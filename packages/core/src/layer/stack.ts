@@ -121,10 +121,20 @@ export function isTopmostLayer(token: object): boolean {
 
 /**
  * Whether a close request the browser raised on its own (dialog `cancel`, `CloseWatcher`, Android
- * back) should dismiss the layer: it must be top-most and no IME composition may be running.
+ * back) should dismiss the layer. It is routed exactly like an Escape keypress: to the top-most
+ * present layer that takes part in Escape handling (`escape` is not `'none'`), which is dismissed
+ * only when its policy is `'close'`. `'block'` and `'none'` never close through this path, and no
+ * IME composition may be running.
  */
 export function shouldDismissOnCloseRequest(token: object): boolean {
-  return !composing && isTopmostLayer(token);
+  if (composing) return false;
+  const top = escapeParticipants()[0];
+  return top?.token === token && top.escape() === 'close';
+}
+
+/** Present layers that take part in Escape handling, top-most first. */
+function escapeParticipants(): StoredEntry[] {
+  return orderedTopFirst(presentEntries().filter((entry) => entry.escape() !== 'none'));
 }
 
 /** Whether a text composition is running anywhere on the page (tracked while layers exist). */
@@ -150,8 +160,7 @@ export function getLayerStack(): LayerSnapshot[] {
 
 function onKeyDown(event: KeyboardEvent): void {
   if (event.key !== 'Escape') return;
-  const participants = orderedTopFirst(presentEntries().filter((e) => e.escape() !== 'none'));
-  const top = participants[0];
+  const top = escapeParticipants()[0];
   // An IME user pressing Escape is cancelling a composition, not dismissing a layer. Claim the
   // press anyway: left unclaimed the browser raises its own close request, which reaches the
   // layer's `cancel` handler and dismisses it on the same keypress.
