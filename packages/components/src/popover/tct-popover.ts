@@ -16,8 +16,10 @@ import {devWarn} from '@tecton-astryx/core/utils/dev.js';
 import {getTabbables} from '@tecton-astryx/core/utils/focus.js';
 import {uniqueId} from '@tecton-astryx/core/utils/id.js';
 import defaultMessages from '@tecton-astryx/locales/en/popover.js';
+import {TctButton} from '../button/tct-button.js';
 import base from '../styles/base.styles.css';
 import focusRing from '../styles/focus-ring.styles.css';
+import layer from '../styles/layer.styles.css';
 import motion from '../styles/motion.styles.css';
 import visuallyHidden from '../styles/visually-hidden.styles.css';
 import styles from './tct-popover.styles.css';
@@ -32,6 +34,15 @@ import {
 
 /** Elements that already are a button for the button + dialog pattern. */
 const BUTTON_SELECTOR = 'button, [role="button"]';
+
+/** Whether `node` is `ancestor` or inside it, looking through shadow roots (a button inside `tct-button`). */
+function insideOf(ancestor: Element | null, node: Node | null): boolean {
+  while (node && ancestor) {
+    if (node === ancestor) return true;
+    node = node.parentNode ?? (node as ShadowRoot).host ?? null;
+  }
+  return false;
+}
 
 /** `command` events (invoker commands, progressive enhancement) as far as this element reads them. */
 interface InvokerCommandEvent extends Event {
@@ -67,7 +78,8 @@ interface InvokerCommandEvent extends Event {
  */
 export class TctPopover extends TctElement {
   static override readonly tagName = 'tct-popover';
-  static override styles: CSSResultGroup = [base, focusRing, motion, visuallyHidden, styles];
+  static override readonly dependencies = [TctButton];
+  static override styles: CSSResultGroup = [base, focusRing, layer, motion, visuallyHidden, styles];
 
   /** Whether the popover is open. Property and attribute writes never emit events. */
   @property({type: Boolean, reflect: true}) open = false;
@@ -254,7 +266,7 @@ export class TctPopover extends TctElement {
     if (!surface) return null;
     const close = surface.querySelector('.close');
     // The generated close button is never an initial focus candidate (`[mwg:accessible-web-components]`).
-    const control = getTabbables(surface).find((element) => !close?.contains(element));
+    const control = getTabbables(surface).find((element) => !insideOf(close, element));
     if (control) return control;
     return this.#role === 'dialog' ? surface : (getTabbables(surface)[0] ?? null);
   }
@@ -423,7 +435,7 @@ export class TctPopover extends TctElement {
       <span class="anchor" part="anchor">
         <slot @slotchange=${() => this.#bindTrigger()}></slot>
       </span>
-      <div class="layer" popover="manual" data-placement=${this.#placement}>
+      <div class="layer layer-surface" popover="manual" data-placement=${this.#placement}>
         <div
           class="surface focus-ring"
           part="popover"
@@ -439,14 +451,13 @@ export class TctPopover extends TctElement {
             this.noCloseButton
               ? nothing
               : html`<div class="close visually-hidden-focusable">
-                  <button
-                    class="close-button focus-ring"
+                  <tct-button
+                    class="close-button"
                     part="close-button"
-                    type="button"
                     @click=${() => this.#request(false, 'close-button')}
                   >
                     ${this.closeLabel ?? this.#locale.t('close', undefined, 'close-label')}
-                  </button>
+                  </tct-button>
                 </div>`
           }
         </div>

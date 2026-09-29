@@ -13,6 +13,7 @@ import {uniqueId} from '@tecton-astryx/core/utils/id.js';
 import base from '../styles/base.styles.css';
 import motion from '../styles/motion.styles.css';
 import focusRing from '../styles/focus-ring.styles.css';
+import layer from '../styles/layer.styles.css';
 import styles from './tct-hover-card.styles.css';
 import {
   HOVER_CARD_ALIGNMENTS,
@@ -101,7 +102,7 @@ const mergeTokens = (existing: string | null, token: string): string =>
  */
 export class TctHoverCard extends TctElement {
   static override readonly tagName = 'tct-hover-card';
-  static override styles: CSSResultGroup = [base, focusRing, motion, styles];
+  static override styles: CSSResultGroup = [base, focusRing, layer, motion, styles];
 
   /** Whether the card is open (also the default-open state). Property and attribute writes never emit events. */
   @property({type: Boolean, reflect: true}) open = false;
@@ -391,7 +392,7 @@ export class TctHoverCard extends TctElement {
         tabindex=${this.#textOnly ? '0' : nothing}
         ><slot @slotchange=${this.#onTriggerSlotChange}></slot
       ></span>
-      <div class="layer" popover="manual" data-placement=${this.placement}>
+      <div class="layer layer-surface" popover="manual" data-placement=${this.placement}>
         <div
           class="card"
           part="hover-card"

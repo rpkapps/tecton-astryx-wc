@@ -521,7 +521,7 @@ describe('focus restoration', () => {
     const wrapper = el.shadowRoot!.querySelector<HTMLElement>('.close')!;
     expect(wrapper.getBoundingClientRect().width).toBeLessThanOrEqual(2);
     await pressKeys('Tab');
-    await waitUntil(() => deepActiveElement() === close, 'close button focused');
+    await waitUntil(() => close.matches(':focus'), 'close button focused');
     expect(wrapper.getBoundingClientRect().width).toBeGreaterThan(20);
     await pressKeys('Enter');
     await waitUntil(() => !el.open, 'closed by the close button');
@@ -557,11 +557,11 @@ describe('focus restoration', () => {
     await pressKeys('Tab');
     expect(deepActiveElement()?.id).toBe('b');
     await pressKeys('Tab');
-    expect(deepActiveElement()).toBe(el.shadowRoot!.querySelector('.close-button'));
+    expect(el.shadowRoot!.querySelector('.close-button')!.matches(':focus')).toBe(true);
     await pressKeys('Tab');
     expect(deepActiveElement()?.id).toBe('a');
     await pressKeys('Shift+Tab');
-    expect(deepActiveElement()).toBe(el.shadowRoot!.querySelector('.close-button'));
+    expect(el.shadowRoot!.querySelector('.close-button')!.matches(':focus')).toBe(true);
   });
 });
 
@@ -658,8 +658,9 @@ describe('rtl, forced colours, reduced motion', () => {
       // Keyboard focus on the close button keeps a visible outline.
       await pressKeys('Tab');
       const close = el.shadowRoot!.querySelector<HTMLElement>('.close-button')!;
-      await waitUntil(() => deepActiveElement() === close, 'close focused');
-      expect(getComputedStyle(close).outlineStyle).not.toBe('none');
+      await waitUntil(() => close.matches(':focus'), 'close focused');
+      const inner = close.shadowRoot!.querySelector<HTMLElement>('button')!;
+      expect(getComputedStyle(inner).outlineStyle).not.toBe('none');
     } finally {
       await restore();
     }
@@ -745,7 +746,7 @@ runKeyboardSuite({
       focus: (el) => el.querySelector<HTMLElement>('#a'),
       keys: ['Shift+Tab'],
       expect: ({element}) => {
-        expect(deepActiveElement()).toBe(element.shadowRoot!.querySelector('.close-button'));
+        expect(element.shadowRoot!.querySelector('.close-button')!.matches(':focus')).toBe(true);
       },
     },
   },

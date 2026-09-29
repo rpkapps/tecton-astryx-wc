@@ -2,8 +2,8 @@
  * tct-popover. Tecton surface: a 1px rule on a recessed (popover) fill, no drop shadow (D-013,
  * design/components/menu.md). The positioned layer paints nothing; the inner `.surface` is the painted
  * box and the `popover` part. [mwg:css] [mwg:animate-to-from-top-layer] [mwg:position-aware-tooltips]
- * TODO(layer.styles.css): the popover reset and enter/exit rules below move to the shared layer module
- * once it lands on the integration branch.
+ * The UA popover reset is the shared `.layer-surface` (styles/layer.styles.css); the enter rules stay here
+ * because the layer element also carries the placement nudge of this surface.
  */
 @layer component {
   :host {
@@ -17,15 +17,6 @@
   }
 
   /* The positioned top-layer element. Inset, margin, clamps and position-area are written inline by PositionController. */
-  .layer {
-    box-sizing: border-box;
-    padding: 0;
-    border: 0;
-    overflow: visible;
-    background: transparent;
-    color: inherit;
-  }
-
   /* Without the Popover API (Tier 2) the attribute is inert: hide until LayerController shows it. */
   @supports not selector(:popover-open) {
     .layer {
@@ -75,19 +66,6 @@
     translate: 50% 100%;
   }
 
-  .close-button {
-    box-sizing: border-box;
-    min-block-size: var(--size-element-md);
-    padding-inline: var(--spacing-3);
-    border: var(--border-width) solid var(--color-border-emphasized);
-    border-radius: var(--radius-element);
-    background: var(--color-background-popover);
-    color: var(--color-text-primary);
-    font-weight: var(--font-weight-medium);
-    white-space: nowrap;
-    cursor: pointer;
-  }
-
   /* Entry: fade and a small slide away from the anchor. Exit runs from JS (WAAPI) before hidePopover(). */
   .layer:popover-open {
     opacity: 1;
@@ -130,26 +108,12 @@
   }
 }
 
-@layer state {
-  @media (hover: hover) {
-    .close-button:hover {
-      background: var(--color-overlay-hover);
-    }
-  }
-}
-
 @layer a11y {
   @media (forced-colors: active) {
     .surface {
       border-color: CanvasText;
       background: Canvas;
       color: CanvasText;
-    }
-
-    .close-button {
-      border-color: ButtonText;
-      background: ButtonFace;
-      color: ButtonText;
     }
   }
 }

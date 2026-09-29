@@ -2,7 +2,7 @@
  * tct-hover-card. Same Tecton surface as the popover: a 1px rule on the recessed popover fill and no
  * drop shadow (D-013). The positioned layer paints nothing; `.card` is the painted box.
  * [mwg:css] [mwg:animate-to-from-top-layer] [mwg:interest-triggered-tooltips]
- * TODO(layer.styles.css): the reset and enter rules move to the shared layer module once it lands.
+ * The UA popover reset is the shared `.layer-surface` (styles/layer.styles.css).
  */
 @layer component {
   :host {
@@ -24,15 +24,6 @@
     text-decoration-style: dashed;
     text-decoration-color: var(--color-border-emphasized);
     text-underline-offset: var(--spacing-0-5);
-  }
-
-  .layer {
-    box-sizing: border-box;
-    padding: 0;
-    border: 0;
-    overflow: visible;
-    background: transparent;
-    color: inherit;
   }
 
   @supports not selector(:popover-open) {

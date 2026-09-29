@@ -227,14 +227,9 @@
       },
       "provisional": [],
       "tokenRequests": [],
-      "requests": [
-        {
-          "file": "packages/components/src/styles/layer.styles.css",
-          "reason": "tct-popover ships its own popover reset and enter animation until the shared layer module lands; swap to it then (TODO in tct-popover.styles.css)."
-        }
-      ],
+      "requests": [],
       "sizeBudgetKb": null,
-      "notes": "Guides: [mwg:declarative-dialog-popover-control] [mwg:animate-to-from-top-layer] [mwg:position-aware-tooltips] [mwg:persistent-top-layer-ui] [mwg:platform-controls-dismiss-dialog]. The fallback close button is a native <button> until tct-button merges."
+      "notes": "Guides: [mwg:declarative-dialog-popover-control] [mwg:animate-to-from-top-layer] [mwg:position-aware-tooltips] [mwg:persistent-top-layer-ui] [mwg:platform-controls-dismiss-dialog]. The fallback close button is a tct-button (secondary); the UA popover reset is the shared .layer-surface."
     }
   }
 }
