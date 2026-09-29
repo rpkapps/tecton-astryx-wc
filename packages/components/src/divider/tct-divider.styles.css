@@ -1,0 +1,86 @@
+/*
+ * tct-divider. The host is the separator (a flex box, block-level for a horizontal rule and
+ * inline-level for a vertical one); the inner `.base` (part "base") holds the rule segments and the
+ * label. The rule is painted by `.line` (part "line") from the Tecton divider roles, one border-width
+ * thick in both weights: emphasis is colour only (Tecton divider design). `full-bleed` cancels the
+ * padding of the enclosing tct-section/tct-card with negative margins on `.base`.
+ * [mwg:css-layout] flex, logical properties, intrinsic sizing
+ */
+@layer component {
+  :host {
+    display: flex;
+    flex-direction: column;
+    inline-size: 100%;
+  }
+
+  :host([orientation='vertical']) {
+    display: inline-flex;
+    inline-size: auto;
+    block-size: 100%;
+  }
+
+  .base {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: row;
+    align-items: center;
+    min-inline-size: 0;
+    min-block-size: 0;
+  }
+
+  .base[data-orientation='vertical'] {
+    flex-direction: column;
+  }
+
+  .line {
+    flex: 1 1 auto;
+    block-size: var(--border-width);
+    background-color: var(--tecton-color-divider-subtle);
+  }
+
+  .base[data-orientation='vertical'] .line {
+    block-size: auto;
+    inline-size: var(--border-width);
+  }
+
+  .base[data-variant='strong'] .line {
+    background-color: var(--tecton-color-divider-strong);
+  }
+
+  .label {
+    flex-shrink: 0;
+    padding-inline: var(--spacing-3);
+    font-size: var(--text-supporting-size);
+    line-height: var(--text-supporting-leading);
+    color: var(--color-text-secondary);
+  }
+
+  .base[data-orientation='vertical'] .label {
+    padding-inline: 0;
+    padding-block: var(--spacing-3);
+  }
+
+  :host([full-bleed]) .base {
+    margin-inline-start: calc(-1 * var(--container-padding-inline-start, 0px));
+    margin-inline-end: calc(-1 * var(--container-padding-inline-end, 0px));
+  }
+
+  :host([full-bleed][orientation='vertical']) .base {
+    margin-inline: 0;
+    margin-block-start: calc(-1 * var(--container-padding-block-start, 0px));
+    margin-block-end: calc(-1 * var(--container-padding-block-end, 0px));
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    /* Backgrounds are replaced in forced-colors mode; keep the rule visible with a system colour. */
+    .line {
+      background-color: ButtonBorder;
+    }
+
+    .label {
+      color: CanvasText;
+    }
+  }
+}

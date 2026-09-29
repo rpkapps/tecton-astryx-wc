@@ -1,0 +1,42 @@
+{
+  "folder": "code",
+  "elements": {
+    "tct-code": {
+      "class": "TctCode",
+      "attributes": [
+        {
+          "name": "color",
+          "property": "color",
+          "type": "CodeColor",
+          "values": [
+            "primary",
+            "secondary",
+            "inherit"
+          ],
+          "default": "'primary'",
+          "reflects": true
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "CodeSize | undefined",
+          "values": [
+            "inherit"
+          ],
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "base"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

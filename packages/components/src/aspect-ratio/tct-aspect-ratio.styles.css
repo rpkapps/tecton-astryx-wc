@@ -1,0 +1,56 @@
+/*
+ * tct-aspect-ratio. The host is a block that never shrinks in a flex column (a ratio box has no
+ * intrinsic height to give up); the ratio lives on the inner `.base`, whose width is 100% of the
+ * host. The content is absolutely positioned to fill it. The `fit` sizing rules are `::slotted()`
+ * rules, so any style the consumer puts on the child itself wins (the upstream baseline rules have
+ * zero specificity for the same reason). [mwg:css-layout] `aspect-ratio`, `overflow: clip`, intrinsic
+ * sizing; [mwg:styling-web-components] `::slotted()` loses to light-DOM rules.
+ */
+@layer component {
+  :host {
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .base {
+    position: relative;
+    inline-size: 100%;
+    min-block-size: 0;
+    aspect-ratio: var(--_ratio, 1);
+    overflow: clip;
+  }
+
+  /* 50% on both axes follows the box dimensions: a circle at 1:1, an oval otherwise. */
+  .base[data-shape='ellipse'] {
+    border-radius: 50%;
+  }
+
+  .child {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .child[data-fit='center'] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .child[data-fit='cover'] ::slotted(*),
+  .child[data-fit='contain'] ::slotted(*) {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .child[data-fit='cover'] ::slotted(img),
+  .child[data-fit='cover'] ::slotted(video) {
+    object-fit: cover;
+  }
+
+  .child[data-fit='contain'] ::slotted(img),
+  .child[data-fit='contain'] ::slotted(video) {
+    object-fit: contain;
+  }
+}

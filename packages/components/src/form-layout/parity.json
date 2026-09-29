@@ -1,0 +1,91 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "form-layout",
+  "workPackage": "WP-1",
+  "entries": {
+    "core.form-layout": {
+      "tag": "tct-form-layout",
+      "status": "implemented",
+      "upstream": {
+        "name": "FormLayout",
+        "path": "packages/core/src/FormLayout/FormLayout.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "direction",
+          "kind": "prop",
+          "target": "direction",
+          "as": "attribute",
+          "reflect": true,
+          "default": "vertical"
+        },
+        {
+          "upstream": "defaultOptionality",
+          "kind": "prop",
+          "target": "default-optionality",
+          "as": "attribute",
+          "notes": "optional | required; provided to descendants as `optionality` on formLayoutContext."
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use the host, `::part(base)` or the documented attributes."
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "The element itself is the handle; the box is reachable as part \"base\"."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "FormLayoutContext",
+          "target": "formLayoutContext",
+          "as": "context",
+          "notes": "@tecton-astryx/core/context/keys.js (WP-F): {direction, optionality}. Provided by ContextProvider on the host; the nearest layout wins, so nesting overrides."
+        }
+      ],
+      "keyboard": [],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "FORMLAYOUT-01",
+          "type": "approved-api-difference",
+          "text": "The context value names the field `optionality` (upstream `defaultOptionality`) and is `undefined` for children outside a layout instead of upstream's `{direction: \"vertical\"}` default; consumers apply the vertical default themselves."
+        },
+        {
+          "id": "FORMLAYOUT-02",
+          "type": "approved-api-difference",
+          "text": "horizontal-labels collapses at a viewport width of 480px or less like upstream (a media query, not a container query); the fields inside render with display: contents so their label and control are the grid items (done by tct-field / the controls through formLayoutContext)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:css-layout] grid and flex containers, gap; [mwg:web-components] context provider (Context Community Protocol, A-10); [mwg:shadow-dom] slot inside the container. Integration with tct-field / tct-text-input (label placement, aria-required) is tested with those elements."
+    }
+  }
+}

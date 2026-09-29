@@ -1,0 +1,14 @@
+<!-- title: A form column; description: A vstack spaces the rows of a simple form; each label and input pair is its own vstack. -->
+<form id="form" onsubmit="return false">
+  <tct-vstack gap="4" width="320">
+    <tct-vstack gap="1">
+      <label for="form-name">Name</label>
+      <input id="form-name" name="name" autocomplete="name" />
+    </tct-vstack>
+    <tct-vstack gap="1">
+      <label for="form-email">Email</label>
+      <input id="form-email" name="email" type="email" autocomplete="email" />
+    </tct-vstack>
+    <tct-button type="submit" variant="primary" label="Save"></tct-button>
+  </tct-vstack>
+</form>

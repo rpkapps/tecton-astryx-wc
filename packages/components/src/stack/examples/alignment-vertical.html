@@ -1,0 +1,21 @@
+<!-- title: Vertical alignment; description: In a vertical stack h-align is the cross axis (start, center, end, stretch) and v-align the main axis. -->
+<tct-hstack id="alignment-vertical" wrap="wrap" gap="4">
+  <tct-card variant="muted" padding="2" width="140">
+    <tct-stack h-align="start" gap="1"><span>start</span><span>a</span></tct-stack>
+  </tct-card>
+  <tct-card variant="muted" padding="2" width="140">
+    <tct-stack h-align="center" gap="1"><span>center</span><span>a</span></tct-stack>
+  </tct-card>
+  <tct-card variant="muted" padding="2" width="140">
+    <tct-stack h-align="end" gap="1"><span>end</span><span>a</span></tct-stack>
+  </tct-card>
+  <tct-card variant="muted" padding="2" width="140">
+    <tct-stack h-align="stretch" gap="1">
+      <tct-card padding="1">stretch</tct-card>
+      <tct-card padding="1">a</tct-card>
+    </tct-stack>
+  </tct-card>
+  <tct-card variant="muted" padding="2" width="140" height="120">
+    <tct-stack v-align="between" height="100%"><span>between</span><span>b</span><span>c</span></tct-stack>
+  </tct-card>
+</tct-hstack>

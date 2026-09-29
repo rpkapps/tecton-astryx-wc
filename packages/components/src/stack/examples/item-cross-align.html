@@ -1,0 +1,9 @@
+<!-- title: Align one item; description: cross-align-self overrides the stack's cross-axis alignment for a single item. -->
+<tct-card variant="muted" padding="2">
+  <tct-stack direction="horizontal" gap="3" v-align="start" min-height="96">
+    <tct-stack-item cross-align-self="start"><span>start</span></tct-stack-item>
+    <tct-stack-item cross-align-self="center"><span>center</span></tct-stack-item>
+    <tct-stack-item cross-align-self="end"><span>end</span></tct-stack-item>
+    <tct-stack-item cross-align-self="stretch"><tct-card padding="1" height="100%">stretch</tct-card></tct-stack-item>
+  </tct-stack>
+</tct-card>

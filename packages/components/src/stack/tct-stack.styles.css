@@ -1,0 +1,103 @@
+/*
+ * tct-stack. Structure: the host is a one-item column flex box that carries the sizes (so a
+ * percentage `width`/`height` resolves against the stack's parent); the inner `.base` (part "base")
+ * fills it, is the flex container the slotted children live in, and carries the padding (padding on
+ * :host would be erased by an application reset such as Tailwind's `* { padding: 0 }`).
+ * [mwg:css-layout] flexbox, `gap`, logical properties; [mwg:styling-web-components] part, host rules.
+ */
+@layer component {
+  :host {
+    display: flex;
+    flex-direction: column;
+    inline-size: var(--_box-width, auto);
+    block-size: var(--_box-height, auto);
+    max-inline-size: var(--_box-max-width, none);
+    min-block-size: var(--_box-min-height, 0);
+
+    /*
+     * Custom properties inherit through the flat tree, so a stack nested in another one would read
+     * its parent's box values. Reset them here; the values BoxPropsMixin writes on the host itself
+     * (inline style) beat this rule.
+     */
+    --_box-padding-inline-start: initial;
+    --_box-padding-inline-end: initial;
+    --_box-padding-block-start: initial;
+    --_box-padding-block-end: initial;
+    --_box-width: initial;
+    --_box-height: initial;
+    --_box-max-width: initial;
+    --_box-min-height: initial;
+  }
+
+  .base {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: var(--_gap, 0);
+    min-inline-size: 0;
+    min-block-size: 0;
+    margin: 0; /* `ul`, `ol` and `nav` carry UA margins */
+    padding-inline-start: var(--_box-padding-inline-start, 0);
+    padding-inline-end: var(--_box-padding-inline-end, 0);
+    padding-block-start: var(--_box-padding-block-start, 0);
+    padding-block-end: var(--_box-padding-block-end, 0);
+    list-style: none;
+  }
+
+  .base[data-direction='horizontal'] {
+    flex-direction: row;
+  }
+
+  .base[data-wrap='wrap'] {
+    flex-wrap: wrap;
+  }
+
+  .base[data-wrap='wrap-reverse'] {
+    flex-wrap: wrap-reverse;
+  }
+
+  .base[data-cross='start'] {
+    align-items: flex-start;
+  }
+
+  .base[data-cross='center'] {
+    align-items: center;
+  }
+
+  .base[data-cross='end'] {
+    align-items: flex-end;
+  }
+
+  .base[data-cross='stretch'] {
+    align-items: stretch;
+  }
+
+  .base[data-main='start'] {
+    justify-content: flex-start;
+  }
+
+  .base[data-main='center'] {
+    justify-content: center;
+  }
+
+  .base[data-main='end'] {
+    justify-content: flex-end;
+  }
+
+  .base[data-main='between'] {
+    justify-content: space-between;
+  }
+
+  .base[data-main='around'] {
+    justify-content: space-around;
+  }
+
+  .base[data-main='evenly'] {
+    justify-content: space-evenly;
+  }
+
+  .base[data-scrollable] {
+    overflow: auto;
+  }
+}
