@@ -274,10 +274,13 @@ describe('tct-chat-tool-calls: group', () => {
 
   it('is one tab stop while collapsed, and reaches every detail button once expanded', async () => {
     const element = await make(many.map((call) => ({...call, resultDetail: 'more'})));
+    // Something focusable after the element, so Tab has somewhere to go inside the page.
+    const after = document.createElement('button');
+    after.textContent = 'after';
+    element.parentElement!.append(after);
     header(element).focus();
     await userEvent.tab();
-    expect(deepActiveElement()).not.toBe(header(element));
-    expect(element.contains(deepActiveElement())).toBe(false);
+    expect(deepActiveElement()).toBe(after);
     header(element).click();
     await element.updateComplete;
     header(element).focus();
