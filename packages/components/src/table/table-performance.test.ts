@@ -295,6 +295,33 @@ describe('table performance: ten thousand rows (Table.perf.test.tsx, INP <= 200 
     expect(selectAll.inp).toBeLessThanOrEqual(200);
   });
 
+  describe('when the page itself scrolls', () => {
+    it('follows the document scroll position when no ancestor clips the table', async () => {
+      const rows = makeRows(3000);
+      const root = await fixture<HTMLElement>('<div><tct-table></tct-table></div>');
+      const table = root.querySelector<TctTable<Employee>>('tct-table')!;
+      Object.assign(table, {data: rows, columns: COLUMNS, idKey: 'id'});
+      await table.updateComplete;
+      try {
+        expect(table.hasAttribute('data-windowed')).toBe(true);
+        expect(rowsInDom(table).length).toBeLessThan(150);
+        const size = rowsInDom(table)[0]!.getBoundingClientRect().height;
+        const top = table.getBoundingClientRect().top + window.scrollY;
+        window.scrollTo(0, top + Math.floor(1500 * size));
+        await waitUntil(() => firstIndex(table) > 1400, 'window follows the page scroll');
+        await table.updateComplete;
+        const near = rowsInDom(table).filter((row) => {
+          const box = row.getBoundingClientRect();
+          return box.top >= 0 && box.bottom <= window.innerHeight;
+        });
+        expect(near.length).toBeGreaterThan(3);
+        expect(Math.abs(Number(near[0]!.getAttribute('aria-rowindex')) - 1500)).toBeLessThan(6);
+      } finally {
+        window.scrollTo(0, 0);
+      }
+    });
+  });
+
   describe('when the table windows', () => {
     it('windows above 200 rows only, and never with windowing="off"', async () => {
       const small = await setup(200);

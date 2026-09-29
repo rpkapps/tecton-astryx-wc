@@ -118,19 +118,22 @@ table.data = sort.sortedData;
 Known names apply in a canonical order (`columnSettings`, `sort`, `tree`, `selection`, `pagination`);
 other names follow in record order. A plugin can also be a plain object with transform methods.
 
-| Plugin | State controller | What it adds |
-| --- | --- | --- |
-| `TableSortableController` | `TableSortableStateController` | Header sort buttons, `aria-sort`, an announcement, header context-menu actions, optional multi-sort. |
-| `TableSelectionController` | `TableSelectionStateController` | Checkbox column, select-all with an indeterminate state, `aria-selected`, selected fill. |
-| `TablePaginationController` | (none; use `paginateData`) | Page controls above or below the table. |
-| `TableColumnSettingsController` | `TableColumnSettingsStateController` | Which columns show, and in what order. |
-| `TableColumnResizeController` | (none) | A separator handle per header, pointer and keyboard. |
-| `TableStickyColumnsController` | (none) | Columns pinned to either edge, with logical offsets. |
-| `TableGroupedRowsController` | (itself) | Collapsible group headings with counts. |
-| `TableRowExpansionController` | (none) | A chevron column and a full-width detail row. |
-| `TableTreeDataController` | `TableTreeStateController` | Indentation, chevrons, optional expand-all and row-click expansion. |
-| `TableRowIndexController` | (none) | A row-number column. |
-| `TableRowStatusController` | (none) | A status gutter with a named marker per row. |
+- `TableSortableController` with `TableSortableStateController`: header sort buttons, `aria-sort`, an
+  announcement, header context-menu actions and optional multi-sort.
+- `TableSelectionController` with `TableSelectionStateController`: a checkbox column, select-all with an
+  indeterminate state, `aria-selected` and the selected fill.
+- `TablePaginationController` (use `paginateData` for the page slice): page controls above or below the
+  table.
+- `TableColumnSettingsController` with `TableColumnSettingsStateController`: which columns show, and in
+  what order.
+- `TableColumnResizeController`: a separator handle per header, for pointer and keyboard.
+- `TableStickyColumnsController`: columns pinned to either edge, with logical offsets.
+- `TableGroupedRowsController`: collapsible group headings with counts; it is also the data source.
+- `TableRowExpansionController`: a chevron column and a full-width detail row.
+- `TableTreeDataController` with `TableTreeStateController`: indentation, chevrons, an optional expand-all
+  control and row-click expansion.
+- `TableRowIndexController`: a row-number column.
+- `TableRowStatusController`: a status gutter with a named marker per row.
 
 ## Large datasets
 

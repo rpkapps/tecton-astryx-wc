@@ -5,7 +5,7 @@
   "entries": {
     "core.table": {
       "tag": "tct-table",
-      "status": "in-progress",
+      "status": "implemented",
       "upstream": {
         "name": "Table",
         "path": "packages/core/src/Table/Table.tsx",
@@ -442,7 +442,7 @@
           "reason": "Table examples import the plugin controllers from @tecton-wc/components/table/define.js and from lit inside inline module scripts (as the toast examples do); the docs bundler must resolve those specifiers. The examples test replaces the imports with the already loaded modules."
         }
       ],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 55,
       "notes": [
         "Plugin architecture (written before implementation): a plugin is a TablePlugin (optional transformColumns, transformTable, transformHeaderRow, transformHeaderCell, transformBodyRow, transformBodyCell, transformScrollWrapper, transformTableContext) plus optional rowSignature/attach/updated/detach and contributesContextActions; TablePluginController is the base class (config read live, refresh(), tables attach/detach, Lit host optional). State helpers (Sortable/Selection/ColumnSettings/Tree state) are TableStateControllers that own state, expose the derived data and implement the config interface of the plugin they feed, notifying subscribers and their Lit host. tct-table resolves the record into one ordered array (canonical order columnSettings, sort, tree, selection, pagination), runs every transform through applyPlugins (a throwing transform is isolated), and rebuilds only the rows whose signature changed (guard() per row).",
         "Slices, each committed with tests: static table, sort, selection, pagination, column settings/resize/sticky, grouped rows/expansion/tree/row index/row status/row context menu, windowing and sliced sorting, keyboard table, examples, docs. Filtering (useTableFiltering) belongs to the search work package.",
@@ -452,7 +452,7 @@
     },
     "core.table-header": {
       "tag": "tct-table-header",
-      "status": "in-progress",
+      "status": "implemented",
       "upstream": {
         "name": "TableHeader",
         "path": "packages/core/src/Table/TableHeader.tsx",
@@ -498,7 +498,7 @@
     },
     "core.table-body": {
       "tag": "tct-table-body",
-      "status": "in-progress",
+      "status": "implemented",
       "upstream": {
         "name": "TableBody",
         "path": "packages/core/src/Table/TableBody.tsx",
@@ -544,7 +544,7 @@
     },
     "core.table-footer": {
       "tag": "tct-table-footer",
-      "status": "in-progress",
+      "status": "implemented",
       "upstream": {
         "name": "TableFooter",
         "path": "packages/core/src/Table/TableFooter.tsx",
@@ -590,7 +590,7 @@
     },
     "core.table-row": {
       "tag": "tct-table-row",
-      "status": "in-progress",
+      "status": "implemented",
       "upstream": {
         "name": "TableRow",
         "path": "packages/core/src/Table/TableRow.tsx",
@@ -645,7 +645,7 @@
     },
     "core.table-cell": {
       "tag": "tct-table-cell",
-      "status": "in-progress",
+      "status": "implemented",
       "upstream": {
         "name": "TableCell",
         "path": "packages/core/src/Table/TableCell.tsx",
@@ -726,7 +726,7 @@
     },
     "core.table-header-cell": {
       "tag": "tct-table-header-cell",
-      "status": "in-progress",
+      "status": "implemented",
       "upstream": {
         "name": "TableHeaderCell",
         "path": "packages/core/src/Table/TableHeaderCell.tsx",
