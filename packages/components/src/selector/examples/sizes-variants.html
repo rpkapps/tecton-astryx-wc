@@ -1,0 +1,14 @@
+<!-- title: Sizes and variants; description: Three sizes, and the ghost variant for toolbars and headers, where the trigger has no border and speaks only on hover, focus and press. -->
+<div id="sizes-variants-root">
+  <tct-vstack max-width="360" gap="4">
+    <tct-selector label="Small" size="sm" value="a"></tct-selector>
+    <tct-selector label="Medium" size="md" value="a"></tct-selector>
+    <tct-selector label="Large" size="lg" value="a"></tct-selector>
+    <tct-selector label="Sort by" variant="ghost" label-hidden value="a"></tct-selector>
+  </tct-vstack>
+  <script type="module">
+    for (const selector of document.querySelectorAll('#sizes-variants-root tct-selector')) {
+      selector.options = [{value: 'a', label: 'Newest first'}, {value: 'b', label: 'Oldest first'}, {value: 'c', label: 'Most popular'}];
+    }
+  </script>
+</div>

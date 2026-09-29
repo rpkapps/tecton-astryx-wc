@@ -1,0 +1,26 @@
+<!-- title: In a form; description: A multi selector submits one entry per chosen value under its name, like a native select with multiple; nothing chosen submits nothing. A required one needs at least one value, and reset restores the initial values. -->
+<tct-vstack max-width="480">
+  <form id="in-form-root">
+    <tct-form-layout>
+      <tct-multi-selector label="Toppings" name="topping" required value="cheese olives"></tct-multi-selector>
+      <tct-hstack gap="2">
+        <tct-button type="submit" variant="primary">Order</tct-button>
+        <tct-button type="reset">Reset</tct-button>
+      </tct-hstack>
+      <output></output>
+    </tct-form-layout>
+  </form>
+</tct-vstack>
+<script type="module">
+  const form = document.getElementById('in-form-root');
+  form.querySelector('tct-multi-selector').options = [
+    {value: 'cheese', label: 'Cheese'},
+    {value: 'mushrooms', label: 'Mushrooms'},
+    {value: 'olives', label: 'Olives'},
+    {value: 'peppers', label: 'Peppers'},
+  ];
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    form.querySelector('output').textContent = JSON.stringify(new FormData(form).getAll('topping'));
+  });
+</script>

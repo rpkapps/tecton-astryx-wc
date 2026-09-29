@@ -1,0 +1,9 @@
+<!-- title: Variants; description: What sits between previous and next: page numbers, an item-range count, a "Page X of Y" readout, dots, an editable page box, or nothing. sibling-count sets how many numbers show beside the current page. -->
+<tct-vstack gap="4">
+  <tct-pagination label="Page numbers" variant="pages" page="5" total-pages="20" sibling-count="1"></tct-pagination>
+  <tct-pagination label="Item count" variant="count" page="2" total-items="95" page-size="10"></tct-pagination>
+  <tct-pagination label="Compact" variant="compact" page="3" total-pages="12"></tct-pagination>
+  <tct-pagination label="Dots" variant="dots" page="2" total-pages="6"></tct-pagination>
+  <tct-pagination label="Page box" variant="input" page="4" total-pages="24"></tct-pagination>
+  <tct-pagination label="Previous and next" variant="none" page="2" total-pages="6"></tct-pagination>
+</tct-vstack>

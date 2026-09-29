@@ -1,0 +1,13 @@
+<!-- title: Dots; description: Page dots for a carousel or a short flow. The dots are one tab stop: the arrow keys move focus and the page together, Home and End jump to the ends, and focus wraps. -->
+<div id="dots-root">
+  <tct-vstack gap="3">
+    <tct-text as="p" data-slide>Slide 1 of 5</tct-text>
+    <tct-pagination label="Slides" variant="dots" page="1" total-pages="5"></tct-pagination>
+  </tct-vstack>
+  <script type="module">
+    const root = document.getElementById('dots-root');
+    root.querySelector('tct-pagination').addEventListener('tct-page-change', (event) => {
+      root.querySelector('[data-slide]').textContent = `Slide ${event.page} of 5`;
+    });
+  </script>
+</div>

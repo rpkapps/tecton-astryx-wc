@@ -1,0 +1,11 @@
+<!-- title: Basic; description: Choose several values from a list. Enter or Space toggles the highlighted row and keeps the list open; the trigger shows how many are chosen, and each change is announced once. -->
+<div id="basic-root">
+  <tct-vstack max-width="360">
+    <tct-multi-selector label="Toppings" placeholder="Choose toppings"></tct-multi-selector>
+  </tct-vstack>
+  <script type="module">
+    const selector = document.querySelector('#basic-root tct-multi-selector');
+    selector.options = ['Cheese', 'Mushrooms', 'Olives', 'Onions', 'Peppers', 'Tomato'];
+    selector.values = ['Cheese', 'Olives'];
+  </script>
+</div>

@@ -1,0 +1,17 @@
+/*
+ * tct-selector-option: a `tct-item` without the row's own padding and corners, so it sits inside the
+ * selector's option row (which owns hover, selected and focus paint) or the closed trigger. The label
+ * and description inks come from the item; nothing here paints a colour. [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  .row::part(item) {
+    padding-block: 0;
+    padding-inline: 0;
+    border-radius: 0;
+  }
+}
