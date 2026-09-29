@@ -10,15 +10,8 @@ import {isChromium} from '@tecton-astryx/testing/tier.js';
 import {waitUntil} from '@tecton-astryx/testing/timing.js';
 import '../icon/define.js';
 import './define.js';
+import parity from './parity.json' with {type: 'json'};
 import type {TctCitation} from './tct-citation.js';
-
-// The parity record feeds the keyboard suite, so the docs table and the tests cannot drift apart.
-// (`import.meta.glob`: the components tsconfig does not include *.json, see the parity `requests`.)
-const parity = Object.values(
-  import.meta.glob<{
-    entries: Record<string, {keyboard: {keys: string; action: string; when?: string}[]}>;
-  }>('./parity.json', {eager: true, import: 'default'}),
-)[0]!;
 
 const source = {title: 'Example Source', url: 'https://example.com'};
 
@@ -58,7 +51,7 @@ runKeyboardSuite({
   tag: 'tct-citation',
   render: () =>
     `<button id="before">before</button><tct-citation number="1" source-title="Example" source-url="https://example.com"></tct-citation>`,
-  table: parity.entries['core.citation']!.keyboard,
+  table: parity.entries['core.citation'].keyboard,
   steps: {
     'Moves focus to the citation link': {
       focus: (element) => element.parentElement!.querySelector<HTMLElement>('#before'),

@@ -1,12 +1,13 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
 import {styleMap} from 'lit/directives/style-map.js';
+import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
 import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
 import {TctElement} from '@tecton-astryx/core/tct-element.js';
 import {devWarn} from '@tecton-astryx/core/utils/dev.js';
 import base from '../styles/base.styles.css';
 import slottedIcon from '../styles/slotted-icon.styles.css';
-import {avatarContext, TrackedContext, type AvatarContextValue} from './avatar.context.js';
+import {avatarContext, type AvatarContextValue} from './avatar.context.js';
 import {AVATAR_STATUS_DOT_VARIANTS, type AvatarStatusDotVariant} from './avatar.types.js';
 import styles from './tct-avatar-status-dot.styles.css';
 
@@ -71,7 +72,7 @@ export class TctAvatarStatusDot extends TctElement {
    */
   @property() label: string | undefined;
 
-  readonly #avatar = new TrackedContext(this, avatarContext);
+  readonly #avatar = new ContextConsumer(this, {context: avatarContext, subscribe: true});
   readonly #slots = new SlotController(this, 'icon');
   #reportedTo: AvatarContextValue | undefined;
 

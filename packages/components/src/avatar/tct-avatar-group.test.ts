@@ -10,15 +10,10 @@ import {isChromium} from '@tecton-astryx/testing/tier.js';
 import {waitUntil} from '@tecton-astryx/testing/timing.js';
 import '../icon/define.js';
 import './define.js';
+import parity from './parity.json' with {type: 'json'};
 import type {TctAvatar} from './tct-avatar.js';
 import type {TctAvatarGroup} from './tct-avatar-group.js';
 import type {TctAvatarGroupOverflow} from './tct-avatar-group-overflow.js';
-
-const parity = Object.values(
-  import.meta.glob<{
-    entries: Record<string, {keyboard: {keys: string; action: string; when?: string}[]}>;
-  }>('./parity.json', {eager: true, import: 'default'}),
-)[0]!;
 
 const rootOf = (avatar: TctAvatar): HTMLElement =>
   avatar.shadowRoot!.querySelector<HTMLElement>('[part~="base"]')!;
@@ -51,7 +46,7 @@ runKeyboardSuite({
   tag: 'tct-avatar-group',
   render: () =>
     `<button type="button">before</button><tct-avatar-group><tct-avatar name="Alice" href="#alice"></tct-avatar><tct-avatar name="Bob" interactive></tct-avatar><tct-avatar name="Charlie" href="#charlie"></tct-avatar></tct-avatar-group>`,
-  table: parity.entries['core.avatar-group']!.keyboard,
+  table: parity.entries['core.avatar-group'].keyboard,
   steps: {
     'Moves focus to the next interactive avatar': {
       focus: (group) => (group.children[0] as TctAvatar).control,

@@ -97,13 +97,7 @@
       },
       "provisional": [],
       "tokenRequests": [],
-      "requests": [
-        {
-          "file": "packages/components/tsconfig.json",
-          "reason": "Component tests feed runKeyboardSuite from parity.json (import parity from './parity.json'), but the project include does not cover JSON files, so tsc -b fails with TS6307. Tests use import.meta.glob until the include is widened.",
-          "diff": "\"include\": [\"src\", \"src/**/*.json\"]"
-        }
-      ],
+      "requests": [],
       "sizeBudgetKb": null,
       "notes": "Guides: [mwg:accessible-web-components] name and role inside the shadow root, delegatesFocus; [mwg:styling-web-components] parts; [mwg:security] URL policy and rel=noopener; [mwg:shadow-dom] slot presence."
     }

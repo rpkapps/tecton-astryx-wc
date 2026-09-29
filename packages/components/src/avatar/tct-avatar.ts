@@ -1,7 +1,7 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property, state} from 'lit/decorators.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
+import {ContextConsumer, ContextProvider} from '@tecton-astryx/core/context/protocol.js';
 import {linkContext} from '@tecton-astryx/core/context/keys.js';
 import {AriaDelegateController} from '@tecton-astryx/core/controllers/aria-delegate.js';
 import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
@@ -12,7 +12,7 @@ import {safeUrl} from '@tecton-astryx/core/utils/safe-url.js';
 import defaults from '@tecton-astryx/locales/en/avatar.js';
 import base from '../styles/base.styles.css';
 import focusRing from '../styles/focus-ring.styles.css';
-import {avatarContext, avatarGroupContext, TrackedContext} from './avatar.context.js';
+import {avatarContext, avatarGroupContext} from './avatar.context.js';
 import {getInitials} from './avatar.initials.js';
 import {
   AVATAR_SHAPES,
@@ -126,8 +126,8 @@ export class TctAvatar extends TctElement {
 
   readonly #slots = new SlotController(this, 'status');
   readonly #locale = new LocaleController(this, {namespace: 'avatar', defaults});
-  readonly #group = new TrackedContext(this, avatarGroupContext);
-  readonly #link = new TrackedContext(this, linkContext);
+  readonly #group = new ContextConsumer(this, {context: avatarGroupContext, subscribe: true});
+  readonly #link = new ContextConsumer(this, {context: linkContext, subscribe: true});
   readonly #statusLabels = new Map<Element, string>();
   readonly #provider = new ContextProvider(this, {context: avatarContext, initialValue: null});
   #hadControl = false;

@@ -1,10 +1,4 @@
-import type {ReactiveController, ReactiveControllerHost} from 'lit';
-import {
-  ContextConsumer,
-  createContext,
-  type ContextType,
-  type UnknownContext,
-} from '@tecton-astryx/core/context/protocol.js';
+import {createContext} from '@tecton-astryx/core/context/protocol.js';
 import type {AvatarShape, AvatarSize} from './avatar.types.js';
 
 /**
@@ -41,32 +35,3 @@ export interface AvatarGroupContextValue {
 export const avatarGroupContext = createContext<AvatarGroupContextValue | null, symbol>(
   Symbol.for('tct.avatar-group'),
 );
-
-/**
- * A context consumer that forgets its value when the host disconnects. `ContextConsumer` keeps the last
- * value it received, so an element moved out of its provider (an avatar taken out of a group) would keep
- * acting on the old one; on reconnect a provider, if there is one, answers again.
- */
-export class TrackedContext<C extends UnknownContext> implements ReactiveController {
-  #value: ContextType<C> | undefined;
-
-  constructor(host: ReactiveControllerHost & HTMLElement, context: C) {
-    new ContextConsumer(host, {
-      context,
-      subscribe: true,
-      callback: (value) => {
-        this.#value = value;
-      },
-    });
-    host.addController(this);
-  }
-
-  /** The latest value from the nearest provider, or `undefined` when there is none. */
-  get value(): ContextType<C> | undefined {
-    return this.#value;
-  }
-
-  hostDisconnected(): void {
-    this.#value = undefined;
-  }
-}

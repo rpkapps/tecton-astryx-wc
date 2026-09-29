@@ -1,13 +1,14 @@
 import {html, type CSSResultGroup, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
 import {styleMap} from 'lit/directives/style-map.js';
+import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
 import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
 import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
 import {TctElement} from '@tecton-astryx/core/tct-element.js';
 import defaults from '@tecton-astryx/locales/en/avatarGroup.js';
 import base from '../styles/base.styles.css';
 import focusRing from '../styles/focus-ring.styles.css';
-import {avatarGroupContext, TrackedContext} from './avatar.context.js';
+import {avatarGroupContext} from './avatar.context.js';
 import {resolveSize} from './avatar.types.js';
 import styles from './tct-avatar-group-overflow.styles.css';
 
@@ -47,7 +48,7 @@ export class TctAvatarGroupOverflow extends TctElement {
    */
   @property({type: Boolean, reflect: true}) interactive = false;
 
-  readonly #group = new TrackedContext(this, avatarGroupContext);
+  readonly #group = new ContextConsumer(this, {context: avatarGroupContext, subscribe: true});
   readonly #locale = new LocaleController(this, {namespace: 'avatarGroup', defaults});
   readonly #slots = new SlotController(this, 'default');
   #hadControl = false;
