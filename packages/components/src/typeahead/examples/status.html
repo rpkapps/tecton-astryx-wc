@@ -1,0 +1,22 @@
+<!-- title: Status; description: status-type and status-message show a message under the field (attached), beside it (detached), or behind a focusable status button (tooltip). An error sets aria-invalid. -->
+<tct-vstack id="status-root" max-width="360" gap="4">
+  <tct-typeahead label="Fruit" status-type="error" status-message="Choose a fruit from the list." placeholder="Search fruit"></tct-typeahead>
+  <tct-typeahead label="Other fruit" status-type="warning" status-message="This fruit is out of season." status-variant="detached" placeholder="Search fruit"></tct-typeahead>
+  <tct-typeahead label="Third fruit" status-type="success" status-message="Available." status-variant="tooltip" placeholder="Search fruit"></tct-typeahead>
+</tct-vstack>
+<script type="module">
+  import {createStaticSource} from '@tecton-wc/components/typeahead/utils.js';
+
+  const fruits = [
+    {id: 'apple', label: 'Apple'},
+    {id: 'apricot', label: 'Apricot'},
+    {id: 'banana', label: 'Banana'},
+    {id: 'blueberry', label: 'Blueberry'},
+    {id: 'cherry', label: 'Cherry'},
+    {id: 'grape', label: 'Grape'},
+    {id: 'lemon', label: 'Lemon'},
+    {id: 'mango', label: 'Mango'},
+    {id: 'peach', label: 'Peach'},
+  ];
+  for (const field of document.querySelectorAll('#status-root tct-typeahead')) field.searchSource = createStaticSource(fruits);
+</script>

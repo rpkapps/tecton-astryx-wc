@@ -1,0 +1,183 @@
+/*
+ * The result popup shared by tct-base-typeahead, tct-typeahead and tct-tokenizer (rendered by the
+ * typeahead engine in the host's shadow root). Tecton surface: a 1px rule on the recessed popover fill,
+ * no drop shadow (D-013, design/components/autocomplete.md "popup surface ... recessed panel"). The
+ * positioned `.typeahead-layer` paints nothing (inset, margins and `position-area` are written inline by
+ * PositionController; the reset is the shared `.layer-surface`); `.popup` is the painted box, `.listbox`
+ * scrolls. The highlight follows the active descendant (`[data-highlighted]`, set by the controller), so
+ * keyboard and pointer share one highlight and DOM focus never leaves the input.
+ * [mwg:css] [mwg:animate-to-from-top-layer] [mwg:resilient-context-menus-and-nested-dropdowns]
+ *
+ * Private custom property: `--_menu-width` (set from `menu-width`).
+ */
+@layer component {
+  /* Without the Popover API (Tier 2) the attribute is inert: hidden until LayerController shows it. */
+  @supports not selector(:popover-open) {
+    .typeahead-layer {
+      position: fixed;
+      display: none;
+    }
+  }
+
+  /*
+   * The layer sets the width: `menu-width` (a fixed width, never below the anchor's: PositionController
+   * writes `min-inline-size: anchor-size(inline)`), else its content. PositionController would clamp it to the
+   * `position-area` cell, which shrinks a popup into a small cell instead of letting the browser flip it, so
+   * the clamp is the viewport minus a 16px gutter each side (important: it beats the inline value).
+   */
+  .typeahead-layer {
+    inline-size: var(--_menu-width, auto);
+    max-inline-size: calc(100vi - var(--spacing-8)) !important;
+    max-block-size: none !important;
+  }
+
+  .popup {
+    --_popup-radius: var(--radius-element);
+
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-inline-size: 0;
+    padding: var(--spacing-1);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--_popup-radius);
+    background: var(--color-background-popover);
+    color: var(--color-text-primary);
+    font-family: var(--font-family-body);
+    font-size: var(--text-label-size);
+    line-height: var(--text-label-leading);
+  }
+
+  .listbox {
+    box-sizing: border-box;
+    max-block-size: min(
+      300px /* design: upstream result list height cap */,
+      calc(100dvb - var(--spacing-8) - var(--spacing-2))
+    );
+    /* physical: overflow-block is not available in every Tier-2 engine */
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .option {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    inline-size: 100%;
+    padding-inline: var(--spacing-2);
+    padding-block: var(--spacing-1-5);
+    border-radius: var(--radius-inner);
+    color: var(--color-text-primary);
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .popup[data-size='sm'] .option {
+    padding-block: var(--spacing-1);
+  }
+
+  .popup[data-size='lg'] .option {
+    padding-block: var(--spacing-2);
+  }
+
+  .option-content {
+    display: flex;
+    flex: 1;
+    min-inline-size: 0;
+    overflow: hidden;
+  }
+
+  .option-content > * {
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  .option-check {
+    flex-shrink: 0;
+    margin-inline-start: var(--spacing-2);
+  }
+
+  .option[data-selected] {
+    font-weight: var(--font-weight-medium);
+  }
+
+  .empty {
+    padding: var(--spacing-3);
+    text-align: center;
+    font-size: var(--text-supporting-size);
+    line-height: var(--text-supporting-leading);
+    color: var(--color-text-secondary);
+  }
+
+  .group-heading {
+    padding-block-start: var(--spacing-2);
+    padding-block-end: var(--spacing-1);
+    padding-inline: var(--spacing-2);
+    font-size: var(--text-supporting-size);
+    line-height: var(--text-supporting-leading);
+    color: var(--color-text-secondary);
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Entry: a fade, plus a small slide away from the anchor. Exit runs from JS (WAAPI) before hidePopover(). */
+  .typeahead-layer:popover-open {
+    opacity: 1;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .typeahead-layer:popover-open {
+      translate: 0 0;
+      transition:
+        opacity var(--duration-fast) var(--ease-standard),
+        translate var(--duration-fast) var(--ease-standard);
+
+      @starting-style {
+        translate: 0 calc(-1 * var(--spacing-1));
+      }
+    }
+
+    .typeahead-layer[data-placement='above']:popover-open {
+      @starting-style {
+        translate: 0 var(--spacing-1);
+      }
+    }
+  }
+}
+
+@layer state {
+  /* The single highlight is the active descendant: the keyboard moves it, and so does the pointer. */
+  .option[data-highlighted] {
+    background-color: var(--tecton-color-table-row-hover);
+  }
+
+  .option:active {
+    background-color: var(--color-overlay-pressed);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .popup {
+      border-color: CanvasText;
+      background: Canvas;
+      color: CanvasText;
+    }
+
+    .option[data-highlighted] {
+      background-color: Highlight;
+      color: HighlightText;
+      outline: var(--border-width) solid CanvasText;
+      outline-offset: calc(-1 * var(--border-width));
+    }
+
+    .option[data-highlighted] .option-check {
+      color: HighlightText;
+    }
+  }
+}

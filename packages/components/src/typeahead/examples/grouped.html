@@ -1,0 +1,17 @@
+<!-- title: Grouped results; description: Results whose auxiliaryData.group is set are listed under a heading per group, in the order the groups first appear. Items without a group come last. -->
+<tct-vstack id="grouped-root" max-width="360">
+  <tct-typeahead label="Place" placeholder="Search places" entries-on-focus></tct-typeahead>
+</tct-vstack>
+<script type="module">
+  import {createStaticSource} from '@tecton-wc/components/typeahead/utils.js';
+
+  const group = (name) => ({group: name});
+  const places = [
+    {id: 'paris', label: 'Paris', auxiliaryData: group('Europe')},
+    {id: 'rome', label: 'Rome', auxiliaryData: group('Europe')},
+    {id: 'tokyo', label: 'Tokyo', auxiliaryData: group('Asia')},
+    {id: 'seoul', label: 'Seoul', auxiliaryData: group('Asia')},
+    {id: 'anywhere', label: 'Anywhere'},
+  ];
+  document.querySelector('#grouped-root tct-typeahead').searchSource = createStaticSource(places);
+</script>

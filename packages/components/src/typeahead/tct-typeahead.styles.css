@@ -1,0 +1,103 @@
+/*
+ * tct-typeahead. The box, the label chrome and the sizes are the shared field module and the shared box
+ * sheet; this sheet lays out what a typeahead holds: the input, and the chosen item as a token painted
+ * over it (upstream: the token is over the input, not beside it, so the field is as wide with a value as
+ * without one), then the end controls (busy indicator, clear button, status glyph) in flow at the inline
+ * end, so the value can never run under them. Tecton: the outlined field (design/components/autocomplete.md).
+ * The result popup is the shared typeahead-popup sheet. [mwg:css] [mwg:styling-web-components]
+ *
+ * Private custom properties: none beyond the shared field module's.
+ */
+@layer component {
+  /* The padding moves to `.typeahead` so the whole box is one click target. */
+  .input-wrapper[data-size] {
+    display: block;
+    padding: 0;
+  }
+
+  .typeahead {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    block-size: 100%;
+    min-inline-size: 0;
+
+    /*
+     * Standard padding minus the border width, so a token (the control height minus 8px) fits the box
+     * exactly and adding one never changes the field's height.
+     */
+    padding-block: calc(var(--spacing-1) - var(--border-width));
+    padding-inline: var(--spacing-2);
+    cursor: text;
+  }
+
+  .adornment {
+    --_icon-size: var(--tecton-icon-size-100);
+
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    color: var(--color-icon-secondary);
+  }
+
+  .start-icon {
+    flex-shrink: 0;
+  }
+
+  /*
+   * The content lane: the input, and the token painted over it. It is an ordinary flex item that ends
+   * where the end lane begins, so a value bounded by it never reaches the clear button or the spinner. The
+   * lane takes the free space and yields all of it when the field is narrow.
+   */
+  .content-lane {
+    position: relative;
+    display: flex;
+    flex: 1;
+    align-items: center;
+    align-self: stretch;
+    min-inline-size: 0;
+  }
+
+  .combobox {
+    flex: 1;
+    min-inline-size: 0;
+  }
+
+  /* The token, painted over the input at the lane's start; bounded by the lane at both ends. */
+  .token {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: calc(-1 * (var(--spacing-1) - var(--border-width))) 0;
+    inline-size: fit-content;
+    max-inline-size: none;
+    margin-block: 0;
+    margin-inline: 0 auto;
+  }
+
+  .end-lane {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: var(--spacing-1);
+    margin-inline-start: auto;
+  }
+
+  .end-lane > .busy,
+  .end-lane > .status-icon {
+    pointer-events: none;
+  }
+}
+
+@layer state {
+  /* While a token shows, the input keeps its place and width (the field's size) but is invisible and inert. */
+  .typeahead[data-token] .combobox {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .input-wrapper[data-disabled] .typeahead,
+  .input-wrapper[data-readonly] .typeahead {
+    cursor: default;
+  }
+}

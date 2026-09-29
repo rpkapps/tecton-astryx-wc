@@ -1,0 +1,625 @@
+{
+  "folder": "typeahead",
+  "elements": {
+    "tct-base-typeahead": {
+      "class": "TctBaseTypeahead",
+      "attributes": [
+        {
+          "name": "anchor",
+          "property": "anchor",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "debounce-ms",
+          "property": "debounceMs",
+          "type": "number",
+          "default": "150",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "empty-search-results-text",
+          "property": "emptySearchResultsText",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "entries-on-focus",
+          "property": "entriesOnFocus",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "focusable-disabled",
+          "property": "focusableDisabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "input-id",
+          "property": "inputId",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "input-tab-index",
+          "property": "inputTabIndex",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "max-menu-items",
+          "property": "maxMenuItems",
+          "type": "number",
+          "default": "10",
+          "reflects": false
+        },
+        {
+          "name": "menu-width",
+          "property": "menuWidth",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "min-query-length",
+          "property": "minQueryLength",
+          "type": "number",
+          "default": "1",
+          "reflects": false
+        },
+        {
+          "name": "placeholder",
+          "property": "placeholder",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "TypeaheadSize | undefined",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "anchorElement",
+          "type": "HTMLElement | null",
+          "default": "null",
+          "readonly": false
+        },
+        {
+          "name": "control",
+          "type": "HTMLInputElement | null",
+          "readonly": true
+        },
+        {
+          "name": "item",
+          "type": "SearchableItem | null",
+          "default": "null",
+          "readonly": false
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "readonly": true
+        },
+        {
+          "name": "renderItem",
+          "type": "((item: SearchableItem) => TypeaheadRenderResult) | undefined",
+          "readonly": false
+        },
+        {
+          "name": "searchSource",
+          "type": "SearchSource | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "blur",
+          "signature": "() => void"
+        },
+        {
+          "name": "focus",
+          "signature": "(options?: FocusOptions) => void"
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "change",
+          "native": true
+        },
+        {
+          "name": "input",
+          "native": true
+        },
+        {
+          "name": "tct-after-open-change",
+          "class": "TctAfterOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        },
+        {
+          "name": "tct-selection-change",
+          "class": "TctSelectionChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "dropdown",
+        "empty-state",
+        "input",
+        "loading",
+        "option",
+        "popup",
+        "typeahead-item"
+      ],
+      "cssStates": [
+        "busy",
+        "open"
+      ],
+      "cssProperties": []
+    },
+    "tct-typeahead": {
+      "class": "TctTypeahead",
+      "attributes": [
+        {
+          "name": "debounce-ms",
+          "property": "debounceMs",
+          "type": "number",
+          "default": "150",
+          "reflects": false
+        },
+        {
+          "name": "description",
+          "property": "description",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "disabled-message",
+          "property": "disabledMessage",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "empty-search-results-text",
+          "property": "emptySearchResultsText",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "entries-on-focus",
+          "property": "entriesOnFocus",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "invalid",
+          "property": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label-hidden",
+          "property": "labelHidden",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label-icon",
+          "property": "labelIcon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label-tooltip",
+          "property": "labelTooltip",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "loading",
+          "property": "loading",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "max-menu-items",
+          "property": "maxMenuItems",
+          "type": "number",
+          "default": "10",
+          "reflects": false
+        },
+        {
+          "name": "min-query-length",
+          "property": "minQueryLength",
+          "type": "number",
+          "default": "1",
+          "reflects": false
+        },
+        {
+          "name": "name",
+          "property": "name",
+          "type": "string",
+          "default": "''",
+          "reflects": true
+        },
+        {
+          "name": "no-clear",
+          "property": "noClear",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "optional",
+          "property": "optional",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "placeholder",
+          "property": "placeholder",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "readonly",
+          "property": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "required",
+          "property": "required",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "FieldSize | undefined",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "start-icon",
+          "property": "startIcon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "status-message",
+          "property": "statusMessage",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "status-type",
+          "property": "statusType",
+          "type": "InputStatusType | undefined",
+          "values": [
+            "error",
+            "warning",
+            "success",
+            "info"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "status-variant",
+          "property": "statusVariant",
+          "type": "FieldStatusVariant",
+          "values": [
+            "attached",
+            "detached",
+            "tooltip"
+          ],
+          "default": "'attached'",
+          "reflects": false
+        },
+        {
+          "name": "value",
+          "property": "defaultValue",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "width",
+          "property": "width",
+          "type": "number | string | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "[BLOCKS_IMPLICIT_SUBMISSION]",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "control",
+          "type": "HTMLInputElement | null",
+          "readonly": true
+        },
+        {
+          "name": "defaultItem",
+          "type": "SearchableItem | null | undefined",
+          "readonly": false
+        },
+        {
+          "name": "displayedValidationMessage",
+          "type": "string",
+          "readonly": true
+        },
+        {
+          "name": "editing",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "form",
+          "type": "HTMLFormElement | null",
+          "readonly": true
+        },
+        {
+          "name": "isDisabled",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "item",
+          "type": "SearchableItem | null",
+          "readonly": false
+        },
+        {
+          "name": "labels",
+          "type": "NodeList",
+          "readonly": true
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "readonly": true
+        },
+        {
+          "name": "renderItem",
+          "type": "((item: SearchableItem) => TypeaheadRenderResult) | undefined",
+          "readonly": false
+        },
+        {
+          "name": "searchSource",
+          "type": "SearchSource | undefined",
+          "readonly": false
+        },
+        {
+          "name": "showInvalid",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "status",
+          "type": "InputStatus | undefined",
+          "readonly": false
+        },
+        {
+          "name": "validationMessage",
+          "type": "string",
+          "readonly": true
+        },
+        {
+          "name": "validity",
+          "type": "ValidityState",
+          "readonly": true
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "readonly": false
+        },
+        {
+          "name": "willValidate",
+          "type": "boolean",
+          "readonly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "checkValidity",
+          "signature": "() => boolean"
+        },
+        {
+          "name": "reportValidity",
+          "signature": "() => boolean"
+        },
+        {
+          "name": "setCustomValidity",
+          "signature": "(message: string) => void"
+        }
+      ],
+      "slots": [
+        "start"
+      ],
+      "events": [
+        {
+          "name": "change",
+          "native": true
+        },
+        {
+          "name": "input",
+          "native": true
+        },
+        {
+          "name": "tct-after-open-change",
+          "class": "TctAfterOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        },
+        {
+          "name": "tct-selection-change",
+          "class": "TctSelectionChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "busy",
+        "control",
+        "description",
+        "dropdown",
+        "empty-state",
+        "field",
+        "input",
+        "label",
+        "label-icon",
+        "label-indicator",
+        "label-tip",
+        "option",
+        "popup",
+        "start-icon",
+        "status",
+        "status-button",
+        "status-icon",
+        "token",
+        "typeahead-item"
+      ],
+      "cssStates": [
+        "busy",
+        "invalid",
+        "open",
+        "user-invalid"
+      ],
+      "cssProperties": []
+    },
+    "tct-typeahead-item": {
+      "class": "TctTypeaheadItem",
+      "attributes": [
+        {
+          "name": "description",
+          "property": "description",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "group",
+          "property": "group",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "item",
+          "type": "SearchableItem | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "icon"
+      ],
+      "events": [],
+      "cssParts": [
+        "description",
+        "item",
+        "label"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}
