@@ -36,6 +36,11 @@ export interface ElementSuiteOptions {
   a11y?: boolean | RunOptions;
   /** Set to `false` for elements that legitimately draw a box on the host (rare; document why). */
   hostBox?: boolean;
+  /**
+   * Set to `false` for light-DOM providers (`tct-theme`, `tct-size-provider`, ...): the element has no
+   * shadow root, and the suite asserts that instead of asserting one exists. Default `true`.
+   */
+  shadow?: boolean;
   /** Checks to skip; state the reason at the call site. */
   skip?: readonly ('upgrade' | 'moveBefore' | 'hidden' | 'hostBox' | 'a11y')[];
 }
@@ -114,7 +119,8 @@ export function runElementSuite(options: ElementSuiteOptions): void {
       });
       expect(errors).toEqual([]);
       expect(element.isConnected).toBe(true);
-      expect(element.shadowRoot).not.toBeNull();
+      if (options.shadow === false) expect(element.shadowRoot).toBeNull();
+      else expect(element.shadowRoot).not.toBeNull();
       for (const [name, value] of Object.entries(properties)) {
         expect((element as unknown as Record<string, unknown>)[name], name).toEqual(value);
       }

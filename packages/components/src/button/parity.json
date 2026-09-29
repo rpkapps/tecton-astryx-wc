@@ -53,8 +53,19 @@
           "reflect": true,
           "default": "button"
         },
-        {"upstream": "name", "kind": "prop", "target": "name", "as": "attribute", "reflect": true},
-        {"upstream": "value", "kind": "prop", "target": "value", "as": "attribute"},
+        {
+          "upstream": "name",
+          "kind": "prop",
+          "target": "name",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "attribute"
+        },
         {
           "upstream": "form",
           "kind": "prop",
@@ -93,7 +104,12 @@
           "as": "attribute",
           "notes": "A registered icon name; slot your own into `icon` for anything else."
         },
-        {"upstream": "icon", "kind": "slot", "target": "icon", "as": "slot"},
+        {
+          "upstream": "icon",
+          "kind": "slot",
+          "target": "icon",
+          "as": "slot"
+        },
         {
           "upstream": "isIconOnly",
           "kind": "prop",
@@ -110,20 +126,60 @@
           "as": "attribute",
           "notes": "Not reflected; number is px, string is a CSS length; applied through a private custom property."
         },
-        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
-        {"upstream": "endContent", "kind": "slot", "target": "end", "as": "slot"},
-        {"upstream": "tooltip", "kind": "prop", "target": "tooltip", "as": "attribute"},
-        {"upstream": "onClick", "kind": "event", "target": "click", "as": "native-event"},
-        {"upstream": "clickAction", "kind": "prop", "target": "clickAction", "as": "property"},
-        {"upstream": "href", "kind": "prop", "target": "href", "as": "attribute"},
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "endContent",
+          "kind": "slot",
+          "target": "end",
+          "as": "slot"
+        },
+        {
+          "upstream": "tooltip",
+          "kind": "prop",
+          "target": "tooltip",
+          "as": "attribute"
+        },
+        {
+          "upstream": "onClick",
+          "kind": "event",
+          "target": "click",
+          "as": "native-event"
+        },
+        {
+          "upstream": "clickAction",
+          "kind": "prop",
+          "target": "clickAction",
+          "as": "property"
+        },
+        {
+          "upstream": "href",
+          "kind": "prop",
+          "target": "href",
+          "as": "attribute"
+        },
         {
           "upstream": "as",
           "kind": "prop",
           "as": "waived",
           "reason": "Custom link component: routers hook in through linkContext (tct-link-provider `navigate`) instead of a component prop (A-xstyle family of React-only polymorphism)."
         },
-        {"upstream": "target", "kind": "prop", "target": "target", "as": "attribute"},
-        {"upstream": "rel", "kind": "prop", "target": "rel", "as": "attribute"},
+        {
+          "upstream": "target",
+          "kind": "prop",
+          "target": "target",
+          "as": "attribute"
+        },
+        {
+          "upstream": "rel",
+          "kind": "prop",
+          "target": "rel",
+          "as": "attribute"
+        },
         {
           "upstream": "xstyle",
           "kind": "prop",
@@ -138,8 +194,16 @@
           "as": "controller",
           "notes": "Shadow mode: the surface is a [popover] in the button's shadow root; also the icon-only label tooltip."
         },
-        {"upstream": "useSize", "target": "SizeController", "as": "controller"},
-        {"upstream": "useButtonGroup", "target": "buttonGroupContext", "as": "context"},
+        {
+          "upstream": "useSize",
+          "target": "SizeController",
+          "as": "controller"
+        },
+        {
+          "upstream": "useButtonGroup",
+          "target": "buttonGroupContext",
+          "as": "context"
+        },
         {
           "upstream": "useLinkComponent",
           "target": "linkContext",
@@ -170,7 +234,11 @@
         }
       ],
       "keyboard": [
-        {"keys": "Enter", "action": "Activates the button", "when": "not disabled or busy"},
+        {
+          "keys": "Enter",
+          "action": "Activates the button",
+          "when": "not disabled or busy"
+        },
         {
           "keys": "Space",
           "action": "Activates the button on key up",
@@ -186,17 +254,21 @@
           "action": "Activates the form's default submit button from a field",
           "when": "type=submit is the first submit button of the form"
         },
-        {"keys": "Escape", "action": "Closes the tooltip", "when": "the tooltip is open"}
+        {
+          "keys": "Escape",
+          "action": "Closes the tooltip",
+          "when": "the tooltip is open"
+        }
       ],
       "form": {
         "formAssociated": true,
-        "notes": "type=submit: temporary hidden native submitter carrying name/value and the form* overrides, then requestSubmit(temp) (A§9.7); type=reset: form.reset(). SubmitEvent.submitter is that temporary button. Enter in a field activates the first submit button; disabled/busy buttons do nothing. `form=` and <fieldset disabled> work natively. No form value of its own."
+        "notes": "type=submit: temporary hidden native submitter carrying name/value and the form* overrides, then requestSubmit(temp) (A\u00a79.7); type=reset: form.reset(). SubmitEvent.submitter is that temporary button. Enter in a field activates the first submit button; disabled/busy buttons do nothing. `form=` and <fieldset disabled> work natively. No form value of its own."
       },
       "differences": [
         {
           "id": "BUTTON-01",
           "type": "approved-api-difference",
-          "text": "The click event is the native event from the inner button. The default action (submit, reset, clickAction) runs after the event finished dispatching, so a listener on the host can preventDefault() and cancel it, like a native button; upstream's onClick ran before clickAction. `SubmitEvent.submitter` is a temporary native button, not the host (platform limit, A§20 item 6)."
+          "text": "The click event is the native event from the inner button. The default action (submit, reset, clickAction) runs after the event finished dispatching, so a listener on the host can preventDefault() and cancel it, like a native button; upstream's onClick ran before clickAction. `SubmitEvent.submitter` is a temporary native button, not the host (platform limit, A\u00a720 item 6)."
         },
         {
           "id": "BUTTON-02",
@@ -237,7 +309,13 @@
       },
       "provisional": [],
       "tokenRequests": [],
-      "requests": [],
+      "requests": [
+        {
+          "file": "packages/components/tsconfig.json",
+          "reason": "include gains \"src/**/*.json\" so tests can import a folder's parity.json (keyboard suite table) under tsc -b (resolveJsonModule).",
+          "diff": "\"include\": [\"src\", \"src/**/*.json\"]"
+        }
+      ],
       "sizeBudgetKb": null,
       "notes": "Guides: [mwg:form-associated-custom-elements] FACE, submitter and reset; [mwg:accessible-web-components] delegation of aria-* to the inner control and states through aria-disabled; [mwg:css] focus-visible ring, touch targets, forced colours, reduced motion; [mwg:styling-web-components] parts, ::slotted icons, host layout only; [mwg:interest-triggered-tooltips] and [mwg:position-aware-tooltips] the built-in tooltip; [mwg:shadow-dom] slots and delegatesFocus; [mwg:custom-elements] lifecycle and custom states."
     }
