@@ -1,9 +1,9 @@
 <!-- title: Long content; description: Content taller than the available space scrolls inside the surface; content that fits never gets a scrollbar. -->
 <tct-popover label="Long list" width="280">
   <button type="button">Long content</button>
-  <div slot="content" style="display: grid; gap: var(--spacing-2)">
-    <p>The surface is clamped to the viewport and scrolls inside when it must.</p>
-    <p style="block-size: 60vh; margin: 0">A tall region that forces the surface to scroll on short viewports.</p>
+  <tct-vstack slot="content" gap="2">
+    <tct-text as="p" display="block">The surface is clamped to the viewport and scrolls inside when it must.</tct-text>
+    <tct-card variant="muted" padding="3" style="block-size: 60vh">A tall region that forces the surface to scroll on short viewports.</tct-card>
     <button type="button">Last control</button>
-  </div>
+  </tct-vstack>
 </tct-popover>

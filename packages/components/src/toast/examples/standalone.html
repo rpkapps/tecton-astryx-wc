@@ -1,5 +1,5 @@
 <!-- title: A toast in markup; description: tct-toast can be used on its own. It fires the cancelable tct-toast-dismiss when it wants to go, then tct-toast-hide, and never removes itself: remove it in the hide listener. -->
-<div id="toast-standalone-root" style="display: grid; gap: var(--spacing-3); max-inline-size: 420px">
+<tct-vstack id="toast-standalone-root" gap="3" max-width="420">
   <tct-toast auto-hide-duration="0">Your session will expire in 5 minutes.</tct-toast>
   <tct-toast type="error">Connection lost. Retrying…</tct-toast>
   <script type="module">
@@ -7,4 +7,4 @@
       element.addEventListener('tct-toast-hide', () => setTimeout(() => element.remove(), 300));
     }
   </script>
-</div>
+</tct-vstack>
