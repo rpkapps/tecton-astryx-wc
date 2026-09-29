@@ -1,0 +1,12 @@
+<!-- title: Locale; description: The text is read in the language of the nearest lang. In German 1.234,5 is 1234.5; the same text in English is not a number. The form always gets the plain number. -->
+<tct-vstack gap="4">
+  <div lang="de-DE">
+    <tct-number-input label="Menge (de-DE)" description="Try 1.234,5" value="1234.5" name="amount-de"></tct-number-input>
+  </div>
+  <div lang="en-US">
+    <tct-number-input label="Quantity (en-US)" description="Try 1,234.5" value="1234.5" name="amount-en"></tct-number-input>
+  </div>
+  <div lang="fr-FR">
+    <tct-number-input label="Quantité (fr-FR)" description="Essayez 1 234,5" value="1234.5" name="amount-fr"></tct-number-input>
+  </div>
+</tct-vstack>

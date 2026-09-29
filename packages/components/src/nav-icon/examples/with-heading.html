@@ -1,5 +1,5 @@
 <!-- title: With a heading; description: The NavIcon sits beside the title of a navigation header. -->
-<div style="display: flex; align-items: center; gap: var(--spacing-3)">
+<tct-hstack v-align="center" gap="3">
   <tct-nav-icon><tct-icon slot="icon" name="search"></tct-icon></tct-nav-icon>
-  <h2 style="margin: 0; font-size: var(--text-large-size); font-weight: var(--font-weight-semibold); color: var(--color-text-primary)">Dashboard</h2>
-</div>
+  <tct-text as="h2" type="large" weight="semibold">Dashboard</tct-text>
+</tct-hstack>

@@ -1,19 +1,19 @@
 <!-- title: Variants, width and position; description: A standard dialog has a configurable width, height and position (start and end are logical and mirror in RTL); fullscreen takes the whole viewport. -->
-<div id="variants-and-position-example" style="display: flex; gap: var(--spacing-2)">
+<tct-hstack id="variants-and-position-example" gap="2">
   <tct-button data-open="wide">Wide</tct-button>
   <tct-button data-open="corner">Top end corner</tct-button>
   <tct-button data-open="full">Fullscreen</tct-button>
 
   <tct-dialog id="variants-and-position-wide" heading="Wide dialog" width="640">
-    <p style="margin: 0">Width is clamped to the viewport with a gutter.</p>
+    <tct-text as="p" display="block">Width is clamped to the viewport with a gutter.</tct-text>
   </tct-dialog>
   <tct-dialog id="variants-and-position-corner" heading="In the corner" width="320" max-height="50dvh">
-    <p style="margin: 0">Positioned with the start and end offsets, which mirror in right-to-left.</p>
+    <tct-text as="p" display="block">Positioned with the start and end offsets, which mirror in right-to-left.</tct-text>
   </tct-dialog>
   <tct-dialog id="variants-and-position-full" heading="Fullscreen" variant="fullscreen">
-    <p style="margin: 0">For complex content such as editors or long forms. Escape closes it.</p>
+    <tct-text as="p" display="block">For complex content such as editors or long forms. Escape closes it.</tct-text>
   </tct-dialog>
-</div>
+</tct-hstack>
 <script type="module">
   const root = document.getElementById('variants-and-position-example');
   root.querySelector('#variants-and-position-corner').position = {top: 24, end: 24};

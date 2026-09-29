@@ -2,28 +2,28 @@
 <tct-button id="sheet-flow-open" label="Review settings"></tct-button>
 <tct-bottom-sheet-switcher id="sheet-flow">
   <tct-bottom-sheet sheet-id="review" label="Review notification settings" height="hug" purpose="form">
-    <div style="display: grid; gap: var(--spacing-4); padding: var(--spacing-4)">
-      <div style="display: grid; gap: var(--spacing-1)">
+    <tct-vstack gap="4" padding="4">
+      <tct-vstack gap="1">
         <tct-heading level="3">Review settings</tct-heading>
-        <span style="color: var(--color-text-secondary)">Daily summaries will be sent by email.</span>
-      </div>
-      <div style="display: flex; gap: var(--spacing-2); justify-content: flex-end">
+        <tct-text color="secondary">Daily summaries will be sent by email.</tct-text>
+      </tct-vstack>
+      <tct-hstack gap="2" h-align="end">
         <tct-button id="sheet-flow-cancel" variant="secondary" label="Cancel"></tct-button>
         <tct-button id="sheet-flow-continue" variant="primary" label="Continue"></tct-button>
-      </div>
-    </div>
+      </tct-hstack>
+    </tct-vstack>
   </tct-bottom-sheet>
   <tct-bottom-sheet sheet-id="confirm" label="Confirm settings" height="hug">
-    <div style="display: grid; gap: var(--spacing-4); padding: var(--spacing-4)">
-      <div style="display: grid; gap: var(--spacing-1)">
+    <tct-vstack gap="4" padding="4">
+      <tct-vstack gap="1">
         <tct-heading level="3">Confirm settings</tct-heading>
-        <span style="color: var(--color-text-secondary)">Your notification settings are ready to save.</span>
-      </div>
-      <div style="display: flex; gap: var(--spacing-2); justify-content: flex-end">
+        <tct-text color="secondary">Your notification settings are ready to save.</tct-text>
+      </tct-vstack>
+      <tct-hstack gap="2" h-align="end">
         <tct-button id="sheet-flow-back" variant="secondary" label="Back"></tct-button>
         <tct-button id="sheet-flow-save" variant="primary" label="Save"></tct-button>
-      </div>
-    </div>
+      </tct-hstack>
+    </tct-vstack>
   </tct-bottom-sheet>
 </tct-bottom-sheet-switcher>
 <script type="module">

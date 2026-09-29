@@ -1,0 +1,12 @@
+<!-- title: States; description: Hidden label, required and optional indicators, disabled (with a reason), read-only, loading and the tooltip status variant, in both modes. -->
+<tct-vstack gap="4">
+  <tct-file-input label="Label hidden but named" label-hidden></tct-file-input>
+  <tct-file-input label="Required" required></tct-file-input>
+  <tct-file-input label="Optional" optional label-tooltip="You can add this later."></tct-file-input>
+  <tct-file-input label="Disabled" disabled></tct-file-input>
+  <tct-file-input label="Disabled with a reason" disabled disabled-message="Uploads are locked until your profile is verified."></tct-file-input>
+  <tct-file-input label="Loading" loading></tct-file-input>
+  <tct-file-input label="Tooltip status" status-type="warning" status-message="Large files take a while." status-variant="tooltip"></tct-file-input>
+  <tct-file-input label="Dropzone, disabled" mode="dropzone" disabled></tct-file-input>
+  <tct-file-input label="Dropzone, loading" mode="dropzone" loading></tct-file-input>
+</tct-vstack>

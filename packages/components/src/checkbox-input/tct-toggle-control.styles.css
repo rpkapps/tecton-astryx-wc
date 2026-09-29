@@ -1,0 +1,119 @@
+/*
+ * The row a checkbox or a switch shares: the control (a native input laid over its visual, so the
+ * visual keeps the input's hit target and focus), the label block beside it and the detached status
+ * under it. The label, description and status text styles are the shared field module. Focus is drawn
+ * on the control (`:has(:focus-visible)`, shared focus-ring module). [mwg:css] [mwg:brand-consistent-forms]
+ *
+ * Private custom properties: `--_field-width` (on `.toggle`, the field width).
+ */
+@layer component {
+  :host {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  .toggle {
+    display: block;
+    inline-size: var(--_field-width, auto);
+    min-inline-size: 0;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    min-inline-size: 0;
+  }
+
+  /* A hidden label is a zero-width flex item: the gap would still be painted beside the control. */
+  .row[data-label-hidden] {
+    gap: 0;
+  }
+
+  .row[data-spread] {
+    justify-content: space-between;
+    inline-size: 100%;
+  }
+
+  .control {
+    --_focus-offset: 2px;
+
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    isolation: isolate;
+  }
+
+  /* The input covers the visual: pointer and keyboard land on the real control. */
+  .input {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    inline-size: 100%;
+    block-size: 100%;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    opacity: 0;
+  }
+
+  @media (pointer: coarse) {
+    /* Touch targets are at least 24px whatever the visual's size (WCAG 2.5.8). */
+    .control {
+      min-inline-size: 1.5rem;
+      min-block-size: 1.5rem;
+    }
+  }
+
+  .label-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-inline-size: 0;
+  }
+
+  .row[data-label-position='start'] .label-wrapper {
+    text-align: start;
+  }
+
+  .label-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    min-inline-size: 0;
+  }
+
+  .label-icon {
+    flex-shrink: 0;
+    color: var(--tecton-color-input-outlined-text);
+    cursor: pointer;
+  }
+
+  .row[data-disabled] .label-icon {
+    color: var(--color-text-disabled);
+    cursor: default;
+  }
+
+  .description-click {
+    cursor: pointer;
+  }
+}
+
+@layer state {
+  .row[data-disabled] .input,
+  .input[aria-disabled='true'],
+  .input[aria-readonly='true'] {
+    cursor: default;
+  }
+
+  .row[data-disabled] [part='label'],
+  .row[data-disabled] .description-click {
+    cursor: default;
+  }
+
+  .row[data-busy] .input {
+    cursor: progress;
+  }
+}

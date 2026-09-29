@@ -2,11 +2,11 @@
 <div id="basic-example">
   <tct-button variant="primary" data-open>Open dialog</tct-button>
   <tct-dialog heading="Delete survey?" subtitle="This cannot be undone.">
-    <p style="margin: 0">The survey and its 12 attached logs will be removed from the project.</p>
-    <div style="display: flex; gap: var(--spacing-2); justify-content: flex-end">
+    <tct-text as="p" display="block">The survey and its 12 attached logs will be removed from the project.</tct-text>
+    <tct-hstack gap="2" h-align="end">
       <tct-button data-close>Cancel</tct-button>
       <tct-button variant="destructive" data-close>Delete</tct-button>
-    </div>
+    </tct-hstack>
   </tct-dialog>
 </div>
 <script type="module">

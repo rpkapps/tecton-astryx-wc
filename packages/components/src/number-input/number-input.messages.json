@@ -1,0 +1,6 @@
+{
+  "@tct.number-input.invalidNumber": {
+    "defaultMessage": "Invalid number",
+    "description": "Screen-reader-only assertive announcement when the text typed into a NumberInput is not a number (or is outside its range). The value returns to the last valid one when the field is left."
+  }
+}

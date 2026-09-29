@@ -1,6 +1,6 @@
 <!-- title: Status; description: status-type and status-message put a message under the control, announced once. An error also marks a wrapped tct-* control invalid. -->
-<div style="display: flex; flex-direction: column; gap: var(--spacing-4)">
-  <tct-field label="Email" status-type="error" status-message="Email must include an @."><input style="inline-size: 100%; box-sizing: border-box; padding: var(--spacing-2); font: inherit; color: inherit; background: transparent; border: var(--border-width) solid var(--color-border); border-radius: var(--radius-element)" name="email" value="ada.example.com" /></tct-field>
-  <tct-field label="Name" status-type="warning" status-message="This name is already in use."><input style="inline-size: 100%; box-sizing: border-box; padding: var(--spacing-2); font: inherit; color: inherit; background: transparent; border: var(--border-width) solid var(--color-border); border-radius: var(--radius-element)" name="name" value="North" /></tct-field>
-  <tct-field label="Code" status-type="success" status-message="Code accepted."><input style="inline-size: 100%; box-sizing: border-box; padding: var(--spacing-2); font: inherit; color: inherit; background: transparent; border: var(--border-width) solid var(--color-border); border-radius: var(--radius-element)" name="code" value="A-12" /></tct-field>
-</div>
+<tct-vstack gap="4">
+  <tct-field label="Email" status-type="error" status-message="Email must include an @."><tct-vstack><input name="email" value="ada.example.com" /></tct-vstack></tct-field>
+  <tct-field label="Name" status-type="warning" status-message="This name is already in use."><tct-vstack><input name="name" value="North" /></tct-vstack></tct-field>
+  <tct-field label="Code" status-type="success" status-message="Code accepted."><tct-vstack><input name="code" value="A-12" /></tct-vstack></tct-field>
+</tct-vstack>

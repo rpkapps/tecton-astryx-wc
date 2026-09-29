@@ -1,14 +1,14 @@
 <!-- title: No scrim; description: no-scrim opens the sheet non-modally: the page behind stays interactive and scrollable and nothing is dimmed. Escape and a swipe still close it. Give it a close control of your own, since a press on the page does not. -->
-<div style="display: grid; gap: var(--spacing-3); justify-items: start; max-inline-size: 360px">
+<tct-vstack gap="3" h-align="start" max-width="360">
   <tct-button id="sheet-noscrim-open" label="Show nearby places"></tct-button>
   <tct-button id="sheet-noscrim-page" variant="ghost" label="A control on the page"></tct-button>
-</div>
+</tct-vstack>
 <tct-bottom-sheet id="sheet-noscrim" label="Nearby places" no-scrim height="capped" snap-points="96px">
-  <div style="display: grid; gap: var(--spacing-3); padding: var(--spacing-4)">
+  <tct-vstack gap="3" padding="4">
     <tct-heading level="3">Nearby places</tct-heading>
-    <p style="margin: 0">The page behind this sheet still works.</p>
+    <tct-text as="p" display="block">The page behind this sheet still works.</tct-text>
     <tct-button id="sheet-noscrim-close" variant="secondary" label="Close"></tct-button>
-  </div>
+  </tct-vstack>
 </tct-bottom-sheet>
 <script type="module">
   const sheet = document.getElementById('sheet-noscrim');

@@ -1,0 +1,21 @@
+<!-- title: In a form; description: A switch submits name=value while on. A required switch blocks the submit while it is off and shows its error only then. Reset returns to the checked attribute. -->
+<tct-vstack max-width="480">
+  <form id="in-form-root">
+    <tct-form-layout>
+      <tct-switch label="Accept the terms" name="terms" required></tct-switch>
+      <tct-switch label="Weekly digest" name="digest" value="weekly" checked></tct-switch>
+      <tct-hstack gap="2">
+        <tct-button type="submit" variant="primary">Save</tct-button>
+        <tct-button type="reset">Reset</tct-button>
+      </tct-hstack>
+      <output></output>
+    </tct-form-layout>
+  </form>
+</tct-vstack>
+<script type="module">
+  const form = document.getElementById('in-form-root');
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    form.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(form, event.submitter)));
+  });
+</script>

@@ -1,0 +1,21 @@
+<!-- title: In a form; description: The slider submits its value under the name, a range submits two entries (the start, then the end), and reset returns to the value attribute. -->
+<tct-vstack max-width="480">
+  <form id="in-form-root">
+    <tct-form-layout>
+      <tct-slider label="Volume" name="volume" value="40"></tct-slider>
+      <tct-slider label="Price range" name="price" range value="20,80" value-display="text"></tct-slider>
+      <tct-hstack gap="2">
+        <tct-button type="submit" variant="primary">Save</tct-button>
+        <tct-button type="reset">Reset</tct-button>
+      </tct-hstack>
+      <output></output>
+    </tct-form-layout>
+  </form>
+</tct-vstack>
+<script type="module">
+  const form = document.getElementById('in-form-root');
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    form.querySelector('output').textContent = JSON.stringify([...new FormData(form, event.submitter)]);
+  });
+</script>

@@ -2,15 +2,11 @@
 <div dir="rtl" lang="ar">
   <tct-button id="sheet-rtl-open" label="فتح المرشحات"></tct-button>
   <tct-bottom-sheet id="sheet-rtl" label="المرشحات" height="tall" snap-points="50%">
-    <div style="display: grid; gap: var(--spacing-3); padding: var(--spacing-4)">
+    <tct-vstack gap="3" padding="4">
       <tct-heading level="3">المرشحات</tct-heading>
-      <label style="display: flex; align-items: center; gap: var(--spacing-2)">
-        <input type="checkbox" /> متوفر في المخزون
-      </label>
-      <label style="display: flex; align-items: center; gap: var(--spacing-2)">
-        <input type="checkbox" /> عروض
-      </label>
-    </div>
+      <label><input type="checkbox" /> متوفر في المخزون</label>
+      <label><input type="checkbox" /> عروض</label>
+    </tct-vstack>
   </tct-bottom-sheet>
   <script type="module">
     const sheet = document.getElementById('sheet-rtl');

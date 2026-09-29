@@ -1,0 +1,32 @@
+/*
+ * tct-checkbox-list-item: a list row (`tct-list-item`) with the checkbox in its start slot. A checked
+ * option tints the whole row with the accent wash; the tint is the row's, so it follows the row's
+ * corners. Forced colours strips the wash and the checkbox itself carries the state.
+ */
+@layer component {
+  :host {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  tct-list-item {
+    display: block;
+  }
+
+  /* The list's dividers are drawn here, between options (the inner row is always the last of its root). */
+  .row[data-dividers] {
+    border-block-end: var(--border-width) solid var(--color-border);
+  }
+
+  :host(:last-of-type) .row[data-dividers] {
+    border-block-end-width: 0;
+  }
+
+  .row[data-dividers] tct-list-item::part(item) {
+    border-radius: 0;
+  }
+
+  tct-list-item[data-checked]::part(list-item) {
+    background-color: var(--color-accent-muted);
+  }
+}

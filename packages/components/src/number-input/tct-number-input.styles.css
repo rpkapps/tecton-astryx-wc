@@ -1,0 +1,106 @@
+/*
+ * tct-number-input: the box, the label chrome and the sizes are the shared field module and the shared box
+ * sheet; this sheet adds what only a number field has: the units text, the stepper column, and the muted
+ * text of an entry that is not a number yet. The stepper column spans the full height of the box: it
+ * cancels the box's padding on the block and inline end sides with negative margins and rounds its own
+ * outer corners to the box's radius minus the border. [mwg:css] [mwg:styling-web-components]
+ */
+@layer component {
+  .start-icon {
+    flex-shrink: 0;
+  }
+
+  .input {
+    text-align: start;
+  }
+
+  .units {
+    flex-shrink: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+    color: var(--color-text-secondary);
+  }
+
+  /* An entry that is not (yet) a number reads as muted, and the muted text is not the only cue: aria-invalid. */
+  .input[aria-invalid='true'] {
+    color: var(--color-text-secondary);
+  }
+
+  .steppers {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    align-self: stretch;
+    inline-size: var(--spacing-4);
+    margin-block: calc(-1 * var(--spacing-1));
+    margin-inline-end: calc(-1 * var(--spacing-2));
+    overflow: hidden;
+    border-inline-start: var(--border-width) solid var(--color-border-emphasized);
+    border-start-end-radius: calc(var(--_field-radius) - var(--border-width));
+    border-end-end-radius: calc(var(--_field-radius) - var(--border-width));
+  }
+
+  .stepper {
+    box-sizing: border-box;
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    min-block-size: 0;
+    padding: 0;
+    margin: 0;
+    color: var(--color-icon-secondary);
+    cursor: pointer;
+    background-color: var(--color-background-surface);
+    border: 0;
+    outline: none;
+  }
+
+  .stepper-increment tct-icon {
+    rotate: 180deg;
+  }
+
+  .stepper-decrement {
+    border-block-start: var(--border-width) solid var(--color-border-emphasized);
+  }
+}
+
+@layer state {
+  @media (hover: hover) {
+    .stepper:hover:not(:disabled) {
+      background-color: var(--color-background-muted);
+    }
+  }
+
+  .stepper:active:not(:disabled) {
+    background-color: var(--color-background-muted);
+  }
+
+  .stepper:disabled {
+    color: var(--color-icon-disabled);
+    cursor: default;
+  }
+
+  .input-wrapper[data-disabled] .steppers {
+    pointer-events: none;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .steppers,
+    .stepper-decrement {
+      border-color: ButtonBorder;
+    }
+
+    .stepper {
+      color: ButtonText;
+      background-color: ButtonFace;
+    }
+
+    .stepper:disabled {
+      color: GrayText;
+    }
+  }
+}

@@ -1,21 +1,29 @@
 <!-- title: Mobile keyboard; description: A fully expanded tall sheet stays where it is when the on-screen keyboard opens and scrolls the focused field above it. Dragging the sheet to a shorter stop dismisses the keyboard. -->
 <tct-button id="sheet-keyboard-open" label="Add a comment"></tct-button>
 <tct-bottom-sheet id="sheet-keyboard" label="Add a comment" height="tall" purpose="form">
-  <form style="display: grid; gap: var(--spacing-3); padding: var(--spacing-4)" id="sheet-keyboard-form">
+  <form id="sheet-keyboard-form">
+    <tct-vstack gap="3" padding="4">
     <tct-heading level="3">Add a comment</tct-heading>
-    <label style="display: grid; gap: var(--spacing-1)">
-      Title
-      <input name="title" style="min-block-size: var(--size-element-lg)" />
+    <label>
+      <tct-vstack gap="1">
+        Title
+        <input name="title" style="min-block-size: var(--size-element-lg)" />
+      </tct-vstack>
     </label>
-    <label style="display: grid; gap: var(--spacing-1)">
-      Comment
-      <textarea name="comment" rows="6"></textarea>
+    <label>
+      <tct-vstack gap="1">
+        Comment
+        <textarea name="comment" rows="6"></textarea>
+      </tct-vstack>
     </label>
-    <label style="display: grid; gap: var(--spacing-1)">
-      Reply to
-      <input name="reply" style="min-block-size: var(--size-element-lg)" />
+    <label>
+      <tct-vstack gap="1">
+        Reply to
+        <input name="reply" style="min-block-size: var(--size-element-lg)" />
+      </tct-vstack>
     </label>
     <tct-button id="sheet-keyboard-post" variant="primary" label="Post"></tct-button>
+    </tct-vstack>
   </form>
 </tct-bottom-sheet>
 <script type="module">

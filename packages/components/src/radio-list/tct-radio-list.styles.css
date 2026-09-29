@@ -1,0 +1,41 @@
+/*
+ * tct-radio-list: the field chrome (label, description, status) is the shared field module; this sheet
+ * adds the radiogroup around the options. The options are `tct-radio-list-item` light-DOM children
+ * projected through a slot; the group only lays them out. [mwg:css-layout] [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  /* In a horizontal-labels form the host disappears so the parent grid places label and group. */
+  :host([data-horizontal-labels]) {
+    display: contents;
+  }
+
+  .group {
+    display: flex;
+    min-inline-size: 0;
+  }
+
+  .group[data-orientation='vertical'] {
+    flex-direction: column;
+    gap: var(--spacing-2);
+  }
+
+  .group[data-orientation='horizontal'] {
+    flex-flow: row wrap;
+    gap: var(--spacing-5);
+  }
+
+  .control-cell {
+    gap: 0;
+  }
+}
+
+@layer state {
+  .group[data-disabled] {
+    cursor: default;
+  }
+}

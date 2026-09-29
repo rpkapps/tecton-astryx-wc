@@ -1,0 +1,14 @@
+<!-- title: States; description: Hidden label, required and optional indicators, an icon and info button on the label, disabled (with a reason), read-only, loading and every status. -->
+<tct-vstack gap="4">
+  <tct-switch label="Label hidden but named" label-hidden checked></tct-switch>
+  <tct-switch label="Required" required></tct-switch>
+  <tct-switch label="Optional" optional label-icon="clock" label-tooltip="Notifications can be changed later."></tct-switch>
+  <tct-switch label="Disabled" disabled></tct-switch>
+  <tct-switch label="Disabled and on" disabled checked></tct-switch>
+  <tct-switch label="Disabled with a reason" disabled disabled-message="Turned off for your whole organisation."></tct-switch>
+  <tct-switch label="Read-only" readonly checked></tct-switch>
+  <tct-switch label="Loading" loading></tct-switch>
+  <tct-switch label="Error" status-type="error" status-message="Could not turn this on."></tct-switch>
+  <tct-switch label="Warning" status-type="warning" status-message="This uses your mobile data."></tct-switch>
+  <tct-switch label="Success" status-type="success" status-message="Saved."></tct-switch>
+</tct-vstack>

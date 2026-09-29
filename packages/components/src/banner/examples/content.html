@@ -1,19 +1,19 @@
 <!-- title: Content; description: Child content sits in a card area, collapsed behind a toggle by default (open starts it open). no-collapse pins it open for content the user needs to act on. -->
-<div style="display: flex; flex-direction: column; gap: var(--spacing-3)">
+<tct-vstack gap="3">
   <tct-banner status="error" heading="Multiple errors found" description="Resolve these before continuing.">
-    <ul style="margin: 0; padding-inline-start: var(--spacing-5)">
-      <li>Email address is invalid</li>
-      <li>Password must be at least 8 characters</li>
-    </ul>
+    <tct-list list-style="disc" density="compact">
+      <tct-list-item label="Email address is invalid"></tct-list-item>
+      <tct-list-item label="Password must be at least 8 characters"></tct-list-item>
+    </tct-list>
   </tct-banner>
   <tct-banner status="warning" heading="Configuration changes" open>
-    <p style="margin: 0">These settings apply to every workspace member.</p>
+    <tct-text as="p" display="block">These settings apply to every workspace member.</tct-text>
   </tct-banner>
   <tct-banner status="error" heading="3 fields need attention" no-collapse>
-    <ul style="margin: 0; padding-inline-start: var(--spacing-5)">
-      <li>Email address is invalid</li>
-      <li>Phone number is required</li>
-      <li>Postcode is invalid</li>
-    </ul>
+    <tct-list list-style="disc" density="compact">
+      <tct-list-item label="Email address is invalid"></tct-list-item>
+      <tct-list-item label="Phone number is required"></tct-list-item>
+      <tct-list-item label="Postcode is invalid"></tct-list-item>
+    </tct-list>
   </tct-banner>
-</div>
+</tct-vstack>
