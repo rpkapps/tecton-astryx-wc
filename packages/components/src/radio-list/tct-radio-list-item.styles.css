@@ -1,0 +1,89 @@
+/*
+ * tct-radio-list-item: a row (`tct-item`) with the radio at its start. The row's default look is bare: no
+ * padding, no corners, no fill and no hover wash (the row is a large click target, and only the radio
+ * tints on hover, through `.indicator-scope`); the item's painted part is reset from here, and the
+ * outer tree wins over the item's own rules for normal declarations. The radio is a `role="radio"`
+ * element with the shared radio indicator inside; the focus ring is drawn on it. Hover reaches the
+ * indicator through the inherited `--_indicator-hover`. [mwg:styling-web-components] [mwg:brand-consistent-forms]
+ */
+@layer component {
+  :host {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  .item::part(item) {
+    padding-block: 0;
+    padding-inline: 0;
+    background-color: transparent;
+    border-radius: 0;
+  }
+
+  .start {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: var(--spacing-2);
+  }
+
+  .radio {
+    --_focus-offset: 2px;
+
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: var(--radius-full);
+  }
+
+  .radio[data-size='md'] {
+    /* design: the radio is 24px (md) */
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+  }
+
+  .radio[data-size='sm'] {
+    /* design: the radio is 20px (sm) */
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+  }
+
+  @media (pointer: coarse) {
+    /* Touch targets are at least 24px whatever the visual's size (WCAG 2.5.8). */
+    .radio {
+      min-inline-size: 1.5rem;
+      min-block-size: 1.5rem;
+    }
+  }
+
+  /* The pressed overlay is the owner's, so a replaced indicator keeps the press feedback. */
+  .radio::after {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    content: '';
+    border-radius: inherit;
+    background-color: transparent;
+  }
+}
+
+@layer state {
+  .item:not([disabled]):active .radio::after {
+    background-color: var(--color-overlay-pressed);
+  }
+
+  .radio[aria-disabled='true'],
+  .radio[data-readonly] {
+    cursor: default;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .item:not([disabled]):active .radio::after {
+      background-color: transparent;
+    }
+  }
+}

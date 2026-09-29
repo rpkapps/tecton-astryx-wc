@@ -1,0 +1,286 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "radio-list",
+  "workPackage": "WP-7",
+  "entries": {
+    "core.radio-list": {
+      "tag": "tct-radio-list",
+      "status": "implemented",
+      "upstream": {
+        "name": "RadioList",
+        "path": "packages/core/src/RadioList/RadioList.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "property",
+          "notes": "Upstream is controlled-only (`value` + onChange). The `value` attribute is the default that reset restores; the property is the current choice. Empty means nothing chosen."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "change",
+          "as": "native-event",
+          "notes": "The native `input` then `change` fire once each when the user chooses another option, from the host (composed). Neither fires when `value` is written."
+        },
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "isLabelHidden",
+          "kind": "prop",
+          "target": "label-hidden",
+          "as": "attribute",
+          "reflect": true
+        },
+        {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute"},
+        {
+          "upstream": "orientation",
+          "kind": "prop",
+          "target": "orientation",
+          "as": "attribute",
+          "reflect": true,
+          "default": "vertical"
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Also through <fieldset disabled>."
+        },
+        {
+          "upstream": "htmlName",
+          "kind": "prop",
+          "target": "name",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "disabledMessage",
+          "kind": "prop",
+          "target": "disabled-message",
+          "as": "attribute"
+        },
+        {
+          "upstream": "isRequired",
+          "kind": "prop",
+          "target": "required",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "A constraint (valueMissing while nothing is chosen) and `aria-required` on the group."
+        },
+        {"upstream": "isOptional", "kind": "prop", "target": "optional", "as": "attribute"},
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "target": "status",
+          "as": "property",
+          "notes": "Object `{type, message}`, or the `status-type` and `status-message` attributes. Always shown detached."
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md"
+        },
+        {"upstream": "labelTooltip", "kind": "prop", "target": "label-tooltip", "as": "attribute"},
+        {"upstream": "width", "kind": "prop", "target": "width", "as": "attribute"},
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style/::part/custom properties"
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "Attributes on the host reach the DOM as they are; no prop is needed."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "RadioListContext",
+          "target": "radioListContext",
+          "as": "context",
+          "notes": "Family-private context: value, size, disabled, hasDisabledMessage, readonly and select()."
+        },
+        {
+          "upstream": "useResolvedRequired",
+          "target": "formLayoutContext",
+          "as": "context",
+          "notes": "A form layout that says \"required by default\" is announced (aria-required) without blocking the form."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "One tab stop: the chosen option, or the first enabled one when nothing is chosen"
+        },
+        {
+          "keys": "ArrowDown, ArrowRight",
+          "action": "Moves focus to the next enabled option and chooses it, wrapping (Left and Right mirror in right-to-left text)",
+          "when": "not disabled or read-only"
+        },
+        {
+          "keys": "ArrowUp, ArrowLeft",
+          "action": "Moves focus to the previous enabled option and chooses it, wrapping"
+        },
+        {
+          "keys": "Space",
+          "action": "Chooses the focused option",
+          "when": "not disabled or read-only"
+        }
+      ],
+      "form": {
+        "formAssociated": true,
+        "notes": "Form-associated on the group (ElementInternals): submits `name=value` of the chosen option (nothing while none is chosen), resets to the `value` attribute, restores, joins <fieldset disabled>, works with form= and label for. `required` blocks the submit while nothing is chosen and the blocked submit focuses the first enabled option (the validation anchor); the error is shown after a change, a blur after an edit or a submit attempt."
+      },
+      "differences": [
+        {
+          "id": "RADIOLIST-01",
+          "type": "approved-api-difference",
+          "text": "Uncontrolled by default (D-006): `value` is a property with the `value` attribute as its default, and native `input`/`change` events report user choices, instead of a controlled `value` plus onChange. Set `value` from the `change` handler to control it."
+        },
+        {
+          "id": "RADIOLIST-02",
+          "type": "approved-api-difference",
+          "text": "Radios are `role=\"radio\"` elements inside each option's shadow root, not native inputs: a native radio group cannot span shadow roots. Roving tabindex (one tab stop, arrow keys choose, Left and Right mirror in RTL) replaces the platform's grouping; Home and End do nothing, as for native radios."
+        },
+        {
+          "id": "RADIOLIST-03",
+          "type": "approved-api-difference",
+          "text": "Entering an unselected group from the end (Shift+Tab) lands on the first enabled option, not the last: a single tab stop cannot know the direction of entry. The chosen option is always the tab stop when there is one."
+        },
+        {
+          "id": "RADIOLIST-04",
+          "type": "a11y-improvement",
+          "text": "The radio (the focusable element) is inside the option, so links and buttons in the label, `start` or `end` content stay in the tab order; the host never takes `tabindex`. `aria-readonly` is on the group only (it is not allowed on a radio)."
+        },
+        {
+          "id": "RADIOLIST-05",
+          "type": "a11y-improvement",
+          "text": "Validation is displayed after user interaction: the browser's message becomes the detached status, `aria-invalid` on the group and `:state(user-invalid)` flip together and are announced once."
+        },
+        {
+          "id": "RADIOLIST-06",
+          "type": "approved-api-difference",
+          "text": "`name` is optional and only names the form entry: grouping does not depend on it (upstream generates one for native radio grouping)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:form-associated-custom-elements] a FACE on the group with a validation anchor (earlier-project review H6); [mwg:accessible-web-components] the radiogroup, its label and description share one shadow root; [mwg:required-field-feedback] and [mwg:validate-input-after-interaction]; [mwg:accessible-error-announcement]."
+    },
+    "core.radio-list-item": {
+      "tag": "tct-radio-list-item",
+      "status": "implemented",
+      "upstream": {
+        "name": "RadioListItem",
+        "path": "packages/core/src/RadioList/RadioListItem.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
+        {
+          "upstream": "aria-label",
+          "kind": "prop",
+          "target": "aria-label",
+          "as": "attribute",
+          "notes": "A host aria-label names the radio."
+        },
+        {"upstream": "value", "kind": "prop", "target": "value", "as": "attribute"},
+        {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute"},
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true
+        },
+        {"upstream": "startContent", "kind": "slot", "target": "start", "as": "slot"},
+        {"upstream": "endContent", "kind": "slot", "target": "end", "as": "slot"},
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style/::part/custom properties"
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useIndicatorFocusRing",
+          "as": "waived",
+          "reason": "The ring is drawn on the radio element with the shared focus-ring module, which is the indicator's own shape."
+        },
+        {
+          "upstream": "RadioListContext",
+          "target": "radioListContext",
+          "as": "context"
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Space",
+          "action": "Chooses the option (the list owns the keys)",
+          "when": "the radio is focused"
+        }
+      ],
+      "form": {
+        "formAssociated": false,
+        "notes": "The list is the form participant and submits the chosen option's value."
+      },
+      "differences": [
+        {
+          "id": "RADIOLISTITEM-01",
+          "type": "approved-api-difference",
+          "text": "`label`, `description`, `start` and `end` are attributes and slots: a rich label or description is `slot=\"label\"` / `slot=\"description\"`. The radio is named by the label element through `aria-labelledby` inside the option's shadow root, and described by the description; a host `aria-label` replaces the label."
+        },
+        {
+          "id": "RADIOLISTITEM-02",
+          "type": "tecton-visual",
+          "text": "The row is bare: no padding, corners, fill or hover wash; only the radio (the shared radio indicator: an empty ring, a dot when chosen, no accent) tints on hover and shows the pressed overlay. The ring is 2px hot pink on the radio."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/core/src/indicators/registry.ts",
+          "reason": "Same as CheckboxInput: rendering the registry-resolved indicator tag (defineIndicators) needs a core helper using unsafeStatic. Until then the default `tct-radio-indicator` is rendered."
+        }
+      ],
+      "sizeBudgetKb": null
+    }
+  }
+}

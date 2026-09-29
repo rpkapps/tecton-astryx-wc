@@ -1,0 +1,15 @@
+<!-- title: Rows with descriptions and content; description: Options take a description, a rich label, and content before and after the label. A click anywhere on the row chooses the option; a link or button in the end content keeps its own meaning. -->
+<!-- layout: pending tct-stack -->
+<tct-radio-list label="Plan" name="plan" value="pro">
+  <tct-radio-list-item label="Free" value="free" description="Up to three projects.">
+    <span slot="end">$0</span>
+  </tct-radio-list-item>
+  <tct-radio-list-item value="pro">
+    <span slot="label">Pro <em>Recommended</em></span>
+    <span slot="description">Unlimited projects and <strong>priority</strong> support.</span>
+    <span slot="end">$12</span>
+  </tct-radio-list-item>
+  <tct-radio-list-item label="Enterprise" value="enterprise" description="Custom limits and a dedicated manager.">
+    <a slot="end" href="#contact">Contact sales</a>
+  </tct-radio-list-item>
+</tct-radio-list>

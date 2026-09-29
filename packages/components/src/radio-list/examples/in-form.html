@@ -1,0 +1,23 @@
+<!-- title: In a form; description: The list submits name=value of the chosen option. A required list blocks the submit while nothing is chosen, focuses the first option and shows the error only then. Reset returns to the value attribute. -->
+<!-- layout: pending tct-stack -->
+<form id="in-form-radio-example">
+  <tct-radio-list label="Size" name="size" required>
+    <tct-radio-list-item label="Small" value="s"></tct-radio-list-item>
+    <tct-radio-list-item label="Medium" value="m"></tct-radio-list-item>
+    <tct-radio-list-item label="Large" value="l"></tct-radio-list-item>
+  </tct-radio-list>
+  <tct-radio-list label="Colour" name="colour" value="blue">
+    <tct-radio-list-item label="Blue" value="blue"></tct-radio-list-item>
+    <tct-radio-list-item label="Green" value="green"></tct-radio-list-item>
+  </tct-radio-list>
+  <tct-button type="submit" variant="primary">Save</tct-button>
+  <tct-button type="reset">Reset</tct-button>
+  <output></output>
+</form>
+<script type="module">
+  const form = document.getElementById('in-form-radio-example');
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    form.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(form, event.submitter)));
+  });
+</script>
