@@ -43,7 +43,7 @@ class TctTestConsumer extends TctElement {
     this.consumer ??= new ContextConsumer(this, {
       context: testContext,
       subscribe: this.subscribe,
-      callback: (value) => this.received.push(value),
+      callback: (value) => this.received.push(value ?? '(none)'),
     });
     super.connectedCallback();
   }
@@ -266,5 +266,27 @@ describe('SizeController (explicit, then context, then fallback)', () => {
     await provider.updateComplete;
     await implicit.updateComplete;
     expect(text(implicit)).toBe('md');
+  });
+});
+
+describe('context: reconnecting without a provider (orchestrator fix, reported by WP-2)', () => {
+  beforeAll(() => {
+    defineElement(TctTestProvider);
+    defineElement(TctTestConsumer);
+  });
+
+  it('drops the old provider value when the element is re-inserted where no provider answers', async () => {
+    const root = await fixture<HTMLElement>(
+      `<div><tct-test-provider value="grouped"><tct-test-consumer></tct-test-consumer></tct-test-provider><div id="outside"></div></div>`,
+    );
+    const consumer = root.querySelector<TctTestConsumer>('tct-test-consumer')!;
+    await consumer.updateComplete;
+    expect(consumer.consumer.value).toBe('grouped');
+    root.querySelector('#outside')!.append(consumer);
+    await consumer.updateComplete;
+    await nextFrame();
+    expect(consumer.consumer.value).toBeUndefined();
+    expect(consumer.shadowRoot!.textContent).toContain('none');
+    expect(consumer.received.at(-1)).toBe('(none)');
   });
 });

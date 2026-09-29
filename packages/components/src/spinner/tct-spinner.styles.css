@@ -1,0 +1,116 @@
+/*
+ * tct-spinner: a ring drawn from two circles; the arc's dash offset moves round a stationary circle (a
+ * rotating rounded cap wobbles in WebKit, upstream #6253). The public custom properties are read through
+ * private aliases with the per-size / per-shade default as the fallback, so a consumer sets them on
+ * the host or any ancestor. The tokens are Tecton's progress roles (`--tecton-color-progress-*`),
+ * bound like the owner's theme. Values that are lengths need a unit (`0px`, not `0`).
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-2);
+    vertical-align: middle;
+  }
+
+  .spinner {
+    /* design: ring diameter and stroke by size (upstream sizes, 10/14/18/28 and 2/3/3/4 px) */
+    --_diameter: var(--spinner-diameter, 14px);
+    --_stroke: var(--spinner-stroke-width, 3px);
+    --_arc-fraction: var(--spinner-arc-fraction, 0.375);
+    --_color: var(--spinner-color, var(--tecton-color-progress-primary));
+    --_track: var(--spinner-track-color, var(--tecton-color-progress-track));
+    --_track-opacity: 1;
+    --_box: calc(var(--_diameter) + var(--_stroke) * 2);
+    --_animation-reduced: tct-dash 3s linear infinite;
+
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    inline-size: var(--_box);
+    block-size: var(--_box);
+  }
+
+  :host([size='sm']) .spinner {
+    --_diameter: var(--spinner-diameter, 10px);
+    --_stroke: var(--spinner-stroke-width, 2px);
+  }
+
+  :host([size='lg']) .spinner {
+    --_diameter: var(--spinner-diameter, 18px);
+  }
+
+  :host([size='xl']) .spinner {
+    --_diameter: var(--spinner-diameter, 28px);
+    --_stroke: var(--spinner-stroke-width, 4px);
+  }
+
+  :host([shade='subtle']) .spinner {
+    --_color: var(--spinner-color, var(--color-text-secondary));
+  }
+
+  :host([shade='on-media']) .spinner {
+    --_color: var(--spinner-color, var(--color-on-dark));
+    --_track: var(--spinner-track-color, var(--color-on-dark));
+    --_track-opacity: 0.30196; /* design: the 4D alpha the upstream on-media track appended to its hex */
+  }
+
+  :host([shade='inherit']) .spinner {
+    --_color: var(--spinner-color, currentcolor);
+    --_track: var(--spinner-track-color, currentcolor);
+    --_track-opacity: 0.3;
+  }
+
+  .ring {
+    display: block;
+    inline-size: var(--_box);
+    block-size: var(--_box);
+    overflow: visible;
+  }
+
+  .track,
+  .arc {
+    fill: none;
+    r: calc(var(--_diameter) / 2);
+    stroke-width: var(--_stroke);
+    stroke-linecap: round;
+  }
+
+  .track {
+    stroke: var(--_track);
+    stroke-opacity: var(--_track-opacity);
+  }
+
+  .arc {
+    stroke: var(--_color);
+    transform: rotate(-90deg);
+    transform-box: fill-box;
+    transform-origin: center;
+    stroke-dasharray: calc(var(--_diameter) * 3.141592653589793 * var(--_arc-fraction))
+      calc(var(--_diameter) * 3.141592653589793 * (1 - var(--_arc-fraction)));
+    animation: tct-dash var(--duration-slow-min) linear infinite;
+  }
+
+  @keyframes tct-dash {
+    from {
+      stroke-dashoffset: 0;
+    }
+
+    to {
+      stroke-dashoffset: calc(var(--_diameter) * -3.141592653589793);
+    }
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .arc {
+      stroke: Highlight;
+    }
+
+    .track {
+      stroke: GrayText;
+    }
+  }
+}
