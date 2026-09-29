@@ -97,7 +97,7 @@
         {
           "name": "edge-compensation",
           "property": "edgeCompensation",
-          "type": "| TabListEdgeCompensation\n    | undefined",
+          "type": "TabListEdgeCompensation | undefined",
           "values": [
             "inline"
           ],
