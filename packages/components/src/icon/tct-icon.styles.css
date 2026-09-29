@@ -1,0 +1,132 @@
+/*
+ * tct-icon. Sizes come from the Tecton icon size tokens (12/16/20/24 px). `--_icon-size` is what an
+ * owning component (button, input, ...) sets for its icon slot; an explicit `size` wins over it, and
+ * `md` is the standalone default (upstream size cascade). Colour variants map to the icon roles;
+ * `accent` uses `--color-icon-accent` because `--color-accent` is a fill in Tecton (components.ts).
+ */
+@layer component {
+  :host {
+    /* Private and read by both the inner svg and a slotted custom svg. */
+    --_size: var(--_icon-size, var(--tecton-icon-size-150));
+
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--_size);
+  }
+
+  :host([size='xsm']) {
+    --_size: var(--tecton-icon-size-50);
+  }
+
+  :host([size='sm']) {
+    --_size: var(--tecton-icon-size-100);
+  }
+
+  :host([size='md']) {
+    --_size: var(--tecton-icon-size-150);
+  }
+
+  :host([size='lg']) {
+    --_size: var(--tecton-icon-size-200);
+  }
+
+  :host([color='primary']) {
+    color: var(--color-icon-primary);
+  }
+
+  :host([color='secondary']),
+  :host([color='tertiary']) {
+    color: var(--color-icon-secondary);
+  }
+
+  :host([color='disabled']) {
+    color: var(--color-icon-disabled);
+  }
+
+  :host([color='accent']) {
+    color: var(--color-icon-accent);
+  }
+
+  :host([color='success']) {
+    color: var(--color-success);
+  }
+
+  :host([color='error']) {
+    color: var(--color-error);
+  }
+
+  :host([color='warning']) {
+    color: var(--color-warning);
+  }
+
+  :host([color='blue']) {
+    color: var(--color-icon-blue);
+  }
+
+  :host([color='red']) {
+    color: var(--color-icon-red);
+  }
+
+  :host([color='green']) {
+    color: var(--color-icon-green);
+  }
+
+  :host([color='gray']) {
+    color: var(--color-icon-gray);
+  }
+
+  :host([color='cyan']) {
+    color: var(--color-icon-cyan);
+  }
+
+  :host([color='teal']) {
+    color: var(--color-icon-teal);
+  }
+
+  :host([color='yellow']) {
+    color: var(--color-icon-yellow);
+  }
+
+  :host([color='orange']) {
+    color: var(--color-icon-orange);
+  }
+
+  :host([color='pink']) {
+    color: var(--color-icon-pink);
+  }
+
+  :host([color='purple']) {
+    color: var(--color-icon-purple);
+  }
+
+  .svg {
+    display: block;
+    inline-size: var(--_size);
+    block-size: var(--_size);
+    fill: currentcolor;
+  }
+
+  /* Stroke icons (the Lucide-based default set): drawn with the stroke, no fill. */
+  .svg[data-mode='stroke'] {
+    fill: none;
+    stroke: currentcolor;
+    stroke-width: var(--icon-stroke-width, var(--_stroke-width, 2));
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  ::slotted(svg) {
+    display: block;
+    inline-size: var(--_size);
+    block-size: var(--_size);
+  }
+}
+
+@layer state {
+  /* Directional glyphs (chevrons, arrows) mirror in right-to-left contexts. */
+  :host(:dir(rtl)) .svg[data-mirror] {
+    scale: -1 1;
+  }
+}
