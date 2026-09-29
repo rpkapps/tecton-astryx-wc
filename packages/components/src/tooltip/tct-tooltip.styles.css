@@ -1,0 +1,49 @@
+/*
+ * tct-tooltip. The host is a transparent wrapper: it never paints, and for an element trigger it
+ * disappears from layout so the trigger keeps its own box (upstream `display: contents` wrapper). A
+ * text-only body makes the host the trigger: inline, with a dashed underline as the hover indication
+ * (upstream text-only mode). The popup is `tct-tooltip-surface`, a satellite in the light DOM.
+ */
+@layer component {
+  :host {
+    display: contents;
+  }
+
+  :host([data-text-trigger]) {
+    display: inline;
+    cursor: help;
+  }
+
+  :host([data-hover-indication]) {
+    text-decoration: underline dashed var(--color-border-emphasized);
+    text-underline-offset: 2px; /* design: upstream's 2px offset keeps the dashes clear of descenders */
+  }
+}
+
+@layer state {
+  /*
+   * A text-only body makes the host itself the focusable trigger (the trigger has to share a tree with
+   * the popup so aria-describedby resolves), so this is the one place the host draws a focus ring.
+   */
+  /* stylelint-disable tct/host-box-props */
+  :host([data-text-trigger]:focus-visible) {
+    outline-width: var(--focus-outline-width);
+    outline-style: var(--focus-outline-style);
+    outline-color: var(--focus-outline-color);
+    outline-offset: var(--focus-outline-offset);
+  }
+  /* stylelint-enable tct/host-box-props */
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    :host([data-hover-indication]) {
+      text-decoration-color: CanvasText;
+    }
+
+    :host([data-text-trigger]:focus-visible) {
+      /* stylelint-disable-next-line tct/host-box-props */
+      outline-color: Highlight;
+    }
+  }
+}
