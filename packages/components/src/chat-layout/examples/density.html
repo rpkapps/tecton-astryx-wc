@@ -1,0 +1,19 @@
+<!-- title: Density; description: density steps the dock padding, the message column and the blur layer together. spacious centres the messages and the composer in a column of at most 800px, which shows in a wide layout. -->
+<tct-grid column-min-width="300" gap="4" max-width="900">
+  <tct-vstack height="300">
+    <tct-chat-layout density="compact">
+      <tct-chat-message-list>
+        <tct-chat-message sender="user"><tct-chat-message-bubble>compact</tct-chat-message-bubble></tct-chat-message>
+      </tct-chat-message-list>
+      <tct-chat-composer slot="composer" density="compact"></tct-chat-composer>
+    </tct-chat-layout>
+  </tct-vstack>
+  <tct-vstack height="300">
+    <tct-chat-layout density="spacious">
+      <tct-chat-message-list density="spacious">
+        <tct-chat-message sender="user"><tct-chat-message-bubble>spacious</tct-chat-message-bubble></tct-chat-message>
+      </tct-chat-message-list>
+      <tct-chat-composer slot="composer" density="spacious"></tct-chat-composer>
+    </tct-chat-layout>
+  </tct-vstack>
+</tct-grid>
