@@ -126,11 +126,31 @@
           "as": "controller",
           "notes": "Implemented inside the table: a shared ResizeObserver decides whether the scroll region overflows; only then is it focusable and does it contain overscroll."
         },
-        {"upstream": "TableContext", "target": "tableContext", "as": "context"},
-        {"upstream": "useBaseTablePlugins", "target": "BaseTablePlugins", "as": "controller"},
-        {"upstream": "proportional", "target": "proportional", "as": "module-function"},
-        {"upstream": "pixel", "target": "pixel", "as": "module-function"},
-        {"upstream": "generateColumns", "target": "generateColumns", "as": "module-function"},
+        {
+          "upstream": "TableContext",
+          "target": "tableContext",
+          "as": "context"
+        },
+        {
+          "upstream": "useBaseTablePlugins",
+          "target": "BaseTablePlugins",
+          "as": "controller"
+        },
+        {
+          "upstream": "proportional",
+          "target": "proportional",
+          "as": "module-function"
+        },
+        {
+          "upstream": "pixel",
+          "target": "pixel",
+          "as": "module-function"
+        },
+        {
+          "upstream": "generateColumns",
+          "target": "generateColumns",
+          "as": "module-function"
+        },
         {
           "upstream": "resolveColumnWidths",
           "target": "resolveColumnWidths",
@@ -147,8 +167,81 @@
           "as": "module-function"
         }
       ],
-      "keyboard": [],
-      "form": {"formAssociated": false},
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Moves focus to the next control in the table (sort buttons, checkboxes, expanders, resize handles) in reading order; the table itself has no arrow-key grid model",
+          "when": "always"
+        },
+        {
+          "keys": "Shift+Tab",
+          "action": "Moves focus back to the previous control",
+          "when": "always"
+        },
+        {
+          "keys": "Enter",
+          "action": "Sorts by the column of the focused sort button: ascending, then descending, then unsorted (when unsorted is allowed)",
+          "when": "sort plugin"
+        },
+        {
+          "keys": "Space",
+          "action": "Sorts like Enter",
+          "when": "sort plugin"
+        },
+        {
+          "keys": "Space",
+          "action": "Toggles the focused row's checkbox (the header checkbox selects or clears every row)",
+          "when": "selection plugin"
+        },
+        {
+          "keys": "Enter",
+          "action": "Expands or collapses the row, group or tree branch of the focused chevron button",
+          "when": "row expansion, grouped rows or tree data plugin"
+        },
+        {
+          "keys": "Space",
+          "action": "Expands or collapses like Enter",
+          "when": "row expansion, grouped rows or tree data plugin"
+        },
+        {
+          "keys": "ArrowRight",
+          "action": "Widens the column by 10 px (visual direction: narrows in right-to-left)",
+          "when": "focus on a column resize handle"
+        },
+        {
+          "keys": "ArrowLeft",
+          "action": "Narrows the column by 10 px (visual direction: widens in right-to-left)",
+          "when": "focus on a column resize handle"
+        },
+        {
+          "keys": "Shift+ArrowRight",
+          "action": "Changes the width by 50 px",
+          "when": "focus on a column resize handle; Shift+ArrowLeft the other way"
+        },
+        {
+          "keys": "Home",
+          "action": "Sets the column to its minimum width",
+          "when": "focus on a column resize handle; End sets the maximum width when there is one"
+        },
+        {
+          "keys": "ContextMenu",
+          "action": "Opens the row or cell actions (context menu) at the focused control",
+          "when": "a plugin contributes actions"
+        },
+        {
+          "keys": "Shift+F10",
+          "action": "Opens the row or cell actions like ContextMenu",
+          "when": "a plugin contributes actions"
+        },
+        {
+          "keys": "ArrowRight",
+          "action": "Scrolls the region sideways while the columns overflow (the region is a tab stop only then)",
+          "when": "focus on the scroll region; ArrowLeft, Home, End and PageUp/PageDown scroll as in any scroll container"
+        }
+      ],
+      "form": {
+        "formAssociated": false
+      },
       "differences": [
         {
           "id": "TABLE-01",
@@ -221,7 +314,12 @@
         "commit": "ca632c6"
       },
       "api": [
-        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
         {
           "upstream": "xstyle",
           "kind": "prop",
@@ -262,7 +360,12 @@
         "commit": "ca632c6"
       },
       "api": [
-        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
         {
           "upstream": "xstyle",
           "kind": "prop",
@@ -303,7 +406,12 @@
         "commit": "ca632c6"
       },
       "api": [
-        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
         {
           "upstream": "xstyle",
           "kind": "prop",
@@ -344,7 +452,12 @@
         "commit": "ca632c6"
       },
       "api": [
-        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
         {
           "upstream": "isHeaderRow",
           "kind": "prop",
@@ -394,7 +507,12 @@
         "commit": "ca632c6"
       },
       "api": [
-        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
         {
           "upstream": "scope",
           "kind": "prop",
@@ -470,7 +588,12 @@
         "commit": "ca632c6"
       },
       "api": [
-        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
         {
           "upstream": "scope",
           "kind": "prop",
