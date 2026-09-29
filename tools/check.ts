@@ -1,7 +1,7 @@
 /**
  * `pnpm check`: everything, in order, stopping at the first failure (A§18.3).
  *
- *   generate -> format:check -> lint -> lint:css -> typecheck -> tokens:check -> api:check ->
+ *   generate -> format:check -> typecheck -> lint -> lint:css -> tokens:check -> api:check ->
  *   parity:check -> licenses:check -> test -> build -> size -> docs:build -> docs:a11y
  *
  * Steps that belong to later milestones skip themselves (with a message) until their inputs exist,
@@ -12,9 +12,12 @@ import {run} from './lib/run.ts';
 const STEPS: readonly string[] = [
   'generate',
   'format:check',
+  // Before lint: typed lint rules read the referenced projects' declarations in .tsbuild, which
+  // `tsc -b` writes. Stale or missing declarations (a fresh clone, or a merge that changed core)
+  // turn imported types into `any` and fail no-unsafe-* rules.
+  'typecheck',
   'lint',
   'lint:css',
-  'typecheck',
   'tokens:check',
   'api:check',
   'parity:check',

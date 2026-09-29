@@ -1,0 +1,38 @@
+/*
+ * Links in tct-banner's header content (heading, description, end). The banner content is light DOM
+ * projected through slots, and `::slotted()` reaches only the top-level slotted element, so a plain
+ * `<a>` nested in a slotted span keeps the UA link colour (#0000ee light, #9e9eff dark), which is
+ * 1.5:1 on the filled status bands. This sheet gives those links the band's ink (inherited from the
+ * header, which sets it per status) and keeps the underline as the affordance, since colour alone no
+ * longer marks a link. Zero specificity, so an application rule wins. `tct-link` needs none of this: it
+ * reads the re-pointed text roles. Delivered through the generated light-dom.css and adopted at runtime
+ * by the element. [mwg:styling-web-components]
+ */
+@layer tecton.light-dom {
+  :where(tct-banner)
+    :where(
+      a[slot='heading'],
+      a[slot='description'],
+      a[slot='end'],
+      [slot='heading'] a,
+      [slot='description'] a,
+      [slot='end'] a
+    ) {
+    color: inherit;
+    text-decoration: underline;
+  }
+
+  @media (forced-colors: active) {
+    :where(tct-banner)
+      :where(
+        a[slot='heading'],
+        a[slot='description'],
+        a[slot='end'],
+        [slot='heading'] a,
+        [slot='description'] a,
+        [slot='end'] a
+      ) {
+      color: LinkText;
+    }
+  }
+}

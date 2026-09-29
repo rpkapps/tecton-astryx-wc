@@ -15,31 +15,35 @@ temporary button probes are at `<scratchpad>/button-probes.test.ts`. To run them
 
 ## Running streams (Sonnet, one worktree each under `.claude/worktrees/agent-<id>`)
 
-The original wave-1 agents were stopped by the owner on 2026-09-29; replacements resumed the same
-worktrees (the old ids live on only as worktree directory names).
+Machine: 4 cores, shared. Keep about 7 concurrent engineers at most.
 
-| Stream | Agent id | Worktree | Status / waiting on |
-| --- | --- | --- | --- |
-| WP-1 layout primitives & static text | a1afeefa92cab3d5f | agent-acded57bd1ca4753e | Resumed. Priority: layout recipes for the examples migration. |
-| WP-2 content & status | af36d3808bd5519a6 | agent-a3ee263248691897a | Resumed; tooltip, dialog, providers now merged. |
-| WP-4 overlay surfaces | a86b7f259ce8499ef | agent-ac379c35b2b1eb75d | Resumed; AlertDialog on the real tct-dialog. |
-| M6 docs site: D-015 public text + docs:a11y | adac51d71c6a610e2 | agent-ab361e81d23c847ee | Resumed; the local 48 commits are not pushed until docs:a11y is green. |
-| WP-7 basic form controls | ae829a7c68f66a548 | (own) | Started 2026-09-29. |
+| Stream | Agent id | Status / waiting on |
+| --- | --- | --- |
+| WP-7 basic form controls | ae829a7c68f66a548 | Running. Told that the layout components merged and a rename codemod is coming. |
+| Wave-1 fix-ups (tree-list dark contrast blocking docs:a11y, banner links, dialog alert role, events tests) | a75b628b5d01a6e95 | Running. |
+| WP-D guides reconciliation (D-015 prose, dead links, real APIs, `<Example>`) | a0422133074a702cb | Running. |
+| D-015 rename to `@tecton-wc/*`, `@tct.*` ids, codemod `tools/codemods/d015-rename.ts`, third-party notices page | a32e9d1ad7c2c92f4 | Running. |
+| WP-6 menus | a1670232dc74bd9dc | Running. |
+| WP-8 layout and app frame | a627274cd9f0fda52 | Running. |
+| WP-9 chat messages | a4474048d684578af | Running. |
 
-Merged: WP-F M1–M6, slices A and B, WP-3, WP-5, D-015 text.
+Merged: WP-F (M1–M6, slices A/B), WP-1, WP-2, WP-3, WP-4, WP-5. Wave 1 is complete.
+
+Follow-ups noted at review:
+- WP-1 did not wire `tct-theme`'s `theme` property to a `DefinedTheme`; the core theme utilities exist.
+- WP-4's alert-dialog size budgets are explicit in parity.json and move to the performance WP.
+- Stack, hstack, vstack and card budgets were raised by ScrollFocusController (15 kB); review in the performance WP.
 
 ## Orchestrator queue (in order)
 
-1. Merge WP-1 first → add the examples lint rule (no layout properties in example `style=`), then
-   the examples migration pass (task: 142/158 examples use inline layout CSS; split by folder,
-   screenshot before/after, light and dark).
-2. D-015 package-scope rename `@tecton-astryx/*` → `@tecton-wc/*` and shipped message ids
-   `@astryx.*` → `@tct.*` (upstream locale catalogs stay byte-identical; map in the generator), token
-   status id `tecton-astryx`, `/vendor/tecton-astryx/` paths. Do it in a quiet window after the
-   wave-1 merges; streams then merge and update their imports.
-3. WP-AI (after the rename; creates `packages/cli` = `@tecton-wc/cli`, MCP SDK approved).
-4. Wave 2: WP-6 (1,4,5), WP-8 (1), WP-9 (1,2) as their dependencies merge.
-5. Performance WP: lazy ICU parser + lazy truncation tooltip, remove provisional size budgets.
+1. Examples migration (715 declarations in 24 folders, listed by `node tools/check-examples.ts`).
+   Split into 3 engineers by folder once capacity frees up. Then add `examples:check` to the
+   `pnpm check` STEPS.
+2. Merge the rename as soon as it lands, and tell every stream to merge it and run the codemod.
+3. WP-AI after the rename (creates `packages/cli` = `@tecton-wc/cli`; MCP SDK approved).
+4. Wave 3 as dependencies merge: WP-10 (3,4,6), WP-11 (4,5,7), WP-12 (4,5,7), WP-13 (3,4,7),
+   WP-14 (4,8), WP-15 (2,6,7), WP-16 (2,4,9). Then wave 4: WP-17, WP-18, WP-I, WP-H.
+5. Performance WP: lazy ICU parser and lazy truncation tooltip; remove provisional size budgets.
 
 ## Next actions
 

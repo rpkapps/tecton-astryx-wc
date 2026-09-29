@@ -6,10 +6,8 @@ import type {TctAfterOpenChangeEvent} from '@tecton-astryx/core/events/tct-after
 import type {ChangeReason} from '@tecton-astryx/core/events/tct-event.js';
 import {TctOpenChangeEvent} from '@tecton-astryx/core/events/tct-open-change.js';
 import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {getLayerStack} from '@tecton-astryx/core/layer/stack.js';
 import {TctElement} from '@tecton-astryx/core/tct-element.js';
 import {devWarn} from '@tecton-astryx/core/utils/dev.js';
-import {isImeKeyEvent} from '@tecton-astryx/core/utils/ime.js';
 import {uniqueId} from '@tecton-astryx/core/utils/id.js';
 import defaultMessages from '@tecton-astryx/locales/en/alertDialog.js';
 import {BUTTON_VARIANTS, type ButtonVariant} from '../button/button.types.js';
@@ -37,8 +35,9 @@ const SMALL_SCREEN_QUERY = '(max-width: 640px)';
  * project"), and say in the description what will happen. For a non-destructive question use `tct-dialog`.
  * Without markup, use `openAlertDialog()` from `@tecton-astryx/components/alert-dialog/alert-dialog.api.js`.
  *
- * It is a `tct-dialog` (purpose `required`, so no backdrop dismissal and no close button) with the
- * content and the footer of a confirmation; nested layers route through the same layer stack.
+ * It is a `tct-dialog` (`purpose="form"` with `alert`: Escape asks to close, a press on the backdrop never
+ * does, and the role is `alertdialog`) with the content and the footer of a confirmation. Escape and
+ * platform close requests go through the dialog's own layer, so nested layers close one per press.
  * [mwg:platform-controls-dismiss-dialog] [mwg:light-dismiss-a-dialog]
  *
  * @summary A modal confirmation dialog for destructive or irreversible actions.
@@ -120,15 +119,9 @@ export class TctAlertDialog extends TctElement {
     defaults: defaultMessages,
   });
   readonly #compact = new MediaQueryController(this, SMALL_SCREEN_QUERY);
-  #escapeListening = false;
 
   get #dialog(): TctDialog | null {
     return this.renderRoot.querySelector<TctDialog>('tct-dialog');
-  }
-
-  override disconnectedCallback(): void {
-    super.disconnectedCallback();
-    this.#stopEscape();
   }
 
   protected override willUpdate(changed: PropertyValues<this>): void {
@@ -143,46 +136,25 @@ export class TctAlertDialog extends TctElement {
   protected override updated(): void {
     this.toggleState('open', this.open && !this.inline);
     if (this.open && !this.inline) {
-      this.#listenEscape();
       if (!this.heading || !this.description || !this.actionLabel) {
         devWarn(
           'tct-alert-dialog:content',
           'tct-alert-dialog needs a `heading`, a `description` and an `action-label`.',
         );
       }
-    } else {
-      this.#stopEscape();
     }
   }
 
   /**
-   * Escape cancels (upstream: the dialog is `purpose="form"` with the alertdialog role). The inner dialog
-   * is `required`, which is what makes it an alertdialog and keeps it from closing by a press on the
-   * backdrop, and a `required` dialog leaves Escape alone: so Escape is answered here, in the capture
-   * phase, while this dialog is the top-most layer. Claiming the press keeps the layer stack (and the
-   * browser's own close request) from also acting on it.
+   * The inner dialog asked to close (Escape, or a platform close request): the intent event it raised
+   * already bubbles out of this element (composed), so the owner can cancel it there. The state follows
+   * once every listener has run, unless one prevented it.
    */
-  #listenEscape(): void {
-    if (this.#escapeListening) return;
-    this.#escapeListening = true;
-    document.addEventListener('keydown', this.#onKeyDown, true);
-  }
-
-  #stopEscape(): void {
-    if (!this.#escapeListening) return;
-    this.#escapeListening = false;
-    document.removeEventListener('keydown', this.#onKeyDown, true);
-  }
-
-  readonly #onKeyDown = (event: KeyboardEvent): void => {
-    if (event.key !== 'Escape' || event.defaultPrevented || !this.open) return;
-    // A composing Escape cancels the composition, not the dialog; the stack claims it.
-    if (isImeKeyEvent(event)) return;
-    const dialog = this.#dialog;
-    const top = getLayerStack().find((layer) => layer.host === dialog);
-    if (!top?.isTopmost) return;
-    event.preventDefault();
-    this.requestClose('escape');
+  readonly #onOpenChange = (event: TctOpenChangeEvent): void => {
+    if (event.target !== this.#dialog || event.open) return;
+    queueMicrotask(() => {
+      if (!event.defaultPrevented) this.open = false;
+    });
   };
 
   readonly #onCancel = (): void => {
@@ -222,12 +194,14 @@ export class TctAlertDialog extends TctElement {
     ></tct-button>`;
     return html`<tct-dialog
       part="dialog"
-      purpose="required"
+      purpose="form"
+      alert
       .open=${this.open}
       .inline=${this.inline}
       .width=${this.width}
       aria-labelledby=${this.#titleId}
       aria-describedby=${this.#descriptionId}
+      @tct-open-change=${this.#onOpenChange}
       @tct-after-open-change=${this.#onAfterOpenChange}
     >
       <div
