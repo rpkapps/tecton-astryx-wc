@@ -1,0 +1,15 @@
+<!-- title: Check indicator; description: The mark on a chosen option: a check when chosen, nothing (and no reserved space) when not. -->
+<div style="display: grid; gap: var(--spacing-1); max-inline-size: 20rem">
+  <div style="display: flex; align-items: center; gap: var(--spacing-2)">
+    <tct-check-indicator state="checked"></tct-check-indicator>
+    <span>Chosen option</span>
+  </div>
+  <div style="display: flex; align-items: center; gap: var(--spacing-2)">
+    <tct-check-indicator state="unchecked"></tct-check-indicator>
+    <span>Unchosen option (the indicator takes no space)</span>
+  </div>
+  <div style="display: flex; align-items: center; gap: var(--spacing-2)">
+    <tct-check-indicator state="checked" disabled></tct-check-indicator>
+    <span style="color: var(--color-text-disabled)">Disabled, chosen</span>
+  </div>
+</div>

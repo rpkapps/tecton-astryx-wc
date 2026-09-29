@@ -16,13 +16,20 @@ import {expectEventCounts, recordEvents} from '@tecton-astryx/testing/events.js'
 import {fixture} from '@tecton-astryx/testing/fixture.js';
 import {pressKeys, tabSequence} from '@tecton-astryx/testing/keyboard.js';
 import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
-import {runKeyboardSuite} from '@tecton-astryx/testing/suites/keyboard.js';
+import {runKeyboardSuite, type KeyboardRow} from '@tecton-astryx/testing/suites/keyboard.js';
 import {isChromium} from '@tecton-astryx/testing/tier.js';
 import {nextFrame} from '@tecton-astryx/testing/timing.js';
 import {itemDescriptionContext} from './item.context.js';
 import './define.js';
-import parity from './parity.json';
 import type {TctItem} from './tct-item.js';
+
+// The keyboard table lives in parity.json (read as data; the docs and these tests share it).
+const parity = Object.values(
+  import.meta.glob<{entries: Record<string, {keyboard: KeyboardRow[]}>}>('./parity.json', {
+    eager: true,
+    import: 'default',
+  }),
+)[0]!;
 
 const make = async (markup: string, options: {dir?: 'ltr' | 'rtl'} = {}): Promise<TctItem> => {
   const wrapper = await fixture<HTMLElement>(`<div style="width: 320px">${markup}</div>`, options);
@@ -601,7 +608,7 @@ describe('tct-item: keyboard', () => {
   runKeyboardSuite({
     tag: 'tct-item',
     render: () => shell('<tct-item label="Open" pressable></tct-item>'),
-    table: parity.entries['core.item'].keyboard.filter((row) => row.when === 'pressable or href'),
+    table: parity.entries['core.item']!.keyboard.filter((row) => row.when === 'pressable or href'),
     steps: {
       "Moves focus to the row's button or link": {
         focus: before,
@@ -618,7 +625,7 @@ describe('tct-item: keyboard', () => {
   runKeyboardSuite({
     tag: 'tct-item',
     render: () => shell('<tct-item label="Open" pressable></tct-item>'),
-    table: parity.entries['core.item'].keyboard.filter((row) => row.when === 'pressable'),
+    table: parity.entries['core.item']!.keyboard.filter((row) => row.when === 'pressable'),
     steps: {
       'Activates the row button': {
         setup: (element) => {
@@ -636,7 +643,7 @@ describe('tct-item: keyboard', () => {
   runKeyboardSuite({
     tag: 'tct-item',
     render: () => shell('<tct-item label="Docs" href="#item-keyboard-target"></tct-item>'),
-    table: parity.entries['core.item'].keyboard.filter((row) => row.when === 'href'),
+    table: parity.entries['core.item']!.keyboard.filter((row) => row.when === 'href'),
     steps: {
       'Follows the row link': {
         focus: (element) => element.shadowRoot!.querySelector<HTMLElement>('a'),
@@ -655,7 +662,7 @@ describe('tct-item: keyboard', () => {
       shell(
         '<tct-item label="Row" interactive-selector="input"><input slot="start" type="checkbox" aria-label="Pick" /></tct-item>',
       ),
-    table: parity.entries['core.item'].keyboard.filter((row) => row.when === 'delegating'),
+    table: parity.entries['core.item']!.keyboard.filter((row) => row.when === 'delegating'),
     steps: {
       'Moves focus to the nested control only, never to a second stop on the row': {
         focus: before,
