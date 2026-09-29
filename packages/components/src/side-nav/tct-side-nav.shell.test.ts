@@ -117,7 +117,10 @@ describe('tct-side-nav inside tct-app-shell', () => {
     await openDrawer(element);
     const group = element.querySelector('#group')!;
     await userEvent.click(inner(group, '.toggle, button'));
-    await waitUntil(() => !(group as unknown as {collapsed: boolean}).collapsed, 'the group expands');
+    await waitUntil(
+      () => !(group as unknown as {collapsed: boolean}).collapsed,
+      'the group expands',
+    );
     await animationsFinished(group.shadowRoot!.querySelector('.root')!);
     expect(isDrawerOpen(element)).toBe(true);
     await userEvent.click(inner(element.querySelector('#sub')!, 'a'));

@@ -331,7 +331,12 @@ export abstract class TctTopNavDisclosure extends TctElement {
         >
           <span class="nav-row-label">${this.label}</span>${this.#chevron(this._drawerOpen)}
         </button>
-        <div class="drawer-items" id=${itemsId} ?data-expanded=${this._drawerOpen} ?inert=${!this._drawerOpen}>
+        <div
+          class="drawer-items"
+          id=${itemsId}
+          ?data-expanded=${this._drawerOpen}
+          ?inert=${!this._drawerOpen}
+        >
           <div class="drawer-inner">${this.renderDrawerItems()}</div>
         </div>
       </div>`;

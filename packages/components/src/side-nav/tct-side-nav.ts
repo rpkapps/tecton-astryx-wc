@@ -75,7 +75,11 @@ const MAX_WIDTH = 480;
  */
 export class TctSideNav extends TctElement {
   static override readonly tagName = 'tct-side-nav';
-  static override readonly dependencies = [TctSideNavCollapseButton, TctResizeHandle, TctSizeProvider];
+  static override readonly dependencies = [
+    TctSideNavCollapseButton,
+    TctResizeHandle,
+    TctSizeProvider,
+  ];
   static override styles: CSSResultGroup = [base, motion, styles];
 
   /** Enables the collapse to the icon rail, with the built-in button (unless `no-collapse-button`). */
@@ -266,11 +270,13 @@ export class TctSideNav extends TctElement {
     if (!hasIcons && !builtIn) return nothing;
     return html`<div class="footer-row" ?data-collapsed=${collapsed}>
       <tct-size-provider size="sm">
-        ${builtIn
-          ? html`<tct-side-nav-collapse-button
-              label=${ifDefined(this.collapseButtonLabel || undefined)}
-            ></tct-side-nav-collapse-button>`
-          : nothing}
+        ${
+          builtIn
+            ? html`<tct-side-nav-collapse-button
+                label=${ifDefined(this.collapseButtonLabel || undefined)}
+              ></tct-side-nav-collapse-button>`
+            : nothing
+        }
         <slot name="footer-icons"></slot>
       </tct-size-provider>
     </div>`;
@@ -296,14 +302,16 @@ export class TctSideNav extends TctElement {
       const content = html`${mode === 'drawer' ? html`<slot name="header"></slot>` : nothing}
         <slot name="top-content"></slot>
         <slot></slot>
-        ${footer
-          ? html`<div class="drawer-footer">
-              <slot name="footer"></slot>
-              <div class="drawer-icons">
-                <tct-size-provider size="sm"><slot name="footer-icons"></slot></tct-size-provider>
-              </div>
-            </div>`
-          : nothing}`;
+        ${
+          footer
+            ? html`<div class="drawer-footer">
+                <slot name="footer"></slot>
+                <div class="drawer-icons">
+                  <tct-size-provider size="sm"><slot name="footer-icons"></slot></tct-size-provider>
+                </div>
+              </div>`
+            : nothing
+        }`;
       return mode === 'drawer'
         ? html`<nav class="drawer" part="base" aria-label=${label}>${content}</nav>`
         : html`<div class="drawer" part="base">${content}</div>`;
@@ -323,14 +331,18 @@ export class TctSideNav extends TctElement {
         ?data-collapsed=${collapsed}
         style=${ifDefined(width ? `--_width: ${width}` : undefined)}
       >
-        ${hasTop
-          ? html`<div class="top" part="header" ?data-collapsed=${collapsed}>
-              <slot name="header"></slot>
-              ${this.#slots.has('top-content')
-                ? html`<div class="top-content"><slot name="top-content"></slot></div>`
-                : nothing}
-            </div>`
-          : nothing}
+        ${
+          hasTop
+            ? html`<div class="top" part="header" ?data-collapsed=${collapsed}>
+                <slot name="header"></slot>
+                ${
+                  this.#slots.has('top-content')
+                    ? html`<div class="top-content"><slot name="top-content"></slot></div>`
+                    : nothing
+                }
+              </div>`
+            : nothing
+        }
         <div
           class="content"
           part="content"
@@ -340,25 +352,29 @@ export class TctSideNav extends TctElement {
         >
           <slot></slot>
         </div>
-        ${hasBottom
-          ? html`<div class="bottom" part="footer" ?data-collapsed=${collapsed}>
-              <slot name="footer"></slot>
-              ${this.#footerRow(collapsed, this.#showsButton)}
-            </div>`
-          : nothing}
+        ${
+          hasBottom
+            ? html`<div class="bottom" part="footer" ?data-collapsed=${collapsed}>
+                <slot name="footer"></slot>
+                ${this.#footerRow(collapsed, this.#showsButton)}
+              </div>`
+            : nothing
+        }
       </nav>
-      ${resizable
-        ? html`<tct-resize-handle
-            class="handle"
-            part="resize-handle"
-            direction="horizontal"
-            position="overlay"
-            pill-placement="end"
-            no-always-visible
-            label=${this.resizeLabel || this.#locale.t('resizeSidebar')}
-            .resizable=${this.#region.props}
-          ></tct-resize-handle>`
-        : nothing}
+      ${
+        resizable
+          ? html`<tct-resize-handle
+              class="handle"
+              part="resize-handle"
+              direction="horizontal"
+              position="overlay"
+              pill-placement="end"
+              no-always-visible
+              label=${this.resizeLabel || this.#locale.t('resizeSidebar')}
+              .resizable=${this.#region.props}
+            ></tct-resize-handle>`
+          : nothing
+      }
     </div>`;
   }
 

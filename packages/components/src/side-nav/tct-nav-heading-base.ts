@@ -151,14 +151,12 @@ export abstract class TctNavHeadingBase extends TctElement {
   }
 
   get #menuBox(): HTMLElement {
-    return (this.renderRoot?.querySelector<HTMLElement>('.menu') ?? this);
+    return this.renderRoot?.querySelector<HTMLElement>('.menu') ?? this;
   }
 
   /** The control that opens the menu: the chevron button, or the whole rail icon when collapsed. */
   get #trigger(): HTMLElement | null {
-    return (
-      this.renderRoot?.querySelector<HTMLElement>('.chevron-btn, .rail-trigger') ?? null
-    );
+    return this.renderRoot?.querySelector<HTMLElement>('.chevron-btn, .rail-trigger') ?? null;
   }
 
   /** The element the panel is anchored to: the whole heading. */
@@ -230,7 +228,9 @@ export abstract class TctNavHeadingBase extends TctElement {
   }
 
   #hasNavIcon(): boolean {
-    const assigned = [...this.children].find((child) => child.getAttribute('slot') === this.iconSlot);
+    const assigned = [...this.children].find(
+      (child) => child.getAttribute('slot') === this.iconSlot,
+    );
     return assigned?.localName === 'tct-nav-icon';
   }
 
@@ -255,15 +255,31 @@ export abstract class TctNavHeadingBase extends TctElement {
 
   #text(independent: boolean, inlineChevron?: TemplateResult): TemplateResult {
     return html`<span class="text">
-      ${this.superheading
-        ? this.#line('superheading', 'superheading', this.superheading, this.superheadingHref, independent)
-        : nothing}
+      ${
+        this.superheading
+          ? this.#line(
+              'superheading',
+              'superheading',
+              this.superheading,
+              this.superheadingHref,
+              independent,
+            )
+          : nothing
+      }
       <span class="heading-row"
         >${this.#line('heading', 'heading', this.heading, this.headingHref, independent)}${inlineChevron ?? nothing}</span
       >
-      ${this.subheading
-        ? this.#line('subheading', 'subheading', this.subheading, this.subheadingHref, independent)
-        : nothing}
+      ${
+        this.subheading
+          ? this.#line(
+              'subheading',
+              'subheading',
+              this.subheading,
+              this.subheadingHref,
+              independent,
+            )
+          : nothing
+      }
     </span>`;
   }
 
@@ -289,7 +305,13 @@ export abstract class TctNavHeadingBase extends TctElement {
 
   #menuPanel(): TemplateResult {
     return html`<div class="menu-layer layer-surface" popover="manual" data-placement="below">
-      <div class="menu" part="menu" id=${this.ids.id('menu')} tabindex="-1" @click=${this.#onMenuClick}>
+      <div
+        class="menu"
+        part="menu"
+        id=${this.ids.id('menu')}
+        tabindex="-1"
+        @click=${this.#onMenuClick}
+      >
         <slot name="menu"></slot>
       </div>
     </div>`;
@@ -326,7 +348,8 @@ export abstract class TctNavHeadingBase extends TctElement {
           ${icon}</button
         >${tooltip}${this.#menuPanel()}`;
     }
-    return html`<div class="nav-row rail rail-row" part="item" data-size="md">${icon}</div>${tooltip}`;
+    return html`<div class="nav-row rail rail-row" part="item" data-size="md">${icon}</div>
+      ${tooltip}`;
   }
 
   protected override render(): TemplateResult | typeof nothing {

@@ -13,7 +13,15 @@ import {fixture} from '@tecton-wc/testing/fixture.js';
 import {pressKeys} from '@tecton-wc/testing/keyboard.js';
 import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
 import {animationsFinished, waitUntil} from '@tecton-wc/testing/timing.js';
-import {isOpen, layerOf, linkOf, menuBar, MENU_ITEMS, panelOf, triggerOf} from './top-nav-test-helpers.js';
+import {
+  isOpen,
+  layerOf,
+  linkOf,
+  menuBar,
+  MENU_ITEMS,
+  panelOf,
+  triggerOf,
+} from './top-nav-test-helpers.js';
 
 afterEach(async () => {
   await userEvent.hover(document.body, {position: {x: 0, y: 0}}).catch(() => undefined);
@@ -22,7 +30,9 @@ afterEach(async () => {
 runElementSuite({
   tag: 'tct-top-nav-mega-menu',
   render: () =>
-    html`<tct-top-nav-mega-menu label="Products"><tct-top-nav-mega-menu-item heading="Analytics" href="#a"></tct-top-nav-mega-menu-item></tct-top-nav-mega-menu>`,
+    html`<tct-top-nav-mega-menu label="Products"
+      ><tct-top-nav-mega-menu-item heading="Analytics" href="#a"></tct-top-nav-mega-menu-item
+    ></tct-top-nav-mega-menu>`,
   properties: {label: 'Products', delay: 300, hideDelay: 400, open: true},
   attributes: {label: 'label', delay: 'delay', hideDelay: 'hide-delay', open: 'open'},
   events: ['tct-open-change', 'tct-after-open-change'],
@@ -36,15 +46,23 @@ describe('tct-top-nav-mega-menu: semantics', () => {
   it('is a disclosure button with aria-expanded and aria-controls; the panel is a labelled group, not a menu', async () => {
     const {first} = await menuBar(TAG);
     const button = triggerOf(first);
-    expect(await axNode(button)).toMatchObject({role: 'button', name: 'Products', expanded: 'false'});
+    expect(await axNode(button)).toMatchObject({
+      role: 'button',
+      name: 'Products',
+      expanded: 'false',
+    });
     expect(button.hasAttribute('aria-haspopup')).toBe(false);
     expect(button.getAttribute('aria-controls')).toBe(panelOf(first).id);
     await first.show();
     await animationsFinished(layerOf(first));
     expect(await axNode(panelOf(first))).toMatchObject({role: 'group', name: 'Products'});
-    expect(first.shadowRoot!.querySelector('[role="menu"], [role="dialog"], [role="menuitem"]')).toBeNull();
+    expect(
+      first.shadowRoot!.querySelector('[role="menu"], [role="dialog"], [role="menuitem"]'),
+    ).toBeNull();
     const names = await Promise.all(
-      [...first.querySelectorAll('tct-top-nav-mega-menu-item')].map(async (item) => (await axNode(linkOf(item))).name),
+      [...first.querySelectorAll('tct-top-nav-mega-menu-item')].map(
+        async (item) => (await axNode(linkOf(item))).name,
+      ),
     );
     expect(names).toEqual(['Analytics', 'Messaging', 'Reports']);
   });
@@ -175,7 +193,9 @@ describe('tct-top-nav-mega-menu: the panel hangs below the whole bar', () => {
     const menu = bar.querySelector<HTMLElement & {show(): Promise<void>}>('#m')!;
     await menu.show();
     await animationsFinished(layerOf(menu));
-    const items = [...menu.querySelectorAll('tct-top-nav-mega-menu-item')].map((item) => item.getBoundingClientRect());
+    const items = [...menu.querySelectorAll('tct-top-nav-mega-menu-item')].map((item) =>
+      item.getBoundingClientRect(),
+    );
     expect(items[0]!.top).toBe(items[1]!.top);
     expect(items[1]!.left).toBeGreaterThan(items[0]!.left);
     expect(items[2]!.top).toBeGreaterThan(items[0]!.top);
@@ -191,7 +211,9 @@ describe('tct-top-nav-mega-menu: the panel hangs below the whole bar', () => {
     await first.show();
     await animationsFinished(layerOf(first));
     const panel = panelOf(first);
-    expect(layerOf(first).getBoundingClientRect().bottom).toBeLessThanOrEqual(window.innerHeight + 8);
+    expect(layerOf(first).getBoundingClientRect().bottom).toBeLessThanOrEqual(
+      window.innerHeight + 8,
+    );
     expect(panel.scrollHeight).toBeGreaterThan(panel.clientHeight);
   });
 });

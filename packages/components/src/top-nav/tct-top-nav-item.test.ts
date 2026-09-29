@@ -70,9 +70,10 @@ describe('tct-top-nav-item', () => {
 
   it('renders the default slot instead of the label', async () => {
     const element = await item('label="Home" href="#home"', '<b id="custom">Custom</b>');
-    expect(element.shadowRoot!.querySelector<HTMLSlotElement>('slot:not([name])')!.assignedElements()[0]!.id).toBe(
-      'custom',
-    );
+    expect(
+      element.shadowRoot!.querySelector<HTMLSlotElement>('slot:not([name])')!.assignedElements()[0]!
+        .id,
+    ).toBe('custom');
     expect(link(element).textContent).not.toContain('Home');
   });
 
@@ -116,9 +117,11 @@ describe('tct-top-nav-item', () => {
       'label="Home" href="#h"',
       '<svg slot="icon" id="glyph" width="16" height="16"></svg>',
     );
-    expect(element.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="icon"]')!.assignedElements()[0]!.id).toBe(
-      'glyph',
-    );
+    expect(
+      element
+        .shadowRoot!.querySelector<HTMLSlotElement>('slot[name="icon"]')!
+        .assignedElements()[0]!.id,
+    ).toBe('glyph');
   });
 
   it('a javascript: destination renders no href', async () => {

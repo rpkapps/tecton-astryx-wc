@@ -79,7 +79,8 @@ export class TctTopNav extends TctElement {
   get renderMode(): TopNavRenderMode {
     const derived = this.#mode.value;
     // A `tct-mobile-nav` of your own replaces the automatic drawer, and the full bar stays.
-    if (derived === 'mobile-bar' && !this.#mode.isExplicit && this.#hasCustomDrawer) return 'default';
+    if (derived === 'mobile-bar' && !this.#mode.isExplicit && this.#hasCustomDrawer)
+      return 'default';
     return derived;
   }
 
@@ -151,7 +152,10 @@ export class TctTopNav extends TctElement {
     const shell = this.#shellElement;
     const sources = this.#drawerSources();
     const wanted =
-      this.renderMode === 'mobile-bar' && !this.#mode.isExplicit && shell !== null && sources.length > 0;
+      this.renderMode === 'mobile-bar' &&
+      !this.#mode.isExplicit &&
+      shell !== null &&
+      sources.length > 0;
     if (!wanted || !shell) {
       this.#removeDrawer();
       return;
@@ -191,14 +195,18 @@ export class TctTopNav extends TctElement {
       const shell = this.#shell.value;
       const hasDrawerContent = this.#drawerSources().length > 0 || shell.hasSideNav;
       return html`<nav class="root bar" part="base" aria-label=${label}>
-        ${hasHeading
-          ? html`<div class="heading" part="heading"><slot name="heading"></slot></div>`
-          : nothing}
+        ${
+          hasHeading
+            ? html`<div class="heading" part="heading"><slot name="heading"></slot></div>`
+            : nothing
+        }
         <div class="bar-end">
           <slot name="end"></slot>
-          ${hasDrawerContent && shell.hasAutoToggle
-            ? html`<tct-mobile-nav-toggle></tct-mobile-nav-toggle>`
-            : nothing}
+          ${
+            hasDrawerContent && shell.hasAutoToggle
+              ? html`<tct-mobile-nav-toggle></tct-mobile-nav-toggle>`
+              : nothing
+          }
         </div>
       </nav>`;
     }
@@ -206,17 +214,21 @@ export class TctTopNav extends TctElement {
     const hasCenter = this.#slots.has('center');
     return html`<nav class="root ${hasCenter ? 'grid' : 'flex'}" part="base" aria-label=${label}>
       <div class="left">
-        ${hasHeading
-          ? html`<div class="heading" part="heading"><slot name="heading"></slot></div>`
-          : nothing}
+        ${
+          hasHeading
+            ? html`<div class="heading" part="heading"><slot name="heading"></slot></div>`
+            : nothing
+        }
         <div class="start"><slot name="start"></slot><slot></slot></div>
       </div>
       ${hasCenter ? html`<div class="center"><slot name="center"></slot></div>` : nothing}
-      ${hasCenter
-        ? html`<div class="right"><slot name="end"></slot></div>`
-        : hasEnd
-          ? html`<div class="end"><slot name="end"></slot></div>`
-          : nothing}
+      ${
+        hasCenter
+          ? html`<div class="right"><slot name="end"></slot></div>`
+          : hasEnd
+            ? html`<div class="end"><slot name="end"></slot></div>`
+            : nothing
+      }
     </nav>`;
   }
 }

@@ -47,17 +47,22 @@ export class TctSideNavSection extends TctElement {
     const titleId = this.#ids.id('title');
     const hidden = this.headerHidden || this.#collapse.value.isCollapsed;
     const header = html`<span class="titles"
-        ><span class="title" part="heading" id=${titleId}>${this.heading}</span
-        >${this.subheading
-          ? html`<span class="subtitle" part="subheading">${this.subheading}</span>`
-          : nothing}</span
-      >${this.#slots.has('end')
-        ? html`<span class="end" part="end-content"><slot name="end"></slot></span>`
-        : nothing}`;
+        ><span class="title" part="heading" id=${titleId}>${this.heading}</span>${
+          this.subheading
+            ? html`<span class="subtitle" part="subheading">${this.subheading}</span>`
+            : nothing
+        }</span
+      >${
+        this.#slots.has('end')
+          ? html`<span class="end" part="end-content"><slot name="end"></slot></span>`
+          : nothing
+      }`;
     return html`<div class="root" part="base" role="group" aria-labelledby=${titleId}>
-      ${hidden
-        ? html`<div class="visually-hidden">${header}</div>`
-        : html`<div class="header" part="header">${header}</div>`}
+      ${
+        hidden
+          ? html`<div class="visually-hidden">${header}</div>`
+          : html`<div class="header" part="header">${header}</div>`
+      }
       <div class="items" part="items"><slot></slot></div>
     </div>`;
   }

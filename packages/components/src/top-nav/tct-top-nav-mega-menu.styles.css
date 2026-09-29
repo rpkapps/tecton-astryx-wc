@@ -7,7 +7,10 @@
  */
 @layer component {
   .panel.mega {
-    max-inline-size: min(960px, calc(100vi - var(--spacing-4))); /* design: upstream mega menu width cap (960px) */
+    max-inline-size: min(
+      960px,
+      calc(100vi - var(--spacing-4))
+    ); /* design: upstream mega menu width cap (960px) */
   }
 
   .content {

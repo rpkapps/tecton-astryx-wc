@@ -77,7 +77,9 @@ const primary = (element: Element): HTMLElement => inner(element, '.primary');
 
 describe('tct-side-nav-item: the row', () => {
   it('renders the label as a link when it has an href', async () => {
-    const {nav: root} = await nav('<tct-side-nav-item id="a" label="Dashboard" href="#dash"></tct-side-nav-item>');
+    const {nav: root} = await nav(
+      '<tct-side-nav-item id="a" label="Dashboard" href="#dash"></tct-side-nav-item>',
+    );
     const link = primary(item(root, '#a'));
     expect(link.localName).toBe('a');
     expect(link.getAttribute('href')).toBe('#dash');
@@ -99,7 +101,10 @@ describe('tct-side-nav-item: the row', () => {
       <tct-side-nav-item id="b" label="Projects" href="#b"></tct-side-nav-item>`);
     expect(primary(item(root, '#a')).getAttribute('aria-current')).toBe('page');
     expect(primary(item(root, '#b')).hasAttribute('aria-current')).toBe(false);
-    expect(await axNode(primary(item(root, '#a')))).toMatchObject({role: 'link', name: 'Dashboard'});
+    expect(await axNode(primary(item(root, '#a')))).toMatchObject({
+      role: 'link',
+      name: 'Dashboard',
+    });
   });
 
   it('disables a button, and turns a disabled link into a disabled button', async () => {
@@ -115,7 +120,9 @@ describe('tct-side-nav-item: the row', () => {
   });
 
   it('fires no click for a disabled item', async () => {
-    const {nav: root} = await nav('<tct-side-nav-item id="a" label="One" disabled></tct-side-nav-item>');
+    const {nav: root} = await nav(
+      '<tct-side-nav-item id="a" label="One" disabled></tct-side-nav-item>',
+    );
     const events = recordEvents(root, ['click']);
     await userEvent.click(primary(item(root, '#a')), {force: true}).catch(() => undefined);
     expect(events.named('click').length).toBe(0);
@@ -138,7 +145,9 @@ describe('tct-side-nav-item: the row', () => {
         <span slot="end" id="count">3</span>
       </tct-side-nav-item>`);
     const one = item(root, '#a');
-    expect(inner<HTMLSlotElement>(one, 'slot[name="icon"]').assignedElements()[0]!.id).toBe('glyph');
+    expect(inner<HTMLSlotElement>(one, 'slot[name="icon"]').assignedElements()[0]!.id).toBe(
+      'glyph',
+    );
     expect(inner<HTMLSlotElement>(one, 'slot[name="end"]').assignedElements()[0]!.id).toBe('count');
     expect(primary(one).contains(inner(one, 'slot[name="end"]'))).toBe(true);
   });
@@ -207,11 +216,23 @@ describe('tct-side-nav-item: text contrast in every state', () => {
       const y = row.top + row.height / 2;
       const session = cdp();
       await session.send('Input.dispatchMouseEvent', {type: 'mouseMoved', x, y});
-      await session.send('Input.dispatchMouseEvent', {type: 'mousePressed', x, y, button: 'left', clickCount: 1});
+      await session.send('Input.dispatchMouseEvent', {
+        type: 'mousePressed',
+        x,
+        y,
+        button: 'left',
+        clickCount: 1,
+      });
       try {
         await expectAccessible(wrapper, contrastOnly);
       } finally {
-        await session.send('Input.dispatchMouseEvent', {type: 'mouseReleased', x, y, button: 'left', clickCount: 1});
+        await session.send('Input.dispatchMouseEvent', {
+          type: 'mouseReleased',
+          x,
+          y,
+          button: 'left',
+          clickCount: 1,
+        });
       }
     });
   }
@@ -249,9 +270,11 @@ describe('tct-side-nav-item: sub-items', () => {
     await pressKeys('Space');
     await group.updateComplete;
     expect(group.collapsed).toBe(false);
-    expect(events.named('tct-collapse-change').map((event) => (event as never as {reason: string}).reason)).toEqual(
-      ['keyboard', 'keyboard'],
-    );
+    expect(
+      events
+        .named('tct-collapse-change')
+        .map((event) => (event as never as {reason: string}).reason),
+    ).toEqual(['keyboard', 'keyboard']);
   });
 
   it('collapsed sub-items are inert: not focusable and not in the accessibility tree', async () => {
@@ -281,7 +304,9 @@ describe('tct-side-nav-item: sub-items', () => {
     });
     await userEvent.click(primary(group));
     expect(events.named('tct-collapse-change').length).toBe(1);
-    expect((events.named('tct-collapse-change')[0] as never as {collapsed: boolean}).collapsed).toBe(false);
+    expect(
+      (events.named('tct-collapse-change')[0] as never as {collapsed: boolean}).collapsed,
+    ).toBe(false);
     expect(group.collapsed).toBe(true);
     group.collapsed = false;
     await group.updateComplete;
@@ -295,7 +320,11 @@ describe('tct-side-nav-item: sub-items', () => {
     expect(link.localName).toBe('a');
     expect(link.hasAttribute('aria-expanded')).toBe(false);
     const toggle = inner(group, '.toggle');
-    expect(await axNode(toggle)).toMatchObject({role: 'button', name: 'Collapse Settings', expanded: 'true'});
+    expect(await axNode(toggle)).toMatchObject({
+      role: 'button',
+      name: 'Collapse Settings',
+      expanded: 'true',
+    });
     // Clicking the link does not toggle; clicking the chevron does, and never bubbles as an item click.
     const clicks = recordEvents(group, ['click']);
     await userEvent.click(toggle);
@@ -320,13 +349,15 @@ describe('tct-side-nav-item: sub-items', () => {
     const {nav: root} = await nav(GROUP.replace('id="g" ', 'id="g" no-collapse '));
     const group = item(root, '#g');
     expect(primary(group).hasAttribute('aria-expanded')).toBe(false);
-    expect(inner(group, '.chevron', )).toBeNull();
+    expect(inner(group, '.chevron')).toBeNull();
     await userEvent.click(primary(group));
     expect(group.collapsed).toBe(false);
   });
 
   it('an item without sub-items has no toggle and no chevron', async () => {
-    const {nav: root} = await nav('<tct-side-nav-item id="a" label="One" href="#"></tct-side-nav-item>');
+    const {nav: root} = await nav(
+      '<tct-side-nav-item id="a" label="One" href="#"></tct-side-nav-item>',
+    );
     expect(inner(item(root, '#a'), '.chevron')).toBeNull();
     expect(inner(item(root, '#a'), '.children')).toBeNull();
   });
@@ -345,7 +376,10 @@ describe('tct-side-nav-item: actions', () => {
     const action = root.querySelector<HTMLElement>('#more')!;
     expect(primary(row).contains(inner(row, 'slot[name="actions"]'))).toBe(false);
     expect(inner<HTMLSlotElement>(row, 'slot[name="actions"]').assignedElements()[0]).toBe(action);
-    await waitUntil(() => action.shadowRoot!.querySelector('.button')!.getAttribute('data-size') === 'sm', 'compact size');
+    await waitUntil(
+      () => action.shadowRoot!.querySelector('.button')!.getAttribute('data-size') === 'sm',
+      'compact size',
+    );
   });
 
   it('tabs reach the primary, the toggle and the action before the sub-items', async () => {
@@ -383,7 +417,9 @@ describe('tct-side-nav-item: actions', () => {
   });
 
   it('adds no row wrapper without actions', async () => {
-    const {nav: root} = await nav('<tct-side-nav-item id="a" label="One" href="#"></tct-side-nav-item>');
+    const {nav: root} = await nav(
+      '<tct-side-nav-item id="a" label="One" href="#"></tct-side-nav-item>',
+    );
     expect(inner(item(root, '#a'), '.row-wrap')).toBeNull();
   });
 });
@@ -394,7 +430,9 @@ describe('tct-side-nav-item: routing', () => {
     const wrapper = await fixture<HTMLElement>(
       `<tct-link-provider><tct-side-nav><tct-side-nav-item id="a" label="One" href="/one"></tct-side-nav-item></tct-side-nav></tct-link-provider>`,
     );
-    const provider = wrapper as HTMLElement & {navigate?: (href: string, event: MouseEvent) => boolean};
+    const provider = wrapper as HTMLElement & {
+      navigate?: (href: string, event: MouseEvent) => boolean;
+    };
     const calls: string[] = [];
     provider.navigate = (href) => {
       calls.push(href);
@@ -464,7 +502,10 @@ describe('tct-side-nav-item: the collapsed rail', () => {
 
   it('renders an icon-only button for an item without a destination', async () => {
     const {nav: root} = await rail();
-    expect(await axNode(primary(item(root, '#plain')))).toMatchObject({role: 'button', name: 'Create'});
+    expect(await axNode(primary(item(root, '#plain')))).toMatchObject({
+      role: 'button',
+      name: 'Create',
+    });
   });
 
   it('keeps a consumer aria-label, and falls back to the label when it is blank', async () => {
@@ -504,7 +545,11 @@ describe('tct-side-nav-item: the collapsed rail', () => {
     const {nav: root} = await rail();
     const settings = item(root, '#settings');
     const trigger = inner(settings, '.rail-trigger');
-    expect(await axNode(trigger)).toMatchObject({role: 'button', name: 'Settings', expanded: 'false'});
+    expect(await axNode(trigger)).toMatchObject({
+      role: 'button',
+      name: 'Settings',
+      expanded: 'false',
+    });
     await userEvent.click(trigger);
     const layer = inner(settings, '.flyout-layer');
     await waitUntil(() => layer.matches(':popover-open'), 'the flyout opens');
@@ -597,9 +642,12 @@ describe('tct-side-nav-item: the collapsed rail', () => {
     const layer = inner(settings, '.flyout-layer');
     await userEvent.click(inner(settings, '.rail-trigger'));
     await waitUntil(() => layer.matches(':popover-open'), 'the flyout opens');
-    (root).expand();
+    root.expand();
     await root.updateComplete;
-    await waitUntil(() => item(root, '#settings').shadowRoot!.querySelector('.flyout-layer') === null, 'the row renders');
+    await waitUntil(
+      () => item(root, '#settings').shadowRoot!.querySelector('.flyout-layer') === null,
+      'the row renders',
+    );
   });
 
   it('gives the flyout the German name and mirrors beside the rail in RTL', async () => {
@@ -619,6 +667,8 @@ describe('tct-side-nav-item: the collapsed rail', () => {
     await animationsFinished(layer);
     expect((await axNode(inner(settings, '.flyout'))).name).toMatch(/Settings/);
     // The rail is on the right in RTL, so the flyout opens to its left.
-    expect(layer.getBoundingClientRect().right).toBeLessThanOrEqual(trigger.getBoundingClientRect().left);
+    expect(layer.getBoundingClientRect().right).toBeLessThanOrEqual(
+      trigger.getBoundingClientRect().left,
+    );
   });
 });

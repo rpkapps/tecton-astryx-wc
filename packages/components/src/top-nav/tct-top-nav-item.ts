@@ -80,9 +80,10 @@ export class TctTopNavItem extends TctElement {
   readonly #slots: SlotController = new SlotController(this, 'default', 'icon');
   readonly #mode: TopNavRenderModeController = new TopNavRenderModeController(this);
   readonly #shell: AppShellMobileController = new AppShellMobileController(this);
-  readonly #router: ContextConsumer<typeof linkContext> = new ContextConsumer<
-    typeof linkContext
-  >(this, {context: linkContext});
+  readonly #router: ContextConsumer<typeof linkContext> = new ContextConsumer<typeof linkContext>(
+    this,
+    {context: linkContext},
+  );
 
   /** The link inside the item. */
   get control(): HTMLAnchorElement | null {
@@ -142,16 +143,20 @@ export class TctTopNavItem extends TctElement {
       ?data-selected=${this.selected}
       ?data-icon-only=${this.iconOnly}
       @click=${this.#onClick}
-      >${hasIcon
-        ? html`<span class="nav-row-icon" part="icon"
-            ><tct-icon name=${this.icon} size="sm" color="inherit"
-              ><slot name="icon"></slot></tct-icon
-          ></span>`
-        : nothing}${this.iconOnly
-        ? nothing
-        : custom
-          ? html`<slot></slot>`
-          : html`<span class="nav-row-label">${this.label}</span>`}</a
+      >${
+        hasIcon
+          ? html`<span class="nav-row-icon" part="icon"
+              ><tct-icon name=${this.icon} size="sm" color="inherit"
+                ><slot name="icon"></slot></tct-icon
+            ></span>`
+          : nothing
+      }${
+        this.iconOnly
+          ? nothing
+          : custom
+            ? html`<slot></slot>`
+            : html`<span class="nav-row-label">${this.label}</span>`
+      }</a
     >`;
   }
 }

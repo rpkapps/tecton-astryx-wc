@@ -132,9 +132,10 @@ export class TctSideNavItem extends TctElement {
   readonly #collapse: SideNavCollapseController = new SideNavCollapseController(this);
   readonly #mode: SideNavRenderModeController = new SideNavRenderModeController(this);
   readonly #shell: AppShellMobileController = new AppShellMobileController(this);
-  readonly #router: ContextConsumer<typeof linkContext> = new ContextConsumer<
-    typeof linkContext
-  >(this, {context: linkContext});
+  readonly #router: ContextConsumer<typeof linkContext> = new ContextConsumer<typeof linkContext>(
+    this,
+    {context: linkContext},
+  );
   readonly #locale: LocaleController = new LocaleController(this, {
     namespace: 'sideNavItem',
     defaults: english,

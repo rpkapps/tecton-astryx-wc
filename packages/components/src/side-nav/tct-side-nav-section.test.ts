@@ -14,7 +14,9 @@ import './define.js';
 runElementSuite({
   tag: 'tct-side-nav-section',
   render: () =>
-    html`<tct-side-nav-section heading="Main"><tct-side-nav-item label="Home" href="#"></tct-side-nav-item></tct-side-nav-section>`,
+    html`<tct-side-nav-section heading="Main"
+      ><tct-side-nav-item label="Home" href="#"></tct-side-nav-item
+    ></tct-side-nav-section>`,
   properties: {heading: 'Projects', subheading: 'Recent', headerHidden: true},
   attributes: {heading: 'heading', subheading: 'subheading', headerHidden: 'header-hidden'},
 });
@@ -32,7 +34,8 @@ async function section(attributes = '', extra = '') {
   return {wrapper, element};
 }
 
-const group = (element: Element): HTMLElement => element.shadowRoot!.querySelector<HTMLElement>('[role="group"]')!;
+const group = (element: Element): HTMLElement =>
+  element.shadowRoot!.querySelector<HTMLElement>('[role="group"]')!;
 
 describe('tct-side-nav-section', () => {
   it('is a group named by its heading', async () => {
@@ -55,7 +58,9 @@ describe('tct-side-nav-section', () => {
 
   it('renders the items in the default slot, in order', async () => {
     const {element} = await section('heading="Main"');
-    const items = element.shadowRoot!.querySelector<HTMLSlotElement>('.items slot')!.assignedElements();
+    const items = element
+      .shadowRoot!.querySelector<HTMLSlotElement>('.items slot')!
+      .assignedElements();
     expect(items.map((item) => item.getAttribute('label'))).toEqual(['Home']);
   });
 

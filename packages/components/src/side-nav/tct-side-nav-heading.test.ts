@@ -44,7 +44,11 @@ runElementSuite({
 const MENU = `<div slot="menu" id="menu"><a id="one" href="#one">Switch to Beta</a><a id="two" href="#two">Switch to Gamma</a></div>`;
 const ICON = `<tct-nav-icon slot="icon" id="icon"><tct-icon name="viewColumns"></tct-icon></tct-nav-icon>`;
 
-async function heading(attributes: string, content = '', options: {collapsed?: boolean; dir?: 'rtl'} = {}) {
+async function heading(
+  attributes: string,
+  content = '',
+  options: {collapsed?: boolean; dir?: 'rtl'} = {},
+) {
   await page.viewport(1000, 700);
   const nav = options.collapsed ? 'collapsible collapsed' : '';
   const wrapper = await fixture<HTMLElement>(
@@ -65,11 +69,16 @@ const isOpen = (element: Element): boolean => layer(element).matches(':popover-o
 
 describe('tct-side-nav-heading: text and links', () => {
   it('renders the heading, the superheading and the subheading', async () => {
-    const {element} = await heading('heading="Product" superheading="Suite" subheading="Account"', ICON);
+    const {element} = await heading(
+      'heading="Product" superheading="Suite" subheading="Account"',
+      ICON,
+    );
     expect(q(element, '.heading').textContent).toBe('Product');
     expect(q(element, '.superheading').textContent).toBe('Suite');
     expect(q(element, '.subheading').textContent).toBe('Account');
-    expect(root(element).querySelector<HTMLSlotElement>('slot[name="icon"]')!.assignedElements()[0]!.id).toBe('icon');
+    expect(
+      root(element).querySelector<HTMLSlotElement>('slot[name="icon"]')!.assignedElements()[0]!.id,
+    ).toBe('icon');
   });
 
   it('is one link when only heading-href is set', async () => {
@@ -90,7 +99,9 @@ describe('tct-side-nav-heading: text and links', () => {
       ICON,
     );
     const links = [...root(element).querySelectorAll('a')];
-    expect(links.map((link) => link.getAttribute('href'))).toEqual(['#p', '#s', '#p', '#t'].sort((a, b) => 0 * a.length - 0 * b.length));
+    expect(links.map((link) => link.getAttribute('href'))).toEqual(
+      ['#p', '#s', '#p', '#t'].sort((a, b) => 0 * a.length - 0 * b.length),
+    );
     expect(root(element).querySelector('a.root')).toBeNull();
     const names = await Promise.all(links.map(async (link) => (await axNode(link)).name));
     expect(names).toEqual(expect.arrayContaining(['Product', 'Suite', 'Team']));
@@ -103,7 +114,9 @@ describe('tct-side-nav-heading: text and links', () => {
       'heading="Product"',
       '<tct-button slot="end" id="end" variant="ghost" icon-only icon="close" label="End"></tct-button>',
     );
-    expect(root(element).querySelector<HTMLSlotElement>('slot[name="end"]')!.assignedElements()[0]!.id).toBe('end');
+    expect(
+      root(element).querySelector<HTMLSlotElement>('slot[name="end"]')!.assignedElements()[0]!.id,
+    ).toBe('end');
     expect(root(element).querySelector('.chevron-btn')).toBeNull();
   });
 });
@@ -145,7 +158,10 @@ describe('tct-side-nav-heading: the menu disclosure', () => {
   });
 
   it('keeps the links independent and the chevron as the trigger when the heading has hrefs and a menu', async () => {
-    const {element} = await heading('heading="Product" heading-href="#home" subheading="Team" subheading-href="#team"', MENU);
+    const {element} = await heading(
+      'heading="Product" heading-href="#home" subheading="Team" subheading-href="#team"',
+      MENU,
+    );
     expect(root(element).querySelector('.trigger-root')).toBeNull();
     const button = q(element, '.chevron-btn');
     // A press on a link is the link's: it navigates and never toggles the menu (hover may still open it).
@@ -253,7 +269,9 @@ describe('tct-side-nav-heading: the collapsed rail', () => {
   });
 
   it('is a link named by the heading when it has a destination', async () => {
-    const {element} = await heading('heading="Product" heading-href="#home"', ICON, {collapsed: true});
+    const {element} = await heading('heading="Product" heading-href="#home"', ICON, {
+      collapsed: true,
+    });
     const link = q(element, 'a.rail-row');
     expect(await axNode(link)).toMatchObject({role: 'link', name: 'Product'});
     await expectAccessible(element);
@@ -266,7 +284,11 @@ describe('tct-side-nav-heading: the collapsed rail', () => {
       {collapsed: true},
     );
     const trigger = q(element, 'button.rail-row');
-    expect(await axNode(trigger)).toMatchObject({role: 'button', name: 'Product', expanded: 'false'});
+    expect(await axNode(trigger)).toMatchObject({
+      role: 'button',
+      name: 'Product',
+      expanded: 'false',
+    });
     expect(root(element).querySelector('slot[name="end"]')).toBeNull();
     await userEvent.click(trigger);
     await waitUntil(() => isOpen(element), 'the menu opens');

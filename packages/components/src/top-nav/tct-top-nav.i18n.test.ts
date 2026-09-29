@@ -39,7 +39,11 @@ const chevron = (element: TctTopNav): HTMLElement =>
     .shadowRoot!.querySelector<HTMLElement>('.chevron-btn')!;
 
 /** Polls the accessible name until the catalog is loaded and rendered (the name is read asynchronously). */
-async function waitForName(element: () => Element, expected: string, message: string): Promise<void> {
+async function waitForName(
+  element: () => Element,
+  expected: string,
+  message: string,
+): Promise<void> {
   let name: string | undefined;
   const start = performance.now();
   while (name !== expected) {

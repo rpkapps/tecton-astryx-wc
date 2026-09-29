@@ -32,7 +32,9 @@ const contrastOnly = {runOnly: {type: 'rule' as const, values: ['color-contrast'
 runElementSuite({
   tag: 'tct-top-nav',
   render: () =>
-    html`<tct-top-nav label="Main"><tct-top-nav-item label="Home" href="#"></tct-top-nav-item></tct-top-nav>`,
+    html`<tct-top-nav label="Main"
+      ><tct-top-nav-item label="Home" href="#"></tct-top-nav-item
+    ></tct-top-nav>`,
   properties: {label: 'Primary'},
   attributes: {label: 'label'},
 });
@@ -48,7 +50,11 @@ const ITEMS = `
   <tct-top-nav-item id="search" slot="end" icon-only icon="search" label="Search" href="#search"></tct-top-nav-item>
 `;
 
-async function bar(content = ITEMS, attributes = '', options: {theme?: 'light' | 'dark'; dir?: 'rtl'} = {}) {
+async function bar(
+  content = ITEMS,
+  attributes = '',
+  options: {theme?: 'light' | 'dark'; dir?: 'rtl'} = {},
+) {
   await page.viewport(1000, 700);
   const element = await fixture<TctTopNav>(
     `<tct-top-nav ${attributes}>${content}</tct-top-nav>`,
@@ -65,7 +71,10 @@ const navOf = (element: Element): HTMLElement => rootOf(element).querySelector<H
 describe('tct-top-nav: structure', () => {
   it('is a navigation landmark named "Top navigation" by default and by label', async () => {
     const element = await bar();
-    expect(await axNode(navOf(element))).toMatchObject({role: 'navigation', name: 'Top navigation'});
+    expect(await axNode(navOf(element))).toMatchObject({
+      role: 'navigation',
+      name: 'Top navigation',
+    });
     element.label = 'Main navigation';
     await element.updateComplete;
     expect((await axNode(navOf(element))).name).toBe('Main navigation');
@@ -76,9 +85,9 @@ describe('tct-top-nav: structure', () => {
       `${ITEMS}<tct-top-nav-item slot="start" id="named" label="Named" href="#n"></tct-top-nav-item>`,
     );
     const root = rootOf(element);
-    expect(root.querySelector<HTMLSlotElement>('slot[name="heading"]')!.assignedElements()[0]!.id).toBe(
-      'heading',
-    );
+    expect(
+      root.querySelector<HTMLSlotElement>('slot[name="heading"]')!.assignedElements()[0]!.id,
+    ).toBe('heading');
     const start = root.querySelector<HTMLSlotElement>('slot[name="start"]')!.assignedElements();
     expect(start.map((item) => item.id)).toEqual(['named']);
     const rest = root.querySelector<HTMLSlotElement>('.start slot:not([name])')!.assignedElements();
@@ -246,9 +255,9 @@ describe('tct-top-nav: inside an app shell', () => {
     const root = rootOf(top(element));
     expect(root.querySelector('.start')).toBeNull();
     expect(element.querySelector('#home')!.getBoundingClientRect().width).toBe(0);
-    expect(root.querySelector<HTMLSlotElement>('slot[name="heading"]')!.assignedElements()[0]!.id).toBe(
-      'heading',
-    );
+    expect(
+      root.querySelector<HTMLSlotElement>('slot[name="heading"]')!.assignedElements()[0]!.id,
+    ).toBe('heading');
     expect(root.querySelector<HTMLSlotElement>('slot[name="end"]')!.assignedElements()[0]!.id).toBe(
       'search',
     );
@@ -277,7 +286,9 @@ describe('tct-top-nav: inside an app shell', () => {
     expect(await axNode(list)).toMatchObject({role: 'navigation', name: 'Main'});
     const labels = [...list.children].map((child) => child.getAttribute('label'));
     expect(labels).toEqual(['Home', 'Docs', 'Products']);
-    const homeRow = list.querySelector('tct-top-nav-item')!.shadowRoot!.querySelector<HTMLElement>('.item')!;
+    const homeRow = list
+      .querySelector('tct-top-nav-item')!
+      .shadowRoot!.querySelector<HTMLElement>('.item')!;
     expect(homeRow.classList.contains('nav-row')).toBe(true);
     expect(homeRow.getAttribute('aria-current')).toBe('page');
     // The rule between the two navigations, and the side navigation after it.
@@ -295,7 +306,11 @@ describe('tct-top-nav: inside an app shell', () => {
     await animationsFinished(drawer.shadowRoot!.querySelector('dialog')!);
     const menu = copies(element)!.shadowRoot!.querySelector<TctTopNavMenu>('tct-top-nav-menu')!;
     const header = menu.shadowRoot!.querySelector<HTMLButtonElement>('.drawer-header')!;
-    expect(await axNode(header)).toMatchObject({role: 'button', name: 'Products', expanded: 'false'});
+    expect(await axNode(header)).toMatchObject({
+      role: 'button',
+      name: 'Products',
+      expanded: 'false',
+    });
     expect(menu.shadowRoot!.querySelector<HTMLElement>('.drawer-items')!.inert).toBe(true);
     // The chevron sits at the end of the header row, inside the drawer.
     const chevron = header.querySelector('.chevron')!.getBoundingClientRect();

@@ -59,9 +59,10 @@ export class TctTopNavMegaMenuItem extends TctElement {
   readonly #slots: SlotController = new SlotController(this, 'icon');
   readonly #mode: TopNavRenderModeController = new TopNavRenderModeController(this);
   readonly #shell: AppShellMobileController = new AppShellMobileController(this);
-  readonly #router: ContextConsumer<typeof linkContext> = new ContextConsumer<
-    typeof linkContext
-  >(this, {context: linkContext});
+  readonly #router: ContextConsumer<typeof linkContext> = new ContextConsumer<typeof linkContext>(
+    this,
+    {context: linkContext},
+  );
   readonly #ids: IdController = new IdController(this, 'tct-top-nav-mega-menu-item');
 
   /** The link or button inside the item. */
@@ -90,18 +91,21 @@ export class TctTopNavMegaMenuItem extends TctElement {
     const {target, rel} = computeTargetAndRel(this.target || undefined, this.rel || undefined);
     const href = this.href !== undefined ? safeHref(this.href) : null;
     const isLink = this.href !== undefined;
-    const content = html`${hasIcon
-        ? html`<span class="icon-box" part="icon"
-            ><tct-icon name=${this.icon} size="sm" color="inherit"
-              ><slot name="icon"></slot></tct-icon
-          ></span>`
-        : nothing}<span class="text"
-        ><span class="title" part="title" id=${titleId}>${this.heading}</span
-        >${this.description
-          ? html`<span class="description" part="description" id=${descriptionId}
-              >${this.description}</span
-            >`
-          : nothing}</span
+    const content = html`${
+        hasIcon
+          ? html`<span class="icon-box" part="icon"
+              ><tct-icon name=${this.icon} size="sm" color="inherit"
+                ><slot name="icon"></slot></tct-icon
+            ></span>`
+          : nothing
+      }<span class="text"
+        ><span class="title" part="title" id=${titleId}>${this.heading}</span>${
+          this.description
+            ? html`<span class="description" part="description" id=${descriptionId}
+                >${this.description}</span
+              >`
+            : nothing
+        }</span
       >`;
     const className = drawer ? 'entry nav-row focus-ring' : 'entry focus-ring';
     return isLink

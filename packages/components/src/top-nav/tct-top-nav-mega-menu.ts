@@ -69,16 +69,20 @@ export class TctTopNavMegaMenu extends TctTopNavDisclosure {
   protected override renderPanel(): TemplateResult {
     return html`<div class="content" part="content">
       <div class="items" part="items"><slot></slot></div>
-      ${this.#slots.has('featured')
-        ? html`<div class="featured" part="featured"><slot name="featured"></slot></div>`
-        : html``}
+      ${
+        this.#slots.has('featured')
+          ? html`<div class="featured" part="featured"><slot name="featured"></slot></div>`
+          : html``
+      }
     </div>`;
   }
 
   protected override renderDrawerItems(): TemplateResult {
-    return html`<slot></slot>${this.#slots.has('featured')
-      ? html`<div class="drawer-featured"><slot name="featured"></slot></div>`
-      : html``}`;
+    return html`<slot></slot>${
+        this.#slots.has('featured')
+          ? html`<div class="drawer-featured"><slot name="featured"></slot></div>`
+          : html``
+      }`;
   }
 }
 

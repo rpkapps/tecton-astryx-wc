@@ -63,31 +63,44 @@ const isOpen = (element: Element): boolean => q(element, '.menu-layer').matches(
 
 describe('tct-top-nav-heading', () => {
   it('renders the heading, the lines around it and the logo', async () => {
-    const {element} = await heading('heading="Product" superheading="Suite" subheading="Team"', LOGO);
+    const {element} = await heading(
+      'heading="Product" superheading="Suite" subheading="Team"',
+      LOGO,
+    );
     expect(q(element, '.heading').textContent).toBe('Product');
     expect(q(element, '.superheading').textContent).toBe('Suite');
     expect(q(element, '.subheading').textContent).toBe('Team');
-    expect(element.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="logo"]')!.assignedElements()[0]!.id).toBe(
-      'logo',
-    );
+    expect(
+      element
+        .shadowRoot!.querySelector<HTMLSlotElement>('slot[name="logo"]')!
+        .assignedElements()[0]!.id,
+    ).toBe('logo');
   });
 
   it('is a plain box with no links and no menu, and one link with only heading-href', async () => {
     const plain = await heading('heading="Product"');
     expect(plain.element.shadowRoot!.querySelector('a, button')).toBeNull();
     const linked = await heading('heading="Product" heading-href="#home"');
-    expect(await axNode(q(linked.element, 'a.root'))).toMatchObject({role: 'link', name: 'Product'});
+    expect(await axNode(q(linked.element, 'a.root'))).toMatchObject({
+      role: 'link',
+      name: 'Product',
+    });
   });
 
   it('names the logo link in the independent-links configuration: by the heading, or by logo-label', async () => {
-    const byHeading = await heading('heading="Product" heading-href="#p" superheading="Suite" superheading-href="#s"', LOGO);
+    const byHeading = await heading(
+      'heading="Product" heading-href="#p" superheading="Suite" superheading-href="#s"',
+      LOGO,
+    );
     const logo = byHeading.element.shadowRoot!.querySelector<HTMLElement>('a.icon-link')!;
     expect((await axNode(logo)).name).toBe('Product');
     const byLabel = await heading(
       'heading="Product" heading-href="#p" superheading="Suite" superheading-href="#s" logo-label="Acme home"',
       LOGO,
     );
-    expect((await axNode(byLabel.element.shadowRoot!.querySelector<HTMLElement>('a.icon-link')!)).name).toBe('Acme home');
+    expect(
+      (await axNode(byLabel.element.shadowRoot!.querySelector<HTMLElement>('a.icon-link')!)).name,
+    ).toBe('Acme home');
     await expectAccessible(byLabel.bar);
   });
 
@@ -100,11 +113,11 @@ describe('tct-top-nav-heading', () => {
   });
 
   it('renders the end content', async () => {
-    const {element} = await heading(
-      'heading="Product"',
-      '<span slot="end" id="end">end</span>',
-    );
-    expect(element.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="end"]')!.assignedElements()[0]!.id).toBe('end');
+    const {element} = await heading('heading="Product"', '<span slot="end" id="end">end</span>');
+    expect(
+      element.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="end"]')!.assignedElements()[0]!
+        .id,
+    ).toBe('end');
   });
 });
 
@@ -125,7 +138,10 @@ describe('tct-top-nav-heading: the menu disclosure', () => {
     button.focus();
     await pressKeys('Enter');
     await waitUntil(() => isOpen(element), 'the menu opens');
-    await waitUntil(() => containsFlat(bar.querySelector('#one'), deepActiveElement()), 'focus enters the menu');
+    await waitUntil(
+      () => containsFlat(bar.querySelector('#one'), deepActiveElement()),
+      'focus enters the menu',
+    );
     await pressKeys('Escape');
     await waitUntil(() => !isOpen(element), 'Escape closes it');
     await waitUntil(() => deepActiveElement() === button, 'focus returns to the chevron');

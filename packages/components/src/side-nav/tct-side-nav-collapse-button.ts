@@ -128,7 +128,11 @@ export class TctSideNavCollapseButton extends TctElement {
       // The id may not resolve yet (the navigation comes later in the document): try again next frame.
       requestAnimationFrame(() => {
         if (this.isConnected && this.#external) this.#bind();
-        else if (this.isConnected) devWarn('tct-side-nav-collapse-button:for', `No tct-side-nav with the id "${this.for ?? ''}" in this tree.`);
+        else if (this.isConnected)
+          devWarn(
+            'tct-side-nav-collapse-button:for',
+            `No tct-side-nav with the id "${this.for ?? ''}" in this tree.`,
+          );
       });
     }
   }
@@ -148,8 +152,7 @@ export class TctSideNavCollapseButton extends TctElement {
     // Nothing to collapse to when the navigation is not collapsible, or it is the drawer.
     if (!state.isCollapsible || this.#shell.value.isMobile) return nothing;
     const label =
-      this.label ||
-      this.#locale.t(state.isCollapsed ? 'expandSidebar' : 'collapseSidebar');
+      this.label || this.#locale.t(state.isCollapsed ? 'expandSidebar' : 'collapseSidebar');
     const custom = this.#slots.has('default');
     return html`<tct-button
       part="button"
@@ -161,9 +164,11 @@ export class TctSideNavCollapseButton extends TctElement {
       @click=${this.#onClick}
     >
       <span slot="icon" class="glyph" part="icon"
-        >${custom
-          ? html`<slot></slot>`
-          : html`<tct-icon name="chevronLeft" color="inherit"></tct-icon>`}</span
+        >${
+          custom
+            ? html`<slot></slot>`
+            : html`<tct-icon name="chevronLeft" color="inherit"></tct-icon>`
+        }</span
       >
     </tct-button>`;
   }

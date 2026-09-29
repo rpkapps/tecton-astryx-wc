@@ -78,7 +78,10 @@ export class TctTopNavDrawer extends TctElement {
         twin.removeAttribute('open');
         twin.removeAttribute('slot');
         for (const name of COPIED_PROPERTIES) {
-          if (name in original) (twin as unknown as Record<string, unknown>)[name] = (original as unknown as Record<string, unknown>)[name];
+          if (name in original)
+            (twin as unknown as Record<string, unknown>)[name] = (
+              original as unknown as Record<string, unknown>
+            )[name];
         }
       }
       // A section the user expanded stays expanded across a rebuild.

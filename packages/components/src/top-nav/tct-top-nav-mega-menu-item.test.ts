@@ -14,7 +14,8 @@ import './define.js';
 
 runElementSuite({
   tag: 'tct-top-nav-mega-menu-item',
-  render: () => html`<tct-top-nav-mega-menu-item heading="Analytics" href="#a"></tct-top-nav-mega-menu-item>`,
+  render: () =>
+    html`<tct-top-nav-mega-menu-item heading="Analytics" href="#a"></tct-top-nav-mega-menu-item>`,
   properties: {
     heading: 'Reports',
     description: 'Dashboards',
@@ -35,7 +36,10 @@ runElementSuite({
 
 runElementSuite({
   tag: 'tct-top-nav-mega-menu-featured-card',
-  render: () => html`<tct-top-nav-mega-menu-featured-card heading="News"></tct-top-nav-mega-menu-featured-card>`,
+  render: () =>
+    html`<tct-top-nav-mega-menu-featured-card
+      heading="News"
+    ></tct-top-nav-mega-menu-featured-card>`,
   properties: {
     heading: 'News',
     description: 'What is new',
@@ -63,7 +67,8 @@ async function mount<T extends HTMLElement>(markup: string, selector: string): P
   return element;
 }
 
-const entry = (element: Element): HTMLElement => element.shadowRoot!.querySelector<HTMLElement>('.entry')!;
+const entry = (element: Element): HTMLElement =>
+  element.shadowRoot!.querySelector<HTMLElement>('.entry')!;
 
 describe('tct-top-nav-mega-menu-item', () => {
   it('renders a link with the title as its name and the description as its description', async () => {
@@ -81,7 +86,10 @@ describe('tct-top-nav-mega-menu-item', () => {
   });
 
   it('renders a button when there is no destination, and a click reaches the host', async () => {
-    const element = await mount('<tct-top-nav-mega-menu-item id="i" heading="Export"></tct-top-nav-mega-menu-item>', '#i');
+    const element = await mount(
+      '<tct-top-nav-mega-menu-item id="i" heading="Export"></tct-top-nav-mega-menu-item>',
+      '#i',
+    );
     expect(entry(element).localName).toBe('button');
     expect(await axNode(entry(element))).toMatchObject({role: 'button', name: 'Export'});
     let clicks = 0;
@@ -114,7 +122,11 @@ describe('tct-top-nav-mega-menu-item', () => {
       '<tct-top-nav-mega-menu-item id="i" heading="Docs" href="#d"><svg slot="icon" id="glyph" width="16" height="16"></svg></tct-top-nav-mega-menu-item>',
       '#i',
     );
-    expect(element.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="icon"]')!.assignedElements()[0]!.id).toBe('glyph');
+    expect(
+      element
+        .shadowRoot!.querySelector<HTMLSlotElement>('slot[name="icon"]')!
+        .assignedElements()[0]!.id,
+    ).toBe('glyph');
   });
 
   it('is accessible', async () => {
@@ -183,7 +195,9 @@ describe('tct-top-nav-mega-menu-featured-card', () => {
       '<tct-top-nav-mega-menu-featured-card id="c" heading="News"><p id="extra">Extra</p></tct-top-nav-mega-menu-featured-card>',
       '#c',
     );
-    expect(element.shadowRoot!.querySelector<HTMLSlotElement>('slot')!.assignedElements()[0]!.id).toBe('extra');
+    expect(
+      element.shadowRoot!.querySelector<HTMLSlotElement>('slot')!.assignedElements()[0]!.id,
+    ).toBe('extra');
   });
 
   it('points the arrow along the reading direction', async () => {

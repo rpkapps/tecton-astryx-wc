@@ -55,9 +55,10 @@ export class TctTopNavMegaMenuFeaturedCard extends TctElement {
 
   readonly #mode: TopNavRenderModeController = new TopNavRenderModeController(this);
   readonly #shell: AppShellMobileController = new AppShellMobileController(this);
-  readonly #router: ContextConsumer<typeof linkContext> = new ContextConsumer<
-    typeof linkContext
-  >(this, {context: linkContext});
+  readonly #router: ContextConsumer<typeof linkContext> = new ContextConsumer<typeof linkContext>(
+    this,
+    {context: linkContext},
+  );
 
   readonly #onLinkClick = (event: MouseEvent): void => {
     routeNavClick(event, this.#router.value, {href: this.linkHref});
@@ -68,30 +69,36 @@ export class TctTopNavMegaMenuFeaturedCard extends TctElement {
     const image = this.image ? safeUrl(this.image) : null;
     const href = this.linkHref !== undefined ? safeHref(this.linkHref) : null;
     return html`<div class="root" part="base">
-      ${image
-        ? html`<img
-            class="image"
-            part="image"
-            src=${image}
-            alt=${this.imageAlt}
-            role=${ifDefined(this.imageAlt ? undefined : 'presentation')}
-            aria-hidden=${this.imageAlt ? nothing : 'true'}
-          />`
-        : nothing}
+      ${
+        image
+          ? html`<img
+              class="image"
+              part="image"
+              src=${image}
+              alt=${this.imageAlt}
+              role=${ifDefined(this.imageAlt ? undefined : 'presentation')}
+              aria-hidden=${this.imageAlt ? nothing : 'true'}
+            />`
+          : nothing
+      }
       <div class="body" part="body">
         <span class="heading" part="heading">${this.heading}</span>
-        ${this.description
-          ? html`<span class="description" part="description">${this.description}</span>`
-          : nothing}
-        ${this.linkLabel && this.linkHref !== undefined
-          ? html`<a
-              class="link focus-ring"
-              part="link"
-              href=${ifDefined(href ?? undefined)}
-              @click=${this.#onLinkClick}
-              >${this.linkLabel}<span class="arrow" aria-hidden="true">&nbsp;→</span></a
-            >`
-          : nothing}
+        ${
+          this.description
+            ? html`<span class="description" part="description">${this.description}</span>`
+            : nothing
+        }
+        ${
+          this.linkLabel && this.linkHref !== undefined
+            ? html`<a
+                class="link focus-ring"
+                part="link"
+                href=${ifDefined(href ?? undefined)}
+                @click=${this.#onLinkClick}
+                >${this.linkLabel}<span class="arrow" aria-hidden="true">&nbsp;→</span></a
+              >`
+            : nothing
+        }
         <slot></slot>
       </div>
     </div>`;

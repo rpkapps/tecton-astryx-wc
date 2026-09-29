@@ -11,10 +11,4 @@ defineElement(TctSideNavHeading);
 defineElement(TctSideNavCollapseButton);
 defineElement(TctSideNav);
 
-export {
-  TctSideNav,
-  TctSideNavCollapseButton,
-  TctSideNavHeading,
-  TctSideNavItem,
-  TctSideNavSection,
-};
+export {TctSideNav, TctSideNavCollapseButton, TctSideNavHeading, TctSideNavItem, TctSideNavSection};

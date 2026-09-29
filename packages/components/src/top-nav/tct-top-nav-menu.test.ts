@@ -18,7 +18,15 @@ import {pressKeys} from '@tecton-wc/testing/keyboard.js';
 import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
 import {isTier2} from '@tecton-wc/testing/tier.js';
 import {animationsFinished, nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
-import {isOpen, layerOf, linkOf, menuBar, MENU_ITEMS, panelOf, triggerOf} from './top-nav-test-helpers.js';
+import {
+  isOpen,
+  layerOf,
+  linkOf,
+  menuBar,
+  MENU_ITEMS,
+  panelOf,
+  triggerOf,
+} from './top-nav-test-helpers.js';
 
 afterEach(async () => {
   await userEvent.hover(document.body, {position: {x: 0, y: 0}}).catch(() => undefined);
@@ -27,7 +35,9 @@ afterEach(async () => {
 runElementSuite({
   tag: 'tct-top-nav-menu',
   render: () =>
-    html`<tct-top-nav-menu label="Products"><tct-top-nav-mega-menu-item heading="Analytics" href="#a"></tct-top-nav-mega-menu-item></tct-top-nav-menu>`,
+    html`<tct-top-nav-menu label="Products"
+      ><tct-top-nav-mega-menu-item heading="Analytics" href="#a"></tct-top-nav-mega-menu-item
+    ></tct-top-nav-menu>`,
   properties: {label: 'Products', delay: 300, hideDelay: 400, open: true},
   attributes: {label: 'label', delay: 'delay', hideDelay: 'hide-delay', open: 'open'},
   events: ['tct-open-change', 'tct-after-open-change'],
@@ -48,7 +58,9 @@ describe('tct-top-nav-menu: disclosure semantics', () => {
     const panel = panelOf(first);
     expect(button.getAttribute('aria-controls')).toBe(panel.id);
     expect(first.shadowRoot!.getElementById(panel.id)).toBe(panel);
-    expect(first.shadowRoot!.querySelector('[role="menu"], [role="menuitem"], [role="dialog"]')).toBeNull();
+    expect(
+      first.shadowRoot!.querySelector('[role="menu"], [role="menuitem"], [role="dialog"]'),
+    ).toBeNull();
   });
 
   it('the panel is a group named by the label, holding ordinary links with their titles as names', async () => {
@@ -119,7 +131,10 @@ describe('tct-top-nav-menu: keyboard', () => {
     await pressKeys('Enter');
     await waitUntil(() => isOpen(first), 'the panel opens');
     const links = [...first.querySelectorAll('tct-top-nav-mega-menu-item')];
-    await waitUntil(() => containsFlat(links[0], deepActiveElement()), 'focus is on the first link');
+    await waitUntil(
+      () => containsFlat(links[0], deepActiveElement()),
+      'focus is on the first link',
+    );
     await pressKeys('Escape');
     await waitUntil(() => !isOpen(first), 'Escape closes it');
     await waitUntil(() => deepActiveElement() === button, 'focus returns to the button');
@@ -169,7 +184,10 @@ describe('tct-top-nav-menu: keyboard', () => {
     button.focus();
     await pressKeys('Enter');
     await waitUntil(() => isOpen(first), 'the panel opens');
-    await waitUntil(() => containsFlat(first.querySelector('tct-top-nav-mega-menu-item'), deepActiveElement()), 'first link');
+    await waitUntil(
+      () => containsFlat(first.querySelector('tct-top-nav-mega-menu-item'), deepActiveElement()),
+      'first link',
+    );
     await pressKeys('Shift+Tab');
     expect(deepActiveElement()).toBe(button);
     expect(isOpen(first)).toBe(true);
@@ -182,7 +200,10 @@ describe('tct-top-nav-menu: keyboard', () => {
     await pressKeys('ArrowDown');
     await waitUntil(() => isOpen(first), 'ArrowDown opens it');
     const links = [...first.querySelectorAll('tct-top-nav-mega-menu-item')];
-    await waitUntil(() => containsFlat(links[0], deepActiveElement()), 'ArrowDown enters the panel');
+    await waitUntil(
+      () => containsFlat(links[0], deepActiveElement()),
+      'ArrowDown enters the panel',
+    );
     await pressKeys('ArrowDown');
     expect(containsFlat(links[1], deepActiveElement())).toBe(true);
     await pressKeys('End');
@@ -378,7 +399,9 @@ describe('tct-top-nav-menu: placement', () => {
       await animationsFinished(layerOf(first));
       const button = triggerOf(first).getBoundingClientRect();
       const panel = layerOf(first).getBoundingClientRect();
-      expect(Math.abs(panel.left + panel.width / 2 - (button.left + button.width / 2))).toBeLessThan(2);
+      expect(
+        Math.abs(panel.left + panel.width / 2 - (button.left + button.width / 2)),
+      ).toBeLessThan(2);
     });
   }
 
@@ -388,7 +411,9 @@ describe('tct-top-nav-menu: placement', () => {
     await first.show();
     await animationsFinished(layerOf(first));
     const panel = panelOf(first);
-    expect(layerOf(first).getBoundingClientRect().bottom).toBeLessThanOrEqual(window.innerHeight + 8);
+    expect(layerOf(first).getBoundingClientRect().bottom).toBeLessThanOrEqual(
+      window.innerHeight + 8,
+    );
     expect(panel.scrollHeight).toBeGreaterThan(panel.clientHeight);
   });
 });

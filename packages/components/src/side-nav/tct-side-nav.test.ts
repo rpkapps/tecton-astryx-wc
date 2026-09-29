@@ -43,11 +43,15 @@ async function nav(attributes = '', content = NAV, width = 1000): Promise<TctSid
 }
 
 const rootOf = (element: Element): ShadowRoot => element.shadowRoot!;
-const box = (element: TctSideNav): HTMLElement => rootOf(element).querySelector<HTMLElement>('nav.root')!;
+const box = (element: TctSideNav): HTMLElement =>
+  rootOf(element).querySelector<HTMLElement>('nav.root')!;
 
 runElementSuite({
   tag: 'tct-side-nav',
-  render: () => html`<tct-side-nav><tct-side-nav-item label="Home" href="#"></tct-side-nav-item></tct-side-nav>`,
+  render: () =>
+    html`<tct-side-nav
+      ><tct-side-nav-item label="Home" href="#"></tct-side-nav-item
+    ></tct-side-nav>`,
   properties: {collapsible: true, resizable: true, label: 'Sections', noCollapseButton: true},
   attributes: {collapsible: 'collapsible', resizable: 'resizable', label: 'label'},
   events: ['tct-collapse-change', 'tct-size-change'],
@@ -137,7 +141,10 @@ describe('tct-side-nav: collapse', () => {
     expect(box(element).getBoundingClientRect().width).toBe(48);
     if (!isTier2) expect(element.matches(':state(collapsed)')).toBe(true);
     expect(events.named('tct-collapse-change').length).toBe(1);
-    expect(events.named('tct-collapse-change').at(-1)).toMatchObject({collapsed: true, reason: 'pointer'});
+    expect(events.named('tct-collapse-change').at(-1)).toMatchObject({
+      collapsed: true,
+      reason: 'pointer',
+    });
     expect(await axNode(inner.shadowRoot!.querySelector('button')!)).toMatchObject({
       name: 'Expand sidebar',
     });
@@ -158,8 +165,9 @@ describe('tct-side-nav: collapse', () => {
     element.addEventListener('tct-collapse-change', (event) => {
       event.preventDefault();
     });
-    rootOf(element).querySelector('tct-side-nav-collapse-button')!.shadowRoot!
-      .querySelector<HTMLElement>('tct-button')!
+    rootOf(element)
+      .querySelector('tct-side-nav-collapse-button')!
+      .shadowRoot!.querySelector<HTMLElement>('tct-button')!
       .click();
     await element.updateComplete;
     expect(element.collapsed).toBe(false);
@@ -309,7 +317,10 @@ describe('tct-side-nav: resizing', () => {
     await pressKeys('Enter');
     await element.updateComplete;
     expect(element.collapsed).toBe(true);
-    expect(events.named('tct-collapse-change').at(-1)).toMatchObject({collapsed: true, reason: 'keyboard'});
+    expect(events.named('tct-collapse-change').at(-1)).toMatchObject({
+      collapsed: true,
+      reason: 'keyboard',
+    });
   });
 
   it('remembers the width and the collapse state across a reload with auto-save-id', async () => {

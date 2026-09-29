@@ -40,7 +40,11 @@ const collapseButton = (element: TctSideNav): HTMLElement =>
     .shadowRoot!.querySelector<HTMLElement>('button')!;
 
 /** Polls the accessible name until the catalog is loaded and rendered (the name is read asynchronously). */
-async function waitForName(element: () => Element, expected: string, message: string): Promise<void> {
+async function waitForName(
+  element: () => Element,
+  expected: string,
+  message: string,
+): Promise<void> {
   let name: string | undefined;
   const start = performance.now();
   while (name !== expected) {
@@ -60,7 +64,11 @@ describe('side navigation i18n', () => {
   it('lang="de-DE" names the landmark, the collapse button, the resize handle and the heading menu', async () => {
     const element = await nav('collapsible resizable', 'de-DE');
     await waitForName(() => navBox(element), 'Seitennavigation', 'the landmark is German');
-    await waitForName(() => collapseButton(element), 'Seitenleiste einklappen', 'the button is German');
+    await waitForName(
+      () => collapseButton(element),
+      'Seitenleiste einklappen',
+      'the button is German',
+    );
     await waitForName(
       () => element.shadowRoot!.querySelector('tct-resize-handle')!,
       'Seitenleiste anpassen',
@@ -92,6 +100,10 @@ describe('side navigation i18n', () => {
     );
     await waitForName(() => navBox(element), 'Bereiche', 'the label wins');
     await waitForName(() => collapseButton(element), 'Zuklappen', 'the button label wins');
-    await waitForName(() => element.shadowRoot!.querySelector('tct-resize-handle')!, 'Breite', 'the handle label wins');
+    await waitForName(
+      () => element.shadowRoot!.querySelector('tct-resize-handle')!,
+      'Breite',
+      'the handle label wins',
+    );
   });
 });

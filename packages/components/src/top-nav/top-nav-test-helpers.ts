@@ -15,7 +15,12 @@ export const MENU_ITEMS = `
 /** A bar with two menus (or mega menus) around a plain item, and the page outside it. */
 export async function menuBar(
   tag: 'tct-top-nav-menu' | 'tct-top-nav-mega-menu',
-  options: {dir?: 'rtl'; theme?: 'light' | 'dark'; region?: 'start' | 'center' | 'end'; width?: number} = {},
+  options: {
+    dir?: 'rtl';
+    theme?: 'light' | 'dark';
+    region?: 'start' | 'center' | 'end';
+    width?: number;
+  } = {},
 ): Promise<{bar: TctTopNav; first: TctTopNavDisclosure; second: TctTopNavDisclosure}> {
   await page.viewport(options.width ?? 1000, 700);
   const region = options.region && options.region !== 'start' ? ` slot="${options.region}"` : '';
