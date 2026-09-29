@@ -22,6 +22,7 @@
       "default": "./dist/autoloader.js"
     },
     "./custom-elements.json": "./custom-elements.json",
+    "./agent-registry.json": "./agent-registry.json",
     "./tecton.css": "./dist/tecton.css",
     "./light-dom.css": "./dist/light-dom.css",
     "./cloak.css": "./dist/cloak.css",
@@ -44,7 +45,9 @@
     "./dist/autoloader.js",
     "./dist/cdn/**",
     "./src/*/define.ts",
-    "**/*.css"
+    "**/*.css",
+    "./src/autoloader.ts",
+    "./src/generated/define-all.ts"
   ],
   "dependencies": {
     "@tecton-astryx/core": "workspace:*",

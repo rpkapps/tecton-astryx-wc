@@ -16,7 +16,7 @@ import {loadManifest} from '../lib/parity.ts';
 import {PATHS, rel} from '../lib/paths.ts';
 import {DOCS_PUBLIC, GUIDES_DIR} from '../lib/site.ts';
 import {loadTokens} from '../lib/tokens.ts';
-import {buildRegistry, type GuideInput} from './build.ts';
+import {buildRegistry, toPublicRegistry, type GuideInput} from './build.ts';
 import {renderLlmsFull, renderLlmsTxt} from './llms.ts';
 
 const cem = loadCem(join(PATHS.components, 'custom-elements.json'));
@@ -59,12 +59,14 @@ const registry = buildRegistry({
   guides: readGuides(),
 });
 
-const json = `${JSON.stringify(registry, null, 2)}\n`;
+const publicRegistry = toPublicRegistry(registry);
 const outputs: [string, string][] = [
-  [join(PATHS.components, 'agent-registry.json'), json],
-  [join(DOCS_PUBLIC, 'agent-registry.json'), json],
-  [join(DOCS_PUBLIC, 'llms.txt'), renderLlmsTxt(registry)],
-  [join(DOCS_PUBLIC, 'llms-full.txt'), renderLlmsFull(registry)],
+  // Internal (full): the CLI and MCP server read this one, with the upstream mapping.
+  [join(PATHS.components, 'agent-registry.json'), `${JSON.stringify(registry, null, 2)}\n`],
+  // Public: served by the docs site; never names the upstream design system.
+  [join(DOCS_PUBLIC, 'agent-registry.json'), `${JSON.stringify(publicRegistry, null, 2)}\n`],
+  [join(DOCS_PUBLIC, 'llms.txt'), renderLlmsTxt(publicRegistry)],
+  [join(DOCS_PUBLIC, 'llms-full.txt'), renderLlmsFull(publicRegistry)],
 ];
 for (const [path, content] of outputs) writeIfChanged(path, content);
 console.log(

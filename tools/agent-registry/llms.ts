@@ -3,14 +3,14 @@
  * the agent registry (D-011). Links are site-root-relative: the docs site has no fixed origin
  * (nothing is published, D-008), so a consumer resolves them against wherever it hosts the build.
  */
-import type {AgentRegistry, RegistryComponent, RegistryElement} from './build.ts';
+import type {PublicRegistry, RegistryComponent, RegistryElement} from './build.ts';
 import {REFERENCE_URLS} from '../lib/site.ts';
 
 const REGISTRY_URL = '/agent-registry.json';
 
 const code = (text: string) => `\`${text.replace(/`/g, "'")}\``;
 
-export function renderLlmsTxt(registry: AgentRegistry): string {
+export function renderLlmsTxt(registry: PublicRegistry): string {
   const lines: string[] = [
     `# ${registry.library.name}`,
     '',
@@ -47,8 +47,6 @@ export function renderLlmsTxt(registry: AgentRegistry): string {
   lines.push(
     '## Reference',
     '',
-    `- [Parity status](${REFERENCE_URLS.parity}): implementation status of every upstream Astryx component`,
-    `- [Differences and open items](${REFERENCE_URLS.differences}): approved differences, provisional and astryx-retained tokens, open owner questions`,
     `- [Design tokens](${REFERENCE_URLS.tokens}): every token with light and dark values and status`,
     `- [Agent registry](${REGISTRY_URL}): the JSON registry read by the tct CLI and MCP server`,
     '',
@@ -136,7 +134,7 @@ function elementMarkdown(element: RegistryElement): string[] {
   return out;
 }
 
-function componentMarkdown(component: RegistryComponent): string[] {
+function componentMarkdown(component: Omit<RegistryComponent, 'entries'>): string[] {
   const out: string[] = [
     `#### ${component.name}${component.tag ? ` (${code(`<${component.tag}>`)})` : ''}`,
     '',
@@ -166,13 +164,13 @@ function componentMarkdown(component: RegistryComponent): string[] {
   return out;
 }
 
-export function renderLlmsFull(registry: AgentRegistry): string {
+export function renderLlmsFull(registry: PublicRegistry): string {
   const lines: string[] = [
     `# ${registry.library.name}: full reference`,
     '',
     `> ${registry.library.description}`,
     '',
-    `Upstream: ${registry.upstream.name} at ${registry.upstream.commit.slice(0, 7)}. Machine-readable: ${REGISTRY_URL}.`,
+    `Machine-readable: ${REGISTRY_URL}.`,
     '',
   ];
 

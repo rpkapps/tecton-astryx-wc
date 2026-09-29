@@ -16,6 +16,7 @@
  * polite live region for the whole page).
  */
 import {Code} from 'astro:components';
+import {parseExampleHeader} from '../../../../tools/lib/example-header.ts';
 
 interface Props {
   source: string;
@@ -25,17 +26,32 @@ interface Props {
 
 const {source, title: titleProp, description: descriptionProp} = Astro.props;
 
-const header = /^\s*<!--\s*title:\s*([^;]*?)\s*(?:;\s*description:\s*([\s\S]*?))?\s*-->\s*\n?/.exec(
-  source,
-);
-const fragment = (header ? source.slice(header[0].length) : source).trimEnd();
-const title = titleProp ?? header?.[1] ?? 'Example';
-const description = descriptionProp ?? header?.[2]?.trim() ?? '';
+const header = parseExampleHeader(source);
+const fragment = (header ? source.slice(header.length) : source).trimEnd();
+const title = titleProp ?? header?.title ?? 'Example';
+const description = descriptionProp ?? header?.description ?? '';
+const exempt = header?.a11yExempt;
+
+// Demonstrations sometimes use a landmark element (<aside>, <nav>) as a plain container. Left unnamed,
+// two of them on one page (or one next to the page's own) collide (axe `landmark-unique`), so the preview
+// copy names each one after the example. The displayed source is untouched. [mwg:accessibility]
+let landmarks = 0;
+const preview = fragment.replace(/<(aside|nav)\b([^>]*)>/g, (match, tag: string, attributes: string) => {
+  if (/\baria-label(?:ledby)?\s*=/.test(attributes)) return match;
+  landmarks += 1;
+  const label = `${title}, ${tag} ${landmarks}`.replace(/"/g, '&quot;');
+  return `<${tag}${attributes} aria-label="${label}">`;
+});
 ---
 
-<figure class="tct-example not-content" data-tct-example>
+<figure
+  class="tct-example not-content"
+  data-tct-example
+  data-a11y-exempt={exempt?.rules.join(',')}
+  data-a11y-reason={exempt?.reason}
+>
   <figcaption class="tct-visually-hidden">{title}{description ? `. ${description}` : ''}</figcaption>
-  <div class="tct-example__preview" set:html={fragment} />
+  <div class="tct-example__preview" set:html={preview} />
   <div class="tct-example__bar">
     <span class="tct-example__label" aria-hidden="true">HTML</span>
     <button type="button" class="tct-example__button" data-tct-copy hidden>

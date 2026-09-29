@@ -60,19 +60,80 @@ interface AxeViolation {
   id: string;
   impact: string | null;
   help: string;
-  nodes: {target: unknown[]; html: string; failureSummary?: string}[];
+  nodes: {
+    target: unknown[];
+    html: string;
+    failureSummary?: string;
+    /** Set when the node sits inside an example that declares `a11y-exempt` (tools/lib/example-header.ts). */
+    exempt?: {rules: string[]; reason: string; example: string} | null;
+  }[];
 }
+
+/** Exemptions actually applied: reported in the output so none is silent. */
+interface AppliedExemption {
+  page: string;
+  scheme: string;
+  rule: string;
+  example: string;
+  reason: string;
+  nodes: number;
+}
+const exemptions: AppliedExemption[] = [];
 
 async function runAxe(page: Page): Promise<AxeViolation[]> {
   await page.addScriptTag({content: axeSource});
   return page.evaluate(async () => {
-    const axe = (window as unknown as {axe: {run: (context: Document, options: unknown) => Promise<{violations: unknown[]}>}}).axe;
+    const axe = (
+      window as unknown as {
+        axe: {run: (context: Document, options: unknown) => Promise<{violations: AxeViolation[]}>};
+      }
+    ).axe;
     const result = await axe.run(document, {
-      runOnly: {type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice']},
+      runOnly: {
+        type: 'tag',
+        values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'],
+      },
       resultTypes: ['violations'],
     });
+
+    // Resolve an axe target (selectors, shadow-DOM paths as nested arrays) to its element.
+    const resolve = (target: unknown[]): Element | null => {
+      let root: ParentNode = document;
+      let element: Element | null = null;
+      const step = (selector: string) => {
+        element = root.querySelector(selector);
+        root = element?.shadowRoot ?? root;
+      };
+      for (const item of target) {
+        if (Array.isArray(item)) for (const selector of item as string[]) step(selector);
+        else step(item as string);
+      }
+      return element;
+    };
+    // Nearest example figure that declares an exemption, crossing shadow roots.
+    const exemptFigure = (start: Element | null): Element | null => {
+      let node: Node | null = start;
+      while (node) {
+        if (node instanceof Element && node.matches('[data-a11y-exempt]')) return node;
+        const root: Node = node.getRootNode();
+        node = node.parentNode ?? (root instanceof ShadowRoot ? root.host : null);
+      }
+      return null;
+    };
+    for (const violation of result.violations) {
+      for (const node of violation.nodes) {
+        const figure = exemptFigure(resolve(node.target));
+        node.exempt = figure
+          ? {
+              rules: (figure.getAttribute('data-a11y-exempt') ?? '').split(',').filter(Boolean),
+              reason: figure.getAttribute('data-a11y-reason') ?? '',
+              example: figure.querySelector('figcaption')?.textContent?.trim() ?? 'example',
+            }
+          : null;
+      }
+    }
     return result.violations;
-  }) as Promise<AxeViolation[]>;
+  });
 }
 
 /** Facts about the page structure, read in the page. */
@@ -150,8 +211,24 @@ async function crawl(context: BrowserContext, base: string, scheme: string, know
     await page.waitForTimeout(250);
 
     for (const violation of await runAxe(page)) {
+      // Nodes inside an example that declares an exemption for this rule (with a reason) are skipped
+      // and reported; everything else counts.
+      const kept = [];
+      const skipped = new Map<string, {reason: string; count: number}>();
+      for (const node of violation.nodes) {
+        const exempt = node.exempt;
+        if (exempt && exempt.reason.length >= 20 && exempt.rules.includes(violation.id)) {
+          const entry = skipped.get(exempt.example) ?? {reason: exempt.reason, count: 0};
+          entry.count++;
+          skipped.set(exempt.example, entry);
+        } else kept.push(node);
+      }
+      for (const [example, {reason, count}] of skipped) {
+        exemptions.push({page: route, scheme, rule: violation.id, example, reason, nodes: count});
+      }
+      if (kept.length === 0) continue;
       axeViolations++;
-      const nodes = violation.nodes
+      const nodes = kept
         .slice(0, 4)
         .map((node) => `      ${JSON.stringify(node.target)}  ${node.html.slice(0, 140).replace(/\s+/g, ' ')}`)
         .join('\n');
@@ -317,7 +394,7 @@ try {
 }
 
 mkdirSync(PATHS.reports, {recursive: true});
-writeIfChanged(join(PATHS.reports, 'docs-a11y.json'), `${JSON.stringify({pages: all.length, findings}, null, 2)}\n`);
+writeIfChanged(join(PATHS.reports, 'docs-a11y.json'), `${JSON.stringify({pages: all.length, findings, exemptions}, null, 2)}\n`);
 
 if (findings.length > 0) {
   for (const finding of findings) {
@@ -325,5 +402,15 @@ if (findings.length > 0) {
   }
   console.error(`\ndocs:a11y FAILED: ${findings.length} finding(s) over ${all.length} page(s) (${axeViolations} axe violation(s)).`);
   process.exit(1);
+}
+if (exemptions.length > 0) {
+  console.log('docs:a11y exemptions applied (declared in the example header as a11y-exempt, each with a reason):');
+  const seen = new Set<string>();
+  for (const e of exemptions) {
+    const key = `${e.page}|${e.rule}|${e.example}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    console.log(`  ${e.rule} in ${e.page} ("${e.example}"): ${e.reason}`);
+  }
 }
 console.log(`docs:a11y OK: ${all.length} page(s) in light and dark, keyboard smoke passed.`);

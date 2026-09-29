@@ -4,6 +4,7 @@
  * resolved event classes and option lists). Descriptions are kept here; the snapshot drops them.
  */
 import {publicMembers, type CemDeclaration, type CemElement} from './cem.ts';
+import {publicText} from './public-text.ts';
 
 export interface AttributeDoc {
   name: string;
@@ -69,7 +70,27 @@ const byName = <T extends {name: string}>(a: T, b: T) =>
 const deprecation = (value: string | boolean | undefined) =>
   value === undefined || value === false ? {} : {deprecated: value === true ? 'true' : value};
 
+/** Runs every prose field through `publicText` (the public site never names the upstream system). */
+function scrub<T>(value: T): T {
+  if (Array.isArray(value)) return value.map((item) => scrub(item as unknown)) as T;
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, inner]) => [
+        key,
+        typeof inner === 'string' && ['description', 'summary', 'deprecated'].includes(key)
+          ? publicText(inner)
+          : scrub(inner),
+      ]),
+    ) as T;
+  }
+  return value;
+}
+
 export function elementDoc(element: CemElement): ElementDoc {
+  return scrub(buildElementDoc(element));
+}
+
+function buildElementDoc(element: CemElement): ElementDoc {
   const declaration: CemDeclaration = element.declaration;
   const {fields, methods} = publicMembers(declaration);
   const attributeFields = new Set(
