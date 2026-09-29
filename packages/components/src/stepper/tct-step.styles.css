@@ -1,0 +1,346 @@
+/*
+ * tct-step. The host is the list item; `.step` lays out one of four arrangements (orientation x indicator
+ * position). Every progress segment is a track (`--color-border`) with the accent fill as a scaled ::before, so
+ * a step the flow advances into grows its line along the track instead of flipping a colour; only advancing
+ * ONE step animates (the stepper hands the previous step down), and reduced motion lands at once. A
+ * clickable step is a real button whose state fill is paired with the tertiary text role of the same state.
+ * `--step-connector-gap` (set on the stepper) clips a connector back from its indicator. [mwg:css]
+ * [mwg:accessible-web-components] [mwg:accessibility]
+ */
+@layer component {
+  :host {
+    display: flex;
+    min-inline-size: 0;
+  }
+
+  .step {
+    --_pad-block: var(--spacing-2);
+    --_pad-inline: var(--spacing-2);
+    --_space: var(--spacing-2);
+    --_gutter: var(--spacing-6); /* design: indicator (16px) + the row gap (8px): what indents a description */
+    --_gap: max(0px, min(var(--step-connector-gap, 0px), var(--spacing-2)));
+
+    box-sizing: border-box;
+    display: flex;
+    min-inline-size: 0;
+    inline-size: 100%;
+  }
+
+  .step[data-density='compact'] {
+    --_pad-block: var(--spacing-1);
+    --_space: var(--spacing-1);
+  }
+
+  .step[data-density='spacious'] {
+    --_pad-block: var(--spacing-3);
+    --_pad-inline: var(--spacing-3);
+    --_space: var(--spacing-3);
+  }
+
+  /* -------------------------------------------------------------------------------- arrangements */
+  .step[data-position='separated'][data-orientation='vertical'] {
+    flex-direction: row;
+    align-items: stretch;
+    gap: var(--spacing-0-5);
+    position: relative;
+  }
+
+  .step[data-position='separated'][data-orientation='horizontal'] {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .step[data-position='on-track'] {
+    flex-direction: column;
+  }
+
+  .step[data-position='on-track'][data-orientation='vertical'] {
+    position: relative;
+  }
+
+  .body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+
+  /* ------------------------------------------------------------------------------------- segments */
+  .seg {
+    position: relative;
+    flex-shrink: 0;
+    border-radius: var(--radius-full);
+    background-color: var(--color-border);
+  }
+
+  .seg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-color: var(--color-icon-accent);
+    transform-origin: left center;
+    transform: scaleX(0);
+  }
+
+  :host(:dir(rtl)) .seg::before {
+    transform-origin: right center;
+  }
+
+  .step[data-orientation='vertical'] .seg::before {
+    transform-origin: center top;
+    transform: scaleY(0);
+  }
+
+  .seg[data-filled]::before {
+    transform: scale(1);
+  }
+
+  .seg[data-kind='bar'] {
+    /* a separated step's own segment: 4px thick, along the flow */
+    inline-size: var(--spacing-1);
+    align-self: stretch;
+  }
+
+  .step[data-orientation='horizontal'] .seg[data-kind='bar'] {
+    inline-size: 100%;
+    block-size: var(--spacing-1);
+    margin-block-end: var(--spacing-0-5);
+  }
+
+  /* On-track: the indicator is a node on the rail. */
+  .ot-column {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    align-items: center;
+    align-self: stretch;
+    inline-size: var(--spacing-4);
+    margin-block: calc(-1 * var(--_space));
+  }
+
+  .ot-column .seg {
+    inline-size: var(--spacing-1);
+    border-radius: 0;
+  }
+
+  .ot-column .seg[data-kind='lead'] {
+    block-size: var(--_space);
+  }
+
+  .ot-column .seg[data-kind='rail'] {
+    flex: 1;
+    min-block-size: var(--spacing-2);
+  }
+
+  .track-row {
+    display: flex;
+    align-items: center;
+    inline-size: 100%;
+  }
+
+  .track-row .seg {
+    flex: 1;
+    min-inline-size: var(--spacing-2);
+    block-size: var(--spacing-1);
+    border-radius: 0;
+  }
+
+  /* The first step has nothing before it, the last nothing after it. */
+  :host(:first-child) .seg[data-kind='lead'],
+  :host(:last-child) .seg[data-kind='rail'],
+  :host(:last-child) .seg[data-kind='content'] {
+    visibility: hidden;
+  }
+
+  /* The connector gives up `--step-connector-gap` where it meets the indicator. One clip covers the track
+     and its fill; it cannot change layout. */
+  .step[data-orientation='vertical'] .seg[data-kind='lead'] {
+    clip-path: inset(0 0 var(--_gap) 0);
+  }
+
+  .step[data-orientation='vertical'] .seg[data-kind='rail'] {
+    clip-path: inset(var(--_gap) 0 0 0);
+  }
+
+  .step[data-orientation='horizontal'] .seg[data-kind='lead'] {
+    clip-path: inset(0 var(--_gap) 0 0);
+  }
+
+  .step[data-orientation='horizontal'] .seg[data-kind='rail'] {
+    clip-path: inset(0 0 0 var(--_gap));
+  }
+
+  :host(:dir(rtl)) .step[data-orientation='horizontal'] .seg[data-kind='lead'] {
+    clip-path: inset(0 0 0 var(--_gap));
+  }
+
+  :host(:dir(rtl)) .step[data-orientation='horizontal'] .seg[data-kind='rail'] {
+    clip-path: inset(0 var(--_gap) 0 0);
+  }
+
+  .ot-content-wrap {
+    position: relative;
+  }
+
+  .ot-content-wrap .seg {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: calc(var(--_space) + (var(--spacing-4) - var(--spacing-1)) / 2);
+    inline-size: var(--spacing-1);
+    border-radius: 0;
+  }
+
+  /* ------------------------------------------------------------------------------------- layout */
+  .header,
+  .ot-wrap {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    inline-size: 100%;
+    min-inline-size: 0;
+    margin: 0;
+    padding-block: var(--_pad-block);
+    padding-inline: var(--_pad-inline);
+    border: 0;
+    border-radius: var(--radius-element);
+    background-color: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+  }
+
+  .header {
+    gap: 0;
+  }
+
+  .step[data-position='on-track'][data-orientation='vertical'] .ot-wrap {
+    flex-direction: row;
+    gap: var(--spacing-2);
+    padding-block: var(--_space);
+    padding-inline: var(--_space);
+  }
+
+  .step[data-position='on-track'][data-orientation='horizontal'] .ot-wrap {
+    padding-block: var(--_space);
+    padding-inline: 0;
+  }
+
+  .ot-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--spacing-0-5);
+    min-inline-size: 0;
+  }
+
+  .ot-label {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-0-5);
+    margin-block-start: var(--_space);
+    text-align: center;
+  }
+
+  .row[data-align='center'] {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--spacing-1);
+  }
+
+  .description-row {
+    display: block;
+  }
+
+  .step[data-has-indicator] .description-row {
+    padding-inline-start: var(--_gutter);
+  }
+
+  .content {
+    padding-block-start: var(--spacing-2);
+    padding-inline: var(--_pad-inline);
+  }
+
+  .step[data-has-indicator][data-position='separated'] .content {
+    padding-inline-start: calc(var(--_pad-inline) + var(--_gutter));
+  }
+
+  .step[data-position='on-track'][data-orientation='vertical'] .content {
+    padding-inline-start: calc(var(--_space) + var(--_gutter));
+    padding-inline-end: var(--_space);
+  }
+
+  .step[data-position='on-track'][data-orientation='horizontal'] .content {
+    padding-inline: 0;
+  }
+
+  .content[hidden] {
+    display: none;
+  }
+}
+
+@layer state {
+  /* The state fills are the tertiary action roles, each paired with its own text role (a fill measured
+     against another state's ink can fail in dark mode). The text of the whole button follows. */
+  .step[data-clickable] :is(.header, .ot-wrap) {
+    cursor: pointer;
+    transition:
+      background-color var(--duration-fast-min) var(--ease-standard),
+      color var(--duration-fast-min) var(--ease-standard);
+  }
+
+  @media (hover: hover) {
+    .step[data-clickable] :is(.header, .ot-wrap):hover {
+      background-color: var(--tecton-color-action-tertiary-bg-hover);
+      color: var(--tecton-color-action-tertiary-text-hover);
+    }
+  }
+
+  .step[data-clickable] :is(.header, .ot-wrap):focus-visible {
+    background-color: var(--tecton-color-action-tertiary-bg-focus);
+    color: var(--tecton-color-action-tertiary-text-focus);
+    outline-width: var(--focus-outline-width);
+    outline-style: var(--focus-outline-style);
+    outline-color: var(--focus-outline-color);
+    outline-offset: var(--focus-outline-offset);
+  }
+
+  .step[data-clickable] :is(.header, .ot-wrap):active {
+    background-color: var(--tecton-color-action-tertiary-bg-press);
+    color: var(--tecton-color-action-tertiary-text-press);
+  }
+
+  /* On a state fill the text is the state's role: labels and descriptions inherit it. */
+  .step[data-clickable] :is(.header, .ot-wrap):is(:hover, :focus-visible, :active) :is(.label, .description, .optional, .optional-dot) {
+    color: inherit;
+  }
+}
+
+@layer component {
+  @media (prefers-reduced-motion: no-preference) {
+    .seg::before {
+      transition-property: transform;
+      transition-duration: var(--_fill-duration, 0s);
+      transition-delay: var(--_fill-delay, 0s);
+      transition-timing-function: linear;
+    }
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .seg {
+      forced-color-adjust: none;
+      background-color: GrayText;
+    }
+
+    .seg::before {
+      background-color: Highlight;
+    }
+
+    .step[data-clickable] :is(.header, .ot-wrap):focus-visible {
+      outline-color: Highlight;
+    }
+  }
+}
