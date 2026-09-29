@@ -1,0 +1,127 @@
+{
+  "folder": "metadata-list",
+  "elements": {
+    "tct-metadata-list": {
+      "class": "TctMetadataList",
+      "attributes": [
+        {
+          "name": "columns",
+          "property": "columns",
+          "type": "MetadataListColumns",
+          "default": "'single'",
+          "reflects": false
+        },
+        {
+          "name": "expanded",
+          "property": "expanded",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "heading",
+          "property": "heading",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label-position",
+          "property": "labelPosition",
+          "type": "MetadataListLabelPosition | undefined",
+          "values": [
+            "start",
+            "top"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "label-width",
+          "property": "labelWidth",
+          "type": "string | number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "max-num-of-items",
+          "property": "maxNumOfItems",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "orientation",
+          "property": "orientation",
+          "type": "MetadataListOrientation",
+          "values": [
+            "vertical",
+            "horizontal"
+          ],
+          "default": "'vertical'",
+          "reflects": true
+        },
+        {
+          "name": "show-less-label",
+          "property": "showLessLabel",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "show-more-label",
+          "property": "showMoreLabel",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)",
+        "heading"
+      ],
+      "events": [
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "heading",
+        "list",
+        "metadata-list",
+        "toggle"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-metadata-list-item": {
+      "class": "TctMetadataListItem",
+      "attributes": [
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)",
+        "icon"
+      ],
+      "events": [],
+      "cssParts": [
+        "icon",
+        "label",
+        "value"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

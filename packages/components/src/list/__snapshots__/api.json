@@ -1,0 +1,175 @@
+{
+  "folder": "list",
+  "elements": {
+    "tct-list": {
+      "class": "TctList",
+      "attributes": [
+        {
+          "name": "density",
+          "property": "density",
+          "type": "ListDensity",
+          "values": [
+            "compact",
+            "balanced",
+            "spacious"
+          ],
+          "default": "'balanced'",
+          "reflects": true
+        },
+        {
+          "name": "edge-compensation",
+          "property": "edgeCompensation",
+          "type": "ListEdgeCompensation | undefined",
+          "values": [
+            "inline"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "has-dividers",
+          "property": "hasDividers",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "header",
+          "property": "header",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "list-style",
+          "property": "listStyle",
+          "type": "ListStyle",
+          "values": [
+            "none",
+            "disc",
+            "decimal",
+            "circle"
+          ],
+          "default": "'none'",
+          "reflects": true
+        },
+        {
+          "name": "start",
+          "property": "start",
+          "type": "number",
+          "default": "1",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)",
+        "header"
+      ],
+      "events": [],
+      "cssParts": [
+        "header",
+        "list"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-list-item": {
+      "class": "TctListItem",
+      "attributes": [
+        {
+          "name": "aria-current",
+          "property": "aria-current",
+          "type": "unknown",
+          "reflects": false
+        },
+        {
+          "name": "description",
+          "property": "description",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "href",
+          "property": "href",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "interactive-selector",
+          "property": "interactiveSelector",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "pressable",
+          "property": "pressable",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "rel",
+          "property": "rel",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "selected",
+          "property": "selected",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "target",
+          "property": "target",
+          "type": "ItemTarget | undefined",
+          "values": [
+            "_blank",
+            "_self"
+          ],
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "interactiveElement",
+          "type": "HTMLElement | null",
+          "default": "null",
+          "readonly": false
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "description",
+        "end",
+        "label",
+        "start"
+      ],
+      "events": [],
+      "cssParts": [
+        "item",
+        "list-item"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

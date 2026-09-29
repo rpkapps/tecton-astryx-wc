@@ -1,0 +1,107 @@
+{
+  "folder": "tree-list",
+  "elements": {
+    "tct-tree-list": {
+      "class": "TctTreeList",
+      "attributes": [
+        {
+          "name": "density",
+          "property": "density",
+          "type": "TreeListDensity",
+          "values": [
+            "compact",
+            "balanced",
+            "spacious"
+          ],
+          "default": "'balanced'",
+          "reflects": true
+        },
+        {
+          "name": "header",
+          "property": "header",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "toggle-children-label",
+          "property": "toggleChildrenLabel",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "variant",
+          "property": "variant",
+          "type": "TreeListVariant",
+          "values": [
+            "lineGuides",
+            "noGuides"
+          ],
+          "default": "'lineGuides'",
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "items",
+          "type": "TreeListItemData[]",
+          "default": "[]",
+          "readonly": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "collapse",
+          "signature": "(id: string) => void"
+        },
+        {
+          "name": "expand",
+          "signature": "(id: string) => void"
+        },
+        {
+          "name": "focusItem",
+          "signature": "(id: string) => boolean"
+        },
+        {
+          "name": "isExpanded",
+          "signature": "(id: string) => boolean"
+        },
+        {
+          "name": "toggle",
+          "signature": "(id: string, force?: boolean) => void"
+        }
+      ],
+      "slots": [
+        "header"
+      ],
+      "events": [
+        {
+          "name": "tct-tree-toggle",
+          "class": "TctTreeToggleEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "header",
+        "tree",
+        "tree-list",
+        "tree-list-chevron",
+        "tree-list-guide",
+        "tree-list-item",
+        "tree-list-item-label"
+      ],
+      "cssStates": [],
+      "cssProperties": [
+        {
+          "name": "--tree-list-indent"
+        },
+        {
+          "name": "--tree-list-row-gap"
+        }
+      ]
+    }
+  }
+}

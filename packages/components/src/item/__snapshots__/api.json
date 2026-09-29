@@ -1,0 +1,181 @@
+{
+  "folder": "item",
+  "elements": {
+    "tct-item": {
+      "class": "TctItem",
+      "attributes": [
+        {
+          "name": "alignment",
+          "property": "alignment",
+          "type": "ItemAlignment",
+          "values": [
+            "center",
+            "start"
+          ],
+          "default": "'center'",
+          "reflects": true
+        },
+        {
+          "name": "aria-current",
+          "property": "aria-current",
+          "type": "unknown",
+          "reflects": false
+        },
+        {
+          "name": "as",
+          "property": "as",
+          "type": "ItemRoot",
+          "values": [
+            "div",
+            "li",
+            "span"
+          ],
+          "default": "'div'",
+          "reflects": false
+        },
+        {
+          "name": "density",
+          "property": "density",
+          "type": "ItemDensity",
+          "values": [
+            "compact",
+            "balanced",
+            "spacious"
+          ],
+          "default": "'balanced'",
+          "reflects": true
+        },
+        {
+          "name": "description",
+          "property": "description",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "description-lines",
+          "property": "descriptionLines",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "highlighted",
+          "property": "highlighted",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "href",
+          "property": "href",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "interactive-selector",
+          "property": "interactiveSelector",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label-lines",
+          "property": "labelLines",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "layout",
+          "property": "layout",
+          "type": "ItemLayout",
+          "values": [
+            "stacked",
+            "inline"
+          ],
+          "default": "'stacked'",
+          "reflects": true
+        },
+        {
+          "name": "pressable",
+          "property": "pressable",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "rel",
+          "property": "rel",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "role",
+          "property": "role",
+          "type": "unknown",
+          "reflects": false
+        },
+        {
+          "name": "selected",
+          "property": "selected",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "target",
+          "property": "target",
+          "type": "ItemTarget | undefined",
+          "values": [
+            "_blank",
+            "_self"
+          ],
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "interactiveElement",
+          "type": "HTMLElement | null",
+          "default": "null",
+          "readonly": false
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "description",
+        "end",
+        "label",
+        "marker",
+        "start"
+      ],
+      "events": [],
+      "cssParts": [
+        "description",
+        "end",
+        "item",
+        "label",
+        "marker",
+        "start"
+      ],
+      "cssStates": [
+        "has-end",
+        "has-start"
+      ],
+      "cssProperties": []
+    }
+  }
+}

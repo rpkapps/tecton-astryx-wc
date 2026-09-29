@@ -87,7 +87,7 @@ const toLength = (width: string): string =>
  * @cloakMinBlockSize var(--size-element-md)
  */
 export class TctButton extends TctElement {
-  static override readonly tagName = 'tct-button';
+  static override readonly tagName: string = 'tct-button';
   static override readonly dependencies = [TctIcon, TctSpinner];
   static formAssociated = true;
   static override shadowRootOptions: ShadowRootInit = {

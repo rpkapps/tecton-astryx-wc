@@ -39,6 +39,8 @@ dense:
     marker: list bullet or counter rendered before the start content
     start: leading content: icon, avatar, checkbox
     end: trailing content: badge, timestamp, action button
+    role: an author role (set by a parent menu or listbox) makes the row role-managed; no inner button or link, the host is the semantic node
+    aria-current: an author aria-current always wins over the value derived from selected
 related: [list, tree-list, metadata-list, indicator]
 ---
 

@@ -1,0 +1,217 @@
+{
+  "folder": "toggle-button",
+  "elements": {
+    "tct-toggle-button": {
+      "class": "TctToggleButton",
+      "attributes": [
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "elevation",
+          "property": "elevation",
+          "type": "ToggleButtonElevation",
+          "values": [
+            "none",
+            "low",
+            "med",
+            "high"
+          ],
+          "default": "'none'",
+          "reflects": true
+        },
+        {
+          "name": "icon",
+          "property": "icon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "icon-only",
+          "property": "iconOnly",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "loading",
+          "property": "loading",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "pressed",
+          "property": "pressed",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "pressed-icon",
+          "property": "pressedIcon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "ElementSize | undefined",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "tooltip",
+          "property": "tooltip",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "value",
+          "property": "value",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "isPressed",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "pressedChangeAction",
+          "type": "((pressed: boolean) => void | Promise<void>) | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)",
+        "icon",
+        "pressed-icon"
+      ],
+      "events": [
+        {
+          "name": "tct-pressed-change",
+          "class": "TctPressedChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "button"
+      ],
+      "cssStates": [
+        "pressed"
+      ],
+      "cssProperties": []
+    },
+    "tct-toggle-button-group": {
+      "class": "TctToggleButtonGroup",
+      "attributes": [
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": true
+        },
+        {
+          "name": "orientation",
+          "property": "orientation",
+          "type": "ToggleButtonGroupOrientation",
+          "values": [
+            "horizontal",
+            "vertical"
+          ],
+          "default": "'horizontal'",
+          "reflects": true
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "ElementSize | undefined",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "type",
+          "property": "type",
+          "type": "ToggleButtonGroupType",
+          "values": [
+            "single",
+            "multiple"
+          ],
+          "default": "'single'",
+          "reflects": true
+        },
+        {
+          "name": "value",
+          "property": "defaultValue",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "value",
+          "type": "string | string[] | null",
+          "readonly": false
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [
+        {
+          "name": "tct-value-change",
+          "class": "TctValueChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "group"
+      ],
+      "cssStates": [
+        "disabled"
+      ],
+      "cssProperties": []
+    }
+  }
+}

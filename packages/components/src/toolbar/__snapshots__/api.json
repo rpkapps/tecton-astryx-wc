@@ -1,0 +1,94 @@
+{
+  "folder": "toolbar",
+  "elements": {
+    "tct-toolbar": {
+      "class": "TctToolbar",
+      "attributes": [
+        {
+          "name": "dividers",
+          "property": "dividers",
+          "type": "ToolbarDivider[]",
+          "default": "[]",
+          "reflects": true
+        },
+        {
+          "name": "gap",
+          "property": "gap",
+          "type": "ToolbarGap",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "default": "1",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": true
+        },
+        {
+          "name": "orientation",
+          "property": "orientation",
+          "type": "ToolbarOrientation",
+          "values": [
+            "horizontal",
+            "vertical"
+          ],
+          "default": "'horizontal'",
+          "reflects": true
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "ElementSize | undefined",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "variant",
+          "property": "variant",
+          "type": "ToolbarVariant",
+          "values": [
+            "transparent",
+            "section",
+            "muted"
+          ],
+          "default": "'transparent'",
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)",
+        "center",
+        "end",
+        "start"
+      ],
+      "events": [],
+      "cssParts": [
+        "keyboard-hint",
+        "surface",
+        "toolbar"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

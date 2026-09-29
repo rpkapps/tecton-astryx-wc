@@ -1,0 +1,140 @@
+{
+  "folder": "banner",
+  "elements": {
+    "tct-banner": {
+      "class": "TctBanner",
+      "attributes": [
+        {
+          "name": "container",
+          "property": "container",
+          "type": "BannerContainer",
+          "values": [
+            "card",
+            "section"
+          ],
+          "default": "'card'",
+          "reflects": true
+        },
+        {
+          "name": "description",
+          "property": "description",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "dismiss-label",
+          "property": "dismissLabel",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "dismissable",
+          "property": "dismissable",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "elevation",
+          "property": "elevation",
+          "type": "BannerElevation",
+          "values": [
+            "none",
+            "low",
+            "med",
+            "high"
+          ],
+          "default": "'none'",
+          "reflects": true
+        },
+        {
+          "name": "heading",
+          "property": "heading",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "icon",
+          "property": "icon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "no-collapse",
+          "property": "noCollapse",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "open",
+          "property": "open",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "status",
+          "property": "status",
+          "type": "BannerStatus",
+          "values": [
+            "info",
+            "warning",
+            "error",
+            "success",
+            "neutral"
+          ],
+          "default": "'info'",
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)",
+        "description",
+        "end",
+        "heading",
+        "icon"
+      ],
+      "events": [
+        {
+          "name": "tct-after-open-change",
+          "class": "TctAfterOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-dismiss",
+          "class": "TctDismissEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        },
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "content",
+        "description",
+        "frame",
+        "header",
+        "icon"
+      ],
+      "cssStates": [
+        "open"
+      ],
+      "cssProperties": []
+    }
+  }
+}

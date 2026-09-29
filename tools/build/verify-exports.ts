@@ -114,7 +114,9 @@ export function verifyExports(
       file.endsWith('.js') &&
       !file.includes('/cdn/') &&
       !file.includes('/_virtual/') &&
-      !file.endsWith('.styles.css.js')
+      !file.endsWith('.styles.css.js') &&
+      // Light-DOM sheets (`*.light.css?inline`): CSS text for a provider, internal like styles above.
+      !file.endsWith('.light.js')
     ) {
       const declaration = file.replace(/\.js$/, '.d.ts');
       if (!all.has(declaration)) problems.push(`${pkg.name}: ${file} has no ${declaration}`);

@@ -1,0 +1,139 @@
+{
+  "folder": "indicator",
+  "elements": {
+    "tct-check-indicator": {
+      "class": "TctCheckIndicator",
+      "attributes": [
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "IndicatorSize",
+          "values": [
+            "sm",
+            "md"
+          ],
+          "default": "'md'",
+          "reflects": true
+        },
+        {
+          "name": "state",
+          "property": "state",
+          "type": "SingleSelectionState",
+          "default": "'unchecked'",
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [],
+      "cssStates": [
+        "checked",
+        "disabled"
+      ],
+      "cssProperties": []
+    },
+    "tct-checkbox-indicator": {
+      "class": "TctCheckboxIndicator",
+      "attributes": [
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "IndicatorSize",
+          "values": [
+            "sm",
+            "md"
+          ],
+          "default": "'md'",
+          "reflects": true
+        },
+        {
+          "name": "state",
+          "property": "state",
+          "type": "MultiSelectionState",
+          "default": "'unchecked'",
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "checkbox-indicator",
+        "checkbox-indicator-check",
+        "checkbox-indicator-dash"
+      ],
+      "cssStates": [
+        "checked",
+        "disabled",
+        "indeterminate"
+      ],
+      "cssProperties": []
+    },
+    "tct-radio-indicator": {
+      "class": "TctRadioIndicator",
+      "attributes": [
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "IndicatorSize",
+          "values": [
+            "sm",
+            "md"
+          ],
+          "default": "'md'",
+          "reflects": true
+        },
+        {
+          "name": "state",
+          "property": "state",
+          "type": "SingleSelectionState",
+          "default": "'unchecked'",
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "radio-indicator",
+        "radio-indicator-dot"
+      ],
+      "cssStates": [
+        "checked",
+        "disabled"
+      ],
+      "cssProperties": []
+    }
+  }
+}
