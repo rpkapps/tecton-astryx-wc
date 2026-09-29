@@ -1,0 +1,70 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "chat-system-message",
+  "workPackage": "WP-9",
+  "entries": {
+    "core.chat-system-message": {
+      "tag": "tct-chat-system-message",
+      "status": "implemented",
+      "upstream": {
+        "name": "ChatSystemMessage",
+        "path": "packages/core/src/Chat/ChatSystemMessage.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "prop",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "variant",
+          "kind": "prop",
+          "target": "variant",
+          "as": "attribute",
+          "reflect": true,
+          "default": "default"
+        },
+        {
+          "upstream": "icon",
+          "kind": "slot",
+          "target": "icon",
+          "as": "slot",
+          "notes": "Rendered before the message in the default variant only, as upstream (the divider variant does not render it)."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base|content|icon|divider) or the tokens."
+        }
+      ],
+      "keyboard": [],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "CHATSYS-01",
+          "type": "a11y-improvement",
+          "text": "In the divider variant the separator is named by the message text through aria-label on the divider, and the visible content is forwarded to the divider's label slot, so rich content (a <time>, bold text) keeps its markup. The host keeps upstream's `status` role."
+        },
+        {
+          "id": "CHATSYS-02",
+          "type": "approved-api-difference",
+          "text": "All the text is one flex item beside the icon, so inline runs (text and <strong>) are not separated by the icon gap as they would be if each were a flex item."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "rtl": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components] (role and name through ElementInternals; the separator's name is text, not an IDREF across roots)."
+    }
+  }
+}
