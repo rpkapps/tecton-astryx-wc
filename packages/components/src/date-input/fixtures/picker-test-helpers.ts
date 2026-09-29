@@ -3,7 +3,7 @@
  * cannot be emulated back and forth inside a page) and contrast arithmetic. Not part of the shipped API.
  */
 import {COMPACT_TOUCH_PRESENTATION_QUERY} from '@tecton-wc/core/controllers/adaptive-presentation.js';
-import {COARSE_POINTER_QUERY} from './picker-presentation.js';
+import {COARSE_POINTER_QUERY} from '../picker-presentation.js';
 
 interface FakeQuery extends EventTarget {
   matches: boolean;

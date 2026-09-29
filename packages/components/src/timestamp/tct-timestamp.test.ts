@@ -25,7 +25,7 @@ import {
   over,
   parseColor,
   settleAnimations,
-} from '../date-input/picker-test-helpers.js';
+} from '../date-input/fixtures/picker-test-helpers.js';
 import './define.js';
 import type {TctTimestamp} from './tct-timestamp.js';
 import type {TimestampTooltipEntry} from './timestamp.types.js';

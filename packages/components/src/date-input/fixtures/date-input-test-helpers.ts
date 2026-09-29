@@ -6,8 +6,8 @@ import {userEvent} from 'vitest/browser';
 import {afterEach, beforeEach, vi} from 'vitest';
 import {fixture} from '@tecton-wc/testing/fixture.js';
 import {animationsFinished, nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
-import type {TctCalendar} from '../calendar/tct-calendar.js';
-import type {TctDateInput} from './tct-date-input.js';
+import type {TctCalendar} from '../../calendar/tct-calendar.js';
+import type {TctDateInput} from '../tct-date-input.js';
 
 /** 2026-01-15 at noon, local time. */
 export const NOW = new Date(2026, 0, 15, 12, 0, 0);

@@ -6,12 +6,12 @@
 import {userEvent} from 'vitest/browser';
 import {fixture} from '@tecton-wc/testing/fixture.js';
 import {animationsFinished, nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
-import type {TctCalendar} from '../calendar/tct-calendar.js';
-import {settleAnimations} from '../date-input/picker-test-helpers.js';
-import type {TctTimePanel} from '../date-input/tct-time-panel.js';
-import type {TctDateTimeInput} from './tct-date-time-input.js';
+import type {TctCalendar} from '../../calendar/tct-calendar.js';
+import {settleAnimations} from '../../date-input/fixtures/picker-test-helpers.js';
+import type {TctTimePanel} from '../../date-input/tct-time-panel.js';
+import type {TctDateTimeInput} from '../tct-date-time-input.js';
 
-export {useFixedToday} from '../date-input/date-input-test-helpers.js';
+export {useFixedToday} from '../../date-input/fixtures/date-input-test-helpers.js';
 
 export const dateInner = (field: TctDateTimeInput): HTMLInputElement =>
   field.shadowRoot!.querySelector<HTMLInputElement>('input.input:not(.time)')!;

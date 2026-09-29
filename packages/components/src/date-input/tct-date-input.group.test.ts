@@ -13,10 +13,10 @@ import '../input-group/define.js';
 import '../tooltip/define.js';
 import './define.js';
 import '../time-input/define.js';
-import {settleAnimations} from './picker-test-helpers.js';
+import {settleAnimations} from './fixtures/picker-test-helpers.js';
 import type {TctDateInput} from './tct-date-input.js';
 import type {TctTimeInput} from '../time-input/tct-time-input.js';
-import {useFixedToday} from './date-input-test-helpers.js';
+import {useFixedToday} from './fixtures/date-input-test-helpers.js';
 
 useFixedToday();
 

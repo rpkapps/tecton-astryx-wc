@@ -22,7 +22,7 @@ import '../field/define.js';
 import '../form-layout/define.js';
 import '../tooltip/define.js';
 import './define.js';
-import {inner, make, typeText, useFixedToday} from './time-input-test-helpers.js';
+import {inner, make, typeText, useFixedToday} from './fixtures/time-input-test-helpers.js';
 import type {TctTimeInput} from './tct-time-input.js';
 
 useFixedToday();

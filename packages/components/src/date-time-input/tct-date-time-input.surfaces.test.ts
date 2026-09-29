@@ -15,7 +15,7 @@ import {nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
 import '../field/define.js';
 import '../tooltip/define.js';
 import './define.js';
-import {stubDeviceQueries} from '../date-input/picker-test-helpers.js';
+import {stubDeviceQueries} from '../date-input/fixtures/picker-test-helpers.js';
 import {
   calendar,
   clock,
@@ -36,7 +36,7 @@ import {
   timeList,
   toggle,
   useFixedToday,
-} from './date-time-input-test-helpers.js';
+} from './fixtures/date-time-input-test-helpers.js';
 import type {TctDateTimeInput} from './tct-date-time-input.js';
 
 useFixedToday();

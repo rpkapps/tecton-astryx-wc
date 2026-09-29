@@ -23,7 +23,7 @@ import {
   textContrast,
   type Rgba,
   settleAnimations,
-} from '../date-input/picker-test-helpers.js';
+} from '../date-input/fixtures/picker-test-helpers.js';
 import {
   calendar,
   day,
@@ -33,7 +33,7 @@ import {
   presets,
   trigger,
   useFixedToday,
-} from './date-range-input-test-helpers.js';
+} from './fixtures/date-range-input-test-helpers.js';
 import type {TctDateRangeInput} from './tct-date-range-input.js';
 
 useFixedToday();

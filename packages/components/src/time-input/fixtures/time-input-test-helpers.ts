@@ -5,11 +5,11 @@
 import {userEvent} from 'vitest/browser';
 import {fixture} from '@tecton-wc/testing/fixture.js';
 import {nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
-import {settleAnimations} from '../date-input/picker-test-helpers.js';
-import type {TctTimePanel} from '../date-input/tct-time-panel.js';
-import type {TctTimeInput} from './tct-time-input.js';
+import {settleAnimations} from '../../date-input/fixtures/picker-test-helpers.js';
+import type {TctTimePanel} from '../../date-input/tct-time-panel.js';
+import type {TctTimeInput} from '../tct-time-input.js';
 
-export {useFixedToday} from '../date-input/date-input-test-helpers.js';
+export {useFixedToday} from '../../date-input/fixtures/date-input-test-helpers.js';
 
 export const inner = (field: TctTimeInput): HTMLInputElement =>
   field.shadowRoot!.querySelector<HTMLInputElement>('input.input')!;

@@ -14,7 +14,7 @@ import {nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
 import '../field/define.js';
 import '../tooltip/define.js';
 import './define.js';
-import {stubDeviceQueries} from '../date-input/picker-test-helpers.js';
+import {stubDeviceQueries} from '../date-input/fixtures/picker-test-helpers.js';
 import {
   closeSheet,
   column,
@@ -29,7 +29,7 @@ import {
   sheet,
   toggle,
   useFixedToday,
-} from './time-input-test-helpers.js';
+} from './fixtures/time-input-test-helpers.js';
 import type {TctTimeInput} from './tct-time-input.js';
 
 useFixedToday();

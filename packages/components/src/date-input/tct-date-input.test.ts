@@ -21,7 +21,7 @@ import '../field/define.js';
 import '../form-layout/define.js';
 import '../tooltip/define.js';
 import './define.js';
-import {inner, make, toggle, typeText, useFixedToday} from './date-input-test-helpers.js';
+import {inner, make, toggle, typeText, useFixedToday} from './fixtures/date-input-test-helpers.js';
 import type {TctDateInput} from './tct-date-input.js';
 
 useFixedToday();

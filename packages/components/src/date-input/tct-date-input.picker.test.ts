@@ -25,7 +25,7 @@ import {
   picker,
   toggle,
   useFixedToday,
-} from './date-input-test-helpers.js';
+} from './fixtures/date-input-test-helpers.js';
 import type {TctDateInput} from './tct-date-input.js';
 
 useFixedToday();

@@ -24,7 +24,7 @@ import {
   textContrast,
   type Rgba,
   settleAnimations,
-} from '../date-input/picker-test-helpers.js';
+} from '../date-input/fixtures/picker-test-helpers.js';
 import {
   boxes,
   calendar,
@@ -45,7 +45,7 @@ import {
   typeDate,
   typeTime,
   useFixedToday,
-} from './date-time-input-test-helpers.js';
+} from './fixtures/date-time-input-test-helpers.js';
 import type {TctDateTimeInput} from './tct-date-time-input.js';
 
 useFixedToday();

@@ -19,7 +19,7 @@ import '../field/define.js';
 import '../form-layout/define.js';
 import '../tooltip/define.js';
 import './define.js';
-import {stubDeviceQueries} from '../date-input/picker-test-helpers.js';
+import {stubDeviceQueries} from '../date-input/fixtures/picker-test-helpers.js';
 import {
   calendar,
   clearButton,
@@ -33,7 +33,7 @@ import {
   sheet,
   trigger,
   useFixedToday,
-} from './date-range-input-test-helpers.js';
+} from './fixtures/date-range-input-test-helpers.js';
 import type {DateRangePreset} from './date-range-input.types.js';
 import type {TctDateRangeInput} from './tct-date-range-input.js';
 

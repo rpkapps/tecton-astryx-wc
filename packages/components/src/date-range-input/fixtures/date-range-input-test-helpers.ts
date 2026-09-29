@@ -6,10 +6,10 @@
 import {userEvent} from 'vitest/browser';
 import {fixture} from '@tecton-wc/testing/fixture.js';
 import {animationsFinished, nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
-import type {TctCalendar} from '../calendar/tct-calendar.js';
-import type {TctDateRangeInput} from './tct-date-range-input.js';
+import type {TctCalendar} from '../../calendar/tct-calendar.js';
+import type {TctDateRangeInput} from '../tct-date-range-input.js';
 
-export {useFixedToday} from '../date-input/date-input-test-helpers.js';
+export {useFixedToday} from '../../date-input/fixtures/date-input-test-helpers.js';
 
 export const trigger = (field: TctDateRangeInput): HTMLButtonElement =>
   field.shadowRoot!.querySelector<HTMLButtonElement>('button.trigger')!;

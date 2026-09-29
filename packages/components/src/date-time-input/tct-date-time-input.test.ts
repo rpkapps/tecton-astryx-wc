@@ -40,7 +40,7 @@ import {
   typeDate,
   typeTime,
   useFixedToday,
-} from './date-time-input-test-helpers.js';
+} from './fixtures/date-time-input-test-helpers.js';
 import type {TctDateTimeInput} from './tct-date-time-input.js';
 
 useFixedToday();
