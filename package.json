@@ -31,7 +31,8 @@
     "docs:build": "node tools/run-if-exists.ts apps/docs/astro.config.mjs -- pnpm --filter @tecton-astryx/docs build",
     "docs:a11y": "node tools/run-if-exists.ts tools/docs/a11y.ts -- node tools/docs/a11y.ts",
     "check": "node tools/check.ts",
-    "test:tier2": "TCT_TIER2=1 vitest run --project browser-chromium"
+    "test:tier2": "TCT_TIER2=1 vitest run --project browser-chromium",
+    "examples:check": "node tools/check-examples.ts"
   },
   "devDependencies": {
     "@custom-elements-manifest/analyzer": "^0.11.0",
