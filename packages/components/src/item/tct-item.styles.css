@@ -1,0 +1,236 @@
+/*
+ * tct-item: the universal row (marker, start content, label + description, end content). Paint lives on
+ * the inner `.base`; the host is layout only (A§6.2). Density, alignment, layout and state arrive as
+ * `data-*` attributes on `.base`.
+ *
+ * Tecton: rows and menu items hover through the Tecton table-row hover fill (`--tecton-color-table-row-hover`,
+ * components.ts `item`); the hover and pressed wash appears only while the row is interactive.
+ * [mwg:styling-web-components] [mwg:content-based-styling]
+ */
+@layer component {
+  :host {
+    display: block;
+    text-align: start;
+  }
+
+  .base {
+    /*
+     * The inline inset is a private property so a parent that compensates for it (tct-list
+     * edge-compensation) reads the same source. Inherited custom properties cross the shadow root.
+     */
+    --_item-inset-inline: var(--spacing-2);
+    --_hover-bg: var(--tecton-color-table-row-hover);
+
+    display: flex;
+    position: relative;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding-inline: var(--_item-inset-inline);
+    border-radius: var(--radius-element);
+    text-align: start;
+  }
+
+  .base[data-alignment='start'] {
+    align-items: flex-start;
+  }
+
+  .base[data-density='compact'] {
+    padding-block: var(--spacing-1);
+  }
+
+  .base[data-density='balanced'] {
+    padding-block: var(--spacing-2);
+  }
+
+  .base[data-density='spacious'] {
+    --_item-inset-inline: var(--spacing-3);
+
+    padding-block: var(--spacing-3);
+  }
+
+  .base[data-interactive] {
+    cursor: pointer;
+  }
+
+  .base[data-highlighted] {
+    background-color: var(--_hover-bg);
+  }
+
+  /* Selected wins over highlighted (upstream order). */
+  .base[data-selected] {
+    background-color: var(--color-accent-muted);
+  }
+
+  .base[data-disabled] {
+    cursor: default;
+  }
+
+  /*
+   * A disabled row takes no pointer input, so no click reaches the host. A role-managed row keeps it:
+   * its parent (a menu) owns the pointer and the disabled feedback.
+   */
+  :host([disabled]:not([role])) {
+    pointer-events: none;
+  }
+
+  /* -------------------------------------------------------------------------- slots */
+
+  /*
+   * The marker slot has no wrapper: a slotted marker is a direct flex child of the row, so it can
+   * set its own `align-self` (list bullets align to the first baseline). An empty slot makes no box,
+   * so it adds no gap.
+   */
+  ::slotted([slot='marker']) {
+    flex: 0 0 auto;
+  }
+
+  .start,
+  .end {
+    display: flex;
+    flex: 0 0 auto;
+  }
+
+  .end {
+    margin-inline-start: auto;
+  }
+
+  .content,
+  .action {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-inline-size: 0;
+    text-align: start;
+  }
+
+  /* Inline layout: label and description share one line, the description yields width first. */
+  .base[data-layout='inline'] .content,
+  .base[data-layout='inline'] .action {
+    flex-direction: row;
+    align-items: center;
+    column-gap: var(--spacing-1);
+  }
+
+  .base[data-layout='inline'] .label {
+    flex-shrink: 0;
+  }
+
+  .base[data-layout='inline'] .description {
+    flex-shrink: 1;
+    min-inline-size: 0;
+  }
+
+  /*
+   * The invisible action: a real <button> or <a> that carries the label and description as its name,
+   * so the row is exactly one tab stop and one target, with no second focusable control.
+   */
+  .action {
+    appearance: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: inherit;
+    text-decoration: none;
+    outline: none;
+  }
+
+  .label {
+    color: var(--_item-label-color, var(--color-text-primary));
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+  }
+
+  .description {
+    color: var(--_item-description-color, var(--color-text-secondary));
+    font-size: var(--text-supporting-size);
+    line-height: var(--text-supporting-leading);
+  }
+
+  .label[data-truncate='single'],
+  .description[data-truncate='single'] {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .label[data-truncate='multi'],
+  .description[data-truncate='multi'] {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+  }
+
+  .label[data-truncate='multi'] {
+    -webkit-line-clamp: var(--_label-lines);
+    line-clamp: var(--_label-lines);
+  }
+
+  .description[data-truncate='multi'] {
+    -webkit-line-clamp: var(--_description-lines);
+    line-clamp: var(--_description-lines);
+  }
+
+  .base[data-disabled] .content,
+  .base[data-disabled] .action,
+  .base[data-disabled] .end {
+    opacity: 0.5;
+  }
+
+  ::slotted(*) {
+    min-inline-size: 0;
+  }
+}
+
+@layer state {
+  @media (hover: hover) {
+    .base[data-interactive]:not([data-disabled], [data-selected]):hover {
+      background-color: var(--_hover-bg);
+    }
+  }
+
+  .base[data-interactive]:not([data-disabled], [data-selected]):active {
+    background-color: var(--color-overlay-pressed);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .base[data-interactive] {
+      transition: background-color var(--duration-fast-min) var(--ease-standard);
+    }
+  }
+
+  /* A host that owns the roving tab stop (menu items, options, tree items) rings the whole row. */
+  :host(:focus-visible) .base {
+    outline-color: var(--focus-outline-color);
+    outline-offset: var(--focus-outline-offset);
+    outline-style: var(--focus-outline-style);
+    outline-width: var(--focus-outline-width);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .base[data-selected],
+    .base[data-highlighted] {
+      background-color: Highlight;
+    }
+
+    .base[data-selected] .label,
+    .base[data-selected] .description,
+    .base[data-highlighted] .label,
+    .base[data-highlighted] .description {
+      color: HighlightText;
+    }
+
+    .base[data-disabled] .label,
+    .base[data-disabled] .description {
+      color: GrayText;
+    }
+
+    :host(:focus-visible) .base {
+      outline-color: Highlight;
+    }
+  }
+}

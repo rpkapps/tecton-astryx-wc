@@ -7,3 +7,10 @@ declare module '*.styles.css' {
   const styles: CSSResult;
   export default styles;
 }
+
+// Light-DOM sheets (`*.light.css`, A§6.7) are imported as CSS text and adopted at runtime by
+// `TctProviderElement` / `adoptLightDomStyles`; the static `light-dom.css` build serves the rest.
+declare module '*.light.css?inline' {
+  const css: string;
+  export default css;
+}

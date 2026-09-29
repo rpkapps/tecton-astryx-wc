@@ -1,0 +1,12 @@
+<!-- title: Basic; description: A persistent on/off choice. pressed is the state (the attribute is the initial one); listen to tct-pressed-change, which is cancelable. -->
+<div id="basic" style="display: flex; align-items: center; gap: var(--spacing-3)">
+  <tct-toggle-button label="Bold" icon="check"></tct-toggle-button>
+  <tct-toggle-button label="Italic" pressed></tct-toggle-button>
+  <span data-output style="color: var(--color-text-secondary)">Italic is on.</span>
+</div>
+<script type="module">
+  const root = document.getElementById('basic');
+  root.addEventListener('tct-pressed-change', (event) => {
+    root.querySelector('[data-output]').textContent = `${event.target.label} would be ${event.pressed ? 'on' : 'off'}.`;
+  });
+</script>

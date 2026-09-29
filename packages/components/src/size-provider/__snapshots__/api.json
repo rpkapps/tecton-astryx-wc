@@ -1,0 +1,31 @@
+{
+  "folder": "size-provider",
+  "elements": {
+    "tct-size-provider": {
+      "class": "TctSizeProvider",
+      "attributes": [
+        {
+          "name": "size",
+          "property": "size",
+          "type": "ElementSize | undefined",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "default": "undefined",
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

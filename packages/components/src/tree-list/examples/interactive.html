@@ -1,0 +1,29 @@
+<!-- title: Actions, links and nested controls; description: onClick makes a row a button, href a link; a nested control in end content owns its own click. Enter and Space activate the focused item. -->
+<div id="interactive-root" style="display: grid; gap: var(--spacing-3); max-inline-size: 26rem">
+  <tct-tree-list header="Projects"></tct-tree-list>
+  <output style="color: var(--color-text-secondary)">Nothing activated yet</output>
+  <script type="module">
+    const root = document.getElementById('interactive-root');
+    const output = root.querySelector('output');
+    const say = (text) => {
+      output.textContent = text;
+    };
+    const pin = document.createElement('button');
+    pin.type = 'button';
+    pin.textContent = 'Pin';
+    pin.addEventListener('click', () => say('Pinned Roadmap (the row itself was not activated)'));
+    root.querySelector('tct-tree-list').items = [
+      {
+        id: 'work',
+        label: 'Work',
+        isExpanded: true,
+        children: [
+          {id: 'roadmap', label: 'Roadmap', endContent: pin, onClick: () => say('Opened Roadmap')},
+          {id: 'spec', label: 'Specification', href: '#specification'},
+          {id: 'docs', label: 'Documentation site', href: 'https://example.com/docs', target: '_blank'},
+        ],
+      },
+      {id: 'archive', label: 'Archive (a parent without an action toggles)', children: [{id: 'old', label: 'Old plans', onClick: () => say('Opened Old plans')}]},
+    ];
+  </script>
+</div>

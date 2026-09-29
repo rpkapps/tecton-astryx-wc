@@ -1,0 +1,12 @@
+<!-- title: Interactive rows; description: pressable rows are buttons, href rows are links, and a checkbox in start can own the row action without a second tab stop. -->
+<div id="list-interactive-root" style="max-inline-size: 24rem">
+  <tct-list header="Actions" has-dividers>
+    <tct-list-item pressable label="Open the report" description="A button row"></tct-list-item>
+    <tct-list-item href="https://example.com/docs" target="_blank" label="Documentation" description="A link row"></tct-list-item>
+    <tct-list-item interactive-selector="input" label="Receive email" description="The checkbox owns the action">
+      <input slot="start" type="checkbox" aria-label="Receive email" />
+    </tct-list-item>
+    <tct-list-item selected pressable label="Selected row" description="aria-current on the row"></tct-list-item>
+    <tct-list-item pressable disabled label="Disabled row"></tct-list-item>
+  </tct-list>
+</div>

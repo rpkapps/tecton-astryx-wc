@@ -1,0 +1,41 @@
+/*
+ * tct-check-indicator: the mark on a chosen option. It IS the glyph: a check mark when chosen and
+ * nothing when not, so a listbox shows no empty box beside every row. The slot wrapper (a pending
+ * spinner replacing the mark) is sized like the glyph, so swapping one for the other does not move
+ * the row. The mark takes the icon accent ink (`--color-icon-accent`), which measures >= 3:1 on the
+ * surface (D-013 Q-05). [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+
+  .slot {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--tecton-icon-size-100);
+    block-size: var(--tecton-icon-size-100);
+
+    /* Foreground of an inherit-shade spinner, matching what the glyph would have painted. */
+    color: var(--color-icon-accent);
+  }
+
+  .slot[data-disabled] {
+    color: var(--color-icon-disabled);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .slot {
+      color: CanvasText;
+    }
+
+    .slot[data-disabled] {
+      color: GrayText;
+    }
+  }
+}

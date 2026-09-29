@@ -14,10 +14,11 @@
   /*
    * `!important` so an application rule such as `tct-button { display: inline-flex }` (or a component
    * `:host { display }`) can never un-hide a `hidden` host; important declarations of the shadow tree
-   * beat those of the outer tree.
+   * beat those of the outer tree. `hidden="until-found"` is left to the browser (find-in-page and
+   * fragment navigation reveal it) [mwg:search-hidden-content].
    */
   :host([hidden]),
-  [hidden] {
+  [hidden]:not([hidden='until-found']) {
     display: none !important;
   }
 

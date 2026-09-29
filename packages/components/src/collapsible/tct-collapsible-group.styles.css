@@ -1,0 +1,11 @@
+@layer component {
+  /* No box of its own: like upstream, the group renders no wrapper unless it draws dividers. */
+  :host {
+    display: contents;
+  }
+
+  :host([has-dividers]) {
+    display: flex;
+    flex-direction: column;
+  }
+}

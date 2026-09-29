@@ -1,0 +1,24 @@
+<!-- title: Modes; description: Light, dark and system islands side by side. Each paints its own surface, and the components inside follow. -->
+<div style="display: flex; gap: var(--spacing-4); flex-wrap: wrap">
+  <tct-theme mode="light" style="padding: var(--spacing-4); border-radius: var(--radius-container)">
+    <div style="display: flex; flex-direction: column; gap: var(--spacing-2); align-items: flex-start">
+      <tct-heading level="4">Light</tct-heading>
+      <tct-text type="body" color="secondary">A light island.</tct-text>
+      <tct-button variant="primary">Primary</tct-button>
+    </div>
+  </tct-theme>
+  <tct-theme mode="dark" style="padding: var(--spacing-4); border-radius: var(--radius-container)">
+    <div style="display: flex; flex-direction: column; gap: var(--spacing-2); align-items: flex-start">
+      <tct-heading level="4">Dark</tct-heading>
+      <tct-text type="body" color="secondary">A dark island.</tct-text>
+      <tct-button variant="primary">Primary</tct-button>
+    </div>
+  </tct-theme>
+  <tct-theme style="padding: var(--spacing-4); border-radius: var(--radius-container)">
+    <div style="display: flex; flex-direction: column; gap: var(--spacing-2); align-items: flex-start">
+      <tct-heading level="4">System</tct-heading>
+      <tct-text type="body" color="secondary">Follows the operating system.</tct-text>
+      <tct-button variant="primary">Primary</tct-button>
+    </div>
+  </tct-theme>
+</div>
