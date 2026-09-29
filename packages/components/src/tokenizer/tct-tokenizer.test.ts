@@ -116,7 +116,8 @@ runElementSuite({
 
 runFormControlSuite({
   tag: 'tct-tokenizer',
-  render: (attributes) => `<tct-tokenizer label="Teams" debounce-ms="0" ${attributes}></tct-tokenizer>`,
+  render: (attributes) =>
+    `<tct-tokenizer label="Teams" debounce-ms="0" ${attributes}></tct-tokenizer>`,
   validValue: 'design',
   setValid: (element) => {
     (element as unknown as TctTokenizer).items = [{id: 'design', label: 'Design'}];
@@ -147,7 +148,10 @@ describe('tct-tokenizer: rendering (Tokenizer.test.tsx)', () => {
     expect(group.getAttribute('aria-label')).toBe('Team members');
     expect(group.contains(comboboxOf(element))).toBe(true);
     if (isChromium) {
-      expect(await axNode(comboboxOf(element))).toMatchObject({role: 'combobox', name: 'Team members'});
+      expect(await axNode(comboboxOf(element))).toMatchObject({
+        role: 'combobox',
+        name: 'Team members',
+      });
     }
   });
 
@@ -181,7 +185,9 @@ describe('tct-tokenizer: rendering (Tokenizer.test.tsx)', () => {
     const element = await make('label="Teams" has-clear', TEAMS, 300);
     await waitUntil(() => tokensOf(element).length === TEAMS.length, 'tokens rendered');
     const box = part(element, 'input')!.getBoundingClientRect();
-    const tops = new Set(tokensOf(element).map((token) => Math.round(token.getBoundingClientRect().top)));
+    const tops = new Set(
+      tokensOf(element).map((token) => Math.round(token.getBoundingClientRect().top)),
+    );
     expect(tops.size).toBeGreaterThan(1);
     const single = await make('label="Teams"');
     expect(box.height).toBeGreaterThan(part(single, 'input')!.getBoundingClientRect().height);
@@ -217,10 +223,13 @@ describe('tct-tokenizer: rendering (Tokenizer.test.tsx)', () => {
   });
 
   it('renders an error status and keeps the group and the input reachable', async () => {
-    const element = await make('label="Teams" status-type="error" status-message="Add at least one"');
+    const element = await make(
+      'label="Teams" status-type="error" status-message="Add at least one"',
+    );
     expect(textOf(statusOf(element))).toContain('Add at least one');
     expect(part(element, 'input')!.getAttribute('data-status')).toBe('error');
-    if (isChromium) expect((await axNode(comboboxOf(element))).description).toContain('Add at least one');
+    if (isChromium)
+      expect((await axNode(comboboxOf(element))).description).toContain('Add at least one');
   });
 
   it('takes its name from the label even inside an input group (no chrome of its own)', async () => {
@@ -282,7 +291,11 @@ describe('tct-tokenizer: adding tokens', () => {
     await whenOpen(element);
     events.events.length = 0;
     await pressKeys('Enter');
-    expect(events.events.map((event) => event.type)).toEqual(['tct-selection-change', 'input', 'change']);
+    expect(events.events.map((event) => event.type)).toEqual([
+      'tct-selection-change',
+      'input',
+      'change',
+    ]);
     expect(events.events[0]).toMatchObject({action: 'add', reason: 'keyboard'});
     expect((events.events[0] as unknown as {item: SearchableItem}).item.id).toBe('design');
     expect((events.events[0] as unknown as {items: SearchableItem[]}).items).toHaveLength(1);
@@ -314,7 +327,9 @@ describe('tct-tokenizer: adding tokens', () => {
       await whenOpen(element);
       await pressKeys('Enter');
       expect(spy.messages.filter((message) => message === 'Added Design')).toHaveLength(1);
-      expect(spy.messages.filter((message) => !message.includes('result') && message !== 'Added Design')).toEqual([]);
+      expect(
+        spy.messages.filter((message) => !message.includes('result') && message !== 'Added Design'),
+      ).toEqual([]);
     } finally {
       spy.restore();
     }
@@ -326,14 +341,26 @@ describe('tct-tokenizer: removing tokens', () => {
     const spy = spyAnnouncements();
     try {
       const element = await make('label="Teams"', [TEAMS[0]!, TEAMS[1]!]);
-      const events = recordEvents(element, ['tct-selection-change', 'input', 'change', 'tct-remove']);
+      const events = recordEvents(element, [
+        'tct-selection-change',
+        'input',
+        'change',
+        'tct-remove',
+      ]);
       await userEvent.click(removeOf(tokensOf(element)[0]!));
       expect(element.values).toEqual(['engineering']);
-      expect(events.events.map((event) => event.type)).toEqual(['tct-selection-change', 'input', 'change']);
+      expect(events.events.map((event) => event.type)).toEqual([
+        'tct-selection-change',
+        'input',
+        'change',
+      ]);
       expect(events.events[0]).toMatchObject({action: 'remove'});
       expect(events.named('tct-remove'), "the token's own event stays inside").toHaveLength(0);
       expect(spy.messages).toEqual(['Removed Design']);
-      await waitUntil(() => deepActiveElement() === comboboxOf(element), 'focus returns to the input');
+      await waitUntil(
+        () => deepActiveElement() === comboboxOf(element),
+        'focus returns to the input',
+      );
     } finally {
       spy.restore();
     }
@@ -362,7 +389,13 @@ describe('tct-tokenizer: removing tokens', () => {
     const element = await make('label="Teams"', [TEAMS[0]!]);
     await userEvent.click(comboboxOf(element));
     comboboxOf(element).dispatchEvent(
-      new KeyboardEvent('keydown', {key: 'Backspace', isComposing: true, bubbles: true, composed: true, cancelable: true}),
+      new KeyboardEvent('keydown', {
+        key: 'Backspace',
+        isComposing: true,
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+      }),
     );
     expect(element.values).toEqual(['design']);
   });
@@ -376,9 +409,16 @@ describe('tct-tokenizer: removing tokens', () => {
     const events = recordEvents(element, ['tct-selection-change', 'input', 'change']);
     await userEvent.click(clearAll(element)!);
     expect(element.values).toEqual([]);
-    expect(events.events.map((event) => event.type)).toEqual(['tct-selection-change', 'input', 'change']);
+    expect(events.events.map((event) => event.type)).toEqual([
+      'tct-selection-change',
+      'input',
+      'change',
+    ]);
     expect(events.events[0]).toMatchObject({action: 'clear', items: []});
-    await waitUntil(() => deepActiveElement() === comboboxOf(element), 'focus returns to the input');
+    await waitUntil(
+      () => deepActiveElement() === comboboxOf(element),
+      'focus returns to the input',
+    );
   });
 
   it('the token remove event of the tokens is not exposed by the tokenizer', async () => {
@@ -408,7 +448,10 @@ describe('tct-tokenizer: max-entries', () => {
     comboboxOf(element).focus();
     await pressKeys('Backspace');
     expect(element.values).toEqual(['design']);
-    await waitUntil(() => comboboxOf(element).getBoundingClientRect().width > 20, 'the input is back');
+    await waitUntil(
+      () => comboboxOf(element).getBoundingClientRect().width > 20,
+      'the input is back',
+    );
   });
 
   it('under the limit the input is shown and results are offered', async () => {
@@ -443,7 +486,10 @@ describe('tct-tokenizer: has-create', () => {
   it('still offers Create below min-query-length, without searching', async () => {
     const element = await make('label="Teams" has-create min-query-length="4"');
     await typeInto(element, 'QA');
-    await waitUntil(() => element.open && optionLabels(element).length === 1, 'the create entry opens');
+    await waitUntil(
+      () => element.open && optionLabels(element).length === 1,
+      'the create entry opens',
+    );
     expect(optionLabels(element)).toEqual(['Create "QA"']);
   });
 
@@ -629,7 +675,9 @@ describe('tct-tokenizer: form (acceptance: repeated entries, reset, restore)', (
   });
 
   it('typing text without choosing submits nothing (the query is not a value)', async () => {
-    const form = await formHarness(`<tct-tokenizer label="Teams" name="teams" debounce-ms="0"></tct-tokenizer>`);
+    const form = await formHarness(
+      `<tct-tokenizer label="Teams" name="teams" debounce-ms="0"></tct-tokenizer>`,
+    );
     const element = form.form.querySelector<TctTokenizer>('tct-tokenizer')!;
     element.searchSource = createStaticSource(TEAMS);
     await typeInto(element, 'des');
@@ -637,7 +685,9 @@ describe('tct-tokenizer: form (acceptance: repeated entries, reset, restore)', (
   });
 
   it('reset returns to defaultItems (empty by default) and forgets the query', async () => {
-    const form = await formHarness(`<tct-tokenizer label="Teams" name="teams" debounce-ms="0"></tct-tokenizer>`);
+    const form = await formHarness(
+      `<tct-tokenizer label="Teams" name="teams" debounce-ms="0"></tct-tokenizer>`,
+    );
     const element = form.form.querySelector<TctTokenizer>('tct-tokenizer')!;
     element.searchSource = createStaticSource(TEAMS);
     element.defaultItems = [TEAMS[4]!];
@@ -699,7 +749,9 @@ describe('tct-tokenizer: form (acceptance: repeated entries, reset, restore)', (
   });
 
   it('Enter chooses while the menu is open and never submits; with it closed Enter submits the form', async () => {
-    const form = await formHarness(`<tct-tokenizer label="Teams" name="teams" debounce-ms="0"></tct-tokenizer>`);
+    const form = await formHarness(
+      `<tct-tokenizer label="Teams" name="teams" debounce-ms="0"></tct-tokenizer>`,
+    );
     const element = form.form.querySelector<TctTokenizer>('tct-tokenizer')!;
     element.searchSource = createStaticSource(TEAMS);
     await typeInto(element, 'de');
@@ -735,7 +787,9 @@ describe('tct-tokenizer: focus', () => {
   it('a press on the field outside the tokens focuses the input', async () => {
     const element = await make('label="Teams"', [TEAMS[0]!]);
     const box = part(element, 'input')!.getBoundingClientRect();
-    await userEvent.click(part(element, 'input')!, {position: {x: box.width - 30, y: box.height / 2}});
+    await userEvent.click(part(element, 'input')!, {
+      position: {x: box.width - 30, y: box.height / 2},
+    });
     await waitUntil(() => deepActiveElement() === comboboxOf(element), 'the input has focus');
   });
 
@@ -769,7 +823,8 @@ describe('tct-tokenizer: inline overflow', () => {
     await waitUntil(() => list() !== null, 'the overflow list renders');
     const singleRow = part(element, 'input')!.getBoundingClientRect().height;
     await waitUntil(
-      () => textOf(list()).includes('more') || (list()!.shadowRoot?.textContent ?? '').includes('more'),
+      () =>
+        textOf(list()).includes('more') || (list()!.shadowRoot?.textContent ?? '').includes('more'),
       'the indicator shows',
     );
     const indicator = list()!.shadowRoot!.querySelector('.indicator')!;
@@ -781,7 +836,10 @@ describe('tct-tokenizer: inline overflow', () => {
     await waitUntil(() => list() === null, 'the overflow list is replaced by the tokens');
     expect(tokensOf(element)).toHaveLength(many.length);
     expect(tokensOf(element).some((token) => token.hasAttribute('data-tct-overflow'))).toBe(false);
-    await waitUntil(() => part(element, 'input')!.getBoundingClientRect().height > singleRow, 'the field grows');
+    await waitUntil(
+      () => part(element, 'input')!.getBoundingClientRect().height > singleRow,
+      'the field grows',
+    );
     // Blur collapses again.
     element.parentElement!.querySelector('button')!.focus();
     await waitUntil(() => list() !== null, 'the overflow list returns');
@@ -800,7 +858,10 @@ describe('tct-tokenizer: inline overflow', () => {
 
   it('the input stays mounted and named while collapsed', async () => {
     const element = await make('label="Teams" token-overflow="unfocused-inline"', many, 320);
-    await waitUntil(() => element.shadowRoot!.querySelector('tct-overflow-list') !== null, 'collapsed');
+    await waitUntil(
+      () => element.shadowRoot!.querySelector('tct-overflow-list') !== null,
+      'collapsed',
+    );
     expect(comboboxOf(element)).not.toBeNull();
     expect(Math.round(comboboxOf(element).getBoundingClientRect().width)).toBe(0);
     if (isChromium) expect((await axNode(comboboxOf(element))).name).toBe('Teams');
@@ -876,7 +937,10 @@ describe('tct-tokenizer: disabled and read-only', () => {
   });
 
   it('disabled-message keeps the input focusable (aria-disabled), blocks typing and removal, and describes the reason', async () => {
-    const element = await make('label="Teams" disabled disabled-message="You need the Editor role"', [TEAMS[0]!]);
+    const element = await make(
+      'label="Teams" disabled disabled-message="You need the Editor role"',
+      [TEAMS[0]!],
+    );
     const input = comboboxOf(element);
     expect(input.disabled).toBe(false);
     expect(input.getAttribute('aria-disabled')).toBe('true');
@@ -924,7 +988,9 @@ describe('tct-tokenizer: busy and custom rendering', () => {
   it('renderToken replaces the token markup and gets a remove callback that removes the item', async () => {
     const element = await make('label="Teams"', [TEAMS[0]!, TEAMS[1]!]);
     element.renderToken = (item, remove) =>
-      html`<button type="button" class="mine" @click=${remove}>${item.label.toUpperCase()}</button>`;
+      html`<button type="button" class="mine" @click=${remove}>
+        ${item.label.toUpperCase()}
+      </button>`;
     await element.updateComplete;
     const mine = [...element.shadowRoot!.querySelectorAll<HTMLButtonElement>('.mine')];
     expect(mine.map((button) => button.textContent)).toEqual(['DESIGN', 'ENGINEERING']);
@@ -1002,7 +1068,10 @@ describe('tct-tokenizer: accessibility, RTL, forced colours and i18n', () => {
     element.items = [TEAMS[0]!, TEAMS[1]!];
     await element.updateComplete;
     await waitUntil(() => tokensOf(element).length === 2, 'tokens render');
-    await waitUntil(() => comboboxOf(element).placeholder !== 'Search…', 'the Arabic catalog loaded');
+    await waitUntil(
+      () => comboboxOf(element).placeholder !== 'Search…',
+      'the Arabic catalog loaded',
+    );
     const box = part(element, 'input')!.getBoundingClientRect();
     const first = tokensOf(element)[0]!.getBoundingClientRect();
     const clear = clearAll(element)!.getBoundingClientRect();
@@ -1036,7 +1105,12 @@ describe('tct-tokenizer: accessibility, RTL, forced colours and i18n', () => {
       element.searchSource = createStaticSource(TEAMS);
       element.items = [TEAMS[0]!];
       await element.updateComplete;
-      await waitUntil(() => comboboxOf(element) !== null && clearAll(element)?.getAttribute('label') === 'Alle löschen', 'German catalog loaded');
+      await waitUntil(
+        () =>
+          comboboxOf(element) !== null &&
+          clearAll(element)?.getAttribute('label') === 'Alle löschen',
+        'German catalog loaded',
+      );
       expect(removeOf(tokensOf(element)[0]!).getAttribute('aria-label')).toBe('Design entfernen');
       await userEvent.click(removeOf(tokensOf(element)[0]!));
       expect(spy.messages).toContain('Design entfernt');

@@ -127,7 +127,8 @@ export class TctTokenizer extends TctBoxControl {
   @property({attribute: false}) searchSource: SearchSource | undefined;
 
   /** Renders the content of a result row (a template, a node or text; never HTML). Default: `tct-typeahead-item`. */
-  @property({attribute: false}) renderItem: ((item: SearchableItem) => TypeaheadRenderResult) | undefined;
+  @property({attribute: false}) renderItem:
+    ((item: SearchableItem) => TypeaheadRenderResult) | undefined;
 
   /**
    * Renders a token (upstream `renderToken`): `(item, remove) => template | node | text`. Call `remove()` from
@@ -241,7 +242,8 @@ export class TctTokenizer extends TctBoxControl {
         size: this.fieldSize,
         renderItem: this.renderItem,
         emptyText:
-          this.emptySearchResultsText ?? this.#typeaheadLocale.t('@tct.typeahead.emptySearchResults'),
+          this.emptySearchResultsText ??
+          this.#typeaheadLocale.t('@tct.typeahead.emptySearchResults'),
         selectedId: null,
         queryEntries: this.#createEntries,
         filter: this.#unselected,
@@ -293,7 +295,8 @@ export class TctTokenizer extends TctBoxControl {
     const items = this.items;
     if (!this.name || items.length === 0) return null;
     const data = new FormData();
-    for (const item of items) data.append(this.name, JSON.stringify({id: item.id, label: item.label}));
+    for (const item of items)
+      data.append(this.name, JSON.stringify({id: item.id, label: item.label}));
     return data;
   }
 
@@ -305,7 +308,11 @@ export class TctTokenizer extends TctBoxControl {
 
   protected override formRestoreState(state: FormValue, _reason: 'restore' | 'autocomplete'): void {
     const entries =
-      state instanceof FormData ? state.getAll(this.name) : typeof state === 'string' ? [state] : [];
+      state instanceof FormData
+        ? state.getAll(this.name)
+        : typeof state === 'string'
+          ? [state]
+          : [];
     this.items = entries
       .filter((entry): entry is string => typeof entry === 'string')
       .map((entry) => {
@@ -599,9 +606,12 @@ export class TctTokenizer extends TctBoxControl {
     this.requestUpdate('items');
     if (item) {
       announce(
-        this.#locale.t(action === 'remove' ? '@tct.tokenizer.tokenRemoved' : '@tct.tokenizer.tokenAdded', {
-          label: item.label,
-        }),
+        this.#locale.t(
+          action === 'remove' ? '@tct.tokenizer.tokenRemoved' : '@tct.tokenizer.tokenAdded',
+          {
+            label: item.label,
+          },
+        ),
         {element: this},
       );
     }
@@ -690,7 +700,9 @@ export class TctTokenizer extends TctBoxControl {
       const leftover: string[] = [];
       const known = new Set(this.items.map((item) => item.id));
       const room = (): number =>
-        this.maxEntries === undefined ? Infinity : this.maxEntries - this.items.length - added.length;
+        this.maxEntries === undefined
+          ? Infinity
+          : this.maxEntries - this.items.length - added.length;
       for (const piece of pieces) {
         if (room() <= 0) {
           leftover.push(piece);
@@ -721,7 +733,12 @@ export class TctTokenizer extends TctBoxControl {
         const next = [...this.items, ...added.map((entry) => entry.item)];
         const last = added[added.length - 1]!;
         const accepted = this.dispatch(
-          new TctSelectionChangeEvent(added.every((entry) => entry.created) ? 'create' : 'add', last.item, next, 'request'),
+          new TctSelectionChangeEvent(
+            added.every((entry) => entry.created) ? 'create' : 'add',
+            last.item,
+            next,
+            'request',
+          ),
         );
         if (accepted) {
           this.#items = next;

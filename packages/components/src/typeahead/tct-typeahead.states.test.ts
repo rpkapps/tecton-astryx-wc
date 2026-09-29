@@ -36,7 +36,10 @@ afterEach(async () => {
   await userEvent.hover(document.body, {position: {x: 0, y: 0}}).catch(() => undefined);
 });
 
-async function open(theme: 'light' | 'dark', attributes = ''): Promise<{root: HTMLElement; field: TctTypeahead}> {
+async function open(
+  theme: 'light' | 'dark',
+  attributes = '',
+): Promise<{root: HTMLElement; field: TctTypeahead}> {
   const root = await fixture<HTMLElement>(
     `<div style="padding:24px 24px 300px;inline-size:420px"><tct-typeahead label="Fruit" description="Pick one" debounce-ms="0" ${attributes}></tct-typeahead></div>`,
     {theme},
@@ -87,7 +90,9 @@ for (const theme of ['light', 'dark'] as const) {
       const release = await forcePseudoState(row, ['active', 'hover']);
       try {
         await motionDone(root);
-        expect(getComputedStyle(row).backgroundColor, 'the pressed fill is painted').not.toBe(highlighted);
+        expect(getComputedStyle(row).backgroundColor, 'the pressed fill is painted').not.toBe(
+          highlighted,
+        );
         await expectAccessible(root, contrastOnly);
       } finally {
         await release();
@@ -116,10 +121,16 @@ for (const theme of ['light', 'dark'] as const) {
     it('grouped results: the heading ink on the popup surface', async () => {
       const {root, field} = await open(theme);
       field.searchSource = createStaticSource(
-        FRUITS.map((item, i) => ({...item, auxiliaryData: {group: i < 2 ? 'A fruits' : 'Other fruits'}})),
+        FRUITS.map((item, i) => ({
+          ...item,
+          auxiliaryData: {group: i < 2 ? 'A fruits' : 'Other fruits'},
+        })),
       );
       await userEvent.keyboard('{Backspace}a');
-      await waitUntil(() => field.shadowRoot!.querySelector('[role="group"]') !== null, 'groups render');
+      await waitUntil(
+        () => field.shadowRoot!.querySelector('[role="group"]') !== null,
+        'groups render',
+      );
       await motionDone(root);
       await expectAccessible(root, contrastOnly);
     });

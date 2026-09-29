@@ -620,9 +620,7 @@ export class TypeaheadEngine<T extends SearchableItem> implements ReactiveContro
   #exitAnimation(): Animation[] {
     const layer = this.#layerElement;
     if (!layer || matchMedia('(prefers-reduced-motion: reduce)').matches) return [];
-    return [
-      layer.animate([{opacity: 1}, {opacity: 0}], {duration: 100, easing: 'ease-in'}),
-    ];
+    return [layer.animate([{opacity: 1}, {opacity: 0}], {duration: 100, easing: 'ease-in'})];
   }
 
   /** The combobox `<input>`: every attribute and handler of the pattern; the host adds its own classes and wiring. */
@@ -687,7 +685,12 @@ export class TypeaheadEngine<T extends SearchableItem> implements ReactiveContro
         <span class="option-content">${this.#renderContent(item, config)}</span>
         ${
           selected
-            ? html`<tct-icon class="option-check" name="check" size="sm" color="primary"></tct-icon>`
+            ? html`<tct-icon
+                class="option-check"
+                name="check"
+                size="sm"
+                color="primary"
+              ></tct-icon>`
             : nothing
         }
       </div>`;

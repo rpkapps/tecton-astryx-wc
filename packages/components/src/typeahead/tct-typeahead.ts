@@ -19,11 +19,7 @@ import popup from './typeahead-popup.styles.css';
 import {TypeaheadEngine} from './typeahead-engine.js';
 import {TctTypeaheadItem} from './tct-typeahead-item.js';
 import styles from './tct-typeahead.styles.css';
-import type {
-  SearchableItem,
-  SearchSource,
-  TypeaheadRenderResult,
-} from './typeahead.types.js';
+import type {SearchableItem, SearchSource, TypeaheadRenderResult} from './typeahead.types.js';
 
 /** Attributes forwarded to the inner input that are not reactive properties: a change re-renders. */
 const FORWARDED_ATTRIBUTES = ['enterkeyhint', 'inputmode'] as const;
@@ -101,7 +97,8 @@ export class TctTypeahead extends TctBoxControl {
   @property({attribute: false}) searchSource: SearchSource | undefined;
 
   /** Renders the content of a result row (a template, a node or text; never HTML). Default: `tct-typeahead-item`. */
-  @property({attribute: false}) renderItem: ((item: SearchableItem) => TypeaheadRenderResult) | undefined;
+  @property({attribute: false}) renderItem:
+    ((item: SearchableItem) => TypeaheadRenderResult) | undefined;
 
   /** Shows the source's `bootstrap()` results when the field takes focus, before anything is typed. */
   @property({type: Boolean, attribute: 'entries-on-focus'}) entriesOnFocus = false;

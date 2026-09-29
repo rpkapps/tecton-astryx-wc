@@ -28,7 +28,8 @@ import type {TctToken} from './tct-token.js';
 
 const root = (token: TctToken): ShadowRoot => token.shadowRoot!;
 const base = (token: TctToken): HTMLElement => root(token).querySelector<HTMLElement>('.base')!;
-const action = (token: TctToken): HTMLElement | null => root(token).querySelector<HTMLElement>('.action');
+const action = (token: TctToken): HTMLElement | null =>
+  root(token).querySelector<HTMLElement>('.action');
 const removeButton = (token: TctToken): HTMLButtonElement | null =>
   root(token).querySelector<HTMLButtonElement>('button.remove');
 
@@ -38,7 +39,8 @@ async function make(attributes = 'label="Design"', extra = ''): Promise<TctToken
   );
   // Links never navigate the test page.
   wrapper.addEventListener('click', (event) => {
-    if (event.composedPath().some((node) => node instanceof HTMLAnchorElement)) event.preventDefault();
+    if (event.composedPath().some((node) => node instanceof HTMLAnchorElement))
+      event.preventDefault();
   });
   const token = wrapper.querySelector<TctToken>('tct-token')!;
   await token.updateComplete;
@@ -101,7 +103,9 @@ describe('tct-token: rendering (Token.test.tsx)', () => {
   it('renders the three sizes at the control height minus 8px', async () => {
     const heights: Record<string, number> = {};
     for (const size of ['sm', 'md', 'lg']) {
-      heights[size] = Math.round(base(await make(`label="Design" size="${size}"`)).getBoundingClientRect().height);
+      heights[size] = Math.round(
+        base(await make(`label="Design" size="${size}"`)).getBoundingClientRect().height,
+      );
     }
     expect(heights).toEqual({sm: 20, md: 24, lg: 28});
   });
@@ -128,7 +132,10 @@ describe('tct-token: rendering (Token.test.tsx)', () => {
   });
 
   it('hides the label visually but keeps it as the accessible name', async () => {
-    const token = await make('label="Design" label-hidden clickable', '<tct-icon slot="icon" name="search"></tct-icon>');
+    const token = await make(
+      'label="Design" label-hidden clickable',
+      '<tct-icon slot="icon" name="search"></tct-icon>',
+    );
     const label = root(token).querySelector<HTMLElement>('.label')!;
     expect(label.classList.contains('visually-hidden')).toBe(true);
     expect(Math.round(label.getBoundingClientRect().width)).toBeLessThanOrEqual(1);
@@ -162,7 +169,10 @@ describe('tct-token: clickable (the label is a real button)', () => {
   });
 
   it('a press on the pill outside the button (the icon, the padding) presses the button once', async () => {
-    const token = await make('label="Design" clickable', '<tct-icon slot="icon" name="search"></tct-icon>');
+    const token = await make(
+      'label="Design" clickable',
+      '<tct-icon slot="icon" name="search"></tct-icon>',
+    );
     const origins: (EventTarget | undefined)[] = [];
     token.addEventListener('click', (event) => origins.push(event.composedPath()[0]));
     const box = base(token).getBoundingClientRect();
@@ -182,7 +192,8 @@ describe('tct-token: clickable (the label is a real button)', () => {
 
   it('is named by its label and exposed as a button', async () => {
     const token = await make('label="Design" clickable');
-    if (isChromium) expect(await axNode(action(token)!)).toMatchObject({role: 'button', name: 'Design'});
+    if (isChromium)
+      expect(await axNode(action(token)!)).toMatchObject({role: 'button', name: 'Design'});
   });
 
   it('inside a popover trigger a plain token renders as a button so the popover can bind it', async () => {
@@ -214,10 +225,16 @@ describe('tct-token: link', () => {
   });
 
   it('target=_blank adds rel="noopener noreferrer" to the rel the author gave', async () => {
-    const token = await make('label="Docs" href="https://example.com" target="_blank" rel="nofollow"');
+    const token = await make(
+      'label="Docs" href="https://example.com" target="_blank" rel="nofollow"',
+    );
     const anchor = base(token);
     expect(anchor.getAttribute('target')).toBe('_blank');
-    expect(anchor.getAttribute('rel')?.split(' ').sort()).toEqual(['nofollow', 'noopener', 'noreferrer']);
+    expect(anchor.getAttribute('rel')?.split(' ').sort()).toEqual([
+      'nofollow',
+      'noopener',
+      'noreferrer',
+    ]);
   });
 
   it('refuses a javascript: destination: an anchor without href', async () => {
@@ -270,7 +287,8 @@ describe('tct-token: removable', () => {
     const token = await make('label="Design" removable');
     const remove = removeButton(token)!;
     expect(remove.getAttribute('aria-label')).toBe('Remove Design');
-    if (isChromium) expect(await axNode(remove)).toMatchObject({role: 'button', name: 'Remove Design'});
+    if (isChromium)
+      expect(await axNode(remove)).toMatchObject({role: 'button', name: 'Remove Design'});
   });
 
   it('pressing it fires tct-remove with the value (default: the label) and no click on the host', async () => {
@@ -334,7 +352,11 @@ describe('tct-token: removable', () => {
 });
 
 describe('tct-token: linked and removable (a link and a button as siblings)', () => {
-  const setup = async (): Promise<{token: TctToken; anchor: HTMLAnchorElement; clicks: MouseEvent[]}> => {
+  const setup = async (): Promise<{
+    token: TctToken;
+    anchor: HTMLAnchorElement;
+    clicks: MouseEvent[];
+  }> => {
     const token = await make('label="Docs" href="https://example.com/docs" removable');
     const anchor = action(token) as HTMLAnchorElement;
     const clicks: MouseEvent[] = [];
@@ -422,7 +444,10 @@ describe('tct-token: focus, RTL, forced colours and i18n', () => {
     after.focus();
     await pressKeys('Shift+Tab', 'Shift+Tab');
     expect(deepActiveElement()).toBe(action(token));
-    await waitUntil(() => getComputedStyle(base(token)).outlineStyle !== 'none', 'the ring is drawn');
+    await waitUntil(
+      () => getComputedStyle(base(token)).outlineStyle !== 'none',
+      'the ring is drawn',
+    );
     expect(getComputedStyle(action(token)!).outlineStyle).toBe('none');
   });
 
@@ -431,7 +456,10 @@ describe('tct-token: focus, RTL, forced colours and i18n', () => {
     const after = token.parentElement!.querySelector('button')!;
     after.focus();
     await pressKeys('Shift+Tab');
-    await waitUntil(() => getComputedStyle(base(token)).outlineStyle !== 'none', 'the ring is drawn');
+    await waitUntil(
+      () => getComputedStyle(base(token)).outlineStyle !== 'none',
+      'the ring is drawn',
+    );
   });
 
   it('forced colours: the pill keeps a system-colour edge and a disabled one turns grey', async () => {
@@ -464,7 +492,10 @@ describe('tct-token: focus, RTL, forced colours and i18n', () => {
     );
     const token = wrapper.querySelector<TctToken>('tct-token')!;
     await token.updateComplete;
-    await waitUntil(() => removeButton(token)!.getAttribute('aria-label') !== 'Remove Design', 'German catalog loaded');
+    await waitUntil(
+      () => removeButton(token)!.getAttribute('aria-label') !== 'Remove Design',
+      'German catalog loaded',
+    );
     expect(removeButton(token)!.getAttribute('aria-label')).toBe('Design entfernen');
   });
 
@@ -480,7 +511,9 @@ describe('tct-token: focus, RTL, forced colours and i18n', () => {
       'label="Disabled" clickable removable disabled',
       'label="Design" label-hidden clickable',
     ]) {
-      await expectAccessible(await make(attributes, '<tct-icon slot="icon" name="search"></tct-icon>'));
+      await expectAccessible(
+        await make(attributes, '<tct-icon slot="icon" name="search"></tct-icon>'),
+      );
     }
   });
 });

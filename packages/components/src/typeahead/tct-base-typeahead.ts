@@ -82,7 +82,8 @@ export class TctBaseTypeahead extends TctElement {
   @property({attribute: false}) item: SearchableItem | null = null;
 
   /** Renders the content of a result row (a template, a node or text; never HTML). Default: `tct-typeahead-item`. */
-  @property({attribute: false}) renderItem: ((item: SearchableItem) => TypeaheadRenderResult) | undefined;
+  @property({attribute: false}) renderItem:
+    ((item: SearchableItem) => TypeaheadRenderResult) | undefined;
 
   /** Placeholder of the input. Unset shows the localised "Search…"; an empty string shows none. */
   @property() placeholder: string | undefined;
@@ -113,7 +114,8 @@ export class TctBaseTypeahead extends TctElement {
    * attribute) so a disabled reason next to it can be found by keyboard and assistive technology. Nothing can
    * be typed or chosen.
    */
-  @property({type: Boolean, reflect: true, attribute: 'focusable-disabled'}) focusableDisabled = false;
+  @property({type: Boolean, reflect: true, attribute: 'focusable-disabled'}) focusableDisabled =
+    false;
 
   /** Delay in ms before a typed query is searched; `0` for synchronous sources. */
   @property({type: Number, attribute: 'debounce-ms'}) debounceMs = 150;
@@ -252,23 +254,24 @@ export class TctBaseTypeahead extends TctElement {
   override render(): TemplateResult {
     const inert = this.disabled && this.focusableDisabled;
     return html`<div class="base" part="base">
-      ${this.#engine.renderInput({
-        className: 'input',
-        part: 'input',
-        id: this.inputId,
-        placeholder: this.placeholder ?? this.#locale.t('searchPlaceholder'),
-        tabindex: this.inputTabIndex,
-        disabled: this.disabled && !inert,
-        focusableDisabled: inert,
-      })}
-      ${
-        this.#engine.loading
-          ? html`<span class="loading" part="loading"
-              ><tct-spinner size="sm" aria-label=${this.#locale.t('loading')}></tct-spinner
-            ></span>`
-          : nothing
-      }
-    </div>${this.#engine.renderPopup()}`;
+        ${this.#engine.renderInput({
+          className: 'input',
+          part: 'input',
+          id: this.inputId,
+          placeholder: this.placeholder ?? this.#locale.t('searchPlaceholder'),
+          tabindex: this.inputTabIndex,
+          disabled: this.disabled && !inert,
+          focusableDisabled: inert,
+        })}
+        ${
+          this.#engine.loading
+            ? html`<span class="loading" part="loading"
+                ><tct-spinner size="sm" aria-label=${this.#locale.t('loading')}></tct-spinner
+              ></span>`
+            : nothing
+        }
+      </div>
+      ${this.#engine.renderPopup()}`;
   }
 }
 

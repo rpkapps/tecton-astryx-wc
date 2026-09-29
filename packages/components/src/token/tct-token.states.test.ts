@@ -30,7 +30,11 @@ const FORMS: Record<string, string> = {
   'linked and removable': 'href="https://example.com" removable',
 };
 
-async function mount(theme: 'light' | 'dark', color: string, attributes: string): Promise<{wrapper: HTMLElement; token: TctToken}> {
+async function mount(
+  theme: 'light' | 'dark',
+  color: string,
+  attributes: string,
+): Promise<{wrapper: HTMLElement; token: TctToken}> {
   const wrapper = await fixture<HTMLElement>(
     `<div style="padding:16px"><button type="button">before</button> <tct-token label="Design team" color="${color}" ${attributes}><tct-icon slot="icon" name="search"></tct-icon></tct-token></div>`,
     {theme},
@@ -72,7 +76,9 @@ for (const theme of ['light', 'dark'] as const) {
           const release = await forcePseudoState(pill, ['active', 'hover']);
           try {
             await motionDone(wrapper);
-            expect(getComputedStyle(pill).borderTopColor, 'the pressed edge is drawn').not.toBe(resting);
+            expect(getComputedStyle(pill).borderTopColor, 'the pressed edge is drawn').not.toBe(
+              resting,
+            );
             await expectAccessible(wrapper, contrastOnly);
           } finally {
             await release();

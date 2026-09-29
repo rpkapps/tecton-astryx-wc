@@ -10,7 +10,12 @@ describe('tct-selection-change', () => {
     const event = new TctSelectionChangeEvent('add', item, [item], 'keyboard');
     expect(event.type).toBe('tct-selection-change');
     expect([event.bubbles, event.composed, event.cancelable]).toEqual([true, true, true]);
-    expect([event.action, event.item, event.items, event.reason]).toEqual(['add', item, [item], 'keyboard']);
+    expect([event.action, event.item, event.items, event.reason]).toEqual([
+      'add',
+      item,
+      [item],
+      'keyboard',
+    ]);
   });
 
   it('a single selection that is cleared has a null item and no items', () => {

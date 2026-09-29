@@ -63,7 +63,10 @@ async function mount(
 }
 
 /** The results of "e" open, with an icon and a description in every row. */
-async function open(theme: 'light' | 'dark', attributes = ''): Promise<{root: HTMLElement; field: TctTokenizer}> {
+async function open(
+  theme: 'light' | 'dark',
+  attributes = '',
+): Promise<{root: HTMLElement; field: TctTokenizer}> {
   const mounted = await mount(theme, attributes);
   await typeInto(mounted.field, 'e');
   await whenOpen(mounted.field);
@@ -103,7 +106,9 @@ for (const theme of ['light', 'dark'] as const) {
       const release = await forcePseudoState(row, ['active', 'hover']);
       try {
         await motionDone(root);
-        expect(getComputedStyle(row).backgroundColor, 'the pressed fill is painted').not.toBe(highlighted);
+        expect(getComputedStyle(row).backgroundColor, 'the pressed fill is painted').not.toBe(
+          highlighted,
+        );
         await expectAccessible(root, contrastOnly);
       } finally {
         await release();
@@ -117,7 +122,10 @@ for (const theme of ['light', 'dark'] as const) {
       await motionDone(root);
       await expectAccessible(root, contrastOnly);
       await userEvent.hover(optionsOf(field).at(-1)!);
-      await waitUntil(() => activeOption(field) === optionsOf(field).at(-1), 'the hover highlights the Create entry');
+      await waitUntil(
+        () => activeOption(field) === optionsOf(field).at(-1),
+        'the hover highlights the Create entry',
+      );
       await motionDone(root);
       await expectAccessible(root, contrastOnly);
     });
@@ -161,7 +169,10 @@ for (const theme of ['light', 'dark'] as const) {
     it('the "+N more" indicator while the field is not focused', async () => {
       const {root, field} = await mount(theme, 'token-overflow="unfocused-inline"', TEAMS, 300);
       const list = (): HTMLElement | null => field.shadowRoot!.querySelector('tct-overflow-list');
-      await waitUntil(() => list()?.shadowRoot?.querySelector('.indicator') != null, 'the indicator shows');
+      await waitUntil(
+        () => list()?.shadowRoot?.querySelector('.indicator') != null,
+        'the indicator shows',
+      );
       await motionDone(root);
       await expectAccessible(root, contrastOnly);
     });

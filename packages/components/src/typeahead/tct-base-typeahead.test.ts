@@ -85,7 +85,11 @@ describe('tct-base-typeahead: combobox semantics (APG editable combobox, list au
     expect(input.placeholder).toBe('Search…');
     expect(input.autocomplete).toBe('off');
     if (isChromium) {
-      expect(await axNode(input)).toMatchObject({role: 'combobox', name: 'Fruit', expanded: 'false'});
+      expect(await axNode(input)).toMatchObject({
+        role: 'combobox',
+        name: 'Fruit',
+        expanded: 'false',
+      });
     }
   });
 
@@ -148,7 +152,9 @@ describe('tct-base-typeahead: combobox semantics (APG editable combobox, list au
   });
 
   it('emptySearchResultsText replaces the default message', async () => {
-    const element = await make('aria-label="Fruit" debounce-ms="0" empty-search-results-text="Nothing here"');
+    const element = await make(
+      'aria-label="Fruit" debounce-ms="0" empty-search-results-text="Nothing here"',
+    );
     await typeInto(element, 'zzz');
     await waitUntil(() => optionsOf(element).length === 1, 'the empty state opens');
     expect(textOf(optionsOf(element)[0])).toBe('Nothing here');
@@ -273,7 +279,10 @@ describe('tct-base-typeahead: keyboard (upstream Typeahead keyboard, APG)', () =
     element.searchSource = createStaticSource(FRUITS);
     await element.updateComplete;
     // The Arabic catalog loads after the first render; the input is located by its placeholder.
-    await waitUntil(() => comboboxOf(element).placeholder !== 'Search…', 'the Arabic catalog loaded');
+    await waitUntil(
+      () => comboboxOf(element).placeholder !== 'Search…',
+      'the Arabic catalog loaded',
+    );
     await typeInto(element, 'a');
     await whenOpen(element);
     await waitUntil(
@@ -283,7 +292,9 @@ describe('tct-base-typeahead: keyboard (upstream Typeahead keyboard, APG)', () =
     const popup = element.shadowRoot!.querySelector<HTMLElement>('.popup')!.getBoundingClientRect();
     const input = comboboxOf(element).getBoundingClientRect();
     expect(Math.abs(popup.right - input.right)).toBeLessThan(2);
-    expect(element.shadowRoot!.querySelector('.empty')?.textContent ?? '').not.toContain('No results');
+    expect(element.shadowRoot!.querySelector('.empty')?.textContent ?? '').not.toContain(
+      'No results',
+    );
   });
 });
 
@@ -317,7 +328,9 @@ describe('tct-base-typeahead: search scheduling', () => {
   });
 
   it('does not fall back to bootstrap on ArrowDown below the threshold', async () => {
-    const element = await make('aria-label="Fruit" debounce-ms="0" min-query-length="3" entries-on-focus');
+    const element = await make(
+      'aria-label="Fruit" debounce-ms="0" min-query-length="3" entries-on-focus',
+    );
     const bootstrap = vi.spyOn(element.searchSource!, 'bootstrap');
     await typeInto(element, 'a');
     await waitUntil(() => bootstrap.mock.calls.length >= 1, 'bootstrap on focus');
@@ -415,7 +428,10 @@ describe('tct-base-typeahead: stale results never win, and work is cancelled', (
     await typeInto(element, 'a');
     await waitUntil(() => control.calls.length === 1, 'search');
     await userEvent.keyboard('{Backspace}');
-    await waitUntil(() => !comboboxOf(element).hasAttribute('aria-busy'), 'busy cleared by the empty field');
+    await waitUntil(
+      () => !comboboxOf(element).hasAttribute('aria-busy'),
+      'busy cleared by the empty field',
+    );
     control.calls[0]!.resolve([FRUITS[0]!]);
     await nextFrame();
     await nextFrame();
@@ -594,11 +610,23 @@ describe('tct-base-typeahead: IME', () => {
     await whenOpen(element);
     const before = activeOption(element);
     comboboxOf(element).dispatchEvent(
-      new KeyboardEvent('keydown', {key: 'ArrowDown', isComposing: true, bubbles: true, composed: true, cancelable: true}),
+      new KeyboardEvent('keydown', {
+        key: 'ArrowDown',
+        isComposing: true,
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+      }),
     );
     expect(activeOption(element)).toBe(before);
     comboboxOf(element).dispatchEvent(
-      new KeyboardEvent('keydown', {key: 'Escape', isComposing: true, bubbles: true, composed: true, cancelable: true}),
+      new KeyboardEvent('keydown', {
+        key: 'Escape',
+        isComposing: true,
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+      }),
     );
     expect(element.open).toBe(true);
   });
@@ -646,7 +674,10 @@ describe('tct-base-typeahead: dismissal', () => {
     await waitUntil(() => !element.open, 'the first Escape closes only the results');
     expect((wrapper as unknown as {open: boolean}).open).toBe(true);
     await pressKeys('Escape');
-    await waitUntil(() => !(wrapper as unknown as {open: boolean}).open, 'the second Escape closes the popover');
+    await waitUntil(
+      () => !(wrapper as unknown as {open: boolean}).open,
+      'the second Escape closes the popover',
+    );
   });
 });
 
@@ -663,7 +694,12 @@ describe('tct-base-typeahead: events', () => {
     expect(element.item).toBeNull();
     expect(comboboxOf(element).value).toBe('a');
     expect(element.open).toBe(true);
-    const detail = events.events[0] as unknown as {action: string; item: SearchableItem; items: SearchableItem[]; reason: string};
+    const detail = events.events[0] as unknown as {
+      action: string;
+      item: SearchableItem;
+      items: SearchableItem[];
+      reason: string;
+    };
     expect([detail.action, detail.item.id, detail.items.length, detail.reason]).toEqual([
       'select',
       'apple',
@@ -830,10 +866,13 @@ describe('tct-base-typeahead: accessibility', () => {
     await expectAccessible(element);
   });
 
-  it.skipIf(isTier2)('the highlighted option is exposed as :state(highlighted) on library rows only; plain rows get data-highlighted', async () => {
-    const element = await make();
-    await typeInto(element, 'a');
-    await whenOpen(element);
-    expect(activeOption(element)?.hasAttribute('data-highlighted')).toBe(true);
-  });
+  it.skipIf(isTier2)(
+    'the highlighted option is exposed as :state(highlighted) on library rows only; plain rows get data-highlighted',
+    async () => {
+      const element = await make();
+      await typeInto(element, 'a');
+      await whenOpen(element);
+      expect(activeOption(element)?.hasAttribute('data-highlighted')).toBe(true);
+    },
+  );
 });

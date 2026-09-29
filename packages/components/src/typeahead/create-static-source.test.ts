@@ -21,8 +21,14 @@ describe('createStaticSource', () => {
   });
 
   it('matches a case-insensitive substring of the label, ignoring surrounding whitespace', () => {
-    expect((source.search(' SET ') as SearchableItem[]).map((item) => item.id)).toEqual(['settings']);
-    expect((source.search('e') as SearchableItem[]).map((item) => item.id)).toEqual(['home', 'settings', 'help']);
+    expect((source.search(' SET ') as SearchableItem[]).map((item) => item.id)).toEqual([
+      'settings',
+    ]);
+    expect((source.search('e') as SearchableItem[]).map((item) => item.id)).toEqual([
+      'home',
+      'settings',
+      'help',
+    ]);
     expect((source.search('centre') as SearchableItem[]).map((item) => item.id)).toEqual(['help']);
   });
 
@@ -36,11 +42,19 @@ describe('createStaticSource', () => {
   });
 
   it('keywords are checked alongside the label', () => {
-    const withKeywords = createStaticSource(ITEMS, {keywords: (item) => item.auxiliaryData?.aliases ?? []});
-    expect((withKeywords.search('PREFER') as SearchableItem[]).map((item) => item.id)).toEqual(['settings']);
-    expect((withKeywords.search('dash') as SearchableItem[]).map((item) => item.id)).toEqual(['home']);
+    const withKeywords = createStaticSource(ITEMS, {
+      keywords: (item) => item.auxiliaryData?.aliases ?? [],
+    });
+    expect((withKeywords.search('PREFER') as SearchableItem[]).map((item) => item.id)).toEqual([
+      'settings',
+    ]);
+    expect((withKeywords.search('dash') as SearchableItem[]).map((item) => item.id)).toEqual([
+      'home',
+    ]);
     // The label still matches.
-    expect((withKeywords.search('help') as SearchableItem[]).map((item) => item.id)).toEqual(['help']);
+    expect((withKeywords.search('help') as SearchableItem[]).map((item) => item.id)).toEqual([
+      'help',
+    ]);
     // Without the option the alias is not searched.
     expect(source.search('preferences')).toEqual([]);
   });
@@ -57,7 +71,10 @@ describe('typeahead utils entry', () => {
     const groups = groupItems(ITEMS);
     expect(groups.map((group) => group.heading)).toEqual(['Pages', null]);
     expect(groups[0]!.items.map((item) => item.id)).toEqual(['home', 'settings']);
-    expect(groupItems(ITEMS, {ungroupedFirst: true}).map((group) => group.heading)).toEqual([null, 'Pages']);
+    expect(groupItems(ITEMS, {ungroupedFirst: true}).map((group) => group.heading)).toEqual([
+      null,
+      'Pages',
+    ]);
   });
 
   it('groupItems without any group is one heading-less group with the items as they are', () => {

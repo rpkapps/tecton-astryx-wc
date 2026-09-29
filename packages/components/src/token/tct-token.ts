@@ -186,7 +186,9 @@ export class TctToken extends TctElement {
     const icon = this.#slots.has('icon')
       ? html`<span class="icon-slot"><slot name="icon"></slot></span>`
       : nothing;
-    const end = this.#slots.has('end') ? html`<span class="end"><slot name="end"></slot></span>` : nothing;
+    const end = this.#slots.has('end')
+      ? html`<span class="end"><slot name="end"></slot></span>`
+      : nothing;
     const label = html`<span class="label${this.labelHidden ? ' visually-hidden' : ''}" part="label"
       >${this.label}</span
     >`;
@@ -272,7 +274,11 @@ export class TctToken extends TctElement {
       >${description}`;
   }
 
-  #linkAttributes(): {href: string | undefined; target: string | undefined; rel: string | undefined} {
+  #linkAttributes(): {
+    href: string | undefined;
+    target: string | undefined;
+    rel: string | undefined;
+  } {
     const href = this.href ? (safeUrl(this.href, {allowData: true}) ?? undefined) : undefined;
     const {target, rel} = computeTargetAndRel(this.target || undefined, this.rel || undefined);
     return {href, target, rel};

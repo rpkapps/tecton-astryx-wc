@@ -90,7 +90,8 @@ runElementSuite({
 
 runFormControlSuite({
   tag: 'tct-typeahead',
-  render: (attributes) => `<tct-typeahead label="Fruit" debounce-ms="0" ${attributes}></tct-typeahead>`,
+  render: (attributes) =>
+    `<tct-typeahead label="Fruit" debounce-ms="0" ${attributes}></tct-typeahead>`,
   validValue: 'apple',
   submitsOnEnter: true,
   readonly: true,
@@ -123,10 +124,13 @@ describe('tct-typeahead: rendering (Typeahead.test.tsx)', () => {
   });
 
   it('renders an error status message and colours the box', async () => {
-    const element = await make('label="Assignee" status-type="error" status-message="Pick someone"');
+    const element = await make(
+      'label="Assignee" status-type="error" status-message="Pick someone"',
+    );
     expect(textOf(statusOf(element))).toContain('Pick someone');
     expect(part(element, 'input')?.getAttribute('data-status')).toBe('error');
-    if (isChromium) expect((await axNode(comboboxOf(element))).description).toContain('Pick someone');
+    if (isChromium)
+      expect((await axNode(comboboxOf(element))).description).toContain('Pick someone');
   });
 
   it('the detached status variant renders the message with its own icon and no glyph in the box', async () => {
@@ -149,7 +153,10 @@ describe('tct-typeahead: rendering (Typeahead.test.tsx)', () => {
   });
 
   it('a start icon and the start slot render before the input', async () => {
-    const element = await make('label="Fruit" start-icon="search"', '<span slot="start" id="mine">@</span>');
+    const element = await make(
+      'label="Fruit" start-icon="search"',
+      '<span slot="start" id="mine">@</span>',
+    );
     expect(part(element, 'start-icon')).not.toBeNull();
     const slot = element.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="start"]')!;
     expect(slot.assignedElements()[0]?.id).toBe('mine');
@@ -231,7 +238,11 @@ describe('tct-typeahead: the selected value is a token', () => {
     await whenOpen(element);
     events.events.length = 0;
     await pressKeys('Enter');
-    expect(events.events.map((event) => event.type)).toEqual(['tct-selection-change', 'input', 'change']);
+    expect(events.events.map((event) => event.type)).toEqual([
+      'tct-selection-change',
+      'input',
+      'change',
+    ]);
     expect(events.events[2]!.composed).toBe(true);
     expect(events.events[0]).toMatchObject({action: 'select', reason: 'keyboard'});
   });
@@ -267,7 +278,11 @@ describe('tct-typeahead: clear button', () => {
     const events = recordEvents(element, ['tct-selection-change', 'input', 'change']);
     await userEvent.click(clear);
     expect(element.item).toBeNull();
-    expect(events.events.map((event) => event.type)).toEqual(['tct-selection-change', 'input', 'change']);
+    expect(events.events.map((event) => event.type)).toEqual([
+      'tct-selection-change',
+      'input',
+      'change',
+    ]);
     expect(events.events[0]).toMatchObject({action: 'clear', item: FRUITS[0]});
     await waitUntil(() => deepActiveElement() === comboboxOf(element), 'the input takes focus');
   });
@@ -289,7 +304,9 @@ describe('tct-typeahead: clear button', () => {
     const element = await make();
     element.item = FRUITS[0]!;
     await element.updateComplete;
-    await userEvent.click(element.shadowRoot!.querySelector<HTMLElement>('tct-input-clear-button')!);
+    await userEvent.click(
+      element.shadowRoot!.querySelector<HTMLElement>('tct-input-clear-button')!,
+    );
     expect(element.editing).toBe(false);
   });
 });
@@ -316,7 +333,9 @@ describe('tct-typeahead: edit mode', () => {
     element.item = FRUITS[0]!;
     await element.updateComplete;
     const box = part(element, 'input')!.getBoundingClientRect();
-    await userEvent.click(part(element, 'input')!, {position: {x: box.width - 60, y: box.height / 2}});
+    await userEvent.click(part(element, 'input')!, {
+      position: {x: box.width - 60, y: box.height / 2},
+    });
     await waitUntil(() => element.editing, 'edit mode');
   });
 
@@ -353,7 +372,13 @@ describe('tct-typeahead: edit mode', () => {
     await userEvent.click(tokenButton(element)!);
     await waitUntil(() => element.editing, 'edit mode');
     comboboxOf(element).dispatchEvent(
-      new KeyboardEvent('keydown', {key: 'Escape', isComposing: true, bubbles: true, composed: true, cancelable: true}),
+      new KeyboardEvent('keydown', {
+        key: 'Escape',
+        isComposing: true,
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+      }),
     );
     await nextFrame();
     expect(element.editing).toBe(true);
@@ -378,7 +403,10 @@ describe('tct-typeahead: edit mode', () => {
     await element.updateComplete;
     expect(tokenOf(element)!.hasAttribute('disabled')).toBe(true);
     const box = part(element, 'input')!.getBoundingClientRect();
-    await userEvent.click(part(element, 'input')!, {position: {x: box.width - 60, y: box.height / 2}, force: true});
+    await userEvent.click(part(element, 'input')!, {
+      position: {x: box.width - 60, y: box.height / 2},
+      force: true,
+    });
     expect(element.editing).toBe(false);
   });
 });
@@ -405,7 +433,9 @@ describe('tct-typeahead: form (acceptance: value = id, restore, reset)', () => {
   });
 
   it('typing text without choosing an item submits nothing (the query is not the value)', async () => {
-    const form = await formHarness(`<tct-typeahead label="Fruit" name="fruit" debounce-ms="0"></tct-typeahead>`);
+    const form = await formHarness(
+      `<tct-typeahead label="Fruit" name="fruit" debounce-ms="0"></tct-typeahead>`,
+    );
     const element = form.form.querySelector<TctTypeahead>('tct-typeahead')!;
     element.searchSource = createStaticSource(FRUITS);
     await typeInto(element, 'ban');
@@ -490,7 +520,9 @@ describe('tct-typeahead: form (acceptance: value = id, restore, reset)', () => {
 
 describe('tct-typeahead: disabled with a reason and busy', () => {
   it('disabled-message keeps the input focusable (aria-disabled), blocks editing and describes the reason', async () => {
-    const element = await make('label="Fruit" disabled disabled-message="You need the Editor role"');
+    const element = await make(
+      'label="Fruit" disabled disabled-message="You need the Editor role"',
+    );
     const input = comboboxOf(element);
     expect(input.disabled).toBe(false);
     expect(input.getAttribute('aria-disabled')).toBe('true');
@@ -658,7 +690,9 @@ describe('tct-typeahead: accessibility, RTL, forced colours and i18n', () => {
     await waitUntil(() => tokenOf(element) !== null, 'the token renders');
     const box = part(element, 'input')!.getBoundingClientRect();
     const token = tokenOf(element)!.getBoundingClientRect();
-    const clear = element.shadowRoot!.querySelector('tct-input-clear-button')!.getBoundingClientRect();
+    const clear = element
+      .shadowRoot!.querySelector('tct-input-clear-button')!
+      .getBoundingClientRect();
     expect(box.right - token.right).toBeLessThan(box.width / 3);
     expect(clear.left - box.left).toBeLessThan(box.width / 3);
   });
@@ -670,7 +704,10 @@ describe('tct-typeahead: accessibility, RTL, forced colours and i18n', () => {
     const element = wrapper.querySelector<TctTypeahead>('tct-typeahead')!;
     element.searchSource = createStaticSource(FRUITS);
     await element.updateComplete;
-    await waitUntil(() => comboboxOf(element).placeholder !== 'Search…', 'the German catalog loaded');
+    await waitUntil(
+      () => comboboxOf(element).placeholder !== 'Search…',
+      'the German catalog loaded',
+    );
     expect(comboboxOf(element).placeholder).toBe('Suchen…');
     element.item = FRUITS[0]!;
     await element.updateComplete;

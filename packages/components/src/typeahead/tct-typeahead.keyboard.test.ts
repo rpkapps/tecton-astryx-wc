@@ -134,9 +134,9 @@ runKeyboardSuite({
         await field(element).updateComplete;
       },
       focus: (element) =>
-        field(element).shadowRoot!.querySelector<HTMLElement>('tct-token')!.shadowRoot!.querySelector<HTMLElement>(
-          'button.action',
-        ),
+        field(element)
+          .shadowRoot!.querySelector<HTMLElement>('tct-token')!
+          .shadowRoot!.querySelector<HTMLElement>('button.action'),
       keys: ['Enter'],
       expect: async ({element}) => {
         await waitUntil(() => field(element).editing, 'edit mode');
@@ -148,9 +148,10 @@ runKeyboardSuite({
         field(element).searchSource = createStaticSource(FRUITS);
         field(element).item = FRUITS[3]!;
         await field(element).updateComplete;
-        field(element).shadowRoot!.querySelector<HTMLElement>('tct-token')!.shadowRoot!.querySelector<HTMLElement>(
-          'button.action',
-        )!.click();
+        field(element)
+          .shadowRoot!.querySelector<HTMLElement>('tct-token')!
+          .shadowRoot!.querySelector<HTMLElement>('button.action')!
+          .click();
         await waitUntil(() => field(element).editing, 'edit mode');
       },
       focus: (element) => comboboxOf(field(element)),

@@ -112,7 +112,7 @@ export function activeDescendantId(input: HTMLInputElement): string | null {
 /** The option row the input currently points at, or `null`. */
 export function activeOption(host: Element): HTMLElement | null {
   const id = activeDescendantId(comboboxOf(host));
-  return id ? (host.shadowRoot!.getElementById(id)) : null;
+  return id ? host.shadowRoot!.getElementById(id) : null;
 }
 
 /** Clicks the input and types `text` with the real keyboard. */
