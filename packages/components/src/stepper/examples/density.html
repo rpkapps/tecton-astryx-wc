@@ -1,0 +1,13 @@
+<!-- title: Density and optional steps; description: density sets the vertical padding of every step (compact, balanced, spacious); a step can override it. optional appends "Optional" and end content sits at the end of the label row. -->
+<tct-vstack gap="5">
+  <tct-stepper active-step="1" density="compact" label="Compact">
+    <tct-step label="Account"></tct-step>
+    <tct-step label="Profile" optional></tct-step>
+    <tct-step label="Review"><tct-text slot="end" color="secondary" size="xs">2 min</tct-text></tct-step>
+  </tct-stepper>
+  <tct-stepper active-step="1" density="spacious" label="Spacious">
+    <tct-step label="Account"></tct-step>
+    <tct-step label="Profile" optional></tct-step>
+    <tct-step label="Review" density="compact"></tct-step>
+  </tct-stepper>
+</tct-vstack>

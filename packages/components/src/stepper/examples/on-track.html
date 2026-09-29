@@ -1,0 +1,15 @@
+<!-- title: Indicators on the track; description: indicator-position="on-track" puts the indicator on the connector line as a node, with the label below (horizontal) or beside it (vertical). The steps abut so the segments read as one line. -->
+<tct-vstack gap="6">
+  <tct-stepper active-step="1" indicator-position="on-track" label="Horizontal, on track">
+    <tct-step label="Account"></tct-step>
+    <tct-step label="Profile" description="Tell us about you"></tct-step>
+    <tct-step label="Review"></tct-step>
+  </tct-stepper>
+  <tct-stepper active-step="1" indicator-position="on-track" orientation="vertical" label="Vertical, on track">
+    <tct-step label="Account"></tct-step>
+    <tct-step label="Profile">
+      <tct-text color="secondary">Content continues the connector past the label.</tct-text>
+    </tct-step>
+    <tct-step label="Review"></tct-step>
+  </tct-stepper>
+</tct-vstack>

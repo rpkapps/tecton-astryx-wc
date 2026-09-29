@@ -1,0 +1,110 @@
+/*
+ * tct-nav-heading-menu-item. The painted row is the inner menuitem (a link or a div): the menu's roving
+ * tabindex focuses it, so the ring is drawn on it, inset so a scrolling popover never clips it. Tecton menu
+ * rows highlight with the table-row hover fill (design/components/menu-item.md) under the primary text, and
+ * DOM focus is the highlight. Disabled rows dim and take no pointer. [mwg:css] [mwg:accessible-web-components]
+ */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .item {
+    --_pad-block: var(--spacing-2);
+    --_pad-inline: var(--spacing-2);
+
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    inline-size: 100%;
+    padding-block: var(--_pad-block);
+    padding-inline: var(--_pad-inline);
+    border: 0;
+    border-radius: var(--radius-inner);
+    background-color: transparent;
+    color: var(--color-text-primary);
+    font-family: inherit;
+    font-size: var(--text-label-size);
+    text-align: start;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .item[data-size='sm'] {
+    --_pad-block: var(--spacing-1);
+  }
+
+  .item[data-size='lg'] {
+    --_pad-block: var(--spacing-3);
+    --_pad-inline: var(--spacing-3);
+  }
+
+  .icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  .content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+
+  .item[data-disabled] {
+    opacity: 0.5;
+    cursor: default;
+  }
+}
+
+@layer state {
+  @media (hover: hover) {
+    .item:hover:not([data-disabled]) {
+      background-color: var(--tecton-color-table-row-hover);
+    }
+  }
+
+  /* The single highlight is DOM focus. */
+  .item:focus {
+    background-color: var(--tecton-color-table-row-hover);
+    outline: none;
+  }
+
+  .item:active:not([data-disabled]) {
+    background-color: var(--color-overlay-pressed);
+  }
+
+  .item:focus-visible {
+    outline-width: var(--focus-outline-width);
+    outline-style: var(--focus-outline-style);
+    outline-color: var(--focus-outline-color);
+    outline-offset: calc(-1 * var(--focus-outline-width));
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .item {
+      color: ButtonText;
+    }
+
+    .item:focus {
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .item[data-disabled] {
+      color: GrayText;
+      opacity: 1;
+    }
+
+    .item:focus-visible {
+      outline-color: CanvasText;
+    }
+  }
+}

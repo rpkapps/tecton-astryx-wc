@@ -1,0 +1,17 @@
+<!-- title: Icons and end content; description: A tab takes an icon (with a different one while selected), trailing content such as a badge, or only an icon with label-hidden; the label stays its accessible name. -->
+<tct-vstack gap="4">
+  <tct-tab-list value="inbox" label="Mailbox">
+    <tct-tab value="inbox" label="Inbox">
+      <tct-icon slot="icon" name="close"></tct-icon>
+      <tct-icon slot="selected-icon" name="check"></tct-icon>
+      <tct-badge slot="end" variant="blue">3</tct-badge>
+    </tct-tab>
+    <tct-tab value="sent" label="Sent">
+      <tct-icon slot="icon" name="close"></tct-icon>
+      <tct-icon slot="selected-icon" name="check"></tct-icon>
+    </tct-tab>
+    <tct-tab value="search" label="Search" label-hidden>
+      <tct-icon slot="icon" name="search"></tct-icon>
+    </tct-tab>
+  </tct-tab-list>
+</tct-vstack>

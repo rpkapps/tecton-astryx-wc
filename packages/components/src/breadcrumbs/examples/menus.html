@@ -1,0 +1,28 @@
+<!-- title: Menu crumbs; description: A crumb with a menu opens the same rows as tct-dropdown-menu, for sibling pages. Give data rows through the menu property, or slot tct-dropdown-menu-item children into slot="menu". -->
+<div id="menus-root">
+  <tct-vstack gap="4">
+    <tct-breadcrumbs label="Data rows">
+      <tct-breadcrumb-item href="#home">Home</tct-breadcrumb-item>
+      <tct-breadcrumb-item data-menu>Projects</tct-breadcrumb-item>
+      <tct-breadcrumb-item>Tecton</tct-breadcrumb-item>
+    </tct-breadcrumbs>
+    <tct-breadcrumbs label="Compound rows">
+      <tct-breadcrumb-item href="#home">Home</tct-breadcrumb-item>
+      <tct-breadcrumb-item>
+        Docs
+        <tct-dropdown-menu-item slot="menu" label="Guides"></tct-dropdown-menu-item>
+        <tct-dropdown-menu-item slot="menu" label="API reference"></tct-dropdown-menu-item>
+        <tct-dropdown-menu-item slot="menu" label="Changelog"></tct-dropdown-menu-item>
+      </tct-breadcrumb-item>
+      <tct-breadcrumb-item>Components</tct-breadcrumb-item>
+    </tct-breadcrumbs>
+  </tct-vstack>
+  <script type="module">
+    const root = document.querySelector('#menus-root');
+    root.querySelector('[data-menu]').menu = [
+      {label: 'Tecton'},
+      {label: 'Atlas'},
+      {label: 'Meridian'},
+    ];
+  </script>
+</div>
