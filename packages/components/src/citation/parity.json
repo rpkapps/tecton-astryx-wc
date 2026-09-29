@@ -17,7 +17,7 @@
           "kind": "prop",
           "target": "source",
           "as": "property",
-          "notes": "Object {title, url, src, icon} (data prop: property only, A§7.2). The flat attributes source-title, source-url and source-src mirror its fields for declarative markup; a field set on the object wins over its attribute."
+          "notes": "Object {title, url, src, icon} (data prop: property only, A\u00a77.2). The flat attributes source-title, source-url and source-src mirror its fields for declarative markup; a field set on the object wins over its attribute."
         },
         {
           "upstream": "number",
@@ -66,7 +66,9 @@
           "when": "the citation is a link"
         }
       ],
-      "form": {"formAssociated": false},
+      "form": {
+        "formAssociated": false
+      },
       "differences": [
         {
           "id": "CITATION-01",
@@ -95,7 +97,13 @@
       },
       "provisional": [],
       "tokenRequests": [],
-      "requests": [],
+      "requests": [
+        {
+          "file": "packages/components/tsconfig.json",
+          "reason": "Component tests feed runKeyboardSuite from parity.json (import parity from './parity.json'), but the project include does not cover JSON files, so tsc -b fails with TS6307. Tests use import.meta.glob until the include is widened.",
+          "diff": "\"include\": [\"src\", \"src/**/*.json\"]"
+        }
+      ],
       "sizeBudgetKb": null,
       "notes": "Guides: [mwg:accessible-web-components] name and role inside the shadow root, delegatesFocus; [mwg:styling-web-components] parts; [mwg:security] URL policy and rel=noopener; [mwg:shadow-dom] slot presence."
     }
