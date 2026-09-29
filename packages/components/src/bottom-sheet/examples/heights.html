@@ -1,27 +1,27 @@
 <!-- title: Heights; description: hug fits its content (up to 92% of the viewport), capped (default) is a scrolling mid-height panel, tall is a pinned near-full panel for forms and streaming content. A number is px and anything else a CSS length. -->
-<div style="display: flex; flex-wrap: wrap; gap: var(--spacing-2)">
+<tct-hstack wrap="wrap" gap="2">
   <tct-button id="sheet-heights-hug" label="Hug"></tct-button>
   <tct-button id="sheet-heights-capped" label="Capped"></tct-button>
   <tct-button id="sheet-heights-tall" label="Tall"></tct-button>
-</div>
+</tct-hstack>
 <tct-bottom-sheet id="sheet-hug" label="Share" height="hug">
-  <div style="display: grid; gap: var(--spacing-3); padding: var(--spacing-4)">
+  <tct-vstack gap="3" padding="4">
     <tct-heading level="3">Share</tct-heading>
     <tct-button label="Copy link"></tct-button>
     <tct-button label="Send by email"></tct-button>
-  </div>
+  </tct-vstack>
 </tct-bottom-sheet>
 <tct-bottom-sheet id="sheet-capped" label="Release notes" height="capped">
-  <div style="display: grid; gap: var(--spacing-3); padding: var(--spacing-4)">
+  <tct-vstack gap="3" padding="4">
     <tct-heading level="3">Release notes</tct-heading>
-    <p style="margin: 0; block-size: 900px">Long notes scroll inside the sheet, which keeps its mid-height.</p>
-  </div>
+    <tct-text as="p" display="block" style="block-size: 900px">Long notes scroll inside the sheet, which keeps its mid-height.</tct-text>
+  </tct-vstack>
 </tct-bottom-sheet>
 <tct-bottom-sheet id="sheet-tall" label="Nearby places" height="tall">
-  <div style="display: grid; gap: var(--spacing-3); padding: var(--spacing-4)">
+  <tct-vstack gap="3" padding="4">
     <tct-heading level="3">Nearby places</tct-heading>
-    <p style="margin: 0">A tall sheet suits a list that streams in.</p>
-  </div>
+    <tct-text as="p" display="block">A tall sheet suits a list that streams in.</tct-text>
+  </tct-vstack>
 </tct-bottom-sheet>
 <script type="module">
   for (const name of ['hug', 'capped', 'tall']) {

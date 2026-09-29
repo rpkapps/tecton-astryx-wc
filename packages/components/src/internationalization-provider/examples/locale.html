@@ -1,5 +1,5 @@
 <!-- title: Locale; description: The same component in three languages. Each provider sets lang on itself; shipped catalogs load on demand. -->
-<div style="display: flex; gap: var(--spacing-8); align-items: flex-start">
+<tct-hstack gap="8" v-align="start">
   <tct-internationalization-provider locale="en">
     <tct-spinner size="lg"></tct-spinner>
     <tct-text type="body" color="secondary">en</tct-text>
@@ -12,4 +12,4 @@
     <tct-spinner size="lg"></tct-spinner>
     <tct-text type="body" color="secondary">fr-FR</tct-text>
   </tct-internationalization-provider>
-</div>
+</tct-hstack>

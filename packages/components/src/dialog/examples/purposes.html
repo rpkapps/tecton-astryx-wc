@@ -1,23 +1,23 @@
 <!-- title: Purposes; description: purpose says what may dismiss the dialog. info: Escape and the backdrop. form: Escape only, so a stray click cannot lose input. required: nothing, and no close button. -->
-<div id="purposes-example" style="display: flex; gap: var(--spacing-2)">
+<tct-hstack id="purposes-example" gap="2">
   <tct-button data-open="info">Info</tct-button>
   <tct-button data-open="form">Form</tct-button>
   <tct-button data-open="required">Required</tct-button>
 
   <tct-dialog id="purposes-info" heading="Release notes" purpose="info">
-    <p style="margin: 0">Escape, the close button and a press on the backdrop all close this dialog.</p>
+    <tct-text as="p" display="block">Escape, the close button and a press on the backdrop all close this dialog.</tct-text>
   </tct-dialog>
   <tct-dialog id="purposes-form" heading="Rename well" purpose="form">
     <tct-text-input label="Well name" value="North-7"></tct-text-input>
-    <p style="margin: 0; color: var(--color-text-secondary)">A press on the backdrop does not close it; Escape does.</p>
+    <tct-text as="p" display="block" color="secondary">A press on the backdrop does not close it; Escape does.</tct-text>
   </tct-dialog>
   <tct-dialog id="purposes-required" heading="Session expired" purpose="required">
-    <p style="margin: 0">Sign in again to continue. Nothing dismisses this dialog but your own action.</p>
-    <div style="display: flex; justify-content: flex-end">
+    <tct-text as="p" display="block">Sign in again to continue. Nothing dismisses this dialog but your own action.</tct-text>
+    <tct-hstack h-align="end">
       <tct-button variant="primary" data-close>Sign in</tct-button>
-    </div>
+    </tct-hstack>
   </tct-dialog>
-</div>
+</tct-hstack>
 <script type="module">
   const root = document.getElementById('purposes-example');
   for (const button of root.querySelectorAll('[data-open]')) {

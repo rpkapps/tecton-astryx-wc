@@ -1,29 +1,29 @@
 <!-- title: Snap points; description: snap-points adds resting heights (a viewport fraction, a percentage or a px length). Drag the handle, tap it to cycle the stops, or focus it and use the arrow keys: every stop is reachable without dragging. A stop of a quarter of the sheet or less is a peek that thins the scrim. -->
-<div style="display: grid; gap: var(--spacing-3); justify-items: start; max-inline-size: 360px">
-  <p style="margin: 0">This sheet has two extra stops: half the viewport and a 96px peek.</p>
+<tct-vstack gap="3" h-align="start" max-width="360">
+  <tct-text as="p" display="block">This sheet has two extra stops: half the viewport and a 96px peek.</tct-text>
   <tct-button id="sheet-snap-open" label="Show directions"></tct-button>
-</div>
+</tct-vstack>
 <tct-bottom-sheet
   id="sheet-snap"
   label="Directions to the Ferry Building"
   height="tall"
   snap-points="96px 50%"
 >
-  <div style="display: grid; gap: var(--spacing-3); padding: var(--spacing-4)">
-    <div style="display: grid; gap: var(--spacing-1)">
+  <tct-vstack gap="3" padding="4">
+    <tct-vstack gap="1">
       <tct-heading level="3">Ferry Building</tct-heading>
-      <span style="color: var(--color-text-secondary)">18 min · 3.7 mi · arrive 9:41 AM</span>
-    </div>
-    <ol style="margin: 0; padding-inline-start: var(--spacing-5); display: grid; gap: var(--spacing-2)">
-      <li>Head north on Market Street</li>
-      <li>Turn right onto Embarcadero</li>
-      <li>Continue past Pier 14</li>
-      <li>Arrive at the Ferry Building</li>
-      <li>Find parking on Washington Street</li>
-      <li>Walk to the terminal entrance</li>
-    </ol>
+      <tct-text color="secondary">18 min · 3.7 mi · arrive 9:41 AM</tct-text>
+    </tct-vstack>
+    <tct-list list-style="decimal" density="compact">
+      <tct-list-item label="Head north on Market Street"></tct-list-item>
+      <tct-list-item label="Turn right onto Embarcadero"></tct-list-item>
+      <tct-list-item label="Continue past Pier 14"></tct-list-item>
+      <tct-list-item label="Arrive at the Ferry Building"></tct-list-item>
+      <tct-list-item label="Find parking on Washington Street"></tct-list-item>
+      <tct-list-item label="Walk to the terminal entrance"></tct-list-item>
+    </tct-list>
     <tct-button id="sheet-snap-start" variant="primary" label="Start"></tct-button>
-  </div>
+  </tct-vstack>
 </tct-bottom-sheet>
 <script type="module">
   const sheet = document.getElementById('sheet-snap');

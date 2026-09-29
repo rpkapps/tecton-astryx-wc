@@ -1,8 +1,8 @@
 <!-- title: Declarative invokers; description: A native button with commandfor and command="--show", "--hide" or "--toggle" controls the dialog with no script. The button gets aria-expanded, and focus returns to it. -->
-<button type="button" commandfor="invokers-dialog" command="--show" style="padding: var(--spacing-2) var(--spacing-3); font: inherit">Open dialog</button>
+<button type="button" commandfor="invokers-dialog" command="--show">Open dialog</button>
 <tct-dialog id="invokers-dialog" heading="Invited by a button">
-  <p style="margin: 0">No script wires this dialog: the buttons carry commandfor and command.</p>
-  <div style="display: flex; justify-content: flex-end">
-    <button type="button" commandfor="invokers-dialog" command="--hide" style="padding: var(--spacing-2) var(--spacing-3); font: inherit">Close</button>
-  </div>
+  <tct-text as="p" display="block">No script wires this dialog: the buttons carry commandfor and command.</tct-text>
+  <tct-hstack h-align="end">
+    <button type="button" commandfor="invokers-dialog" command="--hide">Close</button>
+  </tct-hstack>
 </tct-dialog>
