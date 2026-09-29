@@ -1,0 +1,19 @@
+<!-- title: Client-side routing; description: tct-link-provider hands plain clicks on internal links to your router. Ctrl/Cmd-click and external links stay native. -->
+<div id="router-example" style="display: flex; flex-direction: column; gap: var(--spacing-3)">
+  <tct-link-provider>
+    <div style="display: flex; gap: var(--spacing-4)">
+      <tct-link href="/docs">Docs</tct-link>
+      <tct-link href="/pricing">Pricing</tct-link>
+      <tct-link href="https://example.com" external>Example (native)</tct-link>
+    </div>
+  </tct-link-provider>
+  <tct-text>Route handled by the router: <strong data-route>none yet</strong></tct-text>
+</div>
+<script type="module">
+  const root = document.getElementById('router-example');
+  // A real app calls its router here (history.pushState, router.navigate, ...).
+  root.querySelector('tct-link-provider').navigate = (href, event) => {
+    root.querySelector('[data-route]').textContent = href;
+    return true;
+  };
+</script>

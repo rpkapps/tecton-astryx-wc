@@ -1,0 +1,63 @@
+/*
+ * tct-skeleton. The host is a block that only participates in layout; the placeholder is painted by
+ * `.base`. Size and stagger arrive as private custom properties written by the element; radius is a
+ * data attribute mapped to the radius tokens. Timing keeps upstream's shape: a 1000 ms hold before the
+ * pulse, +100 ms per index, a stepped 10-frame fade over --duration-medium-max. [mwg:css]
+ */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .base {
+    --_radius: var(--radius-container);
+
+    inline-size: var(--_width, 100%);
+    block-size: var(--_height, 100%);
+    border-radius: var(--_radius);
+    background-color: var(--color-skeleton);
+    opacity: 0.25;
+    animation: tct-skeleton-fade var(--duration-medium-max) steps(10, end)
+      calc(1000ms + 100ms * var(--_index, 0)) infinite alternate;
+    /* Reduced motion keeps the static placeholder; it still reads as loading (upstream). */
+    --_animation-reduced: none;
+  }
+
+  .base[data-radius='none'],
+  .base[data-radius='0'] {
+    --_radius: var(--radius-none);
+  }
+
+  .base[data-radius='1'] {
+    --_radius: var(--radius-inner);
+  }
+
+  .base[data-radius='2'] {
+    --_radius: var(--radius-element);
+  }
+
+  .base[data-radius='rounded'] {
+    --_radius: var(--radius-full);
+  }
+
+  @keyframes tct-skeleton-fade {
+    from {
+      opacity: 0.25;
+    }
+
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+@layer a11y {
+  /* Forced colours strip painted backgrounds; GrayText survives and keeps the placeholder visible
+     (WCAG 1.4.11). The resting 0.25 opacity would make it near-invisible on Canvas. */
+  @media (forced-colors: active) {
+    .base {
+      background-color: GrayText;
+      opacity: 1;
+    }
+  }
+}

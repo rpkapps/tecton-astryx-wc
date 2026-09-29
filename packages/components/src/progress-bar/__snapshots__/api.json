@@ -1,0 +1,98 @@
+{
+  "folder": "progress-bar",
+  "elements": {
+    "tct-progress-bar": {
+      "class": "TctProgressBar",
+      "attributes": [
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "has-value-label",
+          "property": "hasValueLabel",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "indeterminate",
+          "property": "indeterminate",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label-hidden",
+          "property": "labelHidden",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "max",
+          "property": "max",
+          "type": "number",
+          "default": "100",
+          "reflects": false
+        },
+        {
+          "name": "value",
+          "property": "value",
+          "type": "number",
+          "default": "0",
+          "reflects": false
+        },
+        {
+          "name": "variant",
+          "property": "variant",
+          "type": "ProgressBarVariant",
+          "values": [
+            "accent",
+            "success",
+            "warning",
+            "error",
+            "neutral"
+          ],
+          "default": "'accent'",
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "formatValueLabel",
+          "type": "ProgressBarValueFormatter | undefined",
+          "readonly": false
+        },
+        {
+          "name": "marks",
+          "type": "readonly ProgressBarMark[] | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [],
+      "slots": [],
+      "events": [],
+      "cssParts": [
+        "base",
+        "fill",
+        "label",
+        "mark",
+        "track",
+        "value-label"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

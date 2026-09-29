@@ -1,0 +1,12 @@
+<!-- title: Link and button; description: href makes a link, interactive a button; both need a name. -->
+<div style="display: flex; gap: var(--spacing-3); align-items: center">
+  <tct-avatar name="Ada Lovelace" href="#ada" size="lg"></tct-avatar>
+  <tct-avatar id="interactive-open" name="Grace Hopper" interactive size="lg"></tct-avatar>
+  <output id="interactive-output" style="color: var(--color-text-secondary)"></output>
+</div>
+<script type="module">
+  const output = document.getElementById('interactive-output');
+  document.getElementById('interactive-open').addEventListener('click', () => {
+    output.textContent = 'Opened Grace Hopper';
+  });
+</script>

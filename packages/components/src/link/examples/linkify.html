@@ -1,0 +1,14 @@
+<!-- title: Linkify plain text; description: linkify() turns URLs, email addresses and your own patterns (T1234) into links. It builds elements, never HTML from the text. -->
+<div id="linkify-example" style="max-inline-size: 420px"></div>
+<script type="module">
+  import {html, render} from 'lit';
+  import {linkify} from '@tecton-astryx/components/link/linkify.js';
+
+  const text = 'See https://example.com/docs, email hi@example.com or open T1234 for the details.';
+  const nodes = linkify(text, {
+    patterns: [
+      {pattern: /\bT(\d+)\b/g, href: (m) => `https://tasks.example.com/${m[1]}`, isExternal: true},
+    ],
+  });
+  render(html`<tct-text>${nodes}</tct-text>`, document.getElementById('linkify-example'));
+</script>

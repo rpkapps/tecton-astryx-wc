@@ -1,0 +1,30 @@
+<!-- title: Photo; description: A loaded image fills the avatar; its accessible name still comes from the name. -->
+<div id="photo-example" style="display: flex; gap: var(--spacing-3); align-items: center">
+  <tct-avatar name="Ada Lovelace" size="lg"></tct-avatar>
+  <tct-avatar name="Grace Hopper" size="lg" shape="rounded"></tct-avatar>
+</div>
+<script type="module">
+  // A generated image keeps this example self-contained: blob: URLs pass the resource URL policy.
+  const root = document.getElementById('photo-example');
+  // Tokens may hold light-dark(); read the resolved colour of a probe, which a canvas can parse.
+  const resolve = (token) => {
+    const probe = document.createElement('span');
+    probe.style.color = `var(${token})`;
+    root.append(probe);
+    const color = getComputedStyle(probe).color;
+    probe.remove();
+    return color;
+  };
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = 96;
+  const context = canvas.getContext('2d');
+  const gradient = context.createLinearGradient(0, 0, 96, 96);
+  gradient.addColorStop(0, resolve('--color-accent'));
+  gradient.addColorStop(1, resolve('--tecton-color-avatar-fill'));
+  context.fillStyle = gradient;
+  context.fillRect(0, 0, 96, 96);
+  canvas.toBlob((blob) => {
+    const url = URL.createObjectURL(blob);
+    for (const avatar of root.querySelectorAll('tct-avatar')) avatar.src = url;
+  });
+</script>

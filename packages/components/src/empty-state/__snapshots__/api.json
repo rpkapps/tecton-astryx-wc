@@ -1,0 +1,62 @@
+{
+  "folder": "empty-state",
+  "elements": {
+    "tct-empty-state": {
+      "class": "TctEmptyState",
+      "attributes": [
+        {
+          "name": "compact",
+          "property": "compact",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "description",
+          "property": "description",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "heading",
+          "property": "heading",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "heading-level",
+          "property": "headingLevel",
+          "type": "EmptyStateHeadingLevel",
+          "values": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ],
+          "default": "3",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "actions",
+        "description",
+        "heading",
+        "icon"
+      ],
+      "events": [],
+      "cssParts": [
+        "actions",
+        "base",
+        "description",
+        "icon",
+        "title"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

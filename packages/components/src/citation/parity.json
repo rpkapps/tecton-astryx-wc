@@ -1,0 +1,105 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "citation",
+  "workPackage": "WP-2",
+  "entries": {
+    "core.citation": {
+      "tag": "tct-citation",
+      "status": "implemented",
+      "upstream": {
+        "name": "Citation",
+        "path": "packages/core/src/Citation/Citation.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "source",
+          "kind": "prop",
+          "target": "source",
+          "as": "property",
+          "notes": "Object {title, url, src, icon} (data prop: property only, A\u00a77.2). The flat attributes source-title, source-url and source-src mirror its fields for declarative markup; a field set on the object wins over its attribute."
+        },
+        {
+          "upstream": "number",
+          "kind": "prop",
+          "target": "number",
+          "as": "attribute"
+        },
+        {
+          "upstream": "variant",
+          "kind": "prop",
+          "target": "variant",
+          "as": "attribute",
+          "reflect": true,
+          "default": "label"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base|icon|label) or the tokens."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "isSafeUrl",
+          "target": "safeUrl",
+          "as": "module-function",
+          "notes": "@tecton-astryx/core/utils/safe-url.js: navigation policy for the link, resource policy (no data:) for image sources."
+        },
+        {
+          "upstream": "renderIconSlot",
+          "target": "icon",
+          "as": "slot",
+          "notes": "A node icon is the `icon` slot; a string icon stays an image URL (upstream back-compat)."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Moves focus to the citation link",
+          "when": "the source has a safe url"
+        },
+        {
+          "keys": "Enter",
+          "action": "Opens the source in a new tab",
+          "when": "the citation is a link"
+        }
+      ],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "CITATION-01",
+          "type": "a11y-improvement",
+          "text": "An unlinked citation is role=\"img\" with the citation name instead of an aria-label on a bare span (which assistive technology ignores); the number badge therefore reads \"Citation 3: Title\" instead of just \"3\"."
+        },
+        {
+          "id": "CITATION-02",
+          "type": "approved-api-difference",
+          "text": "`source.icon` accepts an image URL only; a node icon is the icon slot, and source.src wins over the legacy string. Flat attributes source-title, source-url and source-src are an addition for declarative markup."
+        },
+        {
+          "id": "CITATION-03",
+          "type": "approved-api-difference",
+          "text": "An image source that fails to load or whose URL is refused by the resource policy (data:, script schemes) is dropped instead of leaving a broken image; upstream renders the <img> unconditionally."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 28,
+      "notes": "Guides: [mwg:accessible-web-components] name and role inside the shadow root, delegatesFocus; [mwg:styling-web-components] parts; [mwg:security] URL policy and rel=noopener; [mwg:shadow-dom] slot presence. Size: measured 26.5 kB gzip on 2026-09-29 (family entry with lit, core and the shared tooltip/layer/locale runtime inlined), budget 28 kB; revisit when the shared runtime is split out of family entries."
+    }
+  }
+}
