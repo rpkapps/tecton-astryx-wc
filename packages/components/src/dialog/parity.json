@@ -121,7 +121,7 @@
           "upstream": "useImperativeDialog",
           "target": "openDialog",
           "as": "module-function",
-          "notes": "`openDialog(content, options)` from @tecton-astryx/components/dialog/dialog.api.js returns a handle {element, isOpen, hide(), closed}."
+          "notes": "`openDialog(content, options)` from @tecton-wc/components/dialog/dialog.api.js returns a handle {element, isOpen, hide(), closed}."
         }
       ],
       "keyboard": [

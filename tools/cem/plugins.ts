@@ -27,6 +27,7 @@ import type {
   CemPackage,
   CemUpstream,
 } from '../lib/cem.ts';
+import {publicData} from '../lib/public-text.ts';
 import {resolveTypeValues, type TypeAliasTable} from './type-values.ts';
 
 type Ts = typeof TS;
@@ -343,7 +344,8 @@ export function tctParity(): Plugin {
         for (const declaration of module.declarations ?? []) {
           if (!declaration.tagName) continue;
           const facts = context.parityByTag.get(declaration.tagName);
-          if (facts) declaration['x-tct-upstream'] = facts;
+          // `parity.json` may name the upstream system; the manifest ships, so its prose is sanitised (D-015).
+          if (facts) declaration['x-tct-upstream'] = publicData(facts);
         }
       }
     },

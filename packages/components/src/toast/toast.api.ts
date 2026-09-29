@@ -9,8 +9,8 @@
  */
 import {html, render} from 'lit';
 import {createRef, ref} from 'lit/directives/ref.js';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import {TctLayerProvider} from './tct-layer-provider.js';
 import {TctToastViewport, type ToastEntry} from './tct-toast-viewport.js';
 import {providerViewport} from './toaster.js';

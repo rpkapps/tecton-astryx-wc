@@ -7,13 +7,13 @@
  */
 import {html} from 'lit';
 import {beforeAll, describe, expect, it} from 'vitest';
-import pseudoMessages from '@tecton-astryx/locales/pseudo.js';
-import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {localeContext, type LocaleContextValue} from '@tecton-astryx/core/context/keys.js';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {animationsFinished, waitUntil} from '@tecton-astryx/testing/timing.js';
+import pseudoMessages from '@tecton-wc/locales/pseudo.js';
+import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {localeContext, type LocaleContextValue} from '@tecton-wc/core/context/keys.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {animationsFinished, waitUntil} from '@tecton-wc/testing/timing.js';
 import '../button/define.js';
 import '../text-input/define.js';
 import './define.js';
@@ -24,7 +24,12 @@ import type {TctDialogHeader} from './tct-dialog-header.js';
 
 class TctTestLocaleProvider extends TctElement {
   static override readonly tagName = 'tct-test-locale-provider';
-  readonly provider = new ContextProvider(this, {context: localeContext, initialValue: null});
+  readonly provider: ContextProvider<typeof localeContext> = new ContextProvider<
+    typeof localeContext
+  >(this, {
+    context: localeContext,
+    initialValue: null,
+  });
   set value(value: LocaleContextValue | null) {
     this.provider.setValue(value);
   }
@@ -105,7 +110,7 @@ describe('i18n (acceptance 10)', () => {
     await dialog.updateComplete;
     provider.value = {
       locale: 'de-DE',
-      messages: {'de-DE': {'@astryx.dialog.close': 'Provider zu'}},
+      messages: {'de-DE': {'@tct.dialog.close': 'Provider zu'}},
     };
     await waitUntil(
       () => nativeName(dialog) === 'Provider zu',
@@ -113,8 +118,8 @@ describe('i18n (acceptance 10)', () => {
     );
     provider.value = {
       locale: 'de-DE',
-      messages: {'de-DE': {'@astryx.dialog.close': 'Provider zu'}},
-      overrides: {'de-DE': {'@astryx.dialog.close': 'Override zu'}},
+      messages: {'de-DE': {'@tct.dialog.close': 'Provider zu'}},
+      overrides: {'de-DE': {'@tct.dialog.close': 'Override zu'}},
     };
     await waitUntil(() => nativeName(dialog) === 'Override zu', 'provider overrides win');
     await dialog.hide();
@@ -122,7 +127,7 @@ describe('i18n (acceptance 10)', () => {
 
   it('the pseudo locale (en-XA) renders the pseudo close label, so untranslated UI is easy to spot', async () => {
     const dialog = await dialogIn('lang="en-XA"');
-    const expected = (pseudoMessages as Record<string, string>)['@astryx.dialog.close'];
+    const expected = (pseudoMessages as Record<string, string>)['@tct.dialog.close'];
     expect(expected).toBeTruthy();
     await waitUntil(() => nativeName(dialog) === expected, 'pseudo close label rendered');
     expect(nativeName(dialog)).not.toBe('Close');

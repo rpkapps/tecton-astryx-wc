@@ -9,8 +9,8 @@
  */
 import {html, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
-import {RovingTabindexController, type Orientation} from '@tecton-astryx/core/controllers/roving-tabindex.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {RovingTabindexController, type Orientation} from '@tecton-wc/core/controllers/roving-tabindex.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 
 /** A wrapper item: `tabindex` must go on the inner button, never on the shadow host. */
 export class TctTestChip extends TctElement {

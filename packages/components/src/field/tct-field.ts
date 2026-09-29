@@ -2,18 +2,18 @@ import {html, nothing, type CSSResultGroup, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import fieldMessages from '@tecton-astryx/locales/en/field.js';
-import {ContextConsumer, ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {fieldContext, formLayoutContext} from '@tecton-astryx/core/context/keys.js';
-import {FieldChromeController} from '@tecton-astryx/core/controllers/field-chrome.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
+import fieldMessages from '@tecton-wc/locales/en/field.js';
+import {ContextConsumer, ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {fieldContext, formLayoutContext} from '@tecton-wc/core/context/keys.js';
+import {FieldChromeController} from '@tecton-wc/core/controllers/field-chrome.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
 import {
   observeControl,
   unobserveControl,
   type ControlObserver,
-} from '@tecton-astryx/core/mixins/form-control.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+} from '@tecton-wc/core/mixins/form-control.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import {TctFieldStatus} from '../field-status/tct-field-status.js';
 import {TctIcon} from '../icon/tct-icon.js';
 import {TctTooltip} from '../tooltip/tct-tooltip.js';
@@ -64,7 +64,7 @@ const NATIVE_CONTROL =
  * @slot label - The label satellite the field creates. Do not fill it.
  * @slot description - The description satellite the field creates. Do not fill it.
  * @slot status - The status satellite the field creates. Do not fill it.
- * @csspart field - The field box: label, control and status (Astryx target `astryx-field`).
+ * @csspart field - The field box: label, control and status.
  * @csspart label-tip - The info-tip button after the label.
  * @cloakDisplay block
  */
@@ -158,9 +158,22 @@ export class TctField extends TctElement implements ControlObserver {
     this.statusMessage = value?.message ?? '';
   }
 
-  readonly #provider = new ContextProvider(this, {context: fieldContext, initialValue: null});
-  readonly #layout = new ContextConsumer(this, {context: formLayoutContext, subscribe: true});
-  readonly #locale = new LocaleController(this, {namespace: 'field', defaults: fieldMessages});
+  readonly #provider: ContextProvider<typeof fieldContext> = new ContextProvider<
+    typeof fieldContext
+  >(this, {
+    context: fieldContext,
+    initialValue: null,
+  });
+  readonly #layout: ContextConsumer<typeof formLayoutContext> = new ContextConsumer<
+    typeof formLayoutContext
+  >(this, {
+    context: formLayoutContext,
+    subscribe: true,
+  });
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'field',
+    defaults: fieldMessages,
+  });
   readonly #chrome: FieldChromeController = new FieldChromeController(this, {
     mode: () => 'light',
     control: () => this.#control(),

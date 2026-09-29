@@ -1,8 +1,8 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import base from '../styles/base.styles.css';
 import {
   DIVIDER_ORIENTATIONS,
@@ -57,7 +57,7 @@ export class TctDivider extends TctElement {
    */
   @property({attribute: 'full-bleed', type: Boolean, reflect: true}) fullBleed = false;
 
-  readonly #slots = new SlotController(this, 'label');
+  readonly #slots: SlotController = new SlotController(this, 'label');
   #observer: MutationObserver | undefined;
 
   /** The text a slotted label contributes to the accessible name. */

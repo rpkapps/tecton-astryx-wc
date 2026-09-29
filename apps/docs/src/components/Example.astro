@@ -67,7 +67,7 @@ const preview = fragment.replace(/<(aside|nav)\b([^>]*)>/g, (match, tag: string,
   // Registers the components used by the previews: the autoloader defines tct-* tags on sight
   // (A§2.5), so a page only pays for the families its examples use. Called explicitly rather than
   // imported for its side effect, because the source condition is not in the package's `sideEffects`.
-  import {observe} from '@tecton-astryx/components/autoloader.js';
+  import {observe} from '@tecton-wc/components/autoloader.js';
 
   observe(document);
 

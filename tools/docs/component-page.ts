@@ -96,14 +96,14 @@ function installation(
     `Load the stylesheet once and register the family (${registers} and the elements it renders):`,
     '',
     '```js',
-    `import '@tecton-astryx/components/tecton.css';`,
-    `import '@tecton-astryx/components/${folder}';`,
+    `import '@tecton-wc/components/tecton.css';`,
+    `import '@tecton-wc/components/${folder}';`,
     '```',
     '',
     'Or let the autoloader define tags lazily, the first time they appear in the page:',
     '',
     '```js',
-    `import '@tecton-astryx/components/autoloader.js';`,
+    `import '@tecton-wc/components/autoloader.js';`,
     '```',
     '',
     ...(classFiles.length > 0
@@ -113,7 +113,7 @@ function installation(
           '```js',
           ...classFiles.map(
             (file) =>
-              `import {${file.className}} from '@tecton-astryx/components/${folder}/${file.file}.js';`,
+              `import {${file.className}} from '@tecton-wc/components/${folder}/${file.file}.js';`,
           ),
           '```',
           '',
@@ -392,7 +392,7 @@ export function renderComponentPage(input: ComponentPageInput): string {
         dark: token?.dark ?? '',
         status: token ? tokenStatusLabel(token.status) : 'unknown',
         statusTone:
-          token?.status === 'provisional' ? 'warning' : token?.status === 'astryx-retained' ? 'info' : undefined,
+          token?.status === 'provisional' ? 'warning' : token?.status === 'retained-default' ? 'info' : undefined,
       })),
       'This component reads no design tokens.',
     ),

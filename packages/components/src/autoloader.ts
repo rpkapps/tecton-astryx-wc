@@ -2,7 +2,7 @@
  * Autoloader (A§2.5): registers component families lazily, the first time one of their tags is seen.
  *
  * ```html
- * <script type="module" src=".../cdn/autoloader.js"></script>   <!-- or import '@tecton-astryx/components/autoloader.js' -->
+ * <script type="module" src=".../cdn/autoloader.js"></script>   <!-- or import '@tecton-wc/components/autoloader.js' -->
  * <html data-tct-preload="button dialog">                        <!-- optional: load these families up front -->
  * ```
  *

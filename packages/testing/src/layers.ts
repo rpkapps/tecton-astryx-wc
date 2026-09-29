@@ -1,7 +1,7 @@
 /**
  * Overlay assertions (A§15.2): open a layer element the way its API allows, and read the layer stack.
  */
-import {getLayerStack, type LayerSnapshot} from '@tecton-astryx/core/layer/stack.js';
+import {getLayerStack, type LayerSnapshot} from '@tecton-wc/core/layer/stack.js';
 import {settle} from './fixture.js';
 import {animationsFinished} from './timing.js';
 

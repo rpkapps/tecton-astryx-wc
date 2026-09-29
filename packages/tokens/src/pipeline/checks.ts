@@ -17,7 +17,7 @@ export interface CheckResult {
   note?: string;
 }
 
-/** Tailwind v4 default-theme names that Astryx also defines. Documented (styling.md 3.1); layer order resolves them. */
+/** Tailwind v4 default-theme names that upstream also defines. Documented (styling.md 3.1); layer order resolves them. */
 export const DOCUMENTED_TAILWIND_COLLISIONS = [
   '--font-weight-bold',
   '--font-weight-medium',
@@ -38,7 +38,7 @@ export const D013_PROVISIONAL_NON_TOKENS = [
 ];
 
 /**
- * D-013 Q-06: not brand tokens and Tecton has none, so the Astryx values are kept on purpose:
+ * D-013 Q-06: not brand tokens and Tecton has none, so the upstream values are kept on purpose:
  * motion (custom properties), breakpoints and z-index (no custom property).
  */
 export const D013_RETAINED_CATEGORIES = ['motion'];
@@ -70,7 +70,7 @@ export const D001_SPOT_CHECKS: {
     token: '--color-accent',
     mode: 'dark',
     expected: '#5d4d68',
-    why: 'export = tecton-astryx (violet.onDark.220)',
+    why: 'export = the Tecton binding (violet.onDark.220)',
   },
   {
     token: '--color-on-accent',
@@ -84,7 +84,12 @@ export const D001_SPOT_CHECKS: {
     expected: '#21172a',
     why: 'export text.primary (graphite.onLight.1570)',
   },
-  {token: '--color-text-primary', mode: 'dark', expected: '#f6f5f8', why: 'export = tecton-astryx'},
+  {
+    token: '--color-text-primary',
+    mode: 'dark',
+    expected: '#f6f5f8',
+    why: 'export = the Tecton binding',
+  },
   {
     token: '--color-warning',
     mode: 'light',
@@ -121,7 +126,7 @@ export const D001_SPOT_CHECKS: {
     token: '--tecton-color-input-border-hover',
     mode: 'dark',
     expected: '#a7a2ac',
-    why: 'one of the 3 swapped text-field dark roles: the export wins over tecton-astryx (#cac5d2)',
+    why: 'one of the 3 swapped text-field dark roles: the export wins over the Tecton binding (#cac5d2)',
   },
   {
     token: '--tecton-color-input-outlined-border-hover',
@@ -207,7 +212,7 @@ export function checkD001(result: BuildResult): CheckResult {
 }
 
 export function checkTypography(result: BuildResult): CheckResult {
-  // The export's type scale (px) must equal the Astryx type-scale tokens bound to the same variant.
+  // The export's type scale (px) must equal the upstream type-scale tokens bound to the same variant.
   const problems: string[] = [];
   const {byName} = result.resolved;
   const px = (name: string, mode: 'light' | 'dark' = 'light') => {
@@ -277,15 +282,15 @@ export function checkTypography(result: BuildResult): CheckResult {
       problems.push(`${token.name}: no letter-spacing token may exist (D-013 Q-06: normal)`);
   }
   return {
-    name: 'typography (export type scale = Astryx type-scale tokens; headings 3-6; letter-spacing normal)',
+    name: 'typography (export type scale = upstream type-scale tokens; headings 3-6; letter-spacing normal)',
     problems,
   };
 }
 
-export function checkAstryxCoverage(result: BuildResult): CheckResult {
+export function checkUpstreamCoverage(result: BuildResult): CheckResult {
   const problems: string[] = [];
   const emitted = new Set(result.resolved.tokens.map((token) => token.name));
-  const upstream = Object.keys(result.inputs.astryxTokens.tokens);
+  const upstream = Object.keys(result.inputs.upstreamTokens.tokens);
   if (upstream.length !== 258)
     problems.push(`expected 258 upstream tokens, inventory has ${upstream.length}`);
   for (const name of upstream)
@@ -302,7 +307,7 @@ export function checkAstryxCoverage(result: BuildResult): CheckResult {
   for (const name of allowed.keys())
     if (!emitted.has(name)) problems.push(`allowedExtraNames lists ${name}, which is not emitted`);
   return {
-    name: 'Astryx coverage (258 names, no unknown unprefixed names)',
+    name: 'Upstream coverage (258 names, no unknown unprefixed names)',
     problems,
     note: `${upstream.length} upstream names, ${allowed.size} allowed extras`,
   };
@@ -418,44 +423,44 @@ export function checkProvisional(result: BuildResult): CheckResult {
       problems.push(`${token.name}: provisional and retained/derived at once`);
   }
 
-  // ---- Exact astryx-retained set (D-013 Q-06) -----------------------------------------------------
-  const retainedCategories = setOf(provisional.astryxRetained.categories.map((e) => e.category));
+  // ---- Exact retained-default set (D-013 Q-06) -----------------------------------------------------
+  const retainedCategories = setOf(provisional.retainedDefault.categories.map((e) => e.category));
   const retainedExpected = new Set<string>();
   for (const token of tokens) {
     if (retainedCategories.has(token.category)) retainedExpected.add(token.name);
   }
-  for (const entry of provisional.astryxRetained.names) retainedExpected.add(entry.name);
+  for (const entry of provisional.retainedDefault.names) retainedExpected.add(entry.name);
   const retainedActual = new Set(
-    tokens.filter((token) => token.status === 'astryx-retained').map((token) => token.name),
+    tokens.filter((token) => token.status === 'retained-default').map((token) => token.name),
   );
   for (const name of retainedExpected)
-    if (!retainedActual.has(name)) problems.push(`${name} should be astryx-retained`);
+    if (!retainedActual.has(name)) problems.push(`${name} should be retained-default`);
   for (const name of retainedActual)
     if (!retainedExpected.has(name))
-      problems.push(`${name} is astryx-retained but not in provisional.json`);
+      problems.push(`${name} is retained-default but not in provisional.json`);
   for (const token of tokens) {
-    if (token.status === 'astryx-retained' && !token.retained)
-      problems.push(`${token.name}: astryx-retained without a reason`);
+    if (token.status === 'retained-default' && !token.retained)
+      problems.push(`${token.name}: retained-default without a reason`);
   }
-  sameSet('astryx-retained categories', retainedCategories, D013_RETAINED_CATEGORIES);
+  sameSet('retained-default categories', retainedCategories, D013_RETAINED_CATEGORIES);
   sameSet(
-    'astryx-retained non-tokens',
-    setOf(provisional.astryxRetained.nonTokens.map((entry) => entry.name)),
+    'retained-default non-tokens',
+    setOf(provisional.retainedDefault.nonTokens.map((entry) => entry.name)),
     D013_RETAINED_NON_TOKENS,
   );
-  // Retained values are the upstream Astryx values: they must not drift.
-  const upstream = result.inputs.astryxTokens.tokens;
+  // Retained values are the upstream values: they must not drift.
+  const upstream = result.inputs.upstreamTokens.tokens;
   for (const token of tokens) {
-    if (token.status !== 'astryx-retained') continue;
+    if (token.status !== 'retained-default') continue;
     const known = upstream[token.name];
     if (!known) {
-      problems.push(`${token.name}: astryx-retained but not an upstream Astryx token`);
+      problems.push(`${token.name}: retained-default but not an upstream token`);
     } else if (
       token.value.kind === 'literal' &&
       token.value.value.replaceAll(' ', '') !== known.default.replaceAll(' ', '')
     ) {
       problems.push(
-        `${token.name} is ${token.value.value}, the retained Astryx value is ${known.default}`,
+        `${token.name} is ${token.value.value}, the retained upstream value is ${known.default}`,
       );
     }
   }
@@ -474,7 +479,7 @@ export function checkProvisional(result: BuildResult): CheckResult {
   for (const name of derivedNames) {
     const token = byName.get(name);
     if (!token) problems.push(`tectonDerived: ${name} is not emitted`);
-    else if (token.status !== 'tecton-export' && token.status !== 'tecton-astryx')
+    else if (token.status !== 'tecton-export' && token.status !== 'tecton-binding')
       problems.push(`${name} is ${token.status}, D-013 Q-06 makes it Tecton-derived`);
     else if (!token.derived) problems.push(`${name}: Tecton-derived without a recorded reason`);
   }
@@ -505,9 +510,9 @@ export function checkProvisional(result: BuildResult): CheckResult {
   if (count('data') !== 56) problems.push(`expected 56 data-viz tokens, found ${count('data')}`);
   if (count('motion') !== 10) problems.push(`expected 10 motion tokens, found ${count('motion')}`);
   return {
-    name: 'provisional (D-013) and astryx-retained sets exact; Tecton-derived items bound',
+    name: 'provisional (D-013) and retained-default sets exact; Tecton-derived items bound',
     problems,
-    note: `${actual.size} provisional, ${retainedActual.size} astryx-retained, ${derivedNames.length} Tecton-derived tokens`,
+    note: `${actual.size} provisional, ${retainedActual.size} retained-default, ${derivedNames.length} Tecton-derived tokens`,
   };
 }
 
@@ -570,7 +575,7 @@ export function runChecks(
     checkModel(result),
     checkD001(result),
     checkTypography(result),
-    checkAstryxCoverage(result),
+    checkUpstreamCoverage(result),
     checkSnapshot(result, snapshotFile),
     checkTailwind(result),
     checkContrast(result, contrast.pairs, contrast.allow),

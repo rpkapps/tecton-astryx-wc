@@ -1,7 +1,7 @@
 import {html, nothing, type TemplateResult} from 'lit';
-import {TooltipController} from '@tecton-astryx/core/controllers/tooltip.js';
-import {TruncationController} from '@tecton-astryx/core/controllers/truncation.js';
-import type {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {TooltipController} from '@tecton-wc/core/controllers/tooltip.js';
+import {TruncationController} from '@tecton-wc/core/controllers/truncation.js';
+import type {TctElement} from '@tecton-wc/core/tct-element.js';
 import type {TooltipPlacement} from './text.types.js';
 
 export interface TruncationTooltipOptions {

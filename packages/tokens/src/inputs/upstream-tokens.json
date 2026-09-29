@@ -1,6 +1,6 @@
 {
   "source": {
-    "repository": "astryx (upstream, read-only reference)",
+    "repository": "upstream design system (read-only reference)",
     "commit": "ca632c6594b03aa3933ce9b35d1f6128fbad7a47",
     "files": [
       "packages/core/src/theme/tokens.stylex.ts",

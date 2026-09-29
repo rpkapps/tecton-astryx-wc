@@ -128,7 +128,7 @@ name, and host `aria-*` attributes (`aria-expanded`, `aria-haspopup`, `aria-pres
 
 ## Localisation
 
-The only string is the loading announcement (`@astryx.button.loading`), resolved from the language in
+The only string is the loading announcement (`@tct.button.loading`), resolved from the language in
 scope. Labels are yours to translate. Icons that point (chevrons) mirror in right-to-left; the button lays
 out icon, label and end content along the inline axis.
 

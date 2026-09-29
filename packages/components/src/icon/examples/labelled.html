@@ -1,9 +1,9 @@
 <!-- title: Decorative and labelled; description: An icon beside text stays decorative. A standalone icon that carries meaning gets a label and becomes an image. -->
-<div style="display: flex; flex-direction: column; gap: var(--spacing-3)">
-  <span style="display: inline-flex; align-items: center; gap: var(--spacing-2)">
+<tct-vstack gap="3" h-align="start">
+  <tct-hstack gap="2" v-align="center">
     <tct-icon name="search"></tct-icon> Search
-  </span>
-  <span style="display: inline-flex; align-items: center; gap: var(--spacing-2)">
+  </tct-hstack>
+  <tct-hstack gap="2" v-align="center">
     <tct-icon name="success" color="success" label="Completed"></tct-icon>
-  </span>
-</div>
+  </tct-hstack>
+</tct-vstack>

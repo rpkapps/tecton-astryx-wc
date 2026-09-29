@@ -1,9 +1,9 @@
 import {html, type CSSResultGroup, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
-import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {TctValueChangeEvent} from '@tecton-astryx/core/events/tct-value-change.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {TctValueChangeEvent} from '@tecton-wc/core/events/tct-value-change.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import base from '../styles/base.styles.css';
 import styles from './tct-collapsible-group.styles.css';
 import {collapsibleGroupContext, type CollapsibleGroupContextValue} from './collapsible.context.js';
@@ -60,7 +60,9 @@ export class TctCollapsibleGroup extends TctElement {
   #current: string[] | undefined;
   #lastKey = '';
   #context: CollapsibleGroupContextValue | undefined;
-  readonly #provider = new ContextProvider(this, {
+  readonly #provider: ContextProvider<typeof collapsibleGroupContext> = new ContextProvider<
+    typeof collapsibleGroupContext
+  >(this, {
     context: collapsibleGroupContext,
     initialValue: null,
   });

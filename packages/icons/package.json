@@ -1,10 +1,10 @@
 {
-  "name": "@tecton-astryx/icons",
+  "name": "@tecton-wc/icons",
   "private": true,
   "license": "UNLICENSED",
   "version": "0.0.0",
   "type": "module",
-  "description": "Icon sets as IconDefinition data modules (default set: Astryx role names mapped to Lucide).",
+  "description": "Icon sets as IconDefinition data modules (default set: semantic role names mapped to Lucide).",
   "sideEffects": false,
   "exports": {
     "./*.js": {

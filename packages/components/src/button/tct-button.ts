@@ -2,24 +2,24 @@ import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateRe
 import {property, state} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
 import {html as staticHtml, literal} from 'lit/static-html.js';
-import english from '@tecton-astryx/locales/en/button.js';
-import {announce} from '@tecton-astryx/core/a11y/announcer.js';
-import {AriaDelegateController} from '@tecton-astryx/core/controllers/aria-delegate.js';
-import {SizeController} from '@tecton-astryx/core/controllers/size.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {TooltipController} from '@tecton-astryx/core/controllers/tooltip.js';
-import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
-import {buttonGroupContext, linkContext} from '@tecton-astryx/core/context/keys.js';
-import {installFormBridge} from '@tecton-astryx/core/forms/implicit-submit.js';
+import english from '@tecton-wc/locales/en/button.js';
+import {announce} from '@tecton-wc/core/a11y/announcer.js';
+import {AriaDelegateController} from '@tecton-wc/core/controllers/aria-delegate.js';
+import {SizeController} from '@tecton-wc/core/controllers/size.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {TooltipController} from '@tecton-wc/core/controllers/tooltip.js';
+import {ContextConsumer} from '@tecton-wc/core/context/protocol.js';
+import {buttonGroupContext, linkContext} from '@tecton-wc/core/context/keys.js';
+import {installFormBridge} from '@tecton-wc/core/forms/implicit-submit.js';
 import {
   resetFormFromSubmitter,
   submitWithSubmitter,
   SUBMITTER,
-} from '@tecton-astryx/core/forms/submitter.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
-import {safeUrl} from '@tecton-astryx/core/utils/safe-url.js';
+} from '@tecton-wc/core/forms/submitter.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
+import {safeUrl} from '@tecton-wc/core/utils/safe-url.js';
 import {TctIcon} from '../icon/tct-icon.js';
 import {TctSpinner} from '../spinner/tct-spinner.js';
 import base from '../styles/base.styles.css';
@@ -74,7 +74,7 @@ const toLength = (width: string): string =>
  * @slot - The visible label. Defaults to the `label` attribute.
  * @slot icon - Leading icon (or use the `icon` attribute for a registered icon name).
  * @slot end - Trailing content (badge, icon, chevron). Ignored when `icon-only`.
- * @csspart button - The native `<button>` (or `<a>` for a link). Astryx target `astryx-button`.
+ * @csspart button - The native `<button>` (or `<a>` for a link).
  * @csspart icon - The leading icon wrapper.
  * @csspart label - The label wrapper.
  * @csspart end - The trailing content wrapper.
@@ -183,11 +183,27 @@ export class TctButton extends TctElement {
   @state() private _pending = false;
   @state() private _fieldsetDisabled = false;
 
-  readonly #locale = new LocaleController(this, {namespace: 'button', defaults: english});
-  readonly #slots = new SlotController(this, 'default', 'icon', 'end');
-  readonly #group = new ContextConsumer(this, {context: buttonGroupContext, subscribe: true});
-  readonly #link = new ContextConsumer(this, {context: linkContext});
-  readonly #size = new SizeController(this, {explicit: () => this.size, fallback: 'md'});
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'button',
+    defaults: english,
+  });
+  readonly #slots: SlotController = new SlotController(this, 'default', 'icon', 'end');
+  readonly #group: ContextConsumer<typeof buttonGroupContext> = new ContextConsumer<
+    typeof buttonGroupContext
+  >(this, {
+    context: buttonGroupContext,
+    subscribe: true,
+  });
+  readonly #link: ContextConsumer<typeof linkContext> = new ContextConsumer<typeof linkContext>(
+    this,
+    {
+      context: linkContext,
+    },
+  );
+  readonly #size: SizeController = new SizeController(this, {
+    explicit: () => this.size,
+    fallback: 'md',
+  });
   #inFlight = false;
   #wasLoading = false;
   #appliedWidth: string | undefined;

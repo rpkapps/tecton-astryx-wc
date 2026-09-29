@@ -3,7 +3,7 @@
  * touch input (real mouse gestures would be timing-dependent; a synthetic pointer id has no active
  * pointer to capture, which the sheet tolerates).
  */
-import {animationsFinished, aTimeout, nextFrame, waitUntil} from '@tecton-astryx/testing/index.js';
+import {animationsFinished, aTimeout, nextFrame, waitUntil} from '@tecton-wc/testing/index.js';
 import type {TctBottomSheet} from '../tct-bottom-sheet.js';
 
 export const dialogOf = (el: TctBottomSheet): HTMLDialogElement =>

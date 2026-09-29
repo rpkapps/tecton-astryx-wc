@@ -60,7 +60,7 @@
           "kind": "prop",
           "target": "toggle-children-label",
           "as": "attribute",
-          "notes": "Additive: overrides the toggle's accessible name (message @astryx.treeList.toggleChildren)."
+          "notes": "Additive: overrides the toggle's accessible name (message @tct.treeList.toggleChildren)."
         },
         {
           "upstream": "ref",
@@ -74,7 +74,7 @@
           "upstream": "useTreeFocus",
           "target": "TreeFocusController",
           "as": "controller",
-          "notes": "@tecton-astryx/core/controllers/tree-focus.js: visible-item navigation, roving tab stop, typeahead, Left/Right/Enter/Space. Owns no state beyond the active item id."
+          "notes": "@tecton-wc/core/controllers/tree-focus.js: visible-item navigation, roving tab stop, typeahead, Left/Right/Enter/Space. Owns no state beyond the active item id."
         }
       ],
       "keyboard": [

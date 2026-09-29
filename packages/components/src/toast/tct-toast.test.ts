@@ -6,9 +6,9 @@
 import {html} from 'lit';
 import {beforeEach, describe, expect, it} from 'vitest';
 import {userEvent} from 'vitest/browser';
-import {TctToastDismissEvent} from '@tecton-astryx/core/events/tct-toast-dismiss.js';
-import {TctToastHideEvent} from '@tecton-astryx/core/events/tct-toast-hide.js';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
+import {TctToastDismissEvent} from '@tecton-wc/core/events/tct-toast-dismiss.js';
+import {TctToastHideEvent} from '@tecton-wc/core/events/tct-toast-hide.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import {
   aTimeout,
   axNode,
@@ -19,7 +19,7 @@ import {
   recordEvents,
   runElementSuite,
   waitUntil,
-} from '@tecton-astryx/testing/index.js';
+} from '@tecton-wc/testing/index.js';
 import './define.js';
 import type {TctToast} from './tct-toast.js';
 

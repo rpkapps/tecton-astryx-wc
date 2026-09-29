@@ -77,7 +77,7 @@ language, and the components inside expose their strings (for example a spinner'
 
 This is the localisation entry point. The library ships 30 catalogs (370 message ids) plus a pseudo locale
 (`locale="pseudo"`) that brackets and lengthens every string, for finding truncation and untranslated text.
-Message ids look like `@astryx.pagination.next`. Text you write yourself is yours to translate.
+Message ids look like `@tct.pagination.next`. Text you write yourself is yours to translate.
 
 ## Consumer responsibilities
 

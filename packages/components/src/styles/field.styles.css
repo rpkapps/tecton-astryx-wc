@@ -4,7 +4,7 @@
  * and that the field satellites (`tct-field-label`, `tct-field-description`) reuse inside their own
  * shadow roots. Include it after `base` and before the component sheet. [mwg:css] [mwg:styling-web-components]
  *
- * Tecton is the outlined field (design/components/textfield.md, tecton-astryx components.ts
+ * Tecton is the outlined field (design/components/textfield.md, the Tecton React theme's components.ts
  * `text-input`, `field-label`): a transparent surface with a 1px graphite border, near-white value ink,
  * a placeholder two steps down, coloured ink for validation (no message box behind it) and a 2px hot-pink
  * ring for focus. Filled and text-only variants are not in the upstream API and are not drawn here.

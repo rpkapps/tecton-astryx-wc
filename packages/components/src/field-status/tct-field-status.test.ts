@@ -4,13 +4,13 @@
  */
 import {html} from 'lit';
 import {afterEach, beforeEach, describe, expect, it} from 'vitest';
-import {getAnnouncerRegions} from '@tecton-astryx/core/a11y/announcer.js';
-import {overrideFeature} from '@tecton-astryx/core/features.js';
-import {expectAccessible} from '@tecton-astryx/testing/a11y.js';
-import {emulateMedia} from '@tecton-astryx/testing/emulate.js';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
-import {waitUntil} from '@tecton-astryx/testing/timing.js';
+import {getAnnouncerRegions} from '@tecton-wc/core/a11y/announcer.js';
+import {overrideFeature} from '@tecton-wc/core/features.js';
+import {expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {emulateMedia} from '@tecton-wc/testing/emulate.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
+import {waitUntil} from '@tecton-wc/testing/timing.js';
 import '../icon/define.js';
 import './define.js';
 import type {TctFieldStatus} from './tct-field-status.js';

@@ -1,9 +1,9 @@
 import {html, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
-import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {formLayoutContext, type FormLayoutContextValue} from '@tecton-astryx/core/context/keys.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {formLayoutContext, type FormLayoutContextValue} from '@tecton-wc/core/context/keys.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import base from '../styles/base.styles.css';
 import {
   FORM_LAYOUT_DIRECTIONS,
@@ -49,7 +49,9 @@ export class TctFormLayout extends TctElement {
    */
   @property({attribute: 'default-optionality'}) defaultOptionality: FormOptionality | undefined;
 
-  readonly #context = new ContextProvider(this, {
+  readonly #context: ContextProvider<typeof formLayoutContext> = new ContextProvider<
+    typeof formLayoutContext
+  >(this, {
     context: formLayoutContext,
     initialValue: {direction: 'vertical'},
   });

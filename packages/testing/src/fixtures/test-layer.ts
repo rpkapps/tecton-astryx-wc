@@ -12,19 +12,19 @@
  */
 import {css, html, nothing, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
-import {TctAfterOpenChangeEvent} from '@tecton-astryx/core/events/tct-after-open-change.js';
-import {TctOpenChangeEvent} from '@tecton-astryx/core/events/tct-open-change.js';
+import {TctAfterOpenChangeEvent} from '@tecton-wc/core/events/tct-after-open-change.js';
+import {TctOpenChangeEvent} from '@tecton-wc/core/events/tct-open-change.js';
 import {
   LayerController,
   type EscapeBehavior,
   type LayerKind,
-} from '@tecton-astryx/core/layer/layer-controller.js';
+} from '@tecton-wc/core/layer/layer-controller.js';
 import {
   PositionController,
   type Alignment,
   type Placement,
-} from '@tecton-astryx/core/layer/position.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+} from '@tecton-wc/core/layer/position.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 
 export class TctTestLayer extends TctElement {
   static override readonly tagName = 'tct-test-layer';

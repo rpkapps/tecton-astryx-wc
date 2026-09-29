@@ -20,14 +20,16 @@ Machine: 4 cores, shared. Keep about 7 concurrent engineers at most.
 | Stream | Agent id | Status / waiting on |
 | --- | --- | --- |
 | WP-7 basic form controls | ae829a7c68f66a548 | Running. Told that the layout components merged and a rename codemod is coming. |
-| Wave-1 fix-ups (tree-list dark contrast blocking docs:a11y, banner links, dialog alert role, events tests) | a75b628b5d01a6e95 | Running. |
+| Examples migration A (overflow-list, list, item, metadata-list, indicator, button, button-group, icon-button, collapsible, icon) | a20739f0eddf5105f | Running. |
+| Examples migration B (bottom-sheet, dialog, hover-card, banner, field, field-status, i18n-provider, avatar, link, badge, citation, heading, nav-icon, empty-state) | aca15832d8e9916a1 | Running. |
 | WP-D guides reconciliation (D-015 prose, dead links, real APIs, `<Example>`) | a0422133074a702cb | Running. |
 | D-015 rename to `@tecton-wc/*`, `@tct.*` ids, codemod `tools/codemods/d015-rename.ts`, third-party notices page | a32e9d1ad7c2c92f4 | Running. |
 | WP-6 menus | a1670232dc74bd9dc | Running. |
 | WP-8 layout and app frame | a627274cd9f0fda52 | Running. |
 | WP-9 chat messages | a4474048d684578af | Running. |
 
-Merged: WP-F (M1–M6, slices A/B), WP-1, WP-2, WP-3, WP-4, WP-5. Wave 1 is complete.
+Merged: WP-F (M1–M6, slices A/B), WP-1, WP-2, WP-3, WP-4, WP-5, and the wave-1 fix-ups. Wave 1 is complete.
+`pnpm check` was fully green at 5533370, the first time since wave 1 began. The lint flake was fixed at its root: typecheck now runs before lint.
 
 Follow-ups noted at review:
 - WP-1 did not wire `tct-theme`'s `theme` property to a `DefinedTheme`; the core theme utilities exist.

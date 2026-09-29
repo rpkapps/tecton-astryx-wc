@@ -102,7 +102,7 @@
         {
           "id": "METADATA-04",
           "type": "approved-api-difference",
-          "text": "The collapse state is `expanded` (attribute = initial state) with a cancelable tct-open-change intent event when the user toggles it; upstream kept it as internal state with no callback. Items past the cap are marked data-tct-collapsed on the light-DOM children and hidden with display: none (so they leave the accessibility tree). The toggle labels are the upstream @astryx.metadataList.showMore/showLess messages with show-more-label and show-less-label overrides."
+          "text": "The collapse state is `expanded` (attribute = initial state) with a cancelable tct-open-change intent event when the user toggles it; upstream kept it as internal state with no callback. Items past the cap are marked data-tct-collapsed on the light-DOM children and hidden with display: none (so they leave the accessibility tree). The toggle labels are the upstream @tct.metadataList.showMore/showLess messages with show-more-label and show-less-label overrides."
         },
         {
           "id": "METADATA-05",

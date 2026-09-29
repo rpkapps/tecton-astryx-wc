@@ -1,5 +1,5 @@
 import {html, type CSSResultGroup} from 'lit';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import base from '../styles/base.styles.css';
 import field from '../styles/field.styles.css';
 import styles from './tct-field-description.styles.css';

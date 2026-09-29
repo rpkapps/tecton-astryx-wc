@@ -97,7 +97,7 @@ Not applicable. The tree is not a form control and does not participate in form 
 
 ## Localisation
 
-The toggle's name is the message `@astryx.treeList.toggleChildren`; the `toggle-children-label` attribute
+The toggle's name is the message `@tct.treeList.toggleChildren`; the `toggle-children-label` attribute
 overrides it. Labels and descriptions are yours to translate. Nesting, guide lines and the chevron mirror
 in right-to-left containers, and ArrowLeft and ArrowRight swap their expand and collapse roles.
 

@@ -33,7 +33,7 @@ export const noFeatureChecks: Rule.RuleModule = {
     schema: [],
     messages: {
       probe:
-        'Feature detection belongs in @tecton-astryx/core/features.js. Add a probe there and import it.',
+        'Feature detection belongs in @tecton-wc/core/features.js. Add a probe there and import it.',
     },
   },
   create(context) {

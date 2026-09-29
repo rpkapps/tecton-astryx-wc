@@ -78,7 +78,7 @@
           "upstream": "useOverflow",
           "target": "OverflowController",
           "as": "controller",
-          "notes": "@tecton-astryx/core/controllers/overflow.js: the reactive wrapper; `computeOverflow` is the pure fit computation (upstream tests ported to overflow.node.test.ts)."
+          "notes": "@tecton-wc/core/controllers/overflow.js: the reactive wrapper; `computeOverflow` is the pure fit computation (upstream tests ported to overflow.node.test.ts)."
         },
         {"upstream": "computeOverflow", "target": "computeOverflow", "as": "module-function"}
       ],
@@ -130,8 +130,8 @@
         },
         {
           "file": "packages/locales/src/catalogs.node.test.ts",
-          "reason": "'English namespace modules > partition the English catalog by namespace' compares the merged dist/en modules to the upstream English catalog, so any first-party @tct.* message fails it (@tct.overflow-list.overflow here, and @tct.field.* from WP-F). Compare only the @astryx.* ids, and assert the @tct.* ids sit in the module named after their namespace.",
-          "diff": "expect(merged).toEqual(english) -> expect(Object.fromEntries(Object.entries(merged).filter(([id]) => id.startsWith('@astryx.')))).toEqual(english)"
+          "reason": "'English namespace modules > partition the English catalog by namespace' compares the merged dist/en modules to the upstream English catalog, so any first-party @tct.* message fails it (@tct.overflow-list.overflow here, and @tct.field.* from WP-F). Compare only the @tct.* ids, and assert the @tct.* ids sit in the module named after their namespace.",
+          "diff": "expect(merged).toEqual(english) -> expect(Object.fromEntries(Object.entries(merged).filter(([id]) => id.startsWith('@tct.')))).toEqual(english)"
         }
       ],
       "sizeBudgetKb": null,

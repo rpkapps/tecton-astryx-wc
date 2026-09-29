@@ -1,5 +1,5 @@
 {
-  "name": "@tecton-astryx/testing",
+  "name": "@tecton-wc/testing",
   "private": true,
   "license": "UNLICENSED",
   "version": "0.0.0",
@@ -14,7 +14,7 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@tecton-astryx/core": "workspace:*",
+    "@tecton-wc/core": "workspace:*",
     "axe-core": "catalog:",
     "lit": "catalog:"
   },

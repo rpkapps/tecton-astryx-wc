@@ -9,9 +9,9 @@
  */
 import {userEvent} from 'vitest/browser';
 import {beforeAll, describe, expect, it} from 'vitest';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {observeControl, unobserveControl} from '@tecton-astryx/core/mixins/form-control.js';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {observeControl, unobserveControl} from '@tecton-wc/core/mixins/form-control.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import {axNode} from '../a11y.js';
 import {recordEvents} from '../events.js';
 import {TctTestCheckbox, TctTestGroup, TctTestInput, TctTestSubmit} from '../fixtures/test-form.js';

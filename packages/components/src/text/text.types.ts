@@ -1,7 +1,7 @@
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 
 /**
- * Built-in Astryx text types (upstream `BuiltinTextType`). `inherit` takes size, leading and weight
+ * Built-in text types (upstream `BuiltinTextType`). `inherit` takes size, leading and weight
  * (and colour) from the surrounding text.
  */
 export const BUILTIN_TEXT_TYPES = [

@@ -35,7 +35,7 @@
         "light": 3.12,
         "dark": 3.11
       },
-      "reason": "Tecton design value: the placeholder role (gray 310) is 3.1:1 in both modes. Fields bind the outlined-input placeholder role --tecton-color-input-outlined-text-placeholder (4.7:1, in this matrix and passing), not this one. Kept because the export and tecton-astryx both define it."
+      "reason": "Tecton design value: the placeholder role (gray 310) is 3.1:1 in both modes. Fields bind the outlined-input placeholder role --tecton-color-input-outlined-text-placeholder (4.7:1, in this matrix and passing), not this one. Kept because the export and the Tecton binding both define it."
     },
     {
       "pair": "--tecton-color-text-placeholder on --color-background-surface",
@@ -43,7 +43,7 @@
         "light": 3.27,
         "dark": 3.42
       },
-      "reason": "Tecton design value: the placeholder role (gray 310) is 3.1:1 in both modes. Fields bind the outlined-input placeholder role --tecton-color-input-outlined-text-placeholder (4.7:1, in this matrix and passing), not this one. Kept because the export and tecton-astryx both define it."
+      "reason": "Tecton design value: the placeholder role (gray 310) is 3.1:1 in both modes. Fields bind the outlined-input placeholder role --tecton-color-input-outlined-text-placeholder (4.7:1, in this matrix and passing), not this one. Kept because the export and the Tecton binding both define it."
     },
     {
       "pair": "--tecton-color-text-placeholder on --color-background-card",
@@ -51,7 +51,7 @@
         "light": 3.27,
         "dark": 3.42
       },
-      "reason": "Tecton design value: the placeholder role (gray 310) is 3.1:1 in both modes. Fields bind the outlined-input placeholder role --tecton-color-input-outlined-text-placeholder (4.7:1, in this matrix and passing), not this one. Kept because the export and tecton-astryx both define it."
+      "reason": "Tecton design value: the placeholder role (gray 310) is 3.1:1 in both modes. Fields bind the outlined-input placeholder role --tecton-color-input-outlined-text-placeholder (4.7:1, in this matrix and passing), not this one. Kept because the export and the Tecton binding both define it."
     },
     {
       "pair": "--tecton-color-text-placeholder on --color-background-popover",
@@ -59,21 +59,21 @@
         "light": 3.27,
         "dark": 3.42
       },
-      "reason": "Tecton design value: the placeholder role (gray 310) is 3.1:1 in both modes. Fields bind the outlined-input placeholder role --tecton-color-input-outlined-text-placeholder (4.7:1, in this matrix and passing), not this one. Kept because the export and tecton-astryx both define it."
+      "reason": "Tecton design value: the placeholder role (gray 310) is 3.1:1 in both modes. Fields bind the outlined-input placeholder role --tecton-color-input-outlined-text-placeholder (4.7:1, in this matrix and passing), not this one. Kept because the export and the Tecton binding both define it."
     },
     {
       "pair": "--tecton-color-top-nav-text on --tecton-color-top-nav-background",
       "measured": {
         "light": 4
       },
-      "reason": "Tecton export design value: black at 50% on the white top-nav band (light mode) is 4.0:1. The tecton-astryx derivation (white text on black) passed but left primary text at 1.2:1 on the band, so the export was adopted (D-001). Large nav labels only; owner accepted (D-013)."
+      "reason": "Tecton export design value: black at 50% on the white top-nav band (light mode) is 4.0:1. The Tecton binding derivation (white text on black) passed but left primary text at 1.2:1 on the band, so the export was adopted (D-001). Large nav labels only; owner accepted (D-013)."
     },
     {
       "pair": "--color-icon-secondary on --tecton-color-table-header-bg",
       "measured": {
         "dark": 2.88
       },
-      "reason": "Inherited design shortfall (2.9:1 in dark mode). Mitigation is component-level, as in tecton-astryx: the table header re-points its icons to --color-text-secondary (icon-on-table-header-mitigated in this matrix, passing 3:1)."
+      "reason": "Inherited design shortfall (2.9:1 in dark mode). Mitigation is component-level, as in the Tecton binding: the table header re-points its icons to --color-text-secondary (icon-on-table-header-mitigated in this matrix, passing 3:1)."
     },
     {
       "pair": "--color-border-emphasized on --color-background-body",
@@ -81,7 +81,7 @@
         "light": 2.2,
         "dark": 2.21
       },
-      "reason": "Inherited from the Tecton design (divider medium, 2.2:1 in both modes; tecton-astryx pins it with a test). Allowed for decorative separation only (D-013 Q-05): a component whose border is the sole indicator of a control boundary or of state (WCAG 1.4.11) must use a border token that measures 3:1 or more on its surface, e.g. --tecton-color-divider-strong (3.1:1, in this matrix). Component review enforces this."
+      "reason": "Inherited from the Tecton design (divider medium, 2.2:1 in both modes; the Tecton binding pins it with a test). Allowed for decorative separation only (D-013 Q-05): a component whose border is the sole indicator of a control boundary or of state (WCAG 1.4.11) must use a border token that measures 3:1 or more on its surface, e.g. --tecton-color-divider-strong (3.1:1, in this matrix). Component review enforces this."
     },
     {
       "pair": "--tecton-color-input-outlined-border on --color-background-body",

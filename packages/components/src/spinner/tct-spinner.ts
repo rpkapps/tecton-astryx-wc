@@ -1,8 +1,8 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
-import english from '@tecton-astryx/locales/en/spinner.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import english from '@tecton-wc/locales/en/spinner.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import base from '../styles/base.styles.css';
 import motion from '../styles/motion.styles.css';
 import {TctText} from '../text/tct-text.js';
@@ -53,7 +53,7 @@ function schedulePin(circle: SVGCircleElement): void {
  * @tag tct-spinner
  * @upstream Spinner
  * @slot - Rich visible content shown below the ring (replaces the `label` text).
- * @csspart spinner - The ring box (Astryx target `astryx-spinner`).
+ * @csspart spinner - The ring box.
  * @csspart label - The visible `label` text.
  * @cssprop --spinner-diameter - Diameter of the ring (a length with a unit). Default by size: 10, 14, 18, 28px.
  * @cssprop --spinner-stroke-width - Stroke width of arc and track (a length with a unit). Default by size: 2, 3, 3, 4px.
@@ -82,7 +82,10 @@ export class TctSpinner extends TctElement {
    */
   @property() label = '';
 
-  readonly #locale = new LocaleController(this, {namespace: 'spinner', defaults: english});
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'spinner',
+    defaults: english,
+  });
   #circle: SVGCircleElement | null = null;
 
   protected override willUpdate(changed: PropertyValues): void {

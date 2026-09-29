@@ -37,7 +37,10 @@ describe('resolveAdaptivePresentation', () => {
 class AdaptiveHost extends LitElement {
   static override properties = {presentation: {type: String}};
   presentation: AdaptivePresentation = 'adaptive';
-  readonly adaptive = new AdaptivePresentationController(this, () => this.presentation);
+  readonly adaptive: AdaptivePresentationController = new AdaptivePresentationController(
+    this,
+    () => this.presentation,
+  );
   protected override render() {
     return html`${this.adaptive.resolved}`;
   }

@@ -1,7 +1,7 @@
 import {html, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import base from '../styles/base.styles.css';
 import layer from '../styles/layer.styles.css';
 import typography from '../styles/typography.styles.css';
@@ -45,7 +45,7 @@ import {
  * @tag tct-text
  * @upstream Text
  * @slot - The text.
- * @csspart text - The text box (Astryx target `astryx-text`); carries the typography, truncation and layout.
+ * @csspart text - The text box; carries the typography, truncation and layout.
  * @cloakDisplay inline
  */
 export class TctText extends TctElement {
@@ -108,7 +108,7 @@ export class TctText extends TctElement {
   /** Host semantics: `span` (default), `p` (paragraph), `div`, `label`, or `h1`-`h3` (headings). */
   @property() as: TextElement = 'span';
 
-  readonly #tooltip = new TruncationTooltip(this, {
+  readonly #tooltip: TruncationTooltip = new TruncationTooltip(this, {
     target: () => this.shadowRoot?.querySelector<HTMLElement>('.text'),
     maxLines: () => this.#lines,
     disabled: () => this.noTruncateTooltip,

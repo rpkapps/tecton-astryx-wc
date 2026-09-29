@@ -1,6 +1,6 @@
 ---
 title: CLI Integrations
-description: Deferred - the integration-package workflow of upstream Astryx, and the extension points that exist today for elements, themes, icons and translations.
+description: Deferred - the integration-package workflow of the React design system, and the extension points that exist today for elements, themes, icons and translations.
 sidebar:
   order: 17
   badge:
@@ -9,35 +9,34 @@ sidebar:
 ---
 
 :::caution[Deferred]
-Upstream's integration workflow is specific to its CLI product, and it is not part of the first release. It is recorded here so that nothing is silently dropped, and so that you know which extension points exist now.
+The React design system has an integration workflow that is specific to its CLI product, and it is not part of the first release here. It is recorded so that nothing is silently dropped, and so that you know which extension points exist now.
 :::
 
-## What upstream has
+## What the React design system has
 
-An integration is an npm package that contributes components, templates, source themes, doc topics, agent guidance and upgrade codemods to a consumer's design-system workflow. Consumers install the package and Astryx autolinks it; the authoring CLI scaffolds the manifest (`integration add component`, `integration add doc`, `integration add theme`, `integration add codemod`, `integration add agent-doc`), and a package gate (`integration pack --check`) verifies the packed tarball before publishing. Contributions of each kind use different metadata suffixes, and consumers discover them through `component --list`, `docs`, `template --list` and `theme list`.
+An integration is an npm package that contributes components, templates, source themes, doc topics, agent guidance and upgrade codemods to a consumer's design-system workflow. Consumers install the package and the CLI autolinks it; the authoring CLI scaffolds the manifest (`integration add component`, `integration add doc`, `integration add theme`, `integration add codemod`, `integration add agent-doc`), and a package gate (`integration pack --check`) verifies the packed tarball before publishing. Contributions of each kind use different metadata suffixes, and consumers discover them through `component --list`, `docs`, `template --list` and `theme list`.
 
-That whole workflow (autolinking, the integration file, the scaffolding commands, the pack gate, the run recording and the gap-report handler) belongs to the non-agent CLI commands that are tracked separately as a follow-up (see [CLI Reference](../cli/#not-in-the-first-release)). The library is also unpublished, so a publish-oriented gate has nothing to attach to yet.
+That whole workflow (autolinking, the integration file, the scaffolding commands, the pack gate, the run recording and the gap-report handler) belongs to the commands beyond agent support that are tracked separately as a follow-up (see [CLI Reference](../cli/#not-in-the-first-release)). The library is also unpublished, so a publish-oriented gate has nothing to attach to yet.
 
 ## What you can do today
 
 Every kind of contribution has a direct, code-level equivalent that needs no manifest.
 
-| Upstream contribution | Here, today                                                                                                                                                                        |
+| Contribution          | Here, today                                                                                                                                                                        |
 | --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Components            | Build your own elements on `@tecton-astryx/core`: extend `TctElement`, register with `defineElement`, and reuse the mixins and controllers (form association, layers, roving focus, locale). Use your own tag prefix so that it never collides with `tct-`, and register the family in your app or in a package of yours. |
-| Source themes         | Override tokens in a stylesheet you own ([Theming](../theme/)). A generated theme (`defineTheme`, `generateThemeCSS`) is planned.                                                    |
+| Components            | Build your own elements on `@tecton-wc/core`: extend `TctElement`, register with `defineElement`, and reuse the mixins and controllers (form association, layers, roving focus, locale). Use your own tag prefix so that it never collides with `tct-`, and register the family in your app or in a package of yours. |
+| Source themes         | Override tokens in a stylesheet you own ([Theming](../theme/)). A generated theme (`defineTheme`, `generateThemeCSS` in `@tecton-wc/core`) is available.                                                  |
 | Icons                 | Register a set with `registerIcons`, under a namespace of your own if you like ([Icons](../icons/)). Sets are plain data modules you can ship as a package.                            |
 | Translations          | Register catalogs with `registerTranslation`, or serve them with `setLocaleLoader` ([Internationalization](../internationalization/)).                                                |
 | Doc topics            | Write an authored doc for your element in the same format as ours ([Authoring Reference](../authoring/)); a generated site or registry can consume it.                                |
 | Agent guidance        | The `init --features agents` block is specified to include guidance for your project. Contributing package-labelled agent docs from a dependency is _deferred_ with the integration mechanism. |
-| Codemods              | None. The only upgrade action is refreshing a stale generated agent-docs block (`tct upgrade --apply`).                                                                              |
-| Gap reporting         | `tct gap-report` (_planned_, WP-AI) routes a missing capability to the package that owns it. Until then, record it in the folder's parity record `requests`.                       |
+| Codemods              | None. The only upgrade action is refreshing a stale generated agent-docs block (`tct upgrade --apply`, _planned_).                                                                   |
+| Gap reporting         | `tct gap-report` (_planned_) routes a missing capability to the package that owns it. Until then, record it in the folder's parity record `requests`.                                |
 
 If you build elements that follow the same conventions (the naming and API rules, the tokens-only styling contract, the standard test suites), they will look and behave like the library's own. The conventions are in `docs/CONVENTIONS.md` and `docs/ARCHITECTURE.md` in the repository.
 
 {/*
-Adapted from Astryx docs topic `cli-integrations` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md). Inventory 9.1: "Reference > Integrations (deferred): integration-contribution workflow is CLI-product specific; record as deferred, keep a stub explaining extension points (themes/icons) in WC terms".
-Upstream sections recorded as deferred: Overview; Authoring with the CLI; Theme Package Walkthrough; Contribution Kinds at a Glance; The Integration File; Components; Templates; Docs; Themes; Agent Docs; Codemods; Recording Runs; Gap report handler; How It Works.
-`shadcn-compatibility.doc.draft` (canary/draft upstream) is not applicable and has no page; it is noted on the Migration page.
+Inventory 9.1: "Reference > Integrations (deferred): integration-contribution workflow is CLI-product specific; record as deferred, keep a stub explaining extension points (themes/icons) in WC terms".
+The React design system's integration sections recorded as deferred: overview; authoring with the CLI; theme package walkthrough; contribution kinds; the integration file; components; templates; docs; themes; agent docs; codemods; recording runs; gap report handler; how it works.
 Guides: [mwg:custom-elements] [mwg:web-components]
 */}

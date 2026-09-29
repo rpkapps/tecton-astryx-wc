@@ -1,4 +1,4 @@
-import {createContext} from '@tecton-astryx/core/context/protocol.js';
+import {createContext} from '@tecton-wc/core/context/protocol.js';
 import type {AvatarShape, AvatarSize} from './avatar.types.js';
 
 /**

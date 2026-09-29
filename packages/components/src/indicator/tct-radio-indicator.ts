@@ -1,8 +1,8 @@
 import {html, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import base from '../styles/base.styles.css';
 import {
   INDICATOR_SIZES,
@@ -22,8 +22,8 @@ import styles from './tct-radio-indicator.styles.css';
  * @tag tct-radio-indicator
  * @upstream RadioIndicator
  * @slot - Content drawn inside the circle instead of the dot (a spinner while pending).
- * @csspart radio-indicator - The circle (Astryx target `astryx-radio-indicator`; the deprecated `radio` name is also set).
- * @csspart radio-indicator-dot - The inner dot (Astryx target `astryx-radio-indicator-dot`; the deprecated `radio-dot` name is also set).
+ * @csspart radio-indicator - The circle (the deprecated `radio` name is also set).
+ * @csspart radio-indicator-dot - The inner dot (the deprecated `radio-dot` name is also set).
  * @cssstate checked - The state is `checked`.
  * @cssstate disabled - The owner is disabled.
  * @cloakDisplay inline-flex
@@ -41,7 +41,7 @@ export class TctRadioIndicator extends TctElement {
   /** Whether the owning control is disabled. Purely visual; the owner keeps the real disabled semantics. */
   @property({type: Boolean, reflect: true}) disabled = false;
 
-  readonly #slots = new SlotController(this, 'default');
+  readonly #slots: SlotController = new SlotController(this, 'default');
 
   protected override willUpdate(changed: PropertyValues<this>): void {
     // Decorative by contract: hidden from assistive technology whatever the author writes on the host.

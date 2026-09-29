@@ -1,34 +1,34 @@
 ---
 title: Principles
-description: Core design principles, rules and anti-patterns for building with the Tecton Astryx Web Components.
+description: Core design principles, rules and anti-patterns for building with the Tecton Web Components.
 sidebar:
   order: 4
 ---
 
 ## Design philosophy
 
-A design system that prioritises consistency, adaptability and developer experience. Every decision flows from a few core ideas:
+The design system prioritises consistency, adaptability and developer experience. Every decision flows from a few core ideas:
 
 - **Elements over primitives.** Use `tct-*` elements for everything they cover before reaching for raw HTML. Where no element exists, plain semantic HTML is the right tool: headings, lists, paragraphs and links in prose need no wrapper.
 - **Semantic tokens over hardcoded values.** Colours, spacing and radii are named by purpose, not appearance (`--color-text-secondary`, `--spacing-4`, `--radius-container`).
 - **Theme-agnostic code.** Your app code never references specific colours or measurements, so themes and dark mode work automatically.
-- **Open internals.** Every element class, controller and event is exported and composable, so you can build on top of them without fighting them. The runtime that the elements share lives in `@tecton-astryx/core`.
+- **Open internals.** Every element class, controller and event is exported and composable, so you can build on top of them without fighting them. The runtime that the elements share lives in `@tecton-wc/core`.
 - **The platform first.** Native elements inside the shadow root when the element _is_ a native control (a real `<button>`, `<input>`, `<dialog>`), native events, native form participation, native popovers. You inherit the platform's accessibility and behaviour instead of a re-implementation.
 
 ## Rules
 
 1. Use elements for everything they cover.
 2. Page layout is frame-first: pick the shell and budget regions before writing content (see [Layout](../layout/)).
-3. Dense data renders as rows (`tct-table`, `tct-list` with `tct-list-item`), edge to edge with dividers. `tct-card` is for widgets, galleries and settings groups.
+3. Dense data renders as rows (`tct-list` with `tct-list-item`, or a table, _planned_), edge to edge with dividers. `tct-card` is for widgets, galleries and settings groups.
 4. Style through the public styling API: tokens first, then attributes, `::part()`, `:state()`, documented component custom properties, and `::slotted()` for small adjustments (see [Styling components](../styling/)).
 5. Semantic tokens, not hardcoded values (see [All tokens](../tokens/)).
 6. CSS custom properties for colours, not hex values.
 7. Form controls follow the native model: give them a `name`, read and write `value`, listen for `input` and `change`, and let them submit with their form. They own their state by default (uncontrolled). To control one, set the property and listen for the `tct-*-change` intent event; call `preventDefault()` to refuse a change. See [Forms](../forms/).
-8. Navigate with real links. Use `tct-link` for internal navigation, and wrap the app in `tct-link-provider` (_planned_) so consumers can plug their router into every link.
+8. Navigate with real links. Use `tct-link` for internal navigation, and wrap the app in `tct-link-provider` so consumers can plug their router into every link.
 
 ## Styling approach
 
-Elements accept the standard `class` and `style` attributes on the host for layout (margins, flex and grid placement, sizing). There is no `xstyle` prop, because there is no styling library to feed. For anything else, use design tokens, the documented attributes, `::part()` selectors and component custom properties.
+Elements accept the standard `class` and `style` attributes on the host for layout (margins, flex and grid placement, sizing). There is no style-override prop, because there is no styling library to feed. For anything else, use design tokens, the documented attributes, `::part()` selectors and component custom properties.
 
 See [Styling components](../styling/) for the complete guide with examples.
 
@@ -41,8 +41,8 @@ See [Styling components](../styling/) for the complete guide with examples.
 - Hardcoded spacing (`16px`). Use spacing tokens (`var(--spacing-4)`) or the element's `gap` and `padding` attributes.
 - Hardcoded `<a>` elements for in-app navigation. Use `tct-link` so consumers can swap in their router through `tct-link-provider`.
 - Wrapping every list item or page section in a card. Decide the frame first; dense data renders as rows (see [Layout](../layout/)).
-- Badge as decoration. Reserve `tct-badge` for counts and enumerated states, and use `tct-status-dot` or `tct-token` for status.
-- Inventing attributes or events. Read the element's documentation first (the generated page, the Custom Elements Manifest, or `tct component`).
+- Badge as decoration. Reserve `tct-badge` for counts and enumerated states, and use `tct-status-dot` for status.
+- Inventing attributes or events. Read the element's documentation first (its page under [Components](/components/), the Custom Elements Manifest, or `tct component` once the CLI ships).
 - Setting a `role` attribute on an element that already has one. Elements expose their default role through `ElementInternals`, and a host attribute overrides it.
 - Reaching into a shadow root (`element.shadowRoot.querySelector(…)`) to style or script an element. Use `::part()`, custom properties, properties, methods and events; they are the supported, stable surface.
 - Listening for framework-style callbacks. There are no `onClick`-style properties: use `addEventListener` (or your framework's custom-event binding).
@@ -58,15 +58,13 @@ Values in these pages carry one of these labels wherever it matters, so you know
 | Label              | Meaning                                                                                                                                       |
 | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------- |
 | Tecton             | The value comes from the Tecton design system: its export, or the owner's Tecton theme bindings.                                              |
-| Astryx-retained    | Tecton has no value, so the upstream Astryx value is kept on purpose (motion, breakpoints, z-index).                                          |
+| Retained default   | Tecton has no value, so the original default is kept on purpose (motion, breakpoints, z-index).                                                |
 | Provisional        | No Tecton decision exists yet. The value is a proposal (data-visualisation colours, the 36 px large control height, some pipeline extras).    |
-| Planned            | The API or feature is specified in the architecture but is not merged yet. Do not build on it until its page says it exists.                  |
+| Planned            | The API or feature is specified but is not available yet. Do not build on it until its page says it exists.                                   |
 
-The generated _Differences and open items_ page lists every provisional and Astryx-retained value, and the parity page shows which elements are implemented.
+The [design tokens reference](/reference/tokens/) shows the status of every token, and the [Components](/components/) overview shows which elements exist.
 
 {/*
-Adapted from Astryx docs topic `principles` (+ `principles.doc.dense`) (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md).
-Section map: Design Philosophy -> Design philosophy; Rules -> Rules; Styling Approach -> Styling approach; Anti-Patterns -> Anti-patterns; Design Tokens -> Design tokens.
-Added: "How to read this documentation" (D-002, D-013 Q-06 status labels).
+Added: "How to read this documentation" (status labels of the token pipeline).
 Guides: [mwg:web-components] [mwg:custom-elements] [mwg:accessible-web-components] [mwg:styling-web-components] [mwg:form-associated-custom-elements]
 */}

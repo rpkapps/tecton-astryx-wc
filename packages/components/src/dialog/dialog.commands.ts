@@ -5,7 +5,7 @@
  * dispatches the same event for custom (`--`) commands, so markup written for the platform keeps working.
  * Nothing here manages ARIA: the overlay owns `aria-expanded` on its source itself.
  */
-import {features} from '@tecton-astryx/core/features.js';
+import {features} from '@tecton-wc/core/features.js';
 
 /** The event an invoker sends: the platform's `CommandEvent`, or this stand-in without it. */
 export interface CommandLikeEvent extends Event {

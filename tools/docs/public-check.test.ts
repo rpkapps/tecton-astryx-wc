@@ -7,8 +7,8 @@ import {mkdirSync, mkdtempSync, rmSync, writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {afterAll, beforeAll, describe, expect, it} from 'vitest';
-import {countTransitional, publicText, upstreamLeaks} from '../lib/public-text.ts';
-import {scanPublicOutputs} from './public-check.ts';
+import {publicData, publicText, upstreamLeaks} from '../lib/public-text.ts';
+import {authoredPages, distFiles, packageMetadataFiles, scanPublicOutputs} from './public-check.ts';
 
 let root: string;
 beforeAll(() => {
@@ -18,6 +18,11 @@ afterAll(() => {
   rmSync(root, {recursive: true, force: true});
 });
 
+// The old identifiers are assembled from parts so that `tools/codemods/d015-rename.ts` never rewrites these fixtures.
+const OLD_SCOPE = ['@tecton', 'astryx/'].join('-');
+const OLD_ID = ['@', 'astryx.'].join('');
+const OLD_VENDOR = ['/vendor/tecton', 'astryx/'].join('-');
+
 describe('upstreamLeaks', () => {
   it('finds the name in any case and context', () => {
     expect(upstreamLeaks('Powered by Astryx.')).toHaveLength(1);
@@ -25,11 +30,18 @@ describe('upstreamLeaks', () => {
     expect(upstreamLeaks('Tecton design system')).toEqual([]);
   });
 
-  it('tolerates and counts only the identifiers whose rename is scheduled', () => {
-    const text = 'import "@tecton-astryx/core/x.js"; id `@astryx.button.loading`; href="/vendor/tecton-astryx/a.css"';
-    expect(upstreamLeaks(text)).toEqual([]);
-    expect(countTransitional(text)).toBe(3);
-    expect(upstreamLeaks(`${text} and Astryx`)).toHaveLength(1);
+  it('is absolute: package scopes, message ids, vendor paths and class names all count', () => {
+    const text = `import "${OLD_SCOPE}core/x.js"; id \`${OLD_ID}button.loading\`; href="${OLD_VENDOR}a.css"`;
+    expect(upstreamLeaks(text)).toHaveLength(3);
+    expect(upstreamLeaks('import "@tecton-wc/core/x.js"; id `@tct.button.loading`; href="/vendor/tecton-wc/a.css"')).toEqual([]);
+  });
+});
+
+describe('publicData', () => {
+  it('sanitises every string inside objects and arrays', () => {
+    const out = publicData({notes: ['matching tecton-astryx components.ts `kbd`', 'data-astryx-media'], n: 3});
+    expect(JSON.stringify(out)).not.toMatch(/astryx/i);
+    expect(out.n).toBe(3);
   });
 });
 
@@ -38,7 +50,7 @@ describe('publicText on authored guide prose', () => {
     const text = [
       'Body.',
       'Adapted from Astryx docs topic `theme` (+ `theme.doc.dense`) (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md).',
-      '| `@astryxdesign/core/Button` | `x` | Astryx-retained | _Astryx default_ | `astryx-retained` |',
+      '| `@astryxdesign/core/Button` | `x` | Astryx-retained | _Astryx default_ | `retained-default` |',
     ].join('\n');
     const out = publicText(text);
     expect(upstreamLeaks(out)).toEqual([]);
@@ -48,17 +60,46 @@ describe('publicText on authored guide prose', () => {
   });
 });
 
+describe('what the gate scans', () => {
+  it('collects package metadata, dist text files and authored pages outside the guides', () => {
+    const packages = join(root, 'packages');
+    mkdirSync(join(packages, 'core', 'dist', 'sub'), {recursive: true});
+    writeFileSync(join(packages, 'core', 'package.json'), '{}');
+    writeFileSync(join(packages, 'core', 'dist', 'a.js'), 'x');
+    writeFileSync(join(packages, 'core', 'dist', 'sub', 'b.d.ts'), 'x');
+    writeFileSync(join(packages, 'core', 'dist', 'a.js.map'), 'x');
+    writeFileSync(join(packages, 'core', 'dist', 'font.woff2'), 'x');
+    expect(packageMetadataFiles(packages)).toEqual([join(packages, 'core', 'package.json')]);
+    expect(distFiles(packages).map((file) => file.slice(packages.length + 1))).toEqual([
+      'core/dist/a.js',
+      'core/dist/sub/b.d.ts',
+    ]);
+    const content = join(root, 'content');
+    for (const dir of ['guides', 'components', 'reference', 'legal']) mkdirSync(join(content, dir), {recursive: true});
+    for (const file of ['index.mdx', 'guides/g.mdx', 'components/c.mdx', 'reference/r.mdx', 'legal/n.mdx'])
+      writeFileSync(join(content, file), 'x');
+    expect(authoredPages(content).map((file) => file.slice(content.length + 1))).toEqual(['index.mdx', 'legal/n.mdx']);
+  });
+});
+
 describe('scanPublicOutputs and the CLI', () => {
-  it('passes clean output and reports guides without failing on them', () => {
+  it('passes clean output and clean guides', () => {
     const page = join(root, 'clean.mdx');
-    writeFileSync(page, '# Button\n\nUses `@tecton-astryx/components/button`.\n');
-    const guides = join(root, 'guides');
+    writeFileSync(page, '# Button\n\nUses `@tecton-wc/components/button`.\n');
+    const guides = join(root, 'clean-guides');
     mkdirSync(guides, {recursive: true});
-    writeFileSync(join(guides, 'g.mdx'), 'Astryx for React\n');
+    writeFileSync(join(guides, 'g.mdx'), 'Import `@tecton-wc/core/features.js`.\n');
     const scan = scanPublicOutputs([page], guides);
     expect(scan.leaks).toEqual([]);
-    expect(scan.transitional).toBe(1);
-    expect(scan.guides).toEqual([{file: join(guides, 'g.mdx'), count: 1}]);
+    expect(scan.guidesScanned).toBe(1);
+  });
+
+  it('fails on an authored guide that names the upstream system', () => {
+    const guides = join(root, 'dirty-guides');
+    mkdirSync(guides, {recursive: true});
+    writeFileSync(join(guides, 'g.mdx'), 'Astryx for React\n');
+    const scan = scanPublicOutputs([], guides);
+    expect(scan.leaks.map((leak) => leak.file)).toEqual([join(guides, 'g.mdx')]);
   });
 
   it('fails on a generated page, llms file or registry that names the upstream system', () => {
@@ -81,5 +122,6 @@ describe('scanPublicOutputs and the CLI', () => {
     expect(failed.status).toBe(1);
     expect(failed.stderr).toContain('FAILED');
     expect(run(good).status).toBe(0);
-  });
+    // Two node processes, each compiling the script: seconds on a loaded machine, not milliseconds.
+  }, 60_000);
 });

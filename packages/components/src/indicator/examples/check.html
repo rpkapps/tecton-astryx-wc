@@ -1,15 +1,15 @@
 <!-- title: Check indicator; description: The mark on a chosen option: a check when chosen, nothing (and no reserved space) when not.; a11y-exempt: color-contrast | The last row demonstrates a disabled option: its label is painted with the disabled text colour, and WCAG 1.4.3 exempts text of inactive user interface components. -->
-<div style="display: grid; gap: var(--spacing-1); max-inline-size: 20rem">
-  <div style="display: flex; align-items: center; gap: var(--spacing-2)">
+<tct-vstack gap="1" max-width="20rem">
+  <tct-hstack gap="2" v-align="center">
     <tct-check-indicator state="checked"></tct-check-indicator>
     <span>Chosen option</span>
-  </div>
-  <div style="display: flex; align-items: center; gap: var(--spacing-2)">
+  </tct-hstack>
+  <tct-hstack gap="2" v-align="center">
     <tct-check-indicator state="unchecked"></tct-check-indicator>
     <span>Unchosen option (the indicator takes no space)</span>
-  </div>
-  <div style="display: flex; align-items: center; gap: var(--spacing-2)">
+  </tct-hstack>
+  <tct-hstack gap="2" v-align="center">
     <tct-check-indicator state="checked" disabled></tct-check-indicator>
-    <span style="color: var(--color-text-disabled)">Disabled, chosen</span>
-  </div>
-</div>
+    <tct-text type="inherit" color="disabled">Disabled, chosen</tct-text>
+  </tct-hstack>
+</tct-vstack>

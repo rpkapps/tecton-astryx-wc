@@ -1,7 +1,7 @@
 import {html, type CSSResultGroup} from 'lit';
 import {property} from 'lit/decorators.js';
-import {announce} from '@tecton-astryx/core/a11y/announcer.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {announce} from '@tecton-wc/core/a11y/announcer.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import {TctIcon} from '../icon/tct-icon.js';
 import base from '../styles/base.styles.css';
 import motion from '../styles/motion.styles.css';
@@ -20,7 +20,7 @@ import styles from './tct-field-status.styles.css';
  * The `detached` variant leads with a status icon, so status is never conveyed by colour or position
  * alone (WCAG 1.4.1); the `attached` variant keeps its status glyph on the control (the control draws
  * it), so no icon is rendered here. The `tooltip` presentation of the field family renders no message
- * box at all, so `tct-field-status` does not implement it (Astryx spec FR7).
+ * box at all, so `tct-field-status` does not implement it (spec FR7).
  *
  * The message is the `message` attribute, or the element's own content when it needs markup.
  * Screen-reader announcement goes through the announcer regions rather than `role="alert"` on this
@@ -32,8 +32,8 @@ import styles from './tct-field-status.styles.css';
  * @tag tct-field-status
  * @upstream FieldStatus
  * @slot - The message, when it needs more than the plain `message` text.
- * @csspart status - The message box (Astryx target `astryx-field-status`).
- * @csspart icon - The leading status icon of the `detached` variant (Astryx target `astryx-field-status-icon`).
+ * @csspart status - The message box.
+ * @csspart icon - The leading status icon of the `detached` variant.
  * @cloakDisplay block
  */
 export class TctFieldStatus extends TctElement {

@@ -5,9 +5,11 @@ sidebar:
   order: 10
 ---
 
-The target is WCAG 2.2 level AA for the library's documented examples and supported compositions, plus at least the verified behaviour of upstream Astryx. Pattern-level behaviour follows the WAI-ARIA Authoring Practices. This is a design target and a test suite, not a certification: conformance depends on the page you build with the elements, and automated tools do not establish complete accessibility.
+import Example from '@/components/Example.astro';
 
-Where upstream has a known accessibility defect, it is not copied. Improvements over upstream are recorded on the element's page in its _Differences_ section.
+The target is WCAG 2.2 level AA for the library's documented examples and supported compositions. Pattern-level behaviour follows the WAI-ARIA Authoring Practices. This is a design target and a test suite, not a certification: conformance depends on the page you build with the elements, and automated tools do not establish complete accessibility.
+
+Where the React original has a known accessibility defect, it is not copied.
 
 ## What the elements do for you
 
@@ -15,8 +17,8 @@ Where upstream has a known accessibility defect, it is not copied. Improvements 
 
 - When an element _is_ a native control, it renders the native element inside its shadow root: a real `<button>`, `<a href>`, `<input>`, `<dialog>`. Links stay links.
 - When the host is the semantic node (a heading, a separator, a progress bar, a tab), the role and states are set through `ElementInternals`, not through `role` attributes on the host. That keeps them as defaults that you can still override, and it means the absence of a `role` attribute in the markup does not mean the absence of a role. Check the browser's accessibility-tree inspector when you are unsure.
-- Groups and composites carry the correct pattern: toolbars are toolbars, radio groups are radio groups, and `tct-tab-list` is a navigation landmark with `aria-current` by default and becomes an ARIA tablist only in its tablist mode (then only tabs are allowed inside).
-- Landmarks are native elements where the layout elements render them (`<header>`, `<main>`, `<nav>`, `<aside>`, `<section>`).
+- Groups and composites carry the correct pattern: toolbars are toolbars, radio groups are radio groups, and the planned `tct-tab-list` will be a navigation landmark with `aria-current` by default that becomes an ARIA tablist only in its tablist mode (then only tabs are allowed inside).
+- Landmarks will be native elements where the layout elements render them (`<header>`, `<main>`, `<nav>`, `<aside>`, `<section>`; the layout elements are _planned_).
 
 ### Names, descriptions and errors
 
@@ -84,11 +86,17 @@ The elements make accessible composition possible; the page still has to be asse
 
 **Names.** Every control needs an accessible name. Use the `label` on form controls, and always give an icon-only button its `label` (it becomes the accessible name and a tooltip). Do not use `placeholder` or `title` as a name. Do not reuse one name for controls that do different things in the same view (several "Edit" buttons need distinguishing text), or for links that go to different places.
 
+<Example
+  title="An icon-only button is named by its label"
+  description="The label is the accessible name, and the button shows it as a tooltip. Distinguish repeated actions, such as several Edit buttons, with different text."
+  source={`<tct-icon-button label="Delete row 3" icon="close"></tct-icon-button>`}
+/>
+
 **Content.** Give informative images a text alternative that says what they are for, and decorative images `alt=""`. Pair charts and other data visualisations with a data table or a description. Use semantic tables with captions and header cells, and never tables for layout. Write link text that makes sense out of context.
 
 **Colour.** Use the status tokens for their meaning, and add an icon or text. Do not use `--color-text-disabled` for content (it is not intended to reach 4.5:1). Do not paint your own text on the accent fill except with `--color-on-accent`.
 
-**Announcements.** Do not add your own live regions for element states; use the announcer (`announce()` in `@tecton-astryx/core/a11y/announcer.js`) for messages that are your own, and only for updates worth speaking. Do not announce "Loading…" states.
+**Announcements.** Do not add your own live regions for element states; use the announcer (`announce()` in `@tecton-wc/core/a11y/announcer.js`) for messages that are your own, and only for updates worth speaking. Do not announce "Loading…" states.
 
 **Forms.** Connect hints with the element's `description`, do not use a placeholder as a label, use valid `autocomplete` values, and let the validation timing described above do its job rather than adding your own alert. See [Forms](../forms/).
 
@@ -100,11 +108,11 @@ The elements make accessible composition possible; the page still has to be asse
 
 Every element is tested against these categories before it counts as done: default render and each state with axe (violations fail the build, and `incomplete` results are triaged), computed accessibility-tree assertions for role, name and state, every row of the keyboard table including right-to-left, forms, events, overlays (one Escape per layer, focus return), forced colours, reduced motion, RTL, and strings in `de-DE` and `ar-SA`.
 
-A manual assistive-technology matrix (NVDA with Chrome and Firefox, JAWS, VoiceOver on macOS and iOS, TalkBack) is run per release and recorded with exact versions (_planned_, hardening package WP-H). Until that matrix has results for an element, treat its screen-reader behaviour as designed, not verified.
+A manual assistive-technology matrix (NVDA with Chrome and Firefox, JAWS, VoiceOver on macOS and iOS, TalkBack) is run per release and recorded with exact versions (_planned_). Until that matrix has results for an element, treat its screen-reader behaviour as designed, not verified.
 
 ## Keyboard contracts by family
 
-Each element's page has the exact table. The families follow these contracts:
+Each element's page has the exact table. The families follow these contracts (some families, such as menus, tabs, selectors, calendars and tables, are _planned_ and have no element page yet):
 
 | Family                                          | Contract                                                                                                                                                                  |
 | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -120,8 +128,7 @@ Each element's page has the exact table. The families follow these contracts:
 | Chat, Markdown, code                            | No focus theft during streaming. Actions and attachments are operable. Composition never sends a message accidentally.                                                     |
 
 {/*
-Not a port of a single Astryx topic: upstream has no consumer accessibility guide (only per-component accessibility tabs). Sources: docs/ARCHITECTURE.md section 10, 6.5, 6.6, 9.7, 9.16;
-docs/plan/IMPLEMENTATION-PLAN.md section 7; packages/tokens/src/inputs/contrast.allow.json; packages/core/src/a11y/announcer.ts (verified).
+Sources: docs/ARCHITECTURE.md section 10, 6.5, 6.6, 9.7, 9.16; docs/plan/IMPLEMENTATION-PLAN.md section 7; packages/tokens/src/inputs/contrast.allow.json; packages/core/src/a11y/announcer.ts (verified).
 Guides: [mwg:accessibility] [mwg:accessible-web-components] [mwg:accessible-error-announcement] [mwg:validate-input-after-interaction] [mwg:ime-safe-enter-submit]
 [mwg:persistent-top-layer-ui] [mwg:dark-mode] [mwg:spinner]
 */}
