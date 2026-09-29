@@ -497,6 +497,85 @@
     justify-content: flex-end;
   }
 
+  :where(tct-table) :where(.tct-table-pager) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--spacing-1);
+  }
+
+  :where(tct-table) :where(.tct-table-pager-text) {
+    padding-inline: var(--spacing-2);
+    color: var(--color-text-secondary);
+    font-size: var(--text-supporting-size);
+  }
+
+  :where(tct-table) :where(.tct-table-pager-ellipsis) {
+    color: var(--color-text-secondary);
+  }
+
+  :where(tct-table) :where(.tct-table-pager-dots) {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  /* A dot is 24px square to hit (WCAG 2.5.8) and draws a small mark. */
+  :where(tct-table) :where(.tct-table-pager-dot) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--spacing-6);
+    block-size: var(--spacing-6);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  :where(tct-table) :where(.tct-table-pager-dot)::after {
+    content: '';
+    inline-size: 8px; /* design: the page indicator dot is a fixed 8px mark */
+    block-size: 8px;
+    border-radius: 50%;
+    background-color: var(--color-icon-secondary);
+  }
+
+  :where(tct-table) :where(.tct-table-pager-dot[aria-current='page'])::after {
+    background-color: var(--color-accent);
+  }
+
+  :where(tct-table) :where(.tct-table-pager-dot:focus-visible) {
+    outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+    outline-offset: calc(-1 * var(--focus-outline-width));
+    border-radius: var(--radius-inner);
+  }
+
+  :where(tct-table) :where(.tct-table-pager-size) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    margin-inline-end: var(--spacing-2);
+    color: var(--color-text-secondary);
+    font-size: var(--text-supporting-size);
+  }
+
+  :where(tct-table) :where(.tct-table-pager-size select) {
+    min-block-size: var(--spacing-6);
+    padding-block: var(--spacing-0-5);
+    padding-inline: var(--spacing-2);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-element);
+    background-color: transparent;
+    color: var(--color-text-primary);
+    font: inherit;
+  }
+
+  :where(tct-table) :where(.tct-table-pager-size select:focus-visible) {
+    outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+    outline-offset: var(--focus-outline-offset);
+  }
+
   /* ------------------------------------------------------------ plugin: column resize (handle) */
   :where(tct-table) :where(th.tct-table-resizable) {
     position: relative;

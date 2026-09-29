@@ -13,11 +13,13 @@ import {announce} from '@tecton-wc/core/a11y/announcer.js';
 import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
 import {observeResize} from '@tecton-wc/core/controllers/resize.js';
 import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {onLocaleData} from '@tecton-wc/core/i18n/registry.js';
 import {adoptLightDomStyles} from '@tecton-wc/core/styles/light-dom.js';
 import {TctElement} from '@tecton-wc/core/tct-element.js';
 import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import {isImeKeyEvent} from '@tecton-wc/core/utils/ime.js';
+import paginationMessages from '@tecton-wc/locales/en/pagination.js';
 import tableMessages from '@tecton-wc/locales/en/table.js';
 import treeMessages from '@tecton-wc/locales/en/tableTree.js';
 import expansionMessages from '@tecton-wc/locales/en/tableRowExpansion.js';
@@ -80,6 +82,7 @@ const MESSAGE_DEFAULTS: Record<string, Readonly<Record<string, string>>> = {
   tableTree: treeMessages,
   tableRowExpansion: expansionMessages,
   tableGroupedRows: groupedMessages,
+  pagination: paginationMessages,
 };
 
 let lightSheet: CSSResult | undefined;
@@ -324,6 +327,10 @@ export class TctTable<T extends Row = Row> extends TctElement {
     this.#childrenObserver.observe(this, {childList: true});
     this.addEventListener('contextmenu', this.#onContextMenu);
     this.addEventListener('keydown', this.#onKeyDown);
+    // Rows hold localised text (checkbox names, button labels): a catalog arriving late rebuilds them.
+    this.#stopLocale = onLocaleData(() => {
+      this.#rowRevision += 1;
+    });
     for (const plugin of this.#attached) plugin.attach?.(this.#pluginHost);
   }
 
@@ -332,6 +339,8 @@ export class TctTable<T extends Row = Row> extends TctElement {
     this.#childrenObserver?.disconnect();
     this.removeEventListener('contextmenu', this.#onContextMenu);
     this.removeEventListener('keydown', this.#onKeyDown);
+    this.#stopLocale?.();
+    this.#stopLocale = undefined;
     this.#releaseObservers();
     for (const plugin of this.#attached) plugin.detach?.(this.#pluginHost);
     this.#finishProgress();
@@ -382,6 +391,13 @@ export class TctTable<T extends Row = Row> extends TctElement {
     }
     this.#chunkStart = performance.now();
     this.#chunkFrom = this.#rendered;
+
+    // A different locale changes every localised string a row holds.
+    const localeKey = this.#locales.table!.locale;
+    if (localeKey !== this.#localeKey) {
+      this.#localeKey = localeKey;
+      this.#rowRevision += 1;
+    }
 
     this.#context.setValue({
       density: this.density,
@@ -441,6 +457,8 @@ export class TctTable<T extends Row = Row> extends TctElement {
   }
 
   #rowRevision = 0;
+  #stopLocale: (() => void) | undefined;
+  #localeKey = '';
 
   // --------------------------------------------------------------------------- progressive render
 

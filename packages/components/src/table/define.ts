@@ -47,6 +47,17 @@ export type {
   TableSortState,
 } from './plugins/sortable.js';
 export type {TableSortableStateOptions, TableSortComparator} from './plugins/sortable-state.js';
+export {TableSelectionController, TABLE_SELECTION_COLUMN_KEY} from './plugins/selection.js';
+export {TableSelectionStateController} from './plugins/selection-state.js';
+export type {TableSelectionConfig} from './plugins/selection.js';
+export type {TableSelectionStateOptions} from './plugins/selection-state.js';
+export {paginateData} from './plugins/paginate-data.js';
+export {
+  TablePaginationController,
+  TABLE_PAGINATION_VARIANTS,
+  pageWindow,
+} from './plugins/pagination.js';
+export type {TablePaginationConfig, TablePaginationVariant} from './plugins/pagination.js';
 export type {
   BodyCellRenderProps,
   BodyRowRenderProps,

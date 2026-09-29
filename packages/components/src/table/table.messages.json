@@ -1,5 +1,6 @@
 {
   "@tct.table.contextMenu.label": "Table actions",
+  "@tct.table.selection.columnHeader": "Row selection",
   "@tct.table.resize.handleLabel": "Resize column {label}",
   "@tct.table.resize.handleValueText": "{width, number} pixels wide",
   "@tct.table.sort.announceSorted": "Sorted by {label}, {direction}",
