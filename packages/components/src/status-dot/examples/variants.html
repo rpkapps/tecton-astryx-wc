@@ -1,18 +1,23 @@
 <!-- title: Variants with visible labels; description: A dot is a colour-only signal, so always pair it with a text label. -->
-<div style="display: flex; flex-direction: column; gap: var(--spacing-2)">
-  <div style="display: flex; align-items: center; gap: var(--spacing-2)">
-    <tct-status-dot variant="success" label="Online"></tct-status-dot> Online
-  </div>
-  <div style="display: flex; align-items: center; gap: var(--spacing-2)">
-    <tct-status-dot variant="warning" label="Degraded"></tct-status-dot> Degraded
-  </div>
-  <div style="display: flex; align-items: center; gap: var(--spacing-2)">
-    <tct-status-dot variant="error" label="Offline"></tct-status-dot> Offline
-  </div>
-  <div style="display: flex; align-items: center; gap: var(--spacing-2)">
-    <tct-status-dot variant="accent" label="Syncing"></tct-status-dot> Syncing
-  </div>
-  <div style="display: flex; align-items: center; gap: var(--spacing-2)">
-    <tct-status-dot variant="neutral" label="Idle"></tct-status-dot> Idle
-  </div>
-</div>
+<tct-vstack gap="2">
+  <tct-hstack gap="2" v-align="center">
+    <tct-status-dot variant="success" label="Online"></tct-status-dot>
+    <tct-text>Online</tct-text>
+  </tct-hstack>
+  <tct-hstack gap="2" v-align="center">
+    <tct-status-dot variant="warning" label="Degraded"></tct-status-dot>
+    <tct-text>Degraded</tct-text>
+  </tct-hstack>
+  <tct-hstack gap="2" v-align="center">
+    <tct-status-dot variant="error" label="Offline"></tct-status-dot>
+    <tct-text>Offline</tct-text>
+  </tct-hstack>
+  <tct-hstack gap="2" v-align="center">
+    <tct-status-dot variant="accent" label="Syncing"></tct-status-dot>
+    <tct-text>Syncing</tct-text>
+  </tct-hstack>
+  <tct-hstack gap="2" v-align="center">
+    <tct-status-dot variant="neutral" label="Idle"></tct-status-dot>
+    <tct-text>Idle</tct-text>
+  </tct-hstack>
+</tct-vstack>

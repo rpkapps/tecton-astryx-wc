@@ -12,6 +12,14 @@ import {
   nextFrame,
 } from '@tecton-wc/testing/index.js';
 import './define.js';
+// The examples build their media from these; the docs page defines them through the autoloader.
+import '../card/define.js';
+import '../center/define.js';
+import '../hstack/define.js';
+import '../link/define.js';
+import '../media-theme/define.js';
+import '../text/define.js';
+import '../vstack/define.js';
 import type {TctOverlay} from './tct-overlay.js';
 
 const examples = import.meta.glob<string>('./examples/*.html', {

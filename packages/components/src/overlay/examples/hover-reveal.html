@@ -1,5 +1,7 @@
 <!-- title: Reveal on hover; description: The default fill scrim, revealed on hover and on keyboard focus. Hidden content stays reachable by Tab and reveals when focus lands inside. -->
-<tct-overlay show-on="hover" style="inline-size: 320px; border-radius: var(--radius-container)">
-  <a href="#media" style="display: block; text-decoration: none"><div style="display: grid; place-items: center; inline-size: 320px; block-size: 180px; background: var(--color-on-light); color: var(--color-on-dark)">Media</div></a>
+<tct-overlay show-on="hover" style="inline-size: 320px">
+  <tct-card padding="0" height="180" style="--card-background-color: var(--color-on-light)">
+    <tct-media-theme mode="dark"><tct-center height="100%"><tct-link href="#media" color="primary">Media</tct-link></tct-center></tct-media-theme>
+  </tct-card>
   <div slot="content"><button type="button">Quick view</button></div>
 </tct-overlay>

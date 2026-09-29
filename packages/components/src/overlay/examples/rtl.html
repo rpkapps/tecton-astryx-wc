@@ -1,7 +1,9 @@
 <!-- title: Right-to-left; description: alignment is logical: end is the left side in RTL. -->
 <div dir="rtl" lang="ar">
   <tct-overlay show-on="always" alignment="end" style="inline-size: 320px">
-    <div style="display: grid; place-items: center; inline-size: 320px; block-size: 180px; background: var(--color-on-light); color: var(--color-on-dark)">Media</div>
+    <tct-card padding="0" height="180" style="--card-background-color: var(--color-on-light)">
+      <tct-media-theme mode="dark"><tct-center height="100%"><tct-text>Media</tct-text></tct-center></tct-media-theme>
+    </tct-card>
     <div slot="content"><button type="button">عرض سريع</button></div>
   </tct-overlay>
 </div>

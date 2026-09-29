@@ -1,6 +1,6 @@
 <!-- title: Scrim modes; description: A dark scrim (default) inverts the content to light ink, a light scrim to dark ink, and none paints no wash and no inversion: wrap your own with data-media-theme when the base needs it. -->
-<div style="display: flex; gap: var(--spacing-4); flex-wrap: wrap">
-  <tct-overlay scrim="dark" style="inline-size: 240px"><div style="block-size: 140px; background: var(--color-on-light)"></div><div slot="content"><span>Dark scrim</span></div></tct-overlay>
-  <tct-overlay scrim="light" style="inline-size: 240px"><div style="block-size: 140px; background: var(--color-on-light)"></div><div slot="content"><span>Light scrim</span></div></tct-overlay>
-  <tct-overlay scrim="none" style="inline-size: 240px"><div style="block-size: 140px; background: var(--color-on-light)"></div><div slot="content" data-media-theme="dark"><span>No scrim (own media theme)</span></div></tct-overlay>
-</div>
+<tct-hstack wrap="wrap" gap="4">
+  <tct-overlay scrim="dark" style="inline-size: 240px"><tct-card padding="0" height="140" style="--card-background-color: var(--color-on-light)"></tct-card><div slot="content"><span>Dark scrim</span></div></tct-overlay>
+  <tct-overlay scrim="light" style="inline-size: 240px"><tct-card padding="0" height="140" style="--card-background-color: var(--color-on-light)"></tct-card><div slot="content"><span>Light scrim</span></div></tct-overlay>
+  <tct-overlay scrim="none" style="inline-size: 240px"><tct-card padding="0" height="140" style="--card-background-color: var(--color-on-light)"></tct-card><div slot="content" data-media-theme="dark"><span>No scrim (own media theme)</span></div></tct-overlay>
+</tct-hstack>

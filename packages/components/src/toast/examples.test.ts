@@ -4,7 +4,8 @@
  * `reports/screenshots/toast/` (gitignored).
  *
  * Example scripts `import` from the package and from lit, which the docs bundler resolves; here the
- * imports are replaced by the same modules, already loaded.
+ * named imports are replaced by the same modules, already loaded, and side-effect imports
+ * (`import '@tecton-wc/components/link'`) are dropped because the test loads those families itself.
  */
 import {html} from 'lit';
 import {afterEach, describe, expect, it} from 'vitest';
@@ -17,6 +18,10 @@ import {
   nextFrame,
 } from '@tecton-wc/testing/index.js';
 import './define.js';
+// Rendered inside the toast's shadow root, where the autoloader does not look: the examples import
+// these for their side effect, and here they are loaded up front.
+import '../hstack/define.js';
+import '../link/define.js';
 import * as api from './toast.api.js';
 import {resetToastProviders} from './toaster.js';
 
@@ -43,10 +48,12 @@ async function mountExample(source: string, theme: 'light' | 'dark'): Promise<HT
   );
   (window as unknown as {__tctExample: unknown}).__tctExample = {...api, html};
   for (const code of scripts) {
-    const rewritten = code.replace(
-      /import\s+\{([^}]*)\}\s+from\s+'[^']*';?/g,
-      (_, names: string) => `const {${names}} = window.__tctExample;`,
-    );
+    const rewritten = code
+      .replace(
+        /import\s+\{([^}]*)\}\s+from\s+'[^']*';?/g,
+        (_, names: string) => `const {${names}} = window.__tctExample;`,
+      )
+      .replace(/import\s+'[^']*';?/g, '');
     const script = document.createElement('script');
     script.type = 'module';
     script.textContent = rewritten;
