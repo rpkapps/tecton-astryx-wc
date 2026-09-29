@@ -2,7 +2,7 @@
  * Family-private context (WORK-BREAKDOWN §1.6, A§9.4): what `tct-radio-list` tells its options. Upstream
  * `RadioListContext`, re-expressed for the Context Community Protocol.
  */
-import {createContext} from '@tecton-astryx/core/context/protocol.js';
+import {createContext} from '@tecton-wc/core/context/protocol.js';
 import type {RadioListSize} from './radio-list.types.js';
 
 export interface RadioListContextValue {

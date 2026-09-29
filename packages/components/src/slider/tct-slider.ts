@@ -2,12 +2,12 @@ import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateRe
 import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import sliderMessages from '@tecton-astryx/locales/en/slider.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import type {ElementSize} from '@tecton-astryx/core/context/keys.js';
-import type {FormValue} from '@tecton-astryx/core/mixins/form-control.js';
-import type {TctElementConstructor} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import sliderMessages from '@tecton-wc/locales/en/slider.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import type {ElementSize} from '@tecton-wc/core/context/keys.js';
+import type {FormValue} from '@tecton-wc/core/mixins/form-control.js';
+import type {TctElementConstructor} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import {oneOf} from '../field/field-utils.js';
 import {TctFieldControl} from '../text-area/tct-field-control.js';
 import base from '../styles/base.styles.css';
@@ -156,7 +156,10 @@ export class TctSlider extends TctFieldControl {
     this.value = [value];
   }
 
-  readonly #locale = new LocaleController(this, {namespace: 'slider', defaults: sliderMessages});
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'slider',
+    defaults: sliderMessages,
+  });
   #values: number[] | undefined;
   #drag: {index: number; start: number[]; pointerId: number} | null = null;
   /** The thumb pressed by a pointer (focused from script): it does not draw the keyboard ring. */

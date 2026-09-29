@@ -2,9 +2,9 @@ import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateRe
 import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import type {ElementSize} from '@tecton-astryx/core/context/keys.js';
-import {SizeController} from '@tecton-astryx/core/controllers/size.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import type {ElementSize} from '@tecton-wc/core/context/keys.js';
+import {SizeController} from '@tecton-wc/core/controllers/size.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import {
   FIELD_STATUS_VARIANTS,
   INPUT_STATUS_TYPES,
@@ -68,7 +68,7 @@ export abstract class TctBoxControl extends TctFieldControl {
   /** Field height: `sm`, `md` or `lg`. Explicit, then the enclosing size provider, then `md`. */
   @property({reflect: true}) size: FieldSize | undefined;
 
-  readonly #size = new SizeController<FieldSize>(this, {
+  readonly #size: SizeController<FieldSize> = new SizeController<FieldSize>(this, {
     explicit: () => (this.size ? oneOf(this.size, FIELD_SIZES, 'md') : undefined),
     fallback: 'md',
   });
@@ -239,7 +239,7 @@ export abstract class TctBoxControl extends TctFieldControl {
         part="status-button"
         data-status-type=${type}
         aria-label=${this.fieldLocale.t(
-          type === 'info' ? '@tct.field.infoDetails' : `@astryx.input.statusButton.${type}`,
+          type === 'info' ? '@tct.field.infoDetails' : `@tct.input.statusButton.${type}`,
         )}
       >
         ${icon}

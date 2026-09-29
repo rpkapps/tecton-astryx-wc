@@ -2,12 +2,12 @@ import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateRe
 import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
 import {live} from 'lit/directives/live.js';
-import checkboxListMessages from '@tecton-astryx/locales/en/checkboxList.js';
-import {ContextConsumer, ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {IdController} from '@tecton-astryx/core/utils/id.js';
+import checkboxListMessages from '@tecton-wc/locales/en/checkboxList.js';
+import {ContextConsumer, ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {IdController} from '@tecton-wc/core/utils/id.js';
 import {listContext} from '../list/list.context.js';
 import type {ListContextValue} from '../list/list.types.js';
 import {TctListItem} from '../list/tct-list-item.js';
@@ -94,18 +94,25 @@ export class TctCheckboxListItem extends TctElement {
   /** Shows the mixed state (standalone use); the user clicking it makes it checked. */
   @property({type: Boolean}) indeterminate = false;
 
-  readonly #list = new ContextConsumer(this, {context: checkboxListContext, subscribe: true});
+  readonly #list: ContextConsumer<typeof checkboxListContext> = new ContextConsumer<
+    typeof checkboxListContext
+  >(this, {context: checkboxListContext, subscribe: true});
   /** The enclosing list's density and dividers (a checkbox list or any `tct-list`). */
-  readonly #listStyle = new ContextConsumer(this, {context: listContext, subscribe: true});
+  readonly #listStyle: ContextConsumer<typeof listContext> = new ContextConsumer<
+    typeof listContext
+  >(this, {context: listContext, subscribe: true});
   /**
    * What the row inside this item sees: the list's density, but no dividers. The divider belongs to the
    * item's own wrapper, because the inner row is always the last (and only) row of this shadow root and
    * would never draw one.
    */
-  readonly #rowStyle = new ContextProvider(this, {context: listContext, initialValue: null});
-  readonly #slots = new SlotController(this, 'label', 'description', 'end');
-  readonly #ids = new IdController(this, 'tct-checkbox-list-item');
-  readonly #locale = new LocaleController(this, {
+  readonly #rowStyle: ContextProvider<typeof listContext> = new ContextProvider<typeof listContext>(
+    this,
+    {context: listContext, initialValue: null},
+  );
+  readonly #slots: SlotController = new SlotController(this, 'label', 'description', 'end');
+  readonly #ids: IdController = new IdController(this, 'tct-checkbox-list-item');
+  readonly #locale: LocaleController = new LocaleController(this, {
     namespace: 'checkboxList',
     defaults: checkboxListMessages,
   });
@@ -180,7 +187,7 @@ export class TctCheckboxListItem extends TctElement {
     // generic word, which `aria-labelledby` outranks. An explicit `aria-label` replaces both.
     const namesFromVisibleLabel = richLabel && !ariaLabel;
     const checkboxLabel =
-      ariaLabel ?? (richLabel ? this.#locale.t('@astryx.checkboxList.item.checkbox') : this.label);
+      ariaLabel ?? (richLabel ? this.#locale.t('@tct.checkboxList.item.checkbox') : this.label);
     const focusableDisabled = disabled && !this.disabled && (list?.hasDisabledMessage ?? false);
     const dividers = this.#listStyle.value?.hasDividers ?? false;
     return html`<div class="row" part="row" ?data-dividers=${dividers}>

@@ -2,11 +2,11 @@ import {html, nothing, type CSSResultGroup, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import type {ElementSize} from '@tecton-astryx/core/context/keys.js';
-import {requiredValidator} from '@tecton-astryx/core/forms/validators.js';
-import type {FormValue, Validator} from '@tecton-astryx/core/mixins/form-control.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import type {ElementSize} from '@tecton-wc/core/context/keys.js';
+import {requiredValidator} from '@tecton-wc/core/forms/validators.js';
+import type {FormValue, Validator} from '@tecton-wc/core/mixins/form-control.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import {oneOf} from '../field/field-utils.js';
 import {listContext} from '../list/list.context.js';
 import {LIST_DENSITIES, type ListContextValue, type ListDensity} from '../list/list.types.js';
@@ -89,7 +89,9 @@ export class TctCheckboxList extends TctFieldControl {
     this.#values = Array.isArray(value) ? value.map(String) : [];
   }
 
-  readonly #provider = new ContextProvider(this, {
+  readonly #provider: ContextProvider<typeof checkboxListContext> = new ContextProvider<
+    typeof checkboxListContext
+  >(this, {
     context: checkboxListContext,
     initialValue: null,
   });
@@ -98,7 +100,10 @@ export class TctCheckboxList extends TctFieldControl {
    * element's light-DOM children, so it answers their requests itself: a provider inside this shadow root
    * (a `tct-list`) would not be found by a slotted consumer that connected before it rendered.
    */
-  readonly #rows = new ContextProvider(this, {context: listContext, initialValue: null});
+  readonly #rows: ContextProvider<typeof listContext> = new ContextProvider<typeof listContext>(
+    this,
+    {context: listContext, initialValue: null},
+  );
   /** Options with a pending `changeAction`, by value. */
   #loadingValue: string | null = null;
 

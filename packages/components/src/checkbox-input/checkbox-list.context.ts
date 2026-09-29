@@ -2,7 +2,7 @@
  * Family-private context (WORK-BREAKDOWN §1.6, A§9.4): what `tct-checkbox-list` tells its items. Upstream
  * `CheckboxListContext`, re-expressed for the Context Community Protocol.
  */
-import {createContext} from '@tecton-astryx/core/context/protocol.js';
+import {createContext} from '@tecton-wc/core/context/protocol.js';
 
 export interface CheckboxListContextValue {
   /** The selected values (collection mode). */

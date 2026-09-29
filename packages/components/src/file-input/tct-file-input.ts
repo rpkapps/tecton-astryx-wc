@@ -1,15 +1,15 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
-import fileInputMessages from '@tecton-astryx/locales/en/fileInput.js';
-import inputMessages from '@tecton-astryx/locales/en/input.js';
-import {announce} from '@tecton-astryx/core/a11y/announcer.js';
-import {TctClearEvent} from '@tecton-astryx/core/events/tct-clear.js';
-import {requiredValidator} from '@tecton-astryx/core/forms/validators.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import type {FormValue, Validator} from '@tecton-astryx/core/mixins/form-control.js';
-import type {TctElementConstructor} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import fileInputMessages from '@tecton-wc/locales/en/fileInput.js';
+import inputMessages from '@tecton-wc/locales/en/input.js';
+import {announce} from '@tecton-wc/core/a11y/announcer.js';
+import {TctClearEvent} from '@tecton-wc/core/events/tct-clear.js';
+import {requiredValidator} from '@tecton-wc/core/forms/validators.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import type {FormValue, Validator} from '@tecton-wc/core/mixins/form-control.js';
+import type {TctElementConstructor} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import type {InputStatus} from '../field/field.types.js';
 import {oneOf, NESTED_INTERACTIVE} from '../field/field-utils.js';
 import {TctInputClearButton} from '../field/tct-input-clear-button.js';
@@ -129,7 +129,7 @@ export class TctFileInput extends TctBoxControl {
     }
   }
 
-  readonly #locale = new LocaleController(this, {
+  readonly #locale: LocaleController = new LocaleController(this, {
     namespace: 'fileInput',
     defaults: {...fileInputMessages, ...inputMessages},
   });
@@ -248,7 +248,7 @@ export class TctFileInput extends TctBoxControl {
     return html`${super.renderHelpers()}${
       this.#conveysRequired
         ? html`<span class="visually-hidden" id=${this.ids.id('required')}
-            >${this.#locale.t('@astryx.fileInput.required')}</span
+            >${this.#locale.t('@tct.fileInput.required')}</span
           >`
         : nothing
     }`;
@@ -258,7 +258,7 @@ export class TctFileInput extends TctBoxControl {
     return (
       this.placeholder ||
       this.#locale.t(
-        this.multiple ? '@astryx.fileInput.placeholderMultiple' : '@astryx.fileInput.placeholder',
+        this.multiple ? '@tct.fileInput.placeholderMultiple' : '@tct.fileInput.placeholder',
       )
     );
   }
@@ -270,7 +270,7 @@ export class TctFileInput extends TctBoxControl {
     const status = this.effectiveStatus;
     const mode = oneOf(this.mode, FILE_INPUT_MODES, 'input');
     const label = hasFiles
-      ? this.#locale.t('@astryx.fileInput.triggerWithFiles', {
+      ? this.#locale.t('@tct.fileInput.triggerWithFiles', {
           label: this.label,
           fileNames: this.#names,
         })
@@ -311,7 +311,7 @@ export class TctFileInput extends TctBoxControl {
       ${
         hasFiles && !disabled && !this.busy && !this.readonly
           ? html`<tct-input-clear-button
-              label=${this.#locale.t('@astryx.fileInput.clearLabel', {label: this.label})}
+              label=${this.#locale.t('@tct.fileInput.clearLabel', {label: this.label})}
               @click=${this.#onClear}
             ></tct-input-clear-button>`
           : nothing
@@ -331,7 +331,7 @@ export class TctFileInput extends TctBoxControl {
         color="secondary"
       ></tct-icon>
       <span class="text placeholder" part="text"
-        >${this.#dragDepth > 0 ? this.#locale.t('@astryx.fileInput.dropHint') : this.#placeholder}</span
+        >${this.#dragDepth > 0 ? this.#locale.t('@tct.fileInput.dropHint') : this.#placeholder}</span
       >`;
   }
 
@@ -447,7 +447,7 @@ export class TctFileInput extends TctBoxControl {
     if (this.accept) {
       valid = valid.filter((file) => {
         if (acceptsFile(file, this.accept)) return true;
-        errors.push(this.#locale.t('@astryx.fileInput.errorInvalidType', {fileName: file.name}));
+        errors.push(this.#locale.t('@tct.fileInput.errorInvalidType', {fileName: file.name}));
         return false;
       });
     }
@@ -456,7 +456,7 @@ export class TctFileInput extends TctBoxControl {
       valid = valid.filter((file) => {
         if (file.size <= limit) return true;
         errors.push(
-          this.#locale.t('@astryx.fileInput.errorMaxSize', {
+          this.#locale.t('@tct.fileInput.errorMaxSize', {
             fileName: file.name,
             maxSize: formatFileSize(limit, this.#locale.locale),
           }),
@@ -470,7 +470,7 @@ export class TctFileInput extends TctBoxControl {
       Number.isFinite(this.maxFiles) &&
       valid.length > this.maxFiles
     ) {
-      errors.push(this.#locale.t('@astryx.fileInput.errorMaxFiles', {maxFiles: this.maxFiles}));
+      errors.push(this.#locale.t('@tct.fileInput.errorMaxFiles', {maxFiles: this.maxFiles}));
       valid = valid.slice(0, this.maxFiles);
     }
     if (!this.multiple) valid = valid.slice(0, 1);
@@ -480,8 +480,8 @@ export class TctFileInput extends TctBoxControl {
     if (errors.length === 0 && valid.length > 0) {
       announce(
         valid.length === 1
-          ? this.#locale.t('@astryx.fileInput.fileSelected', {fileName: valid[0]?.name ?? ''})
-          : this.#locale.t('@astryx.fileInput.filesSelected', {count: valid.length}),
+          ? this.#locale.t('@tct.fileInput.fileSelected', {fileName: valid[0]?.name ?? ''})
+          : this.#locale.t('@tct.fileInput.filesSelected', {count: valid.length}),
         {element: this},
       );
     }

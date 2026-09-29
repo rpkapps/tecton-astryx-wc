@@ -1,21 +1,21 @@
 import {html, nothing, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
-import fieldMessages from '@tecton-astryx/locales/en/field.js';
-import inputMessages from '@tecton-astryx/locales/en/input.js';
-import {resolveIdRefs, setAriaElements} from '@tecton-astryx/core/controllers/aria-delegate.js';
-import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
+import fieldMessages from '@tecton-wc/locales/en/field.js';
+import inputMessages from '@tecton-wc/locales/en/input.js';
+import {resolveIdRefs, setAriaElements} from '@tecton-wc/core/controllers/aria-delegate.js';
+import {ContextConsumer} from '@tecton-wc/core/context/protocol.js';
 import {
   formLayoutContext,
   inputGroupContext,
   type ElementSize,
-} from '@tecton-astryx/core/context/keys.js';
-import {FieldChromeController} from '@tecton-astryx/core/controllers/field-chrome.js';
-import {features} from '@tecton-astryx/core/features.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {FormControlMixin} from '@tecton-astryx/core/mixins/form-control.js';
-import {TctElement, type TctElementConstructor} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
-import {IdController} from '@tecton-astryx/core/utils/id.js';
+} from '@tecton-wc/core/context/keys.js';
+import {FieldChromeController} from '@tecton-wc/core/controllers/field-chrome.js';
+import {features} from '@tecton-wc/core/features.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {FormControlMixin} from '@tecton-wc/core/mixins/form-control.js';
+import {TctElement, type TctElementConstructor} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
+import {IdController} from '@tecton-wc/core/utils/id.js';
 import {
   INPUT_STATUS_TYPES,
   type FieldStatusVariant,
@@ -119,19 +119,23 @@ export abstract class TctFieldControl extends FormControlMixin(TctElement) {
   @property({converter: lengthConverter}) width: number | string | undefined;
 
   /** Document-unique ids for the helper text and the group label. @internal */
-  protected readonly ids = new IdController(this, 'tct-field-control');
+  protected readonly ids: IdController = new IdController(this, 'tct-field-control');
   /** Field and input message catalogs (indicator, info tip, status buttons). @internal */
-  protected readonly fieldLocale = new LocaleController(this, {
+  protected readonly fieldLocale: LocaleController = new LocaleController(this, {
     namespace: 'field',
     defaults: {...fieldMessages, ...inputMessages},
   });
   /** The enclosing form layout (default optionality, horizontal labels). @internal */
-  protected readonly layoutContext = new ContextConsumer(this, {
+  protected readonly layoutContext: ContextConsumer<typeof formLayoutContext> = new ContextConsumer<
+    typeof formLayoutContext
+  >(this, {
     context: formLayoutContext,
     subscribe: true,
   });
   /** The enclosing input group, when there is one. @internal */
-  protected readonly groupContext = new ContextConsumer(this, {
+  protected readonly groupContext: ContextConsumer<typeof inputGroupContext> = new ContextConsumer<
+    typeof inputGroupContext
+  >(this, {
     context: inputGroupContext,
     subscribe: true,
   });

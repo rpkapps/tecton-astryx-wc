@@ -2,17 +2,17 @@ import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateRe
 import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
 import {live} from 'lit/directives/live.js';
-import inputMessages from '@tecton-astryx/locales/en/input.js';
-import numberInputMessages from '@tecton-astryx/locales/en/numberInput.js';
-import numberInputExtra from '@tecton-astryx/locales/en/number-input.js';
-import {announce} from '@tecton-astryx/core/a11y/announcer.js';
-import {TctClearEvent} from '@tecton-astryx/core/events/tct-clear.js';
-import {TctEnterEvent} from '@tecton-astryx/core/events/tct-enter.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import type {Validator} from '@tecton-astryx/core/mixins/form-control.js';
-import type {TctElementConstructor} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
-import {isImeKeyEvent} from '@tecton-astryx/core/utils/ime.js';
+import inputMessages from '@tecton-wc/locales/en/input.js';
+import numberInputMessages from '@tecton-wc/locales/en/numberInput.js';
+import numberInputExtra from '@tecton-wc/locales/en/number-input.js';
+import {announce} from '@tecton-wc/core/a11y/announcer.js';
+import {TctClearEvent} from '@tecton-wc/core/events/tct-clear.js';
+import {TctEnterEvent} from '@tecton-wc/core/events/tct-enter.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import type {Validator} from '@tecton-wc/core/mixins/form-control.js';
+import type {TctElementConstructor} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
+import {isImeKeyEvent} from '@tecton-wc/core/utils/ime.js';
 import type {InputStatus} from '../field/field.types.js';
 import {TctInputClearButton} from '../field/tct-input-clear-button.js';
 import {TctBoxControl} from '../text-area/tct-box-control.js';
@@ -154,7 +154,7 @@ export class TctNumberInput extends TctBoxControl {
     this.value = Number.isFinite(value) ? String(value) : '';
   }
 
-  readonly #locale = new LocaleController(this, {
+  readonly #locale: LocaleController = new LocaleController(this, {
     namespace: 'numberInput',
     defaults: {...numberInputMessages, ...numberInputExtra, ...inputMessages},
   });
@@ -400,7 +400,7 @@ export class TctNumberInput extends TctBoxControl {
       ${
         showClear
           ? html`<tct-input-clear-button
-              label=${this.#locale.t('@astryx.numberInput.clearLabel', {label: this.label})}
+              label=${this.#locale.t('@tct.numberInput.clearLabel', {label: this.label})}
               @click=${this.#onClear}
             ></tct-input-clear-button>`
           : nothing
@@ -422,7 +422,7 @@ export class TctNumberInput extends TctBoxControl {
         part="stepper-increment"
         tabindex="-1"
         ?disabled=${!canIncrement}
-        aria-label=${this.#locale.t('@astryx.numberInput.incrementLabel', {label: this.label})}
+        aria-label=${this.#locale.t('@tct.numberInput.incrementLabel', {label: this.label})}
         @pointerdown=${this.#keepFocus}
         @click=${() => {
           this.#stepFromButton(1);
@@ -436,7 +436,7 @@ export class TctNumberInput extends TctBoxControl {
         part="stepper-decrement"
         tabindex="-1"
         ?disabled=${!canDecrement}
-        aria-label=${this.#locale.t('@astryx.numberInput.decrementLabel', {label: this.label})}
+        aria-label=${this.#locale.t('@tct.numberInput.decrementLabel', {label: this.label})}
         @pointerdown=${this.#keepFocus}
         @click=${() => {
           this.#stepFromButton(-1);

@@ -1,4 +1,4 @@
-import {defineElement} from '@tecton-astryx/core/define.js';
+import {defineElement} from '@tecton-wc/core/define.js';
 import {TctCheckboxInput} from './tct-checkbox-input.js';
 import {TctCheckboxList} from './tct-checkbox-list.js';
 import {TctCheckboxListItem} from './tct-checkbox-list-item.js';

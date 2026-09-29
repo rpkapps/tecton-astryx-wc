@@ -2,12 +2,12 @@ import {html, type CSSResultGroup, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import type {ElementSize} from '@tecton-astryx/core/context/keys.js';
-import {RovingTabindexController} from '@tecton-astryx/core/controllers/roving-tabindex.js';
-import {requiredValidator} from '@tecton-astryx/core/forms/validators.js';
-import type {Validator} from '@tecton-astryx/core/mixins/form-control.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import type {ElementSize} from '@tecton-wc/core/context/keys.js';
+import {RovingTabindexController} from '@tecton-wc/core/controllers/roving-tabindex.js';
+import {requiredValidator} from '@tecton-wc/core/forms/validators.js';
+import type {Validator} from '@tecton-wc/core/mixins/form-control.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import {oneOf} from '../field/field-utils.js';
 import {TctFieldControl} from '../text-area/tct-field-control.js';
 import base from '../styles/base.styles.css';
@@ -86,27 +86,30 @@ export class TctRadioList extends TctFieldControl {
     this.redispatchChange();
   };
 
-  readonly #provider = new ContextProvider(this, {
+  readonly #provider: ContextProvider<typeof radioListContext> = new ContextProvider<
+    typeof radioListContext
+  >(this, {
     context: radioListContext,
     initialValue: this.#contextValue(),
   });
 
-  readonly #roving = new RovingTabindexController<TctRadioListItem>(this, {
-    items: () => this.#items(),
-    orientation: 'both',
-    wrap: true,
-    // Native radios have no Home/End.
-    homeEnd: false,
-    isDisabled: (item) => this.#itemDisabled(item),
-    focusTarget: (item) => item.focusTarget,
-    // Keys inside an option's own content (a link in `end`) belong to that content.
-    boundary: () => true,
-    // APG radio group: selection follows focus. Tab into the group stays a pure focus move.
-    activateOnFocus: () => !this.readonly && !this.isDisabled,
-    onActivate: (item) => {
-      this.#select(item);
-    },
-  });
+  readonly #roving: RovingTabindexController<TctRadioListItem> =
+    new RovingTabindexController<TctRadioListItem>(this, {
+      items: () => this.#items(),
+      orientation: 'both',
+      wrap: true,
+      // Native radios have no Home/End.
+      homeEnd: false,
+      isDisabled: (item) => this.#itemDisabled(item),
+      focusTarget: (item) => item.focusTarget,
+      // Keys inside an option's own content (a link in `end`) belong to that content.
+      boundary: () => true,
+      // APG radio group: selection follows focus. Tab into the group stays a pure focus move.
+      activateOnFocus: () => !this.readonly && !this.isDisabled,
+      onActivate: (item) => {
+        this.#select(item);
+      },
+    });
 
   // ------------------------------------------------------------------------------ mixin hooks
 

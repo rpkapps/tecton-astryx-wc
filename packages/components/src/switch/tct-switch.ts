@@ -1,10 +1,10 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
-import spinnerMessages from '@tecton-astryx/locales/en/spinner.js';
-import {announce} from '@tecton-astryx/core/a11y/announcer.js';
-import {indicatorScope} from '@tecton-astryx/core/indicators/registry.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import spinnerMessages from '@tecton-wc/locales/en/spinner.js';
+import {announce} from '@tecton-wc/core/a11y/announcer.js';
+import {indicatorScope} from '@tecton-wc/core/indicators/registry.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import {oneOf} from '../field/field-utils.js';
 import {TctToggleControl} from '../checkbox-input/tct-toggle-control.js';
 import toggleStyles from '../checkbox-input/tct-toggle-control.styles.css';
@@ -80,7 +80,7 @@ export class TctSwitch extends TctToggleControl {
   /** `hug` keeps track and label together (default); `spread` pushes them to opposite ends of the row. */
   @property({reflect: true, attribute: 'label-spacing'}) labelSpacing: SwitchLabelSpacing = 'hug';
 
-  readonly #locale = new LocaleController(this, {
+  readonly #locale: LocaleController = new LocaleController(this, {
     namespace: 'spinner',
     defaults: spinnerMessages,
   });
@@ -114,7 +114,7 @@ export class TctSwitch extends TctToggleControl {
     super.updated(changed);
     // A busy switch says so once, politely (a live region created together with its text is not spoken).
     if (this.busy && !this.#announcedBusy) {
-      announce(this.#locale.t('@astryx.spinner.loading'), {politeness: 'polite', element: this});
+      announce(this.#locale.t('@tct.spinner.loading'), {politeness: 'polite', element: this});
     }
     this.#announcedBusy = this.busy;
   }

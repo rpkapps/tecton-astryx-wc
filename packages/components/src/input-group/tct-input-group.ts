@@ -1,25 +1,21 @@
 import {html, nothing, unsafeCSS, type CSSResultGroup, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
-import fieldMessages from '@tecton-astryx/locales/en/field.js';
-import {
-  formLayoutContext,
-  inputGroupContext,
-  sizeContext,
-} from '@tecton-astryx/core/context/keys.js';
-import type {InputGroupContextValue} from '@tecton-astryx/core/context/keys.js';
-import {ContextConsumer, ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {FieldChromeController} from '@tecton-astryx/core/controllers/field-chrome.js';
-import {SizeController} from '@tecton-astryx/core/controllers/size.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
+import fieldMessages from '@tecton-wc/locales/en/field.js';
+import {formLayoutContext, inputGroupContext, sizeContext} from '@tecton-wc/core/context/keys.js';
+import type {InputGroupContextValue} from '@tecton-wc/core/context/keys.js';
+import {ContextConsumer, ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {FieldChromeController} from '@tecton-wc/core/controllers/field-chrome.js';
+import {SizeController} from '@tecton-wc/core/controllers/size.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
 import {
   observeControl,
   unobserveControl,
   type ControlObserver,
-} from '@tecton-astryx/core/mixins/form-control.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {adoptLightDomStyles} from '@tecton-astryx/core/styles/light-dom.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+} from '@tecton-wc/core/mixins/form-control.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {adoptLightDomStyles} from '@tecton-wc/core/styles/light-dom.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import {INPUT_STATUS_TYPES, type InputStatus, type InputStatusType} from '../field/field.types.js';
 import {renderLabelTip} from '../field/field-label-tip.js';
 import {oneOf} from '../field/field-utils.js';
@@ -115,14 +111,23 @@ export class TctInputGroup extends TctElement {
   /** Text of an info tip shown as a small icon button after the label. */
   @property({attribute: 'label-tooltip'}) labelTooltip = '';
 
-  readonly #size = new SizeController<InputGroupSize>(this, {
+  readonly #size: SizeController<InputGroupSize> = new SizeController<InputGroupSize>(this, {
     explicit: () => (this.size ? oneOf(this.size, INPUT_GROUP_SIZES, 'md') : undefined),
     fallback: 'md',
   });
-  readonly #layout = new ContextConsumer(this, {context: formLayoutContext, subscribe: true});
-  readonly #locale = new LocaleController(this, {namespace: 'field', defaults: fieldMessages});
-  readonly #sizeProvider = new ContextProvider(this, {context: sizeContext, initialValue: null});
-  readonly #groupProvider = new ContextProvider(this, {
+  readonly #layout: ContextConsumer<typeof formLayoutContext> = new ContextConsumer<
+    typeof formLayoutContext
+  >(this, {context: formLayoutContext, subscribe: true});
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'field',
+    defaults: fieldMessages,
+  });
+  readonly #sizeProvider: ContextProvider<typeof sizeContext> = new ContextProvider<
+    typeof sizeContext
+  >(this, {context: sizeContext, initialValue: null});
+  readonly #groupProvider: ContextProvider<typeof inputGroupContext> = new ContextProvider<
+    typeof inputGroupContext
+  >(this, {
     context: inputGroupContext,
     initialValue: null,
   });

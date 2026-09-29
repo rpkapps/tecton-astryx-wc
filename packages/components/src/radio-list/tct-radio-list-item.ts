@@ -1,11 +1,11 @@
 import {html, nothing, type CSSResultGroup, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
-import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {indicatorScope} from '@tecton-astryx/core/indicators/registry.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {IdController} from '@tecton-astryx/core/utils/id.js';
+import {ContextConsumer} from '@tecton-wc/core/context/protocol.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {indicatorScope} from '@tecton-wc/core/indicators/registry.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {IdController} from '@tecton-wc/core/utils/id.js';
 import {TctRadioIndicator} from '../indicator/tct-radio-indicator.js';
 import {TctItem} from '../item/tct-item.js';
 import base from '../styles/base.styles.css';
@@ -59,9 +59,17 @@ export class TctRadioListItem extends TctElement {
   /** Disables this option only. The whole list can be disabled too. */
   @property({type: Boolean, reflect: true}) disabled = false;
 
-  readonly #list = new ContextConsumer(this, {context: radioListContext, subscribe: true});
-  readonly #slots = new SlotController(this, 'label', 'description', 'start', 'end');
-  readonly #ids = new IdController(this, 'tct-radio-list-item');
+  readonly #list: ContextConsumer<typeof radioListContext> = new ContextConsumer<
+    typeof radioListContext
+  >(this, {context: radioListContext, subscribe: true});
+  readonly #slots: SlotController = new SlotController(
+    this,
+    'label',
+    'description',
+    'start',
+    'end',
+  );
+  readonly #ids: IdController = new IdController(this, 'tct-radio-list-item');
 
   /** Whether this option is the list's value (false outside a list, and for an option without a value). */
   get checked(): boolean {

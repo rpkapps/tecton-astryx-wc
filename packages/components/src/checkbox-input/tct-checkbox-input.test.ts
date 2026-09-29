@@ -6,19 +6,19 @@
 import {html} from 'lit';
 import {userEvent} from 'vitest/browser';
 import {describe, expect, it} from 'vitest';
-import {getAnnouncerRegions} from '@tecton-astryx/core/a11y/announcer.js';
-import {overrideFeature} from '@tecton-astryx/core/features.js';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
-import {axNode, expectAccessible} from '@tecton-astryx/testing/a11y.js';
-import {emulateMedia} from '@tecton-astryx/testing/emulate.js';
-import {recordEvents} from '@tecton-astryx/testing/events.js';
-import {deepQueryAll, fixture} from '@tecton-astryx/testing/fixture.js';
-import {formHarness, hasCustomState} from '@tecton-astryx/testing/forms.js';
-import {pressKeys} from '@tecton-astryx/testing/keyboard.js';
-import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
-import {runFormControlSuite} from '@tecton-astryx/testing/suites/form-control.js';
-import {isChromium, isTier2} from '@tecton-astryx/testing/tier.js';
-import {nextFrame, waitUntil} from '@tecton-astryx/testing/timing.js';
+import {getAnnouncerRegions} from '@tecton-wc/core/a11y/announcer.js';
+import {overrideFeature} from '@tecton-wc/core/features.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
+import {axNode, expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {emulateMedia} from '@tecton-wc/testing/emulate.js';
+import {recordEvents} from '@tecton-wc/testing/events.js';
+import {deepQueryAll, fixture} from '@tecton-wc/testing/fixture.js';
+import {formHarness, hasCustomState} from '@tecton-wc/testing/forms.js';
+import {pressKeys} from '@tecton-wc/testing/keyboard.js';
+import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
+import {runFormControlSuite} from '@tecton-wc/testing/suites/form-control.js';
+import {isChromium, isTier2} from '@tecton-wc/testing/tier.js';
+import {nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
 import '../field/define.js';
 import '../tooltip/define.js';
 import './define.js';
@@ -478,11 +478,9 @@ describe('tct-checkbox-input: disabled, disabled reason, loading and changeActio
 describe('tct-checkbox-input: appearance', () => {
   it('draws the Tecton indicator states through the shared checkbox indicator and a 2px focus ring on the box', async () => {
     const checkbox = await make('label="Terms"');
-    const wrapper = checkbox.parentElement!;
-    const before = wrapper.querySelector<HTMLElement>('tct-checkbox-input')!;
-    before.focus();
-    await pressKeys('Shift+Tab');
-    await pressKeys('Tab');
+    // A key press first, so the script focus that follows counts as keyboard focus (`:focus-visible`).
+    await pressKeys('Shift');
+    checkbox.focus();
     await waitUntil(
       () => getComputedStyle(part(checkbox, 'control')!).outlineStyle === 'solid',
       'focus ring',

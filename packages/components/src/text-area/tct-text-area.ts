@@ -3,14 +3,14 @@ import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
 import {live} from 'lit/directives/live.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import textAreaMessages from '@tecton-astryx/locales/en/textArea.js';
-import {announce} from '@tecton-astryx/core/a11y/announcer.js';
-import {observeResize} from '@tecton-astryx/core/controllers/resize.js';
-import {features} from '@tecton-astryx/core/features.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import type {Validator} from '@tecton-astryx/core/mixins/form-control.js';
-import type {FormValue} from '@tecton-astryx/core/mixins/form-control.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import textAreaMessages from '@tecton-wc/locales/en/textArea.js';
+import {announce} from '@tecton-wc/core/a11y/announcer.js';
+import {observeResize} from '@tecton-wc/core/controllers/resize.js';
+import {features} from '@tecton-wc/core/features.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import type {Validator} from '@tecton-wc/core/mixins/form-control.js';
+import type {FormValue} from '@tecton-wc/core/mixins/form-control.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import type {InputStatus} from '../field/field.types.js';
 import {TctBoxControl} from './tct-box-control.js';
 import {
@@ -124,7 +124,7 @@ export class TctTextArea extends TctBoxControl {
     else super.value = value;
   }
 
-  readonly #locale = new LocaleController(this, {
+  readonly #locale: LocaleController = new LocaleController(this, {
     namespace: 'textArea',
     defaults: textAreaMessages,
   });
@@ -168,7 +168,7 @@ export class TctTextArea extends TctBoxControl {
         return over > 0
           ? {
               flags: {tooLong: true},
-              message: element.#locale.t('@astryx.textArea.charactersOverLimit', {count: over}),
+              message: element.#locale.t('@tct.textArea.charactersOverLimit', {count: over}),
             }
           : null;
       },
@@ -418,12 +418,12 @@ export class TctTextArea extends TctBoxControl {
     if (zone === this.#zone) return;
     this.#zone = zone;
     if (zone === 'over') {
-      announce(this.#locale.t('@astryx.textArea.charactersOverLimit', {count: length - max}), {
+      announce(this.#locale.t('@tct.textArea.charactersOverLimit', {count: length - max}), {
         politeness: 'assertive',
         element: this,
       });
     } else if (zone === 'near') {
-      announce(this.#locale.t('@astryx.textArea.charactersRemaining', {count: max - length}), {
+      announce(this.#locale.t('@tct.textArea.charactersRemaining', {count: max - length}), {
         politeness: 'polite',
         element: this,
       });

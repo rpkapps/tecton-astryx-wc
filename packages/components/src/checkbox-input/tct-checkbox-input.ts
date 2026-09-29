@@ -1,6 +1,6 @@
 import {html, nothing, type CSSResultGroup, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
-import {indicatorScope} from '@tecton-astryx/core/indicators/registry.js';
+import {indicatorScope} from '@tecton-wc/core/indicators/registry.js';
 import {TctToggleControl} from './tct-toggle-control.js';
 import {TctCheckboxIndicator} from '../indicator/tct-checkbox-indicator.js';
 import base from '../styles/base.styles.css';
