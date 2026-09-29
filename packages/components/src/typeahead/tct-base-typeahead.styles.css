@@ -1,0 +1,69 @@
+/*
+ * tct-base-typeahead: a bare input with no box, border or focus treatment (the caller draws those, as
+ * upstream). The host is a flex item that takes the free room of the caller's row; the input is
+ * transparent and borderless. The result popup is the shared typeahead-popup sheet.
+ * [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: block;
+    flex: 1;
+    min-inline-size: 60px /* design: upstream input minimum width */;
+  }
+
+  .base {
+    display: flex;
+    align-items: center;
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  .input {
+    display: block;
+    flex: 1;
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    color: var(--color-text-primary);
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+    background-color: transparent;
+    border: 0;
+    outline: none;
+  }
+
+  /*
+   * The 16px floor is iOS-only: iOS Safari zooms the page when a focused control sits under 16px, and
+   * only iOS WebKit implements -webkit-touch-callout to key the coarse-pointer floor to it.
+   */
+  @media (pointer: coarse) {
+    @supports (-webkit-touch-callout: none) {
+      .input {
+        font-size: max(1rem, var(--text-body-size));
+      }
+    }
+  }
+
+  .input::placeholder {
+    color: var(--tecton-color-input-outlined-text-placeholder);
+    opacity: 1;
+  }
+
+  /* In flow, so it reserves its own width and the text never runs under it. */
+  .loading {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-1);
+  }
+}
+
+@layer state {
+  .input:disabled,
+  .input[aria-disabled='true'] {
+    color: var(--tecton-color-disabled-outline-text);
+    cursor: default;
+  }
+}

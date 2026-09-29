@@ -1,0 +1,34 @@
+<!-- title: In a form; description: The field submits the id of the chosen item under its name, is required when required is set (a chosen item, whatever is typed), and returns to defaultItem on reset. -->
+<tct-vstack max-width="480">
+  <form id="in-form-root">
+    <tct-form-layout>
+      <tct-typeahead label="Favourite fruit" name="fruit" required description="Choose one from the list."></tct-typeahead>
+      <tct-hstack gap="2">
+        <tct-button type="submit" variant="primary">Save</tct-button>
+        <tct-button type="reset">Reset</tct-button>
+      </tct-hstack>
+      <output></output>
+    </tct-form-layout>
+  </form>
+</tct-vstack>
+<script type="module">
+  import {createStaticSource} from '@tecton-wc/components/typeahead/utils.js';
+
+  const fruits = [
+    {id: 'apple', label: 'Apple'},
+    {id: 'apricot', label: 'Apricot'},
+    {id: 'banana', label: 'Banana'},
+    {id: 'blueberry', label: 'Blueberry'},
+    {id: 'cherry', label: 'Cherry'},
+    {id: 'grape', label: 'Grape'},
+    {id: 'lemon', label: 'Lemon'},
+    {id: 'mango', label: 'Mango'},
+    {id: 'peach', label: 'Peach'},
+  ];
+  const form = document.getElementById('in-form-root');
+  form.querySelector('tct-typeahead').searchSource = createStaticSource(fruits);
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    form.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(form, event.submitter)));
+  });
+</script>

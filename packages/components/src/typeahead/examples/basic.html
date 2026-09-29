@@ -1,0 +1,21 @@
+<!-- title: Basic; description: A search field for choosing one item. Results appear as you type; ArrowDown and ArrowUp move the highlight, Enter chooses, Escape closes. The chosen item shows as a token; press it to edit. -->
+<tct-vstack id="basic-root" max-width="360">
+  <tct-typeahead label="Fruit" description="Type to search." placeholder="Search fruit"></tct-typeahead>
+</tct-vstack>
+<script type="module">
+  import {createStaticSource} from '@tecton-wc/components/typeahead/utils.js';
+
+  const fruits = [
+    {id: 'apple', label: 'Apple'},
+    {id: 'apricot', label: 'Apricot'},
+    {id: 'banana', label: 'Banana'},
+    {id: 'blueberry', label: 'Blueberry'},
+    {id: 'cherry', label: 'Cherry'},
+    {id: 'grape', label: 'Grape'},
+    {id: 'lemon', label: 'Lemon'},
+    {id: 'mango', label: 'Mango'},
+    {id: 'peach', label: 'Peach'},
+  ];
+  const field = document.querySelector('#basic-root tct-typeahead');
+  field.searchSource = createStaticSource(fruits);
+</script>

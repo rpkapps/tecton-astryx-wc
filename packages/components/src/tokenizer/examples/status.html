@@ -1,0 +1,25 @@
+<!-- title: Status; description: status-type and status-message show a message under the field (attached), beside it (detached), or behind a focusable status button (tooltip). required means at least one token. -->
+<tct-vstack id="status-root" max-width="420" gap="4">
+  <tct-tokenizer label="Teams" required status-type="error" status-message="Choose at least one team."></tct-tokenizer>
+  <tct-tokenizer label="Other teams" status-type="warning" status-message="Legal reviews every addition." status-variant="detached"></tct-tokenizer>
+  <tct-tokenizer label="More teams" status-type="success" status-message="Looks good." status-variant="tooltip"></tct-tokenizer>
+</tct-vstack>
+<script type="module">
+  import {createStaticSource} from '@tecton-wc/components/typeahead/utils.js';
+
+  const teams = [
+    {id: 'design', label: 'Design'},
+    {id: 'engineering', label: 'Engineering'},
+    {id: 'marketing', label: 'Marketing'},
+    {id: 'sales', label: 'Sales'},
+    {id: 'support', label: 'Support'},
+    {id: 'legal', label: 'Legal'},
+    {id: 'finance', label: 'Finance'},
+    {id: 'people', label: 'People'},
+  ];
+  for (const field of document.querySelectorAll('#status-root tct-tokenizer')) {
+    field.searchSource = createStaticSource(teams);
+  }
+  document.querySelectorAll('#status-root tct-tokenizer')[1].items = [teams[4]];
+  document.querySelectorAll('#status-root tct-tokenizer')[2].items = [teams[0]];
+</script>

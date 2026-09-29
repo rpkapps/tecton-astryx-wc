@@ -1,0 +1,7 @@
+<!-- title: Icon and end content; description: The icon slot goes before the label and the end slot after it, before the remove button. label-hidden keeps the label as the accessible name of an icon-only token. -->
+<tct-hstack wrap="wrap" gap="2" v-align="center">
+  <tct-token label="Deadline" color="blue"><tct-icon slot="icon" name="calendar"></tct-icon></tct-token>
+  <tct-token label="Reviewed" color="green"><tct-icon slot="icon" name="check"></tct-icon></tct-token>
+  <tct-token label="Filters" removable><tct-icon slot="icon" name="funnel"></tct-icon><tct-text slot="end" type="supporting" color="secondary">3</tct-text></tct-token>
+  <tct-token label="Verified" color="green" label-hidden><tct-icon slot="icon" name="check"></tct-icon></tct-token>
+</tct-hstack>

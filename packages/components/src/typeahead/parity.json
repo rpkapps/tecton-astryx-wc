@@ -1,0 +1,703 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "typeahead",
+  "workPackage": "WP-12",
+  "entries": {
+    "core.typeahead": {
+      "tag": "tct-typeahead",
+      "status": "implemented",
+      "upstream": {
+        "name": "Typeahead",
+        "path": "packages/core/src/Typeahead/Typeahead.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute"
+        },
+        {
+          "upstream": "searchSource",
+          "kind": "prop",
+          "target": "searchSource",
+          "as": "property",
+          "notes": "`{search(query), bootstrap(), cancel?()}`; synchronous and asynchronous sources both work. Replacing the source discards the results of the old one."
+        },
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "item",
+          "as": "property",
+          "notes": "The chosen item (`{id, label, element?, auxiliaryData?}`) or null. Uncontrolled: `defaultItem` (or the `value` attribute, an id) is where form reset returns to. The `value` property is the item's id, which is what the form submits. Writing either fires no events."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "tct-selection-change",
+          "as": "event",
+          "notes": "Cancelable, fires before the item changes (`action` is `select` or `clear`, `item` the new item or null); the native `input` and `change` follow once, after the change."
+        },
+        {
+          "upstream": "placeholder",
+          "kind": "prop",
+          "target": "placeholder",
+          "as": "attribute",
+          "notes": "Unset shows the localised \"Search…\"; an empty string shows none."
+        },
+        {
+          "upstream": "hasEntriesOnFocus",
+          "kind": "prop",
+          "target": "entries-on-focus",
+          "as": "attribute",
+          "default": false
+        },
+        {
+          "upstream": "hasClear",
+          "kind": "prop",
+          "target": "no-clear",
+          "as": "attribute",
+          "default": false,
+          "notes": "Inverted: upstream defaults to a clear button, so the boolean attribute removes it (a true-by-default boolean attribute cannot be switched off in HTML)."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Also through <fieldset disabled>."
+        },
+        {
+          "upstream": "disabledMessage",
+          "kind": "prop",
+          "target": "disabled-message",
+          "as": "attribute",
+          "notes": "A tooltip on a disabled field that says why; the input stays focusable."
+        },
+        {
+          "upstream": "maxMenuItems",
+          "kind": "prop",
+          "target": "max-menu-items",
+          "as": "attribute",
+          "default": 10
+        },
+        {
+          "upstream": "minQueryLength",
+          "kind": "prop",
+          "target": "min-query-length",
+          "as": "attribute",
+          "default": 1,
+          "notes": "In characters as a person counts them (an emoji is one). Below it no search runs and the menu stays closed."
+        },
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "target": "status",
+          "as": "property",
+          "notes": "Object `{type, message?}`, or the `status-type` and `status-message` attributes."
+        },
+        {
+          "upstream": "statusVariant",
+          "kind": "prop",
+          "target": "status-variant",
+          "as": "attribute",
+          "default": "attached"
+        },
+        {
+          "upstream": "renderItem",
+          "kind": "prop",
+          "target": "renderItem",
+          "as": "property",
+          "notes": "`(item) => template | node | text` for the content of a result row; never HTML. Default: `tct-typeahead-item`. An `item.element` takes priority."
+        },
+        {
+          "upstream": "isLabelHidden",
+          "kind": "prop",
+          "target": "label-hidden",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "description",
+          "kind": "prop",
+          "target": "description",
+          "as": "attribute"
+        },
+        {
+          "upstream": "isRequired",
+          "kind": "prop",
+          "target": "required",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "A validity constraint (valueMissing: \"choose an item\"), `aria-required` and a Required indicator."
+        },
+        {
+          "upstream": "isOptional",
+          "kind": "prop",
+          "target": "optional",
+          "as": "attribute"
+        },
+        {
+          "upstream": "labelTooltip",
+          "kind": "prop",
+          "target": "label-tooltip",
+          "as": "attribute"
+        },
+        {
+          "upstream": "emptySearchResultsText",
+          "kind": "prop",
+          "target": "empty-search-results-text",
+          "as": "attribute",
+          "notes": "Default: the localised \"No results found\"."
+        },
+        {
+          "upstream": "hasAutoFocus",
+          "kind": "prop",
+          "target": "autofocus",
+          "as": "attribute",
+          "notes": "The global `autofocus` attribute; the element focuses its input once it has rendered."
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md",
+          "notes": "Unset takes the nearest size provider, else md."
+        },
+        {
+          "upstream": "debounceMs",
+          "kind": "prop",
+          "target": "debounceMs",
+          "as": "property",
+          "default": 150,
+          "notes": "The `debounce-ms` attribute. `0` searches synchronously."
+        },
+        {
+          "upstream": "onChangeQuery",
+          "kind": "event",
+          "target": "input",
+          "as": "native-event",
+          "notes": "The native `input` event fires on every edit of the query; read the text from the `query` property."
+        },
+        {
+          "upstream": "onOpenChange",
+          "kind": "event",
+          "target": "tct-open-change",
+          "as": "event",
+          "notes": "Cancelable intent event before the popup opens or closes because of the user or a search result; `tct-after-open-change` once the change settled (every actual change)."
+        },
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "target": "width",
+          "as": "attribute",
+          "notes": "A number is px, a string a CSS length. Not reflected."
+        },
+        {
+          "upstream": "startIcon",
+          "kind": "slot",
+          "target": "start-icon",
+          "as": "attribute",
+          "notes": "An icon name; the `start` slot takes your own content (an avatar, a glyph) instead."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(field), ::part(input), ::part(popup) and the tokens."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "createStaticSource",
+          "target": "createStaticSource",
+          "as": "module-function",
+          "notes": "`@tecton-wc/components/typeahead/create-static-source.js` (and the server-safe `typeahead/utils.js` subpath, which also carries `getItemGroup`/`groupItems` and the types): a case-insensitive substring source over an array, with an optional `keywords` extractor."
+        },
+        {
+          "upstream": "useAnnounce",
+          "target": "announce",
+          "as": "module-function",
+          "notes": "`@tecton-wc/core/a11y/announcer.js`: the result count (or the empty message) is announced once per menu, never per keystroke."
+        },
+        {
+          "upstream": "useHighlightedOptionScroll",
+          "target": "ActiveDescendantController",
+          "as": "controller",
+          "notes": "`aria-activedescendant` from the shared core controller; the highlighted option is scrolled into view."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "ArrowDown",
+          "action": "Opens the results and highlights the first one",
+          "when": "the results are closed and there is a query (or entries-on-focus)"
+        },
+        {
+          "keys": "ArrowDown",
+          "action": "Highlights the next result",
+          "when": "the results are open"
+        },
+        {
+          "keys": "ArrowUp",
+          "action": "Highlights the previous result",
+          "when": "the results are open"
+        },
+        {
+          "keys": "Home",
+          "action": "Highlights the first result",
+          "when": "the results are open"
+        },
+        {
+          "keys": "End",
+          "action": "Highlights the last result",
+          "when": "the results are open"
+        },
+        {
+          "keys": "Enter",
+          "action": "Chooses the highlighted result and closes the results",
+          "when": "the results are open; never submits the form"
+        },
+        {
+          "keys": "Enter",
+          "action": "Ignored while an input method editor is composing",
+          "when": "an IME candidate window is open"
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes the results, keeping the text",
+          "when": "the results are open"
+        },
+        {
+          "keys": "Tab",
+          "action": "Closes the results and moves focus on",
+          "when": "the results are open"
+        },
+        {
+          "keys": "Enter",
+          "action": "Edits the chosen item: the query becomes its label",
+          "when": "the chosen item's token has focus"
+        },
+        {
+          "keys": "Escape",
+          "action": "Leaves edit mode, restores the token and focuses it",
+          "when": "an item is being edited"
+        }
+      ],
+      "form": {
+        "formAssociated": true,
+        "notes": "Form-associated (ElementInternals): submits `name=id` of the chosen item, resets to `defaultItem` (or the `value` attribute), restores on navigation (the state carries the label too), joins <fieldset disabled>, works with form= and label for. `required` means an item is chosen, whatever is typed. Enter in the open results chooses and never submits; with the results closed it submits like a text input."
+      },
+      "differences": [
+        {
+          "id": "TYPEAHEAD-01",
+          "type": "approved-api-difference",
+          "text": "Uncontrolled by default: `item` is a property (with `defaultItem` and the `value` attribute as defaults) and the user's choice fires the cancelable `tct-selection-change` followed by the native `input` and `change`, instead of a controlled `value` plus `onChange`. Set the property to control it."
+        },
+        {
+          "id": "TYPEAHEAD-02",
+          "type": "approved-api-difference",
+          "text": "`hasClear` (default true) becomes the inverted `no-clear` attribute. `startIcon` is an icon name plus a `start` slot; `onChangeQuery` is the native `input` event with a `query` getter; `onOpenChange` is the cancelable `tct-open-change` plus `tct-after-open-change`."
+        },
+        {
+          "id": "TYPEAHEAD-03",
+          "type": "approved-api-difference",
+          "text": "`tct-selection-change` is a new event shared by the typeahead family: `action` (`select`, `add`, `create`, `remove`, `clear`), `item`, `items` and `reason`. It lives in core (`events/tct-selection-change.ts`) so `tct-tokenizer` and other selectors can reuse it."
+        },
+        {
+          "id": "TYPEAHEAD-04",
+          "type": "approved-api-difference",
+          "text": "Form-associated with a `name`, `required` validity and restore state (the upstream field has no form participation of its own): the submitted value is the item id."
+        },
+        {
+          "id": "TYPEAHEAD-05",
+          "type": "a11y-improvement",
+          "text": "Result counts (or the empty message) are announced once per menu through the announcer, not on every keystroke; an older response never replaces a newer one (a generation counter plus `cancel()`); an IME composition Enter never chooses."
+        },
+        {
+          "id": "TYPEAHEAD-06",
+          "type": "a11y-improvement",
+          "text": "Escape in edit mode restores the token and returns focus to it, so a keyboard user does not lose their place; the hidden input is out of the tab order while the token shows."
+        },
+        {
+          "id": "TYPEAHEAD-07",
+          "type": "tecton-visual",
+          "text": "Result rows use the Tecton table-row hover fill for the highlight and the pressed overlay for `:active`; every state's text was checked for contrast in light and dark (tct-typeahead.states.test.ts). The chosen item shows as a `tct-token`."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/components/src/typeahead/typeahead-engine.ts",
+          "reason": "Unify the combobox logic with the WP-11 `controllers/combobox.ts` once both are merged: the `TypeaheadEngine` (active descendant, debounce with a generation counter, once-per-menu announcements, IME guard, popup show/hide) is the editable-combobox half; the selectors' listbox half should share the same core controller instead of two implementations."
+        },
+        {
+          "file": "packages/core/src/events/tct-selection-change.ts",
+          "reason": "`tct-selection-change` is new in this work package; if WP-11 (selectors) defines an event with the same name, keep one class and reconcile its `action` union."
+        },
+        {
+          "file": "packages/components/src/link/link.rel.ts",
+          "reason": "`tct-token` (linked) needs the same URL-policy, target/rel and router hand-off as `tct-link`; a shared click-router helper (link + token + card) would replace the copy in `tct-token.ts`."
+        }
+      ],
+      "sizeBudgetKb": 84,
+      "notes": "Guides: [mwg:form-associated-custom-elements] value, validity, reset and restore; [mwg:accessibility] editable combobox with active descendant; [mwg:ime-safe-enter-submit] Enter never selects while composing; [mwg:resilient-context-menus-and-nested-dropdowns] the result popup is a manual popover anchored to the field, dismissed by focus leaving. Known defect outside this folder: the shared success status ink measures 3.97:1 on the field background (field-status tokens), so the contrast tests exclude the success status. Size: about 79 kB gzipped for tct-typeahead.js, 7 kB above tct-text-area (72 kB): the shared box control and field chrome, the popup, the position and layer controllers with the Floating UI fallback, tct-token and the engine."
+    },
+    "core.typeahead-item": {
+      "tag": "tct-typeahead-item",
+      "status": "implemented",
+      "upstream": {
+        "name": "TypeaheadItem",
+        "path": "packages/core/src/Typeahead/TypeaheadItem.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "item",
+          "kind": "prop",
+          "target": "item",
+          "as": "property",
+          "notes": "A `SearchableItem`; its `label` is the text and its `element` (when set) replaces the layout. The `label` attribute is the plain-text shortcut."
+        },
+        {
+          "upstream": "icon",
+          "kind": "slot",
+          "target": "icon",
+          "as": "slot"
+        },
+        {
+          "upstream": "description",
+          "kind": "prop",
+          "target": "description",
+          "as": "attribute"
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Dims the row (styling only, as upstream); the popup does not skip or block the option."
+        },
+        {
+          "upstream": "group",
+          "kind": "prop",
+          "target": "group",
+          "as": "attribute",
+          "notes": "The group heading the row is listed under (`auxiliaryData.group` is read by the popup)."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use ::part(item), ::part(label) and ::part(description)."
+        }
+      ],
+      "keyboard": [],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "TYPEAHEADITEM-01",
+          "type": "approved-api-difference",
+          "text": "`icon` is a slot; `label` and `group` are also attributes so a row can be written in markup. The element is presentational: the popup owns the `option` role, selection and the highlight, so it never takes focus."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": false,
+        "rtl": false,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Presentational; exercised inside every popup of the family (tct-base-typeahead.test.ts, tct-typeahead.test.ts, the contrast-state tests)."
+    },
+    "core.base-typeahead": {
+      "tag": "tct-base-typeahead",
+      "status": "implemented",
+      "upstream": {
+        "name": "BaseTypeahead",
+        "path": "packages/core/src/Typeahead/BaseTypeahead.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "searchSource",
+          "kind": "prop",
+          "target": "searchSource",
+          "as": "property"
+        },
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "item",
+          "as": "property",
+          "notes": "Uncontrolled: only marks the matching result as selected; the input always holds the query."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "tct-selection-change",
+          "as": "event",
+          "notes": "Cancelable, before the item changes; the native `input` and `change` follow."
+        },
+        {
+          "upstream": "renderItem",
+          "kind": "prop",
+          "target": "renderItem",
+          "as": "property"
+        },
+        {
+          "upstream": "placeholder",
+          "kind": "prop",
+          "target": "placeholder",
+          "as": "attribute"
+        },
+        {
+          "upstream": "hasEntriesOnFocus",
+          "kind": "prop",
+          "target": "entries-on-focus",
+          "as": "attribute",
+          "default": false
+        },
+        {
+          "upstream": "maxMenuItems",
+          "kind": "prop",
+          "target": "max-menu-items",
+          "as": "attribute",
+          "default": 10
+        },
+        {
+          "upstream": "menuWidth",
+          "kind": "prop",
+          "target": "menu-width",
+          "as": "attribute",
+          "notes": "Px; never narrower than the anchor."
+        },
+        {
+          "upstream": "minQueryLength",
+          "kind": "prop",
+          "target": "min-query-length",
+          "as": "attribute",
+          "default": 1
+        },
+        {
+          "upstream": "emptySearchResultsText",
+          "kind": "prop",
+          "target": "empty-search-results-text",
+          "as": "attribute"
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "isFocusableDisabled",
+          "kind": "prop",
+          "target": "focusable-disabled",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "hasAutoFocus",
+          "kind": "prop",
+          "target": "autofocus",
+          "as": "attribute"
+        },
+        {
+          "upstream": "debounceMs",
+          "kind": "prop",
+          "target": "debounceMs",
+          "as": "property",
+          "default": 150,
+          "notes": "The `debounce-ms` attribute."
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "notes": "The popup rows follow it; the bare input draws no box."
+        },
+        {
+          "upstream": "anchorRef",
+          "kind": "prop",
+          "target": "anchorElement",
+          "as": "property",
+          "notes": "An element, or the `anchor` attribute (an id in the same tree): the popup is placed against it and is at least as wide."
+        },
+        {
+          "upstream": "inputXStyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use ::part(input)."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(popup), ::part(dropdown) and the tokens."
+        },
+        {
+          "upstream": "inputTabIndex",
+          "kind": "prop",
+          "target": "input-tab-index",
+          "as": "attribute"
+        },
+        {
+          "upstream": "onKeyDown",
+          "kind": "event",
+          "target": "keydown",
+          "as": "native-event",
+          "notes": "Bubbles and composes from the inner input; `preventDefault()` in a listener stops the list handling that key."
+        },
+        {
+          "upstream": "onChangeQuery",
+          "kind": "event",
+          "target": "input",
+          "as": "native-event",
+          "notes": "Native `input` on every edit; the text is the `query` getter."
+        },
+        {
+          "upstream": "onOpenChange",
+          "kind": "event",
+          "target": "tct-open-change",
+          "as": "event",
+          "notes": "Cancelable intent event; `tct-after-open-change` follows once the change settled."
+        },
+        {
+          "upstream": "inputId",
+          "kind": "prop",
+          "target": "input-id",
+          "as": "attribute",
+          "notes": "The id of the inner input, for a `label for` in the same shadow scope."
+        },
+        {
+          "upstream": "ariaDescribedBy",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "The host's aria-describedby (and aria-label, aria-labelledby) is forwarded to the inner input by the AriaDelegateController; the engine owns the combobox attributes."
+        },
+        {
+          "upstream": "ariaLabelledBy",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "The host's aria-labelledby is forwarded to the inner input by the AriaDelegateController (see aria-describedby)."
+        },
+        {
+          "upstream": "__queryEntries",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "Internal upstream hook that lets the Tokenizer inject its Create entry. The shared `TypeaheadEngine` has the same `queryEntries` option, used directly by `tct-tokenizer`."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "ArrowDown",
+          "action": "Opens the results and highlights the first one",
+          "when": "closed, with a query or entries-on-focus"
+        },
+        {
+          "keys": "ArrowDown",
+          "action": "Highlights the next result",
+          "when": "open"
+        },
+        {
+          "keys": "ArrowUp",
+          "action": "Highlights the previous result",
+          "when": "open"
+        },
+        {
+          "keys": "Home",
+          "action": "Highlights the first result",
+          "when": "open"
+        },
+        {
+          "keys": "End",
+          "action": "Highlights the last result",
+          "when": "open"
+        },
+        {
+          "keys": "Enter",
+          "action": "Chooses the highlighted result",
+          "when": "open; ignored while an IME is composing"
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes the results",
+          "when": "open"
+        },
+        {
+          "keys": "Tab",
+          "action": "Closes the results and moves focus on",
+          "when": "open"
+        }
+      ],
+      "form": {
+        "formAssociated": false,
+        "notes": "A bare input: not form-associated. The input is a real `<input>` in the shadow root that does not submit. Use `tct-typeahead` for a form field."
+      },
+      "differences": [
+        {
+          "id": "BASETYPEAHEAD-01",
+          "type": "approved-api-difference",
+          "text": "Uncontrolled: `item` marks the selected result and a choice fires the cancelable `tct-selection-change` then the native `input` and `change`. `anchorRef` becomes `anchorElement` / the `anchor` id attribute."
+        },
+        {
+          "id": "BASETYPEAHEAD-02",
+          "type": "approved-api-difference",
+          "text": "The combobox logic is the `TypeaheadEngine` controller, shared by `tct-base-typeahead`, `tct-typeahead` and `tct-tokenizer`, instead of the two fields composing the base element. `aria-activedescendant` and `aria-controls` are ID references that cannot cross the shadow boundary between a field and a nested base element, so each field owns its input and popup in one shadow root."
+        },
+        {
+          "id": "BASETYPEAHEAD-03",
+          "type": "a11y-improvement",
+          "text": "The popup is a manual popover in the top layer (never clipped by an ancestor), positioned with the anchor and a Floating UI fallback; pressing an option keeps focus in the input; a stale response never replaces a newer one."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessibility] combobox pattern; [mwg:ime-safe-enter-submit]; [mwg:resilient-context-menus-and-nested-dropdowns] popup dismissal. The keyboard behaviour is verified in tct-base-typeahead.test.ts; the table-driven suite runs on tct-typeahead, which has the same table plus the token editing rows."
+    }
+  }
+}

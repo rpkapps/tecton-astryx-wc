@@ -1,0 +1,11 @@
+<!-- title: Removable; description: removable adds a remove button named "Remove {label}". Pressing it fires tct-remove; the token does not remove itself, your handler does. -->
+<tct-hstack id="removable-root" wrap="wrap" gap="2" v-align="center">
+  <tct-token label="Design" removable></tct-token>
+  <tct-token label="Engineering" color="blue" removable></tct-token>
+  <tct-token label="Marketing" color="orange" removable></tct-token>
+</tct-hstack>
+<script type="module">
+  document.getElementById('removable-root').addEventListener('tct-remove', (event) => {
+    event.target.remove();
+  });
+</script>

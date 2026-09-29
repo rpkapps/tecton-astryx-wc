@@ -1,0 +1,5 @@
+{
+  "@tct.tokenizer.createOption": "Create \"{value}\"",
+  "@tct.tokenizer.overflowMore": "+{count, number} more",
+  "@tct.tokenizer.tokensAdded": "Added {count, number} {count, plural, one {item} other {items}}"
+}
