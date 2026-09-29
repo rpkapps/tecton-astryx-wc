@@ -148,4 +148,29 @@ describe('probe: nested layers', () => {
     await aTimeout(100);
     expect(layer.layer.isOpen).toBe(true);
   });
+
+  it('a lone layer with escape "none" or "block" stays open on a real Escape press', async () => {
+    for (const policy of ['none', 'block']) {
+      const layer = await fixture<TctTestLayer>(
+        `<tct-test-layer kind="popover" escape="${policy}"><button slot="trigger">t</button><p>x</p></tct-test-layer>`,
+      );
+      await userEvent.click(layer.querySelector('button')!);
+      await waitUntil(() => layer.layer.isOpen);
+      await userEvent.keyboard('{Escape}');
+      await aTimeout(100);
+      expect(layer.layer.isOpen, `escape="${policy}"`).toBe(true);
+      layer.remove();
+    }
+  });
+
+  it('a modal with escape "none" stays open on a real Escape press', async () => {
+    const layer = await fixture<TctTestLayer>(
+      `<tct-test-layer kind="modal" escape="none"><button slot="trigger">t</button><p>x</p></tct-test-layer>`,
+    );
+    await userEvent.click(layer.querySelector('button')!);
+    await waitUntil(() => layer.layer.isOpen);
+    await userEvent.keyboard('{Escape}');
+    await aTimeout(100);
+    expect(layer.layer.isOpen).toBe(true);
+  });
 });
