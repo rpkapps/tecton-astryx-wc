@@ -1,22 +1,22 @@
 <!-- title: Custom indicator and change event; description: overflowRenderer returns the indicator (a template, a node or text); tct-overflow-change reports the collapsed items, for a menu the row already has. -->
-<div id="overflow-renderer-root" style="display: grid; gap: var(--spacing-2)">
-  <div style="resize: horizontal; overflow: auto; min-inline-size: 8rem; max-inline-size: 100%; padding: var(--spacing-2); border: var(--border-width) dashed var(--color-border); inline-size: 22rem">
+<tct-vstack id="overflow-renderer-root" gap="2">
+  <tct-card padding="2" style="resize: horizontal; overflow: auto; inline-size: 22rem; min-inline-size: 8rem; max-inline-size: 100%">
     <tct-overflow-list gap="1">
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Seismic</span>
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Wells</span>
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Faults</span>
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Horizons</span>
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Strata</span>
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Logs</span>
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Cores</span>
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Pressure</span>
+      <tct-badge>Seismic</tct-badge>
+      <tct-badge>Wells</tct-badge>
+      <tct-badge>Faults</tct-badge>
+      <tct-badge>Horizons</tct-badge>
+      <tct-badge>Strata</tct-badge>
+      <tct-badge>Logs</tct-badge>
+      <tct-badge>Cores</tct-badge>
+      <tct-badge>Pressure</tct-badge>
     </tct-overflow-list>
-  </div>
-  <output style="color: var(--color-text-secondary)">Nothing is collapsed</output>
+  </tct-card>
+  <output><tct-text type="inherit" color="secondary">Nothing is collapsed</tct-text></output>
   <script type="module">
     const root = document.getElementById('overflow-renderer-root');
     const list = root.querySelector('tct-overflow-list');
-    const output = root.querySelector('output');
+    const output = root.querySelector('output tct-text');
     list.overflowRenderer = (items) => {
       const more = document.createElement('button');
       more.type = 'button';
@@ -30,4 +30,4 @@
         : 'Nothing is collapsed';
     });
   </script>
-</div>
+</tct-vstack>
