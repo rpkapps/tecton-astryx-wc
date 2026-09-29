@@ -3,10 +3,10 @@ import {property} from 'lit/decorators.js';
 import {
   ScrollableAreaController,
   type ScrollableAreaState,
-} from '@tecton-astryx/core/controllers/scrollable-area.js';
-import {BoxPropsMixin} from '@tecton-astryx/core/mixins/box-props.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+} from '@tecton-wc/core/controllers/scrollable-area.js';
+import {BoxPropsMixin} from '@tecton-wc/core/mixins/box-props.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import {pick} from '../layout/layout.types.js';
 import base from '../styles/base.styles.css';
 import focusRing from '../styles/focus-ring.styles.css';

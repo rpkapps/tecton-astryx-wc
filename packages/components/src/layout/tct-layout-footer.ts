@@ -1,10 +1,10 @@
 import {html, type CSSResultGroup, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
-import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
-import {BoxPropsMixin} from '@tecton-astryx/core/mixins/box-props.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {ContextConsumer} from '@tecton-wc/core/context/protocol.js';
+import {BoxPropsMixin} from '@tecton-wc/core/mixins/box-props.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import base from '../styles/base.styles.css';
 import {layoutDividerContext} from './layout.context.js';
 import styles from './tct-layout-footer.styles.css';

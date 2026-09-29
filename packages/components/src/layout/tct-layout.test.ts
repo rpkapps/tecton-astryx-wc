@@ -5,9 +5,9 @@
  */
 import {html} from 'lit';
 import {describe, expect, it} from 'vitest';
-import {expectAccessible} from '@tecton-astryx/testing/a11y.js';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
+import {expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
 import '../card/define.js';
 import './define.js';
 import type {TctLayout} from './tct-layout.js';

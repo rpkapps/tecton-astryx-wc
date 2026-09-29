@@ -1,5 +1,5 @@
-import type {BoxSize} from '@tecton-astryx/core/mixins/box-props.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import type {BoxSize} from '@tecton-wc/core/mixins/box-props.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 
 /**
  * Height behaviour of a layout: `fill` takes the height of its container and scrolls the content

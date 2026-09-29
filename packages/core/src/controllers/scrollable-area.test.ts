@@ -5,9 +5,9 @@
  */
 import {css, html, LitElement} from 'lit';
 import {describe, expect, it} from 'vitest';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {pressKeys} from '@tecton-astryx/testing/keyboard.js';
-import {nextFrame, waitUntil} from '@tecton-astryx/testing/timing.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {pressKeys} from '@tecton-wc/testing/keyboard.js';
+import {nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
 import {deepActiveElement} from '../utils/focus.js';
 import {
   attachScrollKeyboardDelegation,

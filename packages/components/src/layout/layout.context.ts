@@ -1,5 +1,5 @@
-import {createContext, ContextProviderEvent} from '@tecton-astryx/core/context/protocol.js';
-import {layoutAreaContext} from '@tecton-astryx/core/context/keys.js';
+import {createContext, ContextProviderEvent} from '@tecton-wc/core/context/protocol.js';
+import {layoutAreaContext} from '@tecton-wc/core/context/keys.js';
 
 /**
  * Which slots of the enclosing `tct-layout` are filled, so the regions inside can collapse the

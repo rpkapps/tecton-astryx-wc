@@ -1,10 +1,10 @@
 import {html, type CSSResultGroup, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
-import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
-import {ScrollableAreaController} from '@tecton-astryx/core/controllers/scrollable-area.js';
-import {BoxPropsMixin} from '@tecton-astryx/core/mixins/box-props.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {ContextConsumer} from '@tecton-wc/core/context/protocol.js';
+import {ScrollableAreaController} from '@tecton-wc/core/controllers/scrollable-area.js';
+import {BoxPropsMixin} from '@tecton-wc/core/mixins/box-props.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import base from '../styles/base.styles.css';
 import focusRing from '../styles/focus-ring.styles.css';
 import {layoutSlotsContext, NO_LAYOUT_SLOTS} from './layout.context.js';

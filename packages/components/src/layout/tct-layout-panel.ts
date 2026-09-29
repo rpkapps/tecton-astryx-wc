@@ -2,19 +2,19 @@ import {html, type CSSResultGroup, type PropertyValues, type TemplateResult} fro
 import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import {layoutAreaContext} from '@tecton-astryx/core/context/keys.js';
-import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
+import {layoutAreaContext} from '@tecton-wc/core/context/keys.js';
+import {ContextConsumer} from '@tecton-wc/core/context/protocol.js';
 import {
   ResizableController,
   type ResizableOptions,
   type ResizableProps,
-} from '@tecton-astryx/core/controllers/resizable.js';
-import {ScrollableAreaController} from '@tecton-astryx/core/controllers/scrollable-area.js';
-import {TctCollapseChangeEvent} from '@tecton-astryx/core/events/tct-collapse-change.js';
-import {TctSizeChangeEvent} from '@tecton-astryx/core/events/tct-size-change.js';
-import {BoxPropsMixin} from '@tecton-astryx/core/mixins/box-props.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+} from '@tecton-wc/core/controllers/resizable.js';
+import {ScrollableAreaController} from '@tecton-wc/core/controllers/scrollable-area.js';
+import {TctCollapseChangeEvent} from '@tecton-wc/core/events/tct-collapse-change.js';
+import {TctSizeChangeEvent} from '@tecton-wc/core/events/tct-size-change.js';
+import {BoxPropsMixin} from '@tecton-wc/core/mixins/box-props.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import base from '../styles/base.styles.css';
 import focusRing from '../styles/focus-ring.styles.css';
 import {layoutSlotsContext, NO_LAYOUT_SLOTS} from './layout.context.js';

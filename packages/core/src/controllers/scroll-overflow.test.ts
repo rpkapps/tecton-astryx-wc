@@ -4,8 +4,8 @@
  */
 import {css, html, LitElement} from 'lit';
 import {describe, expect, it} from 'vitest';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {nextFrame, waitUntil} from '@tecton-astryx/testing/timing.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
 import {measureScrollOverflow, ScrollOverflowController} from './scroll-overflow.js';
 
 class OverflowHost extends LitElement {

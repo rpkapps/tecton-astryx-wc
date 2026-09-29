@@ -1,4 +1,4 @@
-import {defineElement} from '@tecton-astryx/core/define.js';
+import {defineElement} from '@tecton-wc/core/define.js';
 import {TctLayout} from './tct-layout.js';
 import {TctLayoutContent} from './tct-layout-content.js';
 import {TctLayoutFooter} from './tct-layout-footer.js';

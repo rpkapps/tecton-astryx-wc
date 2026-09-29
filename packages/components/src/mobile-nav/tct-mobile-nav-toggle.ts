@@ -1,10 +1,10 @@
 import {html, nothing, type CSSResultGroup, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
-import mobileNavMessages from '@tecton-astryx/locales/en/mobileNav.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {TctOpenChangeEvent} from '@tecton-astryx/core/events/tct-open-change.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import mobileNavMessages from '@tecton-wc/locales/en/mobileNav.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {TctOpenChangeEvent} from '@tecton-wc/core/events/tct-open-change.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import {AppShellMobileController} from '../app-shell/app-shell-mobile.context.js';
 import {TctButton} from '../button/tct-button.js';
 import base from '../styles/base.styles.css';

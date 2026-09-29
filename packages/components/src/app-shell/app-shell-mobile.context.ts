@@ -1,5 +1,5 @@
 import type {ReactiveControllerHost} from 'lit';
-import {ContextConsumer, createContext} from '@tecton-astryx/core/context/protocol.js';
+import {ContextConsumer, createContext} from '@tecton-wc/core/context/protocol.js';
 
 /** Where the shell renders the side navigation right now. */
 export type SideNavPlacement = 'inline' | 'drawer' | 'none';

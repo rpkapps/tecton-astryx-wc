@@ -6,15 +6,11 @@ import {
   ContextProvider,
   type ContextRequestEvent,
   type UnknownContext,
-} from '@tecton-astryx/core/context/protocol.js';
-import {layoutAreaContext, type LayoutArea} from '@tecton-astryx/core/context/keys.js';
-import {
-  SPACING_STEPS,
-  type BoxSize,
-  type SpacingStep,
-} from '@tecton-astryx/core/mixins/box-props.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+} from '@tecton-wc/core/context/protocol.js';
+import {layoutAreaContext, type LayoutArea} from '@tecton-wc/core/context/keys.js';
+import {SPACING_STEPS, type BoxSize, type SpacingStep} from '@tecton-wc/core/mixins/box-props.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import base from '../styles/base.styles.css';
 import {
   announceLayoutAreaProvider,

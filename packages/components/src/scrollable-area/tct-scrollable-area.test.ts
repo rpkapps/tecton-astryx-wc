@@ -7,12 +7,12 @@
 import {html} from 'lit';
 import {describe, expect, it} from 'vitest';
 import {userEvent} from 'vitest/browser';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
-import {expectAccessible} from '@tecton-astryx/testing/a11y.js';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {pressKeys} from '@tecton-astryx/testing/keyboard.js';
-import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
-import {nextFrame, waitUntil} from '@tecton-astryx/testing/timing.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
+import {expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {pressKeys} from '@tecton-wc/testing/keyboard.js';
+import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
+import {nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
 import '../card/define.js';
 import './define.js';
 import type {TctScrollableArea} from './tct-scrollable-area.js';

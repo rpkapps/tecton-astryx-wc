@@ -5,8 +5,8 @@
  */
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {page} from 'vitest/browser';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {nextFrame, waitUntil} from '@tecton-astryx/testing/timing.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
 import {resetDevWarnings} from '../utils/dev.js';
 import {
   parseResizableSize,

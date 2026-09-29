@@ -1,14 +1,14 @@
 import {html, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
-import handleMessages from '@tecton-astryx/locales/en/resize-handle.js';
-import resizableMessages from '@tecton-astryx/locales/en/resizable.js';
-import type {ResizableProps} from '@tecton-astryx/core/controllers/resizable.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {features} from '@tecton-astryx/core/features.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
-import {isImeKeyEvent} from '@tecton-astryx/core/utils/ime.js';
+import handleMessages from '@tecton-wc/locales/en/resize-handle.js';
+import resizableMessages from '@tecton-wc/locales/en/resizable.js';
+import type {ResizableProps} from '@tecton-wc/core/controllers/resizable.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {features} from '@tecton-wc/core/features.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
+import {isImeKeyEvent} from '@tecton-wc/core/utils/ime.js';
 import {pick} from '../layout/layout.types.js';
 import base from '../styles/base.styles.css';
 import {
@@ -241,7 +241,7 @@ export class TctResizeHandle extends TctElement {
     const internals = this.internals;
     internals.role = 'separator';
     internals.ariaOrientation = this.#direction === 'horizontal' ? 'vertical' : 'horizontal';
-    internals.ariaLabel = this.label || this.#locale.t('@astryx.resizable.handle.label');
+    internals.ariaLabel = this.label || this.#locale.t('@tct.resizable.handle.label');
     internals.ariaDisabled = this.disabled ? 'true' : null;
     if (!region) {
       internals.ariaValueNow = null;
@@ -259,7 +259,7 @@ export class TctResizeHandle extends TctElement {
       ? String(Math.round(region.maxSize))
       : null;
     internals.ariaValueText = region.collapsed
-      ? this.#locale.t('@astryx.resizable.collapsed')
+      ? this.#locale.t('@tct.resizable.collapsed')
       : this.#locale.t('value', {size: Math.round(region.size)});
     // The separator controls the region: point at it when the reflection exists and both are in one tree.
     if (features.elementReflection && this.for) {
