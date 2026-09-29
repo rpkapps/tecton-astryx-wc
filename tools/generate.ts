@@ -64,7 +64,7 @@ function runExternal(step: ExternalStep): boolean {
     return true;
   }
   console.log(`  run   ${step.name} (${step.script})`);
-  return run('node', [step.script]).status === 0;
+  return run(process.execPath, [step.script]).status === 0;
 }
 
 function writeAll(files: readonly GeneratedFile[]): void {

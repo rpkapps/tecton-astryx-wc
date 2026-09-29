@@ -4,9 +4,7 @@
  * them with the budgets from `reports/size/budgets.json`. The measured numbers are also written to
  * `reports/size/measured.json`.
  */
-import {join} from 'node:path';
-import {ROOT} from '../lib/paths.ts';
-import {run} from '../lib/run.ts';
+import {runPackageBin} from '../lib/run.ts';
 import {buildSizeEntries} from './build-entries.ts';
 
 const measured = await buildSizeEntries();
@@ -16,4 +14,4 @@ for (const row of measured) {
       `${(row.gzip / 1000).toFixed(2)} kB gzip, ${(row.brotli / 1000).toFixed(2)} kB brotli (budget ${row.budgetKb} kB)`,
   );
 }
-process.exit(run(join(ROOT, 'node_modules', '.bin', 'size-limit'), []).status);
+process.exit(runPackageBin('size-limit', []).status);
