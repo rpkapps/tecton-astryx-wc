@@ -1,6 +1,6 @@
 import {html, nothing, type CSSResultGroup, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import base from '../styles/base.styles.css';
 import {isApplePlatform, keyDisplay, parseKeys, shortcutName} from './kbd.keys.js';
 import styles from './tct-kbd.styles.css';

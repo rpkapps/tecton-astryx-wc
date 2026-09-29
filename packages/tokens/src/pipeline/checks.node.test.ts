@@ -1,7 +1,7 @@
 import {describe, expect, it} from 'vitest';
 import {build} from './build.ts';
 import {
-  checkAstryxCoverage,
+  checkUpstreamCoverage,
   checkContrast,
   checkD001,
   checkFonts,
@@ -34,8 +34,8 @@ describe('tokens:check on the real inputs', () => {
 describe('failing checks', () => {
   it('coverage: fails when an upstream name is not emitted', () => {
     const inputs = fresh();
-    inputs.astryxTokens.tokens['--color-nope'] = {category: 'core', default: '#000'};
-    const problems = checkAstryxCoverage(build(inputs)).problems;
+    inputs.upstreamTokens.tokens['--color-nope'] = {category: 'core', default: '#000'};
+    const problems = checkUpstreamCoverage(build(inputs)).problems;
     expect(problems.some((line) => line.includes('--color-nope'))).toBe(true);
   });
 
@@ -48,7 +48,7 @@ describe('failing checks', () => {
       provisional: 'x',
       value: '1',
     });
-    const problems = checkAstryxCoverage(build(inputs)).problems;
+    const problems = checkUpstreamCoverage(build(inputs)).problems;
     expect(problems.join('\n')).toMatch(/--rogue is neither an upstream token nor --tecton-/);
   });
 
@@ -68,39 +68,39 @@ describe('failing checks', () => {
     expect(provisional).toHaveLength(56 + 1 + 7);
   });
 
-  it('astryx-retained: exactly the 10 motion tokens, with a reason (D-013 Q-06)', () => {
-    const retained = real.resolved.tokens.filter((token) => token.status === 'astryx-retained');
+  it('retained-default: exactly the 10 motion tokens, with a reason (D-013 Q-06)', () => {
+    const retained = real.resolved.tokens.filter((token) => token.status === 'retained-default');
     expect(new Set(retained.map((token) => token.category))).toEqual(new Set(['motion']));
     expect(retained).toHaveLength(10);
     for (const token of retained) expect(token.retained).toMatch(/D-013/);
     expect(real.resolved.byName.get('--duration-fast')?.provisional).toBeUndefined();
   });
 
-  it('astryx-retained: fails when motion is listed as provisional too, or drops out of retained', () => {
+  it('retained-default: fails when motion is listed as provisional too, or drops out of retained', () => {
     const both = fresh();
     both.provisional.categories.push({category: 'motion', reason: 'x'});
-    expect(() => build(both)).toThrow(/more than one of provisional, astryxRetained/);
+    expect(() => build(both)).toThrow(/more than one of provisional, retainedDefault/);
 
     const missing = fresh();
-    missing.provisional.astryxRetained.categories = [];
+    missing.provisional.retainedDefault.categories = [];
     const problems = checkProvisional(build(missing)).problems.join('\n');
-    expect(problems).toContain('astryx-retained categories: motion is required by D-013');
+    expect(problems).toContain('retained-default categories: motion is required by D-013');
   });
 
-  it('astryx-retained: fails when a retained value drifts from the upstream Astryx value', () => {
+  it('retained-default: fails when a retained value drifts from the upstream value', () => {
     const inputs = fresh();
     inputs.semanticMap.tokens['--duration-fast']!.value = '200ms';
     expect(checkProvisional(build(inputs)).problems.join('\n')).toMatch(
-      /--duration-fast is 200ms, the retained Astryx value is 175ms/,
+      /--duration-fast is 200ms, the retained upstream value is 175ms/,
     );
   });
 
-  it('astryx-retained: fails when breakpoints or z-index are not listed', () => {
+  it('retained-default: fails when breakpoints or z-index are not listed', () => {
     const inputs = fresh();
-    inputs.provisional.astryxRetained.nonTokens =
-      inputs.provisional.astryxRetained.nonTokens.filter((item) => item.name !== 'z-index');
+    inputs.provisional.retainedDefault.nonTokens =
+      inputs.provisional.retainedDefault.nonTokens.filter((item) => item.name !== 'z-index');
     expect(checkProvisional(build(inputs)).problems.join('\n')).toContain(
-      'astryx-retained non-tokens: z-index is required by D-013',
+      'retained-default non-tokens: z-index is required by D-013',
     );
   });
 
@@ -108,7 +108,7 @@ describe('failing checks', () => {
     for (const level of [3, 4, 5, 6]) {
       for (const part of ['size', 'weight', 'leading']) {
         const token = real.resolved.byName.get(`--text-heading-${level}-${part}`)!;
-        expect(token.status).toBe('tecton-astryx');
+        expect(token.status).toBe('tecton-binding');
         expect(token.derived).toMatch(/D-013/);
       }
     }

@@ -3,7 +3,7 @@
   <button type="button" id="toast-basic-info">Show toast</button>
   <button type="button" id="toast-basic-error">Show error</button>
   <script type="module">
-    import {toast} from '@tecton-astryx/components/toast/toast.api.js';
+    import {toast} from '@tecton-wc/components/toast/toast.api.js';
     const root = document.getElementById('toast-basic-root');
     root.querySelector('#toast-basic-info').addEventListener('click', () => toast({body: 'Changes saved'}));
     root.querySelector('#toast-basic-error').addEventListener('click', () => toast({body: 'Could not save the changes', type: 'error'}));

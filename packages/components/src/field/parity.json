@@ -132,7 +132,7 @@
           "upstream": "useDevWarning",
           "target": "devWarn",
           "as": "module-function",
-          "notes": "@tecton-astryx/core/utils/dev.js, once per message."
+          "notes": "@tecton-wc/core/utils/dev.js, once per message."
         },
         {
           "upstream": "useInputContainer",

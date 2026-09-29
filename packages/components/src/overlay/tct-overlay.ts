@@ -1,9 +1,9 @@
 import {html, type CSSResultGroup, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
-import {INTERACTIVE_SELECTORS} from '@tecton-astryx/core/controllers/clickable-container.js';
-import {MediaQueryController} from '@tecton-astryx/core/controllers/media-query.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {INTERACTIVE_SELECTORS} from '@tecton-wc/core/controllers/clickable-container.js';
+import {MediaQueryController} from '@tecton-wc/core/controllers/media-query.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import base from '../styles/base.styles.css';
 import styles from './tct-overlay.styles.css';
 import {

@@ -6,8 +6,8 @@
 import {html} from 'lit';
 import {userEvent} from 'vitest/browser';
 import {afterEach, describe, expect, it, vi} from 'vitest';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
 import '../avatar/define.js';
 import '../button/define.js';
 import './define.js';

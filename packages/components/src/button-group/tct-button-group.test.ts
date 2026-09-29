@@ -6,14 +6,14 @@
 import {html} from 'lit';
 import {property} from 'lit/decorators.js';
 import {beforeAll, describe, expect, it} from 'vitest';
-import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
+import {ContextConsumer} from '@tecton-wc/core/context/protocol.js';
 import {
   buttonGroupContext,
   sizeContext,
   type ButtonGroupContextValue,
-} from '@tecton-astryx/core/context/keys.js';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+} from '@tecton-wc/core/context/keys.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import {
   axNode,
   deepActiveElement,
@@ -26,9 +26,9 @@ import {
   runElementSuite,
   runKeyboardSuite,
   tabSequence,
-} from '@tecton-astryx/testing/index.js';
-import {TctTestChip} from '@tecton-astryx/testing/fixtures/test-toolbar.js';
-import type {KeyboardRow} from '@tecton-astryx/testing/suites/keyboard.js';
+} from '@tecton-wc/testing/index.js';
+import {TctTestChip} from '@tecton-wc/testing/fixtures/test-toolbar.js';
+import type {KeyboardRow} from '@tecton-wc/testing/suites/keyboard.js';
 import './define.js';
 import type {TctButtonGroup} from './tct-button-group.js';
 

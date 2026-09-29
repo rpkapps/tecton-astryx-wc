@@ -1,7 +1,7 @@
 import {html, nothing, type CSSResultGroup, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
-import {TooltipController} from '@tecton-astryx/core/controllers/tooltip.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {TooltipController} from '@tecton-wc/core/controllers/tooltip.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import base from '../styles/base.styles.css';
 import focusRing from '../styles/focus-ring.styles.css';
 import layer from '../styles/layer.styles.css';

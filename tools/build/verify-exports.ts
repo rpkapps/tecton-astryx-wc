@@ -138,7 +138,7 @@ function walkFilesIn(dir: string, packageDir: string): string[] {
 
 export function workspaceResolveRoot(pkgName: string): string {
   // A directory whose node_modules links the package: dependents in this workspace.
-  return pkgName === '@tecton-astryx/components'
+  return pkgName === '@tecton-wc/components'
     ? join(ROOT, 'apps/docs')
     : join(ROOT, 'packages/components');
 }

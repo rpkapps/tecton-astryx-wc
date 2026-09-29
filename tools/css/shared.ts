@@ -30,7 +30,7 @@ function assertSafe(tag: string, property: string, value: string): string {
 export function cloakCss(cem: CemPackage): string {
   const elements = cemElements(cem);
   const header =
-    `${BANNER}/*!\n * @tecton-astryx/components: cloak.css\n` +
+    `${BANNER}/*!\n * @tecton-wc/components: cloak.css\n` +
     ` * Optional. Hides not-yet-defined tct-* elements to avoid a flash of unstyled content and\n` +
     ` * reveals them after --tct-cloak-timeout (default 2s) even if their script never runs.\n */\n`;
   if (elements.length === 0) return `${header}${LAYER_ORDER}\n`;
@@ -76,7 +76,7 @@ export function lightDomSources(componentsSrc: string): string[] {
 export function lightDomCss(componentsSrc: string): string {
   const files = lightDomSources(componentsSrc);
   const header =
-    `${BANNER}/*!\n * @tecton-astryx/components: light-dom.css\n` +
+    `${BANNER}/*!\n * @tecton-wc/components: light-dom.css\n` +
     ` * Styles of light-DOM families, in @layer tecton.light-dom. Load once per document.\n */\n${LAYER_ORDER}\n`;
   if (files.length === 0) return header;
   const parts = files.map((file) => {

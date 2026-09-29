@@ -58,9 +58,9 @@ Load the stylesheet once, in the document, so every migrated element reads the s
 
 ```html title="index.html"
 <meta name="color-scheme" content="light dark" />
-<link rel="stylesheet" href="/vendor/tecton-astryx/tecton.css" />
+<link rel="stylesheet" href="/vendor/tecton-wc/tecton.css" />
 <script type="module">
-  import '@tecton-astryx/components/app-shell';
+  import '@tecton-wc/components/app-shell';
 </script>
 ```
 
@@ -71,7 +71,7 @@ When Tailwind remains in the app, declare the layer order once in the global CSS
 
 @import 'tailwindcss/theme.css' layer(theme);
 @import 'tailwindcss/preflight.css' layer(base);
-@import '@tecton-astryx/tokens/tecton.css';
+@import '@tecton-wc/tokens/tecton.css';
 @import 'tailwindcss/utilities.css' layer(utilities);
 ```
 
@@ -80,7 +80,7 @@ On Tailwind v3 there is no `preflight.css` to import, so wrap the `@tailwind bas
 ```css title="Tailwind v3 coexistence"
 @layer tw-preflight, tecton.reset, tecton.tokens, tecton.light-dom;
 
-@import '@tecton-astryx/tokens/tecton.css';
+@import '@tecton-wc/tokens/tecton.css';
 
 @layer tw-preflight {
   @tailwind base; /* layered: the tokens now win over preflight */
@@ -112,7 +112,7 @@ Audit the layers around the theme with this checklist before building screens:
 - Audit every pre-existing global or reset stylesheet and assign each one to a layer on purpose. Top-level imports without `layer()` stay unlayered and beat every layer; imports nested inside a layered file inherit that layer.
 - Remove or demote the app's legacy reset. The theme stylesheet declares its layers as `tecton.reset, tecton.tokens, tecton.light-dom`, and an app reset belongs below them, never above.
 - Layer Tailwind's preflight. On Tailwind v4, import `preflight.css` with `layer(base)`. On Tailwind v3, wrap the `@tailwind base` directive in a named layer. Unlayered preflight overrides the light-DOM styles silently.
-- Set `moduleResolution` to `bundler` or `node16` and newer so package subpaths such as `@tecton-astryx/components/button` resolve in TypeScript.
+- Set `moduleResolution` to `bundler` or `node16` and newer so package subpaths such as `@tecton-wc/components/button` resolve in TypeScript.
 - Theme with token overrides rather than hand-editing a copy of the stylesheet. Keep `--color-on-accent` consistent with any `--color-accent` you change: the pair is designed for contrast, and changing one leaves the other at a stale value.
 - Run the foundation smoke test below and view a few elements in both colour modes before migrating any route.
 

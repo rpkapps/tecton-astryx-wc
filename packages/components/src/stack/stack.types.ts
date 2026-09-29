@@ -1,4 +1,4 @@
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 
 /** Stack direction (upstream `StackDirection`): `horizontal` flows in the inline axis. */
 export const STACK_DIRECTIONS = ['horizontal', 'vertical'] as const;

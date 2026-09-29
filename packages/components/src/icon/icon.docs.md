@@ -8,10 +8,10 @@ examples: [sizes, colors, labelled, tecton-set, custom-svg, rtl]
 keywords: [icon, svg, glyph, symbol, pictogram, graphic, vector, image, registry]
 dense:
   description: icon by registry name (or slotted svg) w/ 4 sizes, Tecton icon colors, decorative or labelled semantics
-  usage: Icons are small visual symbols that represent actions, objects, or concepts. They improve scannability and reinforce meaning alongside text. Set `name` to a registered icon (Astryx role names + Tecton domain glyphs), or slot your own <svg>. Sizes and colours come from the design tokens; the default set is registered automatically.
+  usage: Icons are small visual symbols that represent actions, objects, or concepts. They improve scannability and reinforce meaning alongside text. Set `name` to a registered icon (semantic role names + Tecton domain glyphs), or slot your own <svg>. Sizes and colours come from the design tokens; the default set is registered automatically.
   bestPractices:
     - {do: true, text: 'Use semantic icon names when available; they follow the registry and can be overridden once for the whole app.'}
-    - {do: true, text: 'Override or add icons with registerIcons() (from @tecton-astryx/core/icons/registry.js) at app bootstrap; consumer registrations beat the built-in set.'}
+    - {do: true, text: 'Override or add icons with registerIcons() (from @tecton-wc/core/icons/registry.js) at app bootstrap; consumer registrations beat the built-in set.'}
     - {do: true, text: 'Pair icons with text labels; an icon-only control needs an accessible name on the control itself.'}
     - {do: true, text: 'For a meaningful standalone icon (no adjacent text), set `label`: it becomes role="img" with that name and is unhidden.'}
     - {do: true, text: 'Use the `color` variants (icon and status roles), not hardcoded colour values.'}
@@ -21,7 +21,7 @@ dense:
     - {do: false, text: 'Set `label` on an icon inside a button or link that already has a name; that announces twice.'}
     - {do: false, text: 'Use a `src`, `icon` or `href` attribute; the attribute is `name`.'}
   properties:
-    name: registered icon name (Astryx role such as close, chevronDown, search, or a Tecton glyph such as well, seismic, strata, well-filled); unknown name renders the default slot
+    name: registered icon name (semantic role such as close, chevronDown, search, or a Tecton glyph such as well, seismic, strata, well-filled); unknown name renders the default slot
     color: colour variant (inherit, primary, secondary, tertiary, disabled, accent, success, error, warning, blue, red, green, gray, cyan, teal, yellow, orange, pink, purple)
     size: xsm 12px, sm 16px, md 20px, lg 24px; unset takes the size of the owning component's icon slot, then md
     label: accessible name for a meaningful standalone icon; sets role=img and unhides; empty means decorative
@@ -32,7 +32,7 @@ related: [button, text, spinner]
 ## Purpose
 
 `tct-icon` draws one glyph at a consistent size and colour and gives it the right accessibility
-semantics. Glyphs come from a registry: the default set (Astryx's semantic role names such as `close`,
+semantics. Glyphs come from a registry: the default set (the semantic role names such as `close`,
 `chevronDown` and `search`, drawn from Lucide, plus the Tecton domain glyphs such as `well`, `fault`,
 `seismic` and `strata`, each also as `<name>-filled`) is registered the first time an icon connects.
 Your own glyphs go in through `registerIcons()`, or straight into the default slot as an `<svg>`.

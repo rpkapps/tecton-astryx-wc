@@ -10,18 +10,18 @@ import {
   clearAnnouncements,
   getAnnouncerRegions,
   resetAnnouncer,
-} from '@tecton-astryx/core/a11y/announcer.js';
-import {FocusTrapController} from '@tecton-astryx/core/controllers/focus-trap.js';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {overrideFeature} from '@tecton-astryx/core/features.js';
+} from '@tecton-wc/core/a11y/announcer.js';
+import {FocusTrapController} from '@tecton-wc/core/controllers/focus-trap.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {overrideFeature} from '@tecton-wc/core/features.js';
 import {
   isSanitizerReady,
   preloadSanitizer,
   resetSanitizer,
   sanitizeHtml,
   sanitizeHtmlSync,
-} from '@tecton-astryx/core/security/sanitize.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+} from '@tecton-wc/core/security/sanitize.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import {fixture} from '../fixture.js';
 import {deepActiveElement, pressKeys} from '../keyboard.js';
 import {aTimeout, nextFrame, waitUntil} from '../timing.js';
@@ -242,7 +242,7 @@ describe('announcer without ariaNotify (live regions)', () => {
       const {polite} = getAnnouncerRegions();
       const dialog = await fixture<HTMLDialogElement>(`<dialog><p>modal</p></dialog>`);
       const {noteModalShown, noteModalHidden} =
-        await import('@tecton-astryx/core/layer/top-layer-host.js');
+        await import('@tecton-wc/core/layer/top-layer-host.js');
       dialog.showModal();
       noteModalShown(dialog);
       expect(dialog.contains(polite!)).toBe(true);

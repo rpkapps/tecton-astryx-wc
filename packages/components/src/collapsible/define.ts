@@ -1,4 +1,4 @@
-import {defineElement} from '@tecton-astryx/core/define.js';
+import {defineElement} from '@tecton-wc/core/define.js';
 import {TctCollapsibleGroup} from './tct-collapsible-group.js';
 import {TctCollapsible} from './tct-collapsible.js';
 

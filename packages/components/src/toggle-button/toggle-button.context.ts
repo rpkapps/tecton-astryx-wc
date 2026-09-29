@@ -2,8 +2,8 @@
  * Family-private context (WORK-BREAKDOWN §1.6, A§9.4): what `tct-toggle-button-group` tells the toggle
  * buttons below it. Upstream `ToggleButtonGroupContext` (`useToggleButtonGroup`).
  */
-import {createContext} from '@tecton-astryx/core/context/protocol.js';
-import type {ElementSize} from '@tecton-astryx/core/context/keys.js';
+import {createContext} from '@tecton-wc/core/context/protocol.js';
+import type {ElementSize} from '@tecton-wc/core/context/keys.js';
 
 export interface ToggleButtonGroupContextValue {
   /** Whether the toggle button with this `value` is pressed. */

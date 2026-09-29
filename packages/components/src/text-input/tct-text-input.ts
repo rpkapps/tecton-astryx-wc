@@ -3,24 +3,24 @@ import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
 import {live} from 'lit/directives/live.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import fieldMessages from '@tecton-astryx/locales/en/field.js';
-import inputMessages from '@tecton-astryx/locales/en/input.js';
-import textInputMessages from '@tecton-astryx/locales/en/textInput.js';
-import {resolveIdRefs, setAriaElements} from '@tecton-astryx/core/controllers/aria-delegate.js';
-import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
-import {formLayoutContext, inputGroupContext} from '@tecton-astryx/core/context/keys.js';
-import {FieldChromeController} from '@tecton-astryx/core/controllers/field-chrome.js';
-import {SizeController} from '@tecton-astryx/core/controllers/size.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {TctClearEvent} from '@tecton-astryx/core/events/tct-clear.js';
-import {TctEnterEvent} from '@tecton-astryx/core/events/tct-enter.js';
-import {features} from '@tecton-astryx/core/features.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {FormControlMixin, type FormValue} from '@tecton-astryx/core/mixins/form-control.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {IdController} from '@tecton-astryx/core/utils/id.js';
-import {isImeKeyEvent} from '@tecton-astryx/core/utils/ime.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import fieldMessages from '@tecton-wc/locales/en/field.js';
+import inputMessages from '@tecton-wc/locales/en/input.js';
+import textInputMessages from '@tecton-wc/locales/en/textInput.js';
+import {resolveIdRefs, setAriaElements} from '@tecton-wc/core/controllers/aria-delegate.js';
+import {ContextConsumer} from '@tecton-wc/core/context/protocol.js';
+import {formLayoutContext, inputGroupContext} from '@tecton-wc/core/context/keys.js';
+import {FieldChromeController} from '@tecton-wc/core/controllers/field-chrome.js';
+import {SizeController} from '@tecton-wc/core/controllers/size.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {TctClearEvent} from '@tecton-wc/core/events/tct-clear.js';
+import {TctEnterEvent} from '@tecton-wc/core/events/tct-enter.js';
+import {features} from '@tecton-wc/core/features.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {FormControlMixin, type FormValue} from '@tecton-wc/core/mixins/form-control.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {IdController} from '@tecton-wc/core/utils/id.js';
+import {isImeKeyEvent} from '@tecton-wc/core/utils/ime.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import {
   FIELD_STATUS_VARIANTS,
   INPUT_STATUS_TYPES,
@@ -90,11 +90,11 @@ const FORWARDED_ATTRIBUTES = ['aria-describedby', 'inputmode', 'enterkeyhint'] a
  * @slot label - The label satellite (slotted-input mode). Do not fill it.
  * @slot description - The description satellite (slotted-input mode). Do not fill it.
  * @slot status - The status satellite (slotted-input mode). Do not fill it.
- * @csspart field - The whole field: label, control and status (Astryx target `astryx-field`).
+ * @csspart field - The whole field: label, control and status.
  * @csspart label - The label.
  * @csspart description - The description.
  * @csspart label-indicator - The "Required" or "Optional" text.
- * @csspart input - The painted box around the control (Astryx target `astryx-text-input`).
+ * @csspart input - The painted box around the control.
  * @csspart control - The native `<input>` (shadow mode).
  * @csspart start-icon - The start icon.
  * @csspart status-icon - The status icon inside the box.
@@ -605,7 +605,7 @@ export class TctTextInput extends FormControlMixin(TctElement) {
         class="status-button focus-ring"
         part="status-button"
         data-status-type=${status.type}
-        aria-label=${this.#locale.t(status.type === 'info' ? '@tct.field.infoDetails' : `@astryx.input.statusButton.${status.type}`)}
+        aria-label=${this.#locale.t(status.type === 'info' ? '@tct.field.infoDetails' : `@tct.input.statusButton.${status.type}`)}
       >
         ${icon}
       </button></tct-tooltip

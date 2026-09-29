@@ -5,9 +5,9 @@
  * the surface on screen, `data-placement` reports the side actually used.
  */
 import {beforeAll, describe, expect, it} from 'vitest';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {overrideFeature} from '@tecton-astryx/core/features.js';
-import {isFloatingLoaded} from '@tecton-astryx/core/layer/floating.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {overrideFeature} from '@tecton-wc/core/features.js';
+import {isFloatingLoaded} from '@tecton-wc/core/layer/floating.js';
 import {fixture} from '../fixture.js';
 import {TctTestLayer} from '../fixtures/test-layer.js';
 import {nextFrame, waitUntil} from '../timing.js';

@@ -1,8 +1,8 @@
 import {property} from 'lit/decorators.js';
-import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {localeContext, type LocaleContextValue} from '@tecton-astryx/core/context/keys.js';
-import {TctProviderElement} from '@tecton-astryx/core/provider-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {localeContext, type LocaleContextValue} from '@tecton-wc/core/context/keys.js';
+import {TctProviderElement} from '@tecton-wc/core/provider-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import lightStyles from './tct-internationalization-provider.light.css?inline';
 
 type Messages = NonNullable<LocaleContextValue['messages']>;
@@ -43,14 +43,14 @@ export class TctInternationalizationProvider extends TctProviderElement {
   @property() locale = '';
 
   /**
-   * Additional catalogs by locale tag, for locales that are not loaded from `@tecton-astryx/locales`.
+   * Additional catalogs by locale tag, for locales that are not loaded from `@tecton-wc/locales`.
    * Values are ICU strings or `{defaultMessage}` entries keyed by message id.
    */
   @property({attribute: false}) messages: Messages | undefined = undefined;
 
   /**
    * Sparse per-locale overrides applied on top of every catalog: only the ids you list change. Message
-   * ids look like `@astryx.pagination.next`.
+   * ids look like `@tct.pagination.next`.
    */
   @property({attribute: false}) overrides: Overrides | undefined = undefined;
 

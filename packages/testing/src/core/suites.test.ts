@@ -4,7 +4,7 @@
  */
 import {userEvent} from 'vitest/browser';
 import {beforeAll, describe, expect, it} from 'vitest';
-import {defineElement} from '@tecton-astryx/core/define.js';
+import {defineElement} from '@tecton-wc/core/define.js';
 import {TctTestCheckbox, TctTestGroup, TctTestInput, TctTestSubmit} from '../fixtures/test-form.js';
 import {TctTestLayer} from '../fixtures/test-layer.js';
 import {TctTestToolbar} from '../fixtures/test-toolbar.js';

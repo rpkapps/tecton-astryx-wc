@@ -1,9 +1,9 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {TooltipController} from '@tecton-astryx/core/controllers/tooltip.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {TooltipController} from '@tecton-wc/core/controllers/tooltip.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import base from '../styles/base.styles.css';
 import layer from '../styles/layer.styles.css';
 import motion from '../styles/motion.styles.css';

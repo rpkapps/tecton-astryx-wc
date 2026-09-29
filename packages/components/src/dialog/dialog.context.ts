@@ -4,8 +4,8 @@
  * dialog to close from its close button; the dialog tells the header whether it is inline and what its
  * purpose is (a `required` dialog has no close button).
  */
-import {createContext} from '@tecton-astryx/core/context/protocol.js';
-import type {ChangeReason} from '@tecton-astryx/core/events/tct-event.js';
+import {createContext} from '@tecton-wc/core/context/protocol.js';
+import type {ChangeReason} from '@tecton-wc/core/events/tct-event.js';
 import type {DialogPurpose} from './dialog.types.js';
 
 /** The part of a header the dialog needs. */

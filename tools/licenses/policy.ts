@@ -122,11 +122,11 @@ export const DEV_ONLY_EXCEPTIONS: Readonly<Record<string, DevOnlyException>> = {
  * THIRD-PARTY-NOTICES.md. (`testing`, `docs` and `tools` are private tooling.)
  */
 export const SHIPPED_PACKAGES: readonly string[] = [
-  '@tecton-astryx/tokens',
-  '@tecton-astryx/core',
-  '@tecton-astryx/icons',
-  '@tecton-astryx/locales',
-  '@tecton-astryx/components',
+  '@tecton-wc/tokens',
+  '@tecton-wc/core',
+  '@tecton-wc/icons',
+  '@tecton-wc/locales',
+  '@tecton-wc/components',
 ];
 
 /**

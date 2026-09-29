@@ -21,7 +21,7 @@ Three roles: body (UI text), heading (titles and headings) and code (monospace).
 | `--font-family-heading` | The same as body                                                                   |
 | `--font-family-code`    | `"IBM Plex Mono", "IBM Plex Mono Fallback", Consolas, Monaco, monospace`           |
 
-The first name is the family that the font package registers (Fontsource's variable Figtree registers as "Figtree Variable"), the second covers a locally installed copy, and the third is a metric-matched fallback described below. Both fonts are open source under the SIL Open Font License 1.1, which allows bundling and redistribution, provided the font is not sold on its own and the licence text travels with it. The licences are in `@tecton-astryx/tokens/fonts/`.
+The first name is the family that the font package registers (Fontsource's variable Figtree registers as "Figtree Variable"), the second covers a locally installed copy, and the third is a metric-matched fallback described below. Both fonts are open source under the SIL Open Font License 1.1, which allows bundling and redistribution, provided the font is not sold on its own and the licence text travels with it. The licences are in `@tecton-wc/tokens/fonts/`.
 
 ## Loading fonts
 
@@ -29,11 +29,11 @@ The elements never load font files. `tokens.css` only names the families, and na
 
 ```css
 /* tokens plus the font faces, in one link */
-@import '@tecton-astryx/tokens/tecton.css';
+@import '@tecton-wc/tokens/tecton.css';
 
 /* or, separately */
-@import '@tecton-astryx/tokens/tokens.css';
-@import '@tecton-astryx/tokens/fonts.css';
+@import '@tecton-wc/tokens/tokens.css';
+@import '@tecton-wc/tokens/fonts.css';
 ```
 
 `fonts.css` declares the faces in the document, because `@font-face` inside a shadow root is not reliably applied:
@@ -60,7 +60,7 @@ Preload the Latin Figtree file so that the swap is early:
 
 ```html
 <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="/vendor/tecton-astryx/fonts/figtree-latin-wght-normal.woff2" />
+      href="/vendor/tecton-wc/fonts/figtree-latin-wght-normal.woff2" />
 ```
 
 **Scripts outside Latin.** Only the Latin and Latin Extended subsets ship. Cyrillic, Greek, Arabic, Hebrew, CJK and most of Vietnamese render in the fallback stack (`Helvetica, Arial, sans-serif`) unless you add faces for them. If your product needs those scripts, declare the faces yourself in the document and put their family names in the font-family tokens:

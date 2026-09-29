@@ -6,13 +6,13 @@
 import {html} from 'lit';
 import {property} from 'lit/decorators.js';
 import {afterEach, beforeAll, describe, expect, it, vi} from 'vitest';
-import {defineElement, resetDefineWarnings} from '@tecton-astryx/core/define.js';
-import {TctOpenChangeEvent} from '@tecton-astryx/core/events/tct-open-change.js';
-import {features, overrideFeature, resetFeatures} from '@tecton-astryx/core/features.js';
-import {TctElement, type TctElementConstructor} from '@tecton-astryx/core/tct-element.js';
-import {devError, devWarn, isDevMode, resetDevWarnings} from '@tecton-astryx/core/utils/dev.js';
-import {IdController, uniqueId} from '@tecton-astryx/core/utils/id.js';
-import {ImeGuard, isImeKeyEvent} from '@tecton-astryx/core/utils/ime.js';
+import {defineElement, resetDefineWarnings} from '@tecton-wc/core/define.js';
+import {TctOpenChangeEvent} from '@tecton-wc/core/events/tct-open-change.js';
+import {features, overrideFeature, resetFeatures} from '@tecton-wc/core/features.js';
+import {TctElement, type TctElementConstructor} from '@tecton-wc/core/tct-element.js';
+import {devError, devWarn, isDevMode, resetDevWarnings} from '@tecton-wc/core/utils/dev.js';
+import {IdController, uniqueId} from '@tecton-wc/core/utils/id.js';
+import {ImeGuard, isImeKeyEvent} from '@tecton-wc/core/utils/ime.js';
 import {emulateMedia} from '../emulate.js';
 import {fixture} from '../fixture.js';
 import {hasCustomState} from '../forms.js';
@@ -319,7 +319,7 @@ describe('features', () => {
   });
 
   it.skipIf(!isChromium)('prefersReducedMotion reads the live media query', async () => {
-    const {prefersReducedMotion} = await import('@tecton-astryx/core/features.js');
+    const {prefersReducedMotion} = await import('@tecton-wc/core/features.js');
     const restore = await emulateMedia({reducedMotion: 'reduce'});
     expect(prefersReducedMotion()).toBe(true);
     await restore();

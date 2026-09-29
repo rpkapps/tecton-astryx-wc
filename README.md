@@ -1,12 +1,12 @@
-# tecton-astryx-wc
+# tecton-wc
 
 A framework-independent Web Components implementation (Lit + TypeScript) of the public components and
-documentation of the [Astryx](https://github.com/facebook/astryx) design system, re-skinned with the
-Tecton visual system (colours, fonts, radii). Tags and events use the `tct-` prefix.
+documentation of an MIT-licensed upstream design system, re-skinned with the Tecton visual system
+(colours, fonts, radii). Tags and events use the `tct-` prefix. Packages are `@tecton-wc/*`.
 
 Status: foundation work in progress (workspace, tooling and CI are in place; tokens, core runtime, test
 harness, the vertical-slice components and the docs site follow). The library is private and unlicensed
-for now (all rights reserved); nothing is published. Third-party and upstream Astryx (MIT) notices are in
+for now (all rights reserved); nothing is published. Third-party and upstream (MIT) notices are in
 [`THIRD-PARTY-NOTICES.md`](THIRD-PARTY-NOTICES.md).
 
 ## Requirements
@@ -49,7 +49,7 @@ Tier-2 (features forced off) emulation.
 ```text
 packages/tokens      design tokens and fonts
 packages/core        headless runtime: base class, events, context, controllers, i18n
-packages/icons       icon sets (default: Astryx role names mapped to Lucide)
+packages/icons       icon sets (default: upstream role names mapped to Lucide)
 packages/locales     the 30 upstream message catalogs
 packages/components  every tct-* element, one folder per component family
 packages/testing     test utilities and standard suites

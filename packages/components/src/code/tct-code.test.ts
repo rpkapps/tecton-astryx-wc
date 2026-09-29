@@ -4,11 +4,11 @@
  */
 import {html} from 'lit';
 import {describe, expect, it} from 'vitest';
-import {axNode, expectAccessible} from '@tecton-astryx/testing/a11y.js';
-import {emulateMedia} from '@tecton-astryx/testing/emulate.js';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
-import {isChromium} from '@tecton-astryx/testing/tier.js';
+import {axNode, expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {emulateMedia} from '@tecton-wc/testing/emulate.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
+import {isChromium} from '@tecton-wc/testing/tier.js';
 import './define.js';
 import type {TctCode} from './tct-code.js';
 

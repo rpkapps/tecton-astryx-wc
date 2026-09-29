@@ -20,7 +20,7 @@ Choose the narrowest integration path that fits the styling library. Most DOM st
 | Path                    | Use when                                                                | Value shape                                                       |
 | ----------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------- |
 | CSS variable aliases    | The library ultimately writes CSS and accepts string values            | `var(--color-text-primary)`                                       |
-| Typed token names       | You want autocomplete and typo checks for token names in TypeScript     | `tokenVar('--color-text-primary')` from `@tecton-astryx/tokens/tokens.js` |
+| Typed token names       | You want autocomplete and typo checks for token names in TypeScript     | `tokenVar('--color-text-primary')` from `@tecton-wc/tokens/tokens.js` |
 | Tailwind mapping        | You want utility classes backed by the active tokens                    | `@theme inline { --color-surface: var(--color-background-surface); }` |
 | Token metadata and probes | JavaScript needs token values for charts, canvas, SVG or config objects | `tokens['--color-data-categorical-blue'].light`                   |
 
@@ -59,7 +59,7 @@ Sass variables are compile-time only. They are useful for generating static CSS,
 There is no StyleX integration and no `tokens.stylex` export: the elements do not use StyleX. If your application uses StyleX for its own components, reference tokens as `var(--…)` strings. For autocomplete and typo protection, import the `TokenName` type and `tokenVar()` helper from the metadata module:
 
 ```ts
-import {tokenVar, type TokenName} from '@tecton-astryx/tokens/tokens.js';
+import {tokenVar, type TokenName} from '@tecton-wc/tokens/tokens.js';
 
 const surface: TokenName = '--color-background-surface';
 const value = tokenVar(surface); // 'var(--color-background-surface)'
@@ -74,7 +74,7 @@ Tailwind v4 maps a theme variable to a CSS variable with `@theme inline`, so uti
 
 @import 'tailwindcss/theme.css' layer(theme);
 @import 'tailwindcss/preflight.css' layer(base);
-@import '@tecton-astryx/tokens/tecton.css';
+@import '@tecton-wc/tokens/tecton.css';
 @import 'tailwindcss/utilities.css' layer(utilities);
 
 @theme inline {
@@ -227,7 +227,7 @@ Static utility extractors cannot see dynamically constructed class names. Prefer
 Use the metadata module when code outside CSS needs token values for a known mode, or a computed-style probe when the values should come from a specific place in the page.
 
 ```js title="Token values for a known mode"
-import {tokens} from '@tecton-astryx/tokens/tokens.js';
+import {tokens} from '@tecton-wc/tokens/tokens.js';
 
 const mode = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 

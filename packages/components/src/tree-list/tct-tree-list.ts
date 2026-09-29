@@ -3,17 +3,17 @@ import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
 import {repeat} from 'lit/directives/repeat.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import {AriaDelegateController} from '@tecton-astryx/core/controllers/aria-delegate.js';
-import {INTERACTIVE_SELECTORS} from '@tecton-astryx/core/controllers/clickable-container.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {TreeFocusController} from '@tecton-astryx/core/controllers/tree-focus.js';
-import {TctTreeToggleEvent as TreeToggleEvent} from '@tecton-astryx/core/events/tct-tree-toggle.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
-import {IdController} from '@tecton-astryx/core/utils/id.js';
-import {safeUrl} from '@tecton-astryx/core/utils/safe-url.js';
-import defaults from '@tecton-astryx/locales/en/treeList.js';
+import {AriaDelegateController} from '@tecton-wc/core/controllers/aria-delegate.js';
+import {INTERACTIVE_SELECTORS} from '@tecton-wc/core/controllers/clickable-container.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {TreeFocusController} from '@tecton-wc/core/controllers/tree-focus.js';
+import {TctTreeToggleEvent as TreeToggleEvent} from '@tecton-wc/core/events/tct-tree-toggle.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
+import {IdController} from '@tecton-wc/core/utils/id.js';
+import {safeUrl} from '@tecton-wc/core/utils/safe-url.js';
+import defaults from '@tecton-wc/locales/en/treeList.js';
 import {TctIcon} from '../icon/tct-icon.js';
 import base from '../styles/base.styles.css';
 import styles from './tct-tree-list.styles.css';
@@ -59,13 +59,13 @@ function mergeRel(target: string | undefined): string | undefined {
  * @tag tct-tree-list
  * @upstream TreeList
  * @slot header - Rich header content; names the tree. Overrides the `header` attribute.
- * @csspart tree-list - The wrapper of the header and the tree (Astryx target `astryx-tree-list`).
+ * @csspart tree-list - The wrapper of the header and the tree.
  * @csspart header - The header wrapper.
  * @csspart tree - The `role="tree"` list.
- * @csspart tree-list-item - A row (Astryx target `astryx-tree-list-item`); also carries `tree-list-item-selected`, `tree-list-item-disabled` and the item's own `part` tokens.
- * @csspart tree-list-chevron - The expand/collapse toggle (Astryx target `astryx-tree-list-chevron`); also `tree-list-chevron-expanded` or `-collapsed`.
- * @csspart tree-list-item-label - The label (Astryx target `astryx-tree-list-item-label`); also `tree-list-item-label-selected`.
- * @csspart tree-list-guide - A connector guide line (Astryx target `astryx-tree-list-guide`).
+ * @csspart tree-list-item - A row; also carries `tree-list-item-selected`, `tree-list-item-disabled` and the item's own `part` tokens.
+ * @csspart tree-list-chevron - The expand/collapse toggle; also `tree-list-chevron-expanded` or `-collapsed`.
+ * @csspart tree-list-item-label - The label; also `tree-list-item-label-selected`.
+ * @csspart tree-list-guide - A connector guide line.
  * @cssprop --tree-list-indent - Indent per nesting level. Default `var(--spacing-4)`. Rows and guides both read it, so they stay aligned.
  * @cssprop --tree-list-row-gap - Vertical gap between adjacent rows. Default `var(--spacing-0-5)`. The guide spans it, so the line stays continuous.
  * @fires tct-tree-toggle - The user expands or collapses a branch (cancelable); `id`, `expanded` (the requested state) and `reason`.

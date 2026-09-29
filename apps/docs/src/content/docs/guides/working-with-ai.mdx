@@ -34,7 +34,7 @@ Full parity with Astryx's agent support is a requirement (D-011). The surface is
 Tell your AI to install the CLI and set itself up:
 
 ```text title="Paste this into your AI"
-Install @tecton-astryx/cli in this project (it is a private package: use the workspace, tarball or Git source my team uses) and run `tct init --features agents` to set up your Tecton Astryx context. Read the generated file.
+Install @tecton-wc/cli in this project (it is a private package: use the workspace, tarball or Git source my team uses) and run `tct init --features agents` to set up your Tecton Astryx context. Read the generated file.
 ```
 
 That is all. The `init --features agents` command generates everything your AI needs from the installed project: an element index, behavioural rules, and a CLI reference. After a dependency bump, `tct upgrade` reports a stale block and `tct upgrade --apply` refreshes it, and it never overwrites files you have edited outside the generated block.
@@ -59,7 +59,7 @@ Upstream's workflow also starts with page templates (`template --list`, `templat
 
 The block also includes rules that prevent common mistakes, a CLI quick reference, and an index of every element. The rules are the ones on the [Principles](../principles/) page, stated for agents:
 
-- Use `tct-*` elements before raw HTML for what they cover, and register the families you use (`import '@tecton-astryx/components/button'`).
+- Use `tct-*` elements before raw HTML for what they cover, and register the families you use (`import '@tecton-wc/components/button'`).
 - No inline `style` on raw wrappers; use tokens, attributes, `::part()` and custom properties.
 - No hardcoded colours or spacing; use `var(--color-*)` and `var(--spacing-*)`.
 - Never invent attributes, slots or events; read the element's page first.
@@ -92,7 +92,7 @@ Before writing any Tecton Astryx code, check your knowledge:
 If you don't know all three, run `tct init --features agents` to generate agent docs, then read the generated file.
 ```
 
-The answers the docs give: `import '@tecton-astryx/components/button'` (which registers `tct-button`); `purpose="required"` on `tct-dialog`, which blocks Escape dismissal; and the `options` property on `tct-selector` (structured data is a property, never an attribute).
+The answers the docs give: `import '@tecton-wc/components/button'` (which registers `tct-button`); `purpose="required"` on `tct-dialog`, which blocks Escape dismissal; and the `options` property on `tct-selector` (structured data is a property, never an attribute).
 
 ## The `tct` pattern
 
@@ -142,7 +142,7 @@ Every command also supports `--json`, a stable machine-readable envelope, for to
 }
 ```
 
-A small module in the CLI package (`@tecton-astryx/cli/json`, with `parseResponse`, `isError` and `assertResponse`) parses and narrows responses in TypeScript. The exact envelope and the error-code table are published in the [CLI reference](../cli/) when WP-AI lands; the JSON examples above show the shape to expect, not final identifiers.
+A small module in the CLI package (`@tecton-wc/cli/json`, with `parseResponse`, `isError` and `assertResponse`) parses and narrows responses in TypeScript. The exact envelope and the error-code table are published in the [CLI reference](../cli/) when WP-AI lands; the JSON examples above show the shape to expect, not final identifiers.
 
 ## MCP server
 
@@ -158,7 +158,7 @@ It is available two ways: as `tct mcp` over stdio, and as a route on your self-h
 ```json title="MCP config (stdio)"
 {
   "mcpServers": {
-    "tecton-astryx": {
+    "tecton-wc": {
       "command": "npx",
       "args": ["--no-install", "tct", "mcp"]
     }
@@ -169,7 +169,7 @@ It is available two ways: as `tct mcp` over stdio, and as a route on your self-h
 ```json title="MCP config (docs-site route)"
 {
   "mcpServers": {
-    "tecton-astryx": {
+    "tecton-wc": {
       "type": "url",
       "url": "https://docs.example.com/mcp"
     }

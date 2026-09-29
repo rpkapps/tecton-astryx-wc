@@ -7,9 +7,9 @@ import {css, html} from 'lit';
 import {property} from 'lit/decorators.js';
 import {afterEach, beforeAll, beforeEach, describe, expect, it} from 'vitest';
 import {userEvent} from 'vitest/browser';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import {
   aTimeout,
   emulateMedia,
@@ -20,7 +20,7 @@ import {
   runElementSuite,
   runKeyboardSuite,
   waitUntil,
-} from '@tecton-astryx/testing/index.js';
+} from '@tecton-wc/testing/index.js';
 import base from '../styles/base.styles.css';
 import containerReveal from './container-reveal.styles.css';
 import './define.js';

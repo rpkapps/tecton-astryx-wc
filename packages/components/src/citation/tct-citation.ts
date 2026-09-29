@@ -1,11 +1,11 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property, state} from 'lit/decorators.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
-import {safeUrl} from '@tecton-astryx/core/utils/safe-url.js';
-import defaults from '@tecton-astryx/locales/en/citation.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
+import {safeUrl} from '@tecton-wc/core/utils/safe-url.js';
+import defaults from '@tecton-wc/locales/en/citation.js';
 import base from '../styles/base.styles.css';
 import focusRing from '../styles/focus-ring.styles.css';
 import {CITATION_VARIANTS, type CitationSource, type CitationVariant} from './citation.types.js';

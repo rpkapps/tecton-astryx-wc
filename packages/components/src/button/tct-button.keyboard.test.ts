@@ -1,7 +1,7 @@
 /** tct-button keyboard contract: every row of the parity.json keyboard table has a step. */
 import {expect} from 'vitest';
-import {runKeyboardSuite} from '@tecton-astryx/testing/suites/keyboard.js';
-import {deepActiveElement} from '@tecton-astryx/testing/keyboard.js';
+import {runKeyboardSuite} from '@tecton-wc/testing/suites/keyboard.js';
+import {deepActiveElement} from '@tecton-wc/testing/keyboard.js';
 import parity from './parity.json' with {type: 'json'};
 import './define.js';
 

@@ -2,8 +2,10 @@
  * Locales generator (A§9.15), run by `pnpm generate` before the barrels.
  *
  * Inputs (all under `packages/locales/src/`):
- *  - `catalogs/*.json`     the 30 upstream Astryx catalogs (370 ids each), verbatim, hash-locked by
+ *  - `catalogs/*.json`     the 30 upstream catalogs (370 ids each), verbatim, hash-locked by
  *                          `catalogs.lock.json`. `--relock` rewrites the lock after an intended update.
+ *                          Their ids use the upstream namespace; the generator maps it to `@tct.*` (D-015),
+ *                          so nothing it writes carries the upstream id form.
  *  - `packages/components/src/<folder>/<folder>.messages.json`   new English messages (`@tct.<folder>.<key>`).
  *
  * Outputs (`packages/locales/dist/`, gitignored):
@@ -150,7 +152,15 @@ function main(): number {
 
   // English per namespace: upstream ids by camelCase namespace, new ids by component folder.
   const namespaces = new Map<string, FlatMessages>();
+  const shipped = new Set<string>();
   const add = (namespace: string, messages: FlatMessages) => {
+    for (const id of Object.keys(messages)) {
+      if (shipped.has(id))
+        throw new Error(
+          `locales: message id ${id} is defined twice (upstream catalog and a component folder)`,
+        );
+      shipped.add(id);
+    }
     namespaces.set(namespace, {...namespaces.get(namespace), ...messages});
   };
   for (const id of ids) {

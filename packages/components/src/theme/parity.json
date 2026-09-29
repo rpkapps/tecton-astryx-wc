@@ -35,7 +35,7 @@
           "upstream": "ThemeContext",
           "target": "themeContext",
           "as": "context",
-          "notes": "@tecton-astryx/core/context/keys.js: {name, mode}, mode already resolved to light or dark."
+          "notes": "@tecton-wc/core/context/keys.js: {name, mode}, mode already resolved to light or dark."
         },
         {
           "upstream": "useTheme",

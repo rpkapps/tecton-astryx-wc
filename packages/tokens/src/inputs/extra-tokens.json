@@ -1,5 +1,5 @@
 {
-  "$comment": "Authored (WP-F). Tokens the pipeline defines that neither the Astryx inventory nor the Tecton export contains. All are provisional (D-002): no Tecton decision exists. Colours name palette paths.",
+  "$comment": "Authored (WP-F). Tokens the pipeline defines that neither the upstream inventory nor the Tecton export contains. All are provisional (D-002): no Tecton decision exists. Colours name palette paths.",
   "tokens": [
     {
       "name": "--tecton-color-focus-inner",

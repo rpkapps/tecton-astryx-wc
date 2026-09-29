@@ -1,4 +1,4 @@
-import {defineElement} from '@tecton-astryx/core/define.js';
+import {defineElement} from '@tecton-wc/core/define.js';
 import {TctLayerProvider} from './tct-layer-provider.js';
 import {TctToast} from './tct-toast.js';
 import {TctToastViewport} from './tct-toast-viewport.js';

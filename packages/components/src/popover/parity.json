@@ -104,7 +104,7 @@
           "kind": "prop",
           "target": "closeLabel",
           "as": "attribute",
-          "notes": "`close-label`; default is the localized @astryx.popover.close."
+          "notes": "`close-label`; default is the localized @tct.popover.close."
         },
         {
           "upstream": "hasAutoFocus",

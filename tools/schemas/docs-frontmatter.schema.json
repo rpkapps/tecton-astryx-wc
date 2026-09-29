@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://tecton-astryx-wc.invalid/schemas/docs-frontmatter.schema.json",
+  "$id": "https://tecton-wc.invalid/schemas/docs-frontmatter.schema.json",
   "title": "Component docs frontmatter",
   "description": "Frontmatter of <folder>.docs.md (CONVENTIONS §7, D-011). tools/check-parity.ts adds the cross-file rules: folder name, category, examples on disk, entries vs parity.json, dense.properties vs the CEM.",
   "type": "object",

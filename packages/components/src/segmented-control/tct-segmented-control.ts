@@ -1,18 +1,18 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
-import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import type {ElementSize} from '@tecton-astryx/core/context/keys.js';
-import {RovingTabindexController} from '@tecton-astryx/core/controllers/roving-tabindex.js';
-import {SizeController} from '@tecton-astryx/core/controllers/size.js';
-import {TooltipController} from '@tecton-astryx/core/controllers/tooltip.js';
+import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import type {ElementSize} from '@tecton-wc/core/context/keys.js';
+import {RovingTabindexController} from '@tecton-wc/core/controllers/roving-tabindex.js';
+import {SizeController} from '@tecton-wc/core/controllers/size.js';
+import {TooltipController} from '@tecton-wc/core/controllers/tooltip.js';
 import {
   KeyboardHintController,
   keyboardHintStyles,
-} from '@tecton-astryx/core/controllers/keyboard-hint.js';
-import {requiredValidator} from '@tecton-astryx/core/forms/validators.js';
-import {FormControlMixin, type Validator} from '@tecton-astryx/core/mixins/form-control.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+} from '@tecton-wc/core/controllers/keyboard-hint.js';
+import {requiredValidator} from '@tecton-wc/core/forms/validators.js';
+import {FormControlMixin, type Validator} from '@tecton-wc/core/mixins/form-control.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import base from '../styles/base.styles.css';
 import styles from './tct-segmented-control.styles.css';
 import {
@@ -37,7 +37,7 @@ import type {TctSegmentedControlItem} from './tct-segmented-control-item.js';
  * @tag tct-segmented-control
  * @upstream SegmentedControl
  * @slot - `tct-segmented-control-item` children.
- * @csspart control - The strip that holds the segments (Astryx target `astryx-segmented-control`).
+ * @csspart control - The strip that holds the segments.
  * @csspart keyboard-hint - The arrow-key hint shown once on first keyboard focus.
  * @csspart disabled-message - The tooltip that explains a disabled control (`disabled-message`).
  * @fires input - A user selected a segment (native event, composed).

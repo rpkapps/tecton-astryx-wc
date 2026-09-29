@@ -6,12 +6,12 @@
 import {html} from 'lit';
 import {userEvent} from 'vitest/browser';
 import {describe, expect, it} from 'vitest';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
-import {axNode, expectAccessible} from '@tecton-astryx/testing/a11y.js';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
-import {isChromium} from '@tecton-astryx/testing/tier.js';
-import {nextFrame, waitUntil} from '@tecton-astryx/testing/timing.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
+import {axNode, expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
+import {isChromium} from '@tecton-wc/testing/tier.js';
+import {nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
 import './define.js';
 import type {TctFieldLabel} from './tct-field-label.js';
 import type {TctInputClearButton} from './tct-input-clear-button.js';

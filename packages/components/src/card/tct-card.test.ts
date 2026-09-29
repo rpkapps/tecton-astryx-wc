@@ -4,14 +4,14 @@
  */
 import {html} from 'lit';
 import {describe, expect, it, onTestFinished} from 'vitest';
-import {expectAccessible} from '@tecton-astryx/testing/a11y.js';
-import {emulateMedia} from '@tecton-astryx/testing/emulate.js';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
-import {isChromium} from '@tecton-astryx/testing/tier.js';
-import {waitUntil} from '@tecton-astryx/testing/timing.js';
-import {defineTheme} from '@tecton-astryx/core/theme/define-theme.js';
-import {generateThemeCSS} from '@tecton-astryx/core/theme/generate-theme-rules.js';
+import {expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {emulateMedia} from '@tecton-wc/testing/emulate.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
+import {isChromium} from '@tecton-wc/testing/tier.js';
+import {waitUntil} from '@tecton-wc/testing/timing.js';
+import {defineTheme} from '@tecton-wc/core/theme/define-theme.js';
+import {generateThemeCSS} from '@tecton-wc/core/theme/generate-theme-rules.js';
 import {CARD_ELEVATIONS, CARD_VARIANTS} from './card.types.js';
 import './define.js';
 import type {TctCard} from './tct-card.js';

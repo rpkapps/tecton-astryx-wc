@@ -3,10 +3,10 @@
  * tooltip is placed by the lazily loaded Floating UI fallback, and the placement vocabulary still holds.
  */
 import {describe, expect, it} from 'vitest';
-import {isFloatingLoaded} from '@tecton-astryx/core/layer/floating.js';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {withFeature} from '@tecton-astryx/testing/tier.js';
-import {nextFrame, waitUntil} from '@tecton-astryx/testing/timing.js';
+import {isFloatingLoaded} from '@tecton-wc/core/layer/floating.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {withFeature} from '@tecton-wc/testing/tier.js';
+import {nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
 import './define.js';
 import type {TctTooltip} from './tct-tooltip.js';
 

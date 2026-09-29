@@ -14,8 +14,8 @@
  * open/toggle state still reaches nested items that have a `value`.
  */
 import type {ReactiveController} from 'lit';
-import {ContextConsumer, ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import type {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {ContextConsumer, ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import type {TctElement} from '@tecton-wc/core/tct-element.js';
 import {collapsibleGroupContext, type CollapsibleGroupContextValue} from './collapsible.context.js';
 import type {CollapsibleChevronPosition, CollapsibleDensity} from './collapsible.types.js';
 

@@ -1,10 +1,10 @@
 import {html, nothing, type CSSResultGroup} from 'lit';
 import {property} from 'lit/decorators.js';
-import fieldMessages from '@tecton-astryx/locales/en/field.js';
-import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
-import {formLayoutContext} from '@tecton-astryx/core/context/keys.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import fieldMessages from '@tecton-wc/locales/en/field.js';
+import {ContextConsumer} from '@tecton-wc/core/context/protocol.js';
+import {formLayoutContext} from '@tecton-wc/core/context/keys.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import {TctIcon} from '../icon/tct-icon.js';
 import {TctTooltip} from '../tooltip/tct-tooltip.js';
 import base from '../styles/base.styles.css';
@@ -30,7 +30,7 @@ import styles from './tct-field-label.styles.css';
  * @tag tct-field-label
  * @upstream FieldLabel
  * @slot - The label text; alternative to the `label` attribute.
- * @csspart label - The label box (Astryx target `astryx-field-label`).
+ * @csspart label - The label box.
  * @csspart label-indicator - The "Required" or "Optional" text.
  * @csspart description - The description under the label.
  * @csspart label-tip - The info-tip button.

@@ -1,5 +1,5 @@
 import {html, type CSSResultGroup, type TemplateResult} from 'lit';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import base from '../styles/base.styles.css';
 import visuallyHidden from '../styles/visually-hidden.styles.css';
 

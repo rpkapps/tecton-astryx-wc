@@ -26,7 +26,7 @@
  * Guides: [mwg:interest-triggered-tooltips] [mwg:position-aware-tooltips] [mwg:accessibility]
  */
 import {css, html, type CSSResult, type ReactiveController, type TemplateResult} from 'lit';
-import defaults from '@tecton-astryx/locales/en/keyboardHint.js';
+import defaults from '@tecton-wc/locales/en/keyboardHint.js';
 import {LocaleController} from '../i18n/locale-controller.js';
 import {LayerController} from '../layer/layer-controller.js';
 import {PositionController} from '../layer/position.js';

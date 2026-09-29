@@ -13,7 +13,7 @@
  * layout viewport itself, `interactive-widget=resizes-content`, that is 0 and nothing is added.)
  */
 import type {ReactiveController, ReactiveControllerHost} from 'lit';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import {MOBILE_KEYBOARD_BOTTOM_CLEARANCE} from './bottom-sheet.types.js';
 
 const NON_TEXT_INPUT_TYPES = new Set([

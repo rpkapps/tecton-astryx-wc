@@ -1,8 +1,8 @@
 import {html, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import base from '../styles/base.styles.css';
 import layer from '../styles/layer.styles.css';
 import typography from '../styles/typography.styles.css';
@@ -39,7 +39,7 @@ import styles from './tct-heading.styles.css';
  * @tag tct-heading
  * @upstream Heading
  * @slot - The heading content.
- * @csspart text - The text box (Astryx target `astryx-heading`); carries the typography, truncation and layout.
+ * @csspart text - The text box; carries the typography, truncation and layout.
  * @cloakDisplay block
  */
 export class TctHeading extends TctElement {

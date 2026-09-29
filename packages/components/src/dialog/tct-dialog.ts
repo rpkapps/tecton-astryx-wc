@@ -2,17 +2,17 @@ import {html, nothing, type CSSResultGroup, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {AriaDelegateController} from '@tecton-astryx/core/controllers/aria-delegate.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {TctAfterOpenChangeEvent} from '@tecton-astryx/core/events/tct-after-open-change.js';
-import type {ChangeReason} from '@tecton-astryx/core/events/tct-event.js';
-import {TctOpenChangeEvent} from '@tecton-astryx/core/events/tct-open-change.js';
-import {features, prefersReducedMotion} from '@tecton-astryx/core/features.js';
-import {LayerController} from '@tecton-astryx/core/layer/layer-controller.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
+import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {AriaDelegateController} from '@tecton-wc/core/controllers/aria-delegate.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {TctAfterOpenChangeEvent} from '@tecton-wc/core/events/tct-after-open-change.js';
+import type {ChangeReason} from '@tecton-wc/core/events/tct-event.js';
+import {TctOpenChangeEvent} from '@tecton-wc/core/events/tct-open-change.js';
+import {features, prefersReducedMotion} from '@tecton-wc/core/features.js';
+import {LayerController} from '@tecton-wc/core/layer/layer-controller.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import {oneOf, lengthConverter, toCssLength} from '../field/field-utils.js';
 import base from '../styles/base.styles.css';
 import focusRing from '../styles/focus-ring.styles.css';
@@ -61,7 +61,7 @@ const cssDuration = (element: Element, token: string, fallback: number): number 
  *
  * Give it a `heading` (and optionally a `subtitle`), or compose `<tct-dialog-header>` yourself. Open it
  * with `open`, `show()`, a declarative invoker (`<button commandfor="dlg" command="--show">`) or, without
- * markup, `openDialog()` from `@tecton-astryx/components/dialog/dialog.api.js`. [mwg:light-dismiss-a-dialog]
+ * markup, `openDialog()` from `@tecton-wc/components/dialog/dialog.api.js`. [mwg:light-dismiss-a-dialog]
  * [mwg:platform-controls-dismiss-dialog] [mwg:declarative-dialog-popover-control] [mwg:animate-to-from-top-layer]
  * [mwg:persistent-top-layer-ui] [mwg:move-dom-element-without-losing-state]
  *
@@ -70,7 +70,7 @@ const cssDuration = (element: Element, token: string, fallback: number): number 
  * @upstream Dialog
  * @slot - The dialog content.
  * @slot heading - A heading element of your own (an `<h2>`), instead of the `heading` text.
- * @csspart dialog - The `<dialog>` surface, or its inline stand-in (Astryx target `astryx-dialog`).
+ * @csspart dialog - The `<dialog>` surface, or its inline stand-in.
  * @csspart content - The padded content box inside the surface.
  * @cssprop --dialog-padding - Padding of the dialog content. Default the spacing step 4 (the `padding` attribute wins).
  * @cssstate open - The dialog is open.

@@ -98,7 +98,7 @@ If your audience includes browsers below Tier 2, you have these options, cheapes
 Feature-detect at run time rather than sniffing user agents. Use the library's own detection, which is what the elements use:
 
 ```js
-import {features} from '@tecton-astryx/core/features.js';
+import {features} from '@tecton-wc/core/features.js';
 
 features.popover;            // Popover API (Tier 2 and up)
 features.anchorPositioning;  // CSS anchor positioning (Tier 1)
@@ -124,7 +124,7 @@ const hasLightDark = CSS.supports('color', 'light-dark(#000, #fff)');
 To try Tier 2 behaviour in your own tests without an old browser, force a feature off. `overrideFeature` returns a function that restores the previous state:
 
 ```js
-import {overrideFeature} from '@tecton-astryx/core/features.js';
+import {overrideFeature} from '@tecton-wc/core/features.js';
 
 const restore = overrideFeature('implicitAnchor', false);
 // … assert that a menu still opens beside its trigger …

@@ -2,8 +2,8 @@
  * Family-private context (WORK-BREAKDOWN §1.6, A§9.4): what `tct-segmented-control` tells its items.
  * Upstream `SegmentedControlContext`, re-expressed for the Context Community Protocol.
  */
-import {createContext} from '@tecton-astryx/core/context/protocol.js';
-import type {ElementSize} from '@tecton-astryx/core/context/keys.js';
+import {createContext} from '@tecton-wc/core/context/protocol.js';
+import type {ElementSize} from '@tecton-wc/core/context/keys.js';
 import type {SegmentedControlLayout} from './segmented-control.types.js';
 
 export interface SegmentedControlContextValue {

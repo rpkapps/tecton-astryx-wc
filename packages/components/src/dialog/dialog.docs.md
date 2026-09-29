@@ -131,5 +131,5 @@ The close button's name comes from the locale catalogs and follows the page lang
 - Decide the `purpose`; do not rely on the default `info` for a form.
 - Handle `tct-open-change` if closing must be confirmed, and set `open` yourself after `preventDefault()`.
 - Opening from script: call `show()` from a user action so focus can return to it. Without markup,
-  `openDialog(content, options)` from `@tecton-astryx/components/dialog/dialog.api.js` returns a handle
+  `openDialog(content, options)` from `@tecton-wc/components/dialog/dialog.api.js` returns a handle
   (`element`, `isOpen`, `hide()`, `closed`) and removes the dialog when it has closed.
