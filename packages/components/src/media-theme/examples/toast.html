@@ -1,7 +1,9 @@
 <!-- title: Inverted notice; description: A notice on the inverted surface: the provider makes its text and action readable on it, as a toast or tooltip needs. -->
-<div id="toast" style="display: inline-flex; align-items: center; gap: var(--spacing-3); padding: var(--spacing-3) var(--spacing-4); border-radius: var(--radius-container); background-color: var(--color-background-inverted)">
-  <tct-media-theme mode="auto">
-    <tct-text>Well A-12 archived.</tct-text>
-    <tct-button label="Undo" variant="ghost" size="sm"></tct-button>
-  </tct-media-theme>
-</div>
+<tct-hstack id="toast" h-align="start">
+  <tct-stack direction="horizontal" v-align="center" gap="3" padding-block="3" padding-inline="4" style="background-color: var(--color-background-inverted); border-radius: var(--radius-container)">
+    <tct-media-theme mode="auto">
+      <tct-text>Well A-12 archived.</tct-text>
+      <tct-button label="Undo" variant="ghost" size="sm"></tct-button>
+    </tct-media-theme>
+  </tct-stack>
+</tct-hstack>

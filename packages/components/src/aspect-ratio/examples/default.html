@@ -1,6 +1,6 @@
 <!-- title: Default; description: A 16:9 box. The height comes from the ratio and the width from the container. -->
-<div style="max-inline-size: 400px">
+<tct-vstack max-width="400">
   <tct-aspect-ratio ratio="16/9">
-    <div style="inline-size: 100%; block-size: 100%; display: grid; place-items: center; background: var(--color-background-muted)">16:9</div>
+    <tct-card variant="muted" padding="0" height="100%"><tct-center height="100%">16:9</tct-center></tct-card>
   </tct-aspect-ratio>
-</div>
+</tct-vstack>

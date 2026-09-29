@@ -1,9 +1,11 @@
 <!-- title: Grouping inside a panel; description: Dividers separate the groups of a settings panel; the strong variant marks the main boundary. -->
-<div id="in-card" style="display: grid; gap: var(--spacing-3); max-inline-size: 360px; padding: var(--spacing-4); border: var(--border-width) solid var(--color-border); border-radius: var(--radius-container)">
-  <tct-text type="medium-strong">Notifications</tct-text>
-  <span>Email me about new activity</span>
-  <tct-divider></tct-divider>
-  <span>Send a weekly summary</span>
-  <tct-divider variant="strong" label="Danger zone"></tct-divider>
-  <span>Delete this workspace</span>
-</div>
+<tct-card id="in-card" max-width="360">
+  <tct-vstack gap="3">
+    <tct-text type="medium-strong">Notifications</tct-text>
+    <span>Email me about new activity</span>
+    <tct-divider></tct-divider>
+    <span>Send a weekly summary</span>
+    <tct-divider variant="strong" label="Danger zone"></tct-divider>
+    <span>Delete this workspace</span>
+  </tct-vstack>
+</tct-card>

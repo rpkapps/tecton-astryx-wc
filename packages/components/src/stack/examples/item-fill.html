@@ -1,13 +1,13 @@
 <!-- title: Fill the free space; description: Wrap a child in tct-stack-item size="fill" to make it grow. Items that fill share the space evenly. -->
-<div id="item-fill" style="display: grid; gap: var(--spacing-4)">
+<tct-vstack id="item-fill" gap="4">
   <tct-stack direction="horizontal" gap="2" v-align="center">
     <tct-stack-item>Logo</tct-stack-item>
-    <tct-stack-item size="fill" style="background: var(--color-background-muted); padding: var(--spacing-2)">Content fills the rest</tct-stack-item>
+    <tct-stack-item size="fill"><tct-card variant="muted" padding="2">Content fills the rest</tct-card></tct-stack-item>
     <tct-stack-item>Actions</tct-stack-item>
   </tct-stack>
   <tct-stack direction="horizontal" gap="2">
-    <tct-stack-item size="fill" style="background: var(--color-background-muted); padding: var(--spacing-2)">fill</tct-stack-item>
-    <tct-stack-item size="fill" style="background: var(--color-background-muted); padding: var(--spacing-2)">fill</tct-stack-item>
-    <tct-stack-item size="fill" style="background: var(--color-background-muted); padding: var(--spacing-2)">fill</tct-stack-item>
+    <tct-stack-item size="fill"><tct-card variant="muted" padding="2">fill</tct-card></tct-stack-item>
+    <tct-stack-item size="fill"><tct-card variant="muted" padding="2">fill</tct-card></tct-stack-item>
+    <tct-stack-item size="fill"><tct-card variant="muted" padding="2">fill</tct-card></tct-stack-item>
   </tct-stack>
-</div>
+</tct-vstack>

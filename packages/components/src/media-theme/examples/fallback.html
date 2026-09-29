@@ -1,9 +1,9 @@
 <!-- title: Fallback for an image; description: A background-image cannot be measured from CSS, so auto uses fallback (default dark). Pick the side that matches the image. -->
-<div id="fallback" style="display: grid; gap: var(--spacing-4); max-inline-size: 360px">
-  <div style="padding: var(--spacing-4); border-radius: var(--radius-container); background-image: linear-gradient(135deg, rgb(20, 16, 26), rgb(60, 40, 90))">
+<tct-vstack id="fallback" gap="4" max-width="360">
+  <tct-stack padding="4" style="background-image: linear-gradient(135deg, rgb(20, 16, 26), rgb(60, 40, 90)); border-radius: var(--radius-container)">
     <tct-media-theme mode="auto" fallback="dark"><tct-text display="block">Dark image: fallback="dark".</tct-text></tct-media-theme>
-  </div>
-  <div style="padding: var(--spacing-4); border-radius: var(--radius-container); background-image: linear-gradient(135deg, rgb(246, 245, 248), rgb(220, 210, 235))">
+  </tct-stack>
+  <tct-stack padding="4" style="background-image: linear-gradient(135deg, rgb(246, 245, 248), rgb(220, 210, 235)); border-radius: var(--radius-container)">
     <tct-media-theme mode="auto" fallback="light"><tct-text display="block">Light image: fallback="light".</tct-text></tct-media-theme>
-  </div>
-</div>
+  </tct-stack>
+</tct-vstack>

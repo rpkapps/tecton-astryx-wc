@@ -1,9 +1,9 @@
 <!-- title: Right-to-left; description: The first column is at the inline start, so a grid mirrors under dir="rtl". -->
-<div id="rtl" style="display: grid; gap: var(--spacing-4)">
+<tct-vstack id="rtl" gap="4">
   <div dir="ltr">
-    <tct-grid columns="3" gap="2"><div style="padding: var(--spacing-2); background: var(--color-background-muted)">1</div><div style="padding: var(--spacing-2); background: var(--color-background-muted)">2</div><div style="padding: var(--spacing-2); background: var(--color-background-muted)">3</div></tct-grid>
+    <tct-grid columns="3" gap="2"><tct-card variant="muted" padding="2">1</tct-card><tct-card variant="muted" padding="2">2</tct-card><tct-card variant="muted" padding="2">3</tct-card></tct-grid>
   </div>
   <div dir="rtl">
-    <tct-grid columns="3" gap="2"><div style="padding: var(--spacing-2); background: var(--color-background-muted)">1</div><div style="padding: var(--spacing-2); background: var(--color-background-muted)">2</div><div style="padding: var(--spacing-2); background: var(--color-background-muted)">3</div></tct-grid>
+    <tct-grid columns="3" gap="2"><tct-card variant="muted" padding="2">1</tct-card><tct-card variant="muted" padding="2">2</tct-card><tct-card variant="muted" padding="2">3</tct-card></tct-grid>
   </div>
-</div>
+</tct-vstack>

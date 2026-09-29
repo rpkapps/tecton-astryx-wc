@@ -48,7 +48,7 @@ export interface TypographyConfig {
 }
 
 /** The colour mode of a theme island: `system` follows the operating system preference. */
-export type ThemeMode = 'system' | 'light' | 'dark';
+export type ThemeMode = 'light' | 'dark' | 'system';
 
 /**
  * A syntax highlighting theme as `defineTheme` reads it: a name and the resolved `--color-syntax-*`

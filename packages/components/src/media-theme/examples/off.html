@@ -1,6 +1,6 @@
 <!-- title: Switching the context; description: mode="off" keeps the element and removes the media context, so a surface can switch without re-creating its content. -->
-<div id="off" style="max-inline-size: 360px">
-  <div style="padding: var(--spacing-4); border-radius: var(--radius-container); background-color: rgb(20, 16, 26)">
+<tct-vstack id="off" max-width="360">
+  <tct-stack padding="4" style="background-color: rgb(20, 16, 26); border-radius: var(--radius-container)">
     <tct-vstack gap="3">
       <tct-media-theme id="off-theme" mode="dark">
         <tct-text display="block">Same element, context on or off.</tct-text>
@@ -11,5 +11,5 @@
         onclick="const t = document.getElementById('off-theme'); t.mode = t.mode === 'off' ? 'dark' : 'off'"
       ></tct-button>
     </tct-vstack>
-  </div>
-</div>
+  </tct-stack>
+</tct-vstack>

@@ -1,8 +1,10 @@
 <!-- title: Horizontal labels; description: horizontal-labels puts each label in a first column and its control in a second, through the layout context. It collapses to one column at 480px and below. -->
-<form id="horizontal-labels" onsubmit="return false" style="max-inline-size: 480px">
-  <tct-form-layout direction="horizontal-labels">
-    <tct-text-input label="Name" name="name" autocomplete="name"></tct-text-input>
-    <tct-text-input label="Email address" name="email" type="email" autocomplete="email"></tct-text-input>
-    <tct-text-input label="Organisation" name="org" autocomplete="organization"></tct-text-input>
-  </tct-form-layout>
-</form>
+<tct-vstack max-width="480">
+  <form id="horizontal-labels" onsubmit="return false">
+    <tct-form-layout direction="horizontal-labels">
+      <tct-text-input label="Name" name="name" autocomplete="name"></tct-text-input>
+      <tct-text-input label="Email address" name="email" type="email" autocomplete="email"></tct-text-input>
+      <tct-text-input label="Organisation" name="org" autocomplete="organization"></tct-text-input>
+    </tct-form-layout>
+  </form>
+</tct-vstack>

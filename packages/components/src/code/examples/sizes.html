@@ -1,6 +1,6 @@
 <!-- title: Sizes; description: By default code uses the Tecton code text size. size="inherit" adopts the surrounding font size and line height. -->
-<div id="sizes" style="display: grid; gap: var(--spacing-3)">
-  <p style="font-size: var(--font-size-2xl)">Large text with <tct-code>default code</tct-code></p>
-  <p style="font-size: var(--font-size-2xl)">Large text with <tct-code size="inherit">inherited size</tct-code></p>
-  <p style="font-size: var(--font-size-sm)">Small text with <tct-code size="inherit">inherited size</tct-code></p>
-</div>
+<tct-vstack id="sizes" gap="3">
+  <tct-text as="p" size="2xl" display="block">Large text with <tct-code>default code</tct-code></tct-text>
+  <tct-text as="p" size="2xl" display="block">Large text with <tct-code size="inherit">inherited size</tct-code></tct-text>
+  <tct-text as="p" size="sm" display="block">Small text with <tct-code size="inherit">inherited size</tct-code></tct-text>
+</tct-vstack>

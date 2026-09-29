@@ -1,6 +1,11 @@
+import type {ThemeMode} from '@tecton-astryx/core/theme/types.js';
+
 /** Colour modes (upstream `ThemeMode`): `system` follows the operating system preference. */
 export const THEME_MODES = ['light', 'dark', 'system'] as const;
-export type ThemeMode = (typeof THEME_MODES)[number];
+
+// One name, one declaration: the CEM type-values table resolves an alias by name across the packages,
+// and core/theme declares the same union (`ThemeMode`), so this re-exports it instead of redeclaring.
+export type {ThemeMode};
 
 /** The theme the library ships (D-013): the Tecton tokens in `tokens.css`. */
 export const DEFAULT_THEME = 'tecton';

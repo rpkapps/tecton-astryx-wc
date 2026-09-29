@@ -1,12 +1,14 @@
 <!-- title: Nested contexts; description: The inner context wins inside it, and the outer one applies again after it. -->
-<div id="nested" style="max-inline-size: 360px; padding: var(--spacing-4); border-radius: var(--radius-container); background-color: rgb(20, 16, 26)">
-  <tct-media-theme mode="dark">
-    <tct-vstack gap="3">
-      <tct-text display="block">Dark context.</tct-text>
-      <div style="padding: var(--spacing-3); border-radius: var(--radius-container); background-color: rgb(246, 245, 248)">
-        <tct-media-theme mode="light"><tct-text display="block">A light panel inside it.</tct-text></tct-media-theme>
-      </div>
-      <tct-text display="block">Back in the dark context.</tct-text>
-    </tct-vstack>
-  </tct-media-theme>
-</div>
+<tct-vstack id="nested" max-width="360">
+  <tct-stack padding="4" style="background-color: rgb(20, 16, 26); border-radius: var(--radius-container)">
+    <tct-media-theme mode="dark">
+      <tct-vstack gap="3">
+        <tct-text display="block">Dark context.</tct-text>
+        <tct-stack padding="3" style="background-color: rgb(246, 245, 248); border-radius: var(--radius-container)">
+          <tct-media-theme mode="light"><tct-text display="block">A light panel inside it.</tct-text></tct-media-theme>
+        </tct-stack>
+        <tct-text display="block">Back in the dark context.</tct-text>
+      </tct-vstack>
+    </tct-media-theme>
+  </tct-stack>
+</tct-vstack>

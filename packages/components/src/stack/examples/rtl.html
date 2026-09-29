@@ -1,9 +1,9 @@
 <!-- title: Right-to-left; description: Start and end are logical: a horizontal stack flows from the right in RTL, and padding-inline-start pads the right edge. -->
-<div id="rtl" style="display: grid; gap: var(--spacing-4)">
+<tct-vstack id="rtl" gap="4">
   <div dir="ltr">
-    <tct-stack direction="horizontal" gap="2" padding-inline-start="6" style="background: var(--color-background-muted)"><span>1</span><span>2</span><span>3</span></tct-stack>
+    <tct-card variant="muted" padding="0"><tct-stack direction="horizontal" gap="2" padding-inline-start="6"><span>1</span><span>2</span><span>3</span></tct-stack></tct-card>
   </div>
   <div dir="rtl">
-    <tct-stack direction="horizontal" gap="2" padding-inline-start="6" style="background: var(--color-background-muted)"><span>1</span><span>2</span><span>3</span></tct-stack>
+    <tct-card variant="muted" padding="0"><tct-stack direction="horizontal" gap="2" padding-inline-start="6"><span>1</span><span>2</span><span>3</span></tct-stack></tct-card>
   </div>
-</div>
+</tct-vstack>

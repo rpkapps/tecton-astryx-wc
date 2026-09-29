@@ -1,26 +1,28 @@
 <!-- title: Horizontal alignment; description: In a horizontal stack h-align is the main axis (start, center, end, between, around, evenly) and v-align the cross axis. -->
-<div id="alignment-horizontal" style="display: grid; gap: var(--spacing-4)">
-  <tct-stack direction="horizontal" h-align="start" gap="2" padding="2" style="background: var(--color-background-muted)">
-    <span>start</span><span>start</span><span>start</span>
-  </tct-stack>
-  <tct-stack direction="horizontal" h-align="center" gap="2" padding="2" style="background: var(--color-background-muted)">
-    <span>center</span><span>center</span><span>center</span>
-  </tct-stack>
-  <tct-stack direction="horizontal" h-align="end" gap="2" padding="2" style="background: var(--color-background-muted)">
-    <span>end</span><span>end</span><span>end</span>
-  </tct-stack>
-  <tct-stack direction="horizontal" h-align="between" padding="2" style="background: var(--color-background-muted)">
-    <span>between</span><span>between</span><span>between</span>
-  </tct-stack>
-  <tct-stack direction="horizontal" h-align="around" padding="2" style="background: var(--color-background-muted)">
-    <span>around</span><span>around</span><span>around</span>
-  </tct-stack>
-  <tct-stack direction="horizontal" h-align="evenly" padding="2" style="background: var(--color-background-muted)">
-    <span>evenly</span><span>evenly</span><span>evenly</span>
-  </tct-stack>
-  <tct-stack direction="horizontal" v-align="center" gap="3" min-height="64" style="background: var(--color-background-muted)">
-    <span>v-align="center"</span>
-    <span style="font-size: var(--font-size-2xl)">tall</span>
-    <span>centered</span>
-  </tct-stack>
-</div>
+<tct-vstack id="alignment-horizontal" gap="4">
+  <tct-card variant="muted" padding="2">
+    <tct-stack direction="horizontal" h-align="start" gap="2"><span>start</span><span>start</span><span>start</span></tct-stack>
+  </tct-card>
+  <tct-card variant="muted" padding="2">
+    <tct-stack direction="horizontal" h-align="center" gap="2"><span>center</span><span>center</span><span>center</span></tct-stack>
+  </tct-card>
+  <tct-card variant="muted" padding="2">
+    <tct-stack direction="horizontal" h-align="end" gap="2"><span>end</span><span>end</span><span>end</span></tct-stack>
+  </tct-card>
+  <tct-card variant="muted" padding="2">
+    <tct-stack direction="horizontal" h-align="between"><span>between</span><span>between</span><span>between</span></tct-stack>
+  </tct-card>
+  <tct-card variant="muted" padding="2">
+    <tct-stack direction="horizontal" h-align="around"><span>around</span><span>around</span><span>around</span></tct-stack>
+  </tct-card>
+  <tct-card variant="muted" padding="2">
+    <tct-stack direction="horizontal" h-align="evenly"><span>evenly</span><span>evenly</span><span>evenly</span></tct-stack>
+  </tct-card>
+  <tct-card variant="muted" padding="0" height="64">
+    <tct-stack direction="horizontal" v-align="center" gap="3" height="100%" padding-inline="2">
+      <span>v-align="center"</span>
+      <tct-text type="display-2">tall</tct-text>
+      <span>centered</span>
+    </tct-stack>
+  </tct-card>
+</tct-vstack>

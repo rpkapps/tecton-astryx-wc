@@ -1,7 +1,9 @@
 <!-- title: Horizontal; description: direction="horizontal" puts the fields side by side in equal columns. Use it for fields that belong together. -->
-<form id="horizontal" onsubmit="return false" style="max-inline-size: 480px">
-  <tct-form-layout direction="horizontal">
-    <tct-text-input label="First name" name="first" autocomplete="given-name"></tct-text-input>
-    <tct-text-input label="Last name" name="last" autocomplete="family-name"></tct-text-input>
-  </tct-form-layout>
-</form>
+<tct-vstack max-width="480">
+  <form id="horizontal" onsubmit="return false">
+    <tct-form-layout direction="horizontal">
+      <tct-text-input label="First name" name="first" autocomplete="given-name"></tct-text-input>
+      <tct-text-input label="Last name" name="last" autocomplete="family-name"></tct-text-input>
+    </tct-form-layout>
+  </form>
+</tct-vstack>

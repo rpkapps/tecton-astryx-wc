@@ -4,7 +4,7 @@ folder: hstack
 category: Layout
 entries: [HStack]
 summary: A horizontal stack: children flow left to right with token-based spacing, alignment and wrapping.
-examples: [default, alignment, wrapping, in-vstack]
+examples: [default, alignment, wrapping, in-vstack, start-and-end]
 keywords: [hstack, horizontal stack, row, flexbox, flex, spacing, gap, inline, toolbar, layout]
 dense:
   description: horizontal stack; left-to-right flex row with themed gap, alignment, wrap and padding

@@ -1,11 +1,13 @@
 <!-- title: Scrollable; description: scrollable turns on overflow: auto for a stack with a fixed height. While it overflows and holds nothing focusable, the box is a tab stop, so the keyboard can scroll it (Tab to it, then the arrow keys). -->
-<tct-stack id="scrollable-stack" scrollable height="140" width="260" gap="2" padding="2" style="border: var(--border-width) solid var(--color-border)">
-  <div>Notification 1</div>
-  <div>Notification 2</div>
-  <div>Notification 3</div>
-  <div>Notification 4</div>
-  <div>Notification 5</div>
-  <div>Notification 6</div>
-  <div>Notification 7</div>
-  <div>Notification 8</div>
-</tct-stack>
+<tct-card padding="0" width="260">
+  <tct-stack id="scrollable-stack" scrollable height="140" gap="2" padding="2">
+    <div>Notification 1</div>
+    <div>Notification 2</div>
+    <div>Notification 3</div>
+    <div>Notification 4</div>
+    <div>Notification 5</div>
+    <div>Notification 6</div>
+    <div>Notification 7</div>
+    <div>Notification 8</div>
+  </tct-stack>
+</tct-card>

@@ -1,9 +1,9 @@
 <!-- title: Focus ring on an inverted surface; description: The focus ring follows the surface side. Tab to a button: the ring is the side's ring, not the page's. -->
-<div id="focus-ring" style="display: grid; gap: var(--spacing-4); max-inline-size: 360px">
-  <div style="padding: var(--spacing-4); border-radius: var(--radius-container); background-color: rgb(20, 16, 26)">
+<tct-vstack id="focus-ring" gap="4" max-width="360">
+  <tct-stack padding="4" style="background-color: rgb(20, 16, 26); border-radius: var(--radius-container)">
     <tct-media-theme mode="dark"><tct-button label="On a dark surface" variant="secondary"></tct-button></tct-media-theme>
-  </div>
-  <div style="padding: var(--spacing-4); border-radius: var(--radius-container); background-color: rgb(246, 245, 248)">
+  </tct-stack>
+  <tct-stack padding="4" style="background-color: rgb(246, 245, 248); border-radius: var(--radius-container)">
     <tct-media-theme mode="light"><tct-button label="On a light surface" variant="secondary"></tct-button></tct-media-theme>
-  </div>
-</div>
+  </tct-stack>
+</tct-vstack>

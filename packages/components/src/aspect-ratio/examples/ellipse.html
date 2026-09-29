@@ -1,5 +1,5 @@
 <!-- title: Ellipse; description: shape="ellipse" clips the box to an ellipse that follows the ratio: a circle at 1:1, an oval otherwise. -->
-<div id="ellipse" style="display: flex; align-items: flex-start; gap: var(--spacing-6)">
-  <div style="inline-size: 120px"><tct-aspect-ratio ratio="1" shape="ellipse"><div style="inline-size: 100%; block-size: 100%; display: grid; place-items: center; background: var(--color-neutral)">circle</div></tct-aspect-ratio></div>
-  <div style="inline-size: 200px"><tct-aspect-ratio ratio="2" shape="ellipse"><div style="inline-size: 100%; block-size: 100%; display: grid; place-items: center; background: var(--color-neutral)">oval</div></tct-aspect-ratio></div>
-</div>
+<tct-hstack id="ellipse" v-align="start" gap="6">
+  <tct-vstack width="120"><tct-aspect-ratio ratio="1" shape="ellipse"><tct-card variant="muted" padding="0" height="100%"><tct-center height="100%">circle</tct-center></tct-card></tct-aspect-ratio></tct-vstack>
+  <tct-vstack width="200"><tct-aspect-ratio ratio="2" shape="ellipse"><tct-card variant="muted" padding="0" height="100%"><tct-center height="100%">oval</tct-center></tct-card></tct-aspect-ratio></tct-vstack>
+</tct-hstack>

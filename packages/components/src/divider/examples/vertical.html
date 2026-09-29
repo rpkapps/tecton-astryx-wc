@@ -1,8 +1,8 @@
 <!-- title: Vertical; description: A vertical divider fills the height of its parent, here a row with a fixed height. -->
-<div id="vertical" style="display: flex; align-items: stretch; gap: var(--spacing-3); block-size: 64px">
-  <span style="align-self: center">Left</span>
+<tct-hstack id="vertical" gap="3" height="64">
+  <tct-stack-item cross-align-self="center">Left</tct-stack-item>
   <tct-divider orientation="vertical"></tct-divider>
-  <span style="align-self: center">Middle</span>
+  <tct-stack-item cross-align-self="center">Middle</tct-stack-item>
   <tct-divider orientation="vertical" variant="strong" label="or"></tct-divider>
-  <span style="align-self: center">Right</span>
-</div>
+  <tct-stack-item cross-align-self="center">Right</tct-stack-item>
+</tct-hstack>

@@ -1,6 +1,6 @@
-<!-- title: Padding; description: padding takes a spacing-scale step; padding-inline, padding-block and the four edge attributes refine it (edge, then axis, then padding). -->
-<div id="padding" style="display: flex; flex-wrap: wrap; gap: var(--spacing-4)">
-  <tct-stack padding="4" style="background: var(--color-background-muted)"><span>padding="4"</span></tct-stack>
-  <tct-stack padding="1" padding-inline="6" style="background: var(--color-background-muted)"><span>padding-inline="6"</span></tct-stack>
-  <tct-stack padding="2" padding-block-start="8" padding-inline-end="6" style="background: var(--color-background-muted)"><span>per edge</span></tct-stack>
-</div>
+<!-- title: Padding; description: padding takes a spacing-scale step; padding-inline, padding-block and the four edge attributes refine it (edge, then axis, then padding). The stack draws nothing, so each one sits in a muted card to show its extent. -->
+<tct-hstack id="padding" wrap="wrap" gap="4">
+  <tct-card variant="muted" padding="0"><tct-stack padding="4"><span>padding="4"</span></tct-stack></tct-card>
+  <tct-card variant="muted" padding="0"><tct-stack padding="1" padding-inline="6"><span>padding-inline="6"</span></tct-stack></tct-card>
+  <tct-card variant="muted" padding="0"><tct-stack padding="2" padding-block-start="8" padding-inline-end="6"><span>per edge</span></tct-stack></tct-card>
+</tct-hstack>

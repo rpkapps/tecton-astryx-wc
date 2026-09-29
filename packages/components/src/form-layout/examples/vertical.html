@@ -1,8 +1,10 @@
 <!-- title: Vertical; description: The default: fields stack top to bottom with a spacing-4 gap. -->
-<form id="vertical" onsubmit="return false" style="max-inline-size: 320px">
-  <tct-form-layout>
-    <tct-text-input label="Name" name="name" autocomplete="name"></tct-text-input>
-    <tct-text-input label="Email" name="email" type="email" autocomplete="email"></tct-text-input>
-    <tct-text-input label="Notes" name="notes" optional></tct-text-input>
-  </tct-form-layout>
-</form>
+<tct-vstack max-width="320">
+  <form id="vertical" onsubmit="return false">
+    <tct-form-layout>
+      <tct-text-input label="Name" name="name" autocomplete="name"></tct-text-input>
+      <tct-text-input label="Email" name="email" type="email" autocomplete="email"></tct-text-input>
+      <tct-text-input label="Notes" name="notes" optional></tct-text-input>
+    </tct-form-layout>
+  </form>
+</tct-vstack>

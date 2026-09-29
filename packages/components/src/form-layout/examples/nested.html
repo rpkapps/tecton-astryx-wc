@@ -1,11 +1,13 @@
 <!-- title: Nested layouts; description: A horizontal layout nested in a vertical one puts related fields on one row. The inner layout overrides the outer one for its own fields. -->
-<form id="nested" onsubmit="return false" style="max-inline-size: 480px">
-  <tct-form-layout>
-    <tct-text-input label="Project name" name="project"></tct-text-input>
-    <tct-form-layout direction="horizontal">
-      <tct-text-input label="City" name="city" autocomplete="address-level2"></tct-text-input>
-      <tct-text-input label="State" name="state" autocomplete="address-level1"></tct-text-input>
-      <tct-text-input label="ZIP" name="zip" autocomplete="postal-code"></tct-text-input>
+<tct-vstack max-width="480">
+  <form id="nested" onsubmit="return false">
+    <tct-form-layout>
+      <tct-text-input label="Project name" name="project"></tct-text-input>
+      <tct-form-layout direction="horizontal">
+        <tct-text-input label="City" name="city" autocomplete="address-level2"></tct-text-input>
+        <tct-text-input label="State" name="state" autocomplete="address-level1"></tct-text-input>
+        <tct-text-input label="ZIP" name="zip" autocomplete="postal-code"></tct-text-input>
+      </tct-form-layout>
     </tct-form-layout>
-  </tct-form-layout>
-</form>
+  </form>
+</tct-vstack>

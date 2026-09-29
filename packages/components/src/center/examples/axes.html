@@ -1,6 +1,6 @@
 <!-- title: Axis modes; description: axis="horizontal" centres along the inline axis only; axis="vertical" along the block axis only; both (default) centres on both. -->
-<div id="axes" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-4)">
-  <tct-center axis="horizontal" height="120" style="background: var(--color-background-muted)"><span>horizontal</span></tct-center>
-  <tct-center axis="vertical" height="120" style="background: var(--color-background-muted)"><span>vertical</span></tct-center>
-  <tct-center axis="both" height="120" style="background: var(--color-background-muted)"><span>both</span></tct-center>
-</div>
+<tct-grid id="axes" columns="3" gap="4">
+  <tct-card variant="muted" padding="0" height="120"><tct-center axis="horizontal" height="100%"><span>horizontal</span></tct-center></tct-card>
+  <tct-card variant="muted" padding="0" height="120"><tct-center axis="vertical" height="100%"><span>vertical</span></tct-center></tct-card>
+  <tct-card variant="muted" padding="0" height="120"><tct-center axis="both" height="100%"><span>both</span></tct-center></tct-card>
+</tct-grid>

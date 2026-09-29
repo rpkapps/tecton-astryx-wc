@@ -1,7 +1,7 @@
 <!-- title: Common ratios; description: 16:9 widescreen, 4:3 classic, 1:1 square and 21:9 ultrawide. -->
-<div id="ratios" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--spacing-4); max-inline-size: 480px">
-  <tct-aspect-ratio ratio="16/9"><div style="inline-size: 100%; block-size: 100%; display: grid; place-items: center; background: var(--color-background-muted)">16:9</div></tct-aspect-ratio>
-  <tct-aspect-ratio ratio="4/3"><div style="inline-size: 100%; block-size: 100%; display: grid; place-items: center; background: var(--color-background-muted)">4:3</div></tct-aspect-ratio>
-  <tct-aspect-ratio ratio="1"><div style="inline-size: 100%; block-size: 100%; display: grid; place-items: center; background: var(--color-background-muted)">1:1</div></tct-aspect-ratio>
-  <tct-aspect-ratio ratio="21/9"><div style="inline-size: 100%; block-size: 100%; display: grid; place-items: center; background: var(--color-background-muted)">21:9</div></tct-aspect-ratio>
-</div>
+<tct-grid id="ratios" columns="2" gap="4" max-width="480">
+  <tct-aspect-ratio ratio="16/9"><tct-card variant="muted" padding="0" height="100%"><tct-center height="100%">16:9</tct-center></tct-card></tct-aspect-ratio>
+  <tct-aspect-ratio ratio="4/3"><tct-card variant="muted" padding="0" height="100%"><tct-center height="100%">4:3</tct-center></tct-card></tct-aspect-ratio>
+  <tct-aspect-ratio ratio="1"><tct-card variant="muted" padding="0" height="100%"><tct-center height="100%">1:1</tct-center></tct-card></tct-aspect-ratio>
+  <tct-aspect-ratio ratio="21/9"><tct-card variant="muted" padding="0" height="100%"><tct-center height="100%">21:9</tct-center></tct-card></tct-aspect-ratio>
+</tct-grid>

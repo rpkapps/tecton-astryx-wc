@@ -1,15 +1,15 @@
 <!-- title: Gaps; description: gap sets both axes; row-gap and column-gap override it per axis. -->
-<div id="gaps" style="display: grid; gap: var(--spacing-6)">
+<tct-vstack id="gaps" gap="6">
   <tct-grid columns="3" gap="1">
-    <div style="padding: var(--spacing-2); background: var(--color-background-muted)">gap="1"</div>
-    <div style="padding: var(--spacing-2); background: var(--color-background-muted)">b</div>
-    <div style="padding: var(--spacing-2); background: var(--color-background-muted)">c</div>
-    <div style="padding: var(--spacing-2); background: var(--color-background-muted)">d</div>
+    <tct-card variant="muted" padding="2">gap="1"</tct-card>
+    <tct-card variant="muted" padding="2">b</tct-card>
+    <tct-card variant="muted" padding="2">c</tct-card>
+    <tct-card variant="muted" padding="2">d</tct-card>
   </tct-grid>
   <tct-grid columns="3" gap="1" row-gap="6" column-gap="3">
-    <div style="padding: var(--spacing-2); background: var(--color-background-muted)">row 6, column 3</div>
-    <div style="padding: var(--spacing-2); background: var(--color-background-muted)">b</div>
-    <div style="padding: var(--spacing-2); background: var(--color-background-muted)">c</div>
-    <div style="padding: var(--spacing-2); background: var(--color-background-muted)">d</div>
+    <tct-card variant="muted" padding="2">row 6, column 3</tct-card>
+    <tct-card variant="muted" padding="2">b</tct-card>
+    <tct-card variant="muted" padding="2">c</tct-card>
+    <tct-card variant="muted" padding="2">d</tct-card>
   </tct-grid>
-</div>
+</tct-vstack>
