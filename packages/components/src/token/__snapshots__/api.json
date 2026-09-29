@@ -1,0 +1,140 @@
+{
+  "folder": "token",
+  "elements": {
+    "tct-token": {
+      "class": "TctToken",
+      "attributes": [
+        {
+          "name": "clickable",
+          "property": "clickable",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "color",
+          "property": "color",
+          "type": "TokenColor",
+          "values": [
+            "default",
+            "red",
+            "orange",
+            "yellow",
+            "green",
+            "teal",
+            "cyan",
+            "blue",
+            "purple",
+            "pink",
+            "gray"
+          ],
+          "default": "'default'",
+          "reflects": true
+        },
+        {
+          "name": "description",
+          "property": "description",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "href",
+          "property": "href",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label-hidden",
+          "property": "labelHidden",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "rel",
+          "property": "rel",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "removable",
+          "property": "removable",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "TokenSize | undefined",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "target",
+          "property": "target",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "value",
+          "property": "value",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "control",
+          "type": "HTMLElement | null",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "end",
+        "icon"
+      ],
+      "events": [
+        {
+          "name": "click",
+          "native": true
+        },
+        {
+          "name": "tct-remove",
+          "class": "TctRemoveEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "base",
+        "label",
+        "remove-button"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

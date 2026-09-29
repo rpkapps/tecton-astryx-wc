@@ -1,0 +1,185 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "token",
+  "workPackage": "WP-12",
+  "entries": {
+    "core.token": {
+      "tag": "tct-token",
+      "status": "implemented",
+      "upstream": {
+        "name": "Token",
+        "path": "packages/core/src/Token/Token.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute"
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md",
+          "notes": "Unset takes the nearest size provider, else md."
+        },
+        {
+          "upstream": "color",
+          "kind": "prop",
+          "target": "color",
+          "as": "attribute",
+          "reflect": true,
+          "default": "default",
+          "notes": "`default` or one of ten hues: red, orange, yellow, green, teal, cyan, blue, purple, pink, gray."
+        },
+        {
+          "upstream": "icon",
+          "kind": "slot",
+          "target": "icon",
+          "as": "slot"
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Dims the token and blocks every interaction; a disabled link loses its `href`."
+        },
+        {
+          "upstream": "onRemove",
+          "kind": "event",
+          "target": "tct-remove",
+          "as": "event",
+          "notes": "Cancelable; carries the token's `value` (default: the label). Needs the `removable` attribute, which draws the remove button. The token does not remove itself: the handler removes the element or the item."
+        },
+        {
+          "upstream": "onClick",
+          "kind": "event",
+          "target": "click",
+          "as": "native-event",
+          "notes": "Native `click`, retargeted from the label's button or link (or from the pill of a plain token). Needs `clickable` (or `href`) for the token to be pressable."
+        },
+        {
+          "upstream": "href",
+          "kind": "prop",
+          "target": "href",
+          "as": "attribute",
+          "notes": "Makes the token a link (with `target` and `rel`); unsafe schemes render an anchor without `href`."
+        },
+        {
+          "upstream": "description",
+          "kind": "prop",
+          "target": "description",
+          "as": "attribute",
+          "notes": "The accessible description of the interactive element."
+        },
+        {
+          "upstream": "endContent",
+          "kind": "slot",
+          "target": "end",
+          "as": "slot"
+        },
+        {
+          "upstream": "isLabelHidden",
+          "kind": "prop",
+          "target": "label-hidden",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base), ::part(label), ::part(remove-button) and the tokens."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useClickableContainer",
+          "target": "ClickableContainerController",
+          "as": "controller",
+          "notes": "A linked, removable token: a press anywhere but on the remove button follows the link, modifier keys and middle-click included."
+        },
+        {
+          "upstream": "useInteractiveRole",
+          "target": "interactiveRoleContext",
+          "as": "context",
+          "notes": "Inside a popover trigger a plain token renders as a button so the popover can bind to it."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Enter, Space",
+          "action": "Presses a clickable token",
+          "when": "the label button has focus"
+        },
+        {
+          "keys": "Enter",
+          "action": "Follows the link of a link token",
+          "when": "the link has focus"
+        },
+        {
+          "keys": "Tab",
+          "action": "Moves from the label to the remove button (two tab stops)",
+          "when": "the token is clickable or a link, and removable"
+        },
+        {
+          "keys": "Enter, Space",
+          "action": "Fires tct-remove",
+          "when": "the remove button has focus"
+        }
+      ],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "TOKEN-01",
+          "type": "approved-api-difference",
+          "text": "`clickable` and `removable` are boolean attributes: an element cannot see whether a listener is attached, so upstream's \"an `onClick` makes it a button, an `onRemove` adds a remove control\" becomes an explicit opt-in. `click` is the native event and `tct-remove` the cancelable request to remove, carrying `value`; `href` adds `target` and `rel` with the same URL policy and router hand-off as `tct-link`."
+        },
+        {
+          "id": "TOKEN-02",
+          "type": "a11y-improvement",
+          "text": "The label control and the remove button are two separate tab stops, never nested (a button inside a link is invalid); the remove button's name is the localised \"Remove {label}\", `description` is the accessible description, and a disabled token cannot be pressed (the host ignores the pointer, so no `click` or `tct-remove` reaches a listener)."
+        },
+        {
+          "id": "TOKEN-03",
+          "type": "tecton-visual",
+          "text": "The Tecton chip roles (the neutral pill matches the badge, one size step up from a badge); hover and pressed states draw the edge in the token's own ink (half then full strength) instead of a wash, because a wash over the tinted fill failed contrast in dark mode. Every colour, form and state was checked in light and dark (tct-token.states.test.ts)."
+        },
+        {
+          "id": "TOKEN-04",
+          "type": "tecton-visual",
+          "text": "`teal` and `cyan` resolve to the same values in the Tecton palette, so they look identical; both names stay accepted."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/components/src/link/tct-link.ts",
+          "reason": "The internal-link router hand-off (`linkContext.navigate` on an unmodified primary click) is duplicated in tct-link, tct-token and other link-like elements; a shared helper in core would remove the copies."
+        }
+      ],
+      "sizeBudgetKb": 38,
+      "notes": "Guides: [mwg:accessible-web-components] the remove button and label as separate controls; [mwg:styling-web-components] state styling through private custom properties; [mwg:custom-button-actions] press semantics of the label button. Size: 35 kB gzipped, dominated by the shared modules every icon-bearing element pulls in (tct-icon and the default icon registry, locale and context controllers); the budget is set above the measured size because the upstream complexity default (S) does not account for them."
+    }
+  }
+}

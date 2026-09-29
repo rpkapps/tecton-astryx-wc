@@ -1,0 +1,35 @@
+<!-- title: In a form; description: The field submits one entry per token under its name (repeated names in FormData, the item ids), requires at least one token when required is set, and returns to defaultItems on reset. -->
+<tct-vstack max-width="480">
+  <form id="in-form-root">
+    <tct-form-layout>
+      <tct-tokenizer label="Teams" name="team" required description="Choose at least one."></tct-tokenizer>
+      <tct-hstack gap="2">
+        <tct-button type="submit" variant="primary">Save</tct-button>
+        <tct-button type="reset">Reset</tct-button>
+      </tct-hstack>
+      <output></output>
+    </tct-form-layout>
+  </form>
+</tct-vstack>
+<script type="module">
+  import {createStaticSource} from '@tecton-wc/components/typeahead/utils.js';
+
+  const teams = [
+    {id: 'design', label: 'Design'},
+    {id: 'engineering', label: 'Engineering'},
+    {id: 'marketing', label: 'Marketing'},
+    {id: 'sales', label: 'Sales'},
+    {id: 'support', label: 'Support'},
+    {id: 'legal', label: 'Legal'},
+    {id: 'finance', label: 'Finance'},
+    {id: 'people', label: 'People'},
+  ];
+  const form = document.getElementById('in-form-root');
+  const field = form.querySelector('tct-tokenizer');
+  field.searchSource = createStaticSource(teams);
+  field.defaultItems = [teams[0]];
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    form.querySelector('output').textContent = JSON.stringify(new FormData(form, event.submitter).getAll('team'));
+  });
+</script>

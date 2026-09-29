@@ -1,0 +1,18 @@
+<!-- title: Entries on focus; description: entries-on-focus shows the source's bootstrap() results as soon as the field takes focus, before anything is typed: recent or popular choices. -->
+<tct-vstack id="entries-on-focus-root" max-width="360">
+  <tct-typeahead label="Assignee" entries-on-focus placeholder="Search people"></tct-typeahead>
+</tct-vstack>
+<script type="module">
+  const people = [
+    {id: 'ada', label: 'Ada Lovelace'},
+    {id: 'grace', label: 'Grace Hopper'},
+    {id: 'alan', label: 'Alan Turing'},
+    {id: 'edsger', label: 'Edsger Dijkstra'},
+  ];
+  const field = document.querySelector('#entries-on-focus-root tct-typeahead');
+  field.searchSource = {
+    // Shown on focus: the two people this user picked last.
+    bootstrap: () => people.slice(0, 2),
+    search: (query) => people.filter((person) => person.label.toLowerCase().includes(query.toLowerCase())),
+  };
+</script>

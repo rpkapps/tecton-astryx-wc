@@ -1,0 +1,418 @@
+{
+  "folder": "tokenizer",
+  "elements": {
+    "tct-tokenizer": {
+      "class": "TctTokenizer",
+      "attributes": [
+        {
+          "name": "debounce-ms",
+          "property": "debounceMs",
+          "type": "number",
+          "default": "150",
+          "reflects": false
+        },
+        {
+          "name": "description",
+          "property": "description",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "disabled-message",
+          "property": "disabledMessage",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "empty-search-results-text",
+          "property": "emptySearchResultsText",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "entries-on-focus",
+          "property": "entriesOnFocus",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "has-clear",
+          "property": "hasClear",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "has-create",
+          "property": "hasCreate",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "invalid",
+          "property": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label-hidden",
+          "property": "labelHidden",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label-icon",
+          "property": "labelIcon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label-tooltip",
+          "property": "labelTooltip",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "loading",
+          "property": "loading",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "max-entries",
+          "property": "maxEntries",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "max-menu-items",
+          "property": "maxMenuItems",
+          "type": "number",
+          "default": "10",
+          "reflects": false
+        },
+        {
+          "name": "menu-width",
+          "property": "menuWidth",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "min-query-length",
+          "property": "minQueryLength",
+          "type": "number",
+          "default": "1",
+          "reflects": false
+        },
+        {
+          "name": "name",
+          "property": "name",
+          "type": "string",
+          "default": "''",
+          "reflects": true
+        },
+        {
+          "name": "optional",
+          "property": "optional",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "placeholder",
+          "property": "placeholder",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "readonly",
+          "property": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "required",
+          "property": "required",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "FieldSize | undefined",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "start-icon",
+          "property": "startIcon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "status-message",
+          "property": "statusMessage",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "status-type",
+          "property": "statusType",
+          "type": "InputStatusType | undefined",
+          "values": [
+            "error",
+            "warning",
+            "success",
+            "info"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "status-variant",
+          "property": "statusVariant",
+          "type": "FieldStatusVariant",
+          "values": [
+            "attached",
+            "detached",
+            "tooltip"
+          ],
+          "default": "'attached'",
+          "reflects": false
+        },
+        {
+          "name": "token-overflow",
+          "property": "tokenOverflow",
+          "type": "TokenOverflowBehavior",
+          "values": [
+            "none",
+            "unfocused-inline",
+            "unfocused-layer"
+          ],
+          "default": "'none'",
+          "reflects": true
+        },
+        {
+          "name": "width",
+          "property": "width",
+          "type": "number | string | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "[BLOCKS_IMPLICIT_SUBMISSION]",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "control",
+          "type": "HTMLInputElement | null",
+          "readonly": true
+        },
+        {
+          "name": "defaultItems",
+          "type": "SearchableItem[] | undefined",
+          "readonly": false
+        },
+        {
+          "name": "displayedValidationMessage",
+          "type": "string",
+          "readonly": true
+        },
+        {
+          "name": "form",
+          "type": "HTMLFormElement | null",
+          "readonly": true
+        },
+        {
+          "name": "isDisabled",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "items",
+          "type": "SearchableItem[]",
+          "readonly": false
+        },
+        {
+          "name": "labels",
+          "type": "NodeList",
+          "readonly": true
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "query",
+          "type": "string",
+          "readonly": true
+        },
+        {
+          "name": "renderItem",
+          "type": "((item: SearchableItem) => TypeaheadRenderResult) | undefined",
+          "readonly": false
+        },
+        {
+          "name": "renderToken",
+          "type": "((item: SearchableItem, remove: () => void) => TypeaheadRenderResult) | undefined",
+          "readonly": false
+        },
+        {
+          "name": "searchSource",
+          "type": "SearchSource | undefined",
+          "readonly": false
+        },
+        {
+          "name": "showInvalid",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "status",
+          "type": "InputStatus | undefined",
+          "readonly": false
+        },
+        {
+          "name": "validationMessage",
+          "type": "string",
+          "readonly": true
+        },
+        {
+          "name": "validity",
+          "type": "ValidityState",
+          "readonly": true
+        },
+        {
+          "name": "values",
+          "type": "string[]",
+          "readonly": true
+        },
+        {
+          "name": "willValidate",
+          "type": "boolean",
+          "readonly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "blur",
+          "signature": "() => void"
+        },
+        {
+          "name": "checkValidity",
+          "signature": "() => boolean"
+        },
+        {
+          "name": "focus",
+          "signature": "(options?: FocusOptions) => void"
+        },
+        {
+          "name": "reportValidity",
+          "signature": "() => boolean"
+        },
+        {
+          "name": "setCustomValidity",
+          "signature": "(message: string) => void"
+        }
+      ],
+      "slots": [
+        "end",
+        "start"
+      ],
+      "events": [
+        {
+          "name": "change",
+          "native": true
+        },
+        {
+          "name": "input",
+          "native": true
+        },
+        {
+          "name": "tct-after-open-change",
+          "class": "TctAfterOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        },
+        {
+          "name": "tct-selection-change",
+          "class": "TctSelectionChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "busy",
+        "control",
+        "description",
+        "dropdown",
+        "empty-state",
+        "field",
+        "group",
+        "input",
+        "label",
+        "label-icon",
+        "label-indicator",
+        "label-tip",
+        "option",
+        "popup",
+        "start-icon",
+        "status",
+        "status-button",
+        "status-icon",
+        "token",
+        "typeahead-item"
+      ],
+      "cssStates": [
+        "busy",
+        "invalid",
+        "open",
+        "user-invalid"
+      ],
+      "cssProperties": []
+    }
+  }
+}

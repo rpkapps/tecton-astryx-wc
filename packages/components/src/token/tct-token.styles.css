@@ -1,0 +1,237 @@
+/*
+ * tct-token. The host is layout only; the pill is painted by `.base` (A§6.2). Colours set the two private
+ * properties `--_bg` / `--_fg`: the Tecton chip roles for `default` (the same pill as a badge, one size step
+ * smaller), tinted hue roles for the rest (design/components/chip.md; theme components.ts `token`). An
+ * interactive token (a button, a link) draws its edge in its own ink on hover and press, and the focus
+ * ring is drawn around the whole pill (`:has(:focus-visible)` on the container, `:focus-visible` on a link
+ * root). [mwg:styling-web-components] [mwg:css]
+ *
+ * Private custom properties: `--_bg`, `--_fg`, `--_edge` (the pill's edge: transparent, then the ink at half strength on hover and full strength while pressed).
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+    max-inline-size: 100%;
+    min-inline-size: 0;
+    vertical-align: middle;
+  }
+
+  /* A disabled token takes no pointer at all, like a native disabled control: no click reaches the host. */
+  :host([disabled]) {
+    pointer-events: none;
+  }
+
+  .base {
+    --_bg: var(--tecton-color-chip-default-fill);
+    --_fg: var(--tecton-color-chip-default-text);
+    --_edge: transparent;
+    --_focus-offset: 1px;
+
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    max-inline-size: 100%;
+    min-inline-size: 0;
+    padding-block: 0;
+    padding-inline: var(--spacing-2);
+    overflow: hidden;
+    /* Transparent at rest, not absent: forced colours draw it as the pill's edge (A§6.6). */
+    border: var(--border-width) solid var(--_edge);
+    border-radius: var(--radius-full);
+    background-color: var(--_bg);
+    color: var(--_fg);
+    font-family: inherit;
+    font-size: var(--text-supporting-size);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--text-supporting-leading);
+    white-space: nowrap;
+    text-decoration: none;
+  }
+
+  /* The control height of the size minus 8px (the padding of the field that usually holds a token). */
+  .base[data-size='sm'] {
+    block-size: calc(var(--size-element-sm) - var(--spacing-2));
+  }
+
+  .base[data-size='md'] {
+    block-size: calc(var(--size-element-md) - var(--spacing-2));
+  }
+
+  .base[data-size='lg'] {
+    block-size: calc(var(--size-element-lg) - var(--spacing-2));
+  }
+
+  .base[data-color='red'] {
+    --_bg: var(--color-background-red);
+    --_fg: var(--color-text-red);
+  }
+
+  .base[data-color='orange'] {
+    --_bg: var(--color-background-orange);
+    --_fg: var(--color-text-orange);
+  }
+
+  .base[data-color='yellow'] {
+    --_bg: var(--color-background-yellow);
+    --_fg: var(--color-text-yellow);
+  }
+
+  .base[data-color='green'] {
+    --_bg: var(--color-background-green);
+    --_fg: var(--color-text-green);
+  }
+
+  .base[data-color='teal'] {
+    --_bg: var(--color-background-teal);
+    --_fg: var(--color-text-teal);
+  }
+
+  .base[data-color='cyan'] {
+    --_bg: var(--color-background-cyan);
+    --_fg: var(--color-text-cyan);
+  }
+
+  .base[data-color='blue'] {
+    --_bg: var(--color-background-blue);
+    --_fg: var(--color-text-blue);
+  }
+
+  .base[data-color='purple'] {
+    --_bg: var(--color-background-purple);
+    --_fg: var(--color-text-purple);
+  }
+
+  .base[data-color='pink'] {
+    --_bg: var(--color-background-pink);
+    --_fg: var(--color-text-pink);
+  }
+
+  .base[data-color='gray'] {
+    --_bg: var(--color-background-gray);
+    --_fg: var(--color-text-gray);
+  }
+
+  /* The ellipsis lives on the label: text-overflow needs a block container. */
+  .label {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .interactive {
+    cursor: pointer;
+    transition: border-color var(--duration-fast) var(--ease-standard);
+  }
+
+  /* The real button or link inside the pill draws nothing of its own: the pill is the control. */
+  .label-button {
+    display: block;
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    text-decoration: none;
+    cursor: inherit;
+    outline: none;
+  }
+
+  .end {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  .icon-slot {
+    --_icon-size: var(--tecton-icon-size-100);
+  }
+
+  /* 16px glyph button; its hit area grows through the pseudo-element. */
+  .remove {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--spacing-4);
+    block-size: var(--spacing-4);
+    margin: 0;
+    margin-inline-end: calc(-1 * var(--spacing-1));
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-full);
+    background: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .remove::after {
+    content: '';
+    position: absolute;
+    inset: calc(-1 * var(--spacing-2))
+      /* design: a 32px hit area around the 16px button (WCAG 2.5.8 needs 24px) */;
+  }
+}
+
+@layer state {
+  .base[data-disabled] {
+    opacity: 0.5; /* design: disabled tokens dim to half strength (upstream) */
+    pointer-events: none;
+  }
+
+  .base[data-disabled],
+  .base[data-disabled] .label-button,
+  .base[data-disabled] .remove {
+    cursor: default;
+  }
+
+  /*
+   * Hover and pressed draw the pill's edge in its own ink, half strength and full strength; the fill and the
+   * ink stay as they are. Tecton has no state fill for a chip, and a wash over a tinted fill moves it toward or
+   * away from its ink depending on the hue and the scheme (a white wash on a dark yellow tint fails 4.5:1),
+   * where an edge never changes what the text sits on.
+   */
+  @media (hover: hover) {
+    .interactive:hover:not([data-disabled]) {
+      --_edge: color-mix(in srgb, var(--_fg) 50%, transparent);
+    }
+  }
+
+  .interactive:active:not([data-disabled]) {
+    --_edge: var(--_fg);
+  }
+
+  /* The remove glyph has its own wash: hovering it must not read as pressing the label. */
+  @media (hover: hover) {
+    .remove:hover:not(:disabled) {
+      background-color: var(--color-overlay-hover);
+    }
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .base {
+      border-color: ButtonBorder;
+      background-color: Canvas;
+      color: ButtonText;
+    }
+
+    .base[data-disabled] {
+      border-color: GrayText;
+      color: GrayText;
+      opacity: 1;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .interactive {
+      transition-duration: 0s;
+    }
+  }
+}

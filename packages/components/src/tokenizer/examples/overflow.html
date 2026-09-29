@@ -1,0 +1,23 @@
+<!-- title: Token overflow; description: token-overflow sets what tokens do when they do not fit. none wraps them onto more rows; unfocused-inline keeps one row with a "+N more" indicator while the field is not focused and expands in place on focus. -->
+<tct-vstack id="overflow-root" max-width="360" gap="4">
+  <tct-tokenizer label="Wrapping" token-overflow="none"></tct-tokenizer>
+  <tct-tokenizer label="One row while unfocused" token-overflow="unfocused-inline"></tct-tokenizer>
+</tct-vstack>
+<script type="module">
+  import {createStaticSource} from '@tecton-wc/components/typeahead/utils.js';
+
+  const teams = [
+    {id: 'design', label: 'Design'},
+    {id: 'engineering', label: 'Engineering'},
+    {id: 'marketing', label: 'Marketing'},
+    {id: 'sales', label: 'Sales'},
+    {id: 'support', label: 'Support'},
+    {id: 'legal', label: 'Legal'},
+    {id: 'finance', label: 'Finance'},
+    {id: 'people', label: 'People'},
+  ];
+  for (const field of document.querySelectorAll('#overflow-root tct-tokenizer')) {
+    field.searchSource = createStaticSource(teams);
+    field.items = teams;
+  }
+</script>
