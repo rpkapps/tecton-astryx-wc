@@ -1,8 +1,8 @@
 <!-- title: Controlled; description: The owner decides. preventDefault() the cancelable tct-open-change and set open yourself, or leave the event alone and the item follows the user. -->
-<div id="controlled" style="max-inline-size: 28rem">
+<tct-vstack id="controlled" gap="3" max-width="28rem">
   <tct-collapsible trigger="Confirm before closing" open>Closing asks first.</tct-collapsible>
-  <p data-log style="margin-block-start: var(--spacing-3); color: var(--color-text-secondary)">Waiting for a toggle.</p>
-</div>
+  <tct-text data-log as="p" type="inherit" color="secondary">Waiting for a toggle.</tct-text>
+</tct-vstack>
 <script type="module">
   const root = document.getElementById('controlled');
   const item = root.querySelector('tct-collapsible');
