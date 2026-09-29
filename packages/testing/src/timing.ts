@@ -15,9 +15,41 @@ export function aTimeout(ms = 0): Promise<void> {
  * motion) have finished. Measure positions or run axe (colour contrast) only after that.
  */
 export async function animationsFinished(element: Element): Promise<void> {
-  await nextFrame();
-  const running = element.getAnimations({subtree: true});
-  await Promise.allSettled(running.map((animation) => animation.finished));
+  // `getAnimations({subtree: true})` stays in one tree: animations inside shadow roots (a status that
+  // fades in inside a field inside a selector) were missed, and axe then read a half-faded colour.
+  // Collect through every shadow root, and repeat while finishing animations start new ones.
+  for (let round = 0; round < 10; round++) {
+    await nextFrame();
+    // Endless animations (spinners, skeleton shimmer) never finish: wait only for the ones that end.
+    const running = deepAnimations(element).filter(
+      (animation) =>
+        animation.playState === 'running' &&
+        animation.effect?.getComputedTiming().iterations !== Infinity,
+    );
+    if (running.length === 0) return;
+    await Promise.allSettled(running.map((animation) => animation.finished));
+  }
+}
+
+/** Animations on `root` and everything under it, shadow roots included. */
+export function deepAnimations(root: Element): Animation[] {
+  const animations = [...root.getAnimations({subtree: true})];
+  const visit = (node: Element | ShadowRoot): void => {
+    for (const child of node.querySelectorAll('*')) {
+      if (child.shadowRoot) {
+        for (const inner of child.shadowRoot.children)
+          animations.push(...inner.getAnimations({subtree: true}));
+        visit(child.shadowRoot);
+      }
+    }
+  };
+  if (root.shadowRoot) {
+    for (const inner of root.shadowRoot.children)
+      animations.push(...inner.getAnimations({subtree: true}));
+    visit(root.shadowRoot);
+  }
+  visit(root);
+  return [...new Set(animations)];
 }
 
 /** Polls `predicate` every frame until it returns truthy; fails after `timeout` ms. */

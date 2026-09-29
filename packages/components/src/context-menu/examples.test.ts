@@ -19,6 +19,7 @@ import '../hstack/define.js';
 import '../text/define.js';
 import '../vstack/define.js';
 import type {TctContextMenu} from './tct-context-menu.js';
+import {runModuleScript} from '@tecton-wc/testing/scripts.js';
 
 const examples = import.meta.glob<string>('./examples/*.html', {
   eager: true,
@@ -38,10 +39,7 @@ async function mountExample(source: string, theme: 'light' | 'dark'): Promise<HT
     {theme},
   );
   for (const code of scripts) {
-    const script = document.createElement('script');
-    script.type = 'module';
-    script.textContent = code;
-    root.append(script);
+    await runModuleScript(root, code);
   }
   await nextFrame();
   await nextFrame();

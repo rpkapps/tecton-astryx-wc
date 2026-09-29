@@ -18,6 +18,7 @@ import '../heading/define.js';
 import './define.js';
 import type {TctBottomSheetSwitcher} from './tct-bottom-sheet-switcher.js';
 import type {TctBottomSheet} from './tct-bottom-sheet.js';
+import {runModuleScript} from '@tecton-wc/testing/scripts.js';
 
 const examples = import.meta.glob<string>('./examples/*.html', {
   eager: true,
@@ -36,10 +37,7 @@ async function mountExample(source: string, theme: 'light' | 'dark'): Promise<HT
     {theme},
   );
   for (const code of scripts) {
-    const script = document.createElement('script');
-    script.type = 'module';
-    script.textContent = code;
-    root.append(script);
+    await runModuleScript(root, code);
   }
   await nextFrame();
   await aTimeout(30);

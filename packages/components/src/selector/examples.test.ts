@@ -19,6 +19,7 @@ import '../text/define.js';
 import '../vstack/define.js';
 import './define.js';
 import type {TctSelector} from './tct-selector.js';
+import {runModuleScript} from '@tecton-wc/testing/scripts.js';
 
 const examples = import.meta.glob<string>('./examples/*.html', {
   eager: true,
@@ -39,14 +40,14 @@ async function mountExample(source: string, theme: 'light' | 'dark'): Promise<HT
     {theme},
   );
   for (const code of scripts) {
-    const script = document.createElement('script');
-    script.type = 'module';
     // The docs bundler resolves `import {html} from 'lit'`; here the import is the same module, already loaded.
-    script.textContent = code.replace(
-      /import\s+\{([^}]*)\}\s+from\s+'[^']*';?/g,
-      (_, names: string) => `const {${names}} = window.__tctExample;`,
+    await runModuleScript(
+      root,
+      code.replace(
+        /import\s+\{([^}]*)\}\s+from\s+'[^']*';?/g,
+        (_, names: string) => `const {${names}} = window.__tctExample;`,
+      ),
     );
-    root.append(script);
   }
   await nextFrame();
   await nextFrame();
@@ -66,6 +67,7 @@ describe('selector examples', () => {
         const selectors = [...root.querySelectorAll<TctSelector>('tct-selector')];
         expect(selectors.length).toBeGreaterThan(0);
         await Promise.all(selectors.map((selector) => selector.updateComplete));
+        await animationsFinished(root);
         await expectAccessible(root);
 
         // Open the first selector that can open, and check the popup too.
@@ -76,6 +78,7 @@ describe('selector examples', () => {
           await first.show();
           await animationsFinished(first.shadowRoot!.querySelector('.layer')!);
           await nextFrame();
+          await animationsFinished(root);
           await expectAccessible(root);
           if (shoot) {
             const dir = `${server.config.root}/reports/screenshots/selector`;

@@ -24,6 +24,7 @@ import '../hstack/define.js';
 import '../link/define.js';
 import * as api from './toast.api.js';
 import {resetToastProviders} from './toaster.js';
+import {runModuleScript} from '@tecton-wc/testing/scripts.js';
 
 const examples = import.meta.glob<string>('./examples/*.html', {
   eager: true,
@@ -54,10 +55,7 @@ async function mountExample(source: string, theme: 'light' | 'dark'): Promise<HT
         (_, names: string) => `const {${names}} = window.__tctExample;`,
       )
       .replace(/import\s+'[^']*';?/g, '');
-    const script = document.createElement('script');
-    script.type = 'module';
-    script.textContent = rewritten;
-    root.append(script);
+    await runModuleScript(root, rewritten);
   }
   await nextFrame();
   await aTimeout(30);
