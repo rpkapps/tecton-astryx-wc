@@ -43,6 +43,7 @@ import {TctFieldLabel} from '../field/tct-field-label.js';
 import {TctInputClearButton} from '../field/tct-input-clear-button.js';
 import {TctFieldStatus} from '../field-status/tct-field-status.js';
 import {TctIcon} from '../icon/tct-icon.js';
+import {TctSpinner} from '../spinner/tct-spinner.js';
 import {TctTooltip} from '../tooltip/tct-tooltip.js';
 import base from '../styles/base.styles.css';
 import field from '../styles/field.styles.css';
@@ -116,6 +117,7 @@ export class TctTextInput extends FormControlMixin(TctElement) {
     TctFieldStatus,
     TctInputClearButton,
     TctIcon,
+    TctSpinner,
     TctTooltip,
   ];
   static override shadowRootOptions = {...TctElement.shadowRootOptions, delegatesFocus: true};
@@ -571,8 +573,10 @@ export class TctTextInput extends FormControlMixin(TctElement) {
 
   /** The spinner of a busy field (`loading` or a pending `changeAction`). */
   #renderBusy(): TemplateResult {
-    // TODO(part A): <tct-spinner size="sm"> once tct-spinner lands (a decorative loading indicator).
-    return html`<span class="busy" part="busy" aria-hidden="true"></span>`;
+    // Decorative: the field's own `aria-busy` says it, so the spinner's progressbar role is hidden.
+    return html`<span class="busy" part="busy" aria-hidden="true"
+      ><tct-spinner size="sm" shade="subtle"></tct-spinner
+    ></span>`;
   }
 
   /**
@@ -686,7 +690,7 @@ export class TctTextInput extends FormControlMixin(TctElement) {
     const action = this.changeAction;
     if (!action) return;
     const result = action(value, event);
-    if (!result || typeof (result as Promise<void>).then !== 'function') return;
+    if (!result || typeof result.then !== 'function') return;
     this.#pending++;
     this.requestUpdate();
     void Promise.resolve(result)

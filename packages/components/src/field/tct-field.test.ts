@@ -8,7 +8,7 @@ import {userEvent} from 'vitest/browser';
 import {describe, expect, it} from 'vitest';
 import {getAnnouncerRegions} from '@tecton-astryx/core/a11y/announcer.js';
 import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {formLayoutContext, type FormLayoutContextValue} from '@tecton-astryx/core/context/keys.js';
+import {formLayoutContext} from '@tecton-astryx/core/context/keys.js';
 import {defineElement} from '@tecton-astryx/core/define.js';
 import {overrideFeature} from '@tecton-astryx/core/features.js';
 import {TctElement} from '@tecton-astryx/core/tct-element.js';
@@ -179,7 +179,7 @@ describe('tct-field: required and optional indicators', () => {
       static override readonly tagName = 'tct-test-form-layout';
       readonly provider = new ContextProvider(this, {
         context: formLayoutContext,
-        initialValue: {direction: 'vertical', optionality: 'required'} as FormLayoutContextValue,
+        initialValue: {direction: 'vertical', optionality: 'required'},
       });
       override render() {
         return html`<slot></slot>`;
@@ -329,7 +329,7 @@ describe('tct-field: width and layout', () => {
       static override readonly tagName = 'tct-test-horizontal-layout';
       readonly provider = new ContextProvider(this, {
         context: formLayoutContext,
-        initialValue: {direction: 'horizontal-labels'} as FormLayoutContextValue,
+        initialValue: {direction: 'horizontal-labels'},
       });
       override render() {
         return html`<slot></slot>`;

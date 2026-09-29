@@ -1,5 +1,9 @@
 /*
- * The tooltip popup. Inverted surface (Tecton has no tooltip page, so the component keeps upstream's
+ * The tooltip popup. The look matches `.tooltip-surface` in styles/layer.styles.css (tct-button's built-in
+ * tooltip): the same box, type and colours. It is not that class because here the `[popover]` is a
+ * satellite element in the trigger's tree (ids must not cross a shadow boundary) and the box is painted by
+ * an inner part, while layer.styles.css targets a popover element inside the same shadow root.
+ * Inverted surface (Tecton has no tooltip page, so the component keeps upstream's
  * inverted treatment: the primary text colour as the fill, the surface colour as the ink; the theme
  * flips both with the mode). [mwg:interest-triggered-tooltips] [mwg:position-aware-tooltips]
  *
@@ -25,14 +29,19 @@
 
   .surface {
     box-sizing: border-box;
-    max-inline-size: 18.75rem; /* design: upstream's 300px content cap, in rem so it scales with the user's font size */
+    max-inline-size: min(
+      100%,
+      300px
+    ); /* design: upstream tooltip content width cap, as in styles/layer.styles.css */
     padding-block: var(--spacing-1);
     padding-inline: var(--spacing-2);
     font-family: var(--font-family-body);
     font-size: var(--text-body-size);
+    font-weight: var(--text-body-weight);
     line-height: var(--text-body-leading);
     color: var(--color-background-surface);
-    overflow-wrap: break-word;
+    text-align: start;
+    overflow-wrap: anywhere;
     background-color: var(--color-text-primary);
     border-radius: var(--radius-container);
   }
@@ -50,7 +59,7 @@
     .surface {
       color: CanvasText;
       background-color: Canvas;
-      border: var(--border-width) solid CanvasText;
+      border: 1px solid CanvasText;
     }
   }
 }

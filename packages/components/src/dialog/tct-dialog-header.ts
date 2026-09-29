@@ -8,10 +8,8 @@ import {TctOpenChangeEvent} from '@tecton-astryx/core/events/tct-open-change.js'
 import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
 import {TctElement} from '@tecton-astryx/core/tct-element.js';
 import {uniqueId} from '@tecton-astryx/core/utils/id.js';
-import {TctIcon} from '../icon/tct-icon.js';
-import {TctTooltip} from '../tooltip/tct-tooltip.js';
+import {TctButton} from '../button/tct-button.js';
 import base from '../styles/base.styles.css';
-import focusRing from '../styles/focus-ring.styles.css';
 import {oneOf} from '../field/field-utils.js';
 import {dialogContext, type DialogHeaderLike} from './dialog.context.js';
 import {DIALOG_END_COMPENSATIONS, type DialogEndCompensation} from './dialog.types.js';
@@ -50,15 +48,14 @@ const HEADING_STYLE =
  * @csspart title-block - The block holding the title and subtitle (Astryx target `astryx-dialog-header-title-block`).
  * @csspart subtitle - The subtitle.
  * @csspart end - The end content and close button (Astryx target `astryx-dialog-header-end-content`).
- * @csspart close-button - The close button.
- * @csspart close-icon - The close glyph (Astryx target `astryx-dialog-header-close-icon`).
+ * @csspart close-button - The close button, a `tct-button` (Astryx target `astryx-dialog-header-close-button`).
  * @fires tct-open-change - The close button was pressed outside a `tct-dialog`; cancelable, `open` is `false`, reason `close-button`.
  * @cloakDisplay block
  */
 export class TctDialogHeader extends TctElement implements DialogHeaderLike {
   static override readonly tagName = 'tct-dialog-header';
-  static override readonly dependencies = [TctIcon, TctTooltip];
-  static override styles: CSSResultGroup = [base, focusRing, styles];
+  static override readonly dependencies = [TctButton];
+  static override styles: CSSResultGroup = [base, styles];
 
   /** The title (upstream `title`). Rendered as an `<h2>`; it names the dialog and takes focus when the dialog opens. */
   @property() heading = '';
@@ -172,17 +169,16 @@ export class TctDialogHeader extends TctElement implements DialogHeaderLike {
         <slot name="end"></slot>
         ${
           showClose
-            ? html`<tct-tooltip content=${closeLabel} placement="above"
-                ><!-- TODO(part A): tct-button variant="ghost" icon-only label=... once it lands. -->
-                <button
-                  type="button"
-                  class="close focus-ring"
-                  part="close-button"
-                  aria-label=${closeLabel}
-                  @click=${this.#onClose}
-                >
-                  <tct-icon part="close-icon" name="close" color="inherit"></tct-icon></button
-              ></tct-tooltip>`
+            ? html`<tct-button
+                class="close"
+                part="close-button"
+                variant="ghost"
+                size="md"
+                icon="close"
+                icon-only
+                label=${closeLabel}
+                @click=${this.#onClose}
+              ></tct-button>`
             : nothing
         }
       </div>

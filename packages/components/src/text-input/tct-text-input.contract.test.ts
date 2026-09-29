@@ -24,11 +24,8 @@ import './define.js';
 import type {TctField} from '../field/tct-field.js';
 import type {TctTextInput} from './tct-text-input.js';
 
-// TODO(part A): swap for <tct-button type="submit" name="go" value="1"> once tct-button lands.
-import {TctTestSubmit} from '@tecton-astryx/testing/fixtures/test-form.js';
-import {defineElement} from '@tecton-astryx/core/define.js';
-defineElement(TctTestSubmit);
-const SUBMIT = 'tct-test-submit';
+import '../button/define.js';
+const SUBMIT = 'tct-button';
 
 const innerOf = (input: TctTextInput): HTMLInputElement =>
   input.shadowRoot!.querySelector<HTMLInputElement>('input.input')!;
@@ -38,7 +35,10 @@ function captureSubmissions(harness: FormHarness): Record<string, string>[] {
   const captured: Record<string, string>[] = [];
   harness.form.addEventListener('submit', (event) => {
     captured.push(
-      Object.fromEntries(new FormData(harness.form, event.submitter).entries()) as Record<string, string>,
+      Object.fromEntries(new FormData(harness.form, event.submitter).entries()) as Record<
+        string,
+        string
+      >,
     );
   });
   return captured;
@@ -63,7 +63,12 @@ async function slice(extra = '', formAttributes = ''): Promise<Slice> {
   await text.updateComplete;
   await field.updateComplete;
   await nextFrame();
-  return {harness, text, field, nativeB: harness.form.querySelector<HTMLInputElement>('input[name=b]')!};
+  return {
+    harness,
+    text,
+    field,
+    nativeB: harness.form.querySelector<HTMLInputElement>('input[name=b]')!,
+  };
 }
 
 describe('form contract (acceptance 4)', () => {
@@ -87,7 +92,10 @@ describe('form contract (acceptance 4)', () => {
     expect(text.validity.valueMissing).toBe(true);
 
     await userEvent.click(harness.form.querySelector(SUBMIT)!);
-    await waitUntil(() => innerOf(text).getAttribute('aria-invalid') === 'true', 'aria-invalid shown');
+    await waitUntil(
+      () => innerOf(text).getAttribute('aria-invalid') === 'true',
+      'aria-invalid shown',
+    );
     expect(harness.submitEvents).toHaveLength(0);
     expect(deepActiveElement()).toBe(innerOf(text));
     if (!isTier2) expect(seen()).toBe(true);
@@ -106,7 +114,10 @@ describe('form contract (acceptance 4)', () => {
     expect(innerOf(text).hasAttribute('aria-invalid')).toBe(false);
     if (!isTier2) expect(hasCustomState(text, 'user-invalid')).toBe(false);
     expect(text.reportValidity()).toBe(false);
-    await waitUntil(() => innerOf(text).getAttribute('aria-invalid') === 'true', 'shown by reportValidity');
+    await waitUntil(
+      () => innerOf(text).getAttribute('aria-invalid') === 'true',
+      'shown by reportValidity',
+    );
   });
 
   it('form.reset() restores the attribute defaults and clears the displayed error', async () => {
@@ -143,9 +154,11 @@ describe('form contract (acceptance 4)', () => {
     expect(text.isDisabled).toBe(true);
     expect(text.matches(':disabled')).toBe(true);
     expect(innerOf(text).disabled).toBe(true);
-    expect(wrapper.querySelector<HTMLInputElement>('input[name=b]')!.matches(':disabled')).toBe(true);
+    expect(wrapper.querySelector<HTMLInputElement>('input[name=b]')!.matches(':disabled')).toBe(
+      true,
+    );
     expect([...new FormData(wrapper as unknown as HTMLFormElement).keys()]).toEqual([]);
-    (wrapper.querySelector('fieldset') as HTMLFieldSetElement).disabled = false;
+    wrapper.querySelector('fieldset')!.disabled = false;
     await text.updateComplete;
     expect(text.isDisabled).toBe(false);
     expect(new FormData(wrapper as unknown as HTMLFormElement).get('a')).toBe('x');
@@ -169,7 +182,10 @@ describe('form contract (acceptance 4)', () => {
       `<div><label for="ext">External</label><tct-text-input id="ext" name="x"></tct-text-input>` +
         `<tct-text-input label="Own" name="y"></tct-text-input></div>`,
     );
-    const [ext, own] = [...wrapper.querySelectorAll<TctTextInput>('tct-text-input')] as [TctTextInput, TctTextInput];
+    const [ext, own] = [...wrapper.querySelectorAll<TctTextInput>('tct-text-input')] as [
+      TctTextInput,
+      TctTextInput,
+    ];
     await ext.updateComplete;
     await own.updateComplete;
     await userEvent.click(wrapper.querySelector('label')!);
@@ -191,7 +207,10 @@ describe('form contract (acceptance 4)', () => {
 });
 
 describe('slotted-input mode (A§9.8)', () => {
-  async function make(extra = '', inputAttributes = 'name="email" value="ada@example.com" autocomplete="email"') {
+  async function make(
+    extra = '',
+    inputAttributes = 'name="email" value="ada@example.com" autocomplete="email"',
+  ) {
     const harness = await formHarness(
       `<tct-text-input label="Email" description="We never share it" ${extra}>` +
         `<input slot="input" ${inputAttributes}></tct-text-input>` +
@@ -268,7 +287,8 @@ describe('slotted-input mode (A§9.8)', () => {
     await text.updateComplete;
     const clear = text.shadowRoot!.querySelector<HTMLElement>('tct-input-clear-button')!;
     const order: string[] = [];
-    for (const name of ['input', 'change', 'tct-clear']) text.addEventListener(name, () => order.push(name));
+    for (const name of ['input', 'change', 'tct-clear'])
+      text.addEventListener(name, () => order.push(name));
     await userEvent.click(clear.shadowRoot!.querySelector('button')!);
     await waitUntil(() => input.value === '', 'cleared');
     expect(order).toEqual(['tct-clear', 'input', 'change']);
@@ -303,7 +323,10 @@ describe('slotted-input mode (A§9.8)', () => {
   it('switching between modes follows the markup: removing the slotted input returns to the shadow input', async () => {
     const {text, input} = await make();
     input.remove();
-    await waitUntil(() => text.shadowRoot!.querySelector('input.input') !== null, 'shadow input rendered');
+    await waitUntil(
+      () => text.shadowRoot!.querySelector('input.input') !== null,
+      'shadow input rendered',
+    );
     expect(text.shadowRoot!.querySelector('[part="label"]')).not.toBeNull();
   });
 

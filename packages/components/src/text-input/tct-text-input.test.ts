@@ -446,7 +446,7 @@ describe('tct-text-input: status', () => {
       () => input.shadowRoot!.querySelector('tct-field-status') !== null,
       'message shown',
     );
-    expect(input.shadowRoot!.querySelector('tct-field-status')!.textContent!.trim()).not.toBe('');
+    expect(input.shadowRoot!.querySelector('tct-field-status')!.textContent.trim()).not.toBe('');
     expect(part(input, 'input')!.dataset.status).toBe('error');
   });
 

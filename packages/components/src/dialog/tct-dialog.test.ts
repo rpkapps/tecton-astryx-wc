@@ -26,6 +26,7 @@ import '../tooltip/define.js';
 import './define.js';
 import {openDialog} from './dialog.api.js';
 import type {TctDialog} from './tct-dialog.js';
+import type {TctButton} from '../button/tct-button.js';
 import type {TctDialogHeader} from './tct-dialog-header.js';
 
 const surfaceOf = (dialog: TctDialog): HTMLDialogElement =>
@@ -327,7 +328,7 @@ describe('tct-dialog: events (acceptance 7)', () => {
     const dialog = await make('heading="T" open');
     await waitUntil(() => layerStack().length === 1, 'open');
     const header = dialog.shadowRoot!.querySelector<TctDialogHeader>('tct-dialog-header')!;
-    const close = header.shadowRoot!.querySelector<HTMLButtonElement>('.close')!;
+    const close = header.shadowRoot!.querySelector<TctButton>('.close')!;
     const changes = recordEvents(dialog, 'tct-open-change');
     dialog.addEventListener('tct-open-change', (event) => event.preventDefault(), {once: true});
     close.click();
@@ -382,9 +383,7 @@ describe('tct-dialog: focus', () => {
       const active = deepActiveElement();
       expect(active?.id === 'opener', 'focus escaped to the page').toBe(false);
     }
-    expect((dialog.parentElement!.querySelector('#opener') as HTMLElement).matches(':focus')).toBe(
-      false,
-    );
+    expect(dialog.parentElement!.querySelector('#opener')!.matches(':focus')).toBe(false);
   });
 
   it('closing without error when the captured opener has been removed from the page', async () => {
@@ -404,9 +403,7 @@ describe('tct-dialog: focus', () => {
     );
     const dialog = wrapper.querySelector<TctDialog>('tct-dialog')!;
     await waitUntil(() => surfaceOf(dialog).matches(':modal'), 'modal');
-    const target = wrapper.querySelector('#b') as HTMLElement & {
-      moveBefore?: (n: Node, r: Node | null) => void;
-    };
+    const target = wrapper.querySelector('#b')!;
     if (typeof target.moveBefore === 'function') {
       target.moveBefore(dialog, null);
     } else {
@@ -559,7 +556,7 @@ describe('tct-dialog: heading, header and slots', () => {
       `<tct-dialog-header heading="Alone"></tct-dialog-header>`,
     );
     const changes = recordEvents(header, 'tct-open-change');
-    header.shadowRoot!.querySelector<HTMLButtonElement>('.close')!.click();
+    header.shadowRoot!.querySelector<TctButton>('.close')!.click();
     expect(changes.events).toHaveLength(1);
     expect(changes.events[0]).toMatchObject({
       open: false,
@@ -575,12 +572,18 @@ describe('tct-dialog: heading, header and slots', () => {
     const header = await fixture<TctDialogHeader>(
       `<tct-dialog-header heading="H"></tct-dialog-header>`,
     );
-    const close = () => header.shadowRoot!.querySelector<HTMLButtonElement>('.close')!;
-    expect(close().getAttribute('aria-label')).toBe('Close');
+    const close = () => header.shadowRoot!.querySelector<TctButton>('.close')!;
+    const nativeName = () =>
+      close().shadowRoot!.querySelector('button')!.getAttribute('aria-label');
+    await close().updateComplete;
+    expect(close().label).toBe('Close');
+    expect(nativeName()).toBe('Close');
     header.closeLabel = 'Dismiss';
     await header.updateComplete;
-    expect(close().getAttribute('aria-label')).toBe('Dismiss');
-    expect(header.shadowRoot!.querySelector('tct-tooltip')!.getAttribute('content')).toBe(
+    await close().updateComplete;
+    expect(nativeName()).toBe('Dismiss');
+    // The tct-button is icon-only, so its built-in tooltip shows the label.
+    expect(close().shadowRoot!.querySelector('.tooltip-surface')!.textContent.trim()).toBe(
       'Dismiss',
     );
   });

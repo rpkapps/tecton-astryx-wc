@@ -62,43 +62,10 @@
   .end[data-compensate-inline] {
     margin-inline-end: calc(-1 * var(--spacing-2));
   }
-
-  .close {
-    display: inline-flex;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    inline-size: var(--size-element-md);
-    block-size: var(--size-element-md);
-    padding: 0;
-    margin: 0;
-    color: var(--color-icon-secondary);
-    cursor: pointer;
-    background: none;
-    border: 0;
-    border-radius: var(--radius-element);
-  }
-}
-
-@layer state {
-  @media (hover: hover) {
-    .close:hover {
-      background-color: var(--color-overlay-hover);
-    }
-  }
-
-  .close:active {
-    background-color: var(--color-overlay-pressed);
-  }
 }
 
 @layer a11y {
   @media (forced-colors: active) {
-    .close {
-      color: ButtonText;
-    }
-
     :host([has-divider]) .header {
       border-block-end-color: CanvasText;
     }

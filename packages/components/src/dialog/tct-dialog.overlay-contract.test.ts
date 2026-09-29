@@ -112,10 +112,10 @@ describe('overlay contract (acceptance 5)', () => {
   it('an open tooltip never closes its dialog: hiding it (pointer leaving, Escape) leaves the dialog open', async () => {
     const s = await scene();
     await openBoth(s);
-    s.tooltip.show();
+    void s.tooltip.show();
     await waitUntil(() => s.tooltip.isOpen, 'tooltip shown');
     expect(s.inner.open).toBe(true);
-    s.tooltip.hide();
+    void s.tooltip.hide();
     await waitUntil(() => !s.tooltip.isOpen, 'tooltip hidden');
     expect(s.inner.open).toBe(true);
     expect(s.outer.open).toBe(true);
@@ -176,9 +176,7 @@ describe('overlay contract (acceptance 5)', () => {
     );
     const dialog = wrapper.querySelector<TctDialog>('tct-dialog')!;
     await waitUntil(() => surfaceOf(dialog).matches(':modal'), 'modal');
-    const target = wrapper.querySelector('#b') as HTMLElement & {
-      moveBefore?: (node: Node, reference: Node | null) => void;
-    };
+    const target = wrapper.querySelector('#b')!;
     if (typeof target.moveBefore === 'function') target.moveBefore(dialog, null);
     else target.append(dialog);
     await nextFrame();
