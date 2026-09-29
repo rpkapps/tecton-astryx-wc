@@ -1,0 +1,245 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "button",
+  "workPackage": "WP-F",
+  "entries": {
+    "core.button": {
+      "tag": "tct-button",
+      "status": "implemented",
+      "upstream": {
+        "name": "Button",
+        "path": "packages/core/src/Button/Button.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Visible text (default slot overrides it) and accessible name whenever it differs from the visible text: icon-only, loading, or different slotted text."
+        },
+        {
+          "upstream": "variant",
+          "kind": "prop",
+          "target": "variant",
+          "as": "attribute",
+          "reflect": true,
+          "default": "secondary",
+          "notes": "Adds the Tecton `outlined` and `text-only` variants to primary, secondary, ghost, destructive."
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md via sizeContext / group",
+          "notes": "Cascade: explicit, button group, size provider, md."
+        },
+        {
+          "upstream": "elevation",
+          "kind": "prop",
+          "target": "elevation",
+          "as": "attribute",
+          "reflect": true,
+          "default": "none"
+        },
+        {
+          "upstream": "type",
+          "kind": "prop",
+          "target": "type",
+          "as": "attribute",
+          "reflect": true,
+          "default": "button"
+        },
+        {"upstream": "name", "kind": "prop", "target": "name", "as": "attribute", "reflect": true},
+        {"upstream": "value", "kind": "prop", "target": "value", "as": "attribute"},
+        {
+          "upstream": "form",
+          "kind": "prop",
+          "target": "form",
+          "as": "attribute",
+          "notes": "The native `form` attribute of form-associated elements (id of the owner form); the `form` property is the read-only owner."
+        },
+        {
+          "upstream": "isLoading",
+          "kind": "prop",
+          "target": "loading",
+          "as": "attribute",
+          "reflect": true,
+          "default": "false"
+        },
+        {
+          "upstream": "isInterruptible",
+          "kind": "prop",
+          "target": "interruptible",
+          "as": "attribute",
+          "reflect": true,
+          "default": "false"
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": "false"
+        },
+        {
+          "upstream": "icon",
+          "kind": "prop",
+          "target": "icon",
+          "as": "attribute",
+          "notes": "A registered icon name; slot your own into `icon` for anything else."
+        },
+        {"upstream": "icon", "kind": "slot", "target": "icon", "as": "slot"},
+        {
+          "upstream": "isIconOnly",
+          "kind": "prop",
+          "target": "iconOnly",
+          "as": "attribute",
+          "reflect": true,
+          "default": "false",
+          "notes": "Attribute `icon-only`."
+        },
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "target": "width",
+          "as": "attribute",
+          "notes": "Not reflected; number is px, string is a CSS length; applied through a private custom property."
+        },
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {"upstream": "endContent", "kind": "slot", "target": "end", "as": "slot"},
+        {"upstream": "tooltip", "kind": "prop", "target": "tooltip", "as": "attribute"},
+        {"upstream": "onClick", "kind": "event", "target": "click", "as": "native-event"},
+        {"upstream": "clickAction", "kind": "prop", "target": "clickAction", "as": "property"},
+        {"upstream": "href", "kind": "prop", "target": "href", "as": "attribute"},
+        {
+          "upstream": "as",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "Custom link component: routers hook in through linkContext (tct-link-provider `navigate`) instead of a component prop (A-xstyle family of React-only polymorphism)."
+        },
+        {"upstream": "target", "kind": "prop", "target": "target", "as": "attribute"},
+        {"upstream": "rel", "kind": "prop", "target": "rel", "as": "attribute"},
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(button), the variant/size attributes, and --button-focus-offset / --button-icon-only-aspect."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useTooltip",
+          "target": "TooltipController",
+          "as": "controller",
+          "notes": "Shadow mode: the surface is a [popover] in the button's shadow root; also the icon-only label tooltip."
+        },
+        {"upstream": "useSize", "target": "SizeController", "as": "controller"},
+        {"upstream": "useButtonGroup", "target": "buttonGroupContext", "as": "context"},
+        {
+          "upstream": "useLinkComponent",
+          "target": "linkContext",
+          "as": "context",
+          "notes": "`navigate(href, event)` for unmodified primary clicks on internal links."
+        },
+        {
+          "upstream": "useIndicatorFocusRing",
+          "target": "focus-ring.styles.css",
+          "as": "css",
+          "notes": "Shared `.focus-ring` on the inner control; `--_focus-offset` carries `--button-focus-offset`."
+        },
+        {
+          "upstream": "IconDefaultSizeProvider",
+          "target": "--_icon-size",
+          "as": "css",
+          "notes": "The button sets it on the inner control; slotted tct-icon inherits it through the slot (sm and md buttons 16px, lg 20px)."
+        },
+        {
+          "upstream": "useInteractiveRole",
+          "as": "waived",
+          "reason": "Used by popover/menu triggers that wrap Button, not by Button itself; owned by the overlay work packages."
+        },
+        {
+          "upstream": "EDGE_COMP_ATTR",
+          "as": "waived",
+          "reason": "Layout edge compensation for ghost buttons is a layout concern of tct-layout (WP-8): it can key on `tct-button[variant=ghost]`."
+        }
+      ],
+      "keyboard": [
+        {"keys": "Enter", "action": "Activates the button", "when": "not disabled or busy"},
+        {
+          "keys": "Space",
+          "action": "Activates the button on key up",
+          "when": "not disabled or busy"
+        },
+        {
+          "keys": "Tab",
+          "action": "Moves focus to the button",
+          "when": "a disabled button is skipped; a busy or disabled-with-reason (tooltip) button is a tab stop"
+        },
+        {
+          "keys": "Enter",
+          "action": "Activates the form's default submit button from a field",
+          "when": "type=submit is the first submit button of the form"
+        },
+        {"keys": "Escape", "action": "Closes the tooltip", "when": "the tooltip is open"}
+      ],
+      "form": {
+        "formAssociated": true,
+        "notes": "type=submit: temporary hidden native submitter carrying name/value and the form* overrides, then requestSubmit(temp) (A§9.7); type=reset: form.reset(). SubmitEvent.submitter is that temporary button. Enter in a field activates the first submit button; disabled/busy buttons do nothing. `form=` and <fieldset disabled> work natively. No form value of its own."
+      },
+      "differences": [
+        {
+          "id": "BUTTON-01",
+          "type": "approved-api-difference",
+          "text": "The click event is the native event from the inner button. The default action (submit, reset, clickAction) runs after the event finished dispatching, so a listener on the host can preventDefault() and cancel it, like a native button; upstream's onClick ran before clickAction. `SubmitEvent.submitter` is a temporary native button, not the host (platform limit, A§20 item 6)."
+        },
+        {
+          "id": "BUTTON-02",
+          "type": "a11y-improvement",
+          "text": "A busy button (loading or pending clickAction) uses aria-disabled + an activation guard instead of native `disabled`, so keyboard focus is never dropped to the body; upstream disables the native button. Announcement is a single polite message through the announcer instead of a per-button role=status region."
+        },
+        {
+          "id": "BUTTON-03",
+          "type": "a11y-improvement",
+          "text": "A link-rendering button (href) stays an <a> while busy (guarded), instead of flipping to a <button> and losing focus; only an explicitly disabled button renders as <button>."
+        },
+        {
+          "id": "BUTTON-04",
+          "type": "tecton-visual",
+          "text": "Variants paint from Tecton action roles; `outlined` and `text-only` are added (owner's theme). `destructive` is bound to --tecton-color-status-error-* (D-013 Q-06). Focus is the hover fill plus the hot-pink ring on every variant, destructive included (D-005), 1px from the edge (--button-focus-offset). Disabled is a recessed fill, not opacity 0.5. Every edge has a transparent 1px border so forced colours can paint it."
+        },
+        {
+          "id": "BUTTON-05",
+          "type": "approved-api-difference",
+          "text": "`href` + `as` component: routers integrate through linkContext `navigate(href, event)`; `as` is waived. An href refused by the URL policy (javascript:) renders a button."
+        },
+        {
+          "id": "BUTTON-06",
+          "type": "approved-api-difference",
+          "text": "Icon: attribute `icon` (registered name) and slots `icon` / `end` replace the ReactNode props icon / endContent; the default slot replaces children, with `label` as the fallback visible text."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:form-associated-custom-elements] FACE, submitter and reset; [mwg:accessible-web-components] delegation of aria-* to the inner control and states through aria-disabled; [mwg:css] focus-visible ring, touch targets, forced colours, reduced motion; [mwg:styling-web-components] parts, ::slotted icons, host layout only; [mwg:interest-triggered-tooltips] and [mwg:position-aware-tooltips] the built-in tooltip; [mwg:shadow-dom] slots and delegatesFocus; [mwg:custom-elements] lifecycle and custom states."
+    }
+  }
+}

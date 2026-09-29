@@ -1,9 +1,9 @@
 /**
- * size-limit config (A§18.4), computed at run time. Milestone M6's `tools/size/build-entries.ts`
- * bundles every `<folder>/define.js` (lit and core included) into `reports/size/` and writes
- * `reports/size/budgets.json` (`{"<entry>.js": <kB>}`; kB from `parity.json.sizeBudgetKb` or the
- * complexity default). This file turns that directory into size-limit entries. Until then it yields
- * no entries and `pnpm size` skips (see tools/size/run.ts).
+ * size-limit config (A§18.4), computed at run time. `tools/size/build-entries.ts` (run by `pnpm size`)
+ * bundles the shared runtime, the autoloader and every `<folder>/define.ts` (lit and core included)
+ * into `reports/size/` and writes `reports/size/budgets.json` (`{"<entry>.js": <kB>}`; kB from
+ * `parity.json.sizeBudgetKb` or the complexity default). This file turns that directory into
+ * size-limit entries; lazy chunks live in `reports/size/chunks/` and are not measured.
  */
 import {existsSync, readFileSync, readdirSync} from 'node:fs';
 import {join} from 'node:path';

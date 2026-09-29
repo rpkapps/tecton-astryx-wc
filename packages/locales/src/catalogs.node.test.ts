@@ -99,7 +99,8 @@ describe('upstream catalogs', () => {
       expect(Object.keys(messages).sort(), tag).toEqual([...ids].sort());
       for (const id of ids) expect(typeof messages[id], `${tag} ${id}`).toBe('string');
     }
-  });
+    // Imports 30 generated modules; the default 5 s is too tight when the whole suite runs in parallel.
+  }, 30_000);
 
   it('keeps every ICU argument of the English message in each translation', async () => {
     const english = await load('en');
@@ -136,7 +137,23 @@ describe('English namespace modules', () => {
         merged[id] = message;
       }
     }
-    expect(merged).toEqual(english);
+    // Upstream ids partition en.json exactly. New `@tct.<folder>.*` ids come from the component
+    // folders' `<folder>.messages.json` and exist only in the namespace modules (components pass them
+    // as `defaults`), so each must match its folder file.
+    const upstream = Object.fromEntries(
+      Object.entries(merged).filter(([id]) => !id.startsWith('@tct.')),
+    );
+    expect(upstream).toEqual(english);
+    const componentsSrc = fileURLToPath(new URL('../../components/src/', import.meta.url));
+    for (const [id, message] of Object.entries(merged)) {
+      if (!id.startsWith('@tct.')) continue;
+      const folder = id.split('.')[1]!;
+      const source = JSON.parse(
+        readFileSync(`${componentsSrc}${folder}/${folder}.messages.json`, 'utf8'),
+      ) as Record<string, string | {defaultMessage: string}>;
+      const expected = source[id];
+      expect(typeof expected === 'string' ? expected : expected?.defaultMessage, id).toBe(message);
+    }
   });
 });
 

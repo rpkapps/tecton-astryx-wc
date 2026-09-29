@@ -1,0 +1,17 @@
+<!-- title: Nested dialogs; description: Escape closes the innermost layer first: a tooltip, then the inner dialog, then the outer one, one per press, and focus returns to each opener. -->
+<div id="nested-example">
+  <tct-button variant="primary" data-open="outer">Open outer</tct-button>
+  <tct-dialog id="nested-outer" heading="Outer dialog">
+    <p style="margin: 0">Open the inner dialog, focus its clear button, and press Escape three times.</p>
+    <div><tct-button data-open="inner">Open inner</tct-button></div>
+    <tct-dialog id="nested-inner" heading="Inner dialog">
+      <tct-text-input label="Search" has-clear value="wells"></tct-text-input>
+    </tct-dialog>
+  </tct-dialog>
+</div>
+<script type="module">
+  const root = document.getElementById('nested-example');
+  for (const button of root.querySelectorAll('[data-open]')) {
+    button.addEventListener('click', () => root.querySelector(`#nested-${button.dataset.open}`).show());
+  }
+</script>

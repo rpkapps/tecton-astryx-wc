@@ -1,0 +1,9 @@
+<!-- title: Slotted input; description: Slot your own native input so password managers and autofill see a real field. The label, description and status are wired next to it. -->
+<form id="slotted-input-example" style="max-inline-size: 24rem">
+  <tct-text-input label="Email" description="We never share it." status-type="warning" status-message="Use your work address.">
+    <input slot="input" type="email" name="email" autocomplete="email" value="ada@example.com" />
+  </tct-text-input>
+</form>
+<script type="module">
+  document.getElementById('slotted-input-example').addEventListener('submit', (event) => event.preventDefault());
+</script>

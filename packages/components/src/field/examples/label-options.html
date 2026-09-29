@@ -1,0 +1,6 @@
+<!-- title: Label options; description: label-icon adds a glyph, label-tooltip an info button after the label, and label-hidden hides the label visually while keeping it for assistive technology. -->
+<div style="display: flex; flex-direction: column; gap: var(--spacing-4)">
+  <tct-field label="Depth" label-icon="info"><input style="inline-size: 100%; box-sizing: border-box; padding: var(--spacing-2); font: inherit; color: inherit; background: transparent; border: var(--border-width) solid var(--color-border); border-radius: var(--radius-element)" name="depth" /></tct-field>
+  <tct-field label="Sampling rate" label-tooltip="Samples per second, at the recorder."><input style="inline-size: 100%; box-sizing: border-box; padding: var(--spacing-2); font: inherit; color: inherit; background: transparent; border: var(--border-width) solid var(--color-border); border-radius: var(--radius-element)" name="rate" /></tct-field>
+  <tct-field label="Search wells" label-hidden><input style="inline-size: 100%; box-sizing: border-box; padding: var(--spacing-2); font: inherit; color: inherit; background: transparent; border: var(--border-width) solid var(--color-border); border-radius: var(--radius-element)" type="search" name="q" placeholder="Search wells" /></tct-field>
+</div>

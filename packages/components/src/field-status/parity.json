@@ -1,0 +1,98 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "field-status",
+  "workPackage": "WP-F",
+  "entries": {
+    "core.field-status": {
+      "tag": "tct-field-status",
+      "status": "implemented",
+      "upstream": {
+        "name": "FieldStatus",
+        "path": "packages/core/src/FieldStatus/FieldStatus.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "type",
+          "kind": "prop",
+          "target": "type",
+          "as": "attribute",
+          "reflect": true,
+          "default": "error",
+          "notes": "`error`, `warning`, `success` and, beyond upstream, `info` (the Tecton status set)."
+        },
+        {
+          "upstream": "message",
+          "kind": "prop",
+          "target": "message",
+          "as": "attribute",
+          "notes": "Plain text; the default slot takes richer content."
+        },
+        {
+          "upstream": "id",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "`id` is a global attribute (A§7.1). tct-field and tct-text-input give the status satellite it creates a generated id, or the `status-id` you set."
+        },
+        {
+          "upstream": "variant",
+          "kind": "prop",
+          "target": "variant",
+          "as": "attribute",
+          "reflect": true,
+          "default": "attached"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(status) and ::part(icon)."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useAnnounce",
+          "target": "announce",
+          "as": "module-function",
+          "notes": "@tecton-astryx/core/a11y/announcer.js: an error is announced assertively, every other type politely; skipped for the satellite a field or text input owns, which announces itself once."
+        },
+        {
+          "upstream": "useEntryAnimation",
+          "target": "tct-fade-in",
+          "as": "css",
+          "notes": "A fade from the shared motion module; no movement, so there is nothing to switch off under reduced motion."
+        }
+      ],
+      "differences": [
+        {
+          "id": "FIELDSTATUS-01",
+          "type": "tecton-visual",
+          "text": "A status is coloured ink on the page with no message box behind it (tecton-astryx components.ts `field-status`, textfield.md); the `detached` variant adds the leading icon and the gap above it, the `attached` variant keeps the text directly under the control."
+        },
+        {
+          "id": "FIELDSTATUS-02",
+          "type": "approved-api-difference",
+          "text": "`type` also accepts `info`, which the Tecton status set has and the upstream TextInput tooltip variant already needs."
+        },
+        {
+          "id": "FIELDSTATUS-03",
+          "type": "a11y-improvement",
+          "text": "A standalone error is announced assertively where the field chrome announces it politely once when it appears; both never fire together because an owned satellite does not announce on its own."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-error-announcement] polite/assertive live announcements through the shared announcer; [mwg:accessible-web-components] the status is referenced from the control with aria-describedby."
+    }
+  }
+}

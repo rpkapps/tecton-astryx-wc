@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "sample-badge",
+  "workPackage": "WP-F",
+  "entries": {
+    "core.badge": {
+      "tag": "tct-sample-badge",
+      "status": "implemented",
+      "upstream": {"name": "Badge", "path": "packages/core/src/Badge/Badge.tsx", "commit": "ca632c6"},
+      "api": [
+        {"upstream": "variant", "kind": "prop", "target": "variant", "as": "attribute", "reflect": true, "default": "neutral"},
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
+        {"upstream": "icon", "kind": "prop", "target": "icon", "as": "slot"},
+        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style/::part/custom properties"}
+      ],
+      "keyboard": [
+        {"keys": "Enter, Space", "action": "Activates the remove button", "when": "removable"}
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "SAMPLEBADGE-01",
+          "type": "approved-api-difference",
+          "text": "Sample-only difference: the badge exposes a remove button that upstream Badge lacks."
+        }
+      ],
+      "tests": {"render": true, "a11y": true, "api": true},
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Throwaway sample used to exercise the M6 pipeline. [mwg:custom-elements]"
+    }
+  }
+}

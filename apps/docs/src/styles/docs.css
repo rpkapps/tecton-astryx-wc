@@ -1,0 +1,349 @@
+/*
+ * Docs site skin (A§16.1): maps Starlight's `--sl-*` variables onto the Tecton tokens from
+ * `@tecton-astryx/tokens/tecton.css`, so the shell follows the same light and dark values as the
+ * components (tokens switch on `prefers-color-scheme` and on `[data-theme]`, which Starlight's theme
+ * provider sets). No colour literals: every colour below is a token or a `color-mix()` of tokens.
+ * Site components (Example, DataTable, ...) are styled here as well so the sheet is linted once.
+ */
+
+:root {
+  /* Type: Figtree UI, IBM Plex Mono code (D-003). */
+  --sl-font: var(--font-family-body);
+  --sl-font-mono: var(--font-family-code);
+
+  /* Neutrals (Starlight: white = strongest text, black = page background). */
+  --sl-color-white: var(--color-text-primary);
+  --sl-color-gray-1: var(--color-text-primary);
+  --sl-color-gray-2: var(--color-text-secondary);
+  --sl-color-gray-3: var(--color-text-secondary);
+  --sl-color-gray-4: var(--color-border-emphasized);
+  --sl-color-gray-5: var(--color-neutral);
+  --sl-color-gray-6: var(--color-background-muted);
+  --sl-color-gray-7: var(--color-background-surface);
+  --sl-color-black: var(--color-background-body);
+
+  /* Accent. */
+  --sl-color-accent-low: var(--color-accent-muted);
+  --sl-color-accent: var(--color-accent);
+  --sl-color-accent-high: var(--color-text-accent);
+  --sl-color-text: var(--color-text-secondary);
+  --sl-color-text-accent: var(--color-text-accent);
+  /* Text on the accent-tinted current-item background: the page background is the readable pair. */
+  --sl-color-text-invert: var(--color-background-body);
+  --sl-color-bg: var(--color-background-body);
+  --sl-color-bg-nav: var(--color-background-surface);
+  --sl-color-bg-sidebar: var(--color-background-surface);
+  --sl-color-bg-inline-code: var(--color-background-muted);
+  --sl-color-bg-accent: var(--color-accent);
+  --sl-color-hairline-light: var(--color-border);
+  --sl-color-hairline: var(--color-border);
+  --sl-color-hairline-shade: var(--color-border);
+  --sl-color-backdrop-overlay: var(--color-overlay);
+
+  /* Aside and badge hues from the Tecton text and status roles. */
+  --sl-color-blue-high: var(--color-text-blue);
+  --sl-color-blue: var(--color-text-blue);
+  --sl-color-blue-low: color-mix(in srgb, var(--color-text-blue) 14%, transparent);
+  --sl-color-green-high: var(--color-text-green);
+  --sl-color-green: var(--color-success);
+  --sl-color-green-low: var(--color-success-muted);
+  --sl-color-orange-high: var(--color-text-orange);
+  --sl-color-orange: var(--color-warning);
+  --sl-color-orange-low: var(--color-warning-muted);
+  --sl-color-red-high: var(--color-text-red);
+  --sl-color-red: var(--color-error);
+  --sl-color-red-low: var(--color-error-muted);
+  --sl-color-purple-high: var(--color-text-purple);
+  --sl-color-purple: var(--color-text-purple);
+  --sl-color-purple-low: color-mix(in srgb, var(--color-text-purple) 14%, transparent);
+
+  /* Prose rhythm follows the Tecton scale. */
+  --sl-line-height: 1.65;
+  --sl-content-width: 50rem;
+}
+
+/* One focus ring everywhere (D-005): Tecton hot pink from the focus tokens. */
+:focus-visible {
+  outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+  outline-offset: var(--focus-outline-offset);
+}
+
+/* Cross-document view transitions, as an enhancement only. [mwg:cross-document-transitions] */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+}
+
+/* -- Shared bits ------------------------------------------------------------------------------ */
+
+.tct-visually-hidden:not(:focus-within, :active) {
+  position: absolute;
+  overflow: hidden;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.tct-badge {
+  display: inline-block;
+  padding-block: 0.1em;
+  padding-inline: 0.6em;
+  border: var(--border-width) solid var(--color-border-emphasized);
+  border-radius: var(--radius-full);
+  background: var(--color-background-muted);
+  color: var(--color-text-primary);
+  font-size: var(--sl-text-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.tct-badge[data-tone='success'] {
+  border-color: var(--color-success);
+  color: var(--color-text-green);
+}
+
+.tct-badge[data-tone='warning'] {
+  border-color: var(--color-warning);
+  color: var(--color-text-orange);
+}
+
+.tct-badge[data-tone='info'] {
+  border-color: var(--color-text-accent);
+  color: var(--color-text-accent);
+}
+
+/* -- Component page header -------------------------------------------------------------------- */
+
+.tct-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin-block: 0 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.tct-meta > li {
+  margin: 0;
+}
+
+/* -- Tables ---------------------------------------------------------------------------------- */
+
+.tct-table-wrap {
+  overflow-x: auto;
+  margin-block: 1rem;
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-container);
+}
+
+.tct-table-wrap > table {
+  inline-size: 100%;
+  margin: 0;
+  border-collapse: collapse;
+  font-size: var(--sl-text-sm);
+}
+
+.tct-table-wrap caption {
+  padding: 0.75rem 1rem;
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
+  text-align: start;
+}
+
+.tct-table-wrap :is(th, td) {
+  padding: 0.5rem 0.75rem;
+  border-block-start: var(--border-width) solid var(--color-border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.tct-table-wrap thead th {
+  background: var(--color-background-muted);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+}
+
+.tct-table-wrap tbody th {
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.tct-table-wrap :is(td, th) > code {
+  white-space: nowrap;
+}
+
+.tct-table-wrap :is(td, th) > .tct-codes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.tct-table-wrap kbd {
+  display: inline-block;
+  padding-block: 0.05em;
+  padding-inline: 0.4em;
+  border: var(--border-width) solid var(--color-border-emphasized);
+  border-radius: var(--radius-element);
+  background: var(--color-background-muted);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-code);
+  font-size: var(--sl-text-xs);
+}
+
+.tct-swatch {
+  display: inline-block;
+  inline-size: 1rem;
+  block-size: 1rem;
+  margin-inline-end: 0.4rem;
+  border: var(--border-width) solid var(--color-border-emphasized);
+  border-radius: var(--radius-inner);
+  vertical-align: -0.15em;
+}
+
+/* -- Example: live preview plus source ---------------------------------------------------------- */
+
+.tct-example {
+  margin-block: 1.25rem;
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-container);
+  background: var(--color-background-surface);
+}
+
+.tct-example__preview {
+  padding: 1.5rem;
+  overflow-x: auto;
+  color: var(--color-text-primary);
+}
+
+.tct-example__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  border-block-start: var(--border-width) solid var(--color-border);
+  background: var(--color-background-muted);
+}
+
+.tct-example__label {
+  padding-inline: 0.5rem;
+  color: var(--color-text-secondary);
+  font-family: var(--font-family-code);
+  font-size: var(--sl-text-xs);
+}
+
+.tct-example__button {
+  min-block-size: 2rem;
+  padding-inline: 0.75rem;
+  border: var(--border-width) solid var(--color-border-emphasized);
+  border-radius: var(--radius-element);
+  background: var(--color-background-surface);
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: var(--sl-text-sm);
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .tct-example__button:hover {
+    background: var(--color-neutral);
+  }
+}
+
+.tct-example__code pre {
+  margin: 0;
+  padding: 1rem;
+  overflow-x: auto;
+  border-block-start: var(--border-width) solid var(--color-border);
+  border-end-start-radius: var(--radius-container);
+  border-end-end-radius: var(--radius-container);
+  font-family: var(--font-family-code);
+  font-size: var(--sl-text-code);
+  line-height: 1.55;
+}
+
+/* Shiki `css-variables` theme: token colours come from Tecton text roles, so both schemes follow. */
+html {
+  --astro-code-foreground: var(--color-text-primary);
+  --astro-code-background: var(--color-background-surface);
+  --astro-code-token-constant: var(--color-text-blue);
+  --astro-code-token-string: var(--color-text-green);
+  --astro-code-token-comment: var(--color-text-secondary);
+  --astro-code-token-keyword: var(--color-text-red);
+  --astro-code-token-parameter: var(--color-text-primary);
+  --astro-code-token-function: var(--color-text-purple);
+  --astro-code-token-string-expression: var(--color-text-green);
+  --astro-code-token-punctuation: var(--color-text-secondary);
+  --astro-code-token-link: var(--color-text-accent);
+}
+
+/* -- Theme toggle ------------------------------------------------------------------------------ */
+
+.tct-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-block-size: 2.5rem;
+  padding-inline: 0.75rem;
+  border: var(--border-width) solid var(--color-border-emphasized);
+  border-radius: var(--radius-element);
+  background: transparent;
+  color: var(--color-text-primary);
+  font: inherit;
+  font-size: var(--sl-text-sm);
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .tct-theme-toggle:hover {
+    background: var(--color-background-muted);
+  }
+}
+
+/* `hidden` does not apply to SVG elements. */
+.tct-theme-toggle [data-icon][hidden] {
+  display: none;
+}
+
+.tct-theme-toggle svg {
+  inline-size: 1.125rem;
+  block-size: 1.125rem;
+  fill: none;
+  stroke: currentcolor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* -- Home and lists ---------------------------------------------------------------------------- */
+
+.tct-guide-list {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tct-guide-list > li {
+  margin: 0;
+}
+
+@media (forced-colors: active) {
+  .tct-swatch {
+    forced-color-adjust: none;
+  }
+
+  .tct-badge {
+    border-color: currentcolor;
+  }
+}
