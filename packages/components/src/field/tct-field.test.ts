@@ -396,6 +396,54 @@ describe('tct-field: library controls, naming and accessibility', () => {
     await expectAccessible(field);
   });
 
+  // Upstream Field renders its children as they come and never styles them: a native control is a custom
+  // control the consumer owns. The shared `::slotted(input)` reset belongs to tct-text-input's
+  // `slot="input"` only, so a bare `<input>` in tct-field keeps the browser's own visible box.
+  // (The test setup's preflight is unlayered and zeroes border and padding on every element, so the box
+  // is asserted through what only the reset changed: the background paint and the focus outline.)
+  describe('a native control slotted directly into tct-field', () => {
+    const paint = (control: HTMLElement) => getComputedStyle(control).backgroundColor;
+
+    // Colour-scheme emulation is Chromium-only; the light case runs everywhere. The setup file clears it.
+    for (const scheme of ['light', 'dark'] as const) {
+      it.skipIf(scheme === 'dark' && !isChromium)(
+        `is not made transparent, and shows the browser focus ring (${scheme})`,
+        async () => {
+          if (scheme === 'dark') await emulateMedia({colorScheme: 'dark'});
+          const field = await make('label="Email"');
+          const input = field.querySelector('input')!;
+          expect(paint(input)).not.toBe('rgba(0, 0, 0, 0)');
+          expect(paint(input)).not.toBe('transparent');
+          input.focus();
+          expect(getComputedStyle(input).outlineStyle).not.toBe('none');
+          const rect = input.getBoundingClientRect();
+          expect(rect.width).toBeGreaterThan(50);
+          expect(rect.height).toBeGreaterThan(10);
+        },
+      );
+    }
+
+    it('leaves select and textarea alone too, labelled and accessible', async () => {
+      for (const control of [
+        '<select id="c"><option>One</option></select>',
+        '<textarea id="c"></textarea>',
+      ]) {
+        const field = await make('label="Choice" description="Help"', control);
+        const element = field.querySelector<HTMLElement>('#c')!;
+        expect(paint(element)).not.toBe('rgba(0, 0, 0, 0)');
+        expect(element.getAttribute('aria-labelledby')).toBe(satellite(field, 'label')!.id);
+        await expectAccessible(field);
+      }
+    });
+
+    it('is labelled by the field label, and passes axe with a description', async () => {
+      const field = await make('label="Project code" description="Letters and digits"');
+      const input = field.querySelector('input')!;
+      expect(input.getAttribute('aria-labelledby')).toBe(satellite(field, 'label')!.id);
+      await expectAccessible(field);
+    });
+  });
+
   it('keeps label and control legible in forced-colours mode', async () => {
     const field = await make('label="Email" description="Help"');
     await emulateMedia({forcedColors: 'active'});

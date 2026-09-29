@@ -1,9 +1,9 @@
 <!-- title: Shapes; description: Text lines, a thumbnail and a fully rounded avatar built from skeletons. -->
-<div style="display: flex; gap: var(--spacing-3); align-items: center">
+<tct-hstack gap="3" v-align="center">
   <tct-skeleton width="48" height="48" radius="rounded"></tct-skeleton>
-  <div style="display: flex; flex-direction: column; gap: var(--spacing-2)">
+  <tct-vstack gap="2">
     <tct-skeleton width="200" height="16"></tct-skeleton>
     <tct-skeleton width="140" height="12"></tct-skeleton>
-  </div>
+  </tct-vstack>
   <tct-skeleton width="96" height="64" radius="2"></tct-skeleton>
-</div>
+</tct-hstack>

@@ -1,16 +1,16 @@
 <!-- title: Cascade; description: One provider sizes every control inside it; a control's own size still wins. -->
-<div style="display: flex; flex-direction: column; gap: var(--spacing-4)">
+<tct-vstack gap="4">
   <tct-size-provider size="sm">
-    <div style="display: flex; gap: var(--spacing-2); align-items: center">
+    <tct-hstack gap="2" v-align="center">
       <tct-button variant="primary">Small</tct-button>
       <tct-button>Small</tct-button>
       <tct-button size="lg">Explicit large</tct-button>
-    </div>
+    </tct-hstack>
   </tct-size-provider>
   <tct-size-provider size="lg">
-    <div style="display: flex; gap: var(--spacing-2); align-items: center">
+    <tct-hstack gap="2" v-align="center">
       <tct-button variant="primary">Large</tct-button>
       <tct-button>Large</tct-button>
-    </div>
+    </tct-hstack>
   </tct-size-provider>
-</div>
+</tct-vstack>

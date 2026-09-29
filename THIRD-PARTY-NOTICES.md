@@ -17,6 +17,8 @@ Large parts of this repository adapt [Astryx](https://github.com/facebook/astryx
 
 - component behaviour, keyboard contracts, state machines and hook logic re-expressed as Web
   Components and controllers (`packages/core`, `packages/components`);
+- the command surface, JSON envelope contract, search ranking, layout-expression language and MCP tool
+  design of the agent tooling, re-expressed for Web Components in `@tecton-wc/cli` (`packages/cli`);
 - the parser, tokenizer and utility logic ported for the corresponding components;
 - the 30 message catalogs shipped in `@tecton-wc/locales` (copied from upstream, hash-locked);
 - token names and upstream default values (`@tecton-wc/tokens`), re-skinned with Tecton values;
@@ -83,6 +85,19 @@ Notes:
   `i18n/format.ts`, `security/sanitize.ts`).
 - `@lit-labs/ssr-dom-shim` carries no licence file of its own; its `package.json` declares
   BSD-3-Clause and it is part of the Lit project (same text as `lit`, Google LLC).
+
+### 2.1 CLI runtime dependency (Model Context Protocol SDK)
+
+The private `@tecton-wc/cli` package (`tct`, D-013 Q-07) depends on one external package, used only for its
+MCP server (`tct mcp` and the docs-site route). It is never a dependency of the component packages.
+
+| Package | Version | Licence | Copyright holder |
+| --- | --- | --- | --- |
+| `@modelcontextprotocol/sdk` | 1.31.0 | MIT | Anthropic, PBC |
+
+The CLI's whole production closure (91 packages: MIT 81, ISC 7, BSD-3-Clause 2, BSD-2-Clause 1, all on
+the allowlist) is checked by `pnpm licenses:check` as strictly as the shipped runtime tree; `pnpm --filter @tecton-wc/cli --prod
+licenses list` prints it. Nothing is published (D-008), so no notice obligation reaches a consumer yet.
 
 ## 3. Fonts (SIL Open Font License 1.1)
 
@@ -1133,4 +1148,30 @@ INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
 LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
+```
+
+### 6.13 `@modelcontextprotocol/sdk`
+
+```text
+MIT License
+
+Copyright (c) 2024 Anthropic, PBC
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 ```

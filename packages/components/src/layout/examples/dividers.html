@@ -1,0 +1,17 @@
+<!-- title: Dividers; description: A header, footer or panel draws a divider with has-divider. default-has-dividers on the layout sets the default for its headers and footers; a region that sets has-divider itself wins. Without a divider the regions run into each other and the padding collapses. -->
+<tct-vstack gap="4">
+  <tct-card padding="0" height="180">
+    <tct-layout padding="4" default-has-dividers>
+      <tct-layout-header slot="header"><tct-text type="medium-strong">Divider by default</tct-text></tct-layout-header>
+      <tct-layout-content><tct-text>The header and the footer draw a divider.</tct-text></tct-layout-content>
+      <tct-layout-footer slot="footer"><tct-text>Footer</tct-text></tct-layout-footer>
+    </tct-layout>
+  </tct-card>
+  <tct-card padding="0" height="180">
+    <tct-layout padding="4">
+      <tct-layout-header slot="header"><tct-text type="medium-strong">No dividers</tct-text></tct-layout-header>
+      <tct-layout-content><tct-text>The content runs into the header and the footer.</tct-text></tct-layout-content>
+      <tct-layout-footer slot="footer"><tct-text>Footer</tct-text></tct-layout-footer>
+    </tct-layout>
+  </tct-card>
+</tct-vstack>

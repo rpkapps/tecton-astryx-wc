@@ -1,0 +1,16 @@
+<!-- title: Statuses; description: pending and running show a spinner, complete a check, error an error mark. Each has hidden status text ("Running", "Complete", "Error: message") and a call that fails is announced once. -->
+<tct-vstack id="tool-statuses-root" max-width="520" gap="2">
+  <tct-chat-tool-calls id="tool-pending"></tct-chat-tool-calls>
+  <tct-chat-tool-calls id="tool-running"></tct-chat-tool-calls>
+  <tct-chat-tool-calls id="tool-complete"></tct-chat-tool-calls>
+  <tct-chat-tool-calls id="tool-error"></tct-chat-tool-calls>
+</tct-vstack>
+<script type="module">
+  const set = (id, call) => {
+    document.getElementById(id).calls = [call];
+  };
+  set('tool-pending', {name: 'deploy', status: 'pending', target: 'staging'});
+  set('tool-running', {name: 'run_tests', status: 'running', target: 'pytest forecast/'});
+  set('tool-complete', {name: 'lint', status: 'complete', target: 'forecast/', duration: '1.1s'});
+  set('tool-error', {name: 'fetch', status: 'error', target: 'scada://c-19', errorMessage: 'Connection timed out'});
+</script>

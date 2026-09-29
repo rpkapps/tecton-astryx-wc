@@ -1,13 +1,13 @@
 <!-- title: Basic; description: A trigger button in the default slot, the content in slot="content". The dialog needs a label. -->
 <tct-popover label="Display settings">
   <button type="button">Settings</button>
-  <div slot="content" style="display: grid; gap: var(--spacing-2)">
+  <tct-vstack slot="content" gap="2">
     <strong>Display</strong>
-    <label style="display: flex; align-items: center; gap: var(--spacing-2)">
-      <input type="checkbox" checked /> Show grid
+    <label>
+      <tct-hstack gap="2" v-align="center"><input type="checkbox" checked /> Show grid</tct-hstack>
     </label>
-    <label style="display: flex; align-items: center; gap: var(--spacing-2)">
-      <input type="checkbox" /> Snap to axes
+    <label>
+      <tct-hstack gap="2" v-align="center"><input type="checkbox" /> Snap to axes</tct-hstack>
     </label>
-  </div>
+  </tct-vstack>
 </tct-popover>

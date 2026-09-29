@@ -6,10 +6,15 @@
  * paths and class names count like any other mention: the gate is absolute. `pnpm docs:build` runs it
  * first, so a leak fails the build.
  *
+ * What the CLI generates is scanned too (`cliGeneratedTexts`): the agent-docs block `tct init` writes for
+ * every agent, every command's help, the capability manifest, the layout grammar and the MCP tool
+ * definitions, all produced in-process against the workspace registry.
+ *
  * Authored guides (`guides/`) are held to the same rule: a mention fails the gate like any other leak
  * (they were only reported until the D-015 content pass rewrote them).
  */
-import {existsSync, readdirSync, readFileSync} from 'node:fs';
+import {existsSync, mkdtempSync, readdirSync, readFileSync, rmSync} from 'node:fs';
+import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {walkFiles} from '../lib/fs.ts';
 import {ROOT, rel} from '../lib/paths.ts';
@@ -107,6 +112,65 @@ export function generatedPublicFiles(
   return files;
 }
 
+/** A named piece of text produced by the CLI and scanned in place of a file. */
+export interface GeneratedText {
+  name: string;
+  text: string;
+}
+
+/** Commands whose output is generated for the project (not registry content, which the registry scan covers). */
+const CLI_SAMPLES: readonly (readonly string[])[] = [
+  ['init', '--agent', 'all', '--dry-run'],
+  ['init', '--agent', 'cursor', '--dry-run', '--json'],
+  ['manifest', '--json'],
+  ['layout', 'grammar'],
+  ['layout', 'grammar', '--json'],
+  ['docs', 'working-with-ai', '--dense'],
+  ['docs', 'cli', '--dense'],
+  ['docs', 'cli-integrations', '--dense'],
+  ['search', 'button', '--dense'],
+  ['component', 'tct-button', '--dense'],
+  ['gap-report', '--list-categories'],
+  ['discover'],
+  ['--help'],
+];
+
+/**
+ * The text the CLI generates for a project, produced in-process. Empty when the registry has not been
+ * generated yet (the registry scan reports that).
+ */
+export async function cliGeneratedTexts(
+  registry: string = join(ROOT, 'packages/components/agent-registry.json'),
+): Promise<GeneratedText[]> {
+  if (!existsSync(registry)) return [];
+  const cli = await import('../../packages/cli/src/index.ts');
+  const {COMMANDS, execute} = cli;
+  const cwd = mkdtempSync(join(tmpdir(), 'tct-public-cli-'));
+  const env = {...process.env, TCT_AGENT_REGISTRY: registry, TCT_NO_NUDGE: '1'};
+  const texts: GeneratedText[] = [];
+  try {
+    const argvs = [
+      ...CLI_SAMPLES,
+      ...COMMANDS.map((command) => [command.name, '--help'] as const),
+    ];
+    for (const argv of argvs) {
+      const result = await execute(argv, {cwd, env});
+      texts.push({name: `tct ${argv.join(' ')}`, text: `${result.stdout}\n${result.stderr}`});
+    }
+    const {SEARCH_TOOL, GET_TOOL} = await import('../../packages/cli/src/mcp/tools.ts');
+    texts.push({name: 'mcp tool definitions', text: JSON.stringify([SEARCH_TOOL, GET_TOOL])});
+  } finally {
+    rmSync(cwd, {recursive: true, force: true});
+  }
+  return texts;
+}
+
+export function scanGeneratedTexts(texts: readonly GeneratedText[]): Leak[] {
+  return texts.flatMap(({name, text}) =>
+    upstreamLeaks(text).map((snippet) => ({file: `<${name}>`, snippet})),
+  );
+}
+
 export function scanPublicOutputs(
   files: readonly string[],
   /** `null` skips the guides (the CLI with explicit files). */
@@ -126,9 +190,15 @@ export function scanPublicOutputs(
 }
 
 /** With file arguments the script scans exactly those files (used by the tests); otherwise the site's own output. */
-function main(): void {
+async function main(): Promise<void> {
   const given = process.argv.slice(2);
   const scan = given.length > 0 ? scanPublicOutputs(given, null) : scanPublicOutputs(publicOutputFiles());
+  let generated = 0;
+  if (given.length === 0) {
+    const texts = await cliGeneratedTexts();
+    generated = texts.length;
+    scan.leaks.push(...scanGeneratedTexts(texts));
+  }
   if (scan.scanned === 0) {
     console.error('docs public check: no public output found; run pnpm generate first.');
     process.exit(1);
@@ -141,8 +211,8 @@ function main(): void {
     process.exit(1);
   }
   console.log(
-    `docs public check OK: ${scan.scanned} public file(s) and ${scan.guidesScanned} authored guide(s) never name the upstream system.`,
+    `docs public check OK: ${scan.scanned} public file(s), ${generated} CLI output(s) and ${scan.guidesScanned} authored guide(s) never name the upstream system.`,
   );
 }
 
-if (process.argv[1] && import.meta.filename === process.argv[1]) main();
+if (process.argv[1] && import.meta.filename === process.argv[1]) await main();

@@ -1,0 +1,44 @@
+/*
+ * tct-chat-message-metadata. The host is `display: contents`, so a row with nothing to show (the
+ * element renders nothing) takes no space and no flex gap in its parent; `.base` (part "base") is the
+ * row. It reverses for the user: the row is a flex line, so `row-reverse` also mirrors in RTL.
+ * The sending status pulses, inside `no-preference` only. [mwg:css] [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: contents;
+  }
+
+  .base {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--spacing-1);
+    margin-block-start: var(--spacing-1);
+    color: var(--color-text-secondary);
+    font-size: var(--text-supporting-size);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--text-supporting-leading);
+  }
+
+  .base[data-sender='user'] {
+    flex-direction: row-reverse;
+  }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-1);
+  }
+
+  .status[data-status='error'] {
+    /* Ink, not the fill: --color-error is the filled severity colour (Tecton ChatToolCalls note). */
+    color: var(--color-text-red);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .status[data-status='sending'] {
+      animation: tct-pulse 1.5s ease-in-out infinite;
+    }
+  }
+}

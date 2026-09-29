@@ -7,14 +7,20 @@
  * Pure: takes loaded inputs and returns the registry; `generate.ts` does the IO.
  */
 import {cemElements, type CemPackage} from '../lib/cem.ts';
+import type {RegistryController} from './controllers.ts';
 import {loadComponentDocs, type DocsFrontmatter} from '../lib/docs-model.ts';
 import {elementDoc, type ElementDoc} from '../lib/element-api.ts';
 import {publicData, tokenStatusLabel} from '../lib/public-text.ts';
 import type {Manifest} from '../lib/parity.ts';
 import {CATEGORIES, componentUrl} from '../lib/site.ts';
+import {existsSync, readdirSync} from 'node:fs';
+import {join} from 'node:path';
 import type {TokenData, TokenMeta} from '../lib/tokens.ts';
 
-export const REGISTRY_SCHEMA_VERSION = 1;
+/** 2: adds `controllers` (the public controllers and utilities catalog) and `sourceFiles` per component. */
+export const REGISTRY_SCHEMA_VERSION = 2;
+
+export type {RegistryController} from './controllers.ts';
 
 export interface RegistryElement extends ElementDoc {
   keyboard: {keys: string; action: string; when?: string}[];
@@ -50,6 +56,8 @@ export interface RegistryComponent {
   elements: RegistryElement[];
   entries: RegistryEntry[];
   examples: {id: string; title: string; description: string; source: string}[];
+  /** Files of the element folder, relative to `packages/components/src/<folder>/` (no tests, no examples). */
+  sourceFiles: string[];
   /** Authored H2 sections by heading. */
   sections: Record<string, string>;
 }
@@ -77,6 +85,8 @@ export interface AgentRegistry {
   categories: string[];
   components: RegistryComponent[];
   hooks: RegistryHook[];
+  /** Controllers, mixins, context keys and utilities of `@tecton-wc/core` (D-011: the upstream `hook`). */
+  controllers: RegistryController[];
   topics: RegistryTopic[];
   tokens: Pick<TokenMeta, 'name' | 'category' | 'status' | 'light' | 'dark' | 'description'>[];
   tokenCounts: {tokens: number; byStatus: Record<string, number>} | null;
@@ -97,6 +107,8 @@ export interface RegistryInputs {
   manifest: Manifest;
   tokens?: TokenData;
   guides: readonly GuideInput[];
+  /** From `extractControllers`; empty when core is not present. */
+  controllers?: readonly RegistryController[];
 }
 
 const STATUS_RANK = ['not-started', 'in-progress', 'implemented', 'verified'];
@@ -182,6 +194,7 @@ export function buildRegistry(inputs: RegistryInputs): AgentRegistry {
         description,
         source,
       })),
+      sourceFiles: folderSourceFiles(componentsSrc, folder),
       sections: Object.fromEntries(docs.sections.map((section) => [section.heading, section.body])),
     });
   }
@@ -208,6 +221,7 @@ export function buildRegistry(inputs: RegistryInputs): AgentRegistry {
     categories: [...CATEGORIES],
     components,
     hooks,
+    controllers: [...(inputs.controllers ?? [])],
     topics,
     tokens: (inputs.tokens?.tokens ?? []).map(
       ({name, category, status, light, dark, description}) => ({
@@ -223,6 +237,21 @@ export function buildRegistry(inputs: RegistryInputs): AgentRegistry {
       ? {tokens: inputs.tokens.counts.tokens, byStatus: inputs.tokens.counts.byStatus}
       : null,
   };
+}
+
+/** The shipped source files of an element folder (tests, examples, snapshots and generated files excluded). */
+function folderSourceFiles(componentsSrc: string, folder: string): string[] {
+  const dir = join(componentsSrc, folder);
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir, {withFileTypes: true})
+    .filter(
+      (entry) =>
+        entry.isFile() &&
+        /\.(?:ts|css)$/.test(entry.name) &&
+        !/\.(?:node\.)?test\.ts$/.test(entry.name),
+    )
+    .map((entry) => entry.name)
+    .sort();
 }
 
 /** H2 sections of a guide body (MDX import lines and blank runs are dropped). */

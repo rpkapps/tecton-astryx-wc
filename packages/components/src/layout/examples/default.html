@@ -1,0 +1,40 @@
+<!-- title: Default; description: The five regions of a layout: header, start panel, content, end panel and footer. The layout fills the height of its container (here a card of a fixed height) and the content scrolls on its own. -->
+<tct-card padding="0" height="380">
+  <tct-layout padding="4">
+    <tct-layout-header slot="header" has-divider>
+      <tct-text type="medium-strong">Project settings</tct-text>
+    </tct-layout-header>
+    <tct-layout-panel slot="start" has-divider width="180">
+      <tct-vstack gap="2">
+        <tct-text as="p">General</tct-text>
+        <tct-text as="p">Members</tct-text>
+        <tct-text as="p">Billing</tct-text>
+        <tct-text as="p">Security</tct-text>
+      </tct-vstack>
+    </tct-layout-panel>
+    <tct-layout-content>
+      <tct-vstack gap="3">
+        <tct-text as="p">Regions handle the padding that collapses where two of them meet, the dividers and the scrolling. Paragraph 1.</tct-text>
+        <tct-text as="p">Regions handle the padding that collapses where two of them meet, the dividers and the scrolling. Paragraph 2.</tct-text>
+        <tct-text as="p">Regions handle the padding that collapses where two of them meet, the dividers and the scrolling. Paragraph 3.</tct-text>
+        <tct-text as="p">Regions handle the padding that collapses where two of them meet, the dividers and the scrolling. Paragraph 4.</tct-text>
+        <tct-text as="p">Regions handle the padding that collapses where two of them meet, the dividers and the scrolling. Paragraph 5.</tct-text>
+        <tct-text as="p">Regions handle the padding that collapses where two of them meet, the dividers and the scrolling. Paragraph 6.</tct-text>
+        <tct-text as="p">Regions handle the padding that collapses where two of them meet, the dividers and the scrolling. Paragraph 7.</tct-text>
+        <tct-text as="p">Regions handle the padding that collapses where two of them meet, the dividers and the scrolling. Paragraph 8.</tct-text>
+      </tct-vstack>
+    </tct-layout-content>
+    <tct-layout-panel slot="end" has-divider width="160">
+      <tct-vstack gap="2">
+        <tct-text type="medium-strong">Details</tct-text>
+        <tct-text>Created last week</tct-text>
+      </tct-vstack>
+    </tct-layout-panel>
+    <tct-layout-footer slot="footer" has-divider>
+      <tct-hstack h-align="end" gap="2">
+        <tct-button label="Cancel"></tct-button>
+        <tct-button label="Save" variant="primary"></tct-button>
+      </tct-hstack>
+    </tct-layout-footer>
+  </tct-layout>
+</tct-card>

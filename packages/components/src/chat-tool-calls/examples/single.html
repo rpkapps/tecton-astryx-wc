@@ -1,0 +1,9 @@
+<!-- title: A single call; description: One call renders as one line: status, tool name, target and duration. There is no group chrome and nothing to expand. -->
+<tct-vstack id="tool-single-root" max-width="520">
+  <tct-chat-tool-calls id="tool-single"></tct-chat-tool-calls>
+</tct-vstack>
+<script type="module">
+  document.getElementById('tool-single').calls = [
+    {name: 'read_file', status: 'complete', target: 'well-A12/production.csv', duration: '120ms'},
+  ];
+</script>

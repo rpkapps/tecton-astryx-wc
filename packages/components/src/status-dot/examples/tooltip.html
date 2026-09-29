@@ -1,5 +1,5 @@
 <!-- title: Tooltip; description: The tooltip explains what the status means on hover. It describes the dot; the label stays its accessible name. -->
-<div style="display: flex; align-items: center; gap: var(--spacing-2); padding-block-start: var(--spacing-8)">
+<tct-hstack gap="2" v-align="center" padding-block-start="8">
   <tct-status-dot variant="warning" label="Degraded" tooltip="Responses are slower than usual"></tct-status-dot>
-  Search
-</div>
+  <tct-text>Search</tct-text>
+</tct-hstack>

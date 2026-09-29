@@ -1,17 +1,19 @@
 <!-- title: In a form; description: The field submits with its name, blocks a submit while a required value is missing (and only then shows the error), and is restored by reset. -->
-<form id="in-form-example" style="display: flex; flex-direction: column; gap: var(--spacing-4); max-inline-size: 24rem">
-  <tct-text-input label="Name" name="name" required description="Press Enter to submit."></tct-text-input>
-  <tct-text-input label="Email" name="email" type="email" value="ada@example.com"></tct-text-input>
-  <div style="display: flex; gap: var(--spacing-2)">
-    <tct-button type="submit" variant="primary">Save</tct-button>
-    <tct-button type="reset">Reset</tct-button>
-  </div>
-  <output style="color: var(--color-text-secondary)"></output>
+<form id="in-form-root" style="max-inline-size: 24rem">
+  <tct-vstack gap="4">
+    <tct-text-input label="Name" name="name" required description="Press Enter to submit."></tct-text-input>
+    <tct-text-input label="Email" name="email" type="email" value="ada@example.com"></tct-text-input>
+    <tct-hstack gap="2">
+      <tct-button type="submit" variant="primary">Save</tct-button>
+      <tct-button type="reset">Reset</tct-button>
+    </tct-hstack>
+    <output><tct-text color="secondary"></tct-text></output>
+  </tct-vstack>
 </form>
 <script type="module">
-  const form = document.getElementById('in-form-example');
+  const form = document.getElementById('in-form-root');
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    form.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(form, event.submitter)));
+    form.querySelector('output tct-text').textContent = JSON.stringify(Object.fromEntries(new FormData(form, event.submitter)));
   });
 </script>

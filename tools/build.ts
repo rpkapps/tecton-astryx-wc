@@ -6,6 +6,7 @@
  *   icons       Vite library build (preserveModules) + declarations
  *   core        Vite library build (preserveModules) + declarations
  *   components  Vite library build + declarations + the CDN bundle (code split, no externals) in dist/cdn
+ *   cli         `tsc` emit (JavaScript + declarations, `.ts` specifiers rewritten to `.js`), then smoke-run
  *   testing     not built: dev only, its exports point at source
  *
  * Library builds keep every module as its own file (`preserveModules`) and leave every bare import
@@ -14,6 +15,7 @@
  * `dist`. Afterwards: every package's `exports` are checked against the output, and every built module is
  * imported in Node without a DOM (A§14), and the CDN bundle is loaded in Chromium and must define every tag.
  */
+import {spawnSync} from 'node:child_process';
 import {existsSync, readdirSync, rmSync} from 'node:fs';
 import {join, relative} from 'node:path';
 import {build} from 'vite';
@@ -37,6 +39,54 @@ function tsc(name: string): void {
   const project = join(pkgDir(name), 'tsconfig.build.json');
   const result = run(TSC, ['-p', project, '--emitDeclarationOnly']);
   if (result.status !== 0) throw new Error(`tsc failed for @tecton-wc/${name}`);
+}
+
+/**
+ * The CLI is plain Node code, so it is compiled rather than bundled: `tsc` emits JavaScript and
+ * declarations (`rewriteRelativeImportExtensions` turns `.ts` specifiers into `.js`). The config excludes
+ * tests and the test fixtures, so nothing under `src/testing` ships.
+ */
+function cli(): void {
+  const project = join(pkgDir('cli'), 'tsconfig.build.json');
+  step('@tecton-wc/cli: tsc emit (JavaScript + declarations)');
+  const result = run(TSC, ['-p', project]);
+  if (result.status !== 0) throw new Error('tsc failed for @tecton-wc/cli');
+}
+
+/**
+ * Runs the built launcher against the workspace registry: the version, a search and a component lookup
+ * must answer with the JSON envelope and exit 0, and the built output must not contain the test helpers.
+ */
+function cliSmoke(): string[] {
+  const problems: string[] = [];
+  const dir = pkgDir('cli');
+  if (existsSync(join(dir, 'dist/testing'))) problems.push('cli: dist/testing must not ship');
+  for (const argv of [
+    ['--version'],
+    ['search', 'button', '--json'],
+    ['component', 'tct-button', '--dense'],
+    ['layout', 'grammar', '--json'],
+  ]) {
+    const result = spawnSync('node', [join(dir, 'bin/tct.js'), ...argv], {
+      cwd: ROOT,
+      encoding: 'utf8',
+      env: {...process.env, TCT_NO_NUDGE: '1'},
+    });
+    if (result.status !== 0 || result.stdout.trim() === '') {
+      problems.push(
+        `cli: \`tct ${argv.join(' ')}\` exited ${result.status}: ${result.stderr.trim()}`,
+      );
+    } else if (argv.includes('--json')) {
+      try {
+        const envelope = JSON.parse(result.stdout) as {apiVersion?: number};
+        if (envelope.apiVersion !== 1)
+          problems.push(`cli: \`tct ${argv.join(' ')}\` has no apiVersion 1`);
+      } catch {
+        problems.push(`cli: \`tct ${argv.join(' ')}\` did not print JSON`);
+      }
+    }
+  }
+  return problems;
 }
 
 /** Removes everything in `dist` except the generated files named in `keep` (top-level names). */
@@ -118,6 +168,9 @@ async function main(): Promise<number> {
     clean('components', ['tecton.css', 'light-dom.css', 'cloak.css', 'fonts']);
     await library('components');
     await cdn();
+
+    clean('cli');
+    cli();
   } catch (error) {
     console.error(`build: ${(error as Error).message}`);
     return 1;
@@ -127,7 +180,7 @@ async function main(): Promise<number> {
   const problems: string[] = [];
   const families = componentFolderNames(join(pkgDir('components'), 'src')).length;
   let checked = 0;
-  for (const name of ['tokens', 'locales', 'icons', 'core', 'components']) {
+  for (const name of ['tokens', 'locales', 'icons', 'core', 'components', 'cli']) {
     const pkg = readPackage(pkgDir(name));
     const report = verifyExports(pkg, {
       resolveFrom: workspaceResolveRoot(pkg.name),
@@ -143,6 +196,14 @@ async function main(): Promise<number> {
     return 1;
   }
   console.log(`  build exports: ${checked} export target(s) resolve for the built output`);
+
+  const cliProblems = cliSmoke();
+  if (cliProblems.length > 0) {
+    for (const problem of cliProblems) console.error(`build: ${problem}`);
+    console.error(`\nbuild FAILED: ${cliProblems.length} CLI problem(s).`);
+    return 1;
+  }
+  console.log('  build cli: the built launcher answers version, search, component and layout');
 
   const status = await serverImport();
   return status === 0 ? cdnSmoke() : status;

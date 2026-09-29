@@ -1,0 +1,28 @@
+<!-- title: Sides; description: side is start, end or auto. Both edges are logical, so start is the right edge in right-to-left text. auto opens from the side of the button that was pressed, else from the end. -->
+<div id="mobile-nav-sides-root">
+  <tct-hstack gap="2">
+    <tct-button id="mobile-nav-sides-start" label="From the start"></tct-button>
+    <tct-button id="mobile-nav-sides-end" label="From the end"></tct-button>
+  </tct-hstack>
+  <tct-mobile-nav id="mobile-nav-sides-drawer" header="Navigation" side="start" width="280">
+      <tct-vstack gap="1" padding="2">
+        <a href="#overview">Overview</a>
+        <a href="#projects">Projects</a>
+        <a href="#reports">Reports</a>
+        <a href="#settings">Settings</a>
+      </tct-vstack>
+  </tct-mobile-nav>
+</div>
+<script type="module">
+  const root = document.getElementById('mobile-nav-sides-root');
+  const drawer = root.querySelector('#mobile-nav-sides-drawer');
+  for (const side of ['start', 'end']) {
+    root.querySelector(`#mobile-nav-sides-${side}`).addEventListener('click', () => {
+      drawer.side = side;
+      drawer.open = true;
+    });
+  }
+  drawer.addEventListener('tct-open-change', (event) => {
+    drawer.open = event.open;
+  });
+</script>

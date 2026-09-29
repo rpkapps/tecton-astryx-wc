@@ -1,0 +1,134 @@
+{
+  "folder": "chat-message-list",
+  "elements": {
+    "tct-chat-layout-scroll-button": {
+      "class": "TctChatLayoutScrollButton",
+      "attributes": [
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "visible",
+          "property": "visible",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "focusTarget",
+          "type": "HTMLElement | (() => HTMLElement | null) | null",
+          "default": "null",
+          "readonly": false
+        }
+      ],
+      "methods": [],
+      "slots": [],
+      "events": [
+        {
+          "name": "click",
+          "native": true
+        }
+      ],
+      "cssParts": [
+        "button",
+        "pill",
+        "wrapper"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-chat-message-list": {
+      "class": "TctChatMessageList",
+      "attributes": [
+        {
+          "name": "align",
+          "property": "align",
+          "type": "ChatListAlignment",
+          "values": [
+            "top",
+            "bottom"
+          ],
+          "default": "'bottom'",
+          "reflects": true
+        },
+        {
+          "name": "density",
+          "property": "density",
+          "type": "ChatDensity",
+          "values": [
+            "compact",
+            "balanced",
+            "spacious"
+          ],
+          "default": "'balanced'",
+          "reflects": true
+        },
+        {
+          "name": "gap",
+          "property": "gap",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "no-announce",
+          "property": "noAnnounce",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "streaming",
+          "property": "streaming",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "scrollToTopAction",
+          "type": "(() => Promise<void>) | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "focusLatestMessage",
+          "signature": "() => void"
+        }
+      ],
+      "slots": [
+        "(default)",
+        "empty-state"
+      ],
+      "events": [],
+      "cssParts": [
+        "base",
+        "empty",
+        "loading"
+      ],
+      "cssStates": [
+        "busy"
+      ],
+      "cssProperties": []
+    }
+  }
+}
