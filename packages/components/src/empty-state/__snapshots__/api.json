@@ -39,14 +39,7 @@
           "reflects": false
         }
       ],
-      "properties": [
-        {
-          "name": "role",
-          "type": "string",
-          "default": "'status'",
-          "readonly": false
-        }
-      ],
+      "properties": [],
       "methods": [],
       "slots": [
         "actions",

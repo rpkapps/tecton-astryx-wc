@@ -40,14 +40,7 @@
           "reflects": false
         }
       ],
-      "properties": [
-        {
-          "name": "ariaHidden",
-          "type": "string",
-          "default": "'true'",
-          "readonly": false
-        }
-      ],
+      "properties": [],
       "methods": [],
       "slots": [],
       "events": [],

@@ -1,8 +1,8 @@
-import {nothing, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
 import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
 import {linkContext, type LinkContextValue} from '@tecton-astryx/core/context/keys.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {TctProviderElement} from '@tecton-astryx/core/provider-element.js';
+import lightStyles from './tct-link-provider.light.css?inline';
 
 /** The router hook of `tct-link-provider`: `(href, event) => boolean`; `true` means "handled". */
 export type LinkNavigate = NonNullable<LinkContextValue['navigate']>;
@@ -18,8 +18,7 @@ export type LinkNavigate = NonNullable<LinkContextValue['navigate']>;
  * stay native, and destinations refused by the URL policy never reach the router. Providers nest: the nearest
  * one wins.
  *
- * The element renders nothing and has no shadow root; it is `display: contents` (light-DOM stylesheet and
- * cloak) so it never affects layout.
+ * It has no shadow root, draws nothing and is `display: contents`, so it never affects layout.
  *
  * Guides: [mwg:custom-elements] (a provider element with no shadow root) [mwg:security] (URL policy stays in
  * the link, before the router).
@@ -30,8 +29,9 @@ export type LinkNavigate = NonNullable<LinkContextValue['navigate']>;
  * @slot - The subtree that routes through `navigate`.
  * @cloakDisplay contents
  */
-export class TctLinkProvider extends TctElement {
+export class TctLinkProvider extends TctProviderElement {
   static override readonly tagName = 'tct-link-provider';
+  static override readonly lightStyles = lightStyles;
 
   /**
    * The router hook: `(href, event) => boolean`. Return `true` when your router handled the navigation.
@@ -47,15 +47,6 @@ export class TctLinkProvider extends TctElement {
   constructor() {
     super();
     new ContextProvider(this, {context: linkContext, initialValue: this.#value});
-  }
-
-  /** Providers render into the light DOM and draw nothing: the subtree stays exactly as authored. */
-  protected override createRenderRoot(): HTMLElement {
-    return this;
-  }
-
-  override render(): TemplateResult | typeof nothing {
-    return nothing;
   }
 }
 
