@@ -25,7 +25,7 @@ e.g. `[mwg:form-associated-custom-elements]`.
 | A-06 | Shadow DOM is decided per family (§8). Relationship targets referenced from author light DOM are rendered as **owned light-DOM satellites**. | IDREFs never cross roots; element reflection only points outward (§8.2). |
 | A-07 | Text fields: native `<input>` in the control's shadow root by default; opt-in author-slotted `<input slot="input">` mode for autofill-critical fields (§9.8). | Uniform, framework-safe default; a real escape hatch for password managers. |
 | A-08 | One document-level layer stack; `<dialog>` for modals, `popover="manual"` for everything floating (§9.9). | Deterministic nesting across shadow roots; native top layer; no focus-trap code. |
-| A-09 | Positioning: CSS anchor positioning via implicit anchors first; lazy `@floating-ui/dom` fallback only when the probe fails (§9.10). Virtual anchors (pointer) use a 0×0 fixed anchor element on the CSS path. | Matches upstream `useLayer`; the dependency stays off every Tier-1 code path. |
+| A-09 | Positioning: CSS anchor positioning via implicit anchors first; lazy `@floating-ui/dom` fallback only when the probe fails (§9.10). Virtual anchors (pointer) use a 0×0 fixed anchor element on the CSS path. | Matches upstream `useLayer`. **D-014:** Safari 26 lacks native anchor positioning, so there the lazy fallback is a Tier-1 path too; it never loads where the CSS path works. |
 | A-10 | Context via an **in-house implementation of the Context Community Protocol** (`@tecton-astryx/core/context`). | `@lit/context` is not approved (D-007); the protocol is small and interoperable. |
 | A-11 | Events: native `input`/`change`/`click` for native concepts; `tct-<x>-change` cancelable intent events; `tct-after-<x>-change` commit events only where the commit is asynchronous; one `Event` subclass per name (§7.6). | Platform `beforetoggle`/`toggle` model, Web Awesome typing model, no feedback loops. |
 | A-12 | i18n: upstream's 30 catalogs (+ generated pseudo) shipped as `@tecton-astryx/locales`; ICU via `intl-messageformat` behind `core/i18n/format.ts`; locale = nearest `lang`. | D-006 locale target; approved dependency; one resolution mechanism. |
@@ -49,7 +49,7 @@ e.g. `[mwg:form-associated-custom-elements]`.
 | Below Tier 2 | — | Unsupported. No polyfills ship. Modules must still import without throwing. | Server-import test only. |
 
 Rationale: Tier 1 is the first set in which Popover, `showPopover({source})` (implicit anchoring),
-core CSS anchor positioning, ARIA element reflection, `:state()`, `dialog.requestClose()` and
+core CSS anchor positioning (Chrome/Edge and Firefox only; Safari 26 uses the positioning fallback, D-014), ARIA element reflection, `:state()`, `dialog.requestClose()` and
 `light-dark()` are all native. It is upstream Astryx's Tier 1 (`browser-support.doc.mjs`, spec
 AST-013) raised from Chrome 125 to 137 for implicit anchors.
 

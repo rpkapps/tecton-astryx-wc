@@ -248,3 +248,21 @@ CLI read the same generated registry as the docs site.
 - **Q-07, MCP:** approved. Use `@modelcontextprotocol/sdk` 1.31.0 (MIT; tree of 91 packages, all
   MIT/ISC/BSD, checked 2026-09-29) as a dependency of the private `@tecton-astryx/cli` package only. It
   is never a dependency of the component packages.
+
+## D-014 — Correction: CSS anchor positioning is not native in Safari 26 (2026-09-29)
+
+Found by WP-D and confirmed against `web-features` (data behind Baseline): the `anchor-positioning`
+feature is supported from **Safari 27 / iOS 27** and is not Baseline. ARCHITECTURE A-01/A-09 assumed Safari 26.
+The support floor (D-010) is unchanged. Consequences:
+
+- Positioning stays feature-detected (`features.anchorPositioning`, `features.implicitAnchor`). The lazy
+  `@floating-ui/dom` fallback is therefore **also a Tier-1 code path in Safari 26**, not only a
+  Tier-2 one. Placement fidelity is promised on both paths and tested on both: the Tier-2 run forces
+  the fallback.
+- Size budgets must count the fallback chunk for Safari 26 users. That chunk is lazy and never
+  loads where the CSS path works.
+- Docs and ARCHITECTURE wording is corrected: Chrome/Edge 137+ and Firefox 147+ position with CSS;
+  Safari 26 positions with the fallback.
+- Features listed in ARCHITECTURE §1.2 rule 2 ("available in every Tier-1 engine") must be checked
+  against `web-features` data before a component depends on them natively. Any other mismatch
+  found is fixed the same way.
