@@ -21,24 +21,42 @@ const persistent = new Set<Persistent>();
 /** Modal surfaces in the order they entered the top layer (last = top-most). */
 const modals: HTMLElement[] = [];
 
-function moveInto(element: HTMLElement, target: ParentNode): void {
+/**
+ * Moves `element` into `target`. An open popover keeps its old place in the top-layer stack when it
+ * is moved atomically, which would leave it painted *under* a modal it now lives in, so a move into
+ * a modal (`raise`) re-enters the popover into the top layer, above the modal.
+ */
+function moveInto(element: HTMLElement, target: ParentNode, raise: boolean): void {
   if (element.parentNode === target) return;
+  const wasOpen =
+    features.popover && element.hasAttribute('popover') && element.matches(':popover-open');
+  let moved = false;
   if (features.moveBefore) {
     try {
       (target as Element).moveBefore(element, null);
-      return;
+      moved = true;
     } catch {
       // Not movable atomically (disconnected target, different document): fall back.
     }
   }
-  const reshow =
-    features.popover && element.hasAttribute('popover') && element.matches(':popover-open');
-  target.append(element);
-  if (reshow) {
+  if (!moved) {
+    // A plain move closes an open popover; it is re-shown below (which also raises it).
+    target.append(element);
+    if (wasOpen) {
+      try {
+        element.showPopover();
+      } catch {
+        // Already open again or not connected: nothing to restore.
+      }
+    }
+    return;
+  }
+  if (wasOpen && raise && element.matches(':popover-open')) {
     try {
+      element.hidePopover();
       element.showPopover();
     } catch {
-      // Already open again or not connected: nothing to restore.
+      // Left open where it was: still reachable, only possibly painted below the modal.
     }
   }
 }
@@ -48,7 +66,7 @@ export function syncTopLayerHost(): void {
   const modal = modals[modals.length - 1];
   for (const {element, home} of persistent) {
     const target = modal ?? home();
-    if (target) moveInto(element, target);
+    if (target) moveInto(element, target, modal !== undefined);
   }
 }
 
