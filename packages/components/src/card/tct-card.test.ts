@@ -3,12 +3,14 @@
  * height (ported from upstream Card.test.tsx), published container padding, RTL, forced colours.
  */
 import {html} from 'lit';
-import {describe, expect, it} from 'vitest';
+import {describe, expect, it, onTestFinished} from 'vitest';
 import {expectAccessible} from '@tecton-astryx/testing/a11y.js';
 import {emulateMedia} from '@tecton-astryx/testing/emulate.js';
 import {fixture} from '@tecton-astryx/testing/fixture.js';
 import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
 import {isChromium} from '@tecton-astryx/testing/tier.js';
+import {defineTheme} from '@tecton-astryx/core/theme/define-theme.js';
+import {generateThemeCSS} from '@tecton-astryx/core/theme/generate-theme-rules.js';
 import {CARD_ELEVATIONS, CARD_VARIANTS} from './card.types.js';
 import './define.js';
 import type {TctCard} from './tct-card.js';
@@ -306,4 +308,44 @@ describe('tct-card: accessibility, RTL, forced colours', () => {
       await expectAccessible(await card());
     },
   );
+});
+
+describe('tct-card with a generated theme (--card-padding* from generateThemeCSS)', () => {
+  async function themedCard(
+    components: Parameters<typeof defineTheme>[0]['components'],
+    attributes = '',
+  ) {
+    const {component} = generateThemeCSS(defineTheme({name: 'card-fixture', components}));
+    const style = document.createElement('style');
+    style.textContent = component;
+    document.head.append(style);
+    onTestFinished(() => style.remove());
+    const root = await fixture<HTMLElement>(
+      `<div data-tct-theme="card-fixture" style="inline-size: 300px"><tct-card variant="transparent" ${attributes}><p>Content</p></tct-card></div>`,
+    );
+    return css(root.querySelector('tct-card')!);
+  }
+
+  it('reads a themed uniform padding through the public property', async () => {
+    const style = await themedCard({card: {base: {padding: '20px'}}});
+    expect(style.paddingBlockStart).toBe('20px');
+    expect(style.paddingInlineStart).toBe('20px');
+    expect(style.paddingBlockEnd).toBe('20px');
+    expect(style.paddingInlineEnd).toBe('20px');
+  });
+
+  it('reads themed directional padding, logical edges only', async () => {
+    const style = await themedCard({
+      card: {base: {paddingBlock: '8px', paddingInlineStart: '24px'}},
+    });
+    expect(style.paddingBlockStart).toBe('8px');
+    expect(style.paddingBlockEnd).toBe('8px');
+    expect(style.paddingInlineStart).toBe('24px');
+  });
+
+  it('lets a padding attribute win over the theme', async () => {
+    const style = await themedCard({card: {base: {padding: '20px'}}}, 'padding="2"');
+    // padding step 2 is the second rung of the spacing scale: 8px in Tecton
+    expect(style.paddingBlockStart).toBe('8px');
+  });
 });

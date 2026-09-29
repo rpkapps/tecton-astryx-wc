@@ -14,6 +14,9 @@ import {expectAccessible} from '@tecton-astryx/testing/a11y.js';
 import {emulateMedia} from '@tecton-astryx/testing/emulate.js';
 import {fixture} from '@tecton-astryx/testing/fixture.js';
 import {waitUntil} from '@tecton-astryx/testing/timing.js';
+import '../button/define.js';
+import {defineTheme} from '@tecton-astryx/core/theme/define-theme.js';
+import {generateThemeCSS} from '@tecton-astryx/core/theme/generate-theme-rules.js';
 import './define.js';
 import type {TctMediaTheme} from './tct-media-theme.js';
 
@@ -634,5 +637,47 @@ describe('tct-media-theme: RTL and forced colours', () => {
     const {root, element} = await surface('dark', DARK_SURFACE, '', '<p>content</p>');
     expect(media(element)).toBe('dark');
     await expectAccessible(root);
+  });
+});
+
+describe('tct-media-theme with generated theme CSS (generateThemeCSS, generateOnMediaCSS)', () => {
+  const partOf = (button: Element): HTMLElement =>
+    button.shadowRoot!.querySelector<HTMLElement>('[part~="button"]')!;
+
+  async function themed() {
+    const theme = defineTheme({
+      name: 'media-fixture',
+      components: {button: {'variant:secondary': {borderRadius: '3px'}}},
+      onDark: {components: {button: {'variant:secondary': {borderRadius: '11px'}}}},
+      onLight: {components: {button: {'variant:secondary': {borderRadius: '13px'}}}},
+    });
+    const {prose, component} = generateThemeCSS(theme);
+    const style = document.createElement('style');
+    style.textContent = `${prose}\n${component}`;
+    document.head.append(style);
+    onTestFinished(() => style.remove());
+    const root = await fixture<HTMLElement>(
+      `<div data-tct-theme="media-fixture"><tct-button label="plain" id="plain"></tct-button>
+        <tct-media-theme mode="dark"><tct-button label="dark" id="dark"></tct-button></tct-media-theme>
+        <tct-media-theme mode="light"><tct-button label="light" id="light"></tct-button></tct-media-theme>
+        <tct-media-theme mode="off"><tct-button label="off" id="off"></tct-button></tct-media-theme></div>`,
+    );
+    return (id: string) => partOf(root.querySelector(`#${id}`)!);
+  }
+
+  it('applies the theme component rule outside a media context', async () => {
+    const part = await themed();
+    expect(getComputedStyle(part('plain')).borderRadius).toBe('3px');
+  });
+
+  it('applies the onDark and onLight component rules inside the matching context', async () => {
+    const part = await themed();
+    expect(getComputedStyle(part('dark')).borderRadius).toBe('11px');
+    expect(getComputedStyle(part('light')).borderRadius).toBe('13px');
+  });
+
+  it('keeps the parent theme inside mode="off"', async () => {
+    const part = await themed();
+    expect(getComputedStyle(part('off')).borderRadius).toBe('3px');
   });
 });

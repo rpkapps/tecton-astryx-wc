@@ -49,6 +49,143 @@
           "target": "@tecton-astryx/core/theme/auto-media-mode.js",
           "as": "module-function",
           "notes": "measureMediaMode(anchor), pickMediaMode, resolveBackdrop, resolvePaintedColors, flatTreeParent. Internal upstream (not exported); the element re-measures from a MutationObserver over its ancestors and a prefers-color-scheme listener instead of on every render."
+        },
+        {
+          "upstream": "defineTheme",
+          "target": "@tecton-astryx/core/theme/define-theme.js",
+          "as": "module-function",
+          "notes": "defineTheme(input) -> DefinedTheme; tokens are any `--*` name (the closed upstream union is the pipeline's token set, checked by pnpm tokens:check); icons take IconDefinition/IconLoader (registerIcons shape), indicators are an opaque registry the indicator family reads; `syntax` takes the structural SyntaxThemeDefinition."
+        },
+        {
+          "upstream": "isDefinedTheme",
+          "target": "@tecton-astryx/core/theme/define-theme.js",
+          "as": "module-function"
+        },
+        {
+          "upstream": "generateThemeCSS",
+          "target": "@tecton-astryx/core/theme/generate-theme-rules.js",
+          "as": "module-function",
+          "notes": "Emits @scope ([data-tct-theme=\"<name>\"]) to ([data-tct-theme]); component keys resolve to tag + part (theming-targets.js), prop:value keys to reflected host attributes. Golden-tested against tokens.css for the Tecton theme."
+        },
+        {
+          "upstream": "generateOnMediaCSS",
+          "target": "@tecton-astryx/core/theme/generate-theme-rules.js",
+          "as": "module-function",
+          "notes": "Targets [data-media-theme=\"dark|light\"], the attribute tct-media-theme writes and tokens.css pins."
+        },
+        {
+          "upstream": "generateAdaptationCSS",
+          "target": "@tecton-astryx/core/theme/generate-theme-rules.js",
+          "as": "module-function"
+        },
+        {
+          "upstream": "generateThemeRules",
+          "target": "@tecton-astryx/core/theme/generate-theme-rules.js",
+          "as": "module-function"
+        },
+        {
+          "upstream": "generateThemeRulesSplit",
+          "target": "@tecton-astryx/core/theme/generate-theme-rules.js",
+          "as": "module-function"
+        },
+        {
+          "upstream": "registerTheme",
+          "target": "@tecton-astryx/core/theme/theme-registry.js",
+          "as": "module-function"
+        },
+        {
+          "upstream": "getRegisteredTheme",
+          "target": "@tecton-astryx/core/theme/theme-registry.js",
+          "as": "module-function"
+        },
+        {
+          "upstream": "getRegisteredThemes",
+          "target": "@tecton-astryx/core/theme/theme-registry.js",
+          "as": "module-function"
+        },
+        {
+          "upstream": "resetThemes",
+          "target": "@tecton-astryx/core/theme/theme-registry.js",
+          "as": "module-function"
+        },
+        {
+          "upstream": "expandTypeScale",
+          "target": "@tecton-astryx/core/theme/expand-type-scale.js",
+          "as": "module-function"
+        },
+        {
+          "upstream": "generateTypeScaleComponents",
+          "target": "@tecton-astryx/core/theme/expand-type-scale.js",
+          "as": "module-function"
+        },
+        {
+          "upstream": "expandRadiusScale",
+          "target": "@tecton-astryx/core/theme/expand-radius-scale.js",
+          "as": "module-function"
+        },
+        {
+          "upstream": "expandColorScale",
+          "target": "@tecton-astryx/core/theme/expand-color-scale.js",
+          "as": "module-function",
+          "notes": "The seed of accent-less (neutral-only) configs is the Tecton accent hue (#644a78), guarded against --color-accent by a test."
+        },
+        {
+          "upstream": "expandMotionScale",
+          "target": "@tecton-astryx/core/theme/expand-motion-scale.js",
+          "as": "module-function"
+        },
+        {
+          "upstream": "tokenDefaults",
+          "target": "@tecton-astryx/core/theme/token-defaults.js",
+          "as": "module-function",
+          "notes": "A registry, not constants: values live in tokens.css. registerTokenDefaults(tokenDefaultsFromMetadata(tokens)) with the pipeline metadata from @tecton-astryx/tokens/tokens.js (tct-theme does this, see requests)."
+        },
+        {
+          "upstream": "DEFAULT_WIDTH_BREAKPOINTS",
+          "target": "@tecton-astryx/core/theme/theme-adaptations.js",
+          "as": "module-function",
+          "notes": "Equal to the retained upstream values in tokens.json (golden-tested)."
+        },
+        {
+          "upstream": "WIDTH_BREAKPOINT_NAMES",
+          "target": "@tecton-astryx/core/theme/theme-adaptations.js",
+          "as": "module-function"
+        },
+        {
+          "upstream": "resolveThemeToken",
+          "target": "@tecton-astryx/core/theme/tokens.js",
+          "as": "module-function"
+        },
+        {
+          "upstream": "resolveThemeTokens",
+          "target": "@tecton-astryx/core/theme/tokens.js",
+          "as": "module-function"
+        },
+        {
+          "upstream": "tokenVar",
+          "target": "@tecton-astryx/core/theme/tokens.js",
+          "as": "module-function"
+        },
+        {
+          "upstream": "tokenVars",
+          "target": "@tecton-astryx/core/theme/tokens.js",
+          "as": "module-function",
+          "notes": "A Proxy over the registered token defaults."
+        },
+        {
+          "upstream": "colorVars/spacingVars/... and colorDefaults/spacingDefaults/... (tokens.stylex)",
+          "as": "waived",
+          "reason": "StyleX variable groups. Values live in tokens.css and packages/tokens; tokenVars and tokenDefaults cover the runtime uses."
+        },
+        {
+          "upstream": "useTheme, useThemeName, ThemeContext",
+          "as": "waived",
+          "reason": "React hooks and context. The published theme is themeContext (core/context/keys.js), provided by tct-theme (WP-F) and tct-media-theme; wiring tct-theme.theme to a DefinedTheme is in the hand-off."
+        },
+        {
+          "upstream": "defineSyntaxTheme, SyntaxTheme, useSyntaxTheme, syntax presets",
+          "as": "waived",
+          "reason": "Owned by the syntax-theme provider work package; defineTheme reads its result through the structural SyntaxThemeDefinition type."
         }
       ],
       "keyboard": [],
@@ -96,6 +233,18 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [
+        {
+          "file": "tools/generate.ts (and packages/core/src/generated)",
+          "reason": "Generate the theme wiring data the runtime cannot import: (1) a token-defaults module from tokens.json (name to light/dark value) so core need not depend on the tokens package (tokenDefaults is a registry until then; tct-theme should call registerTokenDefaults(tokenDefaultsFromMetadata(tokens)) with @tecton-astryx/tokens/tokens.js), and (2) the theming-target table from custom-elements.json with themingTargetsFromCem(), registered at start-up, so a theme component key resolves to its element and part (until then a key falls back to tct-<key> with part \"base\" plus the built-in text, heading, button and icon parts)."
+        },
+        {
+          "file": "THIRD-PARTY-NOTICES.md",
+          "reason": "Add packages/core/src/theme to the upstream Astryx (MIT) list of adapted code (defineTheme and the CSS generators, adaptations, scale expanders, contrast and colour parsing). hct.ts ports Google material-color-utilities (Apache-2.0, via Astryx): add its notice (copyright Google LLC, Apache-2.0) to the third-party list."
+        },
+        {
+          "file": "packages/components/src/theme (WP-F, tct-theme)",
+          "reason": "The scope contract the generated CSS assumes: tct-theme writes data-tct-theme=\"<theme name>\" on its host (generateThemeCSS scopes to [data-tct-theme=\"<name>\"] and stops at a nested [data-tct-theme]), injects the two blocks (prose into the reset layer, component into a layer after tecton.tokens; @scope needs Chrome 118, Safari 17.4, Firefox 146), and provides themeContext. Its `theme` property takes a DefinedTheme; registerTheme(theme) makes it resolvable by name for SSR."
+        },
         {
           "file": "packages/testing/src/suites/element.ts",
           "reason": "runElementSuite asserts `element.shadowRoot` is not null after reconnecting, which a light-DOM provider (tct-media-theme, tct-theme, tct-size-provider, ...) cannot satisfy. Add a `lightDom?: boolean` option that skips that assertion. tct-media-theme runs an equivalent local lifecycle block meanwhile."
