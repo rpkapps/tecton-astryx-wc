@@ -1,0 +1,106 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "status-dot",
+  "workPackage": "WP-2",
+  "entries": {
+    "core.status-dot": {
+      "tag": "tct-status-dot",
+      "status": "implemented",
+      "upstream": {
+        "name": "StatusDot",
+        "path": "packages/core/src/StatusDot/StatusDot.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "variant",
+          "kind": "prop",
+          "target": "variant",
+          "as": "attribute",
+          "reflect": true,
+          "default": "success",
+          "notes": "Required upstream; the element defaults to success and warns on an unknown value."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "The dot's aria-label; the dot is a role=img on an inner element."
+        },
+        {
+          "upstream": "isPulsing",
+          "kind": "prop",
+          "target": "pulsing",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "tooltip",
+          "kind": "prop",
+          "target": "tooltip",
+          "as": "attribute",
+          "notes": "Built-in hover tooltip through TooltipController (shadow mode); a description, never the name."
+        },
+        {
+          "upstream": "icon",
+          "kind": "slot",
+          "target": "icon",
+          "as": "slot",
+          "notes": "Named slot; the wrapper is drawn only when something is slotted, so a conditional icon leaves the plain dot."
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "A-ref: the element itself is the ref; the dot is reachable as part=\"base\"."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle family: data-* attributes are set on the host directly; nothing to map."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base|icon|tooltip) or the tokens."
+        }
+      ],
+      "keyboard": [],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "STATUS-DOT-01",
+          "type": "a11y-improvement",
+          "text": "In forced colours the dot is drawn in CanvasText (GrayText for neutral) with a Canvas ink, so it does not disappear when backgrounds are stripped."
+        },
+        {
+          "id": "STATUS-DOT-02",
+          "type": "tecton-visual",
+          "text": "Plates are the Tecton status roles (--tecton-color-status-success/warning/error) with the dedicated --color-on-* inks; accent uses --color-accent, neutral the secondary icon colour with the surface ink."
+        },
+        {
+          "id": "STATUS-DOT-03",
+          "type": "approved-api-difference",
+          "text": "The role and name sit on the inner dot rather than the host, so the tooltip's aria-describedby and the dot share one tree; author aria-* attributes on the host do not reach the img."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "events": false,
+        "rtl": true,
+        "forcedColors": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components] role and name on the inner element; [mwg:interest-triggered-tooltips] and [mwg:position-aware-tooltips] via TooltipController; [mwg:css] reduced motion (--_animation-reduced) and forced colours."
+    }
+  }
+}

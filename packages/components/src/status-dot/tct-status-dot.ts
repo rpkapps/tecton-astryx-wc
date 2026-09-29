@@ -1,9 +1,11 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
 import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
+import {TooltipController} from '@tecton-astryx/core/controllers/tooltip.js';
 import {TctElement} from '@tecton-astryx/core/tct-element.js';
 import {devWarn} from '@tecton-astryx/core/utils/dev.js';
 import base from '../styles/base.styles.css';
+import layer from '../styles/layer.styles.css';
 import motion from '../styles/motion.styles.css';
 import slottedIcon from '../styles/slotted-icon.styles.css';
 import {STATUS_DOT_VARIANTS, type StatusDotVariant} from './status-dot.types.js';
@@ -26,11 +28,12 @@ import styles from './tct-status-dot.styles.css';
  * @slot icon - Optional icon centred in the dot, painted in the variant's ink. Use a different icon per status.
  * @csspart base - The dot (Astryx target `astryx-status-dot`), the `img` that carries the label.
  * @csspart icon - The wrapper of the slotted icon.
+ * @csspart tooltip - The tooltip surface, when `tooltip` is set.
  * @cloakDisplay inline-flex
  */
 export class TctStatusDot extends TctElement {
   static override readonly tagName = 'tct-status-dot';
-  static override styles: CSSResultGroup = [base, motion, slottedIcon, styles];
+  static override styles: CSSResultGroup = [base, layer, motion, slottedIcon, styles];
 
   /** Colour role: `success` (default), `warning`, `error`, `accent` or `neutral`. */
   @property({reflect: true}) variant: StatusDotVariant = 'success';
@@ -41,7 +44,27 @@ export class TctStatusDot extends TctElement {
   /** Pulses the dot to signal activity; respects `prefers-reduced-motion`. */
   @property({type: Boolean, reflect: true}) pulsing = false;
 
+  /**
+   * Text of a tooltip shown on hover to explain what the status means. Without it no tooltip renders.
+   * The tooltip is a description, never the name: `label` is what assistive technology announces.
+   */
+  @property() tooltip = '';
+
   readonly #slots = new SlotController(this, 'icon');
+
+  // The surface lives in this shadow root next to the dot (its trigger), so the dot's
+  // `aria-describedby` stays inside one tree. The dot never takes focus. [mwg:interest-triggered-tooltips]
+  constructor() {
+    super();
+    new TooltipController(this, {
+      mode: 'shadow',
+      trigger: () => this.renderRoot.querySelector<HTMLElement>('.dot'),
+      surface: () => this.renderRoot.querySelector<HTMLElement>('.tooltip-surface'),
+      content: () => this.tooltip,
+      focusTrigger: 'never',
+      touchTrigger: 'auto',
+    });
+  }
 
   protected override willUpdate(changed: PropertyValues<this>): void {
     if (
@@ -57,14 +80,20 @@ export class TctStatusDot extends TctElement {
 
   override render(): TemplateResult {
     return html`<span class="dot" part="base" role="img" aria-label=${this.label || nothing}
+        >${
+          this.#slots.has('icon')
+            ? html`<span class="icon-slot" part="icon" aria-hidden="true"
+                ><slot name="icon"></slot
+              ></span>`
+            : nothing
+        }</span
       >${
-        this.#slots.has('icon')
-          ? html`<span class="icon-slot" part="icon" aria-hidden="true"
-              ><slot name="icon"></slot
-            ></span>`
+        this.tooltip
+          ? html`<div class="layer-surface tooltip-surface" part="tooltip" popover="manual">
+              ${this.tooltip}
+            </div>`
           : nothing
-      }</span
-    >`;
+      }`;
   }
 }
 

@@ -1,10 +1,13 @@
 import {html} from 'lit';
-import {describe, expect, it} from 'vitest';
+import {userEvent} from 'vitest/browser';
+import {beforeEach, describe, expect, it} from 'vitest';
 import {axNode, expectAccessible} from '@tecton-astryx/testing/a11y.js';
 import {emulateMedia} from '@tecton-astryx/testing/emulate.js';
 import {fixture} from '@tecton-astryx/testing/fixture.js';
 import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
+import {pressKeys} from '@tecton-astryx/testing/keyboard.js';
 import {isChromium} from '@tecton-astryx/testing/tier.js';
+import {waitUntil} from '@tecton-astryx/testing/timing.js';
 import {STATUS_DOT_VARIANTS} from './status-dot.types.js';
 import './define.js';
 import type {TctStatusDot} from './tct-status-dot.js';
@@ -77,7 +80,7 @@ describe('tct-status-dot (StatusDot.test.tsx)', () => {
     const element = await fixture<TctStatusDot>(
       html`<tct-status-dot variant="success" label="Online" data-testid="dot"></tct-status-dot>`,
     );
-    expect(element.dataset['testid']).toBe('dot');
+    expect(element.dataset.testid).toBe('dot');
   });
 
   it('is not focusable', async () => {
@@ -264,5 +267,89 @@ describe('tct-status-dot: forced colours and direction', () => {
       wrapper.querySelector<TctStatusDot>('tct-status-dot')!,
     ).getBoundingClientRect();
     expect([box.width, box.height]).toEqual([8, 8]);
+  });
+});
+
+describe('tct-status-dot: tooltip', () => {
+  const surfaceOf = (element: TctStatusDot): HTMLElement | null =>
+    element.shadowRoot!.querySelector<HTMLElement>('.tooltip-surface');
+  const isOpen = (element: TctStatusDot): boolean =>
+    surfaceOf(element)?.matches(':popover-open') ?? false;
+
+  /** The real mouse pointer stays where the last test left it; park it in an empty corner. */
+  beforeEach(async () => {
+    const corner = document.createElement('div');
+    corner.style.cssText =
+      'position:fixed;inset-block-end:0;inset-inline-end:0;inline-size:4px;block-size:4px';
+    document.body.append(corner);
+    await userEvent.hover(corner);
+    corner.remove();
+  });
+
+  const make = async (attributes = ''): Promise<TctStatusDot> => {
+    const wrapper = await fixture<HTMLElement>(
+      `<div style="padding: 60px 120px"><tct-status-dot variant="success" label="Online" ${attributes}></tct-status-dot></div>`,
+    );
+    return wrapper.querySelector<TctStatusDot>('tct-status-dot')!;
+  };
+
+  it('renders no tooltip surface without the tooltip property', async () => {
+    const element = await make();
+    expect(surfaceOf(element)).toBeNull();
+    expect(dotOf(element).hasAttribute('aria-describedby')).toBe(false);
+  });
+
+  it('renders with tooltip and describes the dot with it', async () => {
+    const element = await make('tooltip="Connected to the server"');
+    await element.updateComplete;
+    const surface = surfaceOf(element)!;
+    expect(surface.textContent.trim()).toBe('Connected to the server');
+    expect(surface.getAttribute('role')).toBe('tooltip');
+    expect(dotOf(element).getAttribute('aria-describedby')).toBe(surface.id);
+    // The name stays the label; the tooltip is only the description.
+    expect(dotOf(element).getAttribute('aria-label')).toBe('Online');
+    if (isChromium) {
+      const node = await axNode(dotOf(element));
+      expect([node.role, node.name]).toEqual(['image', 'Online']);
+    }
+  });
+
+  it('shows on hover above the dot and hides on leave', async () => {
+    const element = await make('tooltip="Connected"');
+    await userEvent.hover(dotOf(element));
+    await waitUntil(() => isOpen(element), 'tooltip open');
+    expect(surfaceOf(element)!.getBoundingClientRect().bottom).toBeLessThanOrEqual(
+      dotOf(element).getBoundingClientRect().top + 1,
+    );
+    const corner = document.createElement('div');
+    corner.style.cssText =
+      'position:fixed;inset-block-end:0;inset-inline-end:0;inline-size:4px;block-size:4px';
+    document.body.append(corner);
+    await userEvent.hover(corner);
+    await waitUntil(() => !isOpen(element), 'tooltip closed');
+    corner.remove();
+  });
+
+  it('Escape closes the tooltip', async () => {
+    const element = await make('tooltip="Connected"');
+    await userEvent.hover(dotOf(element));
+    await waitUntil(() => isOpen(element), 'tooltip open');
+    await pressKeys('Escape');
+    await waitUntil(() => !isOpen(element), 'closed by Escape');
+  });
+
+  it('removes the surface and the description when the tooltip is cleared', async () => {
+    const element = await make('tooltip="Connected"');
+    element.tooltip = '';
+    await element.updateComplete;
+    expect(surfaceOf(element)).toBeNull();
+    expect(dotOf(element).hasAttribute('aria-describedby')).toBe(false);
+  });
+
+  it('passes axe with the tooltip open', async () => {
+    const element = await make('tooltip="Connected"');
+    await userEvent.hover(dotOf(element));
+    await waitUntil(() => isOpen(element), 'tooltip open');
+    await expectAccessible(element.parentElement!);
   });
 });
