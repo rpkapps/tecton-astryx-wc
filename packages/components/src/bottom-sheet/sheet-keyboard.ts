@@ -104,21 +104,27 @@ export class SheetKeyboardController implements ReactiveController {
     host.addController(this);
   }
 
-  hostConnected(): void {
+  hostDisconnected(): void {
+    this.#unlisten();
+    cancelAnimationFrame(this.#frame);
+    this.#frame = 0;
+    this.#control = null;
+    this.#clear();
+  }
+
+  /** The visual viewport is only watched while a text field of the sheet has focus. */
+  #listen(): void {
     if (this.#listening) return;
     this.#listening = true;
     window.visualViewport?.addEventListener('resize', this.#onViewport);
     window.visualViewport?.addEventListener('scroll', this.#onViewport);
   }
 
-  hostDisconnected(): void {
+  #unlisten(): void {
+    if (!this.#listening) return;
     this.#listening = false;
     window.visualViewport?.removeEventListener('resize', this.#onViewport);
     window.visualViewport?.removeEventListener('scroll', this.#onViewport);
-    cancelAnimationFrame(this.#frame);
-    this.#frame = 0;
-    this.#control = null;
-    this.#clear();
   }
 
   /** `focusin` on the sheet: a text field in an accommodated sheet gets revealed above the keyboard. */
@@ -127,6 +133,7 @@ export class SheetKeyboardController implements ReactiveController {
     const control = findTextEntryControl(event.composedPath()[0] ?? event.target);
     if (!control) return;
     this.#control = control;
+    this.#listen();
     this.#schedule();
   };
 
@@ -135,7 +142,9 @@ export class SheetKeyboardController implements ReactiveController {
     this.#control = null;
     // A moment later: focus moving between two fields must not collapse and re-open the spacer.
     requestAnimationFrame(() => {
-      if (!this.#control && !findTextEntryControl(deepActiveElement())) this.#clear();
+      if (this.#control || findTextEntryControl(deepActiveElement())) return;
+      this.#clear();
+      this.#unlisten();
     });
   };
 
@@ -147,6 +156,7 @@ export class SheetKeyboardController implements ReactiveController {
     }
     this.#control = null;
     this.#clear();
+    this.#unlisten();
   }
 
   readonly #onViewport = (): void => {

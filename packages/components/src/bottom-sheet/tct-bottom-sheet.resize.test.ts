@@ -5,6 +5,7 @@
  * Upstream test names (BottomSheet.test.tsx `snapPoints`, `height`) are kept where the behaviour applies.
  */
 import {afterEach, describe, expect, it, vi} from 'vitest';
+import type {TctSnapChangeEvent} from '@tecton-astryx/core/events/tct-snap-change.js';
 import {resetDevWarnings} from '@tecton-astryx/core/utils/dev.js';
 import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
 import {
@@ -227,8 +228,8 @@ describe('drag, flick and settle', () => {
     await drag(handleOf(el), 300, 520, {stepMs: 80});
     await settled(el);
     expect(changes.events).toHaveLength(1);
-    expect(changes.events[0]!.index).toBe(1);
-    expect(Math.round(changes.events[0]!.height)).toBe(HALF());
+    expect((changes.events[0] as TctSnapChangeEvent).index).toBe(1);
+    expect(Math.round((changes.events[0] as TctSnapChangeEvent).height)).toBe(HALF());
     expect(changes.events[0]!.reason).toBe('pointer');
     expectEventFlags(changes.events[0]!, {bubbles: true, composed: true, cancelable: false});
   });
@@ -477,7 +478,7 @@ describe('the resizable handle (WCAG 2.5.7: keyboard and single-pointer alternat
     await pressKeys('ArrowUp');
     await settled(el);
     expect(el.snapIndex).toBe(1);
-    expect(changes.events.map((event) => [event.index, event.reason])).toEqual([
+    expect((changes.events as TctSnapChangeEvent[]).map((event) => [event.index, event.reason])).toEqual([
       [1, 'keyboard'],
       [2, 'keyboard'],
       [1, 'keyboard'],

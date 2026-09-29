@@ -138,8 +138,11 @@ export class TctBottomSheetSwitcher extends TctElement {
   readonly #layerOptions: LayerOptions = {
     kind: 'modal',
     surface: () => this.#dialog,
-    escape: (): EscapeBehavior => (this.#activePurpose === 'required' ? 'block' : 'close'),
-    outsidePress: () => this.#activePurpose === 'info' && !this.noScrim,
+    // While the last sheet leaves (`active-sheet` is already null) the flow takes no part in Escape or
+    // outside presses: they belong to the layer below.
+    escape: (): EscapeBehavior =>
+      this.activeSheet == null ? 'none' : this.#activePurpose === 'required' ? 'block' : 'close',
+    outsidePress: () => this.activeSheet != null && this.#activePurpose === 'info' && !this.noScrim,
     // The sheets focus their own panel once they render; a non-modal flow must not take focus.
     initialFocus: () => this.#initialFocusTarget(),
     onDismissRequest: (reason) => {

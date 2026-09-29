@@ -98,37 +98,32 @@
         {
           "upstream": "ref",
           "kind": "prop",
-          "target": "the element itself",
-          "waived": true,
-          "reason": "No ref: the element is the handle (A§7.2)."
+          "reason": "No ref: the element is the handle (A§7.2).",
+          "as": "waived"
         },
         {
           "upstream": "xstyle",
           "kind": "prop",
-          "target": "CSS parts and custom properties",
-          "waived": true,
-          "reason": "StyleX escape hatch; replaced by `part` and custom properties (A§7.2)."
+          "reason": "StyleX escape hatch; replaced by `part` and custom properties (A§7.2).",
+          "as": "waived"
         },
         {
           "upstream": "className",
           "kind": "prop",
-          "target": "class on the host",
-          "waived": true,
-          "reason": "Framework prop; the host takes classes and styles as any element."
+          "reason": "Framework prop; the host takes classes and styles as any element.",
+          "as": "waived"
         },
         {
           "upstream": "style",
           "kind": "prop",
-          "target": "style on the host",
-          "waived": true,
-          "reason": "Framework prop; the host takes classes and styles as any element."
+          "reason": "Framework prop; the host takes classes and styles as any element.",
+          "as": "waived"
         },
         {
           "upstream": "data-testid",
           "kind": "prop",
-          "target": "data-testid on the host",
-          "waived": true,
-          "reason": "A plain attribute on the host."
+          "reason": "A plain attribute on the host.",
+          "as": "waived"
         }
       ],
       "hooks": [
@@ -162,7 +157,9 @@
           "when": "focus on Cancel or the action"
         }
       ],
-      "form": {"formAssociated": false},
+      "form": {
+        "formAssociated": false
+      },
       "differences": [
         {
           "id": "ALERTDIALOG-01",

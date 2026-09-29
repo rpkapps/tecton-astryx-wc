@@ -12,8 +12,6 @@ import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
 import {
   aTimeout,
   axNode,
-  emulateMedia,
-  expectAccessible,
   expectEventFlags,
   fixture,
   layerStack,
@@ -37,7 +35,6 @@ import {
   pointer,
   settled,
   sheetOf,
-  touch,
 } from './sheet-test-utils.js';
 
 beforeAll(() => {
