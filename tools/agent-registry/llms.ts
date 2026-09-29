@@ -194,6 +194,21 @@ export function renderLlmsFull(registry: PublicRegistry): string {
   }
   if (registry.components.length === 0) lines.push('No components are documented yet.', '');
 
+  if (registry.controllers.length > 0) {
+    lines.push(
+      '## Controllers and utilities',
+      '',
+      'Runtime building blocks of `@tecton-wc/core` for building your own elements.',
+      '',
+    );
+    for (const controller of registry.controllers) {
+      lines.push(
+        `- ${code(controller.name)} (${controller.kind}, ${code(controller.import)}): ${controller.summary}`,
+      );
+    }
+    lines.push('');
+  }
+
   if (registry.tokens.length > 0) {
     lines.push('## Design tokens', '');
     const byCategory = new Map<string, string[]>();

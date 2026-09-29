@@ -1,0 +1,18 @@
+{
+  "//": "Emit for `pnpm build` (tools/build.ts): JavaScript and declarations, `.ts` import specifiers rewritten to `.js`. Shipped sources only.",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": false,
+    "incremental": false,
+    "declarationMap": false,
+    "emitDeclarationOnly": false,
+    "allowImportingTsExtensions": false,
+    "rewriteRelativeImportExtensions": true,
+    "customConditions": [],
+    "outDir": "dist",
+    "rootDir": "src",
+    "sourceMap": false
+  },
+  "include": ["src"],
+  "exclude": ["dist", "src/**/*.test.ts", "src/**/*.node.test.ts", "src/**/fixtures", "src/testing"]
+}

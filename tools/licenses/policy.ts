@@ -130,6 +130,13 @@ export const SHIPPED_PACKAGES: readonly string[] = [
 ];
 
 /**
+ * Private tooling packages that people and agents run but that are not part of the shipped runtime (the `tct`
+ * CLI, D-013 Q-07). Their production dependency closure is held to the same strict allowlist as the shipped
+ * packages (no dev-only exceptions); THIRD-PARTY-NOTICES.md must name their direct dependencies.
+ */
+export const TOOLING_RUNTIME_PACKAGES: readonly string[] = ['@tecton-wc/cli'];
+
+/**
  * Packages whose *content* is copied into shipped output (font files, icon glyph data) even though
  * they are dev dependencies. They must be listed in THIRD-PARTY-NOTICES.md too (D-003, D-009).
  */
@@ -148,6 +155,8 @@ export const REQUIRED_NOTICE_TEXT: readonly string[] = [
   'Feather',
   'Astryx',
   'Meta Platforms, Inc.',
+  '@modelcontextprotocol/sdk',
+  'Anthropic, PBC',
 ];
 
 type Token = string;
