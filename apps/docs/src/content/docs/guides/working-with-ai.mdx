@@ -17,7 +17,7 @@ The surface is:
 | `llms.txt`                 | An index for language models, plus `llms-full.txt` (everything in one file) and a JSON registry, all generated from the manifest and the docs                                | Available |
 | The `tct` CLI              | `component`, `docs`, `search`, `discover`, `controllers`, `doctor`, `gap-report`, `layout`, `init --features agents`, `upgrade`, `mcp` and `manifest`, in the private `@tecton-wc/cli` package | Available |
 | Output modes               | `--dense` (token-efficient) and `--json` (a stable envelope) on the commands that print data; `--detail brief\|compact\|full` on lists                                       | Available |
-| MCP server                 | `search(query)` and `get(name)`, as `tct mcp` over stdio, and as a handler you can mount on a self-hosted docs site                                                          | Available |
+| MCP server                 | `search(query)` and `get(name)`, as `tct mcp` over stdio, and live over HTTP at `/mcp` on the docs site (served by a Node process)                                                          | Available |
 | Agent-eval harness         | Fixture prompts that check an agent produces correct `tct-*` code given the agent docs (internal)                                                                            | Planned   |
 
 ## Quick start
@@ -220,17 +220,13 @@ get("tct-alert-dialog")
     "example":{...}, "related":[...], "docs":"/components/overlay/alert-dialog/"}
 ```
 
-Results are capped (a brief is at most about 6,000 characters), and a large guide comes back as an overview with its section list. This site is static, so it cannot answer the POST request an HTTP MCP client sends: `/mcp` returns a card that names the tools and points at `tct mcp`. A site you host with a server adapter can serve the same tools over HTTP with the CLI's handler:
+Results are capped (a brief is at most about 6,000 characters), and a large guide comes back as an overview with its section list.
 
-```ts title="src/pages/mcp.ts (a site with a server adapter)"
-import {handleMcpRequest} from '@tecton-wc/cli/mcp/http.js';
-import registry from '../../public/agent-registry.json';
+### Live over HTTP: `/mcp`
 
-export const prerender = false;
-export const ALL = ({request}: {request: Request}) => handleMcpRequest(registry, request);
-```
+The docs site also serves the same two tools over HTTP, for clients that connect to a URL instead of starting a process. `GET /mcp` is a server card that names the tools and says how to connect; `POST /mcp` speaks MCP (JSON-RPC 2.0, the Streamable HTTP transport in its stateless, JSON-response form). It answers from the registry the site publishes, so it says exactly what `tct mcp` says.
 
-```json title="MCP config (a self-hosted route)"
+```json title="MCP config (HTTP)"
 {
   "mcpServers": {
     "tecton": {
@@ -241,7 +237,75 @@ export const ALL = ({request}: {request: Request}) => handleMcpRequest(registry,
 }
 ```
 
-The handler is stateless (a fresh server per request, JSON responses, no session storage), so it runs on any fetch-style runtime. There is no public docs site (the library is unlicensed and unpublished), so the URL is the one where you host the docs build.
+There is no public docs site yet (the library is unlicensed and unpublished), so the URL is the one where you host the docs build, and `http://localhost:4321/mcp` while you run it yourself (see below). A round trip against a running server, with `curl`:
+
+```bash title="Ask the server what it offers"
+curl -s http://localhost:4321/mcp
+```
+
+```json
+{
+  "name": "tecton-wc",
+  "version": "0.0.0",
+  "transport": "streamable-http (stateless, JSON responses)",
+  "usage": "POST JSON-RPC 2.0 messages to this URL (initialize, tools/list, tools/call).",
+  "tools": [
+    {"name": "search", "description": "Search the Tecton Web Components: finds elements (tct-*), controllers and utilities, and documentation topics. ..."},
+    {"name": "get", "description": "Get full documentation for one element, controller or doc topic by name. ..."}
+  ]
+}
+```
+
+```bash title="initialize, then search"
+curl -s -X POST http://localhost:4321/mcp \
+  -H 'content-type: application/json' -H 'accept: application/json, text/event-stream' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"curl","version":"1"}}}'
+```
+
+```json
+{"result":{"protocolVersion":"2025-06-18","capabilities":{"tools":{}},"serverInfo":{"name":"tecton-wc","version":"0.0.0"},"instructions":"Search and read the Tecton Web Components docs before writing UI: search(query) finds elements, controllers and guides; get(name) returns the full API, usage and examples. Never invent attributes, slots or events."},"jsonrpc":"2.0","id":1}
+```
+
+```bash
+curl -s -X POST http://localhost:4321/mcp \
+  -H 'content-type: application/json' -H 'accept: application/json, text/event-stream' \
+  -d '{"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"search","arguments":{"query":"confirm before deleting","limit":1}}}'
+```
+
+```json
+{"result":{"content":[{"type":"text","text":"[{\"type\":\"component\",\"name\":\"tct-alert-dialog\",\"displayName\":\"Alert Dialog\",\"category\":\"Overlay\",\"description\":\"modal confirmation for destructive or irreversible actions (delete, revoke access, discard changes); ...\",\"import\":\"import '@tecton-wc/components/alert-dialog';\",\"keyAttributes\":[\"open: boolean\",\"action-variant: primary|secondary|ghost|destructive|outlined|text-only\"],\"relatedComponents\":[\"tct-dialog\",\"tct-popover\",\"tct-toast\",\"tct-banner\"],\"hint\":\"Use get(\\\"tct-alert-dialog\\\") for the full API, usage and examples.\"}]"}]},"jsonrpc":"2.0","id":2}
+```
+
+A name that is not exact is not an error: `get("tct-buttn")` answers with the closest matches, and a name with nothing close comes back with `isError: true` and a hint to use `search`.
+
+```json title="Response to get(tct-buttn)"
+{"result":{"content":[{"type":"text","text":"{\"note\":\"\\\"tct-buttn\\\" is not an exact name. Did you mean one of these?\",\"suggestions\":[{\"type\":\"component\",\"name\":\"tct-button\",\"description\":\"action trigger w/ 6 variants, 3 sizes, loading state, link + form submitter modes\",\"import\":\"@tecton-wc/components/button\"}],\"hint\":\"Use get() with the exact name from the suggestions above.\"}"}]},"jsonrpc":"2.0","id":3}
+```
+
+The endpoint is stateless: every POST gets a fresh server and answers as one JSON document, with no session and no event stream, so a client needs no sticky routing and any number of instances can sit behind a load balancer. Only `GET` (the card) and `POST` are accepted.
+
+### How the docs are served
+
+The site is prerendered: `pnpm docs:build` writes the pages, assets, `llms.txt`, the registry and the search index to `apps/docs/dist/client/`. Only `/mcp` renders on demand, so the build also writes a small Node server (the Astro Node adapter, standalone mode) to `apps/docs/dist/server/entry.mjs`. There are two ways to run it:
+
+- **One Node process for everything.** `node apps/docs/dist/server/entry.mjs` serves the static files from `dist/client/` and answers `/mcp`. Set `HOST` (for example `0.0.0.0` in a container) and `PORT` (default `4321`).
+- **A static host for the pages, plus a Node process for `/mcp`.** Publish `dist/client/` on any static host, run the same `entry.mjs`, and route `/mcp` to it (a reverse-proxy rule, or a rewrite on the host). A static host alone cannot answer the POST, so without the Node process `/mcp` does not exist there and clients should use `tct mcp` instead.
+
+```bash title="Build and run the whole site, /mcp included"
+pnpm docs:build
+HOST=0.0.0.0 PORT=4321 node apps/docs/dist/server/entry.mjs
+# [@astrojs/node] Server listening on http://0.0.0.0:4321
+```
+
+`pnpm docs:mcp` runs this against the build (the server on a free port, the MCP SDK's client over HTTP, then the card), and `pnpm check` runs it after `docs:build`. The route itself is `apps/docs/src/pages/mcp.ts`: it mounts the CLI's handler, so a site of your own can do the same:
+
+```ts title="src/pages/mcp.ts (a site with a server adapter)"
+import {handleMcpRequest} from '@tecton-wc/cli/mcp/http.js';
+import registry from '../../public/agent-registry.json';
+
+export const prerender = false;
+export const ALL = ({request}: {request: Request}) => handleMcpRequest(registry, request);
+```
 
 ## `llms.txt` and reference output
 

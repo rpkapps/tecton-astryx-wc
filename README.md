@@ -38,6 +38,7 @@ pnpm check          # everything CI runs for Chromium, stops at the first failur
 | `pnpm licenses:check`                       | licence allowlist and third-party notices                                   |
 | `pnpm build`                                | package and CDN builds                                                      |
 | `pnpm docs:dev` / `docs:build` / `docs:a11y` | documentation site                                                          |
+| `pnpm docs:mcp`                             | the built site's live `/mcp` endpoint, over HTTP with the MCP SDK client    |
 | `pnpm check`                                | all of the above, in order                                                  |
 
 Commands that belong to later milestones print a `skip:` message until their inputs exist.
