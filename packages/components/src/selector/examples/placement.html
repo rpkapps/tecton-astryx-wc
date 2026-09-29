@@ -1,0 +1,13 @@
+<!-- title: Placement; description: The popup opens below the trigger by default. placement moves it above or to a side, alignment aligns it, and placement="overlay" puts the chosen row over the trigger. -->
+<div id="placement-root">
+  <tct-vstack max-width="360" gap="4">
+    <tct-selector label="Below (default)" value="b"></tct-selector>
+    <tct-selector label="Overlay" placement="overlay" value="b"></tct-selector>
+    <tct-selector label="End-aligned" alignment="end" value="b"></tct-selector>
+  </tct-vstack>
+  <script type="module">
+    for (const selector of document.querySelectorAll('#placement-root tct-selector')) {
+      selector.options = [{value: 'a', label: 'First'}, {value: 'b', label: 'Second'}, {value: 'c', label: 'Third'}];
+    }
+  </script>
+</div>

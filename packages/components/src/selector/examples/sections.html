@@ -1,0 +1,15 @@
+<!-- title: Sections and dividers; description: Group options under titled sections or separate them with dividers. Sections are headings for screen readers too, and the arrow keys move across them without wrapping. -->
+<div id="sections-root">
+  <tct-vstack max-width="360">
+    <tct-selector label="Time zone" placeholder="Select a time zone"></tct-selector>
+  </tct-vstack>
+  <script type="module">
+    document.querySelector('#sections-root tct-selector').options = [
+      {type: 'section', title: 'Europe', options: ['Amsterdam', 'Berlin', 'Lisbon']},
+      {type: 'divider'},
+      {type: 'section', title: 'Americas', options: ['New York', 'Sao Paulo', 'Vancouver']},
+      {type: 'divider'},
+      'UTC',
+    ];
+  </script>
+</div>
