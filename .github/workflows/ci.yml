@@ -1,0 +1,126 @@
+# CI (ARCHITECTURE §18.5). Node 22, pnpm 10 via corepack, cached store.
+# There is deliberately no publish or release job: the library is unlicensed and private (D-008).
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  CI: true
+  NODE_VERSION: '22'
+
+jobs:
+  # 1. Everything, in order, with Chromium: generate, format, lint, typecheck, tokens, api, parity,
+  #    licences, tests, build, size, docs build (steps for later milestones skip until they exist).
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      TCT_BROWSERS: chromium
+    steps:
+      - uses: actions/checkout@v4
+      - run: corepack enable
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Install Chromium (CI only; never run locally)
+        run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm check
+      - name: Upload reports and bundles
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: check-reports
+          if-no-files-found: ignore
+          path: |
+            reports/
+            packages/components/dist/cdn/
+
+  # 2. The same tests in Firefox and WebKit.
+  browsers:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [firefox, webkit]
+    env:
+      TCT_BROWSERS: ${{ matrix.browser }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: corepack enable
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Install ${{ matrix.browser }} (CI only; never run locally)
+        run: pnpm exec playwright install --with-deps ${{ matrix.browser }}
+      - run: pnpm test
+
+  # 3. Tier-2 emulation: Chromium with implicitAnchor, elementReflection and customStates forced off
+  #    (the M4 test setup reads TCT_TIER2).
+  tier2:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      TCT_BROWSERS: chromium
+      TCT_TIER2: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - run: corepack enable
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Install Chromium (CI only; never run locally)
+        run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm test
+
+  # 4. Documentation site: build, accessibility crawl, upload the built site.
+  docs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - run: corepack enable
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Install Chromium (CI only; never run locally)
+        run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm docs:build
+      - run: pnpm docs:a11y
+      - uses: actions/upload-artifact@v4
+        with:
+          name: docs-site
+          if-no-files-found: ignore
+          path: apps/docs/dist/
+
+  # 5. Licence allowlist (also part of `pnpm check`; kept separate so it is visible on its own).
+  licenses:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - run: corepack enable
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm licenses:check
