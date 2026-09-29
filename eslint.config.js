@@ -55,7 +55,8 @@ const NOT_APPROVED = [
 ];
 const DEV_ONLY_IN_SHIPPED = [
   {
-    group: ['lucide', 'lucide/*'],
+    // Anchored: only the `lucide` package, not our own generated `./lucide/<name>.js` modules.
+    regex: '^lucide(/.*)?$',
     message:
       'lucide is a build-time source (D-009); import generated @tecton-astryx/icons modules.',
   },
@@ -72,6 +73,9 @@ export default defineConfig([
     'apps/docs/.astro/**',
     'apps/docs/src/content/docs/components/**',
     'packages/tokens/src/inputs/**',
+    // Generated Lucide data (tools/icons/extract-lucide.ts): 1,854 machine-written modules
+    'packages/icons/src/lucide/**',
+    'packages/icons/src/lucide.ts',
     '**/fixtures/**',
   ]),
 

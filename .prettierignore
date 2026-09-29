@@ -2,6 +2,8 @@
 **/generated/
 **/dist/
 custom-elements.json
+packages/icons/src/lucide/
+packages/icons/src/lucide.ts
 reports/
 apps/docs/src/content/docs/components/
 .astro/
