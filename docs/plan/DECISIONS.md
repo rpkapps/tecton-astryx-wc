@@ -57,3 +57,21 @@ Resolving the open questions in `docs/research/styling.md` §16:
   palette variables.
 - **Token names:** Astryx's unprefixed semantic names verbatim; Tecton-only roles under
   `--tecton-*`; component-private `--_<component>-*`.
+
+## D-006 — Parity scope baseline (2026-09-29)
+
+From `docs/research/astryx-inventory.md` (upstream package is `@astryxdesign/core`):
+
+- **In scope, v1 denominator:** all 184 public core components (110 top-level, 67 subcomponents,
+  7 providers), including the 84 public components not in the docs catalog, plus required
+  hooks/utilities re-expressed as controllers or element APIs where they are part of the public
+  developer capability.
+- **Extension packages** (lab 56, charts 6, richtext 4, vega 1 — all `@canary`): tracked in the
+  manifest as `experimental`, scheduled after core (plan phase 4). Not excluded, not in the v1
+  core release gate.
+- **Controlled-only upstream inputs:** the port supports both property-controlled and uncontrolled
+  (attribute default) usage. Recorded as an approved API difference.
+- **Locales:** 30 upstream catalogs (region-tagged, 370 messages) are the target set; the i18n
+  guide's English-only statement is an upstream docs defect.
+- **TabList:** keep upstream semantics (nav + `aria-current` by default, tabs pattern only in
+  tablist mode).

@@ -53,7 +53,7 @@ Everything below was extracted from the frozen source. It was not taken from the
 | Core manifest entries (distinct public components) | **184**: 110 top-level components, 67 subcomponents, 7 providers |
 | Catalog (showcase) entries at the frozen commit | **100** in 11 categories. That is the plan's 99 plus **Timer** |
 | Public core components that are **not** catalog entries | **84** (22 top-level/providers + 62 compound parts) |
-| Extension-package entries (`@canary`) | 72: lab 56, charts 6, richtext 4, vega 6 |
+| Extension-package entries (`@canary`) | 67 (25 top-level + 42 parts): lab 56, charts 6, richtext 4, vega 1 |
 | Core `.doc.mjs` files | 230 (45 multi-component, 85 subcomponent, 62 single, 38 hook/other) |
 | Consumer docs topics (`packages/cli/assets/docs`) | **22** topic files (21 routed on the doc site: `cli` is skipped) + 1 draft (`shadcn-compatibility.doc.draft.mjs`) + 7 overlay files (`.dense`/`.zh`) |
 | Doc-site routes | `/docs/[topic]` (21), `/docs/[package]` (non-theme packages), `/components` + `/components/[name]` (one page per documented component/hook), `/changelog`, `/themes`, `/templates` (+`[slug]`), `/playground`, `/blog`, `/community`, `/llms.txt`, `/mcp`, `/rss.xml` |
@@ -196,8 +196,8 @@ theme 73 · Table 61 · PowerSearch 55 · hooks 50 · Markdown 47 · Chat 44 · 
 
 The catalog was rebuilt from the frozen doc data. Under the docsite rule, an entry needs a `category`
 (inherited by subcomponents), must not be `hidden` or `isHiddenFromOverview`, and must not be a
-`use*` hook. That gives **100 entries**. They match the plan's 99-entry seed one for one, and the
-seed lacks **Timer** (Content), a non-rendering elapsed-time display (spec AST-037). The docsite also
+`use*` hook. That gives **100 entries**. Ninety-nine of them match the plan's seed one for one. The hundredth,
+**Timer** (Content, a non-rendering elapsed-time display, spec AST-037), is missing from the seed. The docsite also
 has a `Data Visualization` category, but it holds only `@canary` packages (charts/lab/vega), so the
 stable catalog has 11 categories.
 
@@ -465,7 +465,7 @@ are listed in §4.3, not here.
   - Other: `ref` React.Ref<HTMLDivElement>; `xstyle` StyleXStyles; `data-testid` string
 - **Variants/sizes:** orientation horizontal/vertical; size sm/md/lg; elevation none/low/med/high
 - **States:** isDisabled
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** Single tab stop (roving tabindex on first/last-focused member); ArrowLeft/Right (ArrowUp/Down when vertical): move between members, wraps; Home/End: first/last member; Arrow keys left to a member whose menu is open; disabled members skipped
 - **ARIA/semantics:** roles group · aria-disabled aria-label
 - **Depends on:** components: SizeContext · hooks: useListFocus
@@ -486,7 +486,7 @@ are listed in §4.3, not here.
 - **States:** [checked], [disabled], isMenuOpen, hasChevron
 - **Subcomponents:** DropdownMenuCheckboxItem, DropdownMenuDivider, DropdownMenuItem, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuSubMenu
 - **Events/callbacks:** onOpenChange, onClick
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** Trigger: Enter/Space/ArrowDown open (keyboard open focuses first item; pointer open focuses the menu container, then ArrowDown enters); ArrowDown/ArrowUp: move between items (no wrap); Home/End; ArrowRight: open submenu; ArrowLeft/Escape: close submenu and return to parent item; Printable chars: typeahead (skips aria-disabled); Enter activates menuitem/menuitemradio; Space toggles menuitemcheckbox; Escape: close + restore focus to trigger; Tab: close menu (APG menu-button); Hover moves focus (mouse only)
 - **ARIA/semantics:** roles group, menu, menuitem, none, presentation · native <li> · aria-controls aria-disabled aria-expanded aria-haspopup aria-hidden aria-label aria-labelledby
 - **Depends on:** components: BottomSheet, Button, Divider, DropdownMenuDivider, DropdownMenuItem, DropdownMenuSubMenu, Heading, Icon, Item, Layer, List, Popover, Section, Spinner · hooks: useAdaptivePresentation, useFocusReturnVisibility, useLayer, useListFocus, useMenuHover, useTypeahead · platform: MutationObserver, ResizeObserver, i18n-strings, useLayer
@@ -505,7 +505,7 @@ are listed in §4.3, not here.
   - Events: `onChange` (checked: boolean) => void
 - **States:** isDisabled, hasCloseOnSelect
 - **Events/callbacks:** onChange
-- **Controlled/uncontrolled:** controlled only: value + onChange
+- **Controlled/uncontrolled:** controlled-only: value required + onChange
 - **Slots/children:** icon, endContent
 - **Keyboard:** (see DropdownMenu)
 - **ARIA/semantics:** roles menuitemcheckbox · aria-checked aria-disabled
@@ -554,8 +554,8 @@ are listed in §4.3, not here.
   - Events: `onChange`* (value: string) => void
 - **States:** hasCloseOnSelect
 - **Events/callbacks:** onChange
-- **Controlled/uncontrolled:** controlled only: value + onChange
-- **Slots/children:** children; —
+- **Controlled/uncontrolled:** controlled-only: value required + onChange
+- **Slots/children:** children
 - **Keyboard:** (see DropdownMenu)
 - **ARIA/semantics:** roles group · aria-label
 - **Depends on:** components: DropdownMenu, DropdownMenuRadioItem
@@ -627,7 +627,7 @@ are listed in §4.3, not here.
 - **Variants/sizes:** size 4xs/3xs/2xs/xsm/sm/base/lg/xl/2xl/3xl/4xl; weight normal/medium/semibold/bold; color primary/secondary/disabled/placeholder/accent/inherit; display inline/block
 - **States:** hasUnderline, isDisabled, isExternalLink, isStandalone
 - **Events/callbacks:** onClick
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** Enter: native link activation; renders <button> when no href
 - **ARIA/semantics:** native <a> <button> · aria-disabled aria-label
 - **Depends on:** components: Icon, Text, Tooltip, VisuallyHidden · hooks: useInteractiveRole · platform: i18n-strings, inert
@@ -669,8 +669,8 @@ are listed in §4.3, not here.
 - **States:** [selected], [disabled], isDisabled
 - **Subcomponents:** SegmentedControlItem
 - **Events/callbacks:** onChange
-- **Controlled/uncontrolled:** controlled only: value + onChange
-- **Slots/children:** children; —
+- **Controlled/uncontrolled:** controlled-only: value required + onChange
+- **Slots/children:** children
 - **Keyboard:** Single tab stop (radiogroup, roving); ArrowLeft/Right: move AND select (selection follows focus), wraps; Home/End: first/last; disabled items skipped; Tabbing in never fires onChange; consumer onKeyDown can preventDefault to opt out; Keyboard hint popover on first keyboard entry
 - **ARIA/semantics:** roles radio, radiogroup · aria-describedby aria-disabled aria-label
 - **Depends on:** components: SegmentedControlItem, SizeContext, Tooltip · hooks: useKeyboardHint, useListFocus
@@ -707,7 +707,7 @@ are listed in §4.3, not here.
 - **Variants/sizes:** size sm/md/lg; elevation none/low/med/high
 - **States:** [isPressed], isPressed, isDisabled, isLoading, isIconOnly
 - **Events/callbacks:** onPressedChange, pressedChangeAction
-- **Controlled/uncontrolled:** controlled only: isPressed, value + onPressedChange
+- **Controlled/uncontrolled:** isPressed optional (no default* counterpart; omitted = unset) + onPressedChange
 - **Slots/children:** children; icon, pressedIcon
 - **Keyboard:** Enter/Space: toggle (native button, aria-pressed)
 - **ARIA/semantics:** roles group · aria-hidden aria-label aria-pressed
@@ -729,8 +729,8 @@ are listed in §4.3, not here.
 - **Variants/sizes:** type single/multiple; orientation horizontal/vertical; size sm/md/lg
 - **States:** isDisabled
 - **Events/callbacks:** onChange
-- **Controlled/uncontrolled:** controlled only: value + onChange
-- **Slots/children:** children; —
+- **Controlled/uncontrolled:** controlled-only: value required + onChange
+- **Slots/children:** children
 - **Keyboard:** Tab between members; Enter/Space toggles; tooltip-bearing disabled member focusable but inert
 - **ARIA/semantics:** roles group · aria-label
 - **Depends on:** components: ToggleButton
@@ -793,7 +793,7 @@ are listed in §4.3, not here.
 - **States:** isStopShown, isDisabled
 - **Subcomponents:** ChatComposerDrawer, ChatComposerInput, ChatComposerTokenElement, ChatDictationButton, ChatSendButton
 - **Events/callbacks:** onSubmit, onStop, onChange
-- **Controlled/uncontrolled:** controlled only: value + onChange
+- **Controlled/uncontrolled:** value optional (controlled when provided, otherwise internal state) + onChange
 - **Slots/children:** drawer, headerActions, headerContext, input, footerActions, sendActions, sendButton
 - **Keyboard:** Keyboard-only focus ring on editor; send button toggles send/stop
 - **ARIA/semantics:** roles button, combobox, error, group, listbox, none, option, status, textbox · aria-activedescendant aria-controls aria-disabled aria-expanded aria-haspopup aria-hidden aria-label aria-multiline aria-selected
@@ -831,7 +831,7 @@ are listed in §4.3, not here.
   - Other: `handleRef` React.Ref<ChatComposerInputHandle>; `maxRows` number = 8; `triggers` ChatComposerTrigger[]; `debounceMs` number = 150; `pasteAsToken` UseChatPasteAsTokenReturn | false
 - **States:** hasHistory, isDisabled
 - **Events/callbacks:** onChange, onPaste, onFiles, onSubmit, onKeyDown
-- **Controlled/uncontrolled:** controlled only: value + onChange
+- **Controlled/uncontrolled:** value optional (no default* counterpart; omitted = unset) + onChange
 - **Keyboard:** Enter submits (not Shift+Enter; IME-guarded incl. keyCode 229); onKeyDown can preventDefault; ArrowUp at draft start recalls history; ArrowDown past newest restores draft; Trigger menus (@ or /) open typeahead; Backspace removes token
 - **ARIA/semantics:** roles combobox, group, listbox, none, option, status, textbox · aria-activedescendant aria-controls aria-disabled aria-expanded aria-haspopup aria-hidden aria-label aria-multiline aria-selected
 - **Depends on:** components: Badge, Button, HoverCard, Popover · hooks: useHighlightedOptionScroll · platform: contenteditable, i18n-strings, ime-guard, portal
@@ -979,7 +979,7 @@ are listed in §4.3, not here.
 - **Props (3):**
   - Slots: `children`* string
   - Other: `tokens` ChatComposerToken[]; `xstyle` StyleXStyles
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Depends on:** components: Badge
 - **Theme targets:** `.astryx-chat-tokenized-text`
 
@@ -1027,7 +1027,7 @@ are listed in §4.3, not here.
   - Slots: `children` ReactNode
   - Other: `xstyle` StyleXStyles †
 - **Variants/sizes:** variant default/transparent/muted/blue/cyan/gray/green/orange/pink/purple/red/teal/yellow; elevation none/low/med/high
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Depends on:** components: Layout
 - **Theme targets:** `.astryx-card`
 
@@ -1043,7 +1043,7 @@ are listed in §4.3, not here.
   - Slots: `children`* ReactNode
   - Other: `ref` React.Ref<HTMLDivElement>; `handleRef` React.Ref<CarouselHandle>; `xstyle` StyleXStyles; `className` string; `style` CSSProperties; `data-testid` string
 - **States:** hasButtons, hasEdgeFade, hasLoop, hasSnap
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** Scroll container focusable (arrow-key scrolling native); Prev/Next buttons: edge buttons disabled instead of removed; focus handed to opposite button at edges; Shift+wheel horizontal scroll
 - **ARIA/semantics:** roles group, region · aria-label aria-roledescription
 - **Depends on:** components: Button, Icon, Layer · hooks: isRtlElement, useLayer, useScrollOverflow · platform: css-anchor-positioning, i18n-strings, media-query, useLayer
@@ -1065,7 +1065,7 @@ are listed in §4.3, not here.
 - **Variants/sizes:** variant default/transparent/muted/blue/cyan/gray/green/orange/pink/purple/red/teal/yellow; elevation none/low/med/high
 - **States:** isDisabled
 - **Events/callbacks:** onClick
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** Hidden full-surface <button>/<a> is the single tab stop; Enter/Space (button) or Enter (link) activate once
 - **ARIA/semantics:** native <button> · aria-disabled aria-label
 - **Depends on:** components: Card, Link · hooks: useClickableContainer
@@ -1106,7 +1106,7 @@ are listed in §4.3, not here.
 - **States:** hasDividers
 - **Events/callbacks:** onChange
 - **Controlled/uncontrolled:** value / defaultValue + onChange
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** (see Collapsible)
 - **Depends on:** components: Collapsible
 
@@ -1125,8 +1125,7 @@ are listed in §4.3, not here.
 - **Variants/sizes:** variant default/transparent/muted/blue/cyan/gray/green/orange/pink/purple/red/teal/yellow; elevation none/low/med/high
 - **States:** isSelected, isDisabled
 - **Events/callbacks:** onChange
-- **Controlled/uncontrolled:** controlled only: isSelected + onChange
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** Checkbox is the focus target; Space toggles natively; Enter also toggles (explicit handler)
 - **ARIA/semantics:** native <input> (input: checkbox) · aria-disabled aria-label
 - **Depends on:** components: Card · hooks: useClickableContainer
@@ -1180,7 +1179,7 @@ are listed in §4.3, not here.
   - Other: `ref` React.Ref<HTMLDivElement>; `xstyle` StyleXStyles; `data-testid` string
 - **Variants/sizes:** shape circle/rounded/square
 - **Subcomponents:** AvatarGroupOverflow
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** Single tab stop over interactive avatars; ArrowLeft/Right roving; keyboard hint via aria-describedby
 - **ARIA/semantics:** roles group · aria-describedby aria-label
 - **Depends on:** components: Avatar, AvatarGroupOverflow, VisuallyHidden · hooks: useListFocus · platform: i18n-strings
@@ -1196,7 +1195,7 @@ are listed in §4.3, not here.
   - Events: `onClick` () => void
   - Other: `count`* number; `ref` React.Ref<HTMLElement>; `xstyle` StyleXStyles
 - **Events/callbacks:** onClick
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** (see AvatarGroup)
 - **ARIA/semantics:** native <button> · aria-disabled aria-label
 - **Depends on:** components: Avatar, AvatarGroup · platform: i18n-strings
@@ -1235,7 +1234,7 @@ are listed in §4.3, not here.
   - Appearance: `color` CodeColor = 'primary' †; `size` CodeSize †
   - Slots: `children`* ReactNode
   - Other: `xstyle` StyleXStyles; `className` string; `style` CSSProperties; `data-testid` string
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **ARIA/semantics:** native <code>
 
 #### CodeBlock
@@ -1285,7 +1284,7 @@ are listed in §4.3, not here.
   - Other: `accessibilityLevel` 1 | 2 | 3 | 4 | 5 | 6 = Same as 'level'; `maxLines` number = 0; `wordBreak` 'break-word' | 'break-all' = 'break-all' for maxLines=1, 'break-word' otherwise; `textWrap` 'wrap' | 'nowrap' | 'balance' | 'pretty'
 - **Variants/sizes:** type display-1/display-2/display-3; weight normal/medium/semibold/bold; color primary/secondary/disabled/placeholder/accent/inherit; display inline/block; justify start/center/end
 - **States:** hasTruncateTooltip, hasCapsize, hasStrikethrough
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **ARIA/semantics:** aria-level
 - **Depends on:** components: Text, Tooltip
 - **Theme targets:** `.astryx-heading`
@@ -1329,7 +1328,7 @@ are listed in §4.3, not here.
 - **Variants/sizes:** display block/inline; density default/compact
 - **States:** isStreaming
 - **Events/callbacks:** onLinkClick
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** Table scroll wrapper keyboard-focusable; task-list checkboxes; links native
 - **ARIA/semantics:** roles document, group, paragraph · native <hr> <img> · aria-label
 - **Depends on:** components: Blockquote, CheckboxList, Citation, CodeBlock, Link, List, Table · hooks: useStreamingText · platform: i18n-strings
@@ -1349,7 +1348,7 @@ are listed in §4.3, not here.
   - Other: `maxLines` number = 0; `wordBreak` 'break-word' | 'break-all' = 'break-all' for maxLines=1, 'break-word' otherwise; `textWrap` 'wrap' | 'nowrap' | 'balance' | 'pretty'; `xstyle` StyleXStyles
 - **Variants/sizes:** type body/large/label/supporting/code/display-1/display-2/display-3/inherit; size 4xs/3xs/2xs/xsm/sm/base/lg/xl/2xl/3xl/4xl; color primary/secondary/disabled/placeholder/accent/inherit; weight normal/medium/semibold/bold; display inline/block; justify start/center/end
 - **States:** hasTruncateTooltip, hasCapsize, hasStrikethrough, hasTabularNumbers
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Depends on:** components: Tooltip · platform: ResizeObserver
 - **Theme targets:** `.astryx-heading` `.astryx-text`
 
@@ -1559,7 +1558,7 @@ the viewer's own time zone
 - **Variants/sizes:** size sm/md
 - **States:** [checked], [disabled], isLabelHidden, isLoading, isDisabled, isReadOnly, isOptional, isRequired
 - **Events/callbacks:** onChange, changeAction, onFocus, onBlur
-- **Controlled/uncontrolled:** controlled only: value + onChange
+- **Controlled/uncontrolled:** controlled-only: value required + onChange
 - **Keyboard:** Space: toggle (native checkbox); aria-disabled with reason keeps focus but blocks toggle
 - **ARIA/semantics:** native <input> (input: checkbox) · aria-busy aria-describedby aria-disabled aria-invalid aria-readonly aria-required
 - **Depends on:** components: CheckboxList, Field, FieldStatus, Indicator, Spinner, Tooltip · hooks: useIndicatorFocusRing, useResolvedRequired · platform: react-transition/optimistic
@@ -1581,7 +1580,7 @@ the viewer's own time zone
 - **Variants/sizes:** size sm/md/lg; variant input/ghost; placement above/below/start/end; alignment start/center/end
 - **States:** [state], isDisabled, isLoading, isLabelHidden, isOptional, isRequired
 - **Events/callbacks:** onChange, changeAction, onOpenChange
-- **Controlled/uncontrolled:** controlled only: value + onChange, onOpenChange
+- **Controlled/uncontrolled:** controlled-only: value required + onChange
 - **Slots/children:** children; triggerLabel, startIcon
 - **Render props / extension:** children
 - **Keyboard:** Trigger: ArrowDown opens (reported via onOpenChange); Escape closes; custom popup content
@@ -1604,7 +1603,7 @@ the viewer's own time zone
 - **Variants/sizes:** size sm/md/lg; statusVariant attached/detached/tooltip; format date/date_long/date_weekday/system_date; presentation popover/bottom-sheet/native/adaptive-bottom-sheet/adaptive-native
 - **States:** [disabled], [state], isLabelHidden, isOptional, isRequired, isDisabled, isLoading, hasClear
 - **Events/callbacks:** onChange, changeAction
-- **Controlled/uncontrolled:** controlled only: value + onChange
+- **Controlled/uncontrolled:** value optional (no default* counterpart; omitted = unset) + onChange
 - **Keyboard:** Typed field: Enter commits parsed date (IME-guarded); ArrowDown or Alt+ArrowDown opens calendar popover (APG combobox); Calendar grid keys as Calendar; Escape closes and returns focus to field; Adaptive: touch (coarse pointer) renders a picker field / bottom sheet
 - **ARIA/semantics:** roles alert, combobox, grid, gridcell, listbox, option, row · native <button> <input> (input: date/text) · aria-activedescendant aria-autocomplete aria-busy aria-controls aria-current aria-describedby aria-disabled aria-expanded aria-haspopup aria-hidden aria-invalid aria-label aria-labelledby aria-live aria-required aria-selected
 - **Depends on:** components: BottomSheet, Button, Calendar, Field, Icon, IconButton, InputGroup, Popover, SizeContext, Spinner, Tooltip, VisuallyHidden · hooks: useDevWarning, useInputStatusIcon, useMediaQuery, useResolvedRequired · platform: ResizeObserver, i18n-strings, ime-guard, inert, media-query, react-transition/optimistic, scrollend
@@ -1625,7 +1624,7 @@ the viewer's own time zone
 - **Variants/sizes:** size sm/md/lg; statusVariant attached/detached/tooltip
 - **States:** [disabled], [state], [selected], isLabelHidden, isOptional, isRequired, isDisabled, isLoading, hasClear
 - **Events/callbacks:** onChange, changeAction
-- **Controlled/uncontrolled:** controlled only: value + onChange
+- **Controlled/uncontrolled:** controlled-only: value required + onChange
 - **Keyboard:** Trigger opens range calendar popover; presets are a labeled group of buttons; Calendar keys as Calendar (range)
 - **ARIA/semantics:** roles group · native <button> · aria-busy aria-controls aria-current aria-describedby aria-disabled aria-expanded aria-haspopup aria-invalid aria-label aria-required
 - **Depends on:** components: Calendar, Field, Icon, Popover, SizeContext, Spinner, Tooltip · hooks: useInputStatusIcon, useResolvedRequired · platform: i18n-strings, react-transition/optimistic
@@ -1646,7 +1645,7 @@ the viewer's own time zone
 - **Variants/sizes:** size sm/md/lg; presentation popover/bottom-sheet/native/adaptive-bottom-sheet/adaptive-native
 - **States:** [disabled], [state], isLabelHidden, isOptional, isRequired, isDisabled, isLoading, hasSeconds, hasClear
 - **Events/callbacks:** onChange, changeAction
-- **Controlled/uncontrolled:** controlled only: value + onChange
+- **Controlled/uncontrolled:** value optional (no default* counterpart; omitted = unset) + onChange
 - **Keyboard:** Date part as DateInput; Time part: ArrowUp/Down steps by timeIncrement (announced); Alt+ArrowDown opens option list; Open list: ArrowUp/Down move active option, Home/End, Enter commits, Escape closes without commit
 - **ARIA/semantics:** roles alert, combobox, group, listbox, none, option · native <button> <input> (input: date/text/time) · aria-activedescendant aria-autocomplete aria-busy aria-controls aria-describedby aria-disabled aria-expanded aria-haspopup aria-hidden aria-invalid aria-label aria-labelledby aria-live aria-required aria-selected
 - **Depends on:** components: BottomSheet, Button, Calendar, DateInput, Field, Icon, IconButton, Popover, SegmentedControl, SizeContext, Spinner, Tooltip, VisuallyHidden · hooks: useAnnounce, useDevWarning, useHighlightedOptionScroll, useInputContainer, useInputStatusIcon, useMediaQuery, useResolvedRequired · platform: i18n-strings, ime-guard, inert, live-announce, media-query, react-transition/optimistic
@@ -1666,7 +1665,7 @@ the viewer's own time zone
 - **Variants/sizes:** statusVariant attached/detached
 - **States:** isGroupLabel, isLabelHidden, isDisabled, isOptional, isRequired
 - **Subcomponents:** FieldLabel, InputClearButton
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** Clicking description forwards click/focus to control
 - **ARIA/semantics:** aria-disabled aria-hidden
 - **Depends on:** components: FieldLabel, FieldStatus, FormLayout, Icon, Text, Tooltip · hooks: useDevWarning, useInputContainer · platform: i18n-strings
@@ -1714,7 +1713,7 @@ the viewer's own time zone
 - **Variants/sizes:** mode input/dropzone; statusVariant attached/detached/tooltip
 - **States:** isMultiple, isLabelHidden, isOptional, isRequired, isDisabled, isLoading
 - **Events/callbacks:** onChange, changeAction
-- **Controlled/uncontrolled:** controlled only: value + onChange
+- **Controlled/uncontrolled:** controlled-only: value required + onChange
 - **Keyboard:** Focusable button opens the file picker on Enter/Space; hidden input not focusable; dropzone mode
 - **ARIA/semantics:** native <button> <input> (input: file) · aria-busy aria-describedby aria-disabled aria-hidden aria-invalid aria-label
 - **Depends on:** components: Field, Icon, Spinner, Tooltip, VisuallyHidden · hooks: useAnnounce, useClickableContainer, useInputStatusIcon · platform: i18n-strings, live-announce, react-transition/optimistic
@@ -1736,7 +1735,7 @@ the viewer's own time zone
 - **Variants/sizes:** size sm/md/lg; variant input/ghost; statusVariant attached/detached/tooltip; presentation popover/bottom-sheet/adaptive
 - **States:** [disabled], [readonly], [state], [select-all], [selected], hasSelectAll, hasSearch, isDisabled, isReadOnly, isLabelHidden, isOptional, isRequired, isLoading, hasClear, isDefaultOpen
 - **Events/callbacks:** onChange, changeAction
-- **Controlled/uncontrolled:** controlled only: value + onChange
+- **Controlled/uncontrolled:** isDefaultOpen (initial value only; no controlled counterpart); controlled-only: value required + onChange
 - **Slots/children:** emptyText, emptySearchText, startIcon
 - **Render props / extension:** renderOption
 - **Keyboard:** As Selector; Enter/Space toggle highlighted option (list stays open); Select-all row keyboard-toggleable; Delete/Backspace on trigger clears all
@@ -1760,7 +1759,7 @@ the viewer's own time zone
 - **Variants/sizes:** size sm/md/lg; statusVariant attached/detached/tooltip
 - **States:** [disabled], [readonly], isLabelHidden, isOptional, isRequired, isDisabled, isReadOnly, isWheelEnabled, hasNumberSteppers, isIntegerOnly, hasClear, hasAutoFocus
 - **Events/callbacks:** onChange, onKeyDown, onFocus, onBlur, onEnter
-- **Controlled/uncontrolled:** controlled only: value + onChange
+- **Controlled/uncontrolled:** controlled-only: value required + onChange
 - **Slots/children:** startIcon
 - **Keyboard:** ArrowUp/ArrowDown: step (onKeyDown can cancel); IME-guarded; Enter: commit (clamp to min/max, reject invalid draft); raw value while focused, formatted on blur; role=spinbutton
 - **ARIA/semantics:** roles alert, spinbutton · native <button> <input> (input: text) · aria-describedby aria-disabled aria-invalid aria-label aria-labelledby aria-live aria-required aria-valuemax aria-valuemin aria-valuenow aria-valuetext
@@ -1835,8 +1834,8 @@ the viewer's own time zone
 - **States:** [selected], [disabled], [checked], isLabelHidden, isDisabled, isRequired, isOptional
 - **Subcomponents:** RadioListItem
 - **Events/callbacks:** onChange
-- **Controlled/uncontrolled:** controlled only: value + onChange
-- **Slots/children:** children; —
+- **Controlled/uncontrolled:** controlled-only: value required + onChange
+- **Slots/children:** children
 - **Keyboard:** Native radio group: arrows move+select; focus entering backward lands on last radio; disabled radios skipped for tab stop
 - **ARIA/semantics:** roles radiogroup · aria-describedby aria-invalid aria-labelledby aria-required
 - **Depends on:** components: Field, RadioListItem, Tooltip · hooks: useResolvedRequired
@@ -1875,7 +1874,7 @@ the viewer's own time zone
 - **States:** [disabled], [readonly], [selected], [state], hasClear, hasSearch, isDisabled, isReadOnly, isLabelHidden, isOptional, isRequired, isLoading, isDefaultOpen
 - **Subcomponents:** SelectorOption
 - **Events/callbacks:** onChange, changeAction
-- **Controlled/uncontrolled:** controlled only: value + onChange
+- **Controlled/uncontrolled:** isDefaultOpen (initial value only; no controlled counterpart); value optional (no default* counterpart; omitted = unset) + onChange
 - **Slots/children:** emptyText, emptySearchText, startIcon
 - **Render props / extension:** renderOption, renderValue
 - **Keyboard:** Trigger (combobox): ArrowDown/ArrowUp/Enter/Space open; Open: ArrowUp/Down move highlight (aria-activedescendant), PageUp/PageDown, Home/End, Enter selects, Escape closes, Tab closes and moves on; Printable chars: typeahead on trigger (seeds search input when hasSearch; Space mid-buffer is part of match); Delete/Backspace on focused trigger clears (when clearable); Search mode: input is the combobox; Home/End move caret; IME-guarded Enter; Adaptive bottom-sheet presentation on compact touch
@@ -1914,7 +1913,7 @@ the viewer's own time zone
 - **Variants/sizes:** orientation horizontal/vertical
 - **States:** [disabled], isDisabled, isOptional, isRequired, isLabelHidden
 - **Events/callbacks:** onChange, onChangeEnd
-- **Controlled/uncontrolled:** controlled only: value + onChange
+- **Controlled/uncontrolled:** controlled-only: value required + onChange
 - **Keyboard:** ArrowRight/Up: +step; ArrowLeft/Down: -step (RTL-aware); PageUp/PageDown: ±10×step; Home/End: min/max; onChangeEnd fires for keyboard commits; range mode: two thumbs, each a tab stop; Focus ring restored on keyboard input after pointer drag
 - **ARIA/semantics:** roles group, slider · native <input> · aria-describedby aria-disabled aria-hidden aria-invalid aria-label aria-labelledby aria-orientation aria-valuemax aria-valuemin aria-valuenow aria-valuetext
 - **Depends on:** components: Field, Tooltip, VisuallyHidden · hooks: isRtlElement
@@ -1934,7 +1933,7 @@ the viewer's own time zone
 - **Variants/sizes:** size sm/md; labelPosition start/end
 - **States:** [checked], [disabled], isLoading, isLabelHidden, isDisabled, isOptional, isRequired
 - **Events/callbacks:** onChange, changeAction, onFocus, onBlur
-- **Controlled/uncontrolled:** controlled only: value + onChange
+- **Controlled/uncontrolled:** controlled-only: value required + onChange
 - **Keyboard:** Space toggles (role=switch on input); aria-disabled with reason stays focusable
 - **ARIA/semantics:** roles status, switch · native <input> (input: checkbox) · aria-busy aria-describedby aria-disabled aria-hidden aria-invalid aria-required
 - **Depends on:** components: Field, FieldStatus, Spinner, Tooltip, VisuallyHidden · hooks: useResolvedRequired · platform: react-transition/optimistic
@@ -1956,7 +1955,7 @@ the viewer's own time zone
 - **Variants/sizes:** statusVariant attached/detached/tooltip; size sm/md/lg
 - **States:** [disabled], [readonly], isLabelHidden, isOptional, isRequired, isDisabled, isReadOnly, isLoading, hasSpellCheck, hasAutoFocus
 - **Events/callbacks:** onChange, changeAction, onPaste, onFocus, onBlur
-- **Controlled/uncontrolled:** controlled only: value + onChange
+- **Controlled/uncontrolled:** controlled-only: value required + onChange
 - **Slots/children:** startIcon
 - **Keyboard:** Native textarea; clicking chrome focuses textarea
 - **ARIA/semantics:** native <textarea> · aria-busy aria-describedby aria-disabled aria-invalid aria-required
@@ -1979,7 +1978,7 @@ the viewer's own time zone
 - **Variants/sizes:** type text/password/email; size sm/md/lg; statusVariant attached/detached/tooltip
 - **States:** [disabled], [readonly], isLabelHidden, isOptional, isRequired, isDisabled, isReadOnly, isLoading, hasClear, hasAutoFocus
 - **Events/callbacks:** onChange, changeAction, onEnter, onKeyDown
-- **Controlled/uncontrolled:** controlled only: value + onChange
+- **Controlled/uncontrolled:** controlled-only: value required + onChange
 - **Slots/children:** startIcon
 - **Keyboard:** Enter: onEnter (not during IME composition); onKeyDown always called; Clear button keyboard activation restores focus synchronously; Tooltip status affordance is a focusable button
 - **ARIA/semantics:** native <input> · aria-busy aria-describedby aria-disabled aria-invalid aria-labelledby aria-required
@@ -2001,7 +2000,7 @@ the viewer's own time zone
 - **Variants/sizes:** presentation text-input/popover/bottom-sheet/native/adaptive-bottom-sheet/adaptive-native; size sm/md/lg; statusVariant attached/detached/tooltip
 - **States:** [disabled], isLabelHidden, isOptional, isRequired, isDisabled, isLoading, hasSeconds, hasClear, hasAutoFocus
 - **Events/callbacks:** onChange, changeAction
-- **Controlled/uncontrolled:** controlled only: value + onChange
+- **Controlled/uncontrolled:** value optional (no default* counterpart; omitted = unset) + onChange
 - **Keyboard:** ArrowUp/Down steps time (announced, IME-guarded); presentation: text-input | native picker | bottom-sheet
 - **ARIA/semantics:** roles alert, combobox · native <button> <input> (input: text) · aria-autocomplete aria-busy aria-describedby aria-disabled aria-expanded aria-haspopup aria-invalid aria-label aria-labelledby aria-live aria-required
 - **Depends on:** components: BottomSheet, Button, DateInput, DateTimeInput, Field, Icon, InputGroup, SizeContext, Spinner, Tooltip, VisuallyHidden · hooks: useAnnounce, useDevWarning, useInputContainer, useInputStatusIcon, useMediaQuery, useResolvedRequired · platform: i18n-strings, ime-guard, live-announce, media-query, react-transition/optimistic
@@ -2023,7 +2022,7 @@ the viewer's own time zone
 - **Variants/sizes:** statusVariant attached/detached; size sm/md/lg
 - **States:** [disabled], hasClear, isDisabled, isLabelHidden, isRequired, isOptional, hasEntriesOnFocus, hasAutoFocus, hasCreate
 - **Events/callbacks:** onChange, onChangeQuery, onFocus, onBlur
-- **Controlled/uncontrolled:** controlled only: value + onChange
+- **Controlled/uncontrolled:** controlled-only: value required + onChange
 - **Slots/children:** startIcon, endContent
 - **Render props / extension:** renderToken, renderItem
 - **Keyboard:** Typeahead keys for suggestions; Backspace in empty input removes last token (announced); Tokens individually removable; overflow modes (inline / layer)
@@ -2048,7 +2047,7 @@ the viewer's own time zone
 - **States:** hasEntriesOnFocus, hasClear, isDisabled, isLabelHidden, isRequired, isOptional, hasAutoFocus
 - **Subcomponents:** BaseTypeahead, TypeaheadItem
 - **Events/callbacks:** onChange, onChangeQuery, onOpenChange
-- **Controlled/uncontrolled:** controlled only: value + onChange, onOpenChange
+- **Controlled/uncontrolled:** controlled-only: value required + onChange
 - **Slots/children:** startIcon
 - **Render props / extension:** renderItem
 - **Keyboard:** Input is combobox: ArrowDown/ArrowUp move highlight, Home/End, Enter selects (IME-guarded), Escape closes (IME-guarded); Tab closes list on keydown and moves focus on; Selected token mode: token shown, invisible input removed from tab order until edit mode
@@ -2071,7 +2070,7 @@ the viewer's own time zone
 - **Variants/sizes:** size sm/md/lg
 - **States:** hasEntriesOnFocus, isDisabled, isFocusableDisabled, hasAutoFocus
 - **Events/callbacks:** onChange, onKeyDown, onChangeQuery, onOpenChange
-- **Controlled/uncontrolled:** controlled only: value + onChange, onOpenChange
+- **Controlled/uncontrolled:** controlled-only: value required + onChange
 - **Render props / extension:** renderItem
 - **Keyboard:** (see Typeahead)
 - **ARIA/semantics:** roles combobox, group, listbox, none, option · native <input> (input: text) · aria-activedescendant aria-autocomplete aria-busy aria-controls aria-describedby aria-disabled aria-expanded aria-hidden aria-label aria-labelledby aria-selected
@@ -2104,7 +2103,7 @@ the viewer's own time zone
   - Other: `state`* 'unchecked' | 'checked' | 'indeterminate'
 - **Variants/sizes:** size sm/md
 - **States:** isDisabled
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **ARIA/semantics:** native <svg> · aria-hidden
 
 #### CheckboxList
@@ -2123,8 +2122,8 @@ the viewer's own time zone
 - **States:** isLabelHidden, hasDividers, isDisabled, isReadOnly
 - **Subcomponents:** CheckboxListItem
 - **Events/callbacks:** onChange, changeAction
-- **Controlled/uncontrolled:** controlled only: value + onChange
-- **Slots/children:** children; —
+- **Controlled/uncontrolled:** value optional (no default* counterpart; omitted = unset) + onChange
+- **Slots/children:** children
 - **Keyboard:** One tab stop per option (the checkbox; row not focusable); Space toggles
 - **ARIA/semantics:** roles group · aria-describedby aria-labelledby
 - **Depends on:** components: CheckboxListItem, Field, List, Tooltip · platform: react-transition/optimistic
@@ -2161,7 +2160,7 @@ the viewer's own time zone
   - Other: `state`* 'unchecked' | 'checked'
 - **Variants/sizes:** size sm/md
 - **States:** isDisabled
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **ARIA/semantics:** aria-hidden
 - **Depends on:** components: Icon
 
@@ -2192,7 +2191,7 @@ the viewer's own time zone
 - **Variants/sizes:** size sm/md/lg
 - **States:** isLabelHidden, isDisabled, isOptional, isRequired
 - **Subcomponents:** InputGroupText
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **ARIA/semantics:** roles group · aria-describedby aria-labelledby
 - **Depends on:** components: Field, InputGroupText, SizeContext
 - **Theme targets:** `.astryx-input-group` `.astryx-input-group-text`
@@ -2205,7 +2204,7 @@ the viewer's own time zone
 - **Props (4):**
   - Slots: `children`* ReactNode
   - Other: `xstyle` StyleXStyles; `className` string; `style` React.CSSProperties
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** (see InputGroup)
 - **Depends on:** components: InputGroup
 
@@ -2221,7 +2220,7 @@ the viewer's own time zone
   - Other: `state`* 'unchecked' | 'checked'
 - **Variants/sizes:** size sm/md
 - **States:** isDisabled
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **ARIA/semantics:** aria-hidden
 
 ### Layout (19 entries; 10 catalog)
@@ -2253,7 +2252,7 @@ the viewer's own time zone
   - Slots: `children`* ReactNode
   - Other: `xstyle` StyleXStyles
 - **Variants/sizes:** shape rectangle/ellipse; fit cover/contain/center
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Theme targets:** `.astryx-aspect-ratio`
 
 #### Divider
@@ -2282,8 +2281,8 @@ the viewer's own time zone
   - Slots: `children` ReactNode
   - Other: `xstyle` StyleXStyles
 - **Variants/sizes:** direction vertical/horizontal/horizontal-labels
-- **Controlled/uncontrolled:** (optionality) / defaultOptionality
-- **Slots/children:** children; —
+- **Controlled/uncontrolled:** defaultOptionality (initial value only; no controlled counterpart)
+- **Slots/children:** children
 - **Theme targets:** `.astryx-form-layout`
 
 #### Grid
@@ -2297,7 +2296,7 @@ the viewer's own time zone
   - Other: `xstyle` StyleXStyles; `rowHeight` number †
 - **Variants/sizes:** align start/center/end/stretch; justify start/center/end/stretch
 - **Subcomponents:** GridSpan
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Depends on:** components: GridSpan
 - **Theme targets:** `.astryx-grid` `.astryx-grid-span`
 
@@ -2310,7 +2309,7 @@ the viewer's own time zone
   - Appearance: `columns` number | 'full'
   - Slots: `children` ReactNode
   - Other: `rows` number; `xstyle` StyleXStyles †
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Depends on:** components: Grid
 
 #### Layout
@@ -2324,7 +2323,7 @@ the viewer's own time zone
   - Slots: `content` ReactNode; `header` ReactNode; `footer` ReactNode; `start` ReactNode; `end` ReactNode; `children` ReactNode †
 - **Variants/sizes:** height fill/auto
 - **Subcomponents:** LayoutContent, LayoutFooter, LayoutHeader, LayoutPanel
-- **Controlled/uncontrolled:** (hasDividers) / defaultHasDividers
+- **Controlled/uncontrolled:** defaultHasDividers (initial value only; no controlled counterpart)
 - **Slots/children:** children; content, header, footer, start, end
 - **Depends on:** components: LayoutContent, LayoutHeader, LayoutPanel, Stack
 - **Theme targets:** `.astryx-layout` `.astryx-layout-content` `.astryx-layout-footer` `.astryx-layout-header` `.astryx-layout-panel`
@@ -2342,7 +2341,7 @@ the viewer's own time zone
   - Slots: `children` ReactNode
   - Other: `xstyle` StyleXStyles †
 - **States:** isScrollable
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **ARIA/semantics:** aria-label
 - **Depends on:** components: Layout, LayoutHeader
 
@@ -2358,7 +2357,7 @@ the viewer's own time zone
   - Slots: `children` ReactNode
   - Other: `xstyle` StyleXStyles †
 - **States:** hasDivider
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **ARIA/semantics:** aria-label
 - **Depends on:** components: Layout, LayoutContent
 
@@ -2374,7 +2373,7 @@ the viewer's own time zone
   - Slots: `children` ReactNode
   - Other: `paddingBlockEnd` 0 | 0.5 | 1 | 1.5 | 2 | 3 | 4 | 5 | 6 | 8 | 10; `xstyle` StyleXStyles †
 - **States:** hasDivider
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **ARIA/semantics:** aria-label
 - **Depends on:** components: Layout, LayoutContent
 
@@ -2390,7 +2389,7 @@ the viewer's own time zone
   - Slots: `children` ReactNode
   - Other: `resizable` ResizableProps; `xstyle` StyleXStyles †
 - **States:** hasDivider, isScrollable
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **ARIA/semantics:** aria-label
 - **Depends on:** components: Layout, LayoutContent
 
@@ -2407,7 +2406,7 @@ the viewer's own time zone
   - Other: `pillPlacement` 'start' | 'end' | 'center' | 'auto' = 'auto'; `resizable`* ResizableProps; `xstyle` StyleXStyles
 - **Variants/sizes:** direction horizontal/vertical; position inline/overlay
 - **States:** isReversed, isDisabled, hasDivider, isAlwaysVisible
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** role=separator focusable; ArrowLeft/Right (or Up/Down) resize by step; Home/End min/max; Enter collapses when collapsible
 - **ARIA/semantics:** roles separator · aria-disabled aria-label aria-orientation aria-valuemax aria-valuemin aria-valuenow aria-valuetext
 - **Depends on:** platform: i18n-strings
@@ -2424,7 +2423,7 @@ the viewer's own time zone
   - Slots: `children` ReactNode
   - Other: `axis` 'inline' | 'block' | 'both' = 'block'; `overscroll` 'allow' | 'contain' = 'allow'; `stickyContainment` 'whenScrollable' | 'always' = 'whenScrollable'; `paddingInlineStart` 0 | 0.5 | 1 | 1.5 | 2 | 3 | 4 | 5 | 6 | 8 | 10; `paddingInlineEnd` 0 | 0.5 | 1 | 1.5 | 2 | 3 | 4 | 5 | 6 | 8 | 10; `paddingBlockStart` 0 | 0.5 | 1 | 1.5 | 2 | 3 | 4 | 5 | 6 | 8 | 10; `paddingBlockEnd` 0 | 0.5 | 1 | 1.5 | 2 | 3 | 4 | 5 | 6 | 8 | 10; `xstyle` StyleXStyles
 - **States:** isFullBleed
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** Viewport becomes keyboard reachable (tabindex=0) only when the requested axis actually overflows
 - **ARIA/semantics:** roles group · aria-label
 - **Depends on:** components: Layout · hooks: useScrollableArea
@@ -2440,7 +2439,7 @@ the viewer's own time zone
   - Slots: `children` ReactNode
   - Other: `paddingInlineStart` 0 | 0.5 | 1 | 1.5 | 2 | 3 | 4 | 5 | 6 | 8 | 10; `paddingInlineEnd` 0 | 0.5 | 1 | 1.5 | 2 | 3 | 4 | 5 | 6 | 8 | 10; `paddingBlockStart` 0 | 0.5 | 1 | 1.5 | 2 | 3 | 4 | 5 | 6 | 8 | 10; `paddingBlockEnd` 0 | 0.5 | 1 | 1.5 | 2 | 3 | 4 | 5 | 6 | 8 | 10; `xstyle` StyleXStyles
 - **Variants/sizes:** variant section/transparent/muted; dividers bottom/start
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Depends on:** components: Layout
 - **Theme targets:** `.astryx-section`
 
@@ -2458,7 +2457,7 @@ the viewer's own time zone
 - **Variants/sizes:** direction horizontal/vertical; hAlign start/center/end/between/around/evenly/stretch; vAlign start/center/end/between/around/evenly/stretch; justify start/center/end/between/around/evenly; align start/center/end/stretch; wrap nowrap/wrap/wrap-reverse
 - **States:** isScrollable
 - **Subcomponents:** StackItem
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Depends on:** components: Layout
 - **Theme targets:** `.astryx-stack` `.astryx-stack-item`
 
@@ -2475,7 +2474,7 @@ the viewer's own time zone
   - Other: `crossAlignSelf` 'start' | 'center' | 'end' | 'stretch'; `xstyle` StyleXStyles †
 - **Variants/sizes:** size static/fill
 - **States:** isScrollable
-- **Slots/children:** children; —
+- **Slots/children:** children
 
 #### Center
 
@@ -2487,7 +2486,7 @@ the viewer's own time zone
   - Slots: `children`* ReactNode
   - Other: `axis` 'both' | 'horizontal' | 'vertical' = 'both'; `paddingInlineStart` 0 | 0.5 | 1 | 1.5 | 2 | 3 | 4 | 5 | 6 | 8 | 10; `paddingInlineEnd` 0 | 0.5 | 1 | 1.5 | 2 | 3 | 4 | 5 | 6 | 8 | 10; `paddingBlockStart` 0 | 0.5 | 1 | 1.5 | 2 | 3 | 4 | 5 | 6 | 8 | 10; `paddingBlockEnd` 0 | 0.5 | 1 | 1.5 | 2 | 3 | 4 | 5 | 6 | 8 | 10; `xstyle` StyleXStyles
 - **States:** isInline
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Depends on:** components: Layout
 - **Theme targets:** `.astryx-center`
 
@@ -2504,7 +2503,7 @@ the viewer's own time zone
   - Other: `paddingInlineStart` 0 | 0.5 | 1 | 1.5 | 2 | 3 | 4 | 5 | 6 | 8 | 10; `paddingInlineEnd` 0 | 0.5 | 1 | 1.5 | 2 | 3 | 4 | 5 | 6 | 8 | 10; `paddingBlockStart` 0 | 0.5 | 1 | 1.5 | 2 | 3 | 4 | 5 | 6 | 8 | 10; `paddingBlockEnd` 0 | 0.5 | 1 | 1.5 | 2 | 3 | 4 | 5 | 6 | 8 | 10; `xstyle` StyleXStyles
 - **Variants/sizes:** hAlign start/center/end/between/around/evenly; vAlign start/center/end/stretch; justify start/center/end/between/around/evenly; align start/center/end/stretch; wrap nowrap/wrap/wrap-reverse
 - **States:** isScrollable
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Depends on:** components: Stack
 
 #### VStack
@@ -2520,7 +2519,7 @@ the viewer's own time zone
   - Other: `paddingInlineStart` 0 | 0.5 | 1 | 1.5 | 2 | 3 | 4 | 5 | 6 | 8 | 10; `paddingInlineEnd` 0 | 0.5 | 1 | 1.5 | 2 | 3 | 4 | 5 | 6 | 8 | 10; `paddingBlockStart` 0 | 0.5 | 1 | 1.5 | 2 | 3 | 4 | 5 | 6 | 8 | 10; `paddingBlockEnd` 0 | 0.5 | 1 | 1.5 | 2 | 3 | 4 | 5 | 6 | 8 | 10
 - **Variants/sizes:** hAlign start/center/end/stretch; vAlign start/center/end/between/around/evenly; justify start/center/end/between/around/evenly; align start/center/end/stretch; wrap nowrap/wrap/wrap-reverse
 - **States:** isScrollable
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Depends on:** components: Stack
 
 ### Navigation (26 entries; 10 catalog)
@@ -2595,7 +2594,7 @@ the viewer's own time zone
 - **Variants/sizes:** variant pages/count/compact/dots/input/none; size sm/md
 - **States:** [active], hasMore, hasFirstLast, isDisabled
 - **Events/callbacks:** onChange, changeAction, onPageSizeChange
-- **Controlled/uncontrolled:** controlled only: page + onChange, onPageSizeChange
+- **Controlled/uncontrolled:** controlled-only: page required + onChange
 - **Keyboard:** Buttons native; dots variant: roving, ArrowLeft/Right selects+wraps, Home/End; Editable page box (NumberInput): Enter commits and clamps
 - **ARIA/semantics:** roles group · native <button> <nav> · aria-current aria-disabled aria-hidden aria-label
 - **Depends on:** components: Button, Icon, NumberInput, Selector, Text · hooks: useAnnounce, useListFocus · platform: i18n-strings, live-announce, react-transition/optimistic
@@ -2629,7 +2628,7 @@ the viewer's own time zone
   - Slots: `children` ReactNode
   - Other: `collapsible` {isCollapsed: boolean, onCollapsedChange: (isCollapsed: boolean) => v…; `handleRef` RefObject<SideNavImperativeCollapseHandle | null> (deprecated); `xstyle` StyleXStyles †
 - **Variants/sizes:** size sm/md/lg
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** (see SideNav)
 - **Depends on:** components: AppShell, Button, Icon, SideNav · platform: i18n-strings
 
@@ -2698,7 +2697,7 @@ the viewer's own time zone
 - **Variants/sizes:** orientation horizontal/vertical; density compact/balanced/spacious
 - **Subcomponents:** Step
 - **Events/callbacks:** onStepClick
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** Steps are buttons when clickable (non-linear): Enter/Space activate; Tab order skips disabled; collapsed steps removed from tab order
 - **ARIA/semantics:** native <ol> · aria-current aria-hidden aria-label
 - **Depends on:** components: Icon, IconButton, Step · platform: ResizeObserver, i18n-strings
@@ -2739,8 +2738,8 @@ the viewer's own time zone
 - **States:** [selected], hasDivider, isFullBleed
 - **Subcomponents:** Tab, TabMenu
 - **Events/callbacks:** onChange
-- **Controlled/uncontrolled:** controlled only: value + onChange
-- **Slots/children:** children; —
+- **Controlled/uncontrolled:** controlled-only: value required + onChange
+- **Slots/children:** children
 - **Keyboard:** Single tab stop (selected tab); ArrowLeft/Right (also Up/Down in nav mode) move focus, wrap; Home/End; disabled skipped; role=tablist mode: aria-selected + panel ids; default nav mode uses aria-current; Overflow TabMenu: menu-button pattern (roving menuitemradio, Enter selects, Escape/Tab close); Keyboard hint on first keyboard entry
 - **ARIA/semantics:** roles tablist · native <button> · aria-disabled aria-hidden aria-label aria-labelledby aria-orientation
 - **Depends on:** components: Icon, Layout, SizeContext, Tab, TabMenu · hooks: isRtlElement, useKeyboardHint, useListFocus, useScrollOverflow · platform: ResizeObserver, i18n-strings
@@ -2850,7 +2849,7 @@ the viewer's own time zone
   - Label/a11y: `title`* string; `description` string
   - Slots: `children` ReactNode
   - Other: `image` string; `imageAlt` string; `linkLabel` string; `linkHref` string; `xstyle` StyleXStyles †
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **ARIA/semantics:** roles presentation · native <img> · aria-hidden
 - **Depends on:** components: Link, TopNavMegaMenu
 
@@ -2897,7 +2896,7 @@ the viewer's own time zone
 - **States:** isOpen
 - **Subcomponents:** MobileNavToggle
 - **Events/callbacks:** onOpenChange
-- **Controlled/uncontrolled:** controlled only: isOpen + onOpenChange
+- **Controlled/uncontrolled:** isOpen optional (no default* counterpart; omitted = unset) + onOpenChange
 - **Slots/children:** children; header
 - **Keyboard:** Native <dialog>: Escape (cancel) closes
 - **ARIA/semantics:** native <dialog> · aria-label
@@ -2913,7 +2912,7 @@ the viewer's own time zone
   - Label/a11y: `label` string = 'Open navigation'
   - Slots: `children` ReactNode
   - Other: `data-testid` string †; `xstyle` StyleXStyles †; `className`* React.HTMLAttributes<T> †; `style`* React.HTMLAttributes<T> †
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** (see MobileNav)
 - **ARIA/semantics:** aria-controls aria-expanded
 - **Depends on:** components: AppShell, Button, Icon · platform: i18n-strings
@@ -2929,7 +2928,7 @@ the viewer's own time zone
   - Other: `xstyle` StyleXStyles
 - **Variants/sizes:** size sm/md/lg
 - **Subcomponents:** NavHeadingMenuItem
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** role=menu; ArrowUp/Down wrap; Home/End; typeahead (skips disabled); Enter/Space activate; Escape calls parent close
 - **ARIA/semantics:** roles menu, menuitem · aria-disabled
 - **Depends on:** components: NavHeadingMenuItem · hooks: useListFocus, useTypeahead
@@ -2981,8 +2980,8 @@ the viewer's own time zone
 - **Variants/sizes:** height hug/capped/tall
 - **States:** isOpen, hasScrim
 - **Events/callbacks:** onOpenChange
-- **Controlled/uncontrolled:** controlled only: isOpen + onOpenChange
-- **Slots/children:** children; —
+- **Controlled/uncontrolled:** isOpen optional (no default* counterpart; omitted = unset) + onOpenChange
+- **Slots/children:** children
 - **Keyboard:** Native <dialog>; Escape requests close via layer stack (IME-guarded; purpose=form blocks scrim/swipe but allows Escape); Focus lands on panel (not first control) unless data-autofocus; restored to opener; Named body tab stop only when text-only content overflows
 - **ARIA/semantics:** roles required · native <dialog> · aria-disabled aria-hidden aria-label aria-modal
 - **Depends on:** components: Layout · hooks: useDevWarning, useMediaQuery, useScrollLock, useScrollableArea · platform: MutationObserver, ResizeObserver, contenteditable, dialog.showModal, ime-guard, inert, media-query, scroll-lock
@@ -3001,7 +3000,7 @@ the viewer's own time zone
   - Other: `ref` Ref<HTMLDialogElement>; `activeSheet`* string | null; `xstyle` StyleXStyles †
 - **States:** hasScrim
 - **Events/callbacks:** onCancel, onActiveSheetChange
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** Switches between sheet surfaces; Escape handled by nested traps first
 - **ARIA/semantics:** roles alertdialog · native <dialog> · aria-hidden aria-label aria-labelledby aria-modal
 - **Depends on:** components: BottomSheet, Layer · hooks: useFocusTrap, useFocusTrapEscapeCompatibilitySignal, useLayerDismissal, useScrollLock · platform: dialog.showModal, focus-trap, layer-dismissal-stack, scroll-lock
@@ -3022,7 +3021,7 @@ the viewer's own time zone
 - **States:** isOpen, isInline
 - **Subcomponents:** CommandPaletteEmpty, CommandPaletteFooter, CommandPaletteGroup, CommandPaletteInput, CommandPaletteItem, CommandPaletteList
 - **Events/callbacks:** onOpenChange, onValueChange
-- **Controlled/uncontrolled:** controlled only: isOpen, value + onOpenChange, onValueChange
+- **Controlled/uncontrolled:** controlled-only: isOpen required + onOpenChange; value optional (controlled when provided, otherwise internal state) + onValueChange
 - **Slots/children:** input, footer, emptySearchText, emptyBootstrapText
 - **Render props / extension:** renderItem
 - **Keyboard:** Input is combobox; ArrowUp/Down move highlight, Enter selects, Escape closes (onOpenChange(false)); Footer shows keyboard hints
@@ -3039,7 +3038,7 @@ the viewer's own time zone
 - **Props (2):**
   - Slots: `children`* ReactNode
   - Other: `xstyle` StyleXStyles †
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** (see CommandPalette)
 - **Depends on:** components: CommandPalette
 
@@ -3051,7 +3050,7 @@ the viewer's own time zone
 - **Props (2):**
   - Slots: `children` ReactNode
   - Other: `xstyle` StyleXStyles
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** (see CommandPalette)
 - **Depends on:** components: CommandPalette, CommandPaletteInput, CommandPaletteList, Kbd · platform: i18n-strings
 
@@ -3063,7 +3062,7 @@ the viewer's own time zone
 - **Props (3):**
   - Slots: `children`* ReactNode
   - Other: `heading`* string; `xstyle` StyleXStyles
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** (see CommandPalette)
 - **ARIA/semantics:** roles group · aria-hidden aria-label
 - **Depends on:** components: CommandPaletteItem
@@ -3081,7 +3080,7 @@ the viewer's own time zone
   - Other: `xstyle` StyleXStyles
 - **States:** hasAutoFocus
 - **Events/callbacks:** onValueChange, onChange
-- **Controlled/uncontrolled:** controlled only: value + onValueChange, onChange
+- **Controlled/uncontrolled:** value optional (no default* counterpart; omitted = unset) + onChange/onValueChange
 - **Slots/children:** endContent
 - **Keyboard:** (see CommandPalette)
 - **ARIA/semantics:** roles combobox · native <input> (input: text) · aria-activedescendant aria-autocomplete aria-controls aria-expanded aria-label
@@ -3099,7 +3098,7 @@ the viewer's own time zone
   - Other: `xstyle` StyleXStyles
 - **States:** isHighlighted, isSelected, isDisabled
 - **Events/callbacks:** onSelect
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** (see CommandPalette)
 - **ARIA/semantics:** roles option · aria-disabled aria-selected
 - **Depends on:** components: Dialog
@@ -3113,7 +3112,7 @@ the viewer's own time zone
   - Label/a11y: `label` string = 'Commands'
   - Slots: `children`* ReactNode
   - Other: `xstyle` StyleXStyles
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** (see CommandPalette)
 - **ARIA/semantics:** roles listbox · aria-label
 - **Depends on:** components: CommandPaletteItem · platform: i18n-strings
@@ -3133,8 +3132,8 @@ the viewer's own time zone
 - **States:** isOpen, isInline
 - **Subcomponents:** DialogHeader
 - **Events/callbacks:** onOpenChange
-- **Controlled/uncontrolled:** controlled only: isOpen + onOpenChange
-- **Slots/children:** children; —
+- **Controlled/uncontrolled:** controlled-only: isOpen required + onOpenChange
+- **Slots/children:** children
 - **Keyboard:** Native <dialog>.showModal(); Escape closes innermost dialog only (layer stack, IME-guarded); DialogHeader title (tabIndex=-1) auto-focused unless an action requests initial focus; Focus restored to trigger on close
 - **ARIA/semantics:** roles alertdialog · native <dialog> · aria-label aria-labelledby aria-modal
 - **Depends on:** components: DialogHeader, Layer, Layout · hooks: useLayerDismissal, useScrollLock · platform: dialog.showModal, layer-dismissal-stack, scroll-lock
@@ -3173,7 +3172,7 @@ the viewer's own time zone
 - **Variants/sizes:** placement above/below/start/end; alignment start/center/end
 - **States:** isEnabled, hasHoverIndication, isDefaultOpen, isOpen
 - **Events/callbacks:** onOpenChange
-- **Controlled/uncontrolled:** controlled only: isOpen + onOpenChange
+- **Controlled/uncontrolled:** isOpen / isDefaultOpen + onOpenChange
 - **Slots/children:** children; content
 - **Keyboard:** Opens on hover or keyboard focus of trigger (tap policy on touch); Escape (on trigger or inside) hides and refocuses trigger; no re-show on refocus
 - **ARIA/semantics:** roles dialog · aria-controls aria-describedby aria-expanded aria-haspopup aria-label
@@ -3191,7 +3190,7 @@ the viewer's own time zone
   - Other: `media`* LightboxMedia | LightboxMedia[]; `index` number; `xstyle` StyleXStyles
 - **States:** isOpen, hasZoom, hasAutoPlay
 - **Events/callbacks:** onOpenChange, onIndexChange
-- **Controlled/uncontrolled:** index / defaultIndex + onIndexChange
+- **Controlled/uncontrolled:** index / defaultIndex + onIndexChange; controlled-only: isOpen required + onOpenChange
 - **Keyboard:** Native <dialog>; Escape closes; ArrowLeft/Right: previous/next item (announced); hasZoom: image is role=button; Enter/Space toggle zoom; arrows pan while zoomed; Trigger helpers open on Enter/Space
 - **ARIA/semantics:** roles button · native <dialog> <img> <video> · aria-disabled aria-label aria-pressed
 - **Depends on:** components: Icon, IconButton, Layer, Layout · hooks: useAnnounce, useLayerDismissal, useScrollLock · platform: dialog.showModal, i18n-strings, layer-dismissal-stack, live-announce, scroll-lock
@@ -3228,7 +3227,7 @@ the viewer's own time zone
 - **Variants/sizes:** placement above/below/start/end; alignment start/center/end
 - **States:** isOpen, isEnabled, isModal, hasCloseButton, hasAutoFocus, hasLightDismiss, hasEscapeDismiss
 - **Events/callbacks:** onOpenChange
-- **Controlled/uncontrolled:** controlled only: isOpen + onOpenChange
+- **Controlled/uncontrolled:** isOpen optional (controlled when provided, otherwise internal state) + onOpenChange
 - **Slots/children:** children; content
 - **Keyboard:** Trigger Enter/Space opens; initial focus to first content control (else dialog container); Escape dismisses (hasEscapeDismiss) and returns focus to trigger; light dismiss; Focus trap inside (role=dialog by default)
 - **ARIA/semantics:** roles button, dialog, none · native <button> · aria-controls aria-expanded aria-haspopup aria-label aria-modal
@@ -3273,9 +3272,9 @@ the viewer's own time zone
 - **Variants/sizes:** placement above/below/start/end; alignment start/center/end
 - **States:** isEnabled, hasHoverIndication, isDefaultOpen, isOpen
 - **Events/callbacks:** onOpenChange
-- **Controlled/uncontrolled:** controlled only: isOpen + onOpenChange
+- **Controlled/uncontrolled:** isOpen / isDefaultOpen + onOpenChange
 - **Slots/children:** children; content
-- **Keyboard:** Shows on keyboard focus and hover; Escape hides (WCAG 1.4.13; IME-guarded); controlled tooltips report via onHide
+- **Keyboard:** Shows on keyboard focus and hover; Escape hides (WCAG 1.4.13; IME-guarded); a controlled tooltip reports Escape through onOpenChange(false) instead of hiding itself
 - **ARIA/semantics:** roles tooltip · aria-describedby
 - **Depends on:** components: Layer · hooks: useLayer, useLayerDismissal, useTouchTrigger · platform: layer-dismissal-stack, useLayer
 - **Theme targets:** `.astryx-tooltip`
@@ -3294,7 +3293,7 @@ the viewer's own time zone
   - Other: `actionLabel`* string; `cancelLabel` string = 'Cancel'; `actionVariant` ButtonVariant = 'destructive'; `xstyle` StyleXStyles †
 - **States:** isOpen, isActionLoading, isInline
 - **Events/callbacks:** onOpenChange, onAction
-- **Controlled/uncontrolled:** controlled only: isOpen + onOpenChange
+- **Controlled/uncontrolled:** controlled-only: isOpen required + onOpenChange
 - **Keyboard:** role=alertdialog; initial focus on Cancel (least destructive); Escape = cancel (onOpenChange(false), never onAction); Tab order Cancel then Action
 - **ARIA/semantics:** roles alertdialog, group · aria-describedby aria-labelledby
 - **Depends on:** components: Button, Dialog, Heading, Layout, Stack, Text · hooks: useMediaQuery · platform: i18n-strings, media-query
@@ -3351,7 +3350,7 @@ the viewer's own time zone
   - Other: `maxNumOfItems` number; `xstyle` StyleXStyles; `data-testid` string †
 - **Variants/sizes:** columns multi/single; orientation vertical/horizontal
 - **Subcomponents:** MetadataListItem
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **ARIA/semantics:** native <button> <dl> · aria-controls aria-disabled aria-expanded
 - **Depends on:** components: MetadataListItem · platform: i18n-strings
 - **Theme targets:** `.astryx-metadata-list` `.astryx-metadata-list-item`
@@ -3380,7 +3379,7 @@ the viewer's own time zone
   - Events: `onOverflowChange` (overflowItems: OverflowItem[]) => void
   - Other: `minVisibleItems` number = 0; `maxVisibleItems` number = undefined (no cap); `maxRows` number = undefined (single line); `collapseFrom` 'start' | 'end' = 'end'; `behavior` 'observeSelf' | 'observeParent' = 'observeSelf'; `xstyle` StyleXStyles
 - **Events/callbacks:** onOverflowChange
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Render props / extension:** overflowRenderer
 - **ARIA/semantics:** aria-hidden
 - **Depends on:** hooks: useOverflow · platform: inert
@@ -3398,7 +3397,7 @@ the viewer's own time zone
 - **Variants/sizes:** density compact/balanced/spacious; dividers rows/columns/grid/none; verticalAlign middle/top/bottom; textOverflow wrap/truncate
 - **States:** isStriped, hasHover
 - **Subcomponents:** TableBody, TableCell, TableFooter, TableHeader, TableHeaderCell, TableRow
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** Sort header buttons Enter/Space; Column resize handle: focusable; ArrowLeft/Right ±10px (Shift ±50px), Home/End min/max; Row selection checkboxes; group/expand toggles are named buttons; Scroll container focusable only when it overflows
 - **ARIA/semantics:** roles group · native <table> <tbody> <td> <th> <thead> · aria-disabled aria-hidden aria-label aria-rowcount aria-rowindex
 - **Depends on:** components: ContextMenu, EmptyState, Icon, TableBody, TableCell, TableFooter, TableHeader, TableHeaderCell, TableRow, Text · hooks: useScrollableArea · platform: i18n-strings
@@ -3413,7 +3412,7 @@ the viewer's own time zone
 - **Props (2):**
   - Slots: `children`* ReactNode
   - Other: `xstyle` StyleXStyles
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** (see Table)
 - **ARIA/semantics:** native <tbody>
 - **Theme targets:** `.astryx-table-body`
@@ -3426,7 +3425,7 @@ the viewer's own time zone
 - **Props (7):**
   - Slots: `children` ReactNode
   - Other: `scope` 'col' | 'row' | 'colgroup' | 'rowgroup' †; `headers` string †; `colSpan` number †; `rowSpan` number †; `xstyle` StyleXStyles | StyleXStyles[] †; `contextMenuActions` TableContextActions †
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** (see Table)
 - **ARIA/semantics:** native <td> · aria-hidden
 - **Depends on:** components: ContextMenu, Icon, Table, TableRow
@@ -3439,7 +3438,7 @@ the viewer's own time zone
 - **Props (2):**
   - Slots: `children`* ReactNode
   - Other: `xstyle` StyleXStyles
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** (see Table)
 - **ARIA/semantics:** native <tfoot>
 - **Theme targets:** `.astryx-table-footer`
@@ -3452,7 +3451,7 @@ the viewer's own time zone
 - **Props (2):**
   - Slots: `children`* ReactNode
   - Other: `xstyle` StyleXStyles
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** (see Table)
 - **ARIA/semantics:** native <thead>
 - **Theme targets:** `.astryx-table-header`
@@ -3465,7 +3464,7 @@ the viewer's own time zone
 - **Props (4):**
   - Slots: `children` ReactNode
   - Other: `scope` 'col' | 'row' | 'colgroup' | 'rowgroup' †; `xstyle` StyleXStyles | StyleXStyles[] †; `contextMenuActions` TableContextActions †
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** (see Table)
 - **ARIA/semantics:** native <th> · aria-hidden
 - **Depends on:** components: ContextMenu, Icon, Table
@@ -3480,7 +3479,7 @@ the viewer's own time zone
   - Slots: `children`* ReactNode
   - Other: `xstyle` StyleXStyles[] †
 - **States:** isHeaderRow
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Keyboard:** (see Table)
 - **ARIA/semantics:** aria-disabled
 - **Depends on:** components: Table, TableBody, TableCell, TableFooter, TableHeader
@@ -3534,7 +3533,7 @@ the viewer's own time zone
 - **Props (2):**
   - Slots: `children`* ReactNode
   - Form/native: `as` ElementType = 'span'
-- **Slots/children:** children; —
+- **Slots/children:** children
 
 #### InternationalizationProvider
 
@@ -3544,7 +3543,7 @@ the viewer's own time zone
 - **Props (5):**
   - Slots: `children`* ReactNode
   - Other: `locale`* string; `messages` MessagesByLocale; `overrides` Overrides; `dir` 'ltr' | 'rtl'
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Depends on:** platform: Intl
 
 #### LayerProvider
@@ -3555,7 +3554,7 @@ the viewer's own time zone
 - **Props (2):**
   - Slots: `children`* ReactNode
   - Other: `toast` LayerToastConfig
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Depends on:** components: Toast
 
 #### LinkProvider
@@ -3566,7 +3565,7 @@ the viewer's own time zone
 - **Props (2):**
   - Slots: `children`* ReactNode
   - Other: `component`* LinkComponentType
-- **Slots/children:** children; —
+- **Slots/children:** children
 
 #### MediaTheme
 
@@ -3578,7 +3577,7 @@ the viewer's own time zone
   - Slots: `children`* ReactNode
   - Other: `fallback` 'dark' | 'light' = 'dark'
 - **Variants/sizes:** mode dark/light/auto/off
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Depends on:** hooks: useAutoMediaMode
 
 #### SizeProvider
@@ -3596,7 +3595,7 @@ the viewer's own time zone
 - **Props (2):**
   - Slots: `children`* ReactNode
   - Other: `theme`* SyntaxTheme
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **Depends on:** hooks: useMediaQuery · platform: media-query
 
 #### Theme
@@ -3609,7 +3608,7 @@ the viewer's own time zone
   - Slots: `children`* ReactNode
   - Other: `theme`* DefinedTheme
 - **Variants/sizes:** mode light/dark/system
-- **Slots/children:** children; —
+- **Slots/children:** children
 - **ARIA/semantics:** aria-disabled
 - **Depends on:** components: MediaTheme · hooks: useMediaQuery · platform: MutationObserver, media-query
 - **Notes:** Runtime theming: defineTheme() tokens + component overrides; light/dark/system mode; built themes via CLI. Port must map to CSS custom properties.
@@ -3686,15 +3685,10 @@ recorded so that none is excluded silently (plan §3).
 | charts | ChartSwatch | subcomponent (Chart) | Data Visualization | yes (2 props) | M | ChartSwatch renders the small decorative mark that pairs a chart series color with its visible label. |
 | charts | ChartTooltip | subcomponent (Chart) | Data Visualization | yes (5 props) | M | ChartTooltip shows grouped values for the chart position nearest the pointer. |
 | richtext | RichTextEditor | component | Form Controls | yes (22 props) | XL | A WYSIWYG rich-text editor built on Lexical, styled with Astryx design tokens. |
-| richtext | RichTextView | component | Uncategorized | no | M |  |
-| richtext | RichTextEditorToolbar | subcomponent (RichTextEditor) | Uncategorized | no | M |  |
-| richtext | RichTextEditorAutoLinkPlugin | subcomponent (RichTextEditor) | Uncategorized | no | M |  |
+| richtext | RichTextView | component | Content | no | M |  |
+| richtext | RichTextEditorToolbar | subcomponent (RichTextEditor) | Form Controls | no | M |  |
+| richtext | RichTextEditorAutoLinkPlugin | subcomponent (RichTextEditor) | Form Controls | no | M |  |
 | vega | VegaChart | component | Data Visualization | yes (8 props) | L | Renders Vega and Vega-Lite specifications through the Vega runtime. |
-| vega | VegaSpec | component | Uncategorized | no | M |  |
-| vega | VegaLiteSpec | component | Uncategorized | no | M |  |
-| vega | Config | component | Uncategorized | no | M |  |
-| vega | ViewOptions | component | Uncategorized | no | M |  |
-| vega | LoggerInterface | component | Uncategorized | no | M |  |
 
 
 ## 9. Documentation inventory and mapping
