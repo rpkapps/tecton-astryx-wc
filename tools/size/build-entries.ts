@@ -23,7 +23,13 @@ import {PATHS} from '../lib/paths.ts';
 
 export const COMPLEXITY_BUDGET_KB: Readonly<Record<string, number>> = {S: 12, M: 16, L: 22, XL: 30};
 export const RUNTIME_BUDGET_KB = 10;
-export const AUTOLOADER_BUDGET_KB = 3;
+/**
+ * The autoloader is one tag -> family entry per element plus one static `import()` per family (the
+ * bundler needs them spelled out), so it grows linearly with the library: 3.08 kB gzip at 136 tags /
+ * 88 families, about 4.2 kB projected at the full 184. The budget covers the full library and still
+ * catches a real regression (component code pulled in eagerly would add tens of kB).
+ */
+export const AUTOLOADER_BUDGET_KB = 5;
 
 const SIZE_DIR = join(PATHS.reports, 'size');
 const ENTRY_DIR = join(SIZE_DIR, '.entries');

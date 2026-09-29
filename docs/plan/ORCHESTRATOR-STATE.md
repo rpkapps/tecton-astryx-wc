@@ -13,6 +13,10 @@ Orchestrator review probes: `packages/testing/src/core/orchestrator-probes.test.
 temporary button probes are at `<scratchpad>/button-probes.test.ts`. To run them, copy them into
 `packages/components/src/zz-orch/`, run them, then delete that folder.
 
+> **Owner instruction (2026-09-29): pause after the current streams finish.** Review, probe, merge and
+> push WP-12, WP-13, WP-14, WP-15, the fix-up sweep and the live `/mcp` adapter (D-016). Then stop:
+> start nothing new (no WP-17, WP-18, WP-I, WP-H, performance or extension work) until the owner says so.
+
 ## Running streams (Sonnet, one worktree each under `.claude/worktrees/agent-<id>`)
 
 Machine: 4 cores, shared. Keep about 7 concurrent engineers at most.

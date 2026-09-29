@@ -1,0 +1,27 @@
+<!-- title: Basic table; description: Give the table columns and data. Cells read the row by column key; a column's renderCell returns markup, and align sets the text alignment. -->
+<div id="table-basic">
+  <tct-table label="Team members"></tct-table>
+  <script type="module">
+    import {html} from 'lit';
+
+    const table = document.querySelector('#table-basic tct-table');
+    table.idKey = 'id';
+    table.columns = [
+      {key: 'name', header: 'Name'},
+      {key: 'role', header: 'Role'},
+      {key: 'team', header: 'Team'},
+      {
+        key: 'status',
+        header: 'Status',
+        renderCell: (row) => html`<tct-badge variant=${row.status === 'Active' ? 'success' : 'neutral'} label=${row.status}></tct-badge>`,
+      },
+      {key: 'age', header: 'Age', align: 'end'},
+    ];
+    table.data = [
+      {id: 'e1', name: 'Alice Chen', role: 'Engineer', team: 'Platform', status: 'Active', age: 31},
+      {id: 'e2', name: 'Bob Smith', role: 'Designer', team: 'Product', status: 'Active', age: 27},
+      {id: 'e3', name: 'Carol Wu', role: 'Product manager', team: 'Product', status: 'On leave', age: 45},
+      {id: 'e4', name: 'Dmitri Volkov', role: 'Engineer', team: 'Platform', status: 'Active', age: 38},
+    ];
+  </script>
+</div>

@@ -1,0 +1,27 @@
+<!-- title: Resizable columns; description: Each header gets a separator handle: drag it, or focus it and use the arrow keys (10 px, Shift for 50 px, Home for the minimum). Persist widths from onColumnResizeEnd. -->
+<div id="table-column-resize">
+  <tct-table label="Files, resizable columns" text-overflow="truncate"></tct-table>
+  <script type="module">
+    import {TableColumnResizeController, pixel} from '@tecton-wc/components/table/define.js';
+
+    const table = document.querySelector('#table-column-resize tct-table');
+    table.idKey = 'id';
+    table.columns = [
+      {key: 'file', header: 'File', width: pixel(220)},
+      {key: 'owner', header: 'Owner', width: pixel(140)},
+      {key: 'size', header: 'Size', width: pixel(100), align: 'end'},
+    ];
+    table.data = [
+      {id: 'f1', file: 'quarterly-report-final-v3.pdf', owner: 'Alice Chen', size: '2.4 MB'},
+      {id: 'f2', file: 'brand-guidelines.key', owner: 'Bob Smith', size: '18.1 MB'},
+      {id: 'f3', file: 'onboarding-checklist.md', owner: 'Carol Wu', size: '6 KB'},
+    ];
+    const widths = {};
+    table.plugins = {
+      resize: new TableColumnResizeController(table, {
+        minWidth: 80,
+        onColumnResizeEnd: (updates) => Object.assign(widths, updates),
+      }),
+    };
+  </script>
+</div>

@@ -1,0 +1,50 @@
+<!-- title: Pagination; description: paginateData slices the rows for the current page and the pagination plugin renders the page controls. row-index-start and row-count keep aria-rowindex true to the whole dataset. -->
+<div id="table-pagination">
+  <tct-table label="Orders"></tct-table>
+  <script type="module">
+    import {
+      TablePaginationController,
+      paginateData,
+    } from '@tecton-wc/components/table/define.js';
+
+    const rows = Array.from({length: 47}, (_, i) => ({
+      id: `o${i + 1}`,
+      order: `#${1000 + i}`,
+      customer: ['Northwind', 'Globex', 'Initech', 'Umbrella'][i % 4],
+      total: 20 + ((i * 37) % 400),
+    }));
+    const table = document.querySelector('#table-pagination tct-table');
+    const state = {page: 1, pageSize: 10};
+    const plugin = new TablePaginationController(table, {
+      page: 1,
+      pageSize: 10,
+      totalItems: rows.length,
+      pageSizeOptions: [10, 25],
+      onPageChange: (page) => {
+        state.page = page;
+        show();
+      },
+      onPageSizeChange: (size) => {
+        state.pageSize = size;
+        state.page = 1;
+        show();
+      },
+    });
+
+    function show() {
+      plugin.config = {...plugin.config, page: state.page, pageSize: state.pageSize};
+      table.rowIndexStart = (state.page - 1) * state.pageSize + 1;
+      table.data = paginateData(rows, state.page, state.pageSize);
+    }
+
+    table.idKey = 'id';
+    table.rowCount = rows.length;
+    table.columns = [
+      {key: 'order', header: 'Order'},
+      {key: 'customer', header: 'Customer'},
+      {key: 'total', header: 'Total', align: 'end'},
+    ];
+    table.plugins = {pagination: plugin};
+    show();
+  </script>
+</div>
