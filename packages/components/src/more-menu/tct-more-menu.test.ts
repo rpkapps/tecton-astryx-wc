@@ -13,8 +13,8 @@ import {
   recordEvents,
   runElementSuite,
   waitUntil,
-} from '@tecton-astryx/testing/index.js';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
+} from '@tecton-wc/testing/index.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import type {DropdownMenuOption} from '../dropdown-menu/dropdown-menu.types.js';
 import {stubCompactTouch} from '../dropdown-menu/menu-test-helpers.js';
 import './define.js';

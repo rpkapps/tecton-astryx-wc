@@ -49,7 +49,7 @@
           "target": "label",
           "as": "attribute",
           "default": "Context menu",
-          "notes": "Default: the localized @astryx.contextMenu.label."
+          "notes": "Default: the localized @tct.contextMenu.label."
         },
         {
           "upstream": "onOpenChange",

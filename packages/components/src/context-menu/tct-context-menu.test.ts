@@ -6,8 +6,8 @@
  */
 import {afterEach, describe, expect, it} from 'vitest';
 import {userEvent} from 'vitest/browser';
-import {isFloatingLoaded} from '@tecton-astryx/core/layer/floating.js';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
+import {isFloatingLoaded} from '@tecton-wc/core/layer/floating.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import {
   aTimeout,
   animationsFinished,
@@ -21,7 +21,7 @@ import {
   runElementSuite,
   runOverlaySuite,
   waitUntil,
-} from '@tecton-astryx/testing/index.js';
+} from '@tecton-wc/testing/index.js';
 import {stubCompactTouch} from '../dropdown-menu/menu-test-helpers.js';
 import './define.js';
 import '../dropdown-menu/define.js';

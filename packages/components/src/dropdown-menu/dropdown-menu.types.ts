@@ -1,6 +1,6 @@
 import type {TemplateResult} from 'lit';
-import type {AdaptivePresentation} from '@tecton-astryx/core/controllers/adaptive-presentation.js';
-import type {ElementSize} from '@tecton-astryx/core/context/keys.js';
+import type {AdaptivePresentation} from '@tecton-wc/core/controllers/adaptive-presentation.js';
+import type {ElementSize} from '@tecton-wc/core/context/keys.js';
 
 export {
   POPOVER_ALIGNMENTS as MENU_ALIGNMENTS,

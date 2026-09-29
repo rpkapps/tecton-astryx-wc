@@ -11,7 +11,7 @@ import {
   expectAccessible,
   fixture,
   nextFrame,
-} from '@tecton-astryx/testing/index.js';
+} from '@tecton-wc/testing/index.js';
 import './define.js';
 import '../button/define.js';
 import '../card/define.js';

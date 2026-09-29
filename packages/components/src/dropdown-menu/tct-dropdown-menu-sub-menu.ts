@@ -1,16 +1,16 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {TctAfterOpenChangeEvent} from '@tecton-astryx/core/events/tct-after-open-change.js';
-import type {ChangeReason} from '@tecton-astryx/core/events/tct-event.js';
-import {TctOpenChangeEvent} from '@tecton-astryx/core/events/tct-open-change.js';
-import {LayerController} from '@tecton-astryx/core/layer/layer-controller.js';
-import {PositionController} from '@tecton-astryx/core/layer/position.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {containsFlat} from '@tecton-astryx/core/utils/focus.js';
-import {isImeKeyEvent} from '@tecton-astryx/core/utils/ime.js';
-import {uniqueId} from '@tecton-astryx/core/utils/id.js';
+import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {TctAfterOpenChangeEvent} from '@tecton-wc/core/events/tct-after-open-change.js';
+import type {ChangeReason} from '@tecton-wc/core/events/tct-event.js';
+import {TctOpenChangeEvent} from '@tecton-wc/core/events/tct-open-change.js';
+import {LayerController} from '@tecton-wc/core/layer/layer-controller.js';
+import {PositionController} from '@tecton-wc/core/layer/position.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {containsFlat} from '@tecton-wc/core/utils/focus.js';
+import {isImeKeyEvent} from '@tecton-wc/core/utils/ime.js';
+import {uniqueId} from '@tecton-wc/core/utils/id.js';
 import {TctIcon} from '../icon/tct-icon.js';
 import {TctItem} from '../item/tct-item.js';
 import {TctSpinner} from '../spinner/tct-spinner.js';
@@ -129,12 +129,14 @@ export class TctDropdownMenuSubMenu extends TctElement {
     accepts: (event) => this.#isOwnRowEvent(event),
   });
 
-  readonly #context = new ContextProvider(this, {
+  readonly #context: ContextProvider<typeof dropdownMenuContext> = new ContextProvider<
+    typeof dropdownMenuContext
+  >(this, {
     context: dropdownMenuContext,
     initialValue: null,
   });
 
-  readonly #keys = new MenuKeyboardController(this, {
+  readonly #keys: MenuKeyboardController = new MenuKeyboardController(this, {
     surface: () => this.#surface,
     items: () => collectMenuItems(this.#surface),
     onTab: () => {
@@ -142,7 +144,7 @@ export class TctDropdownMenuSubMenu extends TctElement {
     },
   });
 
-  readonly #position = new PositionController(this, {
+  readonly #position: PositionController = new PositionController(this, {
     surface: () => this.#layerElement,
     // The row is the anchor: the flyout opens on the inline end, aligned to the row's block start.
     anchor: () => this,

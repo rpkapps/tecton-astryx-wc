@@ -5,9 +5,9 @@ import {
   type ReactiveControllerHost,
   type TemplateResult,
 } from 'lit';
-import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
+import {ContextConsumer} from '@tecton-wc/core/context/protocol.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import {dropdownMenuContext, type DropdownMenuContextValue} from './dropdown-menu.context.js';
 import type {MenuSize} from './dropdown-menu.types.js';
 import {slottedLabelText} from './menu-items.js';

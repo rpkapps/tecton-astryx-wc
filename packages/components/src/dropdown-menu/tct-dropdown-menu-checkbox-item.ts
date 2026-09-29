@@ -1,7 +1,7 @@
 import {html, type CSSResultGroup} from 'lit';
 import {property} from 'lit/decorators.js';
-import {TctValueChangeEvent} from '@tecton-astryx/core/events/tct-value-change.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {TctValueChangeEvent} from '@tecton-wc/core/events/tct-value-change.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import {TctCheckboxIndicator} from '../indicator/tct-checkbox-indicator.js';
 import {TctIcon} from '../icon/tct-icon.js';
 import {TctItem} from '../item/tct-item.js';
@@ -60,7 +60,7 @@ export class TctDropdownMenuCheckboxItem extends TctElement {
   /** Closes the menu when the row is toggled (upstream `hasCloseOnSelect`, default `false` here: checkbox rows keep the menu open). */
   @property({type: Boolean, attribute: 'close-on-select'}) closeOnSelect = false;
 
-  readonly #item = new MenuItemController(this, {
+  readonly #item: MenuItemController = new MenuItemController(this, {
     closeOnSelect: () => this.closeOnSelect,
     activate: () => {
       const next = !this.checked;

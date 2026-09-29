@@ -1,7 +1,7 @@
 import type {ReactiveController, ReactiveControllerHost} from 'lit';
-import {RovingTabindexController} from '@tecton-astryx/core/controllers/roving-tabindex.js';
-import {TypeaheadController} from '@tecton-astryx/core/controllers/typeahead.js';
-import {isImeKeyEvent} from '@tecton-astryx/core/utils/ime.js';
+import {RovingTabindexController} from '@tecton-wc/core/controllers/roving-tabindex.js';
+import {TypeaheadController} from '@tecton-wc/core/controllers/typeahead.js';
+import {isImeKeyEvent} from '@tecton-wc/core/utils/ime.js';
 import {isSubMenu, itemContaining, type MenuItemElement} from './menu-items.js';
 
 export interface MenuKeyboardOptions {

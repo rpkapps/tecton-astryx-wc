@@ -1,7 +1,7 @@
 import {html, type CSSResultGroup, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import {TctIcon} from '../icon/tct-icon.js';
 import {TctItem} from '../item/tct-item.js';
 import base from '../styles/base.styles.css';
@@ -59,7 +59,7 @@ export class TctDropdownMenuItem extends TctElement {
   /** Keeps the menu open after activation, for a row that reports its result on itself (a copy row that swaps to "Copied"). */
   @property({type: Boolean, attribute: 'no-close-on-select'}) noCloseOnSelect = false;
 
-  readonly #item = new MenuItemController(this, {
+  readonly #item: MenuItemController = new MenuItemController(this, {
     closeOnSelect: () => !this.noCloseOnSelect,
     destructive: () => this.variant === 'destructive',
   });

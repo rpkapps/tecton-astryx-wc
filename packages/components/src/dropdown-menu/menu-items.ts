@@ -1,4 +1,4 @@
-import {containsFlat} from '@tecton-astryx/core/utils/focus.js';
+import {containsFlat} from '@tecton-wc/core/utils/focus.js';
 
 /**
  * What the menu machinery needs from a row: every menu item tag (`tct-dropdown-menu-item`, the

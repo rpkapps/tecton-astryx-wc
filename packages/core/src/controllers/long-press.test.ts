@@ -17,7 +17,7 @@ class LongPressHost extends LitElement {
   disabled = false;
   delayMs: number | undefined;
   moveCancelPx: number | undefined;
-  readonly press = new LongPressController(this, {
+  readonly press: LongPressController = new LongPressController(this, {
     onLongPress: (point) => this.presses.push(point),
     disabled: () => this.disabled,
     delayMs: () => this.delayMs ?? LONG_PRESS_DEFAULT_DELAY_MS,
@@ -159,7 +159,7 @@ describe('LongPressController', () => {
   it('listens on a custom target that renders later', async () => {
     class Inner extends LitElement {
       presses = 0;
-      readonly press = new LongPressController(this, {
+      readonly press: LongPressController = new LongPressController(this, {
         target: () => this.renderRoot.querySelector('.area'),
         onLongPress: () => {
           this.presses++;

@@ -2,25 +2,25 @@ import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateRe
 import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
+import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
 import {
   AdaptivePresentationController,
   ADAPTIVE_PRESENTATIONS,
-} from '@tecton-astryx/core/controllers/adaptive-presentation.js';
-import {getModality} from '@tecton-astryx/core/controllers/interaction-modality.js';
-import {SizeController} from '@tecton-astryx/core/controllers/size.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {TctAfterOpenChangeEvent} from '@tecton-astryx/core/events/tct-after-open-change.js';
-import type {ChangeReason} from '@tecton-astryx/core/events/tct-event.js';
-import {TctOpenChangeEvent} from '@tecton-astryx/core/events/tct-open-change.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {LayerController} from '@tecton-astryx/core/layer/layer-controller.js';
-import {PositionController, type PositionOptions} from '@tecton-astryx/core/layer/position.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
-import {getTabbables} from '@tecton-astryx/core/utils/focus.js';
-import {uniqueId} from '@tecton-astryx/core/utils/id.js';
-import defaultMessages from '@tecton-astryx/locales/en/dropdownMenu.js';
+} from '@tecton-wc/core/controllers/adaptive-presentation.js';
+import {getModality} from '@tecton-wc/core/controllers/interaction-modality.js';
+import {SizeController} from '@tecton-wc/core/controllers/size.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {TctAfterOpenChangeEvent} from '@tecton-wc/core/events/tct-after-open-change.js';
+import type {ChangeReason} from '@tecton-wc/core/events/tct-event.js';
+import {TctOpenChangeEvent} from '@tecton-wc/core/events/tct-open-change.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {LayerController} from '@tecton-wc/core/layer/layer-controller.js';
+import {PositionController, type PositionOptions} from '@tecton-wc/core/layer/position.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
+import {getTabbables} from '@tecton-wc/core/utils/focus.js';
+import {uniqueId} from '@tecton-wc/core/utils/id.js';
+import defaultMessages from '@tecton-wc/locales/en/dropdownMenu.js';
 import {TctButton} from '../button/tct-button.js';
 import type {ButtonSize, ButtonVariant} from '../button/button.types.js';
 import {TctDivider} from '../divider/tct-divider.js';
@@ -205,14 +205,22 @@ export class TctDropdownMenu extends TctElement {
   // -------------------------------------------------------------------------------- internals
 
   readonly #id = uniqueId('tct-dropdown-menu');
-  readonly #locale = new LocaleController(this, {
+  readonly #locale: LocaleController = new LocaleController(this, {
     namespace: 'dropdownMenu',
     defaults: defaultMessages,
   });
-  readonly #slots = new SlotController(this, 'icon');
-  readonly #size = new SizeController(this, {explicit: () => this.size, fallback: 'md'});
-  readonly #presentation = new AdaptivePresentationController(this, () => this.#policy);
-  readonly #context = new ContextProvider(this, {
+  readonly #slots: SlotController = new SlotController(this, 'icon');
+  readonly #size: SizeController = new SizeController(this, {
+    explicit: () => this.size,
+    fallback: 'md',
+  });
+  readonly #presentation: AdaptivePresentationController = new AdaptivePresentationController(
+    this,
+    () => this.#policy,
+  );
+  readonly #context: ContextProvider<typeof dropdownMenuContext> = new ContextProvider<
+    typeof dropdownMenuContext
+  >(this, {
     context: dropdownMenuContext,
     initialValue: this.#contextValue(),
   });
@@ -225,7 +233,7 @@ export class TctDropdownMenu extends TctElement {
   /** The submenu rows the sheet drilled into, root first. */
   #path: DropdownMenuItemData[] = [];
 
-  readonly #keys = new MenuKeyboardController(this, {
+  readonly #keys: MenuKeyboardController = new MenuKeyboardController(this, {
     surface: () => this.#surface,
     items: () => collectMenuItems(this.#surface),
     onTab: () => {
@@ -233,7 +241,7 @@ export class TctDropdownMenu extends TctElement {
     },
   });
 
-  readonly #position = new PositionController(this, this.#positionOptions());
+  readonly #position: PositionController = new PositionController(this, this.#positionOptions());
 
   readonly #layer: LayerController = new LayerController(this, {
     kind: 'popover',

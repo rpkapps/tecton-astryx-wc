@@ -1,5 +1,5 @@
-import {createContext} from '@tecton-astryx/core/context/protocol.js';
-import type {ChangeReason} from '@tecton-astryx/core/events/tct-event.js';
+import {createContext} from '@tecton-wc/core/context/protocol.js';
+import type {ChangeReason} from '@tecton-wc/core/events/tct-event.js';
 import type {MenuSize} from './dropdown-menu.types.js';
 
 /**

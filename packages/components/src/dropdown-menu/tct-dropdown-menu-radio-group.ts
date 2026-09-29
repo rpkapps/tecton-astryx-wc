@@ -1,10 +1,10 @@
 import {html, type CSSResultGroup, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
-import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import type {ChangeReason} from '@tecton-astryx/core/events/tct-event.js';
-import {TctValueChangeEvent} from '@tecton-astryx/core/events/tct-value-change.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import type {ChangeReason} from '@tecton-wc/core/events/tct-event.js';
+import {TctValueChangeEvent} from '@tecton-wc/core/events/tct-value-change.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import base from '../styles/base.styles.css';
 import {
   dropdownMenuRadioGroupContext,
@@ -44,7 +44,9 @@ export class TctDropdownMenuRadioGroup extends TctElement {
   /** Keeps the menu open after a row is chosen (upstream `hasCloseOnSelect=false`). */
   @property({type: Boolean, attribute: 'no-close-on-select'}) noCloseOnSelect = false;
 
-  readonly #provider = new ContextProvider(this, {
+  readonly #provider: ContextProvider<typeof dropdownMenuRadioGroupContext> = new ContextProvider<
+    typeof dropdownMenuRadioGroupContext
+  >(this, {
     context: dropdownMenuRadioGroupContext,
     initialValue: this.#contextValue(),
   });

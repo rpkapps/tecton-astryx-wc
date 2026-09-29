@@ -3,7 +3,7 @@
  * media query that drives the adaptive presentation (CDP touch emulation cannot be undone inside a
  * page), and readers for the parts of an open menu. Not part of the shipped API.
  */
-import {COMPACT_TOUCH_PRESENTATION_QUERY} from '@tecton-astryx/core/controllers/adaptive-presentation.js';
+import {COMPACT_TOUCH_PRESENTATION_QUERY} from '@tecton-wc/core/controllers/adaptive-presentation.js';
 
 interface FakeQuery extends EventTarget {
   matches: boolean;

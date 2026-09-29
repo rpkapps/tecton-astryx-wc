@@ -1,24 +1,24 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
+import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
 import {
   AdaptivePresentationController,
   ADAPTIVE_PRESENTATIONS,
-} from '@tecton-astryx/core/controllers/adaptive-presentation.js';
-import {LongPressController} from '@tecton-astryx/core/controllers/long-press.js';
-import {SizeController} from '@tecton-astryx/core/controllers/size.js';
-import {TctAfterOpenChangeEvent} from '@tecton-astryx/core/events/tct-after-open-change.js';
-import type {ChangeReason} from '@tecton-astryx/core/events/tct-event.js';
-import {TctOpenChangeEvent} from '@tecton-astryx/core/events/tct-open-change.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {LayerController} from '@tecton-astryx/core/layer/layer-controller.js';
-import {PositionController} from '@tecton-astryx/core/layer/position.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
-import {containsFlat, deepActiveElement, getTabbables} from '@tecton-astryx/core/utils/focus.js';
-import defaultMessages from '@tecton-astryx/locales/en/contextMenu.js';
-import backMessages from '@tecton-astryx/locales/en/dropdownMenu.js';
+} from '@tecton-wc/core/controllers/adaptive-presentation.js';
+import {LongPressController} from '@tecton-wc/core/controllers/long-press.js';
+import {SizeController} from '@tecton-wc/core/controllers/size.js';
+import {TctAfterOpenChangeEvent} from '@tecton-wc/core/events/tct-after-open-change.js';
+import type {ChangeReason} from '@tecton-wc/core/events/tct-event.js';
+import {TctOpenChangeEvent} from '@tecton-wc/core/events/tct-open-change.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {LayerController} from '@tecton-wc/core/layer/layer-controller.js';
+import {PositionController} from '@tecton-wc/core/layer/position.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
+import {containsFlat, deepActiveElement, getTabbables} from '@tecton-wc/core/utils/focus.js';
+import defaultMessages from '@tecton-wc/locales/en/contextMenu.js';
+import backMessages from '@tecton-wc/locales/en/dropdownMenu.js';
 import {TctDivider} from '../divider/tct-divider.js';
 import {
   dropdownMenuContext,
@@ -179,17 +179,25 @@ export class TctContextMenu extends TctElement {
 
   // -------------------------------------------------------------------------------- internals
 
-  readonly #locale = new LocaleController(this, {
+  readonly #locale: LocaleController = new LocaleController(this, {
     namespace: 'contextMenu',
     defaults: defaultMessages,
   });
-  readonly #backLocale = new LocaleController(this, {
+  readonly #backLocale: LocaleController = new LocaleController(this, {
     namespace: 'dropdownMenu',
     defaults: backMessages,
   });
-  readonly #size = new SizeController(this, {explicit: () => this.size, fallback: 'md'});
-  readonly #presentation = new AdaptivePresentationController(this, () => this.#policy);
-  readonly #context = new ContextProvider(this, {
+  readonly #size: SizeController = new SizeController(this, {
+    explicit: () => this.size,
+    fallback: 'md',
+  });
+  readonly #presentation: AdaptivePresentationController = new AdaptivePresentationController(
+    this,
+    () => this.#policy,
+  );
+  readonly #context: ContextProvider<typeof dropdownMenuContext> = new ContextProvider<
+    typeof dropdownMenuContext
+  >(this, {
     context: dropdownMenuContext,
     initialValue: this.#contextValue(),
   });
@@ -199,7 +207,7 @@ export class TctContextMenu extends TctElement {
   #restoreFocus: HTMLElement | null = null;
   #path: DropdownMenuItemData[] = [];
 
-  readonly #keys = new MenuKeyboardController(this, {
+  readonly #keys: MenuKeyboardController = new MenuKeyboardController(this, {
     surface: () => this.#surface,
     items: () => collectMenuItems(this.#surface),
     onTab: () => {
@@ -219,7 +227,7 @@ export class TctContextMenu extends TctElement {
     });
   }
 
-  readonly #position = new PositionController(this, {
+  readonly #position: PositionController = new PositionController(this, {
     surface: () => this.#layerElement,
     // A point: the controller owns a 0x0 fixed anchor there, so the CSS path still applies.
     anchor: () => this.#at,

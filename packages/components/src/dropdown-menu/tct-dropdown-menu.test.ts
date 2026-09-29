@@ -15,8 +15,8 @@ import {
   runElementSuite,
   runOverlaySuite,
   waitUntil,
-} from '@tecton-astryx/testing/index.js';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
+} from '@tecton-wc/testing/index.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import './define.js';
 import type {TctDropdownMenu} from './tct-dropdown-menu.js';
 import type {TctDropdownMenuItem} from './tct-dropdown-menu-item.js';

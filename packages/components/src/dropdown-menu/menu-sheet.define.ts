@@ -1,4 +1,4 @@
-import {defineElement} from '@tecton-astryx/core/define.js';
+import {defineElement} from '@tecton-wc/core/define.js';
 import {TctBottomSheet} from '../bottom-sheet/tct-bottom-sheet.js';
 import {TctHeading} from '../heading/tct-heading.js';
 import {TctIconButton} from '../icon-button/tct-icon-button.js';

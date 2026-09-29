@@ -1,6 +1,6 @@
 import type {PropertyValues} from 'lit';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import defaultMessages from '@tecton-astryx/locales/en/moreMenu.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import defaultMessages from '@tecton-wc/locales/en/moreMenu.js';
 import {TctDropdownMenu} from '../dropdown-menu/tct-dropdown-menu.js';
 
 /**
@@ -28,7 +28,10 @@ import {TctDropdownMenu} from '../dropdown-menu/tct-dropdown-menu.js';
 export class TctMoreMenu extends TctDropdownMenu {
   static override readonly tagName: string = 'tct-more-menu';
 
-  readonly #locale = new LocaleController(this, {namespace: 'moreMenu', defaults: defaultMessages});
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'moreMenu',
+    defaults: defaultMessages,
+  });
 
   constructor() {
     super();

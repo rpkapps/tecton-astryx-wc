@@ -1,4 +1,4 @@
-import {defineElement} from '@tecton-astryx/core/define.js';
+import {defineElement} from '@tecton-wc/core/define.js';
 import {TctDropdownMenu} from './tct-dropdown-menu.js';
 import {TctDropdownMenuCheckboxItem} from './tct-dropdown-menu-checkbox-item.js';
 import {TctDropdownMenuDivider} from './tct-dropdown-menu-divider.js';

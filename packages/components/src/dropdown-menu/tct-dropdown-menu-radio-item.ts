@@ -1,8 +1,8 @@
 import {html, type CSSResultGroup} from 'lit';
 import {property} from 'lit/decorators.js';
-import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {ContextConsumer} from '@tecton-wc/core/context/protocol.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import {TctRadioIndicator} from '../indicator/tct-radio-indicator.js';
 import {TctIcon} from '../icon/tct-icon.js';
 import {TctItem} from '../item/tct-item.js';
@@ -54,12 +54,14 @@ export class TctDropdownMenuRadioItem extends TctElement {
   /** Disables this option. It stays focusable (announced as unavailable); choosing it is blocked. */
   @property({type: Boolean, reflect: true}) disabled = false;
 
-  readonly #group = new ContextConsumer(this, {
+  readonly #group: ContextConsumer<typeof dropdownMenuRadioGroupContext> = new ContextConsumer<
+    typeof dropdownMenuRadioGroupContext
+  >(this, {
     context: dropdownMenuRadioGroupContext,
     subscribe: true,
   });
 
-  readonly #item = new MenuItemController(this, {
+  readonly #item: MenuItemController = new MenuItemController(this, {
     closeOnSelect: () => this.#group.value?.closeOnSelect ?? false,
     activate: () => {
       this.#group.value?.select(this.value, 'selection');
