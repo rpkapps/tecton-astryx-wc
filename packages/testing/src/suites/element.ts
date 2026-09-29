@@ -133,7 +133,8 @@ export function runElementSuite(options: ElementSuiteOptions): void {
         Object.assign(element, properties);
         await (element as unknown as {updateComplete: Promise<unknown>}).updateComplete;
         const target = document.createElement('div');
-        element.parentElement!.after(target);
+        // Inside the fixture container, so cleanup removes the target (and the element moved into it).
+        element.parentElement!.append(target);
         const focusable = getTabbables(element)[0];
         focusable?.focus();
         const focused = deepActiveElement();

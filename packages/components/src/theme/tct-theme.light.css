@@ -1,0 +1,27 @@
+/*
+ * tct-theme: a theme island. It is a block that paints the page surface and text colour and pins
+ * `color-scheme` for its subtree, so light-dark() token values, native form controls and scrollbars
+ * inside it follow the island's mode. Light-DOM sheet delivered by TctProviderElement
+ * (adoptLightDomStyles) and by the static light-dom.css build (A§6.7).
+ *
+ * The mode rules come after the base one and are attribute-driven (`mode` is reflected), so the
+ * island wins over the `[data-theme]` blocks of tokens.css, which sit in an earlier layer.
+ * [mwg:dark-mode] [mwg:component-specific-light-dark-theme]
+ */
+@layer tecton.light-dom {
+  :where(tct-theme:not([hidden])) {
+    display: block;
+    color-scheme: light dark;
+    background-color: var(--color-background-body);
+    color: var(--color-text-primary);
+    font-family: var(--font-family-body);
+  }
+
+  :where(tct-theme[mode='light']) {
+    color-scheme: light;
+  }
+
+  :where(tct-theme[mode='dark']) {
+    color-scheme: dark;
+  }
+}
