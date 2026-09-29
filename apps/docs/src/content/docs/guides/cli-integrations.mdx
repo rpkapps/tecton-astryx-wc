@@ -40,6 +40,36 @@ tct discover card                     # search element names across all packages
 
 `tct gap-report <element> --category <category>` routes a missing capability to the package that provides the named element (or to `--package`), and `--output <file>` keeps a local record. The library itself is unpublished, so a report to it is recorded, not filed: the receipt names the `parity.json` `requests` list to add it to.
 
+`tct discover` prints one record per package. With the registry above installed next to the library:
+
+```text
+name:       @acme/widgets
+version:    1.0.0
+components: acme-card
+
+Usage: tct discover @acme/widgets/<tct-element>
+```
+
+### Serving a registry over MCP
+
+The registry format is the same one the docs site's live `/mcp` endpoint answers from (see [Working with AI](../working-with-ai/#live-over-http-mcp)), and the handler takes any registry, so a package's elements can be offered to agents over HTTP the same way. In a site with a server adapter, mount the CLI's handler over your registry:
+
+```ts title="src/pages/mcp.ts"
+import {handleMcpRequest} from '@tecton-wc/cli/mcp/http.js';
+import registry from '@acme/widgets/agent-registry.json';
+
+export const prerender = false;
+export const ALL = ({request}: {request: Request}) => handleMcpRequest(registry, request);
+```
+
+A `tools/call` of `search` with the query `card` then answers from your registry only (a real response for the registry above, with the `import` field left out because the sample registry is a renamed copy):
+
+```json
+{"result":{"content":[{"type":"text","text":"[{\"type\":\"component\",\"name\":\"acme-card\",\"displayName\":\"Card\",\"category\":\"Feedback & Status\",\"description\":\"highlights a status or category tag, NOT for general metadata\",\"keyAttributes\":[\"variant: neutral|info|success|warning|error|blue|cyan|green|orange|pink|purple|red|teal|yellow\",\"label: string\"],\"hint\":\"Use get(\\\"acme-card\\\") for the full API, usage and examples.\"}]"}]},"jsonrpc":"2.0","id":1}
+```
+
+Only a Node process (or another runtime that renders on demand) can answer the POST; a static host serves your pages but not `/mcp`.
+
 ## What you can do today
 
 Every kind of contribution has a direct, code-level equivalent that needs no manifest.
