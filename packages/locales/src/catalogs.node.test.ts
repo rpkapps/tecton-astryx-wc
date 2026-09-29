@@ -99,7 +99,8 @@ describe('upstream catalogs', () => {
       expect(Object.keys(messages).sort(), tag).toEqual([...ids].sort());
       for (const id of ids) expect(typeof messages[id], `${tag} ${id}`).toBe('string');
     }
-  });
+    // Imports 30 generated modules; the default 5 s is too tight when the whole suite runs in parallel.
+  }, 30_000);
 
   it('keeps every ICU argument of the English message in each translation', async () => {
     const english = await load('en');

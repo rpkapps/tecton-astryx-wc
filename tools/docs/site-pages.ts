@@ -352,27 +352,36 @@ export function differencesPage(input: DifferencesInput): string {
     {key: 'category', label: 'Category'},
     {key: 'light', label: 'Light', kind: 'swatch'},
     {key: 'dark', label: 'Dark', kind: 'swatch'},
-    {key: 'reason', label: 'Why provisional'},
   ];
   out.push(
     '## Provisional values',
     '',
     `Tecton has no decision for these; they use the proposals in the semantic map (D-002) and are labelled provisional in the token metadata. ${provisionalTokens.length} tokens.`,
     '',
-    table(
-      'Provisional tokens',
-      provisionalColumns,
-      provisionalTokens.map((token) => ({
-        name: token.name,
-        category: token.category,
-        light: token.light,
-        dark: token.dark,
-        reason: token.provisional ?? token.description,
-      })),
-      'No provisional tokens.',
-    ),
-    '',
   );
+  // The reason is shared by whole groups of tokens: state it once per group, not once per row.
+  const byReason = new Map<string, TokenMeta[]>();
+  for (const token of provisionalTokens) {
+    const reason = token.provisional ?? token.description;
+    byReason.set(reason, [...(byReason.get(reason) ?? []), token]);
+  }
+  let group = 0;
+  for (const [reason, list] of byReason) {
+    group++;
+    out.push(
+      `### Group ${group}: ${list[0]?.category ?? ''} (${list.length} tokens)`,
+      '',
+      escapeMdx(reason),
+      '',
+      table(
+        `Provisional tokens, group ${group}`,
+        provisionalColumns,
+        list.map((token) => ({name: token.name, category: token.category, light: token.light, dark: token.dark})),
+      ),
+      '',
+    );
+  }
+  if (byReason.size === 0) out.push('No provisional tokens.', '');
   if ((tokens?.provisionalNonTokens.length ?? 0) > 0) {
     out.push(
       table(

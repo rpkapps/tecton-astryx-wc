@@ -68,6 +68,15 @@ export default defineConfig({
       alias: {'@examples': COMPONENTS_SRC},
     },
     ssr: {resolve: {conditions: ['tct-source', ...defaultServerConditions]}},
+    build: {
+      rolldownOptions: {
+        // Astro's own `use astro:head-inject` marker in every content entry: expected, and very noisy.
+        onLog(level, log, handler) {
+          if (log.code === 'MODULE_LEVEL_DIRECTIVE') return;
+          handler(level, log);
+        },
+      },
+    },
   },
   integrations: [
     generate,

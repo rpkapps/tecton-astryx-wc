@@ -1,7 +1,7 @@
 /**
  * Screenshots of the built docs site into `reports/` (gitignored), for reviews and hand-offs.
  *
- *   node tools/docs/screenshot.ts [--full] / /components/feedback-and-status/sample-badge/
+ *   node tools/docs/screenshot.ts [--full] [--at=<selector>] / /components/feedback-and-status/sample-badge/
  *
  * One PNG per route and colour scheme: `reports/docs-<route>-<light|dark>.png`. Needs `pnpm docs:build`.
  */
@@ -19,6 +19,7 @@ if (!existsSync(join(dist, 'index.html'))) {
 }
 const args = process.argv.slice(2);
 const full = args.includes('--full');
+const at = args.find((arg) => arg.startsWith('--at='))?.slice('--at='.length);
 const routeArgs = args.filter((arg) => !arg.startsWith('--'));
 const routes = routeArgs.length > 0 ? routeArgs : ['/'];
 mkdirSync(PATHS.reports, {recursive: true});
@@ -36,6 +37,7 @@ try {
     for (const route of routes) {
       await page.goto(`${server.url}${route}`, {waitUntil: 'networkidle'});
       await page.evaluate(() => document.fonts.ready);
+      if (at) await page.locator(at).first().scrollIntoViewIfNeeded();
       const name = route.replace(/^\/|\/$/g, '').replace(/\//g, '-') || 'home';
       const file = join(PATHS.reports, `docs-${name}-${scheme}.png`);
       await page.screenshot({path: file, fullPage: full});
