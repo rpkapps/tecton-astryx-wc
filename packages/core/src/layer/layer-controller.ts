@@ -117,6 +117,8 @@ export class LayerController implements ReactiveController {
   #closeWatcher: {destroy(): void} | undefined;
   #previouslyFocused: Element | null = null;
   #dismissedGesture: number | undefined;
+  /** Why the owner was last asked to dismiss (an outside press moves focus after we hear of it). */
+  #dismissReason: ChangeReason | undefined;
 
   constructor(host: TctElement, options: LayerOptions) {
     this.#host = host;
@@ -184,7 +186,12 @@ export class LayerController implements ReactiveController {
       if (generation !== this.#generation) return;
       if (surface) this.#nativeHide(surface);
       this.#release(surface);
-      this.#returnFocus();
+      // The stack hears of an outside press at pointerdown, before the browser moves focus to what
+      // was pressed (or to the body, for empty space). Decide about returning focus after that.
+      if (this.#dismissReason === 'outside') await new Promise((resolve) => setTimeout(resolve, 0));
+      this.#dismissReason = undefined;
+      if (generation !== this.#generation) return;
+      this.#returnFocus(surface);
       this.#options.onHidden?.();
     } finally {
       this.#hiding = false;
@@ -381,6 +388,7 @@ export class LayerController implements ReactiveController {
 
   #dismiss(reason: ChangeReason, event?: Event): void {
     this.#dismissedGesture = currentGesture();
+    this.#dismissReason = reason;
     this.#options.onDismissRequest(reason, event);
   }
 
@@ -424,7 +432,7 @@ export class LayerController implements ReactiveController {
     this.#closeWatcher?.destroy();
     this.#closeWatcher = undefined;
     this.#release(surface);
-    this.#returnFocus();
+    this.#returnFocus(surface);
     this.#options.onNativeClose?.(event);
     this.#options.onHidden?.();
   }
@@ -459,14 +467,15 @@ export class LayerController implements ReactiveController {
 
   /**
    * Returns focus after the native hide, but only when it is not somewhere the user chose: on nothing
-   * (`<body>`, which is where a hidden focused element falls back to) or still inside the layer.
+   * (`<body>`), or still on an element inside the now hidden layer (the engine moves focus off a
+   * hidden element only at the next rendering update, so right after the hide it is still there).
    * A dismissing click on another control has already moved focus and must never be fought.
    */
-  #returnFocus(): void {
+  #returnFocus(surface: HTMLElement | null): void {
     const {returnFocus} = this.#options;
     if (returnFocus === false) return;
-    const surface = this.#shownSurface;
-    if (!isFocusDetached() && !(surface && containsFlat(surface, deepActiveElement()))) return;
+    const stale = surface !== null && containsFlat(surface, deepActiveElement());
+    if (!isFocusDetached() && !stale) return;
     const chosen = typeof returnFocus === 'function' ? returnFocus() : null;
     const target =
       chosen ?? this.#options.trigger?.() ?? (this.#previouslyFocused as HTMLElement | null);

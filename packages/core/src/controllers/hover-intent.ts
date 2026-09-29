@@ -80,13 +80,13 @@ export interface HoverIntentOptions {
   /** The layer surface: hovering it keeps the layer open. */
   surface?: () => HTMLElement | null;
   /** Default 200 ms. */
-  openDelay?: number;
+  openDelay?: number | (() => number);
   /** Default 0, meaning a 100 ms hover bridge. */
-  closeDelay?: number;
+  closeDelay?: number | (() => number);
   /** Default `auto`. */
-  touch?: TouchTrigger;
+  touch?: TouchTrigger | (() => TouchTrigger | undefined);
   /** `auto` (default): only when the trigger is focusable. */
-  focus?: FocusTrigger;
+  focus?: FocusTrigger | (() => FocusTrigger | undefined);
   /** Listeners stay attached but do nothing while this returns false. */
   enabled?: () => boolean;
   /** Controlled layers are never toggled by hover, focus or a tap. */
@@ -152,6 +152,11 @@ export class HoverIntentController implements ReactiveController {
 
   // ---------------------------------------------------------------------------------- internals
 
+  #read<V>(value: V | (() => V | undefined) | undefined, fallback: V): V {
+    const resolved = typeof value === 'function' ? (value as () => V | undefined)() : value;
+    return resolved ?? fallback;
+  }
+
   #live(): boolean {
     return this.#options.enabled?.() ?? true;
   }
@@ -203,19 +208,20 @@ export class HoverIntentController implements ReactiveController {
   #scheduleOpen(reason: ChangeReason, event: Event): void {
     if (!this.#live() || this.#controlled()) return;
     this.cancel();
-    this.#openTimer = setTimeout(() => {
-      this.#openTimer = undefined;
-      if (!this.#options.isOpen()) this.#options.onOpen(reason, event);
-    }, this.#options.openDelay ?? 200);
+    this.#openTimer = setTimeout(
+      () => {
+        this.#openTimer = undefined;
+        if (!this.#options.isOpen()) this.#options.onOpen(reason, event);
+      },
+      this.#read(this.#options.openDelay, 200),
+    );
   }
 
   #scheduleClose(reason: ChangeReason, event: Event): void {
     if (this.#controlled()) return;
     this.cancel();
-    const delay =
-      this.#options.closeDelay && this.#options.closeDelay > 0
-        ? this.#options.closeDelay
-        : HOVER_BRIDGE_MS;
+    const configured = this.#read(this.#options.closeDelay, 0);
+    const delay = configured > 0 ? configured : HOVER_BRIDGE_MS;
     this.#closeTimer = setTimeout(() => {
       this.#closeTimer = undefined;
       if (this.#options.isOpen()) this.#options.onClose(reason, event);
@@ -246,7 +252,7 @@ export class HoverIntentController implements ReactiveController {
   };
 
   #focusEnabled(trigger: HTMLElement): boolean {
-    const mode = this.#options.focus ?? 'auto';
+    const mode = this.#read(this.#options.focus, 'auto');
     if (mode === 'never') return false;
     return mode === 'always' || focusTargetOf(trigger) !== null;
   }
@@ -280,7 +286,7 @@ export class HoverIntentController implements ReactiveController {
       return;
     }
     if (!trigger) return;
-    const configured = this.#options.touch ?? 'auto';
+    const configured = this.#read(this.#options.touch, 'auto');
     const mode = configured === 'auto' ? (isActionTrigger(trigger) ? 'none' : 'tap') : configured;
     if (mode === 'none' || !this.#live()) {
       this.close('pointer', event);

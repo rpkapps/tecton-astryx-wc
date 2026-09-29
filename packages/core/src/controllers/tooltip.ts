@@ -37,11 +37,11 @@ export interface TooltipControllerOptions {
   /** Slot of the satellite. Default `surface`. */
   surfaceSlot?: string;
   /** Delay before showing on hover (ms). Default 200. */
-  delay?: number;
+  delay?: number | (() => number);
   /** Delay before hiding after leave (ms). Default 0 (hover bridge). */
-  hideDelay?: number;
-  focusTrigger?: FocusTrigger;
-  touchTrigger?: TouchTrigger;
+  hideDelay?: number | (() => number);
+  focusTrigger?: FocusTrigger | (() => FocusTrigger | undefined);
+  touchTrigger?: TouchTrigger | (() => TouchTrigger | undefined);
   /** When false the tooltip never opens (and any open one closes). */
   enabled?: () => boolean;
   /** Controlled: `true`/`false` forces the state and hover/focus never toggle; `undefined` = uncontrolled. */
