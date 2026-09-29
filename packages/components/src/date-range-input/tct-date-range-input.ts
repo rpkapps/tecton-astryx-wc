@@ -353,6 +353,7 @@ export class TctDateRangeInput extends TctPickerField {
       <tct-calendar
         class="calendar"
         part="calendar"
+        ?data-autofocus=${surface === 'sheet'}
         mode="range"
         .value=${this.range ?? undefined}
         min=${ifDefined(this.min)}

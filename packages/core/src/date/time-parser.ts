@@ -299,8 +299,9 @@ export function isTimeInRange(
   min?: ISOTimeString | string,
   max?: ISOTimeString | string,
 ): boolean {
-  if (min && compareTime(time, min) < 0) return false;
-  if (max && compareTime(time, max) > 0) return false;
+  // A bound that is not a time is no bound (an unreadable attribute never rules every time out).
+  if (min && parseISOTime(min) && compareTime(time, min) < 0) return false;
+  if (max && parseISOTime(max) && compareTime(time, max) > 0) return false;
   return true;
 }
 

@@ -34,9 +34,9 @@ import {
   type DateInputFormat,
   type DateInputFormatter,
 } from './date-input.types.js';
+import {DraftEntry, type DraftIssue} from './draft-entry.js';
 import {PICKER_PRESENTATIONS, type LegacyNativePicker} from './picker-presentation.js';
 import {TctPickerField} from './tct-picker-field.js';
-import styles from './tct-date-input.styles.css';
 
 /** The browser's localized message for a date outside `min` or `max`, from a probe input. */
 function rangeMessage(kind: 'min' | 'max', bound: string): string {
@@ -53,12 +53,6 @@ function rangeMessage(kind: 'min' | 'max', bound: string): string {
   }
   return probe.validationMessage || nativeMessage('invalid');
 }
-
-/** How long typing must pause before the field says its text is not an available date. */
-const ISSUE_PAUSE_MS = 700;
-
-/** The draft of an entry that cannot be committed: not a date, or a date the constraints rule out. */
-type DraftIssue = 'unreadable' | 'unavailable';
 
 /**
  * A date field: type a date or pick it from a calendar. The typed text reads what people write in their
@@ -117,7 +111,7 @@ export class TctDateInput extends TctPickerField {
     ...TctPickerField.dependencies,
     TctCalendar,
   ];
-  static override styles: CSSResultGroup = [TctPickerField.styles, styles];
+  static override styles: CSSResultGroup = TctPickerField.styles;
 
   /** Shows a clear (x) button while there is a value; it clears, fires `tct-clear` and returns focus. */
   @property({type: Boolean, attribute: 'has-clear'}) hasClear = false;
@@ -161,7 +155,7 @@ export class TctDateInput extends TctPickerField {
     return TctDateInput.#sanitize(super.value);
   }
   override set value(value: string) {
-    if (!this.#userWrite) this.#draft = null;
+    if (!this.#userWrite) this.#entry.drop();
     super.value = TctDateInput.#sanitize(value);
   }
 
@@ -169,11 +163,31 @@ export class TctDateInput extends TctPickerField {
     namespace: 'dateInput',
     defaults: {...dateInputMessages, ...dateInputExtra, ...inputMessages, ...fieldMessages},
   });
-  #draft: string | null = null;
   #userWrite = false;
-  #lastIssue: DraftIssue | null = null;
-  #issueTimer: ReturnType<typeof setTimeout> | undefined;
   #rejected: string | null = null;
+
+  /** The text being typed, until the entry ends (see {@link DraftEntry}). */
+  readonly #entry: DraftEntry = new DraftEntry({
+    host: this,
+    issueOf: (text) => this.#issueOf(text),
+    messageFor: (issue) =>
+      issue === 'unavailable'
+        ? this.#locale.t('@tct.date-input.dateUnavailable')
+        : this.#locale.t('@tct.dateInput.invalidDate'),
+    apply: (text) => {
+      const parsed = parseDateInput(text, this.#locale.locale);
+      if (!parsed) return;
+      const iso = plainDateToISO(parsed);
+      if (iso !== this.value) this.commitValue(iso, {commit: false});
+    },
+    clear: () => {
+      if (this.value !== '') this.commitValue('', {commit: false});
+    },
+    changed: () => {
+      this.requestUpdate();
+      this.syncFormState();
+    },
+  });
 
   static #sanitize(value: string | null | undefined): string {
     const date = tryPlainDateFromISO(String(value ?? '').trim());
@@ -205,16 +219,18 @@ export class TctDateInput extends TctPickerField {
 
   protected override get validators(): Validator<this>[] {
     return [
-      (field) =>
-        field.#draftIssue !== null
+      (field) => {
+        const issue = field.#entry.issue;
+        return issue !== null
           ? {
               flags: {badInput: true},
               message:
-                field.#draftIssue === 'unavailable'
+                issue === 'unavailable'
                   ? field.#locale.t('@tct.date-input.dateUnavailable')
                   : field.#locale.t('@tct.dateInput.invalidDate'),
             }
-          : null,
+          : null;
+      },
       (field) =>
         field.required && !field.optional && field.value === ''
           ? {flags: {valueMissing: true}, message: nativeMessage('text')}
@@ -245,7 +261,7 @@ export class TctDateInput extends TctPickerField {
   }
 
   protected override formResetValue(): void {
-    this.#draft = null;
+    this.#entry.drop();
     this.#rejected = null;
     this.forgetPendingChange();
     super.formResetValue();
@@ -253,12 +269,13 @@ export class TctDateInput extends TctPickerField {
 
   /** Text that is not an available date is invalid once the typing has paused (it is dropped when the field is left). */
   override get showInvalid(): boolean {
-    return super.showInvalid || this.#lastIssue !== null;
+    return super.showInvalid || this.#entry.surfaced !== null;
   }
 
   /** An unreadable draft has no visible message (the muted text and `aria-invalid` say it, once announced). */
   protected override get effectiveStatus(): InputStatus | undefined {
-    if (!this.statusType && (this.#lastIssue !== null || this.#rejected !== null)) return undefined;
+    if (!this.statusType && (this.#entry.surfaced !== null || this.#rejected !== null))
+      return undefined;
     return super.effectiveStatus;
   }
 
@@ -284,7 +301,7 @@ export class TctDateInput extends TctPickerField {
   }
 
   protected override clearValue(): void {
-    this.#draft = null;
+    this.#entry.drop();
     this.commitValue('');
   }
 
@@ -305,11 +322,9 @@ export class TctDateInput extends TctPickerField {
     });
   }
 
-  /** Why the text in the field cannot be committed, if it cannot. */
-  get #draftIssue(): DraftIssue | null {
-    const draft = this.#draft;
-    if (draft === null || draft.trim() === '') return null;
-    const parsed = parseDateInput(draft, this.#locale.locale);
+  /** Why non-blank text cannot be committed as the date, if it cannot. */
+  #issueOf(text: string): DraftIssue | null {
+    const parsed = parseDateInput(text, this.#locale.locale);
     if (!parsed) return 'unreadable';
     return this.#constraints().isDateDisabled(parsed) ? 'unavailable' : null;
   }
@@ -328,7 +343,7 @@ export class TctDateInput extends TctPickerField {
   }
 
   get #displayText(): string {
-    if (this.#draft !== null) return this.#draft;
+    if (this.#entry.text !== null) return this.#entry.text;
     return this.value ? this.#formatValue(this.value) : '';
   }
 
@@ -380,10 +395,11 @@ export class TctDateInput extends TctPickerField {
     await calendar.updateComplete;
   }
 
-  protected override renderPickerContent(): TemplateResult {
+  protected override renderPickerContent(surface: 'popover' | 'sheet'): TemplateResult {
     return html`<tct-calendar
       class="calendar"
       part="calendar"
+      ?data-autofocus=${surface === 'sheet'}
       mode="single"
       .value=${this.value || undefined}
       min=${ifDefined(this.min)}
@@ -406,7 +422,7 @@ export class TctDateInput extends TctPickerField {
     event.stopPropagation();
     const calendar = event.currentTarget as TctCalendar;
     const picked = typeof calendar.value === 'string' ? calendar.value : '';
-    this.#draft = null;
+    this.#entry.drop();
     this.commitValue(picked);
     this.requestOpen(false, 'selection');
   };
@@ -533,76 +549,19 @@ export class TctDateInput extends TctPickerField {
     event.stopPropagation();
     if (!this.canEdit || this.showsDisabledMessage) return;
     const input = event.target as HTMLInputElement;
-    this.#draft = input.value;
-    const issue = this.#draftIssue;
+    this.#entry.input(input.value);
     // The text is a draft until the entry ends (Enter, leaving the field, a pick): every prefix of a
     // complete date ("2026-03-2") is a date too, so committing as it is typed would keep the wrong one.
     // The calendar follows the date being typed, though.
-    if (issue === null && input.value.trim() !== '') {
+    if (this.#entry.issue === null && input.value.trim() !== '') {
       const parsed = parseDateInput(input.value, this.#locale.locale);
       if (parsed) this.#calendar?.navigateTo(plainDateToISO(parsed));
     }
-    this.#scheduleIssue(issue);
-    this.requestUpdate();
-    this.syncFormState();
   };
-
-  /**
-   * Says (once per kind) that the text is not an available date, after typing pauses: every prefix of a
-   * date is unreadable, so speaking at the first keystroke would be noise. Leaving the field or pressing
-   * Enter speaks it at once.
-   */
-  #scheduleIssue(issue: DraftIssue | null, now = false): void {
-    clearTimeout(this.#issueTimer);
-    this.#issueTimer = undefined;
-    if (issue === null) {
-      if (this.#lastIssue !== null) {
-        this.#lastIssue = null;
-        this.requestUpdate();
-        this.syncFormState();
-      }
-      return;
-    }
-    if (issue === this.#lastIssue) return;
-    const speak = (): void => {
-      // The kind can have changed while waiting: say what is true now.
-      const current = this.#draftIssue;
-      this.#issueTimer = undefined;
-      if (current === null || current === this.#lastIssue) return;
-      this.#lastIssue = current;
-      // From now on the field shows it (aria-invalid, muted text); a prefix in progress never flickers.
-      this.requestUpdate();
-      this.syncFormState();
-      announce(
-        current === 'unavailable'
-          ? this.#locale.t('@tct.date-input.dateUnavailable')
-          : this.#locale.t('@tct.dateInput.invalidDate'),
-        {politeness: 'assertive', element: this},
-      );
-    };
-    if (now) speak();
-    else this.#issueTimer = setTimeout(speak, ISSUE_PAUSE_MS);
-  }
 
   /** Turns the draft into the value: blank clears, a readable available date commits, the rest is dropped. */
   #commitDraft(): void {
-    const draft = this.#draft;
-    if (draft !== null) {
-      // The entry ends here: an unreadable or unavailable draft is dropped, so say why while it is still known.
-      this.#scheduleIssue(this.#draftIssue, true);
-      const text = draft.trim();
-      if (text === '') {
-        if (this.value !== '') this.commitValue('', {commit: false});
-      } else {
-        const parsed = parseDateInput(text, this.#locale.locale);
-        if (parsed && !this.#constraints().isDateDisabled(parsed)) {
-          const iso = plainDateToISO(parsed);
-          if (iso !== this.value) this.commitValue(iso, {commit: false});
-        }
-      }
-      this.#draft = null;
-      this.#scheduleIssue(null);
-    }
+    this.#entry.commit();
     this.settleChange();
     this.syncFormState();
     this.requestUpdate();
