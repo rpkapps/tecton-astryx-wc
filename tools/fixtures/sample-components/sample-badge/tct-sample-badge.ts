@@ -1,7 +1,7 @@
 import {html, nothing, type CSSResultGroup} from 'lit';
 import {property} from 'lit/decorators.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {TctRemoveEvent} from '@tecton-astryx/core/events/tct-remove.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {TctRemoveEvent} from '@tecton-wc/core/events/tct-remove.js';
 import styles from './tct-sample-badge.styles.css';
 import type {SampleBadgeSize, SampleBadgeVariant} from './sample-badge.types.js';
 

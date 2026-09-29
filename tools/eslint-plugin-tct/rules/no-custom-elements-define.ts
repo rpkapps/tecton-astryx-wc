@@ -18,7 +18,7 @@ export const noCustomElementsDefine: Rule.RuleModule = {
     schema: [],
     messages: {
       define:
-        'Register elements with defineElement() from @tecton-astryx/core/define.js in the family define.ts; ' +
+        'Register elements with defineElement() from @tecton-wc/core/define.js in the family define.ts; ' +
         'customElements.define is only allowed in core/src/define.ts.',
       decorator:
         '@customElement registers on import. Class modules are side-effect free; register in define.ts with defineElement().',

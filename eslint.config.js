@@ -33,8 +33,8 @@ const boundaryPatterns = (allowed = []) =>
 
 const SHARED_RESTRICTED_PATTERNS = [
   {
-    group: ['@tecton-astryx/*/src/*', '@tecton-astryx/*/src/**'],
-    message: 'Import package subpaths (e.g. @tecton-astryx/core/define.js), never src/ paths.',
+    group: ['@tecton-wc/*/src/*', '@tecton-wc/*/src/**'],
+    message: 'Import package subpaths (e.g. @tecton-wc/core/define.js), never src/ paths.',
   },
   {
     group: [
@@ -51,14 +51,13 @@ const SHARED_RESTRICTED_PATTERNS = [
 ];
 
 const NOT_APPROVED = [
-  {name: '@lit/context', message: 'Not approved (D-007): use @tecton-astryx/core/context (A-10).'},
+  {name: '@lit/context', message: 'Not approved (D-007): use @tecton-wc/core/context (A-10).'},
 ];
 const DEV_ONLY_IN_SHIPPED = [
   {
     // Anchored: only the `lucide` package, not our own generated `./lucide/<name>.js` modules.
     regex: '^lucide(/.*)?$',
-    message:
-      'lucide is a build-time source (D-009); import generated @tecton-astryx/icons modules.',
+    message: 'lucide is a build-time source (D-009); import generated @tecton-wc/icons modules.',
   },
   {group: ['@lit-labs/ssr', '@lit-labs/ssr/*'], message: '@lit-labs/ssr is dev-only (WP-H spike).'},
 ];

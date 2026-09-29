@@ -1,5 +1,5 @@
 {
-  "name": "@tecton-astryx/core",
+  "name": "@tecton-wc/core",
   "private": true,
   "license": "UNLICENSED",
   "version": "0.0.0",
@@ -22,12 +22,12 @@
   "dependencies": {
     "@floating-ui/dom": "catalog:",
     "@internationalized/date": "catalog:",
-    "@tecton-astryx/locales": "workspace:*",
+    "@tecton-wc/locales": "workspace:*",
     "dompurify": "catalog:",
     "intl-messageformat": "catalog:",
     "lit": "catalog:"
   },
   "devDependencies": {
-    "@tecton-astryx/testing": "workspace:*"
+    "@tecton-wc/testing": "workspace:*"
   }
 }
