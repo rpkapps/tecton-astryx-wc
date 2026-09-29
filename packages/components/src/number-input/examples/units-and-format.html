@@ -1,0 +1,8 @@
+<!-- title: Units and format; description: units adds a suffix that is read as part of the description. formatValue formats the text at rest; the plain number is shown while editing and is what the form gets. -->
+<!-- layout: pending tct-stack -->
+<tct-number-input label="Disk size" units="GB" value="256" min="0" name="disk"></tct-number-input>
+<tct-number-input id="format-example" label="Price" value="1234.5" has-clear name="price"></tct-number-input>
+<script type="module">
+  const price = document.getElementById('format-example');
+  price.formatValue = (value) => new Intl.NumberFormat(document.documentElement.lang || undefined, {style: 'currency', currency: 'EUR'}).format(value);
+</script>

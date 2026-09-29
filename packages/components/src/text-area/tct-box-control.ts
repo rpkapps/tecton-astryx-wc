@@ -56,6 +56,9 @@ export abstract class TctBoxControl extends TctFieldControl {
   /** Hint shown while the control is empty. Not a substitute for the label. */
   @property() placeholder = '';
 
+  /** Name of an icon shown before the label text (a registered icon such as `info`). */
+  @property({attribute: 'label-icon'}) labelIcon = '';
+
   /**
    * How the status message is placed: `attached` below the field, `detached` as a separate message with
    * an icon, `tooltip` with no message box (the status icon becomes a focusable button that reveals it).
@@ -116,6 +119,22 @@ export abstract class TctBoxControl extends TctFieldControl {
   }
 
   // -------------------------------------------------------------------------------- rendering
+
+  /** The label row, with the label icon before the text. */
+  protected override renderLabelRow(): TemplateResult {
+    return html`${
+      this.labelIcon && !this.labelHidden
+        ? html`<tct-icon
+            class="label-icon"
+            part="label-icon"
+            name=${this.labelIcon}
+            size="sm"
+            color="inherit"
+            @click=${this.#onDescriptionClick}
+          ></tct-icon>`
+        : nothing
+    }${super.renderLabelRow()}`;
+  }
 
   /**
    * The field: label and description in one cell, the box and status in the other. Inside an input group

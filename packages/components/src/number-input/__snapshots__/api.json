@@ -1,16 +1,9 @@
 {
-  "folder": "text-area",
+  "folder": "number-input",
   "elements": {
-    "tct-text-area": {
-      "class": "TctTextArea",
+    "tct-number-input": {
+      "class": "TctNumberInput",
       "attributes": [
-        {
-          "name": "auto-grow",
-          "property": "autoGrow",
-          "type": "boolean",
-          "default": "false",
-          "reflects": true
-        },
         {
           "name": "autocomplete",
           "property": "autocomplete",
@@ -38,6 +31,27 @@
           "type": "string",
           "default": "''",
           "reflects": false
+        },
+        {
+          "name": "has-clear",
+          "property": "hasClear",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "has-steppers",
+          "property": "hasSteppers",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "integer-only",
+          "property": "integerOnly",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
         },
         {
           "name": "invalid",
@@ -82,14 +96,14 @@
           "reflects": true
         },
         {
-          "name": "max-rows",
-          "property": "maxRows",
+          "name": "max",
+          "property": "max",
           "type": "number | undefined",
           "reflects": false
         },
         {
-          "name": "maxlength",
-          "property": "maxlength",
+          "name": "min",
+          "property": "min",
           "type": "number | undefined",
           "reflects": false
         },
@@ -99,6 +113,13 @@
           "type": "string",
           "default": "''",
           "reflects": true
+        },
+        {
+          "name": "no-wheel",
+          "property": "noWheel",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
         },
         {
           "name": "optional",
@@ -127,13 +148,6 @@
           "type": "boolean",
           "default": "false",
           "reflects": true
-        },
-        {
-          "name": "rows",
-          "property": "rows",
-          "type": "number",
-          "default": "3",
-          "reflects": false
         },
         {
           "name": "size",
@@ -185,6 +199,19 @@
           "reflects": false
         },
         {
+          "name": "step",
+          "property": "step",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "units",
+          "property": "units",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
           "name": "value",
           "property": "defaultValue",
           "type": "string",
@@ -205,11 +232,6 @@
           "readonly": true
         },
         {
-          "name": "changeAction",
-          "type": "((value: string, event: Event) => void | Promise<void>) | undefined",
-          "readonly": false
-        },
-        {
           "name": "displayedValidationMessage",
           "type": "string",
           "readonly": true
@@ -218,6 +240,11 @@
           "name": "form",
           "type": "HTMLFormElement | null",
           "readonly": true
+        },
+        {
+          "name": "formatValue",
+          "type": "NumberFormatter | undefined",
+          "readonly": false
         },
         {
           "name": "isDisabled",
@@ -255,6 +282,11 @@
           "readonly": false
         },
         {
+          "name": "valueAsNumber",
+          "type": "number",
+          "readonly": false
+        },
+        {
           "name": "willValidate",
           "type": "boolean",
           "readonly": true
@@ -282,12 +314,7 @@
           "signature": "(message: string) => void"
         }
       ],
-      "slots": [
-        "description",
-        "input",
-        "label",
-        "status"
-      ],
+      "slots": [],
       "events": [
         {
           "name": "change",
@@ -298,13 +325,22 @@
           "native": true
         },
         {
-          "name": "paste",
-          "native": true
+          "name": "tct-clear",
+          "class": "TctClearEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        },
+        {
+          "name": "tct-enter",
+          "class": "TctEnterEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
         }
       ],
       "cssParts": [
         "control",
-        "counter",
         "description",
         "field",
         "input",
@@ -315,7 +351,11 @@
         "start-icon",
         "status",
         "status-button",
-        "status-icon"
+        "status-icon",
+        "stepper-decrement",
+        "stepper-increment",
+        "steppers",
+        "units"
       ],
       "cssStates": [
         "busy",

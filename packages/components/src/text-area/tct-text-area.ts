@@ -56,6 +56,7 @@ const FORWARDED_ATTRIBUTES = ['enterkeyhint', 'inputmode'] as const;
  * @csspart description - The description.
  * @csspart label-indicator - The "Required" or "Optional" text.
  * @csspart label-tip - The info-tip button.
+ * @csspart label-icon - The icon before the label text.
  * @csspart input - The painted box around the control.
  * @csspart control - The native `<textarea>` (shadow mode).
  * @csspart start-icon - The start icon.

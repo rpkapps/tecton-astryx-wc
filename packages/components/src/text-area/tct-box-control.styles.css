@@ -20,6 +20,12 @@
     cursor: pointer;
   }
 
+  .label-icon {
+    flex-shrink: 0;
+    color: var(--tecton-color-input-outlined-text);
+    cursor: pointer;
+  }
+
   /* Status ink: coloured glyphs, per the Tecton `input-status-icon` target. */
   .status-icon {
     flex-shrink: 0;

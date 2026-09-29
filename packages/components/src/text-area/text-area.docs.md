@@ -22,6 +22,8 @@ dense:
     label: label text, always rendered for accessibility
     labelHidden: hides the label visually, keeps it for screen readers
     label-hidden: attribute of labelHidden
+    labelIcon: icon name before the label text
+    label-icon: attribute of labelIcon
     description: helper text between the label and the field
     optional: shows an Optional indicator; mutually exclusive with required
     required: constraint, aria-required and a Required indicator
