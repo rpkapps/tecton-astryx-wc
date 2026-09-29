@@ -150,7 +150,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 69,
       "notes": "Guides: [mwg:accessible-web-components] (list and list-item semantics on the hosts, aria-current=step through internals) [mwg:accessibility] (status as text, names of clickable steps, reduced motion) [mwg:css-layout] (flex track, container-width collapse measured, not a container query, because the collapse changes what renders)."
     },
     "core.step": {

@@ -202,7 +202,7 @@
           "diff": "On the padded inner box of Layout content/panel/section: `--_container-padding-inline-start: <padding-inline-start>; --_container-padding-inline-end: <padding-inline-end>;`."
         }
       ],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 94,
       "notes": "Guides: [mwg:accessible-web-components] (ElementInternals role on the tablist host, inner native controls, element reflection for aria-controls pointing outward) [mwg:accessibility] (tabs keyboard model, roving tabindex) [mwg:spatial-navigation] (arrows and Home/End) [mwg:anchor-positioning-tab-underline] (the indicator is a decorative bar; state is aria-selected / aria-current). The keyboard hint text is the upstream `@tct.keyboardHint.toNavigate` message."
     },
     "core.tab": {

@@ -96,7 +96,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 89,
       "notes": "Guides: [mwg:accessible-web-components] (list semantics on the item hosts, nav in the shadow root) [mwg:accessibility] (breadcrumb pattern, aria-current=\"page\") [mwg:resilient-context-menus-and-nested-dropdowns] (the crumb menus are the shared dropdown menu)."
     },
     "core.breadcrumb-item": {

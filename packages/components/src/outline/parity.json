@@ -167,7 +167,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 35,
       "notes": "Guides: [mwg:scrollspy] (aria-current mirrored with the visual state; a position-based fallback because scroll-target-group is not available everywhere) [mwg:anchor-positioning-tab-underline] (the bar is decorative; measured position instead of anchor positioning) [mwg:accessibility] (nav landmark, one roving tab stop) [mwg:spatial-navigation] (arrow keys and Home/End)."
     }
   }

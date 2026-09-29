@@ -117,7 +117,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 37,
       "notes": "Guides: [mwg:accessible-web-components] (menu role on the host, menuitem on the inner control) [mwg:accessibility] (menu keyboard model, roving tabindex)."
     },
     "core.nav-heading-menu-item": {
