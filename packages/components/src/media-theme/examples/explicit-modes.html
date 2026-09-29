@@ -1,0 +1,19 @@
+<!-- title: Dark and light; description: dark is for content on a dark surface (light text), light for content on a light surface (dark text). Both are pinned, whatever the page theme is. -->
+<div id="explicit-modes" style="display: grid; gap: var(--spacing-4); max-inline-size: 360px">
+  <div style="padding: var(--spacing-4); border-radius: var(--radius-container); background-color: rgb(20, 16, 26)">
+    <tct-media-theme mode="dark">
+      <tct-vstack gap="2">
+        <tct-text weight="bold" display="block">mode="dark"</tct-text>
+        <tct-text type="supporting" display="block">Content over a dark surface.</tct-text>
+      </tct-vstack>
+    </tct-media-theme>
+  </div>
+  <div style="padding: var(--spacing-4); border-radius: var(--radius-container); background-color: rgb(246, 245, 248)">
+    <tct-media-theme mode="light">
+      <tct-vstack gap="2">
+        <tct-text weight="bold" display="block">mode="light"</tct-text>
+        <tct-text type="supporting" display="block">Content over a light surface.</tct-text>
+      </tct-vstack>
+    </tct-media-theme>
+  </div>
+</div>

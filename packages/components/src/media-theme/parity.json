@@ -1,0 +1,112 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "media-theme",
+  "workPackage": "WP-1",
+  "entries": {
+    "core.media-theme": {
+      "tag": "tct-media-theme",
+      "status": "implemented",
+      "upstream": {
+        "name": "MediaTheme",
+        "path": "packages/core/src/theme/MediaTheme.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "mode",
+          "kind": "prop",
+          "target": "mode",
+          "as": "attribute",
+          "reflect": true,
+          "default": "auto",
+          "notes": "dark | light | auto | off. Upstream requires it; the element defaults to auto."
+        },
+        {
+          "upstream": "fallback",
+          "kind": "prop",
+          "target": "fallback",
+          "as": "attribute",
+          "reflect": true,
+          "default": "dark",
+          "notes": "The side auto uses while the surface cannot be measured. Ignored unless mode is auto."
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "The element itself is the handle; it has no box and no shadow root."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useAutoMediaMode",
+          "target": "@tecton-astryx/core/theme/auto-media-mode.js",
+          "as": "module-function",
+          "notes": "measureMediaMode(anchor), pickMediaMode, resolveBackdrop, resolvePaintedColors, flatTreeParent. Internal upstream (not exported); the element re-measures from a MutationObserver over its ancestors and a prefers-color-scheme listener instead of on every render."
+        }
+      ],
+      "keyboard": [],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "MEDIATHEME-01",
+          "type": "approved-api-difference",
+          "text": "display: contents and no background painting, as the upstream wrapper (which documents that it does not add a background). ARCHITECTURE §8.1 lists tct-media-theme with the theme-island rule (display: block, paints a background); that rule fits tct-theme, which owns its subtree. A media theme sits on a surface its parent already paints and mode=\"auto\" measures that surface, so painting one would feed back into its own input. The block paint is left to tct-theme."
+        },
+        {
+          "id": "MEDIATHEME-02",
+          "type": "approved-api-difference",
+          "text": "mode defaults to auto (upstream requires it, so an element without a mode has no upstream meaning). Both mode and fallback reflect."
+        },
+        {
+          "id": "MEDIATHEME-03",
+          "type": "approved-api-difference",
+          "text": "The attribute is data-media-theme (upstream data-astryx-media, dataAttr(\"media\")), the selector the token pipeline emits its onDark/onLight blocks for (styling.md §7). The element also publishes the resolved side through themeContext."
+        },
+        {
+          "id": "MEDIATHEME-04",
+          "type": "approved-api-difference",
+          "text": "auto measures the parent in the flat tree: it crosses slots (a media theme slotted into tct-card measures the card's painted base) and shadow roots, skips display: contents boxes, and parses color(srgb …) and, through a one-pixel canvas, any other colour space. It re-measures on ancestor style/class/data-theme/hidden changes, on prefers-color-scheme changes, on reconnect and on mode/fallback changes, instead of on every React render. A stylesheet swap alone is not observable: switch mode to off and back."
+        },
+        {
+          "id": "MEDIATHEME-05",
+          "type": "tecton-visual",
+          "text": "D-005: the focus ring and its inner ring (--tecton-color-focus-inner) are light-dark() tokens, so the media block pinning color-scheme re-points them to the side of the surface with no component rule. Tested against the [data-theme] island values. Without light-dark() (Tier 2) only the pinned roles follow."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/testing/src/suites/element.ts",
+          "reason": "runElementSuite asserts `element.shadowRoot` is not null after reconnecting, which a light-DOM provider (tct-media-theme, tct-theme, tct-size-provider, ...) cannot satisfy. Add a `lightDom?: boolean` option that skips that assertion. tct-media-theme runs an equivalent local lifecycle block meanwhile."
+        },
+        {
+          "file": "tools/vite-plugin-tct-css.ts",
+          "reason": "Light-DOM families ship `<tag>.light.css`, but only `*.styles.css` is compiled into a Lit CSSResult, so the element imports it with Vite `?raw` (declared in media-theme.env.d.ts) and wraps it in unsafeCSS(). Either compile `*.light.css` to a CSSResult like `*.styles.css` or bless the `?raw` import; the light-dom.css generator (M6) reads the same file."
+        }
+      ],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:component-specific-light-dark-theme] color-scheme pins the side and light-dark() tokens re-resolve per element; [mwg:dark-mode] color-scheme and accent-color; [mwg:contrast-color] considered and not used, it answers black or white while the choice is between the token pairs or none; [mwg:custom-elements] reconnect and connectedMoveCallback; [mwg:accessible-web-components] no role, transparent to the accessibility tree."
+    }
+  }
+}
