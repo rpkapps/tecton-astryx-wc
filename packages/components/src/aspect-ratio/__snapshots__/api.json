@@ -1,0 +1,49 @@
+{
+  "folder": "aspect-ratio",
+  "elements": {
+    "tct-aspect-ratio": {
+      "class": "TctAspectRatio",
+      "attributes": [
+        {
+          "name": "fit",
+          "property": "fit",
+          "type": "AspectRatioFit | undefined",
+          "values": [
+            "cover",
+            "contain",
+            "center"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "ratio",
+          "property": "ratio",
+          "type": "number | string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "shape",
+          "property": "shape",
+          "type": "AspectRatioShape",
+          "values": [
+            "rectangle",
+            "ellipse"
+          ],
+          "default": "'rectangle'",
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "base"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

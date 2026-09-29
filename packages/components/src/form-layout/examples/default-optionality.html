@@ -1,0 +1,9 @@
+<!-- title: Default optionality; description: default-optionality tells the fields which state is the norm, so only the exception is marked. The layout only shares the setting; the form controls read it. -->
+<tct-vstack max-width="320">
+  <form id="default-optionality" onsubmit="return false">
+    <tct-form-layout default-optionality="required">
+      <tct-text-input label="Name" name="name" required></tct-text-input>
+      <tct-text-input label="Phone" name="phone" type="tel" autocomplete="tel" optional></tct-text-input>
+    </tct-form-layout>
+  </form>
+</tct-vstack>

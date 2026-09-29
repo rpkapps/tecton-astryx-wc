@@ -1,0 +1,43 @@
+{
+  "folder": "media-theme",
+  "elements": {
+    "tct-media-theme": {
+      "class": "TctMediaTheme",
+      "attributes": [
+        {
+          "name": "fallback",
+          "property": "fallback",
+          "type": "MediaThemeFallback",
+          "values": [
+            "dark",
+            "light"
+          ],
+          "default": "'dark'",
+          "reflects": true
+        },
+        {
+          "name": "mode",
+          "property": "mode",
+          "type": "MediaThemeMode",
+          "values": [
+            "dark",
+            "light",
+            "auto",
+            "off"
+          ],
+          "default": "'auto'",
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

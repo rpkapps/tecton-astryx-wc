@@ -1,0 +1,43 @@
+{
+  "folder": "form-layout",
+  "elements": {
+    "tct-form-layout": {
+      "class": "TctFormLayout",
+      "attributes": [
+        {
+          "name": "default-optionality",
+          "property": "defaultOptionality",
+          "type": "FormOptionality | undefined",
+          "values": [
+            "optional",
+            "required"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "direction",
+          "property": "direction",
+          "type": "FormLayoutDirection",
+          "values": [
+            "vertical",
+            "horizontal",
+            "horizontal-labels"
+          ],
+          "default": "'vertical'",
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "base"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

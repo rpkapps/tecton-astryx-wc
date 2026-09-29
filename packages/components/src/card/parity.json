@@ -1,0 +1,134 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "card",
+  "workPackage": "WP-1",
+  "entries": {
+    "core.card": {
+      "tag": "tct-card",
+      "status": "implemented",
+      "upstream": {
+        "name": "Card",
+        "path": "packages/core/src/Card/Card.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "target": "width",
+          "as": "attribute",
+          "notes": "Number is px, string a CSS length; not reflected. Sizes the host."
+        },
+        {
+          "upstream": "height",
+          "kind": "prop",
+          "target": "height",
+          "as": "attribute",
+          "notes": "Sizes the host, so a percentage resolves against the parent."
+        },
+        {
+          "upstream": "maxWidth",
+          "kind": "prop",
+          "target": "max-width",
+          "as": "attribute"
+        },
+        {
+          "upstream": "minHeight",
+          "kind": "prop",
+          "target": "min-height",
+          "as": "attribute"
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "padding",
+          "kind": "prop",
+          "target": "padding",
+          "as": "attribute",
+          "notes": "Spacing step; omitted takes the theme padding (--card-padding), step 4 without a theme. The axis and edge attributes of BoxPropsMixin are additions."
+        },
+        {
+          "upstream": "variant",
+          "kind": "prop",
+          "target": "variant",
+          "as": "attribute",
+          "reflect": true,
+          "default": "default",
+          "notes": "An unknown value (a theme-added variant) falls through to the base box, as upstream."
+        },
+        {
+          "upstream": "elevation",
+          "kind": "prop",
+          "target": "elevation",
+          "as": "attribute",
+          "reflect": true,
+          "default": "none"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use the host, `::part(base)` or the documented attributes."
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "The element itself is the handle; the box is reachable as part \"base\"."
+        }
+      ],
+      "hooks": [],
+      "keyboard": [],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "CARD-01",
+          "type": "tecton-visual",
+          "text": "Default variant: 1px --color-border rule, --radius-container corners, --color-background-card fill and padding step 4, with the border drawn inside the padding; no drop-shadow at rest (tecton-astryx components.ts `Surfaces`: the Tecton panel is flat, card and section are not theme targets)."
+        },
+        {
+          "id": "CARD-02",
+          "type": "approved-api-difference",
+          "text": "The host carries the sizes and an inner part=\"base\" paints the card. Card also accepts the padding axis and edge attributes of BoxPropsMixin (upstream has only `padding`), and publishes its padding as --container-padding-* and --layout-padding-* for bleeding descendants and layout components."
+        },
+        {
+          "id": "CARD-03",
+          "type": "a11y-improvement",
+          "text": "In forced-colors mode the card keeps a ButtonBorder edge (backgrounds and shadows are dropped there), with the padding compensated so border plus padding still equals the padding asked for."
+        },
+        {
+          "id": "CARD-04",
+          "type": "approved-api-difference",
+          "text": "The padding custom properties (`--card-padding*` / `--section-padding*`) are the WC form of the documented themed padding (`derived: padding, expand: container`); private steps propagate through --_section-padding-propagated."
+        },
+        {
+          "id": "CARD-05",
+          "type": "a11y-improvement",
+          "text": "A fixed-height card that really overflows and holds nothing tabbable becomes a tab stop (see STACK-06), so its scrolling content is reachable from the keyboard in every engine. Upstream leaves this to the browser."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 15,
+      "notes": "Size budget 15 kB (above the S default of 12): lit plus the scroll-region focus controller shared with the stack family; 13.3 kB gzip measured. Guides: [mwg:styling-web-components] host rules, part=base, private aliases; [mwg:css] logical properties, custom-property fallbacks; [mwg:dark-mode] tokens resolve per colour scheme; [mwg:css-layout] flex host wrapper for percentage sizes."
+    }
+  }
+}

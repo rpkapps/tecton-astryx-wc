@@ -1,0 +1,96 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "aspect-ratio",
+  "workPackage": "WP-1",
+  "entries": {
+    "core.aspect-ratio": {
+      "tag": "tct-aspect-ratio",
+      "status": "implemented",
+      "upstream": {
+        "name": "AspectRatio",
+        "path": "packages/core/src/AspectRatio/AspectRatio.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "ratio",
+          "kind": "prop",
+          "target": "ratio",
+          "as": "attribute",
+          "notes": "Width divided by height. The attribute takes a decimal or a fraction (`ratio=\"16/9\"`); the property also takes a number (`16 / 9`). Required upstream; missing or invalid falls back to a square with a dev warning."
+        },
+        {
+          "upstream": "shape",
+          "kind": "prop",
+          "target": "shape",
+          "as": "attribute",
+          "reflect": true,
+          "default": "rectangle"
+        },
+        {
+          "upstream": "fit",
+          "kind": "prop",
+          "target": "fit",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use `::part(base)` (also for `aspect-ratio` inside media or container queries), the host, or the attributes or the documented attributes."
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "The element itself is the handle; the box is reachable as part \"base\"."
+        }
+      ],
+      "hooks": [],
+      "keyboard": [],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "ASPECTRATIO-01",
+          "type": "approved-api-difference",
+          "text": "`ratio` also accepts a fraction string (`16/9`) because an attribute is text; upstream types it as a number and calls the string form an error."
+        },
+        {
+          "id": "ASPECTRATIO-02",
+          "type": "approved-api-difference",
+          "text": "The fit sizing (cover, contain) ships as ::slotted() rules on the direct child instead of upstream's reset.css rules keyed on data-astryx-aspect-ratio-override; like those, they lose to any style on the child itself."
+        },
+        {
+          "id": "ASPECTRATIO-03",
+          "type": "approved-api-difference",
+          "text": "The ratio is set through the private --_ratio custom property read by a class-level declaration on part=\"base\", so a consumer rule on ::part(base) (also inside @media or @container) overrides it, matching upstream's CSS-variable indirection for xstyle."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:css-layout] `aspect-ratio`, `overflow: clip`, reserving space; [mwg:styling-web-components] `::slotted()` loses to light-DOM rules, part=base; [mwg:shadow-dom] slot inside an absolutely positioned wrapper."
+    }
+  }
+}

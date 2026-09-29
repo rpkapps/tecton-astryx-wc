@@ -1,0 +1,174 @@
+/*
+ * tct-card. The host carries the sizes and is a one-item column flex box; the inner `.base` (part
+ * "base") is the painted box: background, border, radius, shadow and padding (paint on :host would be
+ * erased by an application reset). Tecton: 1px `--color-border` rule on the default variant, radius
+ * `--radius-container`, fill `--color-background-card`, padding step 4 (the owner's React theme, components.ts
+ * `Surfaces`). The default variant's border is drawn inside the padding: its width is subtracted from
+ * each side, so border plus padding equals the padding asked for.
+ * [mwg:styling-web-components] host rules, part=base; [mwg:css] logical properties, custom properties
+ */
+@layer component {
+  :host {
+    display: flex;
+    flex-direction: column;
+    inline-size: var(--_box-width, auto);
+    block-size: var(--_box-height, auto);
+    max-inline-size: var(--_box-max-width, none);
+    min-block-size: var(--_box-min-height, 0);
+
+    /* Custom properties inherit through the flat tree; a nested box must not read its parent's. */
+    --_box-padding-inline-start: initial;
+    --_box-padding-inline-end: initial;
+    --_box-padding-block-start: initial;
+    --_box-padding-block-end: initial;
+    --_box-width: initial;
+    --_box-height: initial;
+    --_box-max-width: initial;
+    --_box-min-height: initial;
+  }
+
+  .base {
+    --_card-radius: var(--radius-container);
+
+    /* Effective padding per edge: explicit attribute, then the theme's custom properties, then step 4. */
+    --_pis: var(
+      --_box-padding-inline-start,
+      var(
+        --card-padding-inline-start,
+        var(--card-padding-inline, var(--card-padding, var(--spacing-4)))
+      )
+    );
+    --_pie: var(
+      --_box-padding-inline-end,
+      var(
+        --card-padding-inline-end,
+        var(--card-padding-inline, var(--card-padding, var(--spacing-4)))
+      )
+    );
+    --_pbs: var(
+      --_box-padding-block-start,
+      var(--card-padding-block-start, var(--card-padding, var(--spacing-4)))
+    );
+    --_pbe: var(
+      --_box-padding-block-end,
+      var(--card-padding-block-end, var(--card-padding, var(--spacing-4)))
+    );
+
+    /* Published for descendants that bleed to the edge or align to the padding. */
+    --container-padding-inline-start: var(--_pis);
+    --container-padding-inline-end: var(--_pie);
+    --container-padding-block-start: var(--_pbs);
+    --container-padding-block-end: var(--_pbe);
+    --layout-padding-outer-x: var(--_pis);
+    --layout-padding-outer-y: var(--_pbs);
+    --layout-padding-inner-x: var(--_pis);
+    --layout-padding-inner-y: var(--_pbs);
+
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    min-block-size: 0;
+    padding-inline-start: var(--_pis);
+    padding-inline-end: var(--_pie);
+    padding-block-start: var(--_pbs);
+    padding-block-end: var(--_pbe);
+    border-radius: var(--_card-radius);
+    overflow: clip;
+
+    /*
+     * The shadow list reads --_card-ring so a composing surface (a selectable card's inset selection
+     * ring) can layer its own shadow next to the elevation instead of replacing it. Unset values are a
+     * transparent no-op shadow (`none` is invalid inside a comma-separated list).
+     */
+    box-shadow: var(--_card-ring, 0 0 transparent), var(--_card-elevation, 0 0 transparent);
+
+    /* A picture behind the content; a colour or gradient set by the consumer through the hook. */
+    background-image: var(--card-background-image, none);
+  }
+
+  .base[data-variant='default'] {
+    background-color: var(--card-background-color, var(--color-background-card));
+    border: var(--border-width) solid var(--color-border);
+    padding-inline-start: calc(var(--_pis) - var(--border-width));
+    padding-inline-end: calc(var(--_pie) - var(--border-width));
+    padding-block-start: calc(var(--_pbs) - var(--border-width));
+    padding-block-end: calc(var(--_pbe) - var(--border-width));
+  }
+
+  .base[data-variant='transparent'] {
+    background-color: transparent;
+  }
+
+  .base[data-variant='muted'] {
+    background-color: var(--color-background-muted);
+  }
+
+  .base[data-variant='blue'] {
+    background-color: var(--color-background-blue);
+  }
+
+  .base[data-variant='cyan'] {
+    background-color: var(--color-background-cyan);
+  }
+
+  .base[data-variant='gray'] {
+    background-color: var(--color-background-gray);
+  }
+
+  .base[data-variant='green'] {
+    background-color: var(--color-background-green);
+  }
+
+  .base[data-variant='orange'] {
+    background-color: var(--color-background-orange);
+  }
+
+  .base[data-variant='pink'] {
+    background-color: var(--color-background-pink);
+  }
+
+  .base[data-variant='purple'] {
+    background-color: var(--color-background-purple);
+  }
+
+  .base[data-variant='red'] {
+    background-color: var(--color-background-red);
+  }
+
+  .base[data-variant='teal'] {
+    background-color: var(--color-background-teal);
+  }
+
+  .base[data-variant='yellow'] {
+    background-color: var(--color-background-yellow);
+  }
+
+  .base[data-elevation='low'] {
+    --_card-elevation: var(--shadow-low);
+  }
+
+  .base[data-elevation='med'] {
+    --_card-elevation: var(--shadow-med);
+  }
+
+  .base[data-elevation='high'] {
+    --_card-elevation: var(--shadow-high);
+  }
+
+  /* A fixed height scrolls the content; `overflow: auto` also clips to the corner radius. */
+  .base[data-scrollable] {
+    overflow: auto;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    /* Backgrounds and shadows are dropped in forced-colors mode: keep the card's edge visible. */
+    .base {
+      border: var(--border-width) solid ButtonBorder;
+      padding-inline-start: calc(var(--_pis) - var(--border-width));
+      padding-inline-end: calc(var(--_pie) - var(--border-width));
+      padding-block-start: calc(var(--_pbs) - var(--border-width));
+      padding-block-end: calc(var(--_pbe) - var(--border-width));
+    }
+  }
+}

@@ -1,0 +1,48 @@
+/*
+ * tct-stack-item. The host is the flex item of the enclosing stack: `size` and `cross-align-self` are
+ * layout participation, so they live on :host (never paint). `min-width`/`min-height: 0` is the flex
+ * reset that lets an item shrink below its content and scroll instead of overflowing its stack.
+ * [mwg:css-layout] flex items: `flex` as the one sizing source, `min-inline-size: 0`.
+ */
+@layer component {
+  :host {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    min-inline-size: 0;
+    min-block-size: 0;
+  }
+
+  :host([size='fill']) {
+    flex: 1 1 auto;
+  }
+
+  :host([cross-align-self='start']) {
+    align-self: flex-start;
+  }
+
+  :host([cross-align-self='center']) {
+    align-self: center;
+  }
+
+  :host([cross-align-self='end']) {
+    align-self: flex-end;
+  }
+
+  :host([cross-align-self='stretch']) {
+    align-self: stretch;
+  }
+
+  .base {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    min-block-size: 0;
+    margin: 0; /* `ul`, `ol` and `nav` carry UA margins */
+    padding: 0;
+    list-style: none;
+  }
+
+  .base[data-scrollable] {
+    overflow: auto;
+  }
+}
