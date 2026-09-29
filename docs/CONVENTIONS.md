@@ -240,8 +240,41 @@ events), keep upstream terminology, explain renamed APIs, never paste React snip
 
 - `examples/<id>.html`, first line `<!-- title: …; description: … -->`, HTML fragment only, one
   optional `<script type="module">` scoped to a root element whose `id` starts with the example id.
-- Layout inside examples uses our layout elements once they exist; before that, plain inline
-  `style="display:flex; gap: var(--spacing-2)"` (tokens only).
+- **Layout and surfaces come from our components, never from hand-written CSS (owner rule,
+  enforced by `pnpm examples:check`).** Examples are what people and agents copy. Inline `style=""`
+  and `<style>` may only set custom properties (`--*`, e.g. a component theming hook), size
+  constraints (`inline-size`, `max-inline-size`, `block-size` …), `resize` and `overflow`. Never
+  `display`, `gap`, `flex*`, `grid*`, `padding`, `margin`, `border`, `background`, `color`, `font`.
+  Use the recipes below; use `tct-text` for text styling. An example root with a script uses an id
+  ending in `-root` (an id equal to the heading slug collides with the docs page's heading id).
+
+#### Layout recipes
+
+Gap and padding take spacing-scale steps (`0, 0.5, 1, 1.5, 2, 3, 4, 5, 6, 8, 10`). `width`,
+`height`, `max-width`, `min-height` are attributes (a bare number is px, a string is any CSS length).
+
+| Pattern | Markup |
+| --- | --- |
+| Vertical stack with a gap | `<tct-vstack gap="4">…</tct-vstack>`; cross-axis `h-align="start\|center\|end\|stretch"` |
+| Row, not wrapping, centred vertically | `<tct-hstack gap="2" v-align="center">…</tct-hstack>` |
+| Row that wraps | `<tct-hstack wrap="wrap" gap="2" v-align="center">…</tct-hstack>` |
+| Distribute along a row | `h-align="start\|center\|end\|between\|around\|evenly"` on `tct-hstack` |
+| Start group … end group | `<tct-hstack h-align="between" v-align="center"><tct-hstack gap="2">…</tct-hstack><tct-hstack gap="2">…</tct-hstack></tct-hstack>` |
+| Flexible spacer in a flat row | `<tct-stack-item size="fill"></tct-stack-item>` between items |
+| Child that grows / fixed height that must not shrink | `<tct-stack-item size="fill">…</tct-stack-item>` / `<tct-stack-item><tct-vstack height="260">…</tct-vstack></tct-stack-item>` |
+| Scroll region | `<tct-stack-item size="fill" scrollable>…</tct-stack-item>` |
+| Grid of N columns | `<tct-grid columns="3" gap="4">…</tct-grid>` |
+| Responsive grid | `<tct-grid column-min-width="240" gap="4">…</tct-grid>` (`column-max="4"` caps the count) |
+| Spanning cell | `<tct-grid-span columns="2">…</tct-grid-span>` (`columns="full"` for the whole row) |
+| Centred content | `<tct-center height="200">…</tct-center>` (`axis="horizontal\|vertical\|both"`, `inline`) |
+| Constrain width | `max-width="360"` on the stack, or `style="max-inline-size: 20rem"` |
+| Bordered surface / placeholder box | `<tct-card padding="4">…</tct-card>` / `<tct-card variant="muted" padding="3">…</tct-card>` |
+| Page region with a divider | `<tct-section variant="muted" dividers="bottom" padding="3">…</tct-section>` |
+| Padding only, nothing painted | `<tct-vstack padding="4" gap="3">…</tct-vstack>` |
+| Demo surface colour or image | `<tct-card style="--card-background-color: …">` / `--card-background-image` |
+| Divider | `<tct-divider></tct-divider>`; in a row `orientation="vertical"` |
+| Form column | `<tct-vstack max-width="480"><form><tct-form-layout>…</tct-form-layout></form></tct-vstack>` |
+| Fixed-ratio tile | `<tct-aspect-ratio ratio="16/9"><tct-card variant="muted" padding="0" height="100%">…</tct-card></tct-aspect-ratio>` |
 - Cover: every variant group, sizes, states (disabled, loading, invalid, read-only), RTL, long/localized
   labels, and the upstream doc/story compositions.
 

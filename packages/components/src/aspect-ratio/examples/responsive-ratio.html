@@ -1,0 +1,20 @@
+<!-- title: Responsive ratio; description: The ratio can change with the viewport: set it from a media query listener, or override aspect-ratio on ::part(base) from a stylesheet. Resize the window to see the box change from 16:9 to 4:3. -->
+<tct-vstack id="responsive-ratio-root" max-width="420">
+  <tct-aspect-ratio ratio="16/9">
+    <tct-card variant="muted" padding="0" height="100%">
+      <tct-center height="100%"><span data-label>16:9</span></tct-center>
+    </tct-card>
+  </tct-aspect-ratio>
+  <script type="module">
+    const root = document.getElementById('responsive-ratio-root');
+    const box = root.querySelector('tct-aspect-ratio');
+    const label = root.querySelector('[data-label]');
+    const narrow = matchMedia('(max-width: 40rem)');
+    const apply = () => {
+      box.ratio = narrow.matches ? '4/3' : '16/9';
+      label.textContent = narrow.matches ? '4:3 on narrow screens' : '16:9 on wide screens';
+    };
+    narrow.addEventListener('change', apply);
+    apply();
+  </script>
+</tct-vstack>

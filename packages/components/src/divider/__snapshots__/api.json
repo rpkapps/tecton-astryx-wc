@@ -1,0 +1,72 @@
+{
+  "folder": "divider",
+  "elements": {
+    "tct-divider": {
+      "class": "TctDivider",
+      "attributes": [
+        {
+          "name": "full-bleed",
+          "property": "fullBleed",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "orientation",
+          "property": "orientation",
+          "type": "DividerOrientation",
+          "values": [
+            "horizontal",
+            "vertical"
+          ],
+          "default": "'horizontal'",
+          "reflects": true
+        },
+        {
+          "name": "variant",
+          "property": "variant",
+          "type": "DividerVariant",
+          "values": [
+            "subtle",
+            "strong"
+          ],
+          "default": "'subtle'",
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "label"
+      ],
+      "events": [],
+      "cssParts": [
+        "base",
+        "label",
+        "line"
+      ],
+      "cssStates": [],
+      "cssProperties": [
+        {
+          "name": "--container-padding-block-end"
+        },
+        {
+          "name": "--container-padding-block-start"
+        },
+        {
+          "name": "--container-padding-inline-end"
+        },
+        {
+          "name": "--container-padding-inline-start"
+        }
+      ]
+    }
+  }
+}

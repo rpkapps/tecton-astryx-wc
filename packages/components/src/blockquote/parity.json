@@ -1,0 +1,93 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "blockquote",
+  "workPackage": "WP-1",
+  "entries": {
+    "core.blockquote": {
+      "tag": "tct-blockquote",
+      "status": "implemented",
+      "upstream": {
+        "name": "Blockquote",
+        "path": "packages/core/src/Blockquote/Blockquote.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "cite",
+          "kind": "prop",
+          "target": "cite",
+          "as": "attribute",
+          "notes": "The attribution as plain text (upstream ReactNode). It is the name of the source, not a URL like the native blockquote cite attribute."
+        },
+        {
+          "upstream": "cite",
+          "kind": "slot",
+          "target": "cite",
+          "as": "slot",
+          "notes": "Markup attribution: the `cite` slot (A§7.2 content prop)."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use the host (class, style) or ::part(base) and ::part(cite)."
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "The element itself is the handle; the <blockquote> is reachable as part \"base\"."
+        }
+      ],
+      "hooks": [],
+      "keyboard": [],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "BLOCKQUOTE-01",
+          "type": "approved-api-difference",
+          "text": "The <blockquote> lives in the shadow root (part \"base\"); host aria-* attributes are mirrored onto it (AriaDelegateController) so `aria-label` names the quote as upstream's prop spread does."
+        },
+        {
+          "id": "BLOCKQUOTE-02",
+          "type": "approved-api-difference",
+          "text": "`cite` is a string attribute plus a `cite` slot for markup; an empty or whitespace string renders no <cite>, like upstream's isRenderable. The attribute is the attribution text, not the URL the native cite attribute holds."
+        },
+        {
+          "id": "BLOCKQUOTE-03",
+          "type": "tecton-visual",
+          "text": "The rule keeps --color-border-emphasized (decorative, allowed at 2.2:1 by D-013 Q-05) and the text --color-text-secondary; text-wrap: pretty is added as a progressive enhancement for longer quotes."
+        },
+        {
+          "id": "BLOCKQUOTE-04",
+          "type": "a11y-improvement",
+          "text": "Forced colours keep the rule as a ButtonBorder border and use CanvasText for the text."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:improve-text-layout-and-legibility] text-wrap: pretty on blockquote (ignored where unsupported); [mwg:accessible-web-components] aria delegation onto the inner blockquote, no footer landmark; [mwg:styling-web-components] parts base and cite."
+    }
+  }
+}

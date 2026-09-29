@@ -1,0 +1,48 @@
+/*
+ * tct-kbd. An inline group of key badges. The badge is the upstream kbd (spacing-5 tall, inner radius,
+ * 2px emphasised bottom edge, supporting type) on the Tecton muted surface (the owner's React theme
+ * components.ts `kbd`). The bottom edge is decorative depth, not the badge's only boundary, so the
+ * 2.2:1 border-emphasized role is allowed (D-013 Q-05).
+ * [mwg:styling-web-components] host rules, parts; [mwg:css] logical properties
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+
+  .base {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-1);
+  }
+
+  .key {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: var(--spacing-5);
+    block-size: var(--spacing-5);
+    padding-inline: var(--spacing-1);
+    border-radius: var(--radius-inner);
+    background-color: var(--color-background-muted);
+    border-block-end: 2px solid var(--color-border-emphasized);
+    color: var(--color-text-secondary);
+    font-family: var(--font-family-body);
+    font-size: var(--text-supporting-size);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--text-supporting-leading);
+    user-select: none;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    /* Backgrounds are dropped: give each key a visible edge. */
+    .key {
+      border: var(--border-width) solid ButtonBorder;
+      border-block-end-width: 2px;
+      color: CanvasText;
+    }
+  }
+}

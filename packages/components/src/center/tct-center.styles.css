@@ -1,0 +1,51 @@
+/*
+ * tct-center. The host carries the sizes and is a one-item column flex box (inline-flex with
+ * `inline`); the inner `.base` (part "base") fills it, centres the slotted content and carries the
+ * padding, which an application reset such as `* { padding: 0 }` would erase from :host.
+ * [mwg:css-layout] flex centring with `align-items`/`justify-content`; [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: flex;
+    flex-direction: column;
+    inline-size: var(--_box-width, auto);
+    block-size: var(--_box-height, auto);
+    max-inline-size: var(--_box-max-width, none);
+    min-block-size: var(--_box-min-height, 0);
+
+    /* Custom properties inherit through the flat tree; a nested box must not read its parent's. */
+    --_box-padding-inline-start: initial;
+    --_box-padding-inline-end: initial;
+    --_box-padding-block-start: initial;
+    --_box-padding-block-end: initial;
+    --_box-width: initial;
+    --_box-height: initial;
+    --_box-max-width: initial;
+    --_box-min-height: initial;
+  }
+
+  :host([inline]) {
+    display: inline-flex;
+  }
+
+  .base {
+    display: flex;
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    min-block-size: 0;
+    padding-inline-start: var(--_box-padding-inline-start, 0);
+    padding-inline-end: var(--_box-padding-inline-end, 0);
+    padding-block-start: var(--_box-padding-block-start, 0);
+    padding-block-end: var(--_box-padding-block-end, 0);
+  }
+
+  .base[data-axis='both'],
+  .base[data-axis='vertical'] {
+    align-items: center;
+  }
+
+  .base[data-axis='both'],
+  .base[data-axis='horizontal'] {
+    justify-content: center;
+  }
+}

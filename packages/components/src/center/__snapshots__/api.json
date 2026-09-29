@@ -1,0 +1,197 @@
+{
+  "folder": "center",
+  "elements": {
+    "tct-center": {
+      "class": "TctCenter",
+      "attributes": [
+        {
+          "name": "axis",
+          "property": "axis",
+          "type": "CenterAxis",
+          "values": [
+            "both",
+            "horizontal",
+            "vertical"
+          ],
+          "default": "'both'",
+          "reflects": true
+        },
+        {
+          "name": "height",
+          "property": "height",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "inline",
+          "property": "inline",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "max-width",
+          "property": "maxWidth",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "min-height",
+          "property": "minHeight",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "padding",
+          "property": "padding",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block",
+          "property": "paddingBlock",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block-end",
+          "property": "paddingBlockEnd",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block-start",
+          "property": "paddingBlockStart",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline",
+          "property": "paddingInline",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline-end",
+          "property": "paddingInlineEnd",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline-start",
+          "property": "paddingInlineStart",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "width",
+          "property": "width",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "base"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

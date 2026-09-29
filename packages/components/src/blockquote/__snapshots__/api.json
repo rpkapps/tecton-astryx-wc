@@ -1,0 +1,30 @@
+{
+  "folder": "blockquote",
+  "elements": {
+    "tct-blockquote": {
+      "class": "TctBlockquote",
+      "attributes": [
+        {
+          "name": "cite",
+          "property": "cite",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)",
+        "cite"
+      ],
+      "events": [],
+      "cssParts": [
+        "base",
+        "cite"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

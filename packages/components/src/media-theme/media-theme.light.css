@@ -1,0 +1,14 @@
+/*
+ * tct-media-theme is a light-DOM provider (A§6.7, A§8.1): it renders nothing and takes no box. The
+ * token pipeline's `[data-media-theme="dark|light"]` blocks (tokens.css) do the recolouring: they pin
+ * color-scheme, the text, surface and border roles, the icon and accent inks and the colour. The
+ * D-005 focus ring and its inner ring resolve through the same color-scheme, so they follow with no
+ * rule here. `display: contents` keeps the wrapper out of layout, so a flex or grid parent sees the
+ * children, as with upstream's wrapper. [mwg:component-specific-light-dark-theme]
+ */
+@layer tecton.light-dom {
+  /* An author display value beats the UA's [hidden] rule, so hidden is spelled out. */
+  :where(tct-media-theme:not([hidden])) {
+    display: contents;
+  }
+}

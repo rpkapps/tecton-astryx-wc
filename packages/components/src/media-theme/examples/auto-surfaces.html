@@ -1,0 +1,12 @@
+<!-- title: Auto on different surfaces; description: auto measures the painted parent: a dark surface gets dark, a pale one that the ambient text already reads on gets no media context. -->
+<tct-vstack id="auto-surfaces" gap="4" max-width="360">
+  <tct-card padding="4" style="--card-background-color: rgb(20, 16, 26)">
+    <tct-media-theme mode="auto"><tct-text display="block">Dark surface: measured as dark.</tct-text></tct-media-theme>
+  </tct-card>
+  <tct-card>
+    <tct-media-theme mode="auto"><tct-text display="block">Pale surface: the ambient text reads, so no context.</tct-text></tct-media-theme>
+  </tct-card>
+  <tct-card padding="4" style="--card-background-color: rgba(20, 16, 26, 0.85)">
+    <tct-media-theme mode="auto"><tct-text display="block">A translucent surface is composited over the page first.</tct-text></tct-media-theme>
+  </tct-card>
+</tct-vstack>

@@ -1,0 +1,27 @@
+{
+  "folder": "kbd",
+  "elements": {
+    "tct-kbd": {
+      "class": "TctKbd",
+      "attributes": [
+        {
+          "name": "keys",
+          "property": "keys",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [],
+      "events": [],
+      "cssParts": [
+        "base",
+        "key"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

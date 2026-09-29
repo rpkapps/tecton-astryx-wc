@@ -1,0 +1,274 @@
+{
+  "folder": "vstack",
+  "elements": {
+    "tct-vstack": {
+      "class": "TctVStack",
+      "attributes": [
+        {
+          "name": "alignment",
+          "property": "alignment",
+          "type": "StackCrossAlignment | undefined",
+          "values": [
+            "start",
+            "center",
+            "end",
+            "stretch"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "as",
+          "property": "as",
+          "type": "StackElement",
+          "values": [
+            "div",
+            "section",
+            "article",
+            "aside",
+            "nav",
+            "header",
+            "footer",
+            "main",
+            "ul",
+            "ol",
+            "li"
+          ],
+          "default": "'div'",
+          "reflects": false
+        },
+        {
+          "name": "gap",
+          "property": "gap",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "h-align",
+          "property": "hAlign",
+          "type": "StackAlignment | undefined",
+          "reflects": false
+        },
+        {
+          "name": "height",
+          "property": "height",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "justify",
+          "property": "justify",
+          "type": "StackMainAlignment | undefined",
+          "values": [
+            "start",
+            "center",
+            "end",
+            "between",
+            "around",
+            "evenly"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "max-width",
+          "property": "maxWidth",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "min-height",
+          "property": "minHeight",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "padding",
+          "property": "padding",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block",
+          "property": "paddingBlock",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block-end",
+          "property": "paddingBlockEnd",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block-start",
+          "property": "paddingBlockStart",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline",
+          "property": "paddingInline",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline-end",
+          "property": "paddingInlineEnd",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline-start",
+          "property": "paddingInlineStart",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "scrollable",
+          "property": "scrollable",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "v-align",
+          "property": "vAlign",
+          "type": "StackAlignment | undefined",
+          "reflects": false
+        },
+        {
+          "name": "width",
+          "property": "width",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "wrap",
+          "property": "wrap",
+          "type": "StackWrap",
+          "values": [
+            "nowrap",
+            "wrap",
+            "wrap-reverse"
+          ],
+          "default": "'nowrap'",
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "base"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

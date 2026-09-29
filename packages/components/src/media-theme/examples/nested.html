@@ -1,0 +1,14 @@
+<!-- title: Nested contexts; description: The inner context wins inside it, and the outer one applies again after it. -->
+<tct-vstack id="nested" max-width="360">
+  <tct-card padding="4" style="--card-background-color: rgb(20, 16, 26)">
+    <tct-media-theme mode="dark">
+      <tct-vstack gap="3">
+        <tct-text display="block">Dark context.</tct-text>
+        <tct-card padding="3" style="--card-background-color: rgb(246, 245, 248)">
+          <tct-media-theme mode="light"><tct-text display="block">A light panel inside it.</tct-text></tct-media-theme>
+        </tct-card>
+        <tct-text display="block">Back in the dark context.</tct-text>
+      </tct-vstack>
+    </tct-media-theme>
+  </tct-card>
+</tct-vstack>

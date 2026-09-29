@@ -1,0 +1,17 @@
+<!-- title: Fill and fit; description: With few items, fill keeps empty tracks so the items stay at their minimum width; fit collapses them so the items stretch. -->
+<tct-vstack id="fill-vs-fit" gap="4">
+  <tct-vstack gap="2">
+    <p>column-repeat="fill" (default)</p>
+    <tct-grid column-min-width="100" column-repeat="fill" gap="2">
+      <tct-card variant="muted" padding="3">A</tct-card>
+      <tct-card variant="muted" padding="3">B</tct-card>
+    </tct-grid>
+  </tct-vstack>
+  <tct-vstack gap="2">
+    <p>column-repeat="fit"</p>
+    <tct-grid column-min-width="100" column-repeat="fit" gap="2">
+      <tct-card variant="muted" padding="3">A</tct-card>
+      <tct-card variant="muted" padding="3">B</tct-card>
+    </tct-grid>
+  </tct-vstack>
+</tct-vstack>

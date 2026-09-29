@@ -1,0 +1,113 @@
+/*
+ * tct-grid-span. The host is the grid item: it spans columns and rows (layout participation, so it
+ * lives on :host) and is itself a grid so its single child stretches to fill the cell. Spans up to 12
+ * are attribute rules (no JavaScript needed on first paint); larger ones come from a per-instance
+ * sheet in the class. [mwg:css-layout] `grid-column: span n`, `min-inline-size: 0` on grid items.
+ */
+@layer component {
+  :host {
+    display: grid;
+    min-inline-size: 0;
+    block-size: 100%;
+  }
+
+  :host([columns='full']) {
+    grid-column: 1 / -1;
+  }
+
+  :host([columns='1']) {
+    grid-column: span 1;
+  }
+
+  :host([columns='2']) {
+    grid-column: span 2;
+  }
+
+  :host([columns='3']) {
+    grid-column: span 3;
+  }
+
+  :host([columns='4']) {
+    grid-column: span 4;
+  }
+
+  :host([columns='5']) {
+    grid-column: span 5;
+  }
+
+  :host([columns='6']) {
+    grid-column: span 6;
+  }
+
+  :host([columns='7']) {
+    grid-column: span 7;
+  }
+
+  :host([columns='8']) {
+    grid-column: span 8;
+  }
+
+  :host([columns='9']) {
+    grid-column: span 9;
+  }
+
+  :host([columns='10']) {
+    grid-column: span 10;
+  }
+
+  :host([columns='11']) {
+    grid-column: span 11;
+  }
+
+  :host([columns='12']) {
+    grid-column: span 12;
+  }
+
+  :host([rows='1']) {
+    grid-row: span 1;
+  }
+
+  :host([rows='2']) {
+    grid-row: span 2;
+  }
+
+  :host([rows='3']) {
+    grid-row: span 3;
+  }
+
+  :host([rows='4']) {
+    grid-row: span 4;
+  }
+
+  :host([rows='5']) {
+    grid-row: span 5;
+  }
+
+  :host([rows='6']) {
+    grid-row: span 6;
+  }
+
+  :host([rows='7']) {
+    grid-row: span 7;
+  }
+
+  :host([rows='8']) {
+    grid-row: span 8;
+  }
+
+  :host([rows='9']) {
+    grid-row: span 9;
+  }
+
+  :host([rows='10']) {
+    grid-row: span 10;
+  }
+
+  :host([rows='11']) {
+    grid-row: span 11;
+  }
+
+  :host([rows='12']) {
+    grid-row: span 12;
+  }
+}

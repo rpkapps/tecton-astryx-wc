@@ -1,0 +1,17 @@
+<!-- title: Responsive columns; description: column-min-width makes as many columns as fit, each at least that wide. The same grid in a narrow and a wide container reflows from two columns to four. -->
+<tct-vstack id="responsive" gap="4">
+  <tct-grid column-min-width="140" gap="3" width="300">
+    <tct-card variant="muted">Card 1</tct-card>
+    <tct-card variant="muted">Card 2</tct-card>
+    <tct-card variant="muted">Card 3</tct-card>
+    <tct-card variant="muted">Card 4</tct-card>
+    <tct-card variant="muted">Card 5</tct-card>
+  </tct-grid>
+  <tct-grid column-min-width="140" gap="3" width="620" max-width="100%">
+    <tct-card variant="muted">Card 1</tct-card>
+    <tct-card variant="muted">Card 2</tct-card>
+    <tct-card variant="muted">Card 3</tct-card>
+    <tct-card variant="muted">Card 4</tct-card>
+    <tct-card variant="muted">Card 5</tct-card>
+  </tct-grid>
+</tct-vstack>

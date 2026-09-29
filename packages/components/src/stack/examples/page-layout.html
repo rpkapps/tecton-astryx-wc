@@ -1,0 +1,25 @@
+<!-- title: Page layout; description: A header, a sidebar and a scrolling content region built from nested stacks and fill items. -->
+<tct-card id="page-layout" padding="0" height="320">
+  <tct-vstack height="100%">
+    <tct-hstack padding="3" v-align="center" gap="3">
+      <tct-stack-item size="fill"><tct-text type="medium-strong">Workspace</tct-text></tct-stack-item>
+      <span>Account</span>
+    </tct-hstack>
+    <tct-divider></tct-divider>
+    <tct-stack-item size="fill">
+      <tct-hstack height="100%">
+        <tct-stack-item>
+          <tct-vstack padding="3" gap="2" width="140"><span>Overview</span><span>Wells</span><span>Reports</span></tct-vstack>
+        </tct-stack-item>
+        <tct-divider orientation="vertical"></tct-divider>
+        <tct-stack-item size="fill" scrollable>
+          <tct-vstack padding="3" gap="3">
+            <p>The content region grows to fill the space and scrolls on its own.</p>
+            <tct-stack-item><tct-vstack height="260"><p>Tall content.</p></tct-vstack></tct-stack-item>
+            <p>End.</p>
+          </tct-vstack>
+        </tct-stack-item>
+      </tct-hstack>
+    </tct-stack-item>
+  </tct-vstack>
+</tct-card>
