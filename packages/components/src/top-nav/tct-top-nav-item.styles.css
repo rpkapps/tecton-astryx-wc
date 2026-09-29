@@ -1,0 +1,103 @@
+/*
+ * tct-top-nav-item. In the bar it is a pill on the top navigation band. The resting ink is the secondary text
+ * role, not the top-nav text role of the export: that role (black or white at 50%) measures 4.0:1 on the
+ * light band (owner-accepted as designed, D-013 Q-03) and fails WCAG 1.4.3 for 14px labels, so the resting
+ * label uses the nearest Tecton text role that passes (7.5:1 light, 8.4:1 dark). The icon rests on the top-nav
+ * adornment role. Every state that adds a fill pairs it with the primary text role: hover, keyboard focus,
+ * the pressed state and the current page. In the mobile drawer it is the shared navigation row (`.nav-row`).
+ * [mwg:css] [mwg:styling-web-components] [mwg:accessibility]
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+  }
+
+  .item:not(.nav-row) {
+    --_item-fg: var(--color-text-secondary);
+    --_item-bg: transparent;
+    --_item-icon: var(--tecton-color-top-nav-adornment);
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding-block: var(--spacing-1-5);
+    padding-inline: var(--spacing-3);
+    border-radius: var(--radius-element);
+    background: var(--_item-bg);
+    color: var(--_item-fg);
+    font-size: var(--text-label-size);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--text-label-leading);
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .item:not(.nav-row)[data-icon-only] {
+    padding-inline: var(--spacing-2);
+  }
+
+  .item:not(.nav-row) .nav-row-icon {
+    color: var(--_item-icon);
+  }
+}
+
+@layer state {
+  .item:not(.nav-row)[data-selected] {
+    --_item-fg: var(--color-text-primary);
+    --_item-bg: var(--color-neutral);
+    --_item-icon: currentcolor;
+  }
+
+  .item:not(.nav-row):focus-visible {
+    --_item-fg: var(--color-text-primary);
+    --_item-icon: currentcolor;
+  }
+
+  .item:not(.nav-row):active:not([aria-disabled='true']) {
+    --_item-fg: var(--color-text-primary);
+    --_item-bg: var(--color-overlay-pressed);
+    --_item-icon: currentcolor;
+  }
+
+  .item:not(.nav-row)[aria-disabled='true'] {
+    --_item-fg: var(--color-text-disabled);
+    --_item-icon: var(--color-icon-disabled);
+
+    cursor: default;
+  }
+
+  @media (hover: hover) {
+    .item:not(.nav-row):hover:not([aria-disabled='true'], [data-selected]) {
+      --_item-fg: var(--color-text-primary);
+      --_item-bg: var(--color-overlay-hover);
+      --_item-icon: currentcolor;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .item:not(.nav-row) {
+      transition:
+        background-color var(--duration-fast) var(--ease-standard),
+        color var(--duration-fast) var(--ease-standard);
+    }
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .item:not(.nav-row) {
+      border: 1px solid transparent;
+    }
+
+    .item:not(.nav-row)[data-selected] {
+      --_item-fg: HighlightText;
+      --_item-bg: Highlight;
+      --_item-icon: HighlightText;
+    }
+
+    .item:not(.nav-row)[aria-disabled='true'] {
+      --_item-fg: GrayText;
+    }
+  }
+}

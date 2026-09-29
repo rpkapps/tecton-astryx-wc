@@ -1,0 +1,10 @@
+<!-- title: Default; description: A heading at the start, navigation items after it and end content (an icon-only item, here a search link) at the end. The current page is selected and carries aria-current="page". -->
+<tct-top-nav label="Site navigation">
+  <tct-top-nav-heading slot="heading" heading="Acme" heading-href="#home">
+    <tct-nav-icon slot="logo"><tct-icon name="layers"></tct-icon></tct-nav-icon>
+  </tct-top-nav-heading>
+  <tct-top-nav-item label="Home" href="#home" selected></tct-top-nav-item>
+  <tct-top-nav-item label="Docs" href="#docs"></tct-top-nav-item>
+  <tct-top-nav-item label="Pricing" href="#pricing"></tct-top-nav-item>
+  <tct-top-nav-item slot="end" label="Search" icon="search" icon-only href="#search"></tct-top-nav-item>
+</tct-top-nav>

@@ -1,0 +1,100 @@
+/*
+ * tct-top-nav-mega-menu-item. In a panel it is a card row: a 40px icon box (the neutral fill), a title and
+ * a description; the hover fill is the overlay role and the ink stays primary/secondary. In the mobile
+ * drawer it is the shared navigation row, indented under its section, with a 32px icon box.
+ * [mwg:css] [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .entry:not(.nav-row) {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--spacing-3);
+    box-sizing: border-box;
+    inline-size: 100%;
+    margin: 0;
+    padding: var(--spacing-3);
+    border: 0;
+    border-radius: var(--radius-element);
+    background: transparent;
+    color: var(--color-text-primary);
+    font-family: inherit;
+    text-align: start;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .icon-box {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    inline-size: 40px; /* design: upstream icon box (40px) */
+    block-size: 40px;
+    border-radius: var(--radius-element);
+    background: var(--color-neutral);
+    color: var(--color-icon-secondary);
+  }
+
+  .text {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+    min-inline-size: 0;
+  }
+
+  .title {
+    color: var(--color-text-primary);
+    font-size: var(--text-label-size);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--text-label-leading);
+  }
+
+  .description {
+    color: var(--color-text-secondary);
+    font-size: var(--text-supporting-size);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--text-supporting-leading);
+  }
+
+  /* The drawer row: indented under the menu's section, top-aligned, with a smaller icon box. */
+  .nav-row.entry {
+    --_row-padding: var(--spacing-6);
+
+    block-size: auto;
+    min-block-size: var(--_row-height);
+    padding-block: var(--spacing-1);
+    align-items: flex-start;
+  }
+
+  .nav-row .icon-box {
+    inline-size: 32px; /* design: upstream drawer icon box (32px) */
+    block-size: 32px;
+    margin-block-start: var(--spacing-0-5);
+  }
+
+  .nav-row .text {
+    gap: var(--spacing-0-5);
+  }
+}
+
+@layer state {
+  @media (hover: hover) {
+    .entry:not(.nav-row):hover {
+      background: var(--color-overlay-hover);
+    }
+  }
+
+  .entry:not(.nav-row):active {
+    background: var(--color-overlay-pressed);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .entry:not(.nav-row) {
+      transition: background-color var(--duration-fast) var(--ease-standard);
+    }
+  }
+}

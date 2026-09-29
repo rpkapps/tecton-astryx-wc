@@ -1,0 +1,14 @@
+<!-- title: Starting collapsed; description: The collapsed attribute is the initial state of a collapsible navigation. Hover or focus an icon for its name, and press an item with sub-items for its flyout. -->
+<div style="block-size: 480px">
+  <tct-side-nav collapsible collapsed label="Collapsed navigation">
+    <tct-side-nav-heading slot="header" heading="Acme" heading-href="#home">
+      <tct-nav-icon slot="icon"><tct-icon name="layers"></tct-icon></tct-nav-icon>
+    </tct-side-nav-heading>
+    <tct-side-nav-item label="Dashboard" icon="home" href="#dashboard" selected></tct-side-nav-item>
+    <tct-side-nav-item label="Projects" icon="folder">
+      <tct-side-nav-item label="Active" href="#active"></tct-side-nav-item>
+      <tct-side-nav-item label="Archived" href="#archived"></tct-side-nav-item>
+    </tct-side-nav-item>
+    <tct-side-nav-item label="Inbox" icon="inbox" href="#inbox"></tct-side-nav-item>
+  </tct-side-nav>
+</div>

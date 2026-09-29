@@ -1,0 +1,14 @@
+<!-- title: Menu from data; description: The items property of a menu takes an array of { title, description, icon, href, onClick } as an alternative to slotted tct-top-nav-mega-menu-item elements. An item without an href is a button and calls onClick. -->
+<div id="top-nav-menu-items-data-root">
+  <tct-top-nav label="Menu from data">
+    <tct-top-nav-menu id="top-nav-menu-items-data-menu" label="Resources"></tct-top-nav-menu>
+  </tct-top-nav>
+</div>
+<script type="module">
+  const root = document.getElementById('top-nav-menu-items-data-root');
+  root.querySelector('#top-nav-menu-items-data-menu').items = [
+    {title: 'Guides', description: 'Step-by-step tutorials', icon: 'book', href: '#guides'},
+    {title: 'API reference', description: 'Every endpoint', icon: 'code', href: '#api'},
+    {title: 'Contact support', icon: 'mail', onClick: () => window.alert('Support requested')},
+  ];
+</script>

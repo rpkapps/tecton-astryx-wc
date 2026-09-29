@@ -1,0 +1,91 @@
+/*
+ * tct-top-nav. The `nav` (part "base") is the painted band: the Tecton top-nav surface (D-001, the export
+ * values: a white band in light mode, a black band in dark mode). The ink on it is the secondary text role:
+ * the export's top-nav text role (black or white at 50%) is 4.0:1 on the light band and fails WCAG 1.4.3
+ * (accepted as designed by the owner, D-013 Q-03), so the nearest passing Tecton role is used. Layout is a flex row (heading and start content on the
+ * left, end content at the end) or, with a centre region, a three-column grid whose outer columns are equal
+ * so the centre stays centred. The mobile bar keeps the heading, the end content and the toggle.
+ * [mwg:css-layout] logical properties; [mwg:styling-web-components] host rules, part=base
+ */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .root {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    inline-size: 100%;
+    padding: var(--spacing-2);
+    background: var(--tecton-color-top-nav-background);
+    color: var(--color-text-secondary);
+  }
+
+  .root.grid {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+  }
+
+  .left {
+    display: flex;
+    flex: 1 1 0%;
+    align-items: center;
+    gap: var(--spacing-4);
+    min-inline-size: 0;
+  }
+
+  .heading {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  .start {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+  }
+
+  .center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-1);
+  }
+
+  .right {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--spacing-1);
+  }
+
+  .end {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: var(--spacing-1);
+    margin-inline-start: auto;
+  }
+
+  /* The mobile bar: the heading, then the end content and the toggle at the end. */
+  .root.bar {
+    justify-content: space-between;
+  }
+
+  .bar-end {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    margin-inline-start: auto;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .root {
+      border-block-end: 1px solid CanvasText;
+    }
+  }
+}

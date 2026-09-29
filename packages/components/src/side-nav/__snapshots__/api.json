@@ -1,0 +1,436 @@
+{
+  "folder": "side-nav",
+  "elements": {
+    "tct-side-nav": {
+      "class": "TctSideNav",
+      "attributes": [
+        {
+          "name": "auto-save-id",
+          "property": "autoSaveId",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "collapse-button-label",
+          "property": "collapseButtonLabel",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "collapsed",
+          "property": "collapsed",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "collapsible",
+          "property": "collapsible",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "default-width",
+          "property": "defaultWidth",
+          "type": "number",
+          "default": "DEFAULT_WIDTH",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "max-width",
+          "property": "maxWidth",
+          "type": "number",
+          "default": "MAX_WIDTH",
+          "reflects": false
+        },
+        {
+          "name": "min-width",
+          "property": "minWidth",
+          "type": "number",
+          "default": "MIN_WIDTH",
+          "reflects": false
+        },
+        {
+          "name": "no-collapse-button",
+          "property": "noCollapseButton",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "resizable",
+          "property": "resizable",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "resize-label",
+          "property": "resizeLabel",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "isCollapsed",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "width",
+          "type": "number",
+          "readonly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "collapse",
+          "signature": "() => void"
+        },
+        {
+          "name": "expand",
+          "signature": "() => void"
+        },
+        {
+          "name": "requestCollapseToggle",
+          "signature": "(reason: 'pointer' | 'keyboard') => void"
+        }
+      ],
+      "slots": [
+        "(default)",
+        "footer",
+        "footer-icons",
+        "header",
+        "top-content"
+      ],
+      "events": [
+        {
+          "name": "tct-collapse-change",
+          "class": "TctCollapseChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        },
+        {
+          "name": "tct-size-change",
+          "class": "TctSizeChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        }
+      ],
+      "cssParts": [
+        "base",
+        "content",
+        "footer",
+        "header",
+        "resize-handle"
+      ],
+      "cssStates": [
+        "collapsed"
+      ],
+      "cssProperties": [
+        {
+          "name": "--side-nav-width"
+        }
+      ]
+    },
+    "tct-side-nav-collapse-button": {
+      "class": "TctSideNavCollapseButton",
+      "attributes": [
+        {
+          "name": "for",
+          "property": "for",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "ButtonSize | undefined",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "sideNav",
+          "type": "SideNavCollapseHandle | null",
+          "default": "null",
+          "readonly": false
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "button",
+        "icon"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-side-nav-heading": {
+      "class": "TctSideNavHeading",
+      "attributes": [
+        {
+          "name": "heading",
+          "property": "heading",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "heading-href",
+          "property": "headingHref",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "subheading",
+          "property": "subheading",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "subheading-href",
+          "property": "subheadingHref",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "superheading",
+          "property": "superheading",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "superheading-href",
+          "property": "superheadingHref",
+          "type": "string | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "end",
+        "icon",
+        "menu"
+      ],
+      "events": [],
+      "cssParts": [
+        "base",
+        "end-content",
+        "heading",
+        "icon",
+        "item",
+        "menu",
+        "menu-trigger",
+        "subheading",
+        "superheading",
+        "tooltip"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-side-nav-item": {
+      "class": "TctSideNavItem",
+      "attributes": [
+        {
+          "name": "collapsed",
+          "property": "collapsed",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "has-action",
+          "property": "hasAction",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "href",
+          "property": "href",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "icon",
+          "property": "icon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "no-collapse",
+          "property": "noCollapse",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "selected",
+          "property": "selected",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "selected-icon",
+          "property": "selectedIcon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "SideNavItemSize",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "default": "'md'",
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "control",
+          "type": "HTMLElement | null",
+          "readonly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "focus",
+          "signature": "(options?: FocusOptions) => void"
+        }
+      ],
+      "slots": [
+        "(default)",
+        "actions",
+        "end",
+        "icon",
+        "selected-icon"
+      ],
+      "events": [
+        {
+          "name": "click",
+          "native": true
+        },
+        {
+          "name": "tct-collapse-change",
+          "class": "TctCollapseChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "actions",
+        "base",
+        "children",
+        "end-content",
+        "flyout",
+        "icon",
+        "item",
+        "label",
+        "row",
+        "toggle",
+        "tooltip"
+      ],
+      "cssStates": [
+        "open"
+      ],
+      "cssProperties": []
+    },
+    "tct-side-nav-section": {
+      "class": "TctSideNavSection",
+      "attributes": [
+        {
+          "name": "header-hidden",
+          "property": "headerHidden",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "heading",
+          "property": "heading",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "subheading",
+          "property": "subheading",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)",
+        "end"
+      ],
+      "events": [],
+      "cssParts": [
+        "base",
+        "end-content",
+        "header",
+        "heading",
+        "items",
+        "subheading"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

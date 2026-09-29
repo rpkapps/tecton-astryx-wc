@@ -1,0 +1,32 @@
+/*
+ * tct-side-nav-collapse-button. A ghost icon button; the chevron points at the edge the navigation
+ * collapses towards and turns over when it is collapsed. The mirror for right-to-left text and the turn
+ * are separate properties (`scale` and `rotate`), so one never overwrites the other. [mwg:css]
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+  }
+
+  .glyph {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  :host(:dir(rtl)) .glyph {
+    scale: -1 1;
+  }
+}
+
+@layer state {
+  @media (prefers-reduced-motion: no-preference) {
+    .glyph {
+      transition: rotate var(--duration-fast) var(--ease-standard);
+    }
+  }
+
+  tct-button[data-collapsed] .glyph {
+    rotate: 180deg;
+  }
+}

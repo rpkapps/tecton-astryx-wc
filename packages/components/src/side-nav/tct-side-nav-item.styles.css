@@ -1,0 +1,210 @@
+/*
+ * tct-side-nav-item. The row is the shared navigation row (nav-item.styles.css) on the element that takes
+ * focus. An item with a toggle or with actions wraps them in a painted row, so the hover and the selected
+ * fill cover the whole row while each control keeps its own focus ring. The collapsed rail shows a square
+ * icon button; the sub-items of an item with sub-items open in a flyout beside the rail (a popover in the
+ * top layer). [mwg:css] [mwg:resilient-context-menus-and-nested-dropdowns] [mwg:animate-to-from-top-layer]
+ */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .root {
+    display: flex;
+    flex-direction: column;
+    inline-size: 100%;
+  }
+
+  .root[data-rail] {
+    align-items: center;
+  }
+
+  .primary {
+    /* A link or button reset: it blends into the row it sits in. */
+    cursor: pointer;
+  }
+
+  /* The wrapped row: the primary fills the remaining space, and every part sits on one painted row. */
+  .row-wrap {
+    gap: var(--spacing-1);
+    padding-inline-start: var(--_row-padding);
+    padding-inline-end: var(--spacing-1);
+  }
+
+  .row-wrap > .primary {
+    display: flex;
+    flex: 1;
+    gap: var(--spacing-2);
+    align-items: center;
+    align-self: stretch;
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-element);
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    text-decoration: none;
+  }
+
+  .row-wrap > .primary .nav-row-icon {
+    color: var(--_row-icon);
+  }
+
+  .primary .nav-row-label {
+    flex: 1;
+  }
+
+  .chevron {
+    flex-shrink: 0;
+    transition: rotate var(--duration-fast) var(--ease-standard);
+    rotate: 0deg;
+  }
+
+  .chevron[data-expanded] {
+    rotate: 180deg;
+  }
+
+  /* Boxed like a small icon button so it and the actions beside it paint one hover pill. */
+  .toggle {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    inline-size: var(--size-element-sm);
+    block-size: var(--size-element-sm);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-element);
+    background: transparent;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+  }
+
+  .actions {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: var(--spacing-1);
+    pointer-events: auto;
+  }
+
+  /* Sub-items: indented, and animated open and closed. */
+  .children {
+    display: grid;
+    grid-template-rows: 1fr;
+  }
+
+  .children[data-collapsed] {
+    grid-template-rows: 0fr;
+  }
+
+  .children-inner {
+    min-block-size: 0;
+    overflow: hidden;
+    padding-inline-start: var(--spacing-6);
+  }
+
+  /* The collapsed rail: a square icon button. */
+  .rail {
+    justify-content: center;
+    inline-size: var(--_row-height);
+    padding-inline: 0;
+  }
+
+  /*
+   * The flyout: the sub-items in full, beside the rail. The positioned layer paints nothing; it is a flex
+   * column clamped to the space the positioning leaves (max-block-size is written inline), so the flyout
+   * shrinks and scrolls inside it. Only while open: a closed popover stays display: none.
+   */
+  .flyout-layer:popover-open {
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+
+  .flyout {
+    box-sizing: border-box;
+    flex: 0 1 auto;
+    min-block-size: 0;
+    inline-size: max-content;
+    min-inline-size: 180px; /* design: upstream flyout minimum width (180px) */
+    max-inline-size: calc(100vi - var(--spacing-8));
+    padding: var(--spacing-1);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-container);
+    background: var(--color-background-popover);
+    color: var(--color-text-primary);
+    font-size: var(--text-label-size);
+    line-height: var(--text-label-leading);
+    overflow: auto;
+  }
+
+  .flyout-title {
+    padding-block: var(--spacing-1);
+    padding-inline: var(--spacing-2);
+    color: var(--color-text-secondary);
+    font-size: var(--text-supporting-size);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--text-supporting-leading);
+  }
+}
+
+@layer state {
+  @supports not selector(:popover-open) {
+    .flyout-layer {
+      position: fixed;
+      display: none;
+    }
+  }
+
+  .flyout:focus-visible {
+    outline: none;
+  }
+
+  @media (hover: hover) {
+    .toggle:hover {
+      background: var(--color-overlay-hover);
+    }
+  }
+
+  .row-wrap:is([data-selected], [data-disabled]) .toggle {
+    color: inherit;
+  }
+
+  .row-wrap[data-disabled] {
+    --_row-fg: var(--color-text-disabled);
+
+    cursor: default;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .children {
+      transition: grid-template-rows var(--duration-medium) var(--ease-standard);
+    }
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .flyout {
+      border-color: CanvasText;
+      background: Canvas;
+      color: CanvasText;
+    }
+
+    .row-wrap[data-disabled] {
+      color: GrayText;
+    }
+  }
+}
