@@ -32,6 +32,8 @@ import styles from './tct-card.styles.css';
  * @cssprop --card-padding-inline-end - Inline-end padding; overrides `--card-padding-inline`.
  * @cssprop --card-padding-block-start - Block-start padding; overrides `--card-padding`.
  * @cssprop --card-padding-block-end - Block-end padding; overrides `--card-padding`.
+ * @cssprop --card-background-color - Fill of the default variant. Default `var(--color-background-card)`. Other variants keep their own colour.
+ * @cssprop --card-background-image - An image or gradient painted over the fill, for a card that shows a picture behind its content. Default `none`.
  * @cssprop --container-padding-inline-start - Published for descendants that bleed to the card edge (`tct-divider full-bleed`, `tct-section`): the card's inline-start padding.
  * @cssprop --container-padding-inline-end - Published: the card's inline-end padding.
  * @cssprop --container-padding-block-start - Published: the card's block-start padding.

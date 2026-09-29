@@ -81,6 +81,9 @@ radius and the padding. The default slot sits inside it.
   `--card-padding` (and `--card-padding-inline`, `--card-padding-inline-start`, `--card-padding-inline-end`,
   `--card-padding-block-start`, `--card-padding-block-end`). The default variant draws its border inside
   the padding, so border plus padding equals the padding you asked for.
+- `--card-background-color` replaces the fill of the default variant, and `--card-background-image` paints
+  an image or gradient over the fill (for a tile that shows a picture behind its text). Set them on the
+  card; text on a picture needs a `tct-media-theme` around it.
 - A fixed `height` (anything but unset or `auto`) makes the card scroll its own content.
 - The card publishes its padding as `--container-padding-*` and `--layout-padding-*`, so a
   `tct-divider full-bleed`, a nested `tct-section` and layout components inside it can run edge to edge or

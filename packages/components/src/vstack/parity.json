@@ -179,7 +179,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": 14,
+      "sizeBudgetKb": 17,
       "notes": "Guides: [mwg:css-layout] flexbox column, gap; [mwg:styling-web-components] host rules; RTL and forced-colors: the stack paints nothing and is covered by the tct-stack tests. Size budget 14 kB (above the S default of 12): The direction wrappers ship the whole Stack class they extend (13.3 kB gzip measured)."
     }
   }

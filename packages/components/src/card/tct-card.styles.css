@@ -80,10 +80,13 @@
      * transparent no-op shadow (`none` is invalid inside a comma-separated list).
      */
     box-shadow: var(--_card-ring, 0 0 transparent), var(--_card-elevation, 0 0 transparent);
+
+    /* A picture behind the content; a colour or gradient set by the consumer through the hook. */
+    background-image: var(--card-background-image, none);
   }
 
   .base[data-variant='default'] {
-    background-color: var(--color-background-card);
+    background-color: var(--card-background-color, var(--color-background-card));
     border: var(--border-width) solid var(--color-border);
     padding-inline-start: calc(var(--_pis) - var(--border-width));
     padding-inline-end: calc(var(--_pie) - var(--border-width));

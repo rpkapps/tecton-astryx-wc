@@ -1,11 +1,4 @@
-<!-- title: Pull quote; description: Style the part for a pull quote: a larger size on ::part(base). -->
-<style>
-  #pull-quote tct-blockquote::part(base) {
-    font-size: var(--font-size-xl);
-    line-height: 1.4;
-    color: var(--color-text-primary);
-  }
-</style>
+<!-- title: Pull quote; description: For a pull quote, put larger text inside the quotation: the blockquote keeps its rule and padding, and tct-text sets the size. -->
 <tct-vstack id="pull-quote" max-width="480">
-  <tct-blockquote cite="Interview, March">The best interface is the one you stop noticing.</tct-blockquote>
+  <tct-blockquote cite="Interview, March"><tct-text type="large" color="primary">The best interface is the one you stop noticing.</tct-text></tct-blockquote>
 </tct-vstack>

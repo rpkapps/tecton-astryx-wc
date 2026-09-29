@@ -127,8 +127,8 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
-      "notes": "Guides: [mwg:styling-web-components] host rules, part=base, private aliases; [mwg:css] logical properties, custom-property fallbacks; [mwg:dark-mode] tokens resolve per colour scheme; [mwg:css-layout] flex host wrapper for percentage sizes."
+      "sizeBudgetKb": 15,
+      "notes": "Size budget 15 kB (above the S default of 12): lit plus the scroll-region focus controller shared with the stack family; 13.3 kB gzip measured. Guides: [mwg:styling-web-components] host rules, part=base, private aliases; [mwg:css] logical properties, custom-property fallbacks; [mwg:dark-mode] tokens resolve per colour scheme; [mwg:css-layout] flex host wrapper for percentage sizes."
     }
   }
 }

@@ -226,8 +226,8 @@
           "reason": "Optional hardening: BoxPropsMixin removes a custom property when its attribute goes away, but custom properties inherit through the flat tree, so a nested box reads its parent's padding/size unless its own sheet resets them. The layout folders reset `--_box-*` to `initial` on :host (and write the values on the host, see STACK-03). Writing `initial` instead of removing the property would make the reset part of the mixin."
         }
       ],
-      "sizeBudgetKb": 14,
-      "notes": "Guides: [mwg:css-layout] flexbox, gap, logical properties, flex items; [mwg:styling-web-components] host rules, part=base, custom-property inheritance; [mwg:shadow-dom] slots inside the flex container; [mwg:accessible-web-components] landmark and list semantics in the shadow root, aria delegation; [mwg:custom-elements] reflection of enumerated attributes. Size budget 14 kB (above the S default of 12): Stack bundles BoxPropsMixin, the static-tag switch for as=\"ul|ol|nav|\u2026\" and StackItem on top of lit (13.7 kB gzip measured)."
+      "sizeBudgetKb": 17,
+      "notes": "Guides: [mwg:css-layout] flexbox, gap, logical properties, flex items; [mwg:styling-web-components] host rules, part=base, custom-property inheritance; [mwg:shadow-dom] slots inside the flex container; [mwg:accessible-web-components] landmark and list semantics in the shadow root, aria delegation; [mwg:custom-elements] reflection of enumerated attributes. Size budget 17 kB (above the S default of 12): Stack bundles BoxPropsMixin, the static-tag switch for as=\"ul|ol|nav|\u2026\" and StackItem on top of lit and the scroll-region focus controller (resize observer, tabbable scan); 15.4 kB gzip measured."
     },
     "core.stack-item": {
       "tag": "tct-stack-item",
@@ -324,8 +324,8 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": 14,
-      "notes": "Guides: [mwg:css-layout] flex item min-size reset, flex shorthand; [mwg:styling-web-components] host rules. Size budget 14 kB (above the S default of 12): Stack bundles BoxPropsMixin, the static-tag switch for as=\"ul|ol|nav|\u2026\" and StackItem on top of lit (13.7 kB gzip measured)."
+      "sizeBudgetKb": 17,
+      "notes": "Guides: [mwg:css-layout] flex item min-size reset, flex shorthand; [mwg:styling-web-components] host rules. Size budget 17 kB (above the S default of 12): Stack bundles BoxPropsMixin, the static-tag switch for as=\"ul|ol|nav|\u2026\" and StackItem on top of lit and the scroll-region focus controller (resize observer, tabbable scan); 15.4 kB gzip measured."
     }
   }
 }

@@ -194,6 +194,12 @@
       "cssStates": [],
       "cssProperties": [
         {
+          "name": "--card-background-color"
+        },
+        {
+          "name": "--card-background-image"
+        },
+        {
           "name": "--card-padding"
         },
         {
