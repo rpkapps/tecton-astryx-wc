@@ -207,10 +207,11 @@ async function crawl(context: BrowserContext, base: string, scheme: string, know
         {timeout: 5000},
       )
       .catch(() => undefined); // reported below as an undefined preview element
-    // Page scripts finish after load: the example previews become focusable regions from a
-    // ResizeObserver once upgraded content makes them overflow. A fixed delay raced that on a loaded
-    // machine (scrollable-region-focusable flaked), so wait for the state itself: two frames for
-    // observers to run, then every preview's region state matches whether it overflows.
+    // Page scripts finish after load and make overflowing scroll containers keyboard reachable: the
+    // example previews (Example.astro, from a ResizeObserver once upgraded content overflows) and the
+    // code blocks (Expressive Code adds tabindex at runtime). A fixed delay raced both on a loaded
+    // machine (scrollable-region-focusable flaked on random pages), so wait for the state itself: two
+    // frames for observers to run, then every such container that overflows is focusable.
     await page.evaluate(
       () =>
         new Promise<void>((resolve) =>
@@ -220,15 +221,15 @@ async function crawl(context: BrowserContext, base: string, scheme: string, know
     await page
       .waitForFunction(
         () =>
-          [...document.querySelectorAll<HTMLElement>('.tct-example__preview')].every(
-            (preview) =>
-              preview.scrollWidth > preview.clientWidth ===
-              (preview.getAttribute('role') === 'region' && preview.tabIndex === 0),
+          [
+            ...document.querySelectorAll<HTMLElement>('.tct-example__preview, .expressive-code pre'),
+          ].every(
+            (element) => element.scrollWidth <= element.clientWidth || element.tabIndex === 0,
           ),
         undefined,
         {timeout: 5000},
       )
-      .catch(() => undefined); // an unreachable overflowing preview is then reported by axe
+      .catch(() => undefined); // an unreachable overflowing container is then reported by axe
 
     for (const violation of await runAxe(page)) {
       // Nodes inside an example that declares an exemption for this rule (with a reason) are skipped

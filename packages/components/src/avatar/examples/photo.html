@@ -1,8 +1,8 @@
 <!-- title: Photo; description: A loaded image fills the avatar; its accessible name still comes from the name. -->
-<div id="photo-example" style="display: flex; gap: var(--spacing-3); align-items: center">
+<tct-hstack id="photo-example" gap="3" v-align="center">
   <tct-avatar name="Ada Lovelace" size="lg"></tct-avatar>
   <tct-avatar name="Grace Hopper" size="lg" shape="rounded"></tct-avatar>
-</div>
+</tct-hstack>
 <script type="module">
   // A generated image keeps this example self-contained: blob: URLs pass the resource URL policy.
   const root = document.getElementById('photo-example');

@@ -41,12 +41,18 @@ const PAGE = /\.mdx?$/;
 /** Text files of a build output tree (`dist/`); binaries (fonts, images) and source maps are not scanned. */
 const TEXT_OUTPUT = /\.(?:m?js|css|json|html|txt|md|svg)$/;
 
-/** The text files under `dist/` of every workspace package that has been built or generated. */
+/**
+ * Workspace packages that never ship and are not built (tools/build.ts): a `dist/` there is a stale
+ * local leftover, not output, and scanning it made the gate fail on files nobody receives.
+ */
+const NOT_SHIPPED = new Set(['testing']);
+
+/** The text files under `dist/` of every shipped workspace package that has been built or generated. */
 export function distFiles(packagesDir: string = join(ROOT, 'packages')): string[] {
   if (!existsSync(packagesDir)) return [];
   const files: string[] = [];
   for (const pkg of readdirSync(packagesDir, {withFileTypes: true})) {
-    if (!pkg.isDirectory()) continue;
+    if (!pkg.isDirectory() || NOT_SHIPPED.has(pkg.name)) continue;
     const dist = join(packagesDir, pkg.name, 'dist');
     if (!existsSync(dist)) continue;
     for (const entry of readdirSync(dist, {recursive: true, withFileTypes: true})) {

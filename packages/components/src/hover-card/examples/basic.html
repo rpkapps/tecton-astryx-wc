@@ -1,11 +1,11 @@
 <!-- title: Basic; description: A link trigger in the default slot and the card in slot="content". A named card is a dialog. -->
-<div style="padding-block-start: var(--spacing-12)">
+<tct-vstack h-align="start" padding-block-start="10">
   <tct-hover-card label="Profile preview">
     <a href="#profile">Ada Lovelace</a>
-    <div slot="content" style="display: grid; gap: var(--spacing-1); max-inline-size: 260px">
+    <tct-vstack slot="content" gap="1" max-width="260">
       <strong>Ada Lovelace</strong>
       <span>Mathematician. Wrote the first published algorithm for a machine.</span>
       <a href="#profile">View profile</a>
-    </div>
+    </tct-vstack>
   </tct-hover-card>
-</div>
+</tct-vstack>

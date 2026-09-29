@@ -36,6 +36,8 @@ if (problems.length > 0) {
       'surface components (tct-stack, tct-hstack, tct-grid, tct-center, tct-card, tct-text …) instead; ' +
       'only custom properties and size constraints may be set inline.',
   );
-  process.exit(1);
+  // exitCode, not exit(): exit() can cut off a large report still being written to a pipe.
+  process.exitCode = 1;
+} else {
+  console.log(`examples:check OK: ${count} example(s), no hand-written layout or surface CSS.`);
 }
-console.log(`examples:check OK: ${count} example(s), no hand-written layout or surface CSS.`);

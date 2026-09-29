@@ -1,9 +1,9 @@
 <!-- title: Inline in text; description: type="inherit" makes the link adopt the size and leading of the paragraph around it. -->
-<div style="display: flex; flex-direction: column; gap: var(--spacing-4); max-inline-size: 420px">
+<tct-vstack gap="4" max-width="420">
   <tct-text>
     Read our <tct-link href="#terms" type="inherit" has-underline>terms of service</tct-link> before you continue.
   </tct-text>
   <tct-text type="large">
     Larger copy: <tct-link href="#privacy" type="inherit" has-underline>see the privacy policy</tct-link>.
   </tct-text>
-</div>
+</tct-vstack>
