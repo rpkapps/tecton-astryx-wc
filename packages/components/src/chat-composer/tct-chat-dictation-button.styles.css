@@ -1,0 +1,48 @@
+/*
+ * tct-chat-dictation-button. The equalizer is an overlay centred on the (icon-less) button while
+ * listening: five bars scaled from the centre by the microphone level, in the accent colour. The bars are
+ * decoration, so a level change costs a transform, not layout; under reduced motion they do not animate
+ * (the level still updates, without the smoothing transition). Hidden where dictation is unsupported.
+ * [mwg:css] [mwg:accessibility]
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+    vertical-align: middle;
+  }
+
+  :host([data-unsupported]) {
+    display: none;
+  }
+
+  .base {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .bars {
+    position: absolute;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .bar {
+    block-size: 100%;
+    border-radius: var(--radius-full);
+    background-color: var(--color-accent);
+    transform-origin: center;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .bar {
+      transition:
+        transform 0.06s ease-out,
+        background-color 0.06s ease-out;
+    }
+  }
+}
