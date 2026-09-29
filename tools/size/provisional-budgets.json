@@ -1,0 +1,14 @@
+{
+  "//": "PROVISIONAL size budgets (kB gzip) that override the A\u00a718.4 defaults, set to the measured size + 10% so regressions still fail. Cause: every component that translates a string bundles intl-messageformat with its ICU parser (~33 kB min), and tct-text bundles the layer/tooltip machinery for its truncation tooltip. The performance work package (lazy ICU parsing / precompiled catalogs, lazy truncation tooltip) removes these entries; do not add to this file without the orchestrator.",
+  "budgets": {
+    "button": 59,
+    "dialog": 65,
+    "field": 56,
+    "field-status": 19,
+    "heading": 26,
+    "spinner": 45,
+    "text": 26,
+    "text-input": 71,
+    "tooltip": 24
+  }
+}

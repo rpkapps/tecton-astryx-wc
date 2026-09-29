@@ -41,6 +41,12 @@ export class TctSampleBadge extends TctElement {
   /** Number of times the user asked to remove the badge. */
   @property({type: Number, attribute: false}) removeRequests = 0;
 
+  constructor() {
+    super();
+    // Default semantics on the internals: not a `role` field of the element (tct-constructor-fields).
+    this.internals.role = 'status';
+  }
+
   /** Asks to remove the badge, as the remove button does. Returns true when nobody prevented it. */
   requestRemove(): boolean {
     this.removeRequests += 1;

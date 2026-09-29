@@ -7,6 +7,8 @@
  *                         `@internal` on a class (the `tct-internal-tags` behaviour) -> `x-tct`
  *  - `tct-event-classes`  collects classes tagged `@eventName` (core/src/events)
  *  - `tct-events`         resolves `@fires tct-x` against those classes: type, flags, payload fields
+ *  - `tct-constructor-fields` drops phantom fields the analyzer infers from constructor
+ *                         assignments to other objects (`this.internals.role = …` is not `role`)
  *  - `tct-public-api`     drops private, protected, `_underscored`, `#private` and static plumbing;
  *                         applies `@hideInherited`
  *  - `tct-type-values`    resolves union / `as const` aliases to option lists (`x-tct.values`)
@@ -214,6 +216,52 @@ export function tctEvents(): Plugin {
   };
 }
 
+/**
+ * The analyzer turns every `<expr>.<name> = …` statement in a constructor into a field `<name>`, not
+ * only `this.<name> = …`, so `this.internals.role = 'heading'` shows up as a public `role` field. Drop
+ * such fields unless the class declares the member or assigns it on `this`.
+ */
+export function tctConstructorFields(): Plugin {
+  return {
+    name: 'tct-constructor-fields',
+    analyzePhase({ts, node, moduleDoc}) {
+      if (!ts.isClassDeclaration(node)) return;
+      const declaration = findClass(moduleDoc, node.name?.text);
+      if (!declaration?.members) return;
+      const declared = new Set<string>();
+      const onThis = new Set<string>();
+      const onOther = new Set<string>();
+      for (const member of node.members) {
+        if (member.name && (ts.isIdentifier(member.name) || ts.isPrivateIdentifier(member.name))) {
+          declared.add(member.name.text);
+        }
+        if (!ts.isConstructorDeclaration(member)) continue;
+        for (const parameter of member.parameters) {
+          if (ts.getModifiers(parameter)?.length && ts.isIdentifier(parameter.name)) {
+            declared.add(parameter.name.text);
+          }
+        }
+        for (const statement of member.body?.statements ?? []) {
+          if (!ts.isExpressionStatement(statement)) continue;
+          const expression = statement.expression;
+          if (!ts.isBinaryExpression(expression)) continue;
+          const left = expression.left;
+          if (!ts.isPropertyAccessExpression(left)) continue;
+          const target = left.expression.kind === ts.SyntaxKind.ThisKeyword ? onThis : onOther;
+          target.add(left.name.text);
+        }
+      }
+      declaration.members = declaration.members.filter(
+        (member) =>
+          member.kind !== 'field' ||
+          !onOther.has(member.name) ||
+          declared.has(member.name) ||
+          onThis.has(member.name),
+      );
+    },
+  };
+}
+
 const isPrivateName = (name: string) => name.startsWith('_') || name.startsWith('#');
 
 export function tctPublicApi(): Plugin {
@@ -298,6 +346,7 @@ export function tctParity(): Plugin {
 export function tctPlugins(): Plugin[] {
   return [
     tctClassTags(),
+    tctConstructorFields(),
     tctEventClasses(),
     tctPublicApi(),
     tctEvents(),

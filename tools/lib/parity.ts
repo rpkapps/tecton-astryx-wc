@@ -201,6 +201,22 @@ export function cemDenseNames(cem: unknown): Map<string, string[][]> {
 /** Non-native, CEM-checkable mapping kinds. Others (context, controller, ...) have no CEM entry. */
 const CEM_CHECKED_AS = new Set(['attribute', 'property', 'slot', 'event', 'method', 'css']);
 
+/**
+ * HTML global attributes: an `attribute` row may target them (upstream `hasAutoFocus` -> `autofocus`)
+ * although the CEM never lists them for an element.
+ */
+const GLOBAL_ATTRIBUTES = new Set([
+  'autofocus',
+  'dir',
+  'hidden',
+  'id',
+  'inert',
+  'lang',
+  'tabindex',
+  'title',
+  'translate',
+]);
+
 export interface CheckOptions {
   manifest: Manifest;
   schema: Schema;
@@ -414,7 +430,8 @@ export function checkParity(options: CheckOptions): CheckResult {
               row.as !== 'waived' &&
               CEM_CHECKED_AS.has(row.as) &&
               row.target &&
-              !names.has(row.target)
+              !names.has(row.target) &&
+              !(row.as === 'attribute' && GLOBAL_ATTRIBUTES.has(row.target))
             ) {
               fail(
                 `${where}: api "${row.upstream}" targets ${row.as} "${row.target}", absent from the CEM for ${entry.tag}`,

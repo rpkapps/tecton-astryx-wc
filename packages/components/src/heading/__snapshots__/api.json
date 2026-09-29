@@ -1,0 +1,167 @@
+{
+  "folder": "heading",
+  "elements": {
+    "tct-heading": {
+      "class": "TctHeading",
+      "attributes": [
+        {
+          "name": "accessibility-level",
+          "property": "accessibilityLevel",
+          "type": "HeadingLevel | undefined",
+          "values": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "color",
+          "property": "color",
+          "type": "TextColor",
+          "default": "'primary'",
+          "reflects": true
+        },
+        {
+          "name": "display",
+          "property": "display",
+          "type": "TextDisplay",
+          "values": [
+            "inline",
+            "block"
+          ],
+          "default": "'block'",
+          "reflects": true
+        },
+        {
+          "name": "has-capsize",
+          "property": "hasCapsize",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "has-strikethrough",
+          "property": "hasStrikethrough",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "justify",
+          "property": "justify",
+          "type": "TextJustify",
+          "values": [
+            "start",
+            "center",
+            "end"
+          ],
+          "default": "'start'",
+          "reflects": true
+        },
+        {
+          "name": "level",
+          "property": "level",
+          "type": "HeadingLevel",
+          "values": [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6"
+          ],
+          "default": "2",
+          "reflects": true
+        },
+        {
+          "name": "max-lines",
+          "property": "maxLines",
+          "type": "number",
+          "default": "0",
+          "reflects": true
+        },
+        {
+          "name": "no-truncate-tooltip",
+          "property": "noTruncateTooltip",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "text-wrap",
+          "property": "textWrap",
+          "type": "TextWrap | undefined",
+          "values": [
+            "wrap",
+            "nowrap",
+            "balance",
+            "pretty"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "truncate-tooltip-placement",
+          "property": "truncateTooltipPlacement",
+          "type": "TooltipPlacement",
+          "values": [
+            "above",
+            "below",
+            "start",
+            "end"
+          ],
+          "default": "'above'",
+          "reflects": false
+        },
+        {
+          "name": "type",
+          "property": "type",
+          "type": "HeadingType | undefined",
+          "reflects": true
+        },
+        {
+          "name": "weight",
+          "property": "weight",
+          "type": "TextWeight | undefined",
+          "values": [
+            "normal",
+            "medium",
+            "semibold",
+            "bold"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "word-break",
+          "property": "wordBreak",
+          "type": "WordBreak | undefined",
+          "values": [
+            "break-word",
+            "break-all"
+          ],
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "truncated",
+          "type": "boolean",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "text"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

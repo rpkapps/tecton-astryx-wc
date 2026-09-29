@@ -1,0 +1,140 @@
+{
+  "folder": "tooltip",
+  "elements": {
+    "tct-tooltip": {
+      "class": "TctTooltip",
+      "attributes": [
+        {
+          "name": "alignment",
+          "property": "alignment",
+          "type": "TooltipAlignment",
+          "default": "'center'",
+          "reflects": true
+        },
+        {
+          "name": "content",
+          "property": "content",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "delay",
+          "property": "delay",
+          "type": "number",
+          "default": "200",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "focus-trigger",
+          "property": "focusTrigger",
+          "type": "TooltipFocusTrigger",
+          "values": [
+            "auto",
+            "always",
+            "never"
+          ],
+          "default": "'auto'",
+          "reflects": false
+        },
+        {
+          "name": "hide-delay",
+          "property": "hideDelay",
+          "type": "number",
+          "default": "0",
+          "reflects": false
+        },
+        {
+          "name": "hover-indication",
+          "property": "hoverIndication",
+          "type": "TooltipHoverIndication",
+          "values": [
+            "auto",
+            "always",
+            "never"
+          ],
+          "default": "'auto'",
+          "reflects": false
+        },
+        {
+          "name": "open",
+          "property": "open",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "placement",
+          "property": "placement",
+          "type": "TooltipSide",
+          "default": "'above'",
+          "reflects": true
+        },
+        {
+          "name": "touch-trigger",
+          "property": "touchTrigger",
+          "type": "TooltipTouchTrigger",
+          "values": [
+            "auto",
+            "tap",
+            "none"
+          ],
+          "default": "'auto'",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "isOpen",
+          "type": "boolean",
+          "readonly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "hide",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "show",
+          "signature": "() => Promise<void>"
+        }
+      ],
+      "slots": [
+        "(default)",
+        "surface"
+      ],
+      "events": [
+        {
+          "name": "tct-after-open-change",
+          "class": "TctAfterOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "surface",
+        "trigger"
+      ],
+      "cssStates": [
+        "open"
+      ],
+      "cssProperties": []
+    }
+  }
+}
