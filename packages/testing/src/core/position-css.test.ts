@@ -6,9 +6,9 @@
  */
 import {html} from 'lit';
 import {beforeAll, describe, expect, it} from 'vitest';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {features} from '@tecton-astryx/core/features.js';
-import {isFloatingLoaded} from '@tecton-astryx/core/layer/floating.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {features} from '@tecton-wc/core/features.js';
+import {isFloatingLoaded} from '@tecton-wc/core/layer/floating.js';
 import {fixture} from '../fixture.js';
 import {TctTestLayer} from '../fixtures/test-layer.js';
 import {isTier2} from '../tier.js';

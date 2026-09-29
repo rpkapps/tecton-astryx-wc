@@ -55,7 +55,7 @@
           "kind": "prop",
           "target": "cancelLabel",
           "as": "attribute",
-          "notes": "`cancel-label`; default the localized `@astryx.alertDialog.cancel`."
+          "notes": "`cancel-label`; default the localized `@tct.alertDialog.cancel`."
         },
         {
           "upstream": "actionLabel",

@@ -10,14 +10,14 @@
  */
 import {userEvent} from 'vitest/browser';
 import {describe, expect, it} from 'vitest';
-import {axNode, expectAccessible} from '@tecton-astryx/testing/a11y.js';
-import {recordEvents} from '@tecton-astryx/testing/events.js';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {formHarness, hasCustomState, type FormHarness} from '@tecton-astryx/testing/forms.js';
-import {pressKeys} from '@tecton-astryx/testing/keyboard.js';
-import {isChromium, isTier2} from '@tecton-astryx/testing/tier.js';
-import {aTimeout, nextFrame, waitUntil} from '@tecton-astryx/testing/timing.js';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
+import {axNode, expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {recordEvents} from '@tecton-wc/testing/events.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {formHarness, hasCustomState, type FormHarness} from '@tecton-wc/testing/forms.js';
+import {pressKeys} from '@tecton-wc/testing/keyboard.js';
+import {isChromium, isTier2} from '@tecton-wc/testing/tier.js';
+import {aTimeout, nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import '../field/define.js';
 import '../tooltip/define.js';
 import './define.js';

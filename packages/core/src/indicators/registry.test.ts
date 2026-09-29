@@ -77,7 +77,7 @@ describe('getIndicator', () => {
 
 describe('IndicatorController (useIndicator)', () => {
   class Probe extends LitElement {
-    readonly indicator = new IndicatorController(this, 'check');
+    readonly indicator: IndicatorController = new IndicatorController(this, 'check');
     override render() {
       return html`${this.indicator.tag}`;
     }
@@ -93,10 +93,13 @@ describe('IndicatorController (useIndicator)', () => {
   });
 
   class ThemeHost extends LitElement {
-    readonly theme = new ContextProvider(this, {
-      context: themeContext,
-      initialValue: {name: 'brand', mode: 'light'},
-    });
+    readonly theme: ContextProvider<typeof themeContext> = new ContextProvider<typeof themeContext>(
+      this,
+      {
+        context: themeContext,
+        initialValue: {name: 'brand', mode: 'light'},
+      },
+    );
     override render() {
       return html`<slot></slot>`;
     }

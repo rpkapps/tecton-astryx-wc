@@ -4,13 +4,9 @@
  */
 import {css, html} from 'lit';
 import {beforeAll, describe, expect, it, vi} from 'vitest';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {
-  BOX_PROPERTIES,
-  BoxPropsMixin,
-  SPACING_STEPS,
-} from '@tecton-astryx/core/mixins/box-props.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {BOX_PROPERTIES, BoxPropsMixin, SPACING_STEPS} from '@tecton-wc/core/mixins/box-props.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import {fixture} from '../fixture.js';
 
 class TctTestBox extends BoxPropsMixin(TctElement) {

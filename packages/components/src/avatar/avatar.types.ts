@@ -1,4 +1,4 @@
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 
 /** Named avatar sizes (upstream `AvatarNamedSize`): 20, 24, 36, 48 and 128 CSS px. */
 export const AVATAR_NAMED_SIZES = ['xsm', 'sm', 'md', 'lg', 'xl'] as const;

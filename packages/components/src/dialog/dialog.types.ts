@@ -1,4 +1,4 @@
-import type {ChangeReason} from '@tecton-astryx/core/events/tct-event.js';
+import type {ChangeReason} from '@tecton-wc/core/events/tct-event.js';
 
 export const DIALOG_VARIANTS = ['standard', 'fullscreen'] as const;
 /** `standard` is a centred surface with a configurable size; `fullscreen` takes the whole viewport. */

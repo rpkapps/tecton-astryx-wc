@@ -1,8 +1,8 @@
 /**
- * The default icon set (A§12, D-009, D-013): upstream Astryx's semantic role names mapped to Lucide glyphs,
+ * The default icon set (A§12, D-009, D-013): the upstream semantic role names mapped to Lucide glyphs,
  * plus the owner's Tecton domain icons (D-013 Q-02) under their own kebab names.
  *
- * `IconName` at astryx@ca632c6 (`packages/core/src/Icon/globalIconRegistry.tsx`) has 28 roles, plus the
+ * `IconName` at upstream commit ca632c6 (`packages/core/src/Icon/globalIconRegistry.tsx`) has 28 roles, plus the
  * namespaced `numberInput:stepperDown` that `defaultIcons.tsx` also ships. Every one maps to a glyph
  * from the generated `./lucide/*.js` modules (no `lucide` runtime dependency). All are 24x24 stroke
  * icons (`mode: 'stroke'`, stroke width 2); components expose `--icon-stroke-width`. This also covers
@@ -11,8 +11,8 @@
  *
  * The 18 Tecton domain glyphs (oil & gas / subsurface: `well`, `fault`, `seismic`, `strata`, ...) are
  * registered as lazy loaders under `<name>` (outlined) and `<name>-filled`, so they cost nothing until a
- * page uses them. Lucide stays the general-purpose set (`lucide.js`); the larger tecton-astryx glyph set
- * is not used (D-013).
+ * page uses them. Lucide stays the general-purpose set (`lucide.js`); the larger glyph set of the
+ * owner's earlier React theme is not used (D-013).
  *
  * No module side effect: `tct-icon` registers this set as the lowest-priority layer on its first
  * connect, and any consumer registration overrides it. Directional roles are flagged `mirrorInRtl`

@@ -6,8 +6,8 @@
  */
 import {html, LitElement} from 'lit';
 import {afterEach, describe, expect, it} from 'vitest';
-import {AdaptivePresentationController} from '@tecton-astryx/core/controllers/adaptive-presentation.js';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
+import {AdaptivePresentationController} from '@tecton-wc/core/controllers/adaptive-presentation.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import {
   aTimeout,
   emulateMedia,
@@ -16,7 +16,7 @@ import {
   nextFrame,
   pressKeys,
   waitUntil,
-} from '@tecton-astryx/testing/index.js';
+} from '@tecton-wc/testing/index.js';
 import '../popover/define.js';
 import './define.js';
 import {
@@ -409,7 +409,10 @@ describe('i18n', () => {
 describe('adaptive presentation', () => {
   /** A consumer host: the same content in a popover on a fine pointer, in a bottom sheet on compact touch. */
   class AdaptiveHost extends LitElement {
-    readonly adaptive = new AdaptivePresentationController(this, () => 'adaptive');
+    readonly adaptive: AdaptivePresentationController = new AdaptivePresentationController(
+      this,
+      () => 'adaptive',
+    );
     protected override render() {
       return this.adaptive.resolved === 'bottom-sheet'
         ? html`<tct-bottom-sheet label="Options"><p>Options</p></tct-bottom-sheet>`

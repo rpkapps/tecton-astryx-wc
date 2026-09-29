@@ -49,7 +49,7 @@
           "upstream": "defaultIndicators",
           "target": "defaultIndicators",
           "as": "module-function",
-          "notes": "@tecton-astryx/core/indicators/registry.js; maps name to tag (INDICATOR-01)."
+          "notes": "@tecton-wc/core/indicators/registry.js; maps name to tag (INDICATOR-01)."
         },
         {"upstream": "getIndicator", "target": "getIndicator", "as": "module-function"},
         {

@@ -1,8 +1,8 @@
 import type {CSSResultGroup, PropertyValues, TemplateResult} from 'lit';
 import {html} from 'lit';
 import {property} from 'lit/decorators.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import base from '../styles/base.styles.css';
 import type {GridSpanColumns} from './grid.types.js';
 import styles from './tct-grid-span.styles.css';

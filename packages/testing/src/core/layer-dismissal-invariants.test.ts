@@ -11,7 +11,7 @@
  *    because Chromium only raises it without a keydown for the Android back gesture.
  */
 import {beforeAll, describe, expect, it} from 'vitest';
-import {defineElement} from '@tecton-astryx/core/define.js';
+import {defineElement} from '@tecton-wc/core/define.js';
 import {fixture} from '../fixture.js';
 import {pressKeys} from '../keyboard.js';
 import {layerStack} from '../layers.js';

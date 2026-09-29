@@ -5,6 +5,8 @@ sidebar:
   order: 25
 ---
 
+import Example from '@/components/Example.astro';
+
 ## Overview
 
 Elevation tokens create depth through `box-shadow`. Three levels (low, med, high) establish a visual hierarchy for floating surfaces, and inset shadows provide hover, selection and status rings for interactive elements.
@@ -31,7 +33,7 @@ Inset rings for state (each is a two-pixel inset shadow):
 | `--shadow-inset-warning`    | A yellow ring at 30 %                                                                         |
 | `--shadow-inset-error`      | A red ring at 30 %                                                                            |
 
-The complete values are on the [All tokens](../tokens/#shadow-tokens) page. Because Tecton has only one shadow in its design, a floating action button reads flatter here than an Astryx one does.
+The complete values are on the [All tokens](../tokens/#shadow-tokens) page. Because Tecton has only one shadow in its design, a floating action button reads flatter here than it would in a theme with a stronger shadow.
 
 ## Choosing a level
 
@@ -48,19 +50,27 @@ If two surfaces overlap, the one on top takes the higher level. If a surface doe
 
 ## The elevation attribute
 
-Configurable surfaces expose a single `elevation` attribute instead of asking you to hand-write a `box-shadow`. It takes the graded enumeration `none`, `low`, `med` or `high`, narrowed per element to the steps that surface needs: `tct-card`, `tct-clickable-card`, `tct-selectable-card`, `tct-button`, `tct-icon-button`, `tct-button-group` and `tct-banner` expose the full scale, while `tct-chat-composer` exposes only `none` and `low`. `none` is a flat literal (`box-shadow: none`); the other levels map to the `--shadow-*` tokens above, so a surface stays theme-agnostic.
+Configurable surfaces expose a single `elevation` attribute instead of asking you to hand-write a `box-shadow`. It takes the graded enumeration `none`, `low`, `med` or `high`, narrowed per element to the steps that surface needs. `tct-button`, `tct-icon-button`, `tct-toggle-button`, `tct-button-group`, `tct-banner` and `tct-card` expose the full scale today. `tct-clickable-card` and `tct-selectable-card` will expose it too, and `tct-chat-composer` only `none` and `low` (all three _planned_). `none` is a flat literal (`box-shadow: none`); the other levels map to the `--shadow-*` tokens above, so a surface stays theme-agnostic.
 
 Defaults preserve the current appearance: every surface defaults to `none` except the chat composer, which defaults to `low`. Set `elevation="none"` to flatten it; the flat composer draws a border with the same rest, hover and focus treatment as a text input.
 
+<Example
+  title="The elevation attribute"
+  description="Flat by default; raise only when the surface needs to float. A button that floats over content is raised to med, a card or banner that needs emphasis in the flow to low."
+  source={`<tct-vstack gap="4">
+  <tct-hstack>
+    <tct-icon-button label="Search" icon="search" variant="primary" elevation="med"></tct-icon-button>
+  </tct-hstack>
+  <tct-card elevation="low" padding="4">
+    <tct-text>Raised card</tct-text>
+  </tct-card>
+  <tct-banner status="info" heading="Raised, low" description="An inline banner that needs emphasis." elevation="low"></tct-banner>
+</tct-vstack>`}
+/>
+
+The same attribute on the planned surface:
+
 ```html
-<!-- Flat by default; raise only when the surface needs to float. -->
-<tct-card elevation="low">Raised card</tct-card>
-
-<!-- A floating action button. -->
-<tct-icon-button label="New" variant="primary" elevation="med">
-  <tct-icon slot="icon" name="add"></tct-icon>
-</tct-icon-button>
-
 <!-- Flatten the composer (it defaults to low). -->
 <tct-chat-composer elevation="none"></tct-chat-composer>
 ```
@@ -104,8 +114,7 @@ Depth in Tecton is also drawn without shadows. Use a border (`var(--border-width
 - Use elevation shadows for decorative borders. Use `--color-border` instead.
 
 {/*
-Adapted from Astryx docs topic `elevation` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md). Section map (1:1): Overview; Elevation Scale; Choosing a level; The elevation prop -> The elevation attribute; Usage; Best Practices.
-Tecton depth model: tecton-theme.md 3.6 and D-013 Q-06 ("menus, popovers and panels follow no drop shadow; border plus recessed surface"). Values from packages/tokens/dist/tokens.json.
-Element tags with an elevation attribute follow the upstream list (Card, ClickableCard, SelectableCard, Button, IconButton, ButtonGroup, Banner full scale; ChatComposer none|low): planned, see each element page.
+Sources: docs/research/tecton-theme.md 3.6 and D-013 Q-06 ("menus, popovers and panels follow no drop shadow; border plus recessed surface"). Values from packages/tokens/dist/tokens.json.
+Elements with an elevation attribute: button, icon-button, toggle-button, button-group, banner, card (merged); clickable-card, selectable-card, chat-composer (planned).
 Guides: [mwg:css] [mwg:dark-mode]
 */}

@@ -14,12 +14,12 @@ import {
   type ContextCallback,
   type ContextRequestEvent,
   type UnknownContext,
-} from '@tecton-astryx/core/context/protocol.js';
+} from '@tecton-wc/core/context/protocol.js';
 import {
   buttonGroupContext,
   type ButtonGroupContextValue,
   type ButtonGroupPosition,
-} from '@tecton-astryx/core/context/keys.js';
+} from '@tecton-wc/core/context/keys.js';
 
 const NOT_MEMBERS = new Set(['template', 'script', 'style', 'slot']);
 

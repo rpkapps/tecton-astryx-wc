@@ -4,7 +4,7 @@
  * `item` part. Markers are custom rendered (bullet, ring or CSS counter) and slotted into the item's
  * marker slot, where they are direct flex children of the row and align to the first line's baseline.
  *
- * Tecton: hover is the Tecton table-row hover fill, which the item paints (tecton-astryx components.ts
+ * Tecton: hover is the Tecton table-row hover fill, which the item paints (the Tecton React theme's components.ts
  * `list-item`); rows keep the item's element radius, and divided rows are flush rectangles.
  * [mwg:css-layout] [mwg:styling-web-components]
  */

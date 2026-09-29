@@ -207,8 +207,28 @@ async function crawl(context: BrowserContext, base: string, scheme: string, know
         {timeout: 5000},
       )
       .catch(() => undefined); // reported below as an undefined preview element
-    // Page scripts (code block scroll regions, table focus, search) finish shortly after load.
-    await page.waitForTimeout(250);
+    // Page scripts finish after load: the example previews become focusable regions from a
+    // ResizeObserver once upgraded content makes them overflow. A fixed delay raced that on a loaded
+    // machine (scrollable-region-focusable flaked), so wait for the state itself: two frames for
+    // observers to run, then every preview's region state matches whether it overflows.
+    await page.evaluate(
+      () =>
+        new Promise<void>((resolve) =>
+          requestAnimationFrame(() => requestAnimationFrame(() => resolve())),
+        ),
+    );
+    await page
+      .waitForFunction(
+        () =>
+          [...document.querySelectorAll<HTMLElement>('.tct-example__preview')].every(
+            (preview) =>
+              preview.scrollWidth > preview.clientWidth ===
+              (preview.getAttribute('role') === 'region' && preview.tabIndex === 0),
+          ),
+        undefined,
+        {timeout: 5000},
+      )
+      .catch(() => undefined); // an unreachable overflowing preview is then reported by axe
 
     for (const violation of await runAxe(page)) {
       // Nodes inside an example that declares an exemption for this rule (with a reason) are skipped

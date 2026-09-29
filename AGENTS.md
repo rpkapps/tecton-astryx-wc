@@ -1,8 +1,8 @@
 # Instructions for every agent working in this repository
 
-`tecton-astryx-wc` is a framework-independent Web Components implementation (Lit + TypeScript) of
-the Astryx design system's public components and documentation, re-skinned with the Tecton visual
-system. Tags and events use the `tct-` prefix.
+`tecton-wc` is a framework-independent Web Components implementation (Lit + TypeScript) of
+the upstream design system's public components and documentation (reference checkout below),
+re-skinned with the Tecton visual system. Tags and events use the `tct-` prefix.
 
 ## Read first
 
@@ -32,7 +32,7 @@ If `~/.npm` is not writable, set `NPM_CONFIG_CACHE=/tmp/npm-cache`. Cite guide i
 - **Tier 1 (supported, CI-tested):** Chrome/Edge ≥ 137, Firefox ≥ 147, Safari/iOS ≥ 26.
 - **Tier 2 (degraded, must not throw):** Chrome ≥ 116, Firefox ≥ 125, Safari ≥ 17.
 - Baseline Widely available: use freely. Features present in every Tier-1 engine: use natively,
-  no polyfills, but guard APIs whose absence throws through `@tecton-astryx/core/features.js`.
+  no polyfills, but guard APIs whose absence throws through `@tecton-wc/core/features.js`.
   Features missing from any Tier-1 engine (`ariaNotify`, invoker commands, `CloseWatcher`,
   `closedby`, `moveBefore`, `hidden="until-found"`, Reference Target, scoped registries,
   `popover="hint"`, `interestfor`, anchored container queries, `field-sizing`, `scrollbar-color`,
@@ -51,17 +51,17 @@ If `~/.npm` is not writable, set `NPM_CONFIG_CACHE=/tmp/npm-cache`. Cite guide i
   allowlist in ARCHITECTURE §18.6) before it goes to the owner.
 - The library itself is unlicensed (D-008): no LICENSE file; every `package.json` is
   `"private": true, "license": "UNLICENSED"`; nothing is published. Keep `THIRD-PARTY-NOTICES.md`
-  current, including the upstream Astryx (MIT) attribution for adapted code and docs.
+  current, including the upstream (MIT) attribution for adapted code and docs.
 
 ## Layout
 
 ```text
-packages/tokens      @tecton-astryx/tokens      token inputs → tokens.css, palette.css, fonts.css, metadata
-packages/core        @tecton-astryx/core        base class, define, events, context, controllers, mixins, i18n
-packages/icons       @tecton-astryx/icons       icon data (default set = Astryx port)
-packages/locales     @tecton-astryx/locales     30 upstream catalogs + pseudo
-packages/components  @tecton-astryx/components  src/<folder>/ per component family (ARCHITECTURE §4)
-packages/testing     @tecton-astryx/testing     fixtures, a11y helpers, standard suites
+packages/tokens      @tecton-wc/tokens      token inputs → tokens.css, palette.css, fonts.css, metadata
+packages/core        @tecton-wc/core        base class, define, events, context, controllers, mixins, i18n
+packages/icons       @tecton-wc/icons       icon data (default set = upstream role names on Lucide)
+packages/locales     @tecton-wc/locales     30 upstream catalogs + pseudo
+packages/components  @tecton-wc/components  src/<folder>/ per component family (ARCHITECTURE §4)
+packages/testing     @tecton-wc/testing     fixtures, a11y helpers, standard suites
 apps/docs            Astro + Starlight docs site
 tools/               generators, checks, Vite/ESLint/Stylelint/CEM plugins
 docs/                plan/, research/, ARCHITECTURE.md, CONVENTIONS.md
@@ -84,6 +84,22 @@ docs/                plan/, research/, ARCHITECTURE.md, CONVENTIONS.md
 Environment: Node 22, pnpm 10. Only Chromium is installed locally (`/opt/pw-browsers/chromium`,
 Chromium 141, `PLAYWRIGHT_BROWSERS_PATH` set); the test config passes it as `executablePath`.
 **Never run `playwright install` locally.** CI also runs Firefox and WebKit.
+
+## Naming (D-015)
+
+Nothing that ships or renders names the upstream design system. Use `@tecton-wc/*` for packages and
+imports, `@tct.<namespace>.<key>` for message ids (the locales generator maps the upstream catalogs;
+they stay byte-identical), `/vendor/tecton-wc/` in guides, and the token statuses `tecton-binding` and
+`retained-default`. In docs, JSDoc (it feeds the manifest), CSS descriptions and user-facing strings say
+"upstream", never the design system's name; `parity.json`, tests, planning docs and non-doc code comments
+may keep neutral upstream references. `pnpm docs:public-check` is absolute: it scans generated pages,
+`llms.txt`, the registry, the Custom Elements Manifest, every `package.json` and `dist/`, and fails on any
+mention (authored guides are still only reported).
+
+**After merging the rename into a branch, run `node tools/codemods/d015-rename.ts`** (add `--dry-run` to
+preview). It rewrites the old package scope, message ids, vendor path and token status ids in the files
+your branch added, skips the upstream catalogs, `docs/plan/` and `docs/research/`, is idempotent, and
+prints what it changed. Then `pnpm install --offline` (workspace-only lockfile change) and `pnpm check`.
 
 ## Generated files
 

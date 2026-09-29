@@ -1,4 +1,4 @@
-import {createContext} from '@tecton-astryx/core/context/protocol.js';
+import {createContext} from '@tecton-wc/core/context/protocol.js';
 import type {ItemDescription} from './item.types.js';
 
 /**

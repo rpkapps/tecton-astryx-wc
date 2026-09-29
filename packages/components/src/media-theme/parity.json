@@ -46,129 +46,129 @@
       "hooks": [
         {
           "upstream": "useAutoMediaMode",
-          "target": "@tecton-astryx/core/theme/auto-media-mode.js",
+          "target": "@tecton-wc/core/theme/auto-media-mode.js",
           "as": "module-function",
           "notes": "measureMediaMode(anchor), pickMediaMode, resolveBackdrop, resolvePaintedColors, flatTreeParent. Internal upstream (not exported); the element re-measures from a MutationObserver over its ancestors and a prefers-color-scheme listener instead of on every render."
         },
         {
           "upstream": "defineTheme",
-          "target": "@tecton-astryx/core/theme/define-theme.js",
+          "target": "@tecton-wc/core/theme/define-theme.js",
           "as": "module-function",
           "notes": "defineTheme(input) -> DefinedTheme; tokens are any `--*` name (the closed upstream union is the pipeline's token set, checked by pnpm tokens:check); icons take IconDefinition/IconLoader (registerIcons shape), indicators are an opaque registry the indicator family reads; `syntax` takes the structural SyntaxThemeDefinition."
         },
         {
           "upstream": "isDefinedTheme",
-          "target": "@tecton-astryx/core/theme/define-theme.js",
+          "target": "@tecton-wc/core/theme/define-theme.js",
           "as": "module-function"
         },
         {
           "upstream": "generateThemeCSS",
-          "target": "@tecton-astryx/core/theme/generate-theme-rules.js",
+          "target": "@tecton-wc/core/theme/generate-theme-rules.js",
           "as": "module-function",
           "notes": "Emits @scope ([data-tct-theme=\"<name>\"]) to ([data-tct-theme]); component keys resolve to tag + part (theming-targets.js), prop:value keys to reflected host attributes. Golden-tested against tokens.css for the Tecton theme."
         },
         {
           "upstream": "generateOnMediaCSS",
-          "target": "@tecton-astryx/core/theme/generate-theme-rules.js",
+          "target": "@tecton-wc/core/theme/generate-theme-rules.js",
           "as": "module-function",
           "notes": "Targets [data-media-theme=\"dark|light\"], the attribute tct-media-theme writes and tokens.css pins."
         },
         {
           "upstream": "generateAdaptationCSS",
-          "target": "@tecton-astryx/core/theme/generate-theme-rules.js",
+          "target": "@tecton-wc/core/theme/generate-theme-rules.js",
           "as": "module-function"
         },
         {
           "upstream": "generateThemeRules",
-          "target": "@tecton-astryx/core/theme/generate-theme-rules.js",
+          "target": "@tecton-wc/core/theme/generate-theme-rules.js",
           "as": "module-function"
         },
         {
           "upstream": "generateThemeRulesSplit",
-          "target": "@tecton-astryx/core/theme/generate-theme-rules.js",
+          "target": "@tecton-wc/core/theme/generate-theme-rules.js",
           "as": "module-function"
         },
         {
           "upstream": "registerTheme",
-          "target": "@tecton-astryx/core/theme/theme-registry.js",
+          "target": "@tecton-wc/core/theme/theme-registry.js",
           "as": "module-function"
         },
         {
           "upstream": "getRegisteredTheme",
-          "target": "@tecton-astryx/core/theme/theme-registry.js",
+          "target": "@tecton-wc/core/theme/theme-registry.js",
           "as": "module-function"
         },
         {
           "upstream": "getRegisteredThemes",
-          "target": "@tecton-astryx/core/theme/theme-registry.js",
+          "target": "@tecton-wc/core/theme/theme-registry.js",
           "as": "module-function"
         },
         {
           "upstream": "resetThemes",
-          "target": "@tecton-astryx/core/theme/theme-registry.js",
+          "target": "@tecton-wc/core/theme/theme-registry.js",
           "as": "module-function"
         },
         {
           "upstream": "expandTypeScale",
-          "target": "@tecton-astryx/core/theme/expand-type-scale.js",
+          "target": "@tecton-wc/core/theme/expand-type-scale.js",
           "as": "module-function"
         },
         {
           "upstream": "generateTypeScaleComponents",
-          "target": "@tecton-astryx/core/theme/expand-type-scale.js",
+          "target": "@tecton-wc/core/theme/expand-type-scale.js",
           "as": "module-function"
         },
         {
           "upstream": "expandRadiusScale",
-          "target": "@tecton-astryx/core/theme/expand-radius-scale.js",
+          "target": "@tecton-wc/core/theme/expand-radius-scale.js",
           "as": "module-function"
         },
         {
           "upstream": "expandColorScale",
-          "target": "@tecton-astryx/core/theme/expand-color-scale.js",
+          "target": "@tecton-wc/core/theme/expand-color-scale.js",
           "as": "module-function",
           "notes": "The seed of accent-less (neutral-only) configs is the Tecton accent hue (#644a78), guarded against --color-accent by a test."
         },
         {
           "upstream": "expandMotionScale",
-          "target": "@tecton-astryx/core/theme/expand-motion-scale.js",
+          "target": "@tecton-wc/core/theme/expand-motion-scale.js",
           "as": "module-function"
         },
         {
           "upstream": "tokenDefaults",
-          "target": "@tecton-astryx/core/theme/token-defaults.js",
+          "target": "@tecton-wc/core/theme/token-defaults.js",
           "as": "module-function",
-          "notes": "A registry, not constants: values live in tokens.css. registerTokenDefaults(tokenDefaultsFromMetadata(tokens)) with the pipeline metadata from @tecton-astryx/tokens/tokens.js (tct-theme does this, see requests)."
+          "notes": "A registry, not constants: values live in tokens.css. registerTokenDefaults(tokenDefaultsFromMetadata(tokens)) with the pipeline metadata from @tecton-wc/tokens/tokens.js (tct-theme does this, see requests)."
         },
         {
           "upstream": "DEFAULT_WIDTH_BREAKPOINTS",
-          "target": "@tecton-astryx/core/theme/theme-adaptations.js",
+          "target": "@tecton-wc/core/theme/theme-adaptations.js",
           "as": "module-function",
           "notes": "Equal to the retained upstream values in tokens.json (golden-tested)."
         },
         {
           "upstream": "WIDTH_BREAKPOINT_NAMES",
-          "target": "@tecton-astryx/core/theme/theme-adaptations.js",
+          "target": "@tecton-wc/core/theme/theme-adaptations.js",
           "as": "module-function"
         },
         {
           "upstream": "resolveThemeToken",
-          "target": "@tecton-astryx/core/theme/tokens.js",
+          "target": "@tecton-wc/core/theme/tokens.js",
           "as": "module-function"
         },
         {
           "upstream": "resolveThemeTokens",
-          "target": "@tecton-astryx/core/theme/tokens.js",
+          "target": "@tecton-wc/core/theme/tokens.js",
           "as": "module-function"
         },
         {
           "upstream": "tokenVar",
-          "target": "@tecton-astryx/core/theme/tokens.js",
+          "target": "@tecton-wc/core/theme/tokens.js",
           "as": "module-function"
         },
         {
           "upstream": "tokenVars",
-          "target": "@tecton-astryx/core/theme/tokens.js",
+          "target": "@tecton-wc/core/theme/tokens.js",
           "as": "module-function",
           "notes": "A Proxy over the registered token defaults."
         },
@@ -235,7 +235,7 @@
       "requests": [
         {
           "file": "tools/generate.ts (and packages/core/src/generated)",
-          "reason": "Generate the theme wiring data the runtime cannot import: (1) a token-defaults module from tokens.json (name to light/dark value) so core need not depend on the tokens package (tokenDefaults is a registry until then; tct-theme should call registerTokenDefaults(tokenDefaultsFromMetadata(tokens)) with @tecton-astryx/tokens/tokens.js), and (2) the theming-target table from custom-elements.json with themingTargetsFromCem(), registered at start-up, so a theme component key resolves to its element and part (until then a key falls back to tct-<key> with part \"base\" plus the built-in text, heading, button and icon parts)."
+          "reason": "Generate the theme wiring data the runtime cannot import: (1) a token-defaults module from tokens.json (name to light/dark value) so core need not depend on the tokens package (tokenDefaults is a registry until then; tct-theme should call registerTokenDefaults(tokenDefaultsFromMetadata(tokens)) with @tecton-wc/tokens/tokens.js), and (2) the theming-target table from custom-elements.json with themingTargetsFromCem(), registered at start-up, so a theme component key resolves to its element and part (until then a key falls back to tct-<key> with part \"base\" plus the built-in text, heading, button and icon parts)."
         },
         {
           "file": "THIRD-PARTY-NOTICES.md",

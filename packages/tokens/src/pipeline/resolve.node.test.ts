@@ -57,11 +57,11 @@ describe('resolveTokens (D-001)', () => {
     expect(value('--spacing-4', 'light')).toBe('16px');
   });
 
-  it('marks data-viz and --size-element-lg provisional, motion astryx-retained (D-013)', () => {
+  it('marks data-viz and --size-element-lg provisional, motion retained-default (D-013)', () => {
     for (const name of ['--color-data-categorical-blue', '--size-element-lg'])
       expect(real.byName.get(name)?.status).toBe('provisional');
     for (const name of ['--duration-fast', '--ease-standard'])
-      expect(real.byName.get(name)?.status).toBe('astryx-retained');
+      expect(real.byName.get(name)?.status).toBe('retained-default');
     expect(real.byName.get('--color-accent')?.status).toBe('tecton-export');
   });
 
@@ -74,7 +74,7 @@ describe('resolveTokens (D-001)', () => {
   it('adds tecton-astryx-only component roles under export-style names', () => {
     expect(roleTokenName('component.tab.restText')).toBe('--tecton-color-tab-rest-text');
     expect(roleTokenName('accent.lilac.fill')).toBe('--tecton-color-accent-lilac-fill');
-    expect(real.byName.get('--tecton-color-checkbox-border')?.status).toBe('tecton-astryx');
+    expect(real.byName.get('--tecton-color-checkbox-border')?.status).toBe('tecton-binding');
   });
 
   it('builds shadows per mode and keeps syntax tokens as references', () => {

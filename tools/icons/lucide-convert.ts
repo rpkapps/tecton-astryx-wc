@@ -223,7 +223,7 @@ import type {IconLoader} from './types.js';
 
 /**
  * Every Lucide glyph as a lazy loader, keyed by its kebab-case name (\`chevron-down\`, \`a-arrow-up\`).
- * Register with a namespace so it never shadows the Astryx role names:
+ * Register with a namespace so it never shadows the semantic role names:
  *
  *   registerIcons(lucideIcons, {namespace: 'lucide'});   // <tct-icon name="lucide:activity">
  *

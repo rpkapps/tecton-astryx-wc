@@ -2,8 +2,8 @@ import type {CSSResultGroup, PropertyValues, TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
 import {html as staticHtml} from 'lit/static-html.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
-import {AriaDelegateController} from '@tecton-astryx/core/controllers/aria-delegate.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {AriaDelegateController} from '@tecton-wc/core/controllers/aria-delegate.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import base from '../styles/base.styles.css';
 import focusRing from '../styles/focus-ring.styles.css';
 import {ScrollFocusController} from './scroll-focus.js';
@@ -68,7 +68,7 @@ export class TctStackItem extends TctElement {
     ScrollFocusController.attach(this);
   }
 
-  readonly #aria = new AriaDelegateController(this, {
+  readonly #aria: AriaDelegateController = new AriaDelegateController(this, {
     target: () => {
       const inner = this.renderRoot.querySelector<HTMLElement>('[part~="base"]');
       return inner && inner.localName !== 'div' ? inner : null;

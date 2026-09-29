@@ -129,7 +129,7 @@ const clip = (text: string, max = 150) =>
   text.length > max ? `${text.slice(0, max - 1).trimEnd()}…` : text;
 
 const statusTone = (status: string): string | undefined =>
-  status === 'provisional' ? 'warning' : status === 'astryx-retained' ? 'info' : undefined;
+  status === 'provisional' ? 'warning' : status === 'retained-default' ? 'info' : undefined;
 
 export function tokensPage(tokens: TokenData | undefined): string {
   const out: string[] = [

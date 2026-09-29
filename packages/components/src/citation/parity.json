@@ -45,7 +45,7 @@
           "upstream": "isSafeUrl",
           "target": "safeUrl",
           "as": "module-function",
-          "notes": "@tecton-astryx/core/utils/safe-url.js: navigation policy for the link, resource policy (no data:) for image sources."
+          "notes": "@tecton-wc/core/utils/safe-url.js: navigation policy for the link, resource policy (no data:) for image sources."
         },
         {
           "upstream": "renderIconSlot",

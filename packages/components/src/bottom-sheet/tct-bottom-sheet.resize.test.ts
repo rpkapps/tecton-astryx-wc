@@ -5,9 +5,9 @@
  * Upstream test names (BottomSheet.test.tsx `snapPoints`, `height`) are kept where the behaviour applies.
  */
 import {afterEach, describe, expect, it, vi} from 'vitest';
-import type {TctSnapChangeEvent} from '@tecton-astryx/core/events/tct-snap-change.js';
-import {resetDevWarnings} from '@tecton-astryx/core/utils/dev.js';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
+import type {TctSnapChangeEvent} from '@tecton-wc/core/events/tct-snap-change.js';
+import {resetDevWarnings} from '@tecton-wc/core/utils/dev.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import {
   aTimeout,
   axNode,
@@ -18,7 +18,7 @@ import {
   pressKeys,
   recordEvents,
   waitUntil,
-} from '@tecton-astryx/testing/index.js';
+} from '@tecton-wc/testing/index.js';
 import './define.js';
 import type {TctBottomSheet} from './tct-bottom-sheet.js';
 import {

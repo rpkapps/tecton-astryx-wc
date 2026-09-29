@@ -6,13 +6,13 @@
 import {html} from 'lit';
 import {property} from 'lit/decorators.js';
 import {afterEach, beforeAll, describe, expect, it, vi} from 'vitest';
-import {defineElement, resetDefineWarnings} from '@tecton-astryx/core/define.js';
-import {TctOpenChangeEvent} from '@tecton-astryx/core/events/tct-open-change.js';
-import {features, overrideFeature, resetFeatures} from '@tecton-astryx/core/features.js';
-import {TctElement, type TctElementConstructor} from '@tecton-astryx/core/tct-element.js';
-import {devError, devWarn, isDevMode, resetDevWarnings} from '@tecton-astryx/core/utils/dev.js';
-import {IdController, uniqueId} from '@tecton-astryx/core/utils/id.js';
-import {ImeGuard, isImeKeyEvent} from '@tecton-astryx/core/utils/ime.js';
+import {defineElement, resetDefineWarnings} from '@tecton-wc/core/define.js';
+import {TctOpenChangeEvent} from '@tecton-wc/core/events/tct-open-change.js';
+import {features, overrideFeature, resetFeatures} from '@tecton-wc/core/features.js';
+import {TctElement, type TctElementConstructor} from '@tecton-wc/core/tct-element.js';
+import {devError, devWarn, isDevMode, resetDevWarnings} from '@tecton-wc/core/utils/dev.js';
+import {IdController, uniqueId} from '@tecton-wc/core/utils/id.js';
+import {ImeGuard, isImeKeyEvent} from '@tecton-wc/core/utils/ime.js';
 import {emulateMedia} from '../emulate.js';
 import {fixture} from '../fixture.js';
 import {hasCustomState} from '../forms.js';
@@ -24,7 +24,7 @@ class TctTestBase extends TctElement {
   connects = 0;
   disconnects = 0;
   moves = 0;
-  readonly ids = new IdController(this, 'tct-test');
+  readonly ids: IdController = new IdController(this, 'tct-test');
 
   override connectedCallback(): void {
     super.connectedCallback();
@@ -319,7 +319,7 @@ describe('features', () => {
   });
 
   it.skipIf(!isChromium)('prefersReducedMotion reads the live media query', async () => {
-    const {prefersReducedMotion} = await import('@tecton-astryx/core/features.js');
+    const {prefersReducedMotion} = await import('@tecton-wc/core/features.js');
     const restore = await emulateMedia({reducedMotion: 'reduce'});
     expect(prefersReducedMotion()).toBe(true);
     await restore();
@@ -360,7 +360,7 @@ describe('dev diagnostics and IME helpers', () => {
   it('ImeGuard tracks composition on the target and clears on blur', async () => {
     class Host extends TctElement {
       static override readonly tagName = 'tct-test-ime';
-      readonly guard = new ImeGuard(this, () => this.renderRoot.querySelector('input'));
+      readonly guard: ImeGuard = new ImeGuard(this, () => this.renderRoot.querySelector('input'));
       override render() {
         return html`<input />`;
       }

@@ -4,7 +4,7 @@
  * hovered. Measured from the painted, computed colours (after `color-mix`), not from token values.
  */
 import {describe, expect, it} from 'vitest';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
 import './define.js';
 import type {TctCheckboxIndicator} from './tct-checkbox-indicator.js';
 import type {TctRadioIndicator} from './tct-radio-indicator.js';

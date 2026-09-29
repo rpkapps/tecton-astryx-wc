@@ -1,12 +1,12 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {AriaDelegateController} from '@tecton-astryx/core/controllers/aria-delegate.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
-import {IdController} from '@tecton-astryx/core/utils/id.js';
+import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {AriaDelegateController} from '@tecton-wc/core/controllers/aria-delegate.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
+import {IdController} from '@tecton-wc/core/utils/id.js';
 import base from '../styles/base.styles.css';
 import {listContext} from './list.context.js';
 import {
@@ -35,7 +35,7 @@ import styles from './tct-list.styles.css';
  * @upstream List
  * @slot - The list items (`tct-list-item`).
  * @slot header - Rich header content; overrides the `header` attribute.
- * @csspart list - The list element (Astryx target `astryx-list`).
+ * @csspart list - The list element.
  * @csspart header - The header wrapper.
  * @cloakDisplay block
  */
@@ -67,9 +67,15 @@ export class TctList extends TctElement {
   /** First number of a numbered list (`list-style="decimal"`). */
   @property({type: Number}) start = 1;
 
-  readonly #slots = new SlotController(this, 'header');
-  readonly #ids = new IdController(this, 'tct-list');
-  readonly #context = new ContextProvider(this, {context: listContext, initialValue: null});
+  readonly #slots: SlotController = new SlotController(this, 'header');
+  readonly #ids: IdController = new IdController(this, 'tct-list');
+  readonly #context: ContextProvider<typeof listContext> = new ContextProvider<typeof listContext>(
+    this,
+    {
+      context: listContext,
+      initialValue: null,
+    },
+  );
   constructor() {
     super();
     // Mirrors host aria-* onto the inner list; it syncs on connect and after every host update.

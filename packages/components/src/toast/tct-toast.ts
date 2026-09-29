@@ -1,14 +1,14 @@
 import {html, type CSSResultGroup, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
-import {INTERACTIVE_SELECTORS} from '@tecton-astryx/core/controllers/clickable-container.js';
+import {INTERACTIVE_SELECTORS} from '@tecton-wc/core/controllers/clickable-container.js';
 import {
   TctToastDismissEvent,
   type ToastDismissReason,
-} from '@tecton-astryx/core/events/tct-toast-dismiss.js';
-import {TctToastHideEvent} from '@tecton-astryx/core/events/tct-toast-hide.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import defaultMessages from '@tecton-astryx/locales/en/toast.js';
+} from '@tecton-wc/core/events/tct-toast-dismiss.js';
+import {TctToastHideEvent} from '@tecton-wc/core/events/tct-toast-hide.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import defaultMessages from '@tecton-wc/locales/en/toast.js';
 import {TctIcon} from '../icon/tct-icon.js';
 import base from '../styles/base.styles.css';
 import focusRing from '../styles/focus-ring.styles.css';
@@ -100,7 +100,10 @@ export class TctToast extends TctElement {
 
   // -------------------------------------------------------------------------------- internals
 
-  readonly #locale = new LocaleController(this, {namespace: 'toast', defaults: defaultMessages});
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'toast',
+    defaults: defaultMessages,
+  });
   #timer: ReturnType<typeof setTimeout> | undefined;
   #paused = false;
   #remaining = DEFAULT_AUTO_HIDE_MS;

@@ -5,18 +5,18 @@
  */
 import {html} from 'lit';
 import {beforeAll, describe, expect, it} from 'vitest';
-import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
-import {sizeContext} from '@tecton-astryx/core/context/keys.js';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {axNode, expectAccessible} from '@tecton-astryx/testing/a11y.js';
-import {emulateMedia} from '@tecton-astryx/testing/emulate.js';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {TctTestChip} from '@tecton-astryx/testing/fixtures/test-toolbar.js';
-import {deepActiveElement, pressKeys, tabSequence} from '@tecton-astryx/testing/keyboard.js';
-import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
-import {runKeyboardSuite, type KeyboardRow} from '@tecton-astryx/testing/suites/keyboard.js';
-import {nextFrame, waitUntil} from '@tecton-astryx/testing/timing.js';
+import {ContextConsumer} from '@tecton-wc/core/context/protocol.js';
+import {sizeContext} from '@tecton-wc/core/context/keys.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {axNode, expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {emulateMedia} from '@tecton-wc/testing/emulate.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {TctTestChip} from '@tecton-wc/testing/fixtures/test-toolbar.js';
+import {deepActiveElement, pressKeys, tabSequence} from '@tecton-wc/testing/keyboard.js';
+import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
+import {runKeyboardSuite, type KeyboardRow} from '@tecton-wc/testing/suites/keyboard.js';
+import {nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
 import '../segmented-control/define.js';
 import './define.js';
 import type {TctToolbar} from './tct-toolbar.js';
@@ -24,7 +24,13 @@ import type {TctToolbar} from './tct-toolbar.js';
 /** A control that reports the size it inherits (what a button or input reads). */
 class TctTestSized extends TctElement {
   static override readonly tagName = 'tct-test-sized';
-  readonly #size = new ContextConsumer(this, {context: sizeContext, subscribe: true});
+  readonly #size: ContextConsumer<typeof sizeContext> = new ContextConsumer<typeof sizeContext>(
+    this,
+    {
+      context: sizeContext,
+      subscribe: true,
+    },
+  );
   get inherited(): string | null | undefined {
     return this.#size.value;
   }

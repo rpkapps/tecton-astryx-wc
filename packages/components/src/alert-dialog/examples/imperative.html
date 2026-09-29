@@ -1,7 +1,7 @@
 <!-- title: Without markup; description: openAlertDialog() renders the dialog, opens it and removes it when it closes. onAction receives the handle and may return a promise: the action button shows its spinner until it settles. -->
 <button type="button" id="alert-imperative-open">Delete item</button>
 <script type="module">
-  import {openAlertDialog} from '@tecton-astryx/components/alert-dialog/alert-dialog.api.js';
+  import {openAlertDialog} from '@tecton-wc/components/alert-dialog/alert-dialog.api.js';
 
   document.getElementById('alert-imperative-open').addEventListener('click', () => {
     openAlertDialog({

@@ -15,7 +15,7 @@ import {
   fixture,
   nextFrame,
   waitUntil,
-} from '@tecton-astryx/testing/index.js';
+} from '@tecton-wc/testing/index.js';
 import './define.js';
 import * as api from './alert-dialog.api.js';
 import type {TctAlertDialog} from './tct-alert-dialog.js';

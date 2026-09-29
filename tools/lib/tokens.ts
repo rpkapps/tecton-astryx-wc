@@ -4,7 +4,7 @@ import {join} from 'node:path';
 import {ROOT} from './paths.ts';
 
 export type TokenStatus =
-  'tecton-export' | 'tecton-astryx' | 'upstream-default' | 'astryx-retained' | 'provisional';
+  'tecton-export' | 'tecton-binding' | 'upstream-default' | 'retained-default' | 'provisional';
 
 export interface TokenMeta {
   name: string;
@@ -28,7 +28,7 @@ export interface TokenData {
   counts: {tokens: number; palette: number; byStatus: Record<string, number>};
   breakpoints?: {status: string; note: string; values: Record<string, number>};
   provisionalNonTokens: NonToken[];
-  astryxRetainedNonTokens: NonToken[];
+  retainedNonTokens: NonToken[];
   tectonDerivedNonTokens: NonToken[];
   tokens: TokenMeta[];
 }
@@ -43,7 +43,7 @@ export function loadTokens(path: string = TOKENS_JSON): TokenData | undefined {
   return {
     ...raw,
     provisionalNonTokens: raw.provisionalNonTokens ?? [],
-    astryxRetainedNonTokens: raw.astryxRetainedNonTokens ?? [],
+    retainedNonTokens: raw.retainedNonTokens ?? [],
     tectonDerivedNonTokens: raw.tectonDerivedNonTokens ?? [],
     tokens: Object.values(raw.tokens).sort((a, b) =>
       a.name < b.name ? -1 : a.name > b.name ? 1 : 0,

@@ -1,5 +1,5 @@
 {
-  "name": "@tecton-astryx/components",
+  "name": "@tecton-wc/components",
   "private": true,
   "license": "UNLICENSED",
   "version": "0.0.0",
@@ -50,13 +50,13 @@
     "./src/generated/define-all.ts"
   ],
   "dependencies": {
-    "@tecton-astryx/core": "workspace:*",
-    "@tecton-astryx/icons": "workspace:*",
-    "@tecton-astryx/locales": "workspace:*",
-    "@tecton-astryx/tokens": "workspace:*",
+    "@tecton-wc/core": "workspace:*",
+    "@tecton-wc/icons": "workspace:*",
+    "@tecton-wc/locales": "workspace:*",
+    "@tecton-wc/tokens": "workspace:*",
     "lit": "catalog:"
   },
   "devDependencies": {
-    "@tecton-astryx/testing": "workspace:*"
+    "@tecton-wc/testing": "workspace:*"
   }
 }

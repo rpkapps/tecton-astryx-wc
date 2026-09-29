@@ -61,7 +61,7 @@
           "kind": "prop",
           "target": "new-tab-label",
           "as": "attribute",
-          "notes": "Default: the localised @astryx.link.newTab message."
+          "notes": "Default: the localised @tct.link.newTab message."
         },
         {
           "upstream": "target",

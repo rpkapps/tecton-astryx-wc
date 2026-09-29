@@ -4,10 +4,10 @@
  */
 import {userEvent} from 'vitest/browser';
 import {beforeEach, describe, expect, it, vi} from 'vitest';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {formHarness} from '@tecton-astryx/testing/forms.js';
-import {pressKeys} from '@tecton-astryx/testing/keyboard.js';
-import {aTimeout, waitUntil} from '@tecton-astryx/testing/timing.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {formHarness} from '@tecton-wc/testing/forms.js';
+import {pressKeys} from '@tecton-wc/testing/keyboard.js';
+import {aTimeout, waitUntil} from '@tecton-wc/testing/timing.js';
 import './define.js';
 import type {TctButton} from './tct-button.js';
 

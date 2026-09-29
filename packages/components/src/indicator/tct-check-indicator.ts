@@ -1,8 +1,8 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import {TctIcon} from '../icon/tct-icon.js';
 import base from '../styles/base.styles.css';
 import {
@@ -44,7 +44,7 @@ export class TctCheckIndicator extends TctElement {
   /** Whether the owning row is disabled. Purely visual; the owner keeps the real disabled semantics. */
   @property({type: Boolean, reflect: true}) disabled = false;
 
-  readonly #slots = new SlotController(this, 'default');
+  readonly #slots: SlotController = new SlotController(this, 'default');
 
   protected override willUpdate(changed: PropertyValues<this>): void {
     // Decorative by contract: hidden from assistive technology whatever the author writes on the host.

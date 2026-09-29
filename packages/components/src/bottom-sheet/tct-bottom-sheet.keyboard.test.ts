@@ -3,8 +3,8 @@
  * sheet's and the switcher's table has a named step, so the docs and the tests cannot drift apart.
  */
 import {describe, expect, it} from 'vitest';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
-import {runKeyboardSuite, waitUntil} from '@tecton-astryx/testing/index.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
+import {runKeyboardSuite, waitUntil} from '@tecton-wc/testing/index.js';
 import './define.js';
 import type {TctBottomSheetSwitcher} from './tct-bottom-sheet-switcher.js';
 import type {TctBottomSheet} from './tct-bottom-sheet.js';

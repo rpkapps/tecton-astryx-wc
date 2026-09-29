@@ -1,4 +1,4 @@
-import type {SpacingStep} from '@tecton-astryx/core/mixins/box-props.js';
+import type {SpacingStep} from '@tecton-wc/core/mixins/box-props.js';
 
 /** Item alignment inside a grid track (`align-items` / `justify-items`). */
 export const GRID_ALIGNMENTS = ['start', 'center', 'end', 'stretch'] as const;

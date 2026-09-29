@@ -10,7 +10,7 @@
  * built from the small test-only hosts `tct-test-layer` and `tct-test-tooltip`.
  */
 import {beforeAll, describe, expect, it} from 'vitest';
-import {defineElement} from '@tecton-astryx/core/define.js';
+import {defineElement} from '@tecton-wc/core/define.js';
 import {fixture} from '../fixture.js';
 import {pressKeys} from '../keyboard.js';
 import {recordEvents} from '../events.js';

@@ -12,7 +12,7 @@ import {
   fixture,
   nextFrame,
   waitUntil,
-} from '@tecton-astryx/testing/index.js';
+} from '@tecton-wc/testing/index.js';
 import '../button/define.js';
 import '../heading/define.js';
 import './define.js';

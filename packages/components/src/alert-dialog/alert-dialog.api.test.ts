@@ -11,7 +11,7 @@ import {
   layerStack,
   pressKeys,
   waitUntil,
-} from '@tecton-astryx/testing/index.js';
+} from '@tecton-wc/testing/index.js';
 import './define.js';
 import {openAlertDialog, type AlertDialogHandle} from './alert-dialog.api.js';
 import type {TctButton} from '../button/tct-button.js';

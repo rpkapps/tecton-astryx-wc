@@ -12,11 +12,11 @@ import {
   ContextRequestEvent,
   createContext,
   pendingContextRequestCount,
-} from '@tecton-astryx/core/context/protocol.js';
-import {sizeContext, type ElementSize} from '@tecton-astryx/core/context/keys.js';
-import {SizeController} from '@tecton-astryx/core/controllers/size.js';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+} from '@tecton-wc/core/context/protocol.js';
+import {sizeContext, type ElementSize} from '@tecton-wc/core/context/keys.js';
+import {SizeController} from '@tecton-wc/core/controllers/size.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import {fixture} from '../fixture.js';
 import {nextFrame} from '../timing.js';
 
@@ -24,7 +24,13 @@ const testContext = createContext<string, symbol>(Symbol.for('tct.test.context')
 
 class TctTestProvider extends TctElement {
   static override readonly tagName = 'tct-test-provider';
-  readonly provider = new ContextProvider(this, {context: testContext, initialValue: 'initial'});
+  readonly provider: ContextProvider<typeof testContext> = new ContextProvider<typeof testContext>(
+    this,
+    {
+      context: testContext,
+      initialValue: 'initial',
+    },
+  );
   @property() value = 'initial';
   protected override willUpdate(): void {
     this.provider.setValue(this.value);
@@ -55,7 +61,10 @@ class TctTestConsumer extends TctElement {
 class TctTestSized extends TctElement {
   static override readonly tagName = 'tct-test-sized';
   @property() size: ElementSize | undefined;
-  readonly sizeController = new SizeController(this, {explicit: () => this.size, fallback: 'md'});
+  readonly sizeController: SizeController = new SizeController(this, {
+    explicit: () => this.size,
+    fallback: 'md',
+  });
   override render() {
     return html`<span>${this.sizeController.value}</span>`;
   }
@@ -64,7 +73,13 @@ class TctTestSized extends TctElement {
 class TctTestSizeProvider extends TctElement {
   static override readonly tagName = 'tct-test-size-provider';
   @property() size: ElementSize | null = null;
-  readonly provider = new ContextProvider(this, {context: sizeContext, initialValue: null});
+  readonly provider: ContextProvider<typeof sizeContext> = new ContextProvider<typeof sizeContext>(
+    this,
+    {
+      context: sizeContext,
+      initialValue: null,
+    },
+  );
   protected override willUpdate(): void {
     this.provider.setValue(this.size);
   }

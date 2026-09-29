@@ -1,7 +1,7 @@
 import {property} from 'lit/decorators.js';
-import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {sizeContext, type ElementSize} from '@tecton-astryx/core/context/keys.js';
-import {TctProviderElement} from '@tecton-astryx/core/provider-element.js';
+import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {sizeContext, type ElementSize} from '@tecton-wc/core/context/keys.js';
+import {TctProviderElement} from '@tecton-wc/core/provider-element.js';
 import {warnInvalidValue} from '../text/text.types.js';
 import lightStyles from './tct-size-provider.light.css?inline';
 import {ELEMENT_SIZES} from './size-provider.types.js';
@@ -27,7 +27,13 @@ export class TctSizeProvider extends TctProviderElement {
   /** Default size for the controls inside: `sm`, `md` or `lg`. Unset: controls use their own default. */
   @property({reflect: true}) size: ElementSize | undefined = undefined;
 
-  readonly #provider = new ContextProvider(this, {context: sizeContext, initialValue: null});
+  readonly #provider: ContextProvider<typeof sizeContext> = new ContextProvider<typeof sizeContext>(
+    this,
+    {
+      context: sizeContext,
+      initialValue: null,
+    },
+  );
 
   #publish(): void {
     const size = this.size;

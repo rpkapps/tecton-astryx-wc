@@ -5,8 +5,8 @@
  */
 import {userEvent} from 'vitest/browser';
 import {beforeAll, describe, expect, it} from 'vitest';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import {TctTestInput, TctTestSubmit} from '../fixtures/test-form.js';
 import {TctTestLayer} from '../fixtures/test-layer.js';
 import {fixture} from '../fixture.js';

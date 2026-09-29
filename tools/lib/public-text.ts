@@ -1,9 +1,10 @@
 /**
- * Owner decision: the upstream design system's name must not appear anywhere on the public docs site.
- * Authored JSDoc and token metadata still carry it (it is useful in source, in `parity.json` and in the
- * internal reports), so everything the generators print to public pages goes through `publicText()`,
- * and token status names go through `tokenStatusLabel()`. Anything the sanitiser cannot remove is
- * found by `findUpstreamName()` and reported by the docs generator.
+ * Owner decision (D-015): the upstream design system's name must not appear in anything that ships or
+ * renders: the docs site, generated pages, `llms.txt`, the agent registry, the Custom Elements Manifest,
+ * token metadata, package names and public ids. Internal files (`parity.json`, tests, planning docs)
+ * still carry it, so everything the generators print to shipped output goes through `publicText()`, and
+ * token status names go through `tokenStatusLabel()`. Anything the sanitiser cannot remove is found by
+ * `findUpstreamName()` and fails the public-output check.
  */
 import type {TokenStatus} from './tokens.ts';
 
@@ -19,7 +20,7 @@ export function publicText(text: string): string {
         /^Adapted (?:\(not ported\) )?from (?:the )?(?:Astryx|base system) docs topic .*$/gim,
         '',
       )
-      // Token status names (guides and metadata): "Astryx-retained", `astryx-retained`, "Astryx default".
+      // Token status names (guides and metadata): "Astryx-retained", `retained-default`, "Astryx default".
       .replace(/(\|\s*)Astryx-retained(?![A-Za-z0-9-])/g, '$1Retained default')
       .replace(/(?<![A-Za-z0-9])Astryx-retained(?![A-Za-z0-9-])/gi, 'retained default')
       .replace(/(?<![A-Za-z0-9])Astryx default(?![A-Za-z0-9])/g, 'default')
@@ -36,6 +37,16 @@ export function publicText(text: string): string {
       .replace(/\s*\(upstream `[^`]*`\)/g, '')
       .replace(/\ban Astryx role\b/g, 'a role')
       .replace(/\bAstryx role names\b/g, 'role names')
+      // The owner's React reference theme, cited in parity notes.
+      .replace(
+        /(?<![@\w/-])tecton-astryx components\.ts/g,
+        "the Tecton reference theme's components.ts",
+      )
+      .replace(/(?<![@\w/-])tecton-astryx's/g, "the Tecton reference theme's")
+      // Upstream data attributes and hooks named in notes.
+      .replace(/\bdata-astryx-([\w-]+)/g, 'data-upstream-$1')
+      .replace(/`astryx-([\w-]+)`/g, '`upstream-$1`')
+      .replace(/\bupstream Astryx\b/g, 'upstream')
       // Token metadata: "(tecton-astryx name)", "the default Astryx border", "Not set by tecton-astryx".
       .replace(/\s*\(tecton-astryx name\)/g, '')
       .replace(/\bthe default Astryx (\w+)/g, 'the default $1')
@@ -49,39 +60,29 @@ export function publicText(text: string): string {
   );
 }
 
-/**
- * Identifiers that still carry the upstream name because their rename is scheduled separately (D-015):
- * the package scope `@tecton-astryx/*`, the message-id namespace `@astryx.*` and the vendor path
- * `/vendor/tecton-astryx/` that the guides use. They are not silent:
- * the public-output check reports how many it tolerated. Delete this list when both renames land, and the
- * check becomes absolute.
- */
-export const TRANSITIONAL_IDENTIFIERS: readonly RegExp[] = [
-  /@tecton-astryx\/[\w.-]+/g,
-  /@astryx\.[\w.<>*-]+/g,
-  /\/vendor\/tecton-astryx\//g,
-];
-
-/** Occurrences of the transitional identifiers in `text` (reported, not failed). */
-export function countTransitional(text: string): number {
-  return TRANSITIONAL_IDENTIFIERS.reduce(
-    (sum, pattern) => sum + (text.match(pattern)?.length ?? 0),
-    0,
-  );
+/** `publicText()` applied to every string inside `value` (objects and arrays are copied). */
+export function publicData<T>(value: T): T {
+  if (typeof value === 'string') return publicText(value) as T;
+  if (Array.isArray(value)) return value.map((item) => publicData(item as unknown)) as T;
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, inner]) => [key, publicData(inner)]),
+    ) as T;
+  }
+  return value;
 }
 
 /**
- * Every place the upstream name survives in `text`, as short context snippets, after removing the
- * transitional identifiers. Empty when the text is clean.
+ * Every place the upstream name survives in `text`, as short context snippets. Absolute: package scopes,
+ * message ids, vendor paths and class names count like any other mention (D-015). Empty when the text is
+ * clean.
  */
 export function upstreamLeaks(text: string): string[] {
-  let rest = text;
-  for (const pattern of TRANSITIONAL_IDENTIFIERS) rest = rest.replace(pattern, ' ');
   const found: string[] = [];
-  for (const match of rest.matchAll(/astryx/gi)) {
+  for (const match of text.matchAll(/astryx/gi)) {
     const at = match.index ?? 0;
     found.push(
-      rest
+      text
         .slice(Math.max(0, at - 30), at + 40)
         .replace(/\s+/g, ' ')
         .trim(),
@@ -94,9 +95,9 @@ export const findUpstreamName = (text: string): boolean => upstreamLeaks(text).l
 
 const STATUS_LABELS: Readonly<Record<TokenStatus, string>> = {
   'tecton-export': 'Tecton',
-  'tecton-astryx': 'Tecton (bound)',
+  'tecton-binding': 'Tecton (bound)',
   'upstream-default': 'default',
-  'astryx-retained': 'retained default',
+  'retained-default': 'retained default',
   provisional: 'provisional',
 };
 

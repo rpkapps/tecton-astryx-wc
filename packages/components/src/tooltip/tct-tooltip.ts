@@ -1,10 +1,10 @@
 import {html, type CSSResultGroup, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
-import {TooltipController} from '@tecton-astryx/core/controllers/tooltip.js';
-import {TctAfterOpenChangeEvent} from '@tecton-astryx/core/events/tct-after-open-change.js';
-import {TctOpenChangeEvent} from '@tecton-astryx/core/events/tct-open-change.js';
-import {prefersReducedMotion} from '@tecton-astryx/core/features.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {TooltipController} from '@tecton-wc/core/controllers/tooltip.js';
+import {TctAfterOpenChangeEvent} from '@tecton-wc/core/events/tct-after-open-change.js';
+import {TctOpenChangeEvent} from '@tecton-wc/core/events/tct-open-change.js';
+import {prefersReducedMotion} from '@tecton-wc/core/features.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import base from '../styles/base.styles.css';
 import {oneOf} from '../field/field-utils.js';
 import {
@@ -46,7 +46,7 @@ import styles from './tct-tooltip.styles.css';
  * @slot - The trigger element (its first element), or plain text.
  * @slot surface - The popup satellite the element creates. Do not fill it.
  * @csspart trigger - The trigger wrapper of a text-only tooltip (the element itself).
- * @csspart surface - The tooltip box (on `tct-tooltip-surface`, Astryx target `astryx-tooltip`).
+ * @csspart surface - The tooltip box (on `tct-tooltip-surface`).
  * @cssstate open - The tooltip is showing.
  * @fires tct-open-change - A user or Escape asks to show or hide it; cancelable, carries `open` and `reason`.
  * @fires tct-after-open-change - The change settled (after the entry or exit animation); carries `open`.
@@ -93,7 +93,7 @@ export class TctTooltip extends TctElement {
   /** Whether the tooltip is showing. The attribute opens it initially (it stays dismissible). */
   @property({type: Boolean, reflect: true}) open = false;
 
-  readonly #tooltip = new TooltipController(this, {
+  readonly #tooltip: TooltipController = new TooltipController(this, {
     mode: 'satellite',
     surfaceTag: 'tct-tooltip-surface',
     trigger: () => this.#trigger(),
