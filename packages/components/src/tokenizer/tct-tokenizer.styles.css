@@ -1,0 +1,157 @@
+/*
+ * tct-tokenizer. The box, the label chrome and the sizes are the shared field module and the shared box
+ * sheet; this sheet lays out what a tokenizer holds: the tokens and the input wrapping in one lane, and the
+ * end controls (busy indicator, end content, clear button, status glyph) in a second grid column that stays on
+ * the first row while tokens wrap below it. In flow, not absolutely placed: the lane simply ends where the
+ * end column begins, so the input can never run under the controls and nothing is measured. Border
+ * concentricity as upstream: with tokens the padding is the standard padding minus the border width, so a
+ * token (the control height minus 8px) fits exactly. The result popup is the shared typeahead-popup sheet.
+ * [mwg:css] [mwg:styling-web-components] [mwg:form-fields-automatically-fit-contents]
+ */
+@layer component {
+  /* The field grows with its tokens: the fixed control heights of the field module become minimums. */
+  .input-wrapper[data-size] {
+    display: block;
+    padding: 0;
+    block-size: auto;
+  }
+
+  .input-wrapper[data-size='sm'] {
+    min-block-size: var(--size-element-sm);
+  }
+
+  .input-wrapper[data-size='md'] {
+    min-block-size: var(--size-element-md);
+  }
+
+  .input-wrapper[data-size='lg'] {
+    min-block-size: var(--size-element-lg);
+  }
+
+  .tokenizer {
+    /* The height of one row of tokens: the control height minus the padding around it. */
+    --_row: calc(var(--size-element-md) - var(--spacing-2));
+
+    box-sizing: border-box;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    column-gap: var(--spacing-2);
+    min-inline-size: 0;
+    padding-block: calc(var(--spacing-1) - var(--border-width));
+    padding-inline: var(--spacing-2);
+    font-family: var(--font-family-body);
+    cursor: text;
+  }
+
+  .tokenizer[data-size='sm'] {
+    --_row: calc(var(--size-element-sm) - var(--spacing-2));
+  }
+
+  .tokenizer[data-size='lg'] {
+    --_row: calc(var(--size-element-lg) - var(--spacing-2));
+  }
+
+  .tokenizer[data-tokens] {
+    padding-inline: calc(var(--spacing-1) - var(--border-width));
+  }
+
+  .lane {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: var(--spacing-1);
+    row-gap: calc(var(--spacing-1) - var(--border-width));
+    min-block-size: var(--_row);
+    min-inline-size: 0;
+  }
+
+  .adornment {
+    --_icon-size: var(--tecton-icon-size-100);
+
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    color: var(--color-icon-secondary);
+  }
+
+  .adornment[hidden] {
+    display: none;
+  }
+
+  /* The start icon keeps the field's standard inset even though the padding shrank for the tokens. */
+  .tokenizer[data-tokens] .start-icon,
+  .tokenizer[data-tokens] .adornment {
+    margin-inline-start: calc(var(--spacing-2) - var(--spacing-1) + var(--border-width));
+  }
+
+  .start-icon {
+    flex-shrink: 0;
+  }
+
+  .token,
+  .token-slot {
+    display: flex;
+    flex-shrink: 0;
+    max-inline-size: 100%;
+  }
+
+  .combobox {
+    flex: 1 1 60px;
+    min-inline-size: 60px;
+  }
+
+  /* After tokens the input is a narrower flexible item, with the text inset the wrapper padding removed. */
+  .tokenizer[data-tokens] .combobox {
+    flex: 1 1 40px;
+    min-inline-size: 40px;
+    inline-size: 0;
+    padding-inline-start: calc(var(--spacing-2) - var(--spacing-1) + var(--border-width));
+  }
+
+  /*
+   * Collapsed (full, or showing "+N more"): the one input stays mounted, focusable and named, but takes no
+   * room. The tokens' remove buttons and Backspace still work.
+   */
+  .tokenizer[data-collapsed] .combobox {
+    position: absolute;
+    flex: 0 0 0;
+    inline-size: 0;
+    min-inline-size: 0;
+    padding: 0;
+    opacity: 0;
+  }
+
+  .tokenizer[data-truncated] .lane {
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+
+  .overflow {
+    flex: 1;
+    min-inline-size: 0;
+  }
+
+  /* On the first row, where the input starts, whatever the tokens do below. */
+  .end-lane {
+    display: flex;
+    align-items: center;
+    align-self: start;
+    gap: var(--spacing-2);
+    block-size: var(--_row);
+    margin-inline-end: var(--spacing-1);
+  }
+
+  .end-lane > .busy,
+  .end-lane > .status-icon {
+    pointer-events: none;
+  }
+}
+
+@layer state {
+  .input-wrapper[data-disabled] .tokenizer,
+  .input-wrapper[data-readonly] .tokenizer {
+    cursor: default;
+  }
+}

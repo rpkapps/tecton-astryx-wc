@@ -1,0 +1,39 @@
+<!-- title: Right-to-left; description: In right-to-left text the columns, the pinned column, the sort control, the chevrons and the resize handles all mirror; the resize arrows follow the visual direction. -->
+<div id="table-rtl" dir="rtl" style="max-inline-size: 520px">
+  <tct-table label="الفواتير"></tct-table>
+  <script type="module">
+    import {
+      TableColumnResizeController,
+      TableSortableController,
+      TableSortableStateController,
+      TableStickyColumnsController,
+      pixel,
+    } from '@tecton-wc/components/table/define.js';
+
+    const table = document.querySelector('#table-rtl tct-table');
+    const sort = new TableSortableStateController(table, {
+      data: [
+        {id: 'i1', customer: 'الشركة الشرقية', region: 'الرياض', plan: 'مؤسسة', seats: 250},
+        {id: 'i2', customer: 'مكتب النور', region: 'دبي', plan: 'فريق', seats: 40},
+        {id: 'i3', customer: 'دار الحكمة', region: 'القاهرة', plan: 'مؤسسة', seats: 900},
+      ],
+      element: table,
+    });
+    sort.subscribe(() => {
+      table.data = sort.sortedData;
+    });
+    table.idKey = 'id';
+    table.columns = [
+      {key: 'customer', header: 'العميل', sortable: true, width: pixel(180)},
+      {key: 'region', header: 'المنطقة', sortable: true, width: pixel(160)},
+      {key: 'plan', header: 'الخطة', width: pixel(160)},
+      {key: 'seats', header: 'المقاعد', width: pixel(120), align: 'end'},
+    ];
+    table.data = sort.sortedData;
+    table.plugins = {
+      sort: new TableSortableController(table, sort.sortConfig),
+      resize: new TableColumnResizeController(table, {minWidth: 100}),
+      sticky: new TableStickyColumnsController(table, {startKeys: ['customer']}),
+    };
+  </script>
+</div>

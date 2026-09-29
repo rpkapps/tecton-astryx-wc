@@ -1,0 +1,15 @@
+<!-- title: Stop, disabled and status; description: While a reply runs set stop-shown: the send button becomes Stop and fires tct-chat-stop, and stays operable even when the composer is disabled. status-type and status-message show a warning or error strip, announced once when it appears. -->
+<tct-vstack id="stop-root" gap="4" max-width="520">
+  <tct-chat-composer id="stop-composer" stop-shown disabled placeholder="A reply is on its way…"></tct-chat-composer>
+  <tct-chat-composer status-type="error" status-message="The message could not be sent. Check your connection and try again."></tct-chat-composer>
+  <tct-chat-composer status-type="warning" status-message="This conversation is close to the context limit." status-position="top"></tct-chat-composer>
+  <tct-text id="stop-output" type="supporting" color="secondary">Press Stop to end the reply.</tct-text>
+</tct-vstack>
+<script type="module">
+  const composer = document.getElementById('stop-composer');
+  composer.addEventListener('tct-chat-stop', () => {
+    composer.stopShown = false;
+    composer.disabled = false;
+    document.getElementById('stop-output').textContent = 'Stopped. The composer is ready again.';
+  });
+</script>

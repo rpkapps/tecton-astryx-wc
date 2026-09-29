@@ -1,0 +1,24 @@
+<!-- title: Voice dictation; description: A dictation controller drives the button: the phrase being spoken appears as faded text at the end of the draft and becomes real text when it is final. Where the browser has no speech recognition (Firefox) the button hides itself and nothing else changes. Chromium asks for the microphone on first use. -->
+<tct-vstack id="dictation-root" gap="3" max-width="520">
+  <dictation-demo></dictation-demo>
+</tct-vstack>
+<script type="module">
+  import {LitElement, html} from 'lit';
+  import {ChatDictationController} from '@tecton-wc/components/chat-composer/chat-dictation.js';
+
+  if (!customElements.get('dictation-demo')) {
+    class DictationDemo extends LitElement {
+      #dictation = new ChatDictationController(this, {
+        input: () => this.renderRoot.querySelector('tct-chat-composer-input'),
+      });
+
+      render() {
+        return html`<tct-chat-composer>
+          <tct-chat-composer-input slot="input" placeholder="Press the microphone and speak"></tct-chat-composer-input>
+          <tct-chat-dictation-button slot="send-actions" .dictation=${this.#dictation}></tct-chat-dictation-button>
+        </tct-chat-composer>`;
+      }
+    }
+    customElements.define('dictation-demo', DictationDemo);
+  }
+</script>

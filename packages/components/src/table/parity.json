@@ -1,0 +1,788 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "table",
+  "workPackage": "WP-15",
+  "entries": {
+    "core.table": {
+      "tag": "tct-table",
+      "status": "implemented",
+      "upstream": {
+        "name": "Table",
+        "path": "packages/core/src/Table/Table.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "data",
+          "kind": "prop",
+          "target": "data",
+          "as": "property",
+          "notes": "Property only; `T` is any object type."
+        },
+        {
+          "upstream": "columns",
+          "kind": "prop",
+          "target": "columns",
+          "as": "property",
+          "notes": "Omitted with `data` set: generated from the first row's keys (`generateColumns`)."
+        },
+        {
+          "upstream": "idKey",
+          "kind": "prop",
+          "target": "idKey",
+          "as": "property",
+          "notes": "Property (name or function); the `id-key` attribute accepts the property-name form."
+        },
+        {
+          "upstream": "density",
+          "kind": "prop",
+          "target": "density",
+          "as": "attribute",
+          "reflect": true,
+          "default": "balanced"
+        },
+        {
+          "upstream": "dividers",
+          "kind": "prop",
+          "target": "dividers",
+          "as": "attribute",
+          "reflect": true,
+          "default": "rows"
+        },
+        {
+          "upstream": "isStriped",
+          "kind": "prop",
+          "target": "striped",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "hasHover",
+          "kind": "prop",
+          "target": "hasHover",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "`has-hover`."
+        },
+        {
+          "upstream": "verticalAlign",
+          "kind": "prop",
+          "target": "verticalAlign",
+          "as": "attribute",
+          "reflect": true,
+          "default": "middle",
+          "notes": "`vertical-align`."
+        },
+        {
+          "upstream": "textOverflow",
+          "kind": "prop",
+          "target": "textOverflow",
+          "as": "attribute",
+          "reflect": true,
+          "default": "wrap",
+          "notes": "`text-overflow`."
+        },
+        {
+          "upstream": "plugins",
+          "kind": "prop",
+          "target": "plugins",
+          "as": "property",
+          "notes": "Record of plugin controllers; only its values are compared, so an inline record is fine."
+        },
+        {
+          "upstream": "rowIndexStart",
+          "kind": "prop",
+          "target": "rowIndexStart",
+          "as": "attribute",
+          "notes": "`row-index-start`."
+        },
+        {
+          "upstream": "rowCount",
+          "kind": "prop",
+          "target": "rowCount",
+          "as": "attribute",
+          "notes": "`row-count`."
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "Children mode: authored light DOM (a native `<table>`, or tct-table-* parts). Light DOM has no slots; the content stays where the author put it."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, the table's light-DOM parts (`tct-table th`), custom properties and tokens."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useScrollableArea",
+          "target": "TctTable#scrollable",
+          "as": "controller",
+          "notes": "Implemented inside the table: a shared ResizeObserver decides whether the scroll region overflows; only then is it focusable and does it contain overscroll."
+        },
+        {
+          "upstream": "TableContext",
+          "target": "tableContext",
+          "as": "context"
+        },
+        {
+          "upstream": "useBaseTablePlugins",
+          "target": "BaseTablePlugins",
+          "as": "controller"
+        },
+        {
+          "upstream": "proportional",
+          "target": "proportional",
+          "as": "module-function"
+        },
+        {
+          "upstream": "pixel",
+          "target": "pixel",
+          "as": "module-function"
+        },
+        {
+          "upstream": "generateColumns",
+          "target": "generateColumns",
+          "as": "module-function"
+        },
+        {
+          "upstream": "resolveColumnWidths",
+          "target": "resolveColumnWidths",
+          "as": "module-function"
+        },
+        {
+          "upstream": "DEFAULT_MIN_COLUMN_WIDTH",
+          "target": "DEFAULT_MIN_COLUMN_WIDTH",
+          "as": "module-function"
+        },
+        {
+          "upstream": "resolveContextActions",
+          "target": "resolveContextActions",
+          "as": "module-function"
+        },
+        {
+          "upstream": "useTableSortable",
+          "target": "TableSortableController",
+          "as": "controller",
+          "notes": "Sort buttons with aria-sort, an announcement and header context-menu actions; `multiSort` is upstream `isMultiSortEnabled` (TABLE-12)."
+        },
+        {
+          "upstream": "useTableSortableState",
+          "target": "TableSortableStateController",
+          "as": "controller",
+          "notes": "Owns the sort, sorts a copy; above 2,000 rows it sorts in yielding slices (`sorting`, `settled()`); missing values sort last (TABLE-10)."
+        },
+        {
+          "upstream": "useTableSelection",
+          "target": "TableSelectionController",
+          "as": "controller",
+          "notes": "Checkbox column (tct-checkbox-input), select-all with the indeterminate state, aria-selected, selected fill."
+        },
+        {
+          "upstream": "useTableSelectionState",
+          "target": "TableSelectionStateController",
+          "as": "controller",
+          "notes": "`noRowHighlight` is upstream `hasNoRowHighlight` (TABLE-12)."
+        },
+        {
+          "upstream": "useTablePagination",
+          "target": "TablePaginationController",
+          "as": "controller",
+          "notes": "The controls are the table's own small pager built from tct-button and the pagination message catalog, not the standalone pagination component (TABLE-11)."
+        },
+        {
+          "upstream": "paginateData",
+          "target": "paginateData",
+          "as": "module-function"
+        },
+        {
+          "upstream": "useTableColumnSettings",
+          "target": "TableColumnSettingsController",
+          "as": "controller"
+        },
+        {
+          "upstream": "useTableColumnSettingsState",
+          "target": "TableColumnSettingsStateController",
+          "as": "controller",
+          "notes": "`alwaysVisible` is upstream `isAlwaysVisible` (TABLE-12)."
+        },
+        {
+          "upstream": "useTableColumnResize",
+          "target": "TableColumnResizeController",
+          "as": "controller",
+          "notes": "A role=\"separator\" window-splitter handle per header; drag or arrow keys (10 px, Shift 50 px, Home, End), mirrored in RTL; the handle is a focusable control in the tab order."
+        },
+        {
+          "upstream": "useTableStickyColumns",
+          "target": "TableStickyColumnsController",
+          "as": "controller",
+          "notes": "Logical offsets, so pinned columns flip in RTL."
+        },
+        {
+          "upstream": "useTableGroupedRows",
+          "target": "TableGroupedRowsController",
+          "as": "controller",
+          "notes": "The controller is both the plugin and the data source: give the table `grouped.data` and `grouped.idKey`."
+        },
+        {
+          "upstream": "useTableRowIndex",
+          "target": "TableRowIndexController",
+          "as": "controller"
+        },
+        {
+          "upstream": "useTableRowStatus",
+          "target": "TableRowStatusController",
+          "as": "controller",
+          "notes": "A role=\"img\" marker named by its label, with a native title tooltip (TABLE-13); a raw CSS colour is validated and set as a custom property, never as markup."
+        },
+        {
+          "upstream": "useTableRowExpansion",
+          "target": "TableRowExpansionController",
+          "as": "controller"
+        },
+        {
+          "upstream": "useTableTreeData",
+          "target": "TableTreeDataController",
+          "as": "controller",
+          "notes": "`expandAllControl` and `rowClickExpansion` are upstream `hasExpandAllControl` and `hasRowClickExpansion` (TABLE-12). Rows carry data attributes, not aria-level/aria-expanded (TABLE-09)."
+        },
+        {
+          "upstream": "useTableTreeState",
+          "target": "TableTreeStateController",
+          "as": "controller"
+        },
+        {
+          "upstream": "useTableFiltering",
+          "as": "waived",
+          "reason": "Filtering belongs to the search work package (WP-18). The plugin pipeline, `TableColumn.filter` and `rowSignature` are its hooks."
+        },
+        {
+          "upstream": "useTableFilterState",
+          "as": "waived",
+          "reason": "Filtering belongs to the search work package (WP-18)."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Moves focus to the next control in the table (sort buttons, checkboxes, expanders, resize handles) in reading order; the table itself has no arrow-key grid model",
+          "when": "always"
+        },
+        {
+          "keys": "Shift+Tab",
+          "action": "Moves focus back to the previous control",
+          "when": "always"
+        },
+        {
+          "keys": "Enter",
+          "action": "Sorts by the column of the focused sort button: ascending, then descending, then unsorted (when unsorted is allowed)",
+          "when": "sort plugin"
+        },
+        {
+          "keys": "Space",
+          "action": "Sorts like Enter",
+          "when": "sort plugin"
+        },
+        {
+          "keys": "Space",
+          "action": "Toggles the focused row's checkbox (the header checkbox selects or clears every row)",
+          "when": "selection plugin"
+        },
+        {
+          "keys": "Enter",
+          "action": "Expands or collapses the row, group or tree branch of the focused chevron button",
+          "when": "row expansion, grouped rows or tree data plugin"
+        },
+        {
+          "keys": "Space",
+          "action": "Expands or collapses like Enter",
+          "when": "row expansion, grouped rows or tree data plugin"
+        },
+        {
+          "keys": "ArrowRight",
+          "action": "Widens the column by 10 px (visual direction: narrows in right-to-left)",
+          "when": "focus on a column resize handle"
+        },
+        {
+          "keys": "ArrowLeft",
+          "action": "Narrows the column by 10 px (visual direction: widens in right-to-left)",
+          "when": "focus on a column resize handle"
+        },
+        {
+          "keys": "Shift+ArrowRight",
+          "action": "Changes the width by 50 px",
+          "when": "focus on a column resize handle; Shift+ArrowLeft the other way"
+        },
+        {
+          "keys": "Home",
+          "action": "Sets the column to its minimum width",
+          "when": "focus on a column resize handle; End sets the maximum width when there is one"
+        },
+        {
+          "keys": "ContextMenu",
+          "action": "Opens the row or cell actions (context menu) at the focused control",
+          "when": "a plugin contributes actions"
+        },
+        {
+          "keys": "Shift+F10",
+          "action": "Opens the row or cell actions like ContextMenu",
+          "when": "a plugin contributes actions"
+        },
+        {
+          "keys": "ArrowRight",
+          "action": "Scrolls the region sideways while the columns overflow (the region is a tab stop only then)",
+          "when": "focus on the scroll region; ArrowLeft, Home, End and PageUp/PageDown scroll as in any scroll container"
+        }
+      ],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "TABLE-01",
+          "type": "approved-api-difference",
+          "text": "Light-DOM native table (A§8.1). tct-table renders a native <table> into its own light DOM from `columns`/`data`; the six subcomponents map to native elements and renderer outputs: TableHeader/Body/Footer/Row/Cell/HeaderCell are the <thead>/<tbody>/<tfoot>/<tr>/<td>/<th> the renderer produces, and tct-table-* elements exist for declarative children mode, where they carry ARIA table roles through ElementInternals (custom elements cannot be parsed inside <table> markup, so native markup is the alternative)."
+        },
+        {
+          "id": "TABLE-02",
+          "type": "approved-api-difference",
+          "text": "Plugins are controllers. Each upstream `useTableX(config)` hook is a class implementing the TablePlugin transform protocol and Lit's ReactiveController (`new TableSortableController(host, config)`), and the State hooks are controllers that implement the config interface they feed. Configs are read live at render time, so a state controller is its own config (`new TableSortableController(host, state)`)."
+        },
+        {
+          "id": "TABLE-03",
+          "type": "approved-api-difference",
+          "text": "Render props: `htmlProps`/`xstyle` become an attribute bag (`TableHtmlProps`: attributes, style declarations, classes, listeners, ref) applied by the `tableProps()` directive; ReactNode slots become Lit renderables (template, node or text, never HTML strings). Plugin visuals are classes styled by tct-table.light.css."
+        },
+        {
+          "id": "TABLE-04",
+          "type": "approved-api-difference",
+          "text": "Row memoization: upstream memoizes rows on shallow item equality and lets plugins push imperative updates. Here a row is rebuilt only when its item identity, position, columns, plugins or a plugin's `rowSignature` value changed (`guard()` per row), so selecting one row of ten thousand rebuilds one row. A new object with identical values re-renders its row."
+        },
+        {
+          "id": "TABLE-05",
+          "type": "approved-api-difference",
+          "text": "One shared context menu per table instead of one ContextMenu per cell: the table opens a single tct-context-menu at the pointer (contextmenu, ContextMenu key, Shift+F10) with the actions of the cell and row under it, resolved lazily. `BodyRowRenderProps.contextMenuActions` is added so a plugin builds one closure per row."
+        },
+        {
+          "id": "TABLE-06",
+          "type": "approved-api-difference",
+          "text": "Large datasets are windowed instead of rendered whole: above 200 rows (`windowing=\"auto\"`, `windowing=\"off\"` renders every row) only the rows near the viewport are in the DOM between two aria-hidden spacer rows, sized from a measured row height, and the table sets aria-rowcount and aria-rowindex. The window follows the nearest vertical scroller (an ancestor or the page) and snaps to steps of 8 rows with an overscan of half a viewport. Consequences: rows outside the window are not found by find-in-page, and rows of very different heights make the spacers approximate. TctTable adds the `windowing` attribute and `renderedRowCount`. Table rows cannot use content-visibility, so windowing is the way to keep the DOM small [mwg:defer-rendering-heavy-content] [mwg:interactions-in-complex-layouts]."
+        },
+        {
+          "id": "TABLE-07",
+          "type": "a11y-improvement",
+          "text": "Sort changes are announced through the shared announcer (\"Sorted by Name, ascending\", \"Sort cleared\") in addition to `aria-sort` and the button name, because a name change on the focused button is not spoken by most screen readers. The resize handle's name is localised (`@tct.table.resize.handleLabel`) and it has `aria-valuetext`."
+        },
+        {
+          "id": "TABLE-08",
+          "type": "approved-api-difference",
+          "text": "An empty table (no `data` and no `columns`) renders nothing instead of an empty <table>; `data=[]` with columns renders the empty state row."
+        },
+        {
+          "id": "TABLE-09",
+          "type": "a11y-improvement",
+          "text": "Tree rows and group heading rows do not carry aria-level or aria-expanded. Both are valid only on a treegrid/grid row: on a native table row axe reports aria-conditional-attr, and a treegrid would promise arrow-key navigation the table does not have. The state is on the expander button (`aria-expanded`, named \"Expand row\" / \"Collapse group X\"); the depth is `data-tree-level` (1-based) and the state `data-tree-expanded` / `data-group-expanded` on the row for styling and tests."
+        },
+        {
+          "id": "TABLE-10",
+          "type": "approved-api-difference",
+          "text": "Default sorting orders missing values (null, undefined, NaN) last in both directions, numbers numerically and other values with an Intl.Collator for the element's language with numeric collation. Sorting decorates each row once and is stable. Datasets above 2,000 rows sort asynchronously in slices of about 8 ms (`sorting`, `settled()`); until the sort is done `sortedData` is the previous order, or the raw rows when the data itself changed [mwg:break-up-long-tasks]."
+        },
+        {
+          "id": "TABLE-11",
+          "type": "approved-api-difference",
+          "text": "The pagination plugin renders the table's own small pager (previous/next, page numbers with ellipses, a count or \"Page x of y\", an optional page-size select, variants pages, count, compact, dots) built from tct-button, tct-icon and the shared pagination catalog, so it works without the standalone pagination component (WP-11), which this package must not depend on. When that component is merged the pager can switch to it without an API change."
+        },
+        {
+          "id": "TABLE-12",
+          "type": "approved-api-difference",
+          "text": "Boolean plugin config fields drop upstream's is/has prefix, like the element attributes: `multiSort` (isMultiSortEnabled), `noRowHighlight` (hasNoRowHighlight), `alwaysVisible` (isAlwaysVisible), `expandAllControl` (hasExpandAllControl), `rowClickExpansion` (hasRowClickExpansion). State controllers do not take React state: the config is a live object with a `subscribe` method, so `state.sortConfig`, `state.selectionConfig`, `state.treeConfig` and `state.columnSettingsConfig` follow every change."
+        },
+        {
+          "id": "TABLE-13",
+          "type": "approved-api-difference",
+          "text": "Row status markers are role=\"img\" elements named by their label and carry the label as a native `title` tooltip (upstream uses the design system tooltip component per marker, which would add a popover per row). A custom colour is one of the named roles or a plain CSS colour expression; anything that could end the declaration falls back to the inherited colour."
+        },
+        {
+          "id": "TABLE-14",
+          "type": "approved-api-difference",
+          "text": "Pixel columns take their declared width as the minimum a resize can reach (a global `minWidth` on the resize plugin lowers it), and the resize handle is a role=\"separator\" control in the tab order with aria-valuenow, aria-valuemin and aria-valuetext; arrow keys follow the visual direction, so they mirror in RTL. Column resize does not depend on the resize-handle component (WP-8)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": false,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/components/src/pagination (WP-11)",
+          "reason": "When the standalone pagination component is merged, TablePaginationController can render it instead of its own small pager (TABLE-11). Nothing depends on it today."
+        },
+        {
+          "file": "packages/components/src/resize-handle (WP-8)",
+          "reason": "The column resize handle is implemented inside the table (a separator control with drag, keyboard and RTL). If the resize-handle component ships the same contract it can replace it (TABLE-14)."
+        },
+        {
+          "file": "tools/lib/example-style.ts or apps/docs (orchestrator)",
+          "reason": "Table examples import the plugin controllers from @tecton-wc/components/table/define.js and from lit inside inline module scripts (as the toast examples do); the docs bundler must resolve those specifiers. The examples test replaces the imports with the already loaded modules."
+        }
+      ],
+      "sizeBudgetKb": 55,
+      "notes": [
+        "Plugin architecture (written before implementation): a plugin is a TablePlugin (optional transformColumns, transformTable, transformHeaderRow, transformHeaderCell, transformBodyRow, transformBodyCell, transformScrollWrapper, transformTableContext) plus optional rowSignature/attach/updated/detach and contributesContextActions; TablePluginController is the base class (config read live, refresh(), tables attach/detach, Lit host optional). State helpers (Sortable/Selection/ColumnSettings/Tree state) are TableStateControllers that own state, expose the derived data and implement the config interface of the plugin they feed, notifying subscribers and their Lit host. tct-table resolves the record into one ordered array (canonical order columnSettings, sort, tree, selection, pagination), runs every transform through applyPlugins (a throwing transform is isolated), and rebuilds only the rows whose signature changed (guard() per row).",
+        "Slices, each committed with tests: static table, sort, selection, pagination, column settings/resize/sticky, grouped rows/expansion/tree/row index/row status/row context menu, windowing and sliced sorting, keyboard table, examples, docs. Filtering (useTableFiltering) belongs to the search work package.",
+        "Measured on 10,000 rows in Chromium (table-performance.test.ts, event timing INP and long tasks from the pointer going down): initial render about 35-40 ms and no long task over 65 ms; sort by name/age/score INP 0-24 ms (below the 16 ms event-timing threshold reads 0), every task under 50 ms, sort complete in 90-360 ms with the table responsive throughout; single selection INP 24-56 ms; select all INP 40-56 ms. The budget asserted is INP <= 200 ms and longest task < 120 ms.",
+        "Guides: [mwg:break-up-long-tasks] sliced sorting with scheduler.yield and the setTimeout fallback; [mwg:defer-rendering-heavy-content] and [mwg:interactions-in-complex-layouts] windowing (content-visibility does not apply to table rows); [mwg:identify-inp-causes] the INP measurement; [mwg:responsive-table] semantic table, sticky columns with logical offsets, scroll region; [mwg:accessibility] native table semantics, announcer discipline, no invalid row ARIA; [mwg:styling-web-components] light-DOM sheet in @layer tecton.light-dom at zero specificity; [mwg:schedule-tasks-by-priority] yielding."
+      ]
+    },
+    "core.table-header": {
+      "tag": "tct-table-header",
+      "status": "implemented",
+      "upstream": {
+        "name": "TableHeader",
+        "path": "packages/core/src/Table/TableHeader.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style and the table's light-DOM parts."
+        }
+      ],
+      "keyboard": [],
+      "differences": [
+        {
+          "id": "TABLEHEADER-01",
+          "type": "approved-api-difference",
+          "text": "See TABLE-01: an ARIA rowgroup laid out as a table header group for declarative children mode; the data-driven renderer emits a native <thead>."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": false,
+        "rtl": false,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null
+    },
+    "core.table-body": {
+      "tag": "tct-table-body",
+      "status": "implemented",
+      "upstream": {
+        "name": "TableBody",
+        "path": "packages/core/src/Table/TableBody.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style and the table's light-DOM parts."
+        }
+      ],
+      "keyboard": [],
+      "differences": [
+        {
+          "id": "TABLEBODY-01",
+          "type": "approved-api-difference",
+          "text": "See TABLE-01: an ARIA rowgroup laid out as a table row group for declarative children mode; the data-driven renderer emits a native <tbody>."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": false,
+        "rtl": false,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null
+    },
+    "core.table-footer": {
+      "tag": "tct-table-footer",
+      "status": "implemented",
+      "upstream": {
+        "name": "TableFooter",
+        "path": "packages/core/src/Table/TableFooter.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style and the table's light-DOM parts."
+        }
+      ],
+      "keyboard": [],
+      "differences": [
+        {
+          "id": "TABLEFOOTER-01",
+          "type": "approved-api-difference",
+          "text": "See TABLE-01: an ARIA rowgroup laid out as a table footer group for declarative children mode; native markup uses <tfoot>."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": false,
+        "rtl": false,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null
+    },
+    "core.table-row": {
+      "tag": "tct-table-row",
+      "status": "implemented",
+      "upstream": {
+        "name": "TableRow",
+        "path": "packages/core/src/Table/TableRow.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "isHeaderRow",
+          "kind": "prop",
+          "target": "headerRow",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "`header-row`."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style and the table's light-DOM parts."
+        }
+      ],
+      "keyboard": [],
+      "differences": [
+        {
+          "id": "TABLEROW-01",
+          "type": "approved-api-difference",
+          "text": "See TABLE-01: an ARIA row for declarative children mode; the data-driven renderer emits a native <tr>. `contextMenuActions` (row-level right-click actions) is added, see TABLE-05."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": false,
+        "rtl": false,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null
+    },
+    "core.table-cell": {
+      "tag": "tct-table-cell",
+      "status": "implemented",
+      "upstream": {
+        "name": "TableCell",
+        "path": "packages/core/src/Table/TableCell.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "scope",
+          "kind": "prop",
+          "target": "scope",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Sets the ARIA role: `row` a rowheader, `col` a columnheader."
+        },
+        {
+          "upstream": "headers",
+          "kind": "prop",
+          "target": "headers",
+          "as": "attribute",
+          "notes": "Kept as an attribute for native-table parity; ARIA has no equivalent of `headers`."
+        },
+        {
+          "upstream": "colSpan",
+          "kind": "prop",
+          "target": "colSpan",
+          "as": "attribute",
+          "notes": "`col-span`: `aria-colspan` only; CSS cannot span table-cell columns, so a visibly spanning cell belongs in native <table> markup."
+        },
+        {
+          "upstream": "rowSpan",
+          "kind": "prop",
+          "target": "rowSpan",
+          "as": "attribute",
+          "notes": "`row-span`: `aria-rowspan` only (see colSpan)."
+        },
+        {
+          "upstream": "contextMenuActions",
+          "kind": "prop",
+          "target": "contextMenuActions",
+          "as": "property"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style and the table's light-DOM parts."
+        }
+      ],
+      "keyboard": [],
+      "differences": [
+        {
+          "id": "TABLECELL-01",
+          "type": "approved-api-difference",
+          "text": "See TABLE-01: an ARIA cell for declarative children mode; the data-driven renderer emits a native <td>. The upstream per-cell ContextMenu wrapper is replaced by the table's shared menu, see TABLE-05."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": false,
+        "rtl": false,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null
+    },
+    "core.table-header-cell": {
+      "tag": "tct-table-header-cell",
+      "status": "implemented",
+      "upstream": {
+        "name": "TableHeaderCell",
+        "path": "packages/core/src/Table/TableHeaderCell.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "scope",
+          "kind": "prop",
+          "target": "scope",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "`row` makes it a rowheader; default columnheader."
+        },
+        {
+          "upstream": "contextMenuActions",
+          "kind": "prop",
+          "target": "contextMenuActions",
+          "as": "property"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style and the table's light-DOM parts."
+        }
+      ],
+      "keyboard": [],
+      "differences": [
+        {
+          "id": "TABLEHEADERCELL-01",
+          "type": "approved-api-difference",
+          "text": "See TABLE-01: an ARIA columnheader for declarative children mode; the data-driven renderer emits a native <th scope=\"col\">."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": false,
+        "rtl": false,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null
+    }
+  }
+}

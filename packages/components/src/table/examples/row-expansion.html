@@ -1,0 +1,37 @@
+<!-- title: Row expansion; description: A chevron column opens a full-width detail panel below a row. You own the expanded keys; the row's context menu gets an expand action too. -->
+<div id="table-row-expansion">
+  <tct-table label="Deployments"></tct-table>
+  <script type="module">
+    import {html} from 'lit';
+    import {TableRowExpansionController} from '@tecton-wc/components/table/define.js';
+
+    const table = document.querySelector('#table-row-expansion tct-table');
+    let expanded = new Set(['d2']);
+    const plugin = new TableRowExpansionController(table, {
+      get expandedKeys() {
+        return expanded;
+      },
+      onToggle: (key) => {
+        expanded = new Set(expanded);
+        if (!expanded.delete(key)) expanded.add(key);
+        plugin.refresh();
+      },
+      getRowKey: (row) => row.id,
+      // Rows without notes have nothing to open.
+      getIsItemExpandable: (row) => Boolean(row.notes),
+      renderExpanded: (row) => html`<tct-text type="supporting">${row.notes}</tct-text>`,
+    });
+    table.idKey = 'id';
+    table.columns = [
+      {key: 'service', header: 'Service'},
+      {key: 'version', header: 'Version'},
+      {key: 'state', header: 'State'},
+    ];
+    table.data = [
+      {id: 'd1', service: 'api-gateway', version: '2.14.0', state: 'Healthy', notes: 'Rolled out to all regions at 09:40.'},
+      {id: 'd2', service: 'billing-worker', version: '1.8.3', state: 'Degraded', notes: 'Retries are elevated since the last release; the previous build is standing by.'},
+      {id: 'd3', service: 'search-index', version: '5.2.1', state: 'Healthy'},
+    ];
+    table.plugins = {expansion: plugin};
+  </script>
+</div>

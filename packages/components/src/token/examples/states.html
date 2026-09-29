@@ -1,0 +1,7 @@
+<!-- title: States; description: disabled dims the token and blocks every interaction (a disabled link loses its href). description is the accessible description of the interactive element; a11y-exempt: color-contrast | Disabled tokens are inactive components, which WCAG 1.4.3 exempts from the contrast requirement. -->
+<tct-hstack wrap="wrap" gap="2" v-align="center">
+  <tct-token label="Disabled" disabled></tct-token>
+  <tct-token label="Disabled and removable" removable disabled></tct-token>
+  <tct-token label="Disabled link" href="https://example.com" disabled></tct-token>
+  <tct-token label="With description" description="Members of the design team" clickable></tct-token>
+</tct-hstack>

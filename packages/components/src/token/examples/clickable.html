@@ -1,0 +1,14 @@
+<!-- title: Clickable; description: clickable makes the label a real button, so the token is pressed like one and the host fires a native click. Beside removable it keeps two separate tab stops. -->
+<tct-vstack gap="3">
+  <tct-hstack id="clickable-root" wrap="wrap" gap="2" v-align="center">
+    <tct-token label="Open issues" color="red" clickable></tct-token>
+    <tct-token label="In review" color="purple" clickable removable></tct-token>
+  </tct-hstack>
+  <tct-text id="clickable-status" type="supporting" color="secondary">Nothing pressed yet.</tct-text>
+</tct-vstack>
+<script type="module">
+  document.getElementById('clickable-root').addEventListener('click', (event) => {
+    const token = event.target.closest('tct-token');
+    if (token) document.getElementById('clickable-status').textContent = `Pressed ${token.label}.`;
+  });
+</script>

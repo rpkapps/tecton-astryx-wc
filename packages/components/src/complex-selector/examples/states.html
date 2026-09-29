@@ -1,0 +1,9 @@
+<!-- title: States; description: Required, a status message, disabled with a reason, and busy. A busy selector does not open its popover. -->
+<div id="states-root">
+  <tct-vstack max-width="360" gap="4">
+    <tct-complex-selector label="Required" required description="Choose one to continue."><tct-text>Content</tct-text></tct-complex-selector>
+    <tct-complex-selector label="With an error" status-type="error" status-message="This choice is no longer available." trigger-label="Old choice" value="old"><tct-text>Content</tct-text></tct-complex-selector>
+    <tct-complex-selector label="Disabled" disabled disabled-message="Ask an admin to change this."><tct-text>Content</tct-text></tct-complex-selector>
+    <tct-complex-selector label="Saving" loading trigger-label="Saving choice" value="x"><tct-text>Content</tct-text></tct-complex-selector>
+  </tct-vstack>
+</div>

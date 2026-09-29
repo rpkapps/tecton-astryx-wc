@@ -1,0 +1,10 @@
+{
+  "@tct.multi-selector.selected": {
+    "defaultMessage": "{count, number} selected",
+    "description": "Text on the closed trigger of a MultiSelector that shows the number of chosen options (the count display). Short: it sits on the button face; `{count}` is at least 1."
+  },
+  "@tct.multi-selector.moreCount": {
+    "defaultMessage": "+{count, number}",
+    "description": "Text after the visible labels or badges on the closed trigger of a MultiSelector when more options are chosen than are shown; `{count}` is how many are hidden. Very short."
+  }
+}

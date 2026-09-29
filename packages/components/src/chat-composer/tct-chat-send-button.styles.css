@@ -1,0 +1,16 @@
+/*
+ * tct-chat-send-button. The host is an inline flex box; the button is a `tct-button`. Inside a composer the
+ * composer hands down its concentric corner radius (`--_button-radius`), so the button follows the shell's
+ * curvature; on its own the button is a circle. [mwg:css]
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+    flex-shrink: 0;
+    vertical-align: middle;
+  }
+
+  .button {
+    --radius-element: var(--_button-radius, var(--radius-full));
+  }
+}

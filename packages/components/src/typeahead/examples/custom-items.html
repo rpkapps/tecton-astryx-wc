@@ -1,0 +1,20 @@
+<!-- title: Custom result rows; description: renderItem returns the content of a result row. Reuse tct-typeahead-item to keep the standard layout with an icon slot and a description, or return your own template. An item's element property overrides both. -->
+<tct-vstack id="custom-items-root" max-width="360">
+  <tct-typeahead label="Report" placeholder="Search reports" entries-on-focus></tct-typeahead>
+</tct-vstack>
+<script type="module">
+  import {html} from 'lit';
+  import {createStaticSource} from '@tecton-wc/components/typeahead/utils.js';
+
+  const reports = [
+    {id: 'q1', label: 'Quarterly revenue', auxiliaryData: {detail: 'Finance, updated daily', icon: 'calendar'}},
+    {id: 'uptime', label: 'Service uptime', auxiliaryData: {detail: 'Operations, live', icon: 'clock'}},
+    {id: 'churn', label: 'Customer churn', auxiliaryData: {detail: 'Growth, weekly', icon: 'funnel'}},
+  ];
+  const field = document.querySelector('#custom-items-root tct-typeahead');
+  field.searchSource = createStaticSource(reports);
+  field.renderItem = (item) => html`
+    <tct-typeahead-item .item=${item} description=${item.auxiliaryData.detail}>
+      <tct-icon slot="icon" name=${item.auxiliaryData.icon}></tct-icon>
+    </tct-typeahead-item>`;
+</script>

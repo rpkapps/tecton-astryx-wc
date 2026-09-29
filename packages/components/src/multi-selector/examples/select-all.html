@@ -1,0 +1,11 @@
+<!-- title: Select all; description: has-select-all adds a "Select all" row that acts on the options currently shown (a search narrows it) and shows a mixed state while only some are chosen. -->
+<div id="select-all-root">
+  <tct-vstack max-width="360">
+    <tct-multi-selector label="Regions" has-select-all has-search has-clear select-all-label="All regions"></tct-multi-selector>
+  </tct-vstack>
+  <script type="module">
+    const selector = document.querySelector('#select-all-root tct-multi-selector');
+    selector.options = ['North America', 'South America', 'Europe', 'Africa', 'Asia', 'Oceania'];
+    selector.values = ['Europe'];
+  </script>
+</div>

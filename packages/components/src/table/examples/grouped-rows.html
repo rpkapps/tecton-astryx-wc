@@ -1,0 +1,39 @@
+<!-- title: Grouped rows; description: Rows that share a groupBy value sit under a collapsible heading with a count. The controller is both the plugin and the data source: give the table its data and idKey. -->
+<div id="table-grouped-rows">
+  <tct-table label="Tickets by status"></tct-table>
+  <script type="module">
+    import {TableGroupedRowsController} from '@tecton-wc/components/table/define.js';
+
+    const rows = [
+      {id: 'k1', ticket: 'Login loops on Safari', status: 'Open', owner: 'Alice'},
+      {id: 'k2', ticket: 'Export times out', status: 'In progress', owner: 'Bob'},
+      {id: 'k3', ticket: 'Typo on pricing page', status: 'Open', owner: 'Carol'},
+      {id: 'k4', ticket: 'Dark mode contrast', status: 'Done', owner: 'Alice'},
+      {id: 'k5', ticket: 'Slow dashboard load', status: 'In progress', owner: 'Dmitri'},
+      {id: 'k6', ticket: 'Broken avatar upload', status: 'Done', owner: 'Emma'},
+    ];
+    const table = document.querySelector('#table-grouped-rows tct-table');
+    let collapsed = new Set(['Done']);
+    const grouped = new TableGroupedRowsController(table, {
+      data: rows,
+      groupBy: (row) => row.status,
+      get collapsedGroups() {
+        return collapsed;
+      },
+      groupOrder: ['Open', 'In progress', 'Done'],
+      getRowKey: (row) => row.id,
+      onToggleGroup: (key) => {
+        collapsed = new Set(collapsed);
+        if (!collapsed.delete(key)) collapsed.add(key);
+        table.data = grouped.data;
+      },
+    });
+    table.idKey = grouped.idKey;
+    table.columns = [
+      {key: 'ticket', header: 'Ticket'},
+      {key: 'owner', header: 'Owner'},
+    ];
+    table.data = grouped.data;
+    table.plugins = {grouped};
+  </script>
+</div>

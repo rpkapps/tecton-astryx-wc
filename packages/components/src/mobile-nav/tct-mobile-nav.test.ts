@@ -163,14 +163,16 @@ describe('tct-mobile-nav: dismissal (intent events)', () => {
     await openFromTrigger(nav, trigger);
     const events = recordEvents(nav, ['tct-open-change']);
     const close = drawerOf(nav).querySelector<HTMLElement>('.close')!;
-    close.click();
-    expect(events.events.map((event) => [event.open, event.reason])).toEqual([
-      [false, 'close-button'],
-    ]);
+    // Name it while the drawer is open: once closed, the button leaves the accessibility tree, and
+    // checking after the click raced the close.
     // The accessible button is the native one inside the tct-button.
     const node = await axNode(close.shadowRoot!.querySelector('button')!);
     expect(node.role).toBe('button');
     expect(node.name).toBe('Close navigation');
+    close.click();
+    expect(events.events.map((event) => [event.open, event.reason])).toEqual([
+      [false, 'close-button'],
+    ]);
   });
 
   it('requestClose() is user-equivalent: it asks first', async () => {

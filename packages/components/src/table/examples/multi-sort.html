@@ -1,0 +1,37 @@
+<!-- title: Sorting by several columns; description: With multiSort a Shift+click adds a secondary key and the header buttons name their priority. A custom comparator orders a column the default comparison cannot. -->
+<div id="table-multi-sort">
+  <tct-table label="Tasks, sortable by several columns"></tct-table>
+  <script type="module">
+    import {TableSortableController, TableSortableStateController} from '@tecton-wc/components/table/define.js';
+
+    const PRIORITY = {High: 0, Medium: 1, Low: 2};
+    const table = document.querySelector('#table-multi-sort tct-table');
+    const sort = new TableSortableStateController(table, {
+      data: [
+        {id: 't1', task: 'Fix login redirect', owner: 'Alice', priority: 'High'},
+        {id: 't2', task: 'Update onboarding copy', owner: 'Bob', priority: 'Low'},
+        {id: 't3', task: 'Audit keyboard traps', owner: 'Alice', priority: 'Medium'},
+        {id: 't4', task: 'Migrate billing job', owner: 'Carol', priority: 'High'},
+        {id: 't5', task: 'Refresh icon set', owner: 'Bob', priority: 'Medium'},
+      ],
+      multiSort: true,
+      defaultSort: [
+        {sortKey: 'owner', direction: 'ascending'},
+        {sortKey: 'priority', direction: 'ascending'},
+      ],
+      // "High" is not the alphabetically first priority: rank it.
+      comparators: {priority: (a, b) => PRIORITY[a.priority] - PRIORITY[b.priority]},
+    });
+    sort.subscribe(() => {
+      table.data = sort.sortedData;
+    });
+    table.idKey = 'id';
+    table.columns = [
+      {key: 'task', header: 'Task', sortable: true},
+      {key: 'owner', header: 'Owner', sortable: true},
+      {key: 'priority', header: 'Priority', sortable: true},
+    ];
+    table.plugins = {sort: new TableSortableController(table, sort.sortConfig)};
+    table.data = sort.sortedData;
+  </script>
+</div>

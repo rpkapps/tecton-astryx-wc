@@ -1,0 +1,55 @@
+/*
+ * tct-typeahead-item: the label, icon and description layout of a result row. The host is layout only;
+ * the row is `.item`. Text uses the label and supporting scales; a disabled row dims (upstream 0.5).
+ * The row inherits its colour so the option row that paints the highlight decides the ink.
+ * [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  .item {
+    --_icon-size: var(--tecton-icon-size-100);
+
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    min-block-size: 0;
+    min-inline-size: 0;
+  }
+
+  .content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+
+  .label,
+  .description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .label {
+    font-size: var(--text-label-size);
+    line-height: var(--text-label-leading);
+    font-weight: var(--font-weight-normal);
+    color: inherit;
+  }
+
+  .description {
+    font-size: var(--text-supporting-size);
+    line-height: var(--text-supporting-leading);
+    color: var(--color-text-secondary);
+  }
+}
+
+@layer state {
+  .item[data-disabled] {
+    opacity: 0.5;
+  }
+}
