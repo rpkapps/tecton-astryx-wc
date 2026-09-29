@@ -152,10 +152,18 @@ export function isLocaleLoaded(locale: string): boolean {
   return tag === undefined || tag === 'en' || shipped.has(tag);
 }
 
-/** First message for `id` in registered then shipped catalogs along the chain for `locale`. */
+/**
+ * First message for `id`: application registrations along the whole chain first (they outrank every
+ * shipped catalog, whatever their specificity), then shipped catalogs, most specific first.
+ */
 export function lookupMessage(id: string, locale: string): string | undefined {
-  for (const tag of localeChain(locale)) {
-    const message = registered.get(tag)?.[id] ?? shipped.get(tag)?.[id];
+  const chain = localeChain(locale);
+  for (const tag of chain) {
+    const message = registered.get(tag)?.[id];
+    if (message !== undefined) return message;
+  }
+  for (const tag of chain) {
+    const message = shipped.get(tag)?.[id];
     if (message !== undefined) return message;
   }
   return undefined;
