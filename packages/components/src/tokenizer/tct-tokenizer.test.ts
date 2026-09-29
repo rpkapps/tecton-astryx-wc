@@ -1018,6 +1018,14 @@ describe('tct-tokenizer: accessibility, RTL, forced colours and i18n', () => {
     expect(Math.abs(popup.right - box.right)).toBeLessThan(2);
   });
 
+  it('focus() and blur() reach the input, not the first token (upstream handleRef)', async () => {
+    const element = await make('label="Teams"', [TEAMS[0]!, TEAMS[1]!]);
+    element.focus();
+    expect(element.shadowRoot!.activeElement).toBe(comboboxOf(element));
+    element.blur();
+    expect(element.shadowRoot!.activeElement).toBeNull();
+  });
+
   it('de-DE: the clear label, the token names and the announcements come from the catalog', async () => {
     const spy = spyAnnouncements();
     try {

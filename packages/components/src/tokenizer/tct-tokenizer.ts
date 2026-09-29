@@ -327,6 +327,18 @@ export class TctTokenizer extends TctBoxControl {
     return super.busy || this.#engine.loading;
   }
 
+  /** Focuses the input (upstream `handleRef.focus`), not the first token's remove button. */
+  override focus(options?: FocusOptions): void {
+    const control = this.control;
+    if (control) control.focus(options);
+    else super.focus(options);
+  }
+
+  /** Blurs the input (upstream `handleRef.blur`). */
+  override blur(): void {
+    this.control?.blur();
+  }
+
   /** The anchor a blocked submit focuses: the input, which stays focusable when it is collapsed. */
   protected override get validationAnchor(): HTMLElement | null {
     return this.control;
