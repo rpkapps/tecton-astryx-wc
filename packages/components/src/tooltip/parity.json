@@ -1,0 +1,133 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "tooltip",
+  "workPackage": "WP-F",
+  "entries": {
+    "core.tooltip": {
+      "tag": "tct-tooltip",
+      "status": "implemented",
+      "upstream": {"name": "Tooltip", "path": "packages/core/src/Tooltip/Tooltip.tsx", "commit": "ca632c6"},
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "The trigger: the first element of the default slot. A text-only body makes the element itself the trigger (focusable, dashed underline)."
+        },
+        {
+          "upstream": "anchorRef",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A React ref object. The slotted trigger is the anchor (it is also the popover's implicit CSS anchor); to anchor to an element that is not the trigger, wrap that element. See TOOLTIP-02."
+        },
+        {
+          "upstream": "content",
+          "kind": "prop",
+          "target": "content",
+          "as": "property",
+          "notes": "Attribute and property, plain text. See TOOLTIP-01."
+        },
+        {"upstream": "placement", "kind": "prop", "target": "placement", "as": "attribute", "reflect": true, "default": "above"},
+        {"upstream": "alignment", "kind": "prop", "target": "alignment", "as": "attribute", "reflect": true, "default": "center"},
+        {"upstream": "delay", "kind": "prop", "target": "delay", "as": "attribute", "default": 200},
+        {"upstream": "hideDelay", "kind": "prop", "target": "hide-delay", "as": "attribute", "default": 0},
+        {"upstream": "focusTrigger", "kind": "prop", "target": "focus-trigger", "as": "attribute", "default": "auto"},
+        {"upstream": "touchTrigger", "kind": "prop", "target": "touch-trigger", "as": "attribute", "default": "auto"},
+        {
+          "upstream": "isEnabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Inverted: `isEnabled={false}` is `disabled`, so the boolean attribute defaults to off."
+        },
+        {
+          "upstream": "onOpenChange",
+          "kind": "event",
+          "target": "tct-open-change",
+          "as": "event",
+          "notes": "Cancelable, carries `open` and `reason` (hover, focus, escape, touch, outside). Preventing it vetoes the change; property writes never emit it."
+        },
+        {
+          "upstream": "hasHoverIndication",
+          "kind": "prop",
+          "target": "hover-indication",
+          "as": "attribute",
+          "default": "auto",
+          "notes": "`auto`, `always` (true) or `never` (false)."
+        },
+        {
+          "upstream": "isDefaultOpen",
+          "kind": "prop",
+          "target": "open",
+          "as": "attribute",
+          "notes": "The `open` attribute at first render; the tooltip stays dismissible."
+        },
+        {
+          "upstream": "isOpen",
+          "kind": "prop",
+          "target": "open",
+          "as": "property",
+          "reflect": true,
+          "notes": "Controlled use: listen to `tct-open-change`, `preventDefault()` and set `open` yourself. The read-only `isOpen` getter reports whether the layer is on the stack."
+        },
+        {
+          "upstream": "isOpen",
+          "kind": "method",
+          "target": "show",
+          "as": "method",
+          "notes": "`show()` and `hide()` open and close it programmatically (no tct-open-change)."
+        }
+      ],
+      "hooks": [
+        {"upstream": "useLayer", "target": "LayerController", "as": "controller", "notes": "Layer stack membership, Escape, hint kind, anchor positioning through PositionController."},
+        {"upstream": "useLayerDismissal", "target": "LayerController", "as": "controller", "notes": "Escape and outside presses go through the shared layer stack: the tooltip closes before its dialog."},
+        {"upstream": "useTouchTrigger", "target": "TooltipController", "as": "controller", "notes": "touch-trigger auto | tap | none, in packages/core/src/controllers/tooltip.ts."}
+      ],
+      "keyboard": [
+        {"keys": "Tab (focus on the trigger)", "action": "Shows the tooltip after keyboard focus (focus-visible), when the trigger is naturally focusable or focus-trigger is always.", "when": "focus-trigger is not never"},
+        {"keys": "Escape", "action": "Hides the tooltip, and only the tooltip: an enclosing dialog or popup stays open (WCAG 1.4.13, IME-guarded)."}
+      ],
+      "differences": [
+        {
+          "id": "TOOLTIP-01",
+          "type": "approved-api-difference",
+          "text": "`content` is a string. Upstream accepts a ReactNode; rich tooltip content is not offered because the popup is a satellite whose text becomes the trigger's accessible description, which has to be plain text."
+        },
+        {
+          "id": "TOOLTIP-02",
+          "type": "waiver",
+          "text": "`anchorRef` is not ported: references to elements across the page are a React device, and the trigger is the anchor. Wrap the element you want to describe."
+        },
+        {
+          "id": "TOOLTIP-03",
+          "type": "approved-api-difference",
+          "text": "`isOpen` and `isDefaultOpen` are one `open` property: it is the state, the attribute sets it initially, and a controlled tooltip vetoes changes in `tct-open-change` and writes `open` itself. `isEnabled` is inverted to `disabled`."
+        },
+        {
+          "id": "TOOLTIP-04",
+          "type": "a11y-improvement",
+          "text": "The popup is an owned light-DOM satellite (`tct-tooltip-surface`, popover=manual, role=tooltip) next to the trigger, so `aria-describedby` resolves without crossing a shadow root; it works with Tier-2 browsers, where element reflection is missing."
+        },
+        {
+          "id": "TOOLTIP-05",
+          "type": "approved-api-difference",
+          "text": "Positioning uses CSS anchor positioning (the trigger is the popover's implicit anchor); Floating UI is loaded only where that is unavailable or `implicitAnchor` is forced off. The trigger must be a single element or text."
+        },
+        {
+          "id": "TOOLTIP-06",
+          "type": "tecton-visual",
+          "text": "The surface keeps the inverted look and 300px cap of tct-button's built-in tooltip (styles/layer.styles.css): primary-text fill, surface-colour ink, container radius, no shadow. Tecton has no tooltip design; entry is a fade only, because a tooltip must not move while the pointer travels to it."
+        }
+      ],
+      "tests": {"render": true, "a11y": true, "api": true, "keyboard": true, "events": true, "rtl": true, "forcedColors": true},
+      "provisional": ["Entry is a fade with no movement; upstream nudges the surface away from the trigger."],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:interest-triggered-tooltips] hover and focus intent with a hide bridge; [mwg:position-aware-tooltips] implicit anchor positioning with a Floating UI fallback and a flipped `data-placement`; [mwg:accessible-web-components] the description is wired with ids in one tree; [mwg:animate-to-from-top-layer] exit animation through WAAPI before hiding the popover (never `overlay`). Exports are TOOLTIP_SIDES / TooltipSide (not TOOLTIP_PLACEMENTS / TooltipPlacement) because text/text.types.ts already exports those names."
+    }
+  }
+}

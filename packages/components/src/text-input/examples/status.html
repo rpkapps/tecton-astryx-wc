@@ -1,0 +1,6 @@
+<!-- title: Status; description: status-type and status-message show a message; status-variant chooses attached, detached, or a tooltip behind a status button. An error sets aria-invalid. -->
+<div style="display: flex; flex-direction: column; gap: var(--spacing-4)">
+  <tct-text-input label="Email" value="ada.example.com" status-type="error" status-message="Email must include an @."></tct-text-input>
+  <tct-text-input label="Name" value="North" status-type="warning" status-message="This name is already in use." status-variant="detached"></tct-text-input>
+  <tct-text-input label="Code" value="A-12" status-type="success" status-message="Code accepted." status-variant="tooltip"></tct-text-input>
+</div>

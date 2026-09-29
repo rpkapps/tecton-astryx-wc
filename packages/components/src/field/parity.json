@@ -1,0 +1,150 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "field",
+  "workPackage": "WP-F",
+  "entries": {
+    "core.field": {
+      "tag": "tct-field",
+      "status": "implemented",
+      "upstream": {"name": "Field", "path": "packages/core/src/Field/Field.tsx", "commit": "ca632c6"},
+      "api": [
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
+        {"upstream": "inputID", "kind": "prop", "target": "input-id", "as": "attribute", "notes": "Optional: without it the field wires the control it finds (the first native control, or the group container for `group-label`)."},
+        {"upstream": "labelID", "kind": "prop", "target": "label-id", "as": "attribute"},
+        {"upstream": "isGroupLabel", "kind": "prop", "target": "group-label", "as": "attribute", "default": false, "notes": "Labels a group (radio group, fieldset-like container) with `role=group` and `aria-labelledby`; a click on the label does not forward."},
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot", "notes": "The control. Its label, description and status are light-DOM satellites next to it, so aria-labelledby and aria-describedby resolve without crossing a shadow root."},
+        {"upstream": "isLabelHidden", "kind": "prop", "target": "label-hidden", "as": "attribute", "reflect": true, "default": false},
+        {"upstream": "isDisabled", "kind": "prop", "target": "disabled", "as": "attribute", "reflect": true, "default": false},
+        {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute"},
+        {"upstream": "descriptionID", "kind": "prop", "target": "description-id", "as": "attribute"},
+        {"upstream": "isOptional", "kind": "prop", "target": "optional", "as": "attribute", "default": false},
+        {"upstream": "isRequired", "kind": "prop", "target": "required", "as": "attribute", "default": false},
+        {"upstream": "labelIcon", "kind": "prop", "target": "label-icon", "as": "attribute"},
+        {"upstream": "labelTooltip", "kind": "prop", "target": "label-tooltip", "as": "attribute", "notes": "Shows an info-tip button after the label. See FIELD-04."},
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "target": "status",
+          "as": "property",
+          "notes": "Object `{type, message?, messageID?}`, or the `status-type` and `status-message` attributes; `messageID` is `status-id`."
+        },
+        {"upstream": "statusVariant", "kind": "prop", "target": "status-variant", "as": "attribute", "default": "attached"},
+        {"upstream": "width", "kind": "prop", "target": "width", "as": "attribute", "notes": "A number is px, a string a CSS length. Not reflected."},
+        {"upstream": "ref", "kind": "ref", "as": "waived", "reason": "React refs. The element itself is the reference."},
+        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style and ::part(field)."},
+        {"upstream": "className", "kind": "prop", "as": "waived", "reason": "The class attribute is native."},
+        {"upstream": "style", "kind": "prop", "as": "waived", "reason": "The style attribute is native."}
+      ],
+      "hooks": [
+        {"upstream": "useDevWarning", "target": "devWarn", "as": "module-function", "notes": "@tecton-astryx/core/utils/dev.js, once per message."},
+        {"upstream": "useInputContainer", "target": "FieldChromeController", "as": "controller", "notes": "Light mode of the shared chrome controller (packages/core/src/controllers/field-chrome.ts); tct-text-input uses its shadow mode. The field also provides `fieldContext` to nested controls."}
+      ],
+      "keyboard": [
+        {"keys": "Click on the label or the description", "action": "Focuses (or activates) the control, as a real <label for> does; not over a nested link or button, not while text is selected."}
+      ],
+      "form": {"formAssociated": false, "notes": "The wrapped control owns the form value. A wrapped tct-* control gets the error state pushed to it when `status-type` is error, so aria-invalid and :state(user-invalid) show without a submit attempt."},
+      "differences": [
+        {
+          "id": "FIELD-01",
+          "type": "approved-api-difference",
+          "text": "The label, description and status are owned satellites in the light DOM of the field (`data-tct-owned`, slots label, description and status), not shadow-DOM children, so the wrapped control's aria-labelledby and aria-describedby reference them in one tree (A-18). Do not slot your own elements with those names."
+        },
+        {
+          "id": "FIELD-02",
+          "type": "approved-api-difference",
+          "text": "`input-id` is optional: the field finds the control itself and gives it an id when it has none."
+        },
+        {
+          "id": "FIELD-03",
+          "type": "tecton-visual",
+          "text": "The label does not turn pink on focus (the Tecton field only draws the focus ring on the box), and the status is coloured ink with no wash behind it."
+        },
+        {
+          "id": "FIELD-04",
+          "type": "a11y-improvement",
+          "text": "The label tooltip is a focusable info button with an accessible name (\"More information\"), so keyboard and touch users can open it; upstream shows it on the label icon only."
+        },
+        {
+          "id": "FIELD-05",
+          "type": "approved-api-difference",
+          "text": "A horizontal-labels form layout (`data-horizontal-labels`, published by the form layout context) lets the host disappear so the parent grid places label and control. The label context of an input group needs an element from WP-7 and is not wired yet."
+        }
+      ],
+      "tests": {"render": true, "a11y": true, "api": true, "form": true, "events": true, "rtl": true, "forcedColors": true},
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {"file": "packages/core/src/controllers/field-chrome.ts", "reason": "Edited as an assigned core file: `ids` overrides (label, description, status ids) and an `indicator` attribute on the label satellite. Listed so the orchestrator knows the controller changed shape."}
+      ],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-error-announcement] the status is announced once, politely, through the announcer; [mwg:required-field-feedback] required and optional indicators are text, not colour; [mwg:validate-input-after-interaction] errors show after interaction; [mwg:accessible-web-components] id references stay in one tree; [mwg:form-associated-custom-elements] wrapped tct-* controls stay the form participants."
+    },
+    "core.field-label": {
+      "tag": "tct-field-label",
+      "status": "implemented",
+      "upstream": {"name": "FieldLabel", "path": "packages/core/src/Field/FieldLabel.tsx", "commit": "ca632c6"},
+      "api": [
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute", "notes": "The default slot takes rich label text instead."},
+        {"upstream": "inputID", "kind": "prop", "target": "input-id", "as": "attribute"},
+        {"upstream": "isLabelHidden", "kind": "prop", "target": "label-hidden", "as": "attribute", "reflect": true},
+        {"upstream": "isDisabled", "kind": "prop", "target": "disabled", "as": "attribute", "reflect": true},
+        {"upstream": "isOptional", "kind": "prop", "target": "optional", "as": "attribute"},
+        {"upstream": "isRequired", "kind": "prop", "target": "required", "as": "attribute"},
+        {"upstream": "labelIcon", "kind": "prop", "target": "label-icon", "as": "attribute"},
+        {"upstream": "labelTooltip", "kind": "prop", "target": "label-tooltip", "as": "attribute"},
+        {"upstream": "labelID", "kind": "prop", "as": "waived", "reason": "`id` is a global attribute; tct-field gives the label satellite its id (or `label-id`)."},
+        {"upstream": "isGroupLabel", "kind": "prop", "target": "group-label", "as": "attribute"},
+        {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute", "notes": "Plain text under the label."},
+        {"upstream": "descriptionID", "kind": "prop", "as": "waived", "reason": "The description is a separate satellite (tct-field-description) whose id is `description-id` on tct-field; the label only renders the text."},
+        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use ::part(label), ::part(label-indicator), ::part(description) and ::part(label-tip)."}
+      ],
+      "hooks": [
+        {"upstream": "useInputContainer", "target": "formLayoutContext", "as": "context", "notes": "The form layout's optionality default decides whether the Required or Optional indicator shows."}
+      ],
+      "keyboard": [
+        {"keys": "Click", "action": "Forwards to the control named by `input-id` (see Field)."}
+      ],
+      "differences": [
+        {
+          "id": "FIELDLABEL-01",
+          "type": "approved-api-difference",
+          "text": "Mostly internal: tct-field and tct-text-input create it as an owned satellite. An `indicator` attribute (internal) carries the resolved Required/Optional text for the satellite."
+        }
+      ],
+      "tests": {"render": true, "a11y": true, "api": true, "events": true},
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:required-field-feedback] the indicator is text (\"Required\" or \"Optional\") beside the label, not a colour."
+    },
+    "core.input-clear-button": {
+      "tag": "tct-input-clear-button",
+      "status": "implemented",
+      "upstream": {"name": "InputClearButton", "path": "packages/core/src/Field/InputClearButton.tsx", "commit": "ca632c6"},
+      "api": [
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute", "notes": "Accessible name and tooltip, such as \"Clear Search\"."},
+        {"upstream": "onClick", "kind": "event", "target": "click", "as": "native-event", "notes": "Native click retargeted from the inner button; one per activation."},
+        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use ::part(button) and ::part(icon)."},
+        {"upstream": "iconClassName", "kind": "prop", "as": "waived", "reason": "The glyph is ::part(icon)."}
+      ],
+      "hooks": [],
+      "keyboard": [
+        {"keys": "Enter or Space", "action": "Activates it (a native button); tct-text-input clears, fires input and change, and restores focus to the input synchronously."}
+      ],
+      "differences": [
+        {
+          "id": "INPUTCLEAR-01",
+          "type": "approved-api-difference",
+          "text": "A native button with a tct-icon and a tct-tooltip in the shadow root, not a tct-button: the box is the small square Tecton draws inside an input. A pointer press never takes focus from the input, and on coarse pointers the hit area grows to 24px."
+        }
+      ],
+      "tests": {"render": true, "a11y": true, "api": true, "keyboard": true, "events": true},
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:custom-button-actions] a real button, activated by keyboard and pointer alike."
+    }
+  }
+}

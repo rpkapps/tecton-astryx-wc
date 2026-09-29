@@ -1,0 +1,138 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "dialog",
+  "workPackage": "WP-F",
+  "entries": {
+    "core.dialog": {
+      "tag": "tct-dialog",
+      "status": "implemented",
+      "upstream": {"name": "Dialog", "path": "packages/core/src/Dialog/Dialog.tsx", "commit": "ca632c6"},
+      "api": [
+        {"upstream": "isOpen", "kind": "prop", "target": "open", "as": "property", "reflect": true, "notes": "The state. The attribute opens it initially; writing the property never emits an event."},
+        {
+          "upstream": "onOpenChange",
+          "kind": "event",
+          "target": "tct-open-change",
+          "as": "event",
+          "notes": "Cancelable intent event with `open` and `reason` (escape, outside, close-button, close-watcher, request, trigger). Preventing it keeps the dialog as it is. `tct-after-open-change` follows once the animation settled."
+        },
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {"upstream": "width", "kind": "prop", "target": "width", "as": "attribute", "default": 400, "notes": "A number is px, a string a CSS length; clamped to the viewport gutter."},
+        {"upstream": "maxHeight", "kind": "prop", "target": "max-height", "as": "attribute", "default": "75dvh"},
+        {"upstream": "position", "kind": "prop", "target": "position", "as": "property", "notes": "Object `{top, bottom, start, end}`; `start` and `end` are logical and mirror in RTL. Property only (A§7.2 data props)."},
+        {"upstream": "variant", "kind": "prop", "target": "variant", "as": "attribute", "reflect": true, "default": "standard"},
+        {"upstream": "purpose", "kind": "prop", "target": "purpose", "as": "attribute", "reflect": true, "default": "info"},
+        {"upstream": "padding", "kind": "prop", "target": "padding", "as": "attribute", "notes": "Step of the spacing scale (0, 0.5, 1, 1.5, 2, 3, 4, 5, 6, 8, 10)."},
+        {"upstream": "isInline", "kind": "prop", "target": "inline", "as": "attribute", "reflect": true, "default": false},
+        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style, ::part(dialog) and ::part(content), --dialog-padding, and the padding, width and max-height attributes."},
+        {"upstream": "requestClose()", "kind": "method", "target": "requestClose", "as": "method", "notes": "Asks like the user does (cancelable tct-open-change). `show()`, `hide()` and `toggle()` change it programmatically without an intent event."}
+      ],
+      "hooks": [
+        {"upstream": "useLayerDismissal", "target": "LayerController", "as": "controller", "notes": "Escape, backdrop press and platform close requests go through the shared layer stack, innermost first, with the dialog's purpose as its dismissal policy."},
+        {"upstream": "useScrollLock", "target": "LayerController", "as": "controller", "notes": "The controller locks page scroll while a modal is open (with scrollbar-gutter: stable, so the page does not shift)."},
+        {"upstream": "useImperativeDialog", "target": "openDialog", "as": "module-function", "notes": "`openDialog(content, options)` from @tecton-astryx/components/dialog/dialog.api.js returns a handle {element, isOpen, hide(), closed}."}
+      ],
+      "keyboard": [
+        {"keys": "Escape", "action": "Asks to close the innermost dialog (tooltips first). Not for purpose=required; a composing IME Escape is claimed and ignored.", "when": "purpose is info or form"},
+        {"keys": "Tab / Shift+Tab", "action": "Stays inside the modal: the page behind is inert."},
+        {"keys": "Enter or Space on the close button", "action": "Asks to close with reason close-button."}
+      ],
+      "differences": [
+        {
+          "id": "DIALOG-01",
+          "type": "approved-api-difference",
+          "text": "`heading` and `subtitle` attributes (and a `heading` slot) are shorthand for a tct-dialog-header as first child; upstream composes DialogHeader in the children. Composing tct-dialog-header directly works and names the dialog the same way."
+        },
+        {
+          "id": "DIALOG-02",
+          "type": "approved-api-difference",
+          "text": "The dialog pads its own content (`--dialog-padding`, or the `padding` step) because there is no Layout element yet; upstream delegates padding to Layout. Once tct-layout exists, the same value is republished as `--_dialog-padding`."
+        },
+        {
+          "id": "DIALOG-03",
+          "type": "approved-api-difference",
+          "text": "Required accessible name: a `heading`, a header, or an `aria-label`/`aria-labelledby` on the host (mirrored onto the `<dialog>`); the dialog warns once in dev mode when it opens without one."
+        },
+        {
+          "id": "DIALOG-04",
+          "type": "approved-api-difference",
+          "text": "Declarative invokers work: `<button commandfor=\"dlg\" command=\"--show\">` (also `--hide`, `--toggle`) through the platform's invoker commands where present and a document-level click fallback elsewhere. The invoker gets aria-haspopup and aria-expanded."
+        },
+        {
+          "id": "DIALOG-05",
+          "type": "a11y-improvement",
+          "text": "The `<dialog>` is the modal in the top layer, so the page behind is inert and needs no focus trap or portal. The announcer's live regions move into the top-most modal, so toast-like messages are still spoken while a modal is open."
+        },
+        {
+          "id": "DIALOG-06",
+          "type": "tecton-visual",
+          "text": "Drawn with a rule around it, the container radius (8px) and the high elevation shadow (tecton-astryx components.ts `dialog`); entry is a rise from the opener's side with a fade, only a fade under reduced motion."
+        },
+        {
+          "id": "DIALOG-07",
+          "type": "approved-api-difference",
+          "text": "`openDialog()` is a module function rather than a hook; it renders a `tct-dialog` into the page, opens it and removes it once it has closed."
+        },
+        {
+          "id": "DIALOG-08",
+          "type": "approved-api-difference",
+          "text": "A `required` dialog ignores user dismissal only: `requestClose()`, `hide()` and a `<form method=\"dialog\">` in the content still close it (an explicit action of the application)."
+        }
+      ],
+      "tests": {"render": true, "a11y": true, "api": true, "keyboard": true, "events": true, "rtl": true, "forcedColors": true, "i18n": true},
+      "provisional": [
+        "Entry animation distance (16px rise, scale 0.95) and the 2px backdrop blur are upstream's values and were not re-tuned for Tecton.",
+        "Content padding until tct-layout exists."
+      ],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:light-dismiss-a-dialog] backdrop press through the layer stack, per purpose; [mwg:platform-controls-dismiss-dialog] `cancel` and CloseWatcher requests respect the escape policy; [mwg:declarative-dialog-popover-control] commandfor/command invokers; [mwg:animate-to-from-top-layer] WAAPI exit before `close()` (never `overlay`); [mwg:persistent-top-layer-ui] live regions inside the modal; [mwg:move-dom-element-without-losing-state] moveBefore keeps the dialog modal; [mwg:accessible-web-components] name from the heading via ids."
+    },
+    "core.dialog-header": {
+      "tag": "tct-dialog-header",
+      "status": "implemented",
+      "upstream": {"name": "DialogHeader", "path": "packages/core/src/Dialog/DialogHeader.tsx", "commit": "ca632c6"},
+      "api": [
+        {"upstream": "title", "kind": "prop", "target": "heading", "as": "attribute", "notes": "Rendered as an <h2> satellite in the light DOM (tabindex -1); `slot=\"title\"` takes an element of your own. `title` is a global attribute, so it is not reused (A§7.1)."},
+        {"upstream": "subtitle", "kind": "prop", "target": "subtitle", "as": "attribute"},
+        {
+          "upstream": "onOpenChange",
+          "kind": "event",
+          "target": "tct-open-change",
+          "as": "event",
+          "notes": "Inside a tct-dialog the close button asks the dialog; on its own the header fires the cancelable event itself (open false, reason close-button). Without the close button (no-close-button, or purpose=required) there is none."
+        },
+        {"upstream": "startContent", "kind": "slot", "target": "start", "as": "slot"},
+        {"upstream": "endContent", "kind": "slot", "target": "end", "as": "slot"},
+        {"upstream": "endContentEdgeCompensation", "kind": "prop", "target": "end-content-edge-compensation", "as": "attribute"},
+        {"upstream": "hasDivider", "kind": "prop", "target": "has-divider", "as": "attribute", "reflect": true, "default": false, "notes": "Upstream defaults to true; see DIALOG-HEADER-01."},
+        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style and the ::part(...) list of the header."}
+      ],
+      "hooks": [],
+      "differences": [
+        {
+          "id": "DIALOG-HEADER-01",
+          "type": "tecton-visual",
+          "text": "`has-divider` defaults to off: the Tecton dialog reads as one surface with a rule around it, and a rule under the title is asked for, not the default."
+        },
+        {
+          "id": "DIALOG-HEADER-02",
+          "type": "approved-api-difference",
+          "text": "The close button is shown by default (upstream only when `onOpenChange` is passed) and turned off with `no-close-button`; a purpose=required dialog never shows it. Its label is localised (\"Close\") and `close-label` overrides it. It is a tct-button (ghost, icon-only) whose built-in tooltip shows the label."
+        },
+        {
+          "id": "DIALOG-HEADER-03",
+          "type": "a11y-improvement",
+          "text": "The heading is a real <h2> in the light DOM so the dialog (whose <dialog> is in a shadow root) can name itself with an id reference, and it takes focus when a modal opens without becoming a tab stop."
+        }
+      ],
+      "tests": {"render": true, "a11y": true, "api": true, "events": true, "rtl": true, "i18n": true},
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components] the heading satellite and id references; [mwg:custom-button-actions] the close button asks instead of closing."
+    }
+  }
+}
