@@ -160,5 +160,6 @@ describe('CLI', () => {
     expect(result.status).toBe(0);
     // The repository itself has been migrated: a dry run over it finds nothing left to rename.
     expect(result.stdout).toMatch(/would change 0 of \d+ file\(s\)/);
-  });
+    // A node process scanning the whole repository (thousands of files).
+  }, 60_000);
 });

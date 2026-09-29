@@ -1,0 +1,36 @@
+<!-- title: In a form; description: The complex selector is form-associated: it submits its value string under its name, blocks a submit while a required choice is missing, and is restored by reset. Encode a structured value into the string yourself, for example as JSON. -->
+<tct-vstack max-width="480">
+  <form id="in-form-root">
+    <tct-form-layout>
+      <tct-complex-selector label="Accent colour" name="accent" required placeholder="Choose a colour">
+        <tct-vstack gap="1">
+          <tct-button variant="ghost" data-value="teal" data-label="Teal">Teal</tct-button>
+          <tct-button variant="ghost" data-value="coral" data-label="Coral">Coral</tct-button>
+        </tct-vstack>
+      </tct-complex-selector>
+      <tct-hstack gap="2">
+        <tct-button type="submit" variant="primary">Save</tct-button>
+        <tct-button type="reset">Reset</tct-button>
+      </tct-hstack>
+      <output></output>
+    </tct-form-layout>
+  </form>
+</tct-vstack>
+<script type="module">
+  const form = document.getElementById('in-form-root');
+  const selector = form.querySelector('tct-complex-selector');
+  selector.addEventListener('click', (event) => {
+    const choice = event.target.closest('[data-value]');
+    if (!choice) return;
+    selector.commit(choice.dataset.value);
+    selector.triggerLabel = choice.dataset.label;
+    selector.hide();
+  });
+  form.addEventListener('reset', () => {
+    selector.triggerLabel = '';
+  });
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    form.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(form)));
+  });
+</script>

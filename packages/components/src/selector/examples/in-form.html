@@ -1,0 +1,24 @@
+<!-- title: In a form; description: The selector is form-associated: it submits its value under its name (an empty string while nothing is chosen), blocks a submit while a required choice is missing, and is restored by reset. -->
+<tct-vstack max-width="480">
+  <form id="in-form-root">
+    <tct-form-layout>
+      <tct-selector label="Size" name="size" required placeholder="Choose a size"></tct-selector>
+      <tct-selector label="Colour" name="colour" value="blue" has-clear></tct-selector>
+      <tct-hstack gap="2">
+        <tct-button type="submit" variant="primary">Save</tct-button>
+        <tct-button type="reset">Reset</tct-button>
+      </tct-hstack>
+      <output></output>
+    </tct-form-layout>
+  </form>
+</tct-vstack>
+<script type="module">
+  const form = document.getElementById('in-form-root');
+  const [size, colour] = form.querySelectorAll('tct-selector');
+  size.options = ['Small', 'Medium', 'Large'];
+  colour.options = [{value: 'red', label: 'Red'}, {value: 'blue', label: 'Blue'}, {value: 'green', label: 'Green'}];
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    form.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(form)));
+  });
+</script>

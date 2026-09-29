@@ -1,0 +1,256 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "pagination",
+  "workPackage": "WP-11",
+  "entries": {
+    "core.pagination": {
+      "tag": "tct-pagination",
+      "status": "implemented",
+      "upstream": {
+        "name": "Pagination",
+        "path": "packages/core/src/Pagination/Pagination.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "page",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "page",
+          "default": 1,
+          "notes": "1-based. The user's actions change it after `tct-page-change` (unless prevented), so it works without a script; setting it from code fires nothing and announces nothing."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "as": "event",
+          "target": "tct-page-change",
+          "notes": "Cancelable intent event before a page button, previous/next/first/last, a dot or the page box changes the page; carries `page`, `oldPage` and `reason`. A request for the current page is ignored (PAGINATION-02)."
+        },
+        {
+          "upstream": "changeAction",
+          "kind": "prop",
+          "as": "property",
+          "target": "changeAction",
+          "notes": "Runs after `tct-page-change` with the new page; the paginator is busy (`aria-busy`, `:state(busy)`) while a returned promise is pending, rapid clicks are not blocked, and the previous page returns if it rejects."
+        },
+        {
+          "upstream": "totalItems",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "total-items",
+          "notes": "Zero or less renders nothing. Wins over `total-pages` (PAGINATION-03)."
+        },
+        {
+          "upstream": "totalPages",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "total-pages",
+          "notes": "Zero or less renders nothing."
+        },
+        {
+          "upstream": "hasMore",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "has-more",
+          "notes": "Cursor paging: next follows it while the total is unknown."
+        },
+        {
+          "upstream": "pageSize",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "page-size",
+          "default": 10,
+          "notes": "Coerced to a positive whole number; a non-finite value is 10."
+        },
+        {
+          "upstream": "pageSizeOptions",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "page-size-options",
+          "notes": "`page-size-options=\"10, 25, 50\"` or a `number[]` property; shows the page-size selector."
+        },
+        {
+          "upstream": "onPageSizeChange",
+          "kind": "event",
+          "as": "event",
+          "target": "tct-page-size-change",
+          "notes": "Cancelable intent event before the page size changes; carries `pageSize` and `oldPageSize`. When it is not prevented the size changes and the paginator asks for page 1 with a `tct-page-change` (fired even from page 1)."
+        },
+        {
+          "upstream": "variant",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "variant",
+          "reflect": true,
+          "default": "pages",
+          "notes": "pages, count, compact, dots, input or none."
+        },
+        {
+          "upstream": "pageLabel",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "page-label",
+          "notes": "The noun before the page box of the `input` variant. Default: the localized \"Page\"."
+        },
+        {
+          "upstream": "hasFirstLast",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "no-first-last",
+          "notes": "Inverted: first and last buttons flank previous and next in the `input` variant by default (when the total is known); `no-first-last` leaves them out."
+        },
+        {
+          "upstream": "step",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "step",
+          "default": 1
+        },
+        {
+          "upstream": "siblingCount",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "sibling-count",
+          "default": 1
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "size",
+          "reflect": true,
+          "default": "md",
+          "notes": "sm or md; unset follows the nearest size provider (`lg` is md)."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "disabled",
+          "reflect": true
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "label",
+          "default": "Pagination",
+          "notes": "The accessible name of the navigation landmark (the localized \"Pagination\")."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style/::part/custom properties"
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: attributes go on the host element."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useAnnounce",
+          "target": "announce",
+          "as": "module-function",
+          "notes": "A user-driven page change is announced politely (\"Page N of M\", or \"Page N\" without a total); mounting and property writes are silent."
+        },
+        {
+          "upstream": "useListFocus",
+          "target": "RovingTabindexController",
+          "as": "controller",
+          "notes": "The dots are one tab stop; arrows move focus and the page together (selection follows focus), Home and End jump, focus wraps, arrows follow the reading direction."
+        },
+        {
+          "upstream": "generatePageRange",
+          "target": "generatePageRange",
+          "as": "module-function",
+          "notes": "pagination/pagination.utils.ts, with the upstream tests; also coercePageSize, coerceStep and resolveTotalPages."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab, Shift+Tab",
+          "action": "Moves through the selector, the buttons and the page box in order; the dots are a single tab stop",
+          "when": "always"
+        },
+        {
+          "keys": "Enter, Space",
+          "action": "Activates the focused button: previous, next, first, last, a page number or a dot",
+          "when": "a button or dot focused"
+        },
+        {
+          "keys": "ArrowRight, ArrowLeft",
+          "action": "Moves focus to the next or previous dot and goes to that page; wraps at the ends and follows the reading direction",
+          "when": "dots variant, a dot focused"
+        },
+        {
+          "keys": "Home, End",
+          "action": "Goes to the first or last page",
+          "when": "dots variant, a dot focused"
+        },
+        {
+          "keys": "Enter",
+          "action": "Commits the typed page: a number out of range is clamped, an empty or invalid entry is restored",
+          "when": "input variant, page box focused"
+        },
+        {
+          "keys": "Tab, Shift+Tab (leaving the box)",
+          "action": "Commits the typed page when focus leaves the page box",
+          "when": "input variant, page box focused"
+        }
+      ],
+      "differences": [
+        {
+          "id": "PAGINATION-01",
+          "type": "approved-api-difference",
+          "text": "Uncontrolled by default (D-006): `page` and `page-size` are applied by the element when `tct-page-change` and `tct-page-size-change` are not prevented; upstream is controlled (`page` plus `onChange`). Preventing the event, or setting the property back, keeps the paginator controlled."
+        },
+        {
+          "id": "PAGINATION-02",
+          "type": "approved-api-difference",
+          "text": "A request for the page that is already current (clicking the current page button) fires nothing; upstream calls `onChange` with the current page. The page-size change is the exception: it always asks for page 1 so a loader can rely on it."
+        },
+        {
+          "id": "PAGINATION-03",
+          "type": "approved-api-difference",
+          "text": "When both are given `total-items` wins over `total-pages`, as upstream documents; upstream's code lets `totalPages` win, which disagrees with its count readout."
+        },
+        {
+          "id": "PAGINATION-04",
+          "type": "approved-api-difference",
+          "text": "`hasFirstLast` (default true) is the inverted `no-first-last` attribute; `isDisabled` is `disabled`; `page-size-options` also parses from an attribute; `xstyle` and `data-testid` are replaced by class, style, `::part()` and host attributes."
+        },
+        {
+          "id": "PAGINATION-05",
+          "type": "a11y-improvement",
+          "text": "Each dot is a 24px target that paints an 8px disc (WCAG 2.5.8) instead of an 8px button; the current dot is `aria-current=\"page\"` and the only tab stop. The input, page-size selector and buttons keep their own events inside the paginator (`input`, `change`, `tct-enter` do not leave it)."
+        },
+        {
+          "id": "PAGINATION-06",
+          "type": "tecton-visual",
+          "text": "Ghost buttons, the neutral fill of the current page number and the accent dot use the shared Tecton tokens; chevrons mirror in right-to-left through the icon's own direction handling."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 112,
+      "notes": "Guides: [mwg:accessible-web-components] a real <nav> and buttons in the shadow tree, the dots as one tab stop; [mwg:accessibility] politeness, target size and names. The sixteen upstream messages are all used and tested in de-DE."
+    }
+  }
+}

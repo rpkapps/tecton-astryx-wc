@@ -1,0 +1,21 @@
+<!-- title: Collapsed; description: A horizontal stepper collapses when its steps no longer fit (each needs minimum-step-width, 112px by default): the steps shrink to their track segment and a summary of the active step shows below it, with previous and next buttons when navigable. -->
+<tct-vstack gap="5" max-width="320">
+  <tct-stepper active-step="1" navigable label="With label and controls">
+    <tct-step label="Account"></tct-step>
+    <tct-step label="Profile" description="Tell us about you"></tct-step>
+    <tct-step label="Payment"></tct-step>
+    <tct-step label="Review"></tct-step>
+  </tct-stepper>
+  <tct-stepper active-step="1" collapsed-variant="with-label" label="With label only">
+    <tct-step label="Account"></tct-step>
+    <tct-step label="Profile"></tct-step>
+    <tct-step label="Payment"></tct-step>
+    <tct-step label="Review"></tct-step>
+  </tct-stepper>
+  <tct-stepper active-step="1" collapsed-variant="hidden-label" label="Bare track">
+    <tct-step label="Account"></tct-step>
+    <tct-step label="Profile"></tct-step>
+    <tct-step label="Payment"></tct-step>
+    <tct-step label="Review"></tct-step>
+  </tct-stepper>
+</tct-vstack>

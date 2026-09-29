@@ -1,0 +1,35 @@
+/*
+ * tct-tab-menu. The trigger is a `.tab` (the tab sheet is included first) slotted into the shared
+ * tct-dropdown-menu, so it looks and rolls like a tab. The menu panel is the dropdown's own surface.
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+
+  .menu {
+    display: inline-flex;
+  }
+
+  .chevron {
+    flex-shrink: 0;
+    transition: rotate var(--duration-fast) var(--ease-standard);
+  }
+
+  .menu-heading {
+    display: block;
+    padding-block: var(--spacing-1);
+    padding-inline: var(--spacing-3);
+    color: var(--color-text-secondary);
+    font-size: var(--text-supporting-size);
+    line-height: var(--text-supporting-leading);
+    font-weight: var(--font-weight-semibold);
+  }
+}
+
+@layer state {
+  .tab[data-open] .chevron {
+    rotate: 180deg;
+  }
+}

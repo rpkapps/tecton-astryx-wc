@@ -1,0 +1,138 @@
+/*
+ * tct-chat-layout. The host is layout only: a flex column that takes the space its container offers
+ * (`flex: 1` with `min-block-size: 0`, so a flex parent can bound it and the root can scroll). `.root` is the
+ * layout: a flex column that scrolls itself unless `scroll-target` names another scroller, and whose
+ * `container-type: inline-size` lets children use container queries. Its children are the message area and
+ * the dock.
+ *
+ * The contract that keeps the scrolling honest: the message area GROWS into the space the dock leaves
+ * (`flex-grow: 1`) but NEVER SHRINKS below its content (`flex: 1 0 auto`). Short transcripts then fill the root
+ * exactly with no overflow, and long ones grow past it so the root scrolls, and the message list keeps
+ * growing with its messages, which is what the resize observer of the scroll controllers watches. The sticky
+ * dock keeps its natural height in the column, so its height is part of the 100% and there is no phantom
+ * scrollbar; with an external scroller the dock is `fixed` (out of flow) and the message area fills the root.
+ *
+ * The dock is a frosted-glass strip: a blur layer masked to fade out toward the transcript sits behind the
+ * composer, and the scroll button sits above it. Density steps the dock padding, the message column and the
+ * blur size together. [mwg:css-layout] [mwg:soft-edge-content-fade] [mwg:scroll-position-aware-elements]
+ */
+@layer component {
+  :host {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-block-size: 0;
+    min-inline-size: 0;
+  }
+
+  .root {
+    --_dock-padding-inline: var(--spacing-3);
+    --_dock-padding-block-end: var(--spacing-3);
+    --_column-max: 100%;
+    --_column-padding-inline: 0;
+    --_blur-block-size: 100px; /* design: the blur layer is 100px tall */
+    --_blur-fade: 36px; /* design: it fades in over its first 36px */
+
+    position: relative;
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-block-size: 0;
+    container-type: inline-size;
+  }
+
+  .root[data-self-scroll] {
+    /* physical: overflow-inline is not available in every Tier-2 engine */
+    overflow-x: hidden;
+    /* physical: overflow-block is not available in every Tier-2 engine */
+    overflow-y: auto;
+  }
+
+  .root[data-density='compact'] {
+    --_dock-padding-inline: var(--spacing-2);
+    --_dock-padding-block-end: var(--spacing-2);
+    --_blur-block-size: 80px; /* design: compact blur height */
+    --_blur-fade: 24px; /* design: compact blur fade */
+  }
+
+  .root[data-density='spacious'] {
+    --_dock-padding-inline: var(--spacing-4);
+    --_column-max: 50rem; /* design: the spacious column is 800px wide */
+    --_column-padding-inline: var(--spacing-4);
+    --_blur-block-size: 120px; /* design: spacious blur height */
+    --_blur-fade: 48px; /* design: spacious blur fade */
+  }
+
+  .messages {
+    display: flex;
+    flex: 1 0 auto;
+    flex-direction: column;
+    inline-size: 100%;
+    max-inline-size: var(--_column-max);
+    margin-inline: auto;
+    padding-block-end: var(--spacing-6);
+    padding-inline: var(--_column-padding-inline);
+  }
+
+  .empty {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    min-block-size: 12.5rem; /* design: the empty state has at least 200px */
+  }
+
+  /* ------------------------------------------------------------------------------------ the dock */
+  .dock-container {
+    inset-block-end: 0;
+    inset-inline: 0;
+    z-index: 0;
+    isolation: isolate;
+    flex-shrink: 0;
+    pointer-events: none;
+  }
+
+  .dock-container[data-mode='sticky'] {
+    position: sticky;
+  }
+
+  .dock-container[data-mode='fixed'] {
+    position: fixed;
+  }
+
+  .blur {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline: 0;
+    block-size: var(--_blur-block-size);
+    pointer-events: none;
+    -webkit-backdrop-filter: blur(12px); /* design: 12px frosted blur */
+    backdrop-filter: blur(12px); /* design: 12px frosted blur */
+    /* Only the alpha of the mask counts: a fade from nothing to fully opaque. */
+    -webkit-mask-image: linear-gradient(to bottom, transparent, currentColor var(--_blur-fade));
+    mask-image: linear-gradient(to bottom, transparent, currentColor var(--_blur-fade));
+  }
+
+  .dock {
+    position: relative;
+    z-index: 1;
+    padding-inline: var(--_dock-padding-inline);
+    padding-block-end: var(--_dock-padding-block-end);
+    pointer-events: auto;
+  }
+
+  .dock-inner {
+    inline-size: 100%;
+    max-inline-size: var(--_column-max);
+    margin-inline: auto;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    /* No frosted glass in forced colours: the composer's own edge carries the boundary. */
+    .blur {
+      display: none;
+    }
+  }
+}

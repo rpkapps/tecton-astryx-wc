@@ -1,0 +1,15 @@
+<!-- title: A chat layout; description: The transcript fills the space, the composer is docked at the bottom behind a frosted layer, and the layout scrolls itself. Give it a height (here a stack), because it fills what its container offers. -->
+<tct-vstack height="420" max-width="560">
+  <tct-chat-layout>
+    <tct-chat-message-list>
+      <tct-chat-message sender="user">
+        <tct-chat-message-bubble>Which wells dropped below their forecast this week?</tct-chat-message-bubble>
+      </tct-chat-message>
+      <tct-chat-message sender="assistant">
+        <tct-avatar slot="avatar" name="Navi" size="sm"></tct-avatar>
+        <tct-chat-message-bubble name="Navi">Three wells are under forecast: A-12 (-8%), B-04 (-11%) and C-19 (-15%).</tct-chat-message-bubble>
+      </tct-chat-message>
+    </tct-chat-message-list>
+    <tct-chat-composer slot="composer" placeholder="Ask a follow-up…"></tct-chat-composer>
+  </tct-chat-layout>
+</tct-vstack>

@@ -1,0 +1,14 @@
+<!-- title: Right-to-left; description: The user's messages sit at the left edge, the composer's send button at the inline end, and the scroll button stays centred above the dock. -->
+<tct-vstack dir="rtl" lang="ar" height="360" max-width="560">
+  <tct-chat-layout>
+    <tct-chat-message-list>
+      <tct-chat-message sender="assistant">
+        <tct-chat-message-bubble>مرحبا، كيف يمكنني المساعدة؟</tct-chat-message-bubble>
+      </tct-chat-message>
+      <tct-chat-message sender="user">
+        <tct-chat-message-bubble>لخّص التقرير من فضلك.</tct-chat-message-bubble>
+      </tct-chat-message>
+    </tct-chat-message-list>
+    <tct-chat-composer slot="composer" placeholder="اكتب رسالة…"></tct-chat-composer>
+  </tct-chat-layout>
+</tct-vstack>

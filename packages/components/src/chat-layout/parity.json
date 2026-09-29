@@ -1,0 +1,117 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "chat-layout",
+  "workPackage": "WP-16",
+  "entries": {
+    "core.chat-layout": {
+      "tag": "tct-chat-layout",
+      "status": "implemented",
+      "upstream": {
+        "name": "ChatLayout",
+        "path": "packages/core/src/Chat/ChatLayout.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "prop",
+          "target": "default",
+          "as": "slot",
+          "notes": "The transcript, typically a tct-chat-message-list."
+        },
+        {
+          "upstream": "composer",
+          "kind": "slot",
+          "target": "composer",
+          "as": "slot"
+        },
+        {
+          "upstream": "emptyState",
+          "kind": "slot",
+          "target": "empty-state",
+          "as": "slot",
+          "notes": "Shown, centred, while the default slot has no content (whitespace does not count)."
+        },
+        {
+          "upstream": "scrollButton",
+          "kind": "slot",
+          "target": "scroll-button",
+          "as": "slot",
+          "notes": "Slot content replaces the default button. Upstream's `null` (no button) is the `no-scroll-button` attribute."
+        },
+        {
+          "upstream": "scrollRef",
+          "kind": "prop",
+          "target": "scrollTarget",
+          "as": "property",
+          "notes": "An element, as upstream's ref; `scroll-target` (attribute, `scrollTargetSelector`) takes `document` or a CSS selector and is the declarative form."
+        },
+        {
+          "upstream": "density",
+          "kind": "prop",
+          "target": "density",
+          "as": "attribute",
+          "reflect": true,
+          "default": "balanced"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base|messages|empty|dock|dock-inner|blur|scroll-button) or the tokens."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useChatLayoutContext",
+          "target": "chatLayoutContext",
+          "as": "context",
+          "notes": "chat-message-list/chat-layout.context.ts (WP-9): {scrollContainer(), contentRef}. Provided here; the message list registers its content and the layout's controllers (ChatStreamScrollController, ChatNewMessagesController) do the stick-to-bottom and the new-messages state."
+        },
+        {
+          "upstream": "useMediaQuery",
+          "as": "waived",
+          "reason": "Upstream reads a media query to choose the dock mode; here the mode follows `scroll-target` (sticky when the layout scrolls itself, fixed when another scroller does) and the rest is container-query and CSS."
+        }
+      ],
+      "keyboard": [],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "CHATLAYOUT-01",
+          "type": "approved-api-difference",
+          "text": "`scrollRef` is the element property `scrollTarget`, with the declarative `scroll-target` attribute (`document` or a selector). When the page scrolls (`document`, the root or `<body>`) the scroll controllers get a small view of the viewport scroller (`viewport-scroller.ts`): `scroll`/`scrollend` listeners go to `document`, where the browser fires them, and the height is the viewport's, so \"distance from the bottom\" is honest. The dock is `position: fixed` with an external scroller and `sticky` otherwise."
+        },
+        {
+          "id": "CHATLAYOUT-02",
+          "type": "approved-api-difference",
+          "text": "The wired scroll button is the WP-9 `tct-chat-layout-scroll-button`; the layout renders it unless `no-scroll-button` is set or the `scroll-button` slot has content. The state it shows (scrolled up, new messages) is also readable as `isScrolledUp`, `isFollowing` and `hasNewMessages`, and `scrollToBottom({instant})` is public."
+        },
+        {
+          "id": "CHATLAYOUT-03",
+          "type": "tecton-visual",
+          "text": "The frosted dock is a `backdrop-filter` blur layer masked to fade toward the transcript (`mask-image`), sized by density; it is removed in forced-colours mode, where the composer's own edge carries the boundary. Density steps the dock padding, the message column (the spacious column is at most 800px and centred) and the blur size together."
+        },
+        {
+          "id": "CHATLAYOUT-04",
+          "type": "a11y-improvement",
+          "text": "The layout assigns no landmark or name to your regions and moves no focus while a reply streams (the transcript is announced by the message list, one completed message at a time). Following the stream is a spring that becomes a jump under `prefers-reduced-motion`, and the reader's own scroll always wins."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "events": false,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 65,
+      "notes": "Size: the measured gzip size is 58.4 kB (the budget adds about 10%): it bundles the message list and scroll button of WP-9 and the ICU message parser (about 33 kB, see provisional-budgets.json). Guides: [mwg:css-layout] (a flex column that grows without shrinking below its content, logical properties); [mwg:soft-edge-content-fade] (the masked blur layer); [mwg:scroll-position-aware-elements] (the scroll button follows the scroll position, driven by the shared controllers); [mwg:css]."
+    }
+  }
+}

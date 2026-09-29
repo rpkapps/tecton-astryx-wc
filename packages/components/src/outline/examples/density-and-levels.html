@@ -1,0 +1,18 @@
+<!-- title: Density and levels; description: Items indent by heading level (levels 1 and 2 share the first step, deeper levels indent further). density="compact" reduces the item padding for dense UIs. -->
+<div id="density-and-levels-root">
+  <tct-hstack gap="8" v-align="start">
+    <tct-outline label="Default density" active-id="density-b"></tct-outline>
+    <tct-outline label="Compact density" density="compact" active-id="density-b"></tct-outline>
+  </tct-hstack>
+  <script type="module">
+    const root = document.querySelector('#density-and-levels-root');
+    for (const outline of root.querySelectorAll('tct-outline')) {
+      outline.items = [
+        {id: 'density-a', label: 'Overview', level: 1},
+        {id: 'density-b', label: 'Concepts', level: 2},
+        {id: 'density-c', label: 'Deep dive', level: 3},
+        {id: 'density-d', label: 'Reference', level: 1},
+      ];
+    }
+  </script>
+</div>

@@ -1,0 +1,13 @@
+<!-- title: Descriptions and icons; description: Options can be objects with a label, a description, an icon or a disabled flag. A disabled option is skipped by the keyboard and cannot be chosen. -->
+<div id="rich-options-root">
+  <tct-vstack max-width="360">
+    <tct-selector label="Plan" description="You can change it later."></tct-selector>
+  </tct-vstack>
+  <script type="module">
+    document.querySelector('#rich-options-root tct-selector').options = [
+      {value: 'free', label: 'Free', description: 'For a single project', icon: 'wrench'},
+      {value: 'team', label: 'Team', description: 'Shared projects and roles', icon: 'funnel'},
+      {value: 'enterprise', label: 'Enterprise', description: 'Contact sales', icon: 'info', disabled: true},
+    ];
+  </script>
+</div>

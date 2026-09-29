@@ -1,0 +1,119 @@
+{
+  "folder": "outline",
+  "elements": {
+    "tct-outline": {
+      "class": "TctOutline",
+      "attributes": [
+        {
+          "name": "active-id",
+          "property": "activeId",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "density",
+          "property": "density",
+          "type": "OutlineDensity",
+          "values": [
+            "default",
+            "compact"
+          ],
+          "default": "'default'",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "no-scroll-on-click",
+          "property": "noScrollOnClick",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "offset",
+          "property": "offset",
+          "type": "number",
+          "default": "0",
+          "reflects": false
+        },
+        {
+          "name": "scroll-container",
+          "property": "scrollContainerSelector",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "source",
+          "property": "source",
+          "type": "string | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "currentId",
+          "type": "string | undefined",
+          "readonly": true
+        },
+        {
+          "name": "items",
+          "type": "OutlineItem[]",
+          "default": "[]",
+          "readonly": false
+        },
+        {
+          "name": "scrollContainer",
+          "type": "HTMLElement | null",
+          "default": "null",
+          "readonly": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "navigateTo",
+          "signature": "(id: string, reason: ActiveChangeReason) => boolean"
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "tct-active-change",
+          "class": "TctActiveChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-navigate-end",
+          "class": "TctNavigateEndEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-navigate-start",
+          "class": "TctNavigateStartEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        }
+      ],
+      "cssParts": [
+        "base",
+        "indicator",
+        "item",
+        "list"
+      ],
+      "cssStates": [
+        "active"
+      ],
+      "cssProperties": []
+    }
+  }
+}

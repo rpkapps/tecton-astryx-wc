@@ -1,0 +1,425 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "multi-selector",
+  "workPackage": "WP-11",
+  "entries": {
+    "core.multi-selector": {
+      "tag": "tct-multi-selector",
+      "status": "implemented",
+      "upstream": {
+        "name": "MultiSelector",
+        "path": "packages/core/src/MultiSelector/MultiSelector.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "options",
+          "kind": "prop",
+          "as": "property",
+          "target": "options"
+        },
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "as": "property",
+          "target": "values",
+          "notes": "`values: string[]` is the array (selection order); the `value` string and attribute list the same values separated by whitespace. `\"\"`/`[]` is nothing chosen."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "as": "native-event",
+          "target": "change",
+          "notes": "`input` then `change` fire once per user toggle, select-all or clear; read `values`. Neither fires on property writes."
+        },
+        {
+          "upstream": "changeAction",
+          "kind": "prop",
+          "as": "property",
+          "target": "changeAction",
+          "notes": "Runs after every user change with the new values; busy while a returned promise is pending, and the values return to what they were if it rejects."
+        },
+        {
+          "upstream": "triggerDisplay",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "trigger-display",
+          "default": "count",
+          "notes": "`count`, `labels` or `badges`."
+        },
+        {
+          "upstream": "formatValue",
+          "kind": "prop",
+          "as": "property",
+          "target": "formatValue",
+          "notes": "`(items: {value, label}[]) => string` for the `count` and `labels` displays; not called while nothing is chosen."
+        },
+        {
+          "upstream": "maxBadges",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "max-badges",
+          "default": 3
+        },
+        {
+          "upstream": "hasSelectAll",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "has-select-all",
+          "default": false,
+          "notes": "A \"Select all\" row first in the list; it acts on the enabled options shown (a search narrows it) and shows a mixed state."
+        },
+        {
+          "upstream": "selectAllLabel",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "select-all-label",
+          "notes": "Default: the localized \"Select all\"."
+        },
+        {
+          "upstream": "hasClear",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "has-clear",
+          "default": false,
+          "notes": "A clear button (and Delete on the trigger) clears every value and fires a cancelable `tct-clear` first."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "label",
+          "notes": "The accessible name of the combobox; always rendered for accessibility."
+        },
+        {
+          "upstream": "isLabelHidden",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "label-hidden",
+          "reflect": true
+        },
+        {
+          "upstream": "description",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "description"
+        },
+        {
+          "upstream": "isOptional",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "optional"
+        },
+        {
+          "upstream": "isRequired",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "required",
+          "reflect": true,
+          "notes": "Also a validity constraint (valueMissing) and `aria-required`."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "disabled",
+          "reflect": true,
+          "notes": "Also through <fieldset disabled>."
+        },
+        {
+          "upstream": "isReadOnly",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "readonly",
+          "reflect": true,
+          "notes": "The list does not open and the value cannot change; the trigger stays focusable and the value is still submitted."
+        },
+        {
+          "upstream": "disabledMessage",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "disabled-message",
+          "notes": "A tooltip on a disabled selector that says why; the trigger stays focusable (aria-disabled) and inert."
+        },
+        {
+          "upstream": "htmlName",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "name",
+          "reflect": true
+        },
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "as": "property",
+          "target": "status",
+          "notes": "Object `{type, message?}`, or the `status-type` and `status-message` attributes."
+        },
+        {
+          "upstream": "statusVariant",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "status-variant",
+          "default": "attached",
+          "notes": "attached, detached or tooltip (a focusable button in the box that reveals the message)."
+        },
+        {
+          "upstream": "isLoading",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "loading",
+          "notes": "Busy: a spinner and `aria-busy` on the trigger. It does not describe the options; that is `options-state` (SELECTOR-06)."
+        },
+        {
+          "upstream": "labelTooltip",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "label-tooltip"
+        },
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "width",
+          "notes": "A number is px, a string a CSS length. Not reflected."
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "size",
+          "reflect": true,
+          "default": "md",
+          "notes": "Unset takes the nearest size provider, else md."
+        },
+        {
+          "upstream": "variant",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "variant",
+          "reflect": true,
+          "default": "input",
+          "notes": "`input` is the bordered field, `ghost` the borderless toolbar trigger."
+        },
+        {
+          "upstream": "placeholder",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "placeholder",
+          "notes": "Default: the localized \"Select...\"."
+        },
+        {
+          "upstream": "startIcon",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "start-icon",
+          "notes": "An icon name (upstream also accepts a node); the start of the trigger."
+        },
+        {
+          "upstream": "hasSearch",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "has-search",
+          "notes": "A search field at the top of the popup filters the options; the number of matches is announced. The search field is then the combobox while the list is open."
+        },
+        {
+          "upstream": "searchPlaceholder",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "search-placeholder"
+        },
+        {
+          "upstream": "emptyText",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "empty-text",
+          "notes": "Text of the panel with no options; announced once."
+        },
+        {
+          "upstream": "emptySearchText",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "empty-search-text",
+          "notes": "Text of the panel when a search matches nothing; announced once per query."
+        },
+        {
+          "upstream": "indicatorPosition",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "indicator-position",
+          "notes": "Where the selection mark sits in a row (start or end)."
+        },
+        {
+          "upstream": "presentation",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "presentation",
+          "notes": "`adaptive` (default: popover on pointer devices, bottom sheet on a narrow touch viewport), `popover` or `sheet`."
+        },
+        {
+          "upstream": "renderOption",
+          "kind": "prop",
+          "as": "property",
+          "target": "renderOption",
+          "notes": "`(option, state) => TemplateResult`; use `tct-selector-option` for the standard row content. Any content is drawn inside the row; the row itself (role, highlight, mark) is not replaced."
+        },
+        {
+          "upstream": "isDefaultOpen",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "open",
+          "reflect": true,
+          "notes": "`open` is the live state and the initial one; setting it from code fires no events (SELECTOR-02)."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style/::part/custom properties"
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: attributes go on the host element."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useAnnounce",
+          "target": "announce",
+          "as": "module-function",
+          "notes": "Search result counts, empty/loading/error panels once per state, and the selection changes."
+        },
+        {
+          "upstream": "useHighlightedOptionScroll",
+          "target": "MultiComboboxController",
+          "as": "controller",
+          "notes": "Keyboard-only scrolling of the highlighted option."
+        },
+        {
+          "upstream": "useKeepLayerOpenProps",
+          "target": "LayerController",
+          "as": "controller",
+          "notes": "A press on the trigger box is inside the layer; choosing a row keeps the list open."
+        },
+        {
+          "upstream": "useResolvedRequired",
+          "target": "formLayoutContext",
+          "as": "context",
+          "notes": "The form layout optionality default; the indicator follows it."
+        },
+        {
+          "upstream": "useMultiCombobox",
+          "target": "MultiComboboxController",
+          "as": "controller",
+          "notes": "core/src/controllers/combobox.ts: the multiple-selection variant of the select-only combobox contract."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Enter, Space, ArrowDown",
+          "action": "Opens the list and highlights the first option",
+          "when": "trigger focused, closed"
+        },
+        {
+          "keys": "ArrowUp",
+          "action": "Opens the list and highlights the last option",
+          "when": "trigger focused, closed"
+        },
+        {
+          "keys": "ArrowDown, ArrowUp",
+          "action": "Moves the highlight to the next or previous enabled option, without wrapping",
+          "when": "open"
+        },
+        {
+          "keys": "Home, End, PageUp, PageDown",
+          "action": "Highlights the first or last enabled option",
+          "when": "open; with search Home and End move the caret, the Page keys jump"
+        },
+        {
+          "keys": "Enter, Space",
+          "action": "Toggles the highlighted option and keeps the list open",
+          "when": "open, an option highlighted (Space types into the search field)"
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes the list; focus stays on the trigger",
+          "when": "open; one layer per press"
+        },
+        {
+          "keys": "Tab",
+          "action": "Closes the list and moves focus on",
+          "when": "open"
+        },
+        {
+          "keys": "Printable characters",
+          "action": "Opens the list on the option whose label starts with what was typed",
+          "when": "closed or open; without search"
+        },
+        {
+          "keys": "Delete, Backspace",
+          "action": "Clears every value",
+          "when": "closed; has-clear; without search"
+        }
+      ],
+      "form": {
+        "formAssociated": true,
+        "notes": "Form-associated like a native `<select multiple>`: one `FormData` entry per chosen value under `name` (repeated names), nothing submitted when nothing is chosen; resets to the `value` attribute, restores on navigation, joins <fieldset disabled>. `required` needs at least one value (valueMissing)."
+      },
+      "differences": [
+        {
+          "id": "MULTISELECTOR-01",
+          "type": "approved-api-difference",
+          "text": "Uncontrolled by default (D-006): `values` is the array and `value` the same list as whitespace-separated text (also the `value` attribute, the form reset default); a value that contains whitespace can only be set through `values`. `input` then `change` fire once per user toggle, select-all or clear; upstream is a controlled `value: string[]` with `onChange`."
+        },
+        {
+          "id": "MULTISELECTOR-02",
+          "type": "approved-api-difference",
+          "text": "Form-associated like a native `<select multiple>`: one entry per chosen value under `name` (repeated names in `FormData`), nothing chosen submits nothing; `required` needs at least one value. The restore state is the list of values."
+        },
+        {
+          "id": "MULTISELECTOR-03",
+          "type": "approved-api-difference",
+          "text": "The `is*` props are bare boolean attributes, `htmlName` is `name`, `isDefaultOpen` is the `open` attribute, `xstyle` and `data-testid` are replaced by class, style, `::part()` and host attributes; `has-clear` clears every value and fires the cancelable `tct-clear` first."
+        },
+        {
+          "id": "MULTISELECTOR-04",
+          "type": "approved-api-difference",
+          "text": "The checkbox marks are drawn by the shipped checkbox indicator element only (see SELECTOR-04); the popup opens below the trigger unless `placement=\"overlay\"` (SELECTOR-05)."
+        },
+        {
+          "id": "MULTISELECTOR-05",
+          "type": "a11y-improvement",
+          "text": "Every selection change is announced once and politely (\"3 of 12 selected\", \"All selected\", \"Selection cleared\"), and the select-all row is named for its state with a partial (mixed) state while some of the shown options are chosen. Async option states behave as for the selector (SELECTOR-06)."
+        },
+        {
+          "id": "MULTISELECTOR-06",
+          "type": "a11y-improvement",
+          "text": "The opening keys highlight the first option (ArrowUp the last) since there is no single chosen row; Home, End and the Page keys, Escape, Tab and typeahead follow the selector contract (SELECTOR-07, SELECTOR-08)."
+        },
+        {
+          "id": "MULTISELECTOR-07",
+          "type": "tecton-visual",
+          "text": "As the selector (SELECTOR-09); the `badges` display uses `tct-badge` neutral badges with a \"+N\" overflow marker."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 98,
+      "notes": "Guides: [mwg:form-associated-custom-elements] repeated FormData entries, validity, reset and restore; [mwg:accessible-web-components] combobox semantics; [mwg:accessibility] selection announcements. Shares tct-select-base with the selector (see selector/parity.json)."
+    }
+  }
+}

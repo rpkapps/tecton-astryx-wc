@@ -1,0 +1,11 @@
+<!-- title: Search and clear; description: has-search adds a search field that filters the options and announces how many match; has-clear adds a clear button. Typing on the closed trigger opens the list with the text in the search field. -->
+<div id="search-root">
+  <tct-vstack max-width="360">
+    <tct-selector label="Country" has-search has-clear search-placeholder="Search countries" empty-search-text="No country matches"></tct-selector>
+  </tct-vstack>
+  <script type="module">
+    document.querySelector('#search-root tct-selector').options = [
+      'Argentina', 'Australia', 'Austria', 'Belgium', 'Brazil', 'Canada', 'Chile', 'Denmark', 'Finland', 'France', 'Germany', 'Iceland', 'Ireland', 'Japan', 'Norway', 'Portugal', 'Spain', 'Sweden',
+    ];
+  </script>
+</div>

@@ -1,0 +1,376 @@
+{
+  "folder": "complex-selector",
+  "elements": {
+    "tct-complex-selector": {
+      "class": "TctComplexSelector",
+      "attributes": [
+        {
+          "name": "alignment",
+          "property": "alignment",
+          "type": "Alignment",
+          "values": [
+            "start",
+            "center",
+            "end"
+          ],
+          "default": "'start'",
+          "reflects": false
+        },
+        {
+          "name": "description",
+          "property": "description",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "disabled-message",
+          "property": "disabledMessage",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "invalid",
+          "property": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label-hidden",
+          "property": "labelHidden",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label-icon",
+          "property": "labelIcon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label-tooltip",
+          "property": "labelTooltip",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "loading",
+          "property": "loading",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "name",
+          "property": "name",
+          "type": "string",
+          "default": "''",
+          "reflects": true
+        },
+        {
+          "name": "open",
+          "property": "open",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "optional",
+          "property": "optional",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "placeholder",
+          "property": "placeholder",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "placement",
+          "property": "placement",
+          "type": "Placement",
+          "values": [
+            "above",
+            "below",
+            "start",
+            "end"
+          ],
+          "default": "'below'",
+          "reflects": false
+        },
+        {
+          "name": "readonly",
+          "property": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "required",
+          "property": "required",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "FieldSize | undefined",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "start-icon",
+          "property": "startIcon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "status-message",
+          "property": "statusMessage",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "status-type",
+          "property": "statusType",
+          "type": "InputStatusType | undefined",
+          "values": [
+            "error",
+            "warning",
+            "success",
+            "info"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "status-variant",
+          "property": "statusVariant",
+          "type": "FieldStatusVariant",
+          "values": [
+            "attached",
+            "detached",
+            "tooltip"
+          ],
+          "default": "'attached'",
+          "reflects": false
+        },
+        {
+          "name": "trigger-label",
+          "property": "triggerLabel",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "value",
+          "property": "defaultValue",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "variant",
+          "property": "variant",
+          "type": "SelectorVariant",
+          "values": [
+            "input",
+            "ghost"
+          ],
+          "default": "'input'",
+          "reflects": true
+        },
+        {
+          "name": "width",
+          "property": "width",
+          "type": "number | string | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "[BLOCKS_IMPLICIT_SUBMISSION]",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "changeAction",
+          "type": "((value: string) => void | Promise<void>) | undefined",
+          "readonly": false
+        },
+        {
+          "name": "displayedValidationMessage",
+          "type": "string",
+          "readonly": true
+        },
+        {
+          "name": "form",
+          "type": "HTMLFormElement | null",
+          "readonly": true
+        },
+        {
+          "name": "isDisabled",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "labels",
+          "type": "NodeList",
+          "readonly": true
+        },
+        {
+          "name": "showInvalid",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "status",
+          "type": "InputStatus | undefined",
+          "readonly": false
+        },
+        {
+          "name": "validationMessage",
+          "type": "string",
+          "readonly": true
+        },
+        {
+          "name": "validity",
+          "type": "ValidityState",
+          "readonly": true
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "readonly": false
+        },
+        {
+          "name": "willValidate",
+          "type": "boolean",
+          "readonly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "checkValidity",
+          "signature": "() => boolean"
+        },
+        {
+          "name": "commit",
+          "signature": "(value: string) => boolean"
+        },
+        {
+          "name": "focus",
+          "signature": "(options?: FocusOptions) => void"
+        },
+        {
+          "name": "hide",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "reportValidity",
+          "signature": "() => boolean"
+        },
+        {
+          "name": "requestClose",
+          "signature": "(reason: ChangeReason) => void"
+        },
+        {
+          "name": "setCustomValidity",
+          "signature": "(message: string) => void"
+        },
+        {
+          "name": "show",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "toggle",
+          "signature": "(force?: boolean) => Promise<void>"
+        }
+      ],
+      "slots": [
+        "(default)",
+        "start",
+        "trigger-label"
+      ],
+      "events": [
+        {
+          "name": "change",
+          "native": true
+        },
+        {
+          "name": "input",
+          "native": true
+        },
+        {
+          "name": "tct-after-open-change",
+          "class": "TctAfterOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "busy",
+        "content",
+        "description",
+        "field",
+        "indicator",
+        "input",
+        "label",
+        "label-icon",
+        "label-indicator",
+        "label-tip",
+        "placeholder",
+        "popup",
+        "start-icon",
+        "status",
+        "status-button",
+        "status-icon",
+        "trigger",
+        "value"
+      ],
+      "cssStates": [
+        "busy",
+        "invalid",
+        "open",
+        "user-invalid"
+      ],
+      "cssProperties": []
+    }
+  }
+}

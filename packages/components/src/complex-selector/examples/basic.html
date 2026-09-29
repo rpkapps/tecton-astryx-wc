@@ -1,0 +1,22 @@
+<!-- title: Basic; description: The selector supplies the field, the trigger, focus handling and the popover; you supply the content. The content commits a choice with commit(value) and dismisses with hide(). Tab stays inside the popover and Escape returns focus to the trigger. -->
+<div id="basic-root">
+  <tct-vstack max-width="360">
+    <tct-complex-selector label="Accent colour" placeholder="Choose a colour" value="teal" trigger-label="Teal">
+      <tct-vstack gap="1" role="radiogroup" aria-label="Accent colour">
+        <tct-button variant="ghost" data-value="teal" data-label="Teal">Teal</tct-button>
+        <tct-button variant="ghost" data-value="coral" data-label="Coral">Coral</tct-button>
+        <tct-button variant="ghost" data-value="violet" data-label="Violet">Violet</tct-button>
+      </tct-vstack>
+    </tct-complex-selector>
+  </tct-vstack>
+  <script type="module">
+    const selector = document.querySelector('#basic-root tct-complex-selector');
+    selector.addEventListener('click', (event) => {
+      const choice = event.target.closest('[data-value]');
+      if (!choice) return;
+      selector.commit(choice.dataset.value);
+      selector.triggerLabel = choice.dataset.label;
+      selector.hide();
+    });
+  </script>
+</div>
