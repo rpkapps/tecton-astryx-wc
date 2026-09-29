@@ -1,0 +1,21 @@
+/*
+ * tct-dropdown-menu: the trigger and its anchor. The menu panel is the shared surface
+ * (tct-menu-surface.styles.css) and the touch sheet body the shared sheet styles.
+ * [mwg:css] [mwg:resilient-context-menus-and-nested-dropdowns]
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+    vertical-align: middle;
+  }
+
+  /* Stable anchor: pressed-state transforms on the trigger never move the menu, so it does not jitter. */
+  .anchor {
+    display: inline-flex;
+  }
+
+  /* While the menu is open the trigger keeps its pressed look. */
+  .trigger[data-open]::part(button) {
+    background-image: linear-gradient(var(--color-overlay-pressed), var(--color-overlay-pressed));
+  }
+}

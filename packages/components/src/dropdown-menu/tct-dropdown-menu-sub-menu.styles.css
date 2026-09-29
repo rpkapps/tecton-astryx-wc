@@ -1,0 +1,27 @@
+/*
+ * The submenu row is the shared menu row (tct-menu-item.styles.css) with a trailing caret; its flyout is
+ * the shared menu surface (tct-menu-surface.styles.css), at least 160px wide unless `menu-width` says
+ * otherwise. While the flyout is open the row stays highlighted, so the open branch reads as the current
+ * path even when focus has moved into the child.
+ */
+@layer component {
+  .surface {
+    /* design: upstream flyout minimum width, capped to the viewport gutter */
+    --_menu-min-inline-size: min(160px, calc(100vi - var(--spacing-8)));
+  }
+}
+
+@layer state {
+  :host([open]) .row::part(item) {
+    background-color: var(--tecton-color-table-row-hover);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    :host([open]) .row::part(item) {
+      background-color: Highlight;
+      color: HighlightText;
+    }
+  }
+}

@@ -1,0 +1,39 @@
+/*
+ * tct-context-menu: the trigger area and the menu at the pointer. The menu panel is the shared surface
+ * (dropdown-menu/tct-menu-surface.styles.css) and the touch sheet body the shared sheet styles.
+ * [mwg:css] [mwg:resilient-context-menus-and-nested-dropdowns]
+ */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  /*
+   * Suppresses the iOS long-press callout and text selection on the trigger area, so a long press opens
+   * this menu instead of the native selection UI. A disabled menu leaves the browser's behaviour alone.
+   */
+  .trigger:not([data-disabled]) {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  /* Upstream default: at least 160px wide (a flyout's minimum), unless `menu-width` says otherwise. */
+  .surface {
+    /* design: upstream context menu minimum width, capped to the viewport gutter */
+    --_menu-min-inline-size: min(160px, calc(100vi - var(--spacing-8)));
+  }
+
+  /* The compound menu of the touch sheet: a plain column of rows on the sheet surface. */
+  .sheet-menu {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-0-5);
+    box-sizing: border-box;
+    inline-size: 100%;
+    padding: var(--spacing-1);
+    outline: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+}

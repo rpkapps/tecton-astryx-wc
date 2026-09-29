@@ -1,0 +1,115 @@
+/*
+ * The painted row shared by every menu item tag (item, checkbox item, radio item, submenu row): a
+ * `tct-item` whose `item` part is the row. The host is the focus owner (roving tabindex) and the
+ * semantic node; the ring and the highlight are drawn on the part.
+ *
+ * Tecton (design/components/menu-item.md, theme components.ts `dropdown-menu-item`): the row fill is
+ * the Tecton table-row hover fill with a ~2px corner, and the highlight follows DOM focus, so the
+ * pointer and the keyboard share one highlight (a mouse moving over a row focuses it). Disabled rows
+ * dim; a destructive row recolours its icon and text from the error role.
+ * [mwg:css] [mwg:styling-web-components] [mwg:accessible-web-components]
+ */
+@layer component {
+  :host {
+    display: block;
+    cursor: pointer;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  :host([disabled]) {
+    cursor: default;
+  }
+
+  /*
+   * The row is the box that paints. Item sizes: `sm` is the compact 4px of block padding and `lg` the
+   * balanced 8px; `md` sits between them at 6px, which `tct-item` has no density for.
+   */
+  .row {
+    --_item-radius: var(--radius-inner);
+  }
+
+  .row::part(item) {
+    border-radius: var(--_item-radius);
+    color: var(--color-text-primary);
+    font-size: var(--text-label-size);
+    line-height: var(--text-label-leading);
+  }
+
+  .row[data-size='md']::part(item) {
+    padding-block: var(--spacing-1-5);
+  }
+
+  .row[data-destructive] {
+    --_item-label-color: var(--color-error);
+    --_item-description-color: var(--color-error);
+  }
+
+  :host([disabled]) .row::part(item) {
+    opacity: 0.5;
+  }
+
+  /* Decorative markers (checkbox box, radio circle) never take the pointer: the row owns activation. */
+  [slot='marker'] {
+    pointer-events: none;
+  }
+
+  /* On touch the marker moves to the inline end, where a thumb rests. */
+  @media (pointer: coarse) {
+    [slot='marker'] {
+      order: 1;
+      margin-inline-start: auto;
+    }
+  }
+
+  .caret {
+    display: flex;
+    align-items: center;
+  }
+}
+
+@layer state {
+  /* The single highlight: DOM focus (pointer hover moves focus onto the row). */
+  :host(:focus) .row::part(item) {
+    background-color: var(--tecton-color-table-row-hover);
+  }
+
+  :host(:active:not([disabled])) .row::part(item) {
+    background-color: var(--color-overlay-pressed);
+  }
+
+  /*
+   * The host is the roving focus owner and would draw the UA ring around its whole box; the ring is
+   * drawn on the row instead, inset so a scrolling menu never clips it.
+   */
+  /* stylelint-disable tct/host-box-props */
+  :host(:focus-visible) {
+    outline: none;
+  }
+  /* stylelint-enable tct/host-box-props */
+
+  :host(:focus-visible) .row::part(item) {
+    outline-width: var(--focus-outline-width);
+    outline-style: var(--focus-outline-style);
+    outline-color: var(--focus-outline-color);
+    outline-offset: calc(-1 * var(--focus-outline-width));
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    :host(:focus) .row::part(item) {
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    :host([disabled]) .row::part(item) {
+      color: GrayText;
+      opacity: 1;
+    }
+
+    :host(:focus-visible) .row::part(item) {
+      outline-color: CanvasText;
+    }
+  }
+}
