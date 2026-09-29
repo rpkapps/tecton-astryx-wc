@@ -1,0 +1,10 @@
+<!-- title: Width and elevation; description: width takes a number (px) or a CSS length; 100% fills the container. elevation lifts a floating button. -->
+<div style="display: flex; flex-direction: column; gap: var(--spacing-3); inline-size: 320px">
+  <tct-button variant="primary" label="Sign in" width="100%"></tct-button>
+  <tct-button label="240px wide" width="240"></tct-button>
+  <div style="display: flex; gap: var(--spacing-4); padding: var(--spacing-3)">
+    <tct-button label="Low" elevation="low"></tct-button>
+    <tct-button label="Med" elevation="med"></tct-button>
+    <tct-button label="High" elevation="high" variant="primary"></tct-button>
+  </div>
+</div>

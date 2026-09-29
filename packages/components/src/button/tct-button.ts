@@ -10,6 +10,7 @@ import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
 import {TooltipController} from '@tecton-astryx/core/controllers/tooltip.js';
 import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
 import {buttonGroupContext, linkContext} from '@tecton-astryx/core/context/keys.js';
+import {installFormBridge} from '@tecton-astryx/core/forms/implicit-submit.js';
 import {
   resetFormFromSubmitter,
   submitWithSubmitter,
@@ -280,6 +281,12 @@ export class TctButton extends TctElement {
   }
 
   // ------------------------------------------------------------------------------- lifecycle
+
+  override connectedCallback(): void {
+    super.connectedCallback();
+    // Enter in a field of the form must find this element as the default submit button (A§9.7).
+    installFormBridge();
+  }
 
   protected override willUpdate(changed: PropertyValues<this>): void {
     if (changed.has('variant'))

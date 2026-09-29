@@ -1,0 +1,73 @@
+/*
+ * tct-dialog-header. Title left, actions right, aligned at the top; the title block is centred on the
+ * close button (upstream `titleWrapper`), and the end slot is pulled into the corner so the close
+ * button's glyph, not its box, lines up with the dialog's padding.
+ */
+@layer component {
+  :host {
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .header {
+    display: flex;
+    gap: var(--spacing-3);
+    align-items: flex-start;
+    justify-content: space-between;
+    min-inline-size: 0;
+  }
+
+  :host([has-divider]) .header {
+    padding-block-end: var(--spacing-4);
+    border-block-end: var(--border-width) solid var(--color-border);
+  }
+
+  .start,
+  .end {
+    display: flex;
+    flex-shrink: 0;
+    gap: var(--spacing-2);
+    align-items: center;
+  }
+
+  .title-block {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--spacing-0);
+    min-inline-size: 0;
+
+    /*
+     * Visual centring: the title's centre lines up with the close button's centre
+     * (half the element height minus the button's own padding minus half the title line).
+     */
+    margin-block: calc(
+      var(--size-element-md) / 2 - var(--spacing-2) - var(--text-heading-2-size) *
+        var(--text-heading-2-leading) / 2
+    );
+  }
+
+  .subtitle {
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+    color: var(--color-text-secondary);
+  }
+
+  /* Compensate for the close button's own padding so its glyph meets the dialog's content edge. */
+  .end[data-compensate-block] {
+    margin-block: calc(-1 * var(--spacing-2));
+  }
+
+  .end[data-compensate-inline] {
+    margin-inline-end: calc(-1 * var(--spacing-2));
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    :host([has-divider]) .header {
+      border-block-end-color: CanvasText;
+    }
+  }
+}

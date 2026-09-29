@@ -1,0 +1,32 @@
+/*
+ * tct-field-label. The label and its description read as one block with no space between them, so they
+ * share a wrapper: as bare siblings they would pick up the gap of whatever field holds them, which is
+ * the spacing meant for the label group as a whole (upstream). The paint is the shared field chrome
+ * (`[part='label']`, `[part='description']`).
+ */
+@layer component {
+  :host {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  :host([label-hidden]) {
+    /* A hidden label group takes no place in the caller's layout. */
+    display: contents;
+  }
+
+  .label-group {
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+
+  /* Pressing the description reads as pressing the label, so it takes the label's hit cursor. */
+  .description {
+    cursor: pointer;
+  }
+
+  :host([disabled]) .description {
+    cursor: default;
+  }
+}

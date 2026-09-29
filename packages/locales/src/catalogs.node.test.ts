@@ -136,7 +136,23 @@ describe('English namespace modules', () => {
         merged[id] = message;
       }
     }
-    expect(merged).toEqual(english);
+    // Upstream ids partition en.json exactly. New `@tct.<folder>.*` ids come from the component
+    // folders' `<folder>.messages.json` and exist only in the namespace modules (components pass them
+    // as `defaults`), so each must match its folder file.
+    const upstream = Object.fromEntries(
+      Object.entries(merged).filter(([id]) => !id.startsWith('@tct.')),
+    );
+    expect(upstream).toEqual(english);
+    const componentsSrc = fileURLToPath(new URL('../../components/src/', import.meta.url));
+    for (const [id, message] of Object.entries(merged)) {
+      if (!id.startsWith('@tct.')) continue;
+      const folder = id.split('.')[1]!;
+      const source = JSON.parse(
+        readFileSync(`${componentsSrc}${folder}/${folder}.messages.json`, 'utf8'),
+      ) as Record<string, string | {defaultMessage: string}>;
+      const expected = source[id];
+      expect(typeof expected === 'string' ? expected : expected?.defaultMessage, id).toBe(message);
+    }
   });
 });
 

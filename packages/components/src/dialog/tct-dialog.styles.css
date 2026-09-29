@@ -1,0 +1,131 @@
+/*
+ * tct-dialog. The host is layout only (`display: contents`): the surface is the native <dialog>, which
+ * lives in the top layer. Tecton draws the dialog with a rule around it (tecton-astryx components.ts
+ * `dialog`) and keeps the elevation shadow; radius is `--radius-container` (8px).
+ *
+ * A closed <dialog> is `display: none` from the UA sheet, so `display: flex` is only ever set on
+ * `[open]`. Entry is a rise from the opener's side plus a fade; movement plays only when motion is not
+ * reduced (a fade stays). Exit runs through WAAPI before `close()` (the `overlay` property is never
+ * used). [mwg:animate-to-from-top-layer]
+ *
+ * The content box pads itself (`--dialog-padding`, or the `padding` step) because there is no layout
+ * element yet to do it; `--_dialog-padding` republishes the value for one that will.
+ */
+@layer component {
+  :host {
+    display: contents;
+  }
+
+  .dialog {
+    --_padding-used: var(--_padding, var(--dialog-padding, var(--spacing-4)));
+    --_dialog-padding: var(--_padding-used);
+
+    box-sizing: border-box;
+    inline-size: var(--_width, 400px); /* design: upstream's default dialog width */
+    max-inline-size: min(100%, calc(100dvw - 2 * var(--spacing-4)));
+    max-block-size: var(--_max-height, 75dvh);
+    block-size: fit-content;
+    padding: 0;
+    margin: auto;
+    overscroll-behavior: contain;
+    color: var(--color-text-primary);
+    background-color: var(--color-background-surface);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-container);
+    box-shadow: var(--shadow-high);
+  }
+
+  .dialog[open] {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .dialog.inline {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Static position: logical inline offsets mirror in RTL; each unset edge is auto. */
+  .dialog[data-positioned] {
+    margin: 0;
+    inset-block: var(--_top, auto) var(--_bottom, auto);
+    inset-inline: var(--_start, auto) var(--_end, auto);
+  }
+
+  .dialog[data-variant='fullscreen'] {
+    inset: 0;
+    inline-size: 100dvw;
+    max-inline-size: 100dvw;
+    block-size: 100dvh;
+    max-block-size: 100dvh;
+    margin: 0;
+    border-radius: 0;
+  }
+
+  .dialog::backdrop {
+    background-color: var(--color-overlay);
+    backdrop-filter: blur(2px); /* design: upstream's 2px backdrop blur */
+  }
+
+  .inner {
+    box-sizing: border-box;
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: var(--spacing-3);
+    min-block-size: 0;
+    padding: var(--_padding-used);
+    overflow: auto;
+    border-radius: inherit;
+  }
+
+  /* Fullscreen keeps the content clear of device cut-outs, unless a padding was asked for. */
+  .dialog[data-variant='fullscreen'] .inner {
+    padding-block: var(
+        --_padding,
+        max(var(--dialog-padding, var(--spacing-4)), env(safe-area-inset-top, 0px))
+      )
+      var(
+        --_padding,
+        max(var(--dialog-padding, var(--spacing-4)), env(safe-area-inset-bottom, 0px))
+      );
+    padding-inline: var(
+        --_padding,
+        max(var(--dialog-padding, var(--spacing-4)), env(safe-area-inset-left, 0px))
+      )
+      var(--_padding, max(var(--dialog-padding, var(--spacing-4)), env(safe-area-inset-right, 0px)));
+  }
+
+  @keyframes tct-dialog-enter {
+    from {
+      opacity: 0;
+      transform: translate(var(--_dir-x, 0px), var(--_dir-y, 16px)) scale(0.95);
+    }
+  }
+}
+
+@layer state {
+  @media (prefers-reduced-motion: no-preference) {
+    .dialog[open] {
+      animation: tct-dialog-enter var(--duration-medium-max) var(--ease-standard) backwards;
+    }
+
+    .dialog[open][data-variant='fullscreen'] {
+      animation-name: tct-fade-in;
+    }
+
+    .dialog[open]::backdrop {
+      animation: tct-fade-in var(--duration-medium) var(--ease-standard);
+    }
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .dialog {
+      color: CanvasText;
+      background-color: Canvas;
+      border-color: CanvasText;
+    }
+  }
+}
