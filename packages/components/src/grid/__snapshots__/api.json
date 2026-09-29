@@ -1,0 +1,320 @@
+{
+  "folder": "grid",
+  "elements": {
+    "tct-grid": {
+      "class": "TctGrid",
+      "attributes": [
+        {
+          "name": "alignment",
+          "property": "alignment",
+          "type": "GridAlignment | undefined",
+          "values": [
+            "start",
+            "center",
+            "end",
+            "stretch"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "column-gap",
+          "property": "columnGap",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "column-max",
+          "property": "columnMax",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "column-min-width",
+          "property": "columnMinWidth",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "column-repeat",
+          "property": "columnRepeat",
+          "type": "GridRepeat",
+          "values": [
+            "fill",
+            "fit"
+          ],
+          "default": "'fill'",
+          "reflects": false
+        },
+        {
+          "name": "columns",
+          "property": "columns",
+          "type": "GridColumns | undefined",
+          "reflects": false
+        },
+        {
+          "name": "gap",
+          "property": "gap",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "height",
+          "property": "height",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "justify",
+          "property": "justify",
+          "type": "GridAlignment | undefined",
+          "values": [
+            "start",
+            "center",
+            "end",
+            "stretch"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "max-width",
+          "property": "maxWidth",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "min-height",
+          "property": "minHeight",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "padding",
+          "property": "padding",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block",
+          "property": "paddingBlock",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block-end",
+          "property": "paddingBlockEnd",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block-start",
+          "property": "paddingBlockStart",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline",
+          "property": "paddingInline",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline-end",
+          "property": "paddingInlineEnd",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline-start",
+          "property": "paddingInlineStart",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "row-gap",
+          "property": "rowGap",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "row-height",
+          "property": "rowHeight",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "width",
+          "property": "width",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "base"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-grid-span": {
+      "class": "TctGridSpan",
+      "attributes": [
+        {
+          "name": "columns",
+          "property": "columns",
+          "type": "GridSpanColumns | undefined",
+          "reflects": true
+        },
+        {
+          "name": "rows",
+          "property": "rows",
+          "type": "number | undefined",
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

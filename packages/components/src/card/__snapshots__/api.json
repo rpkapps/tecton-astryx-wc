@@ -1,0 +1,241 @@
+{
+  "folder": "card",
+  "elements": {
+    "tct-card": {
+      "class": "TctCard",
+      "attributes": [
+        {
+          "name": "elevation",
+          "property": "elevation",
+          "type": "CardElevation",
+          "values": [
+            "none",
+            "low",
+            "med",
+            "high"
+          ],
+          "default": "'none'",
+          "reflects": true
+        },
+        {
+          "name": "height",
+          "property": "height",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "max-width",
+          "property": "maxWidth",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "min-height",
+          "property": "minHeight",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "padding",
+          "property": "padding",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block",
+          "property": "paddingBlock",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block-end",
+          "property": "paddingBlockEnd",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block-start",
+          "property": "paddingBlockStart",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline",
+          "property": "paddingInline",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline-end",
+          "property": "paddingInlineEnd",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline-start",
+          "property": "paddingInlineStart",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "variant",
+          "property": "variant",
+          "type": "CardVariant | (string & {})",
+          "default": "'default'",
+          "reflects": true
+        },
+        {
+          "name": "width",
+          "property": "width",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "base"
+      ],
+      "cssStates": [],
+      "cssProperties": [
+        {
+          "name": "--card-padding"
+        },
+        {
+          "name": "--card-padding-block-end"
+        },
+        {
+          "name": "--card-padding-block-start"
+        },
+        {
+          "name": "--card-padding-inline"
+        },
+        {
+          "name": "--card-padding-inline-end"
+        },
+        {
+          "name": "--card-padding-inline-start"
+        },
+        {
+          "name": "--container-padding-block-end"
+        },
+        {
+          "name": "--container-padding-block-start"
+        },
+        {
+          "name": "--container-padding-inline-end"
+        },
+        {
+          "name": "--container-padding-inline-start"
+        },
+        {
+          "name": "--layout-padding-inner-x"
+        },
+        {
+          "name": "--layout-padding-inner-y"
+        },
+        {
+          "name": "--layout-padding-outer-x"
+        },
+        {
+          "name": "--layout-padding-outer-y"
+        }
+      ]
+    }
+  }
+}

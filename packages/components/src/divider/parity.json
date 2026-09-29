@@ -66,16 +66,14 @@
         {
           "upstream": "aria-label",
           "kind": "prop",
-          "target": "aria-label",
-          "as": "attribute",
-          "notes": "Host attribute; overrides the label-derived name (ElementInternals default)."
+          "as": "waived",
+          "reason": "A global ARIA attribute on the host, not a component API: the label-derived name is ElementInternals default state, so a host aria-label overrides it natively."
         },
         {
           "upstream": "aria-labelledby",
           "kind": "prop",
-          "target": "aria-labelledby",
-          "as": "attribute",
-          "notes": "Host attribute, resolved in the host tree; overrides the label-derived name."
+          "as": "waived",
+          "reason": "A global ARIA attribute on the host, resolved in the host tree: it overrides the label-derived name natively, so the component declares nothing for it."
         }
       ],
       "hooks": [],
