@@ -1,0 +1,247 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "file-input",
+  "workPackage": "WP-7",
+  "entries": {
+    "core.file-input": {
+      "tag": "tct-file-input",
+      "status": "implemented",
+      "upstream": {
+        "name": "FileInput",
+        "path": "packages/core/src/FileInput/FileInput.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "target": "focus",
+          "as": "method",
+          "notes": "The element is the handle: `focus()` reaches the button that carries the field; `files`, `showPicker()` and the form API are on the host."
+        },
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
+        {
+          "upstream": "isLabelHidden",
+          "kind": "prop",
+          "target": "label-hidden",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "files",
+          "as": "property",
+          "notes": "Controlled `File | File[] | null` upstream; an uncontrolled `files: File[]` here (a native file input's model): set it to control the field, or read it after `change`. The native `value` (a fake path) is also there."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "change",
+          "as": "native-event",
+          "notes": "`input` and then `change` fire, composed, after the user chose, dropped or removed files; read `files`. Neither fires for property writes."
+        },
+        {
+          "upstream": "changeAction",
+          "kind": "prop",
+          "target": "changeAction",
+          "as": "property",
+          "notes": "`(files: File[], event: Event) => void | Promise<void>` after each user choice or removal; busy (:state(busy), aria-busy, spinner) while the promise is pending."
+        },
+        {
+          "upstream": "accept",
+          "kind": "prop",
+          "target": "accept",
+          "as": "attribute",
+          "notes": "The HTML `accept` format; it filters the picker and is checked again for dropped files."
+        },
+        {
+          "upstream": "isMultiple",
+          "kind": "prop",
+          "target": "multiple",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "maxSize",
+          "kind": "prop",
+          "target": "max-size",
+          "as": "attribute",
+          "notes": "Bytes. A larger file is left out with an error status; the limit is written in the locale (\"2.0 MB\")."
+        },
+        {
+          "upstream": "maxFiles",
+          "kind": "prop",
+          "target": "max-files",
+          "as": "attribute",
+          "notes": "With `multiple`; the rest are left out with an error status."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Also through <fieldset disabled>."
+        },
+        {
+          "upstream": "disabledMessage",
+          "kind": "prop",
+          "target": "disabled-message",
+          "as": "attribute",
+          "notes": "A tooltip on a disabled field that says why; the button stays focusable (aria-disabled) and the picker stays closed."
+        },
+        {
+          "upstream": "isRequired",
+          "kind": "prop",
+          "target": "required",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "A constraint (valueMissing while no file is chosen); announced by a hidden \"Required\" text because `aria-required` is not defined for a button."
+        },
+        {
+          "upstream": "isLoading",
+          "kind": "prop",
+          "target": "loading",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "target": "status",
+          "as": "property",
+          "notes": "Object `{type, message?}`, or the `status-type` and `status-message` attributes. Rejected files show as an error status when none is set."
+        },
+        {
+          "upstream": "statusVariant",
+          "kind": "prop",
+          "target": "status-variant",
+          "as": "attribute",
+          "default": "attached",
+          "notes": "attached, detached or tooltip (a focusable button in the box that reveals the message)."
+        },
+        {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute"},
+        {
+          "upstream": "placeholder",
+          "kind": "prop",
+          "target": "placeholder",
+          "as": "attribute",
+          "notes": "Default \"Choose file\" or \"Choose files\" from the catalog."
+        },
+        {
+          "upstream": "mode",
+          "kind": "prop",
+          "target": "mode",
+          "as": "attribute",
+          "reflect": true,
+          "default": "input",
+          "notes": "`input` or `dropzone`."
+        },
+        {"upstream": "isOptional", "kind": "prop", "target": "optional", "as": "attribute"},
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "target": "width",
+          "as": "attribute",
+          "notes": "A number is px, a string a CSS length. Not reflected."
+        },
+        {"upstream": "labelTooltip", "kind": "prop", "target": "label-tooltip", "as": "attribute"},
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style/::part/custom properties"
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useAnnounce",
+          "target": "announce",
+          "as": "controller",
+          "notes": "The shared announcer: the attached file names are announced politely once; errors are the error status's."
+        },
+        {
+          "upstream": "useInputStatusIcon",
+          "as": "waived",
+          "reason": "Internal render helper; the status glyph and the tooltip button are part of the element's template."
+        },
+        {
+          "upstream": "useClickableContainer",
+          "as": "waived",
+          "reason": "The clickable surface is the element's own click handler, which ignores clicks on the nested clear and status buttons."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Enter / Space",
+          "action": "Opens the file picker.",
+          "when": "the field's button is focused, not disabled or read-only"
+        },
+        {
+          "keys": "Tab",
+          "action": "Moves to the field's button, then to the clear button (when files are chosen) and the tooltip-status button, which are real focusable buttons."
+        }
+      ],
+      "form": {
+        "formAssociated": true,
+        "notes": "Form-associated (ElementInternals): submits every chosen file as its own `name=File` entry in the form's FormData (nothing when none is chosen), resets to no files, joins <fieldset disabled>, works with form= and label for. `required` (valueMissing) blocks the submit and focuses the button; the error is shown after a change, a submit attempt or `reportValidity()`. Files are not restored on navigation unless the browser hands a File state back."
+      },
+      "differences": [
+        {
+          "id": "FILEINPUT-01",
+          "type": "approved-api-difference",
+          "text": "Uncontrolled by default (D-006): `files` (an array of File) is a property and native `input`/`change` events report user choices, instead of a controlled `value: File | File[] | null` plus onChange. Setting `files` never fires events or validates."
+        },
+        {
+          "id": "FILEINPUT-02",
+          "type": "approved-api-difference",
+          "text": "Files that fail `accept`, `max-size` or `max-files` are left out and the first reason shows as an error status, as upstream; the element also validates dropped files the same way, keeps the accepted ones next to a rejected one, and keeps the form submittable (the value is valid)."
+        },
+        {
+          "id": "FILEINPUT-03",
+          "type": "approved-api-difference",
+          "text": "With no file chosen the field adds no FormData entry (a native input submits one empty file), so a server can tell a missing field from a chosen one."
+        },
+        {
+          "id": "FILEINPUT-04",
+          "type": "a11y-improvement",
+          "text": "The `max-size` limit is written with Intl in the locale (\"2.0 MB\", \"2,0 MB\") instead of a hard-coded English format, and the attached file names are announced through the shared announcer."
+        },
+        {
+          "id": "FILEINPUT-05",
+          "type": "a11y-improvement",
+          "text": "A `required` field is invalid through the platform constraint (valueMissing), shown after user interaction, and a failed submit focuses the button; upstream marks it only with the hidden \"Required\" text, which is kept."
+        },
+        {
+          "id": "FILEINPUT-06",
+          "type": "approved-api-difference",
+          "text": "`tct-clear` (cancelable) fires before the clear button removes the files; `size` (sm, md, lg) and `label-icon` come with the shared box, and `showPicker()` opens the picker from code."
+        },
+        {
+          "id": "FILEINPUT-07",
+          "type": "tecton-visual",
+          "text": "The compact field is the Tecton outlined box (border, hover, focus ring through the shared focus-ring module, 4px radius) with a dashed border for the dropzone that takes the focus colour while files are dragged over it."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [
+        "The dragover highlight uses `--color-accent-muted` and the field's focus border colour; no Tecton design frame was compared."
+      ],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 73,
+      "notes": "Guides: [mwg:form-associated-custom-elements] FormData value with File entries; [mwg:accessible-web-components] a real button carries the role and name over a hidden native input; [mwg:accessible-error-announcement]; [mwg:validate-input-after-interaction]."
+    }
+  }
+}

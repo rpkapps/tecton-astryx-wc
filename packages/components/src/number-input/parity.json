@@ -1,0 +1,323 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "number-input",
+  "workPackage": "WP-7",
+  "entries": {
+    "core.number-input": {
+      "tag": "tct-number-input",
+      "status": "implemented",
+      "upstream": {
+        "name": "NumberInput",
+        "path": "packages/core/src/NumberInput/NumberInput.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "target": "focus",
+          "as": "method",
+          "notes": "The element is the handle: `focus()` and `select()` reach the inner input; `value`, `valueAsNumber` and the form API are on the host."
+        },
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
+        {
+          "upstream": "isLabelHidden",
+          "kind": "prop",
+          "target": "label-hidden",
+          "as": "attribute",
+          "reflect": true
+        },
+        {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute"},
+        {"upstream": "isOptional", "kind": "prop", "target": "optional", "as": "attribute"},
+        {
+          "upstream": "isRequired",
+          "kind": "prop",
+          "target": "required",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Also a validity constraint (valueMissing) and `aria-required`."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Also through <fieldset disabled>."
+        },
+        {
+          "upstream": "isReadOnly",
+          "kind": "prop",
+          "target": "readonly",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Stepping is off by every route while read-only: arrow keys, the wheel and the stepper buttons. `disabled` wins when both are set."
+        },
+        {
+          "upstream": "disabledMessage",
+          "kind": "prop",
+          "target": "disabled-message",
+          "as": "attribute",
+          "notes": "A tooltip on a disabled field that says why; the field stays focusable (aria-disabled) and read-only."
+        },
+        {
+          "upstream": "startIcon",
+          "kind": "prop",
+          "target": "start-icon",
+          "as": "attribute",
+          "notes": "An icon name (upstream also accepts a node)."
+        },
+        {"upstream": "labelIcon", "kind": "prop", "target": "label-icon", "as": "attribute"},
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "target": "status",
+          "as": "property",
+          "notes": "Object `{type, message?}`, or the `status-type` and `status-message` attributes."
+        },
+        {
+          "upstream": "statusVariant",
+          "kind": "prop",
+          "target": "status-variant",
+          "as": "attribute",
+          "default": "attached",
+          "notes": "attached, detached or tooltip (a focusable button in the box that reveals the message)."
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md",
+          "notes": "Unset takes the nearest size provider, else md."
+        },
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "property",
+          "notes": "A plain number string (`\"1234.5\"`) like a native number input's, or `\"\"` for no value; `valueAsNumber` gives the number. The `value` attribute is the default (form reset restores it); the property is the current value. Upstream is controlled with `number | null | undefined`; empty is `\"\"`/NaN here."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "change",
+          "as": "native-event",
+          "notes": "`input` and then `change` fire, composed, when the committed value changes by a commit (blur or Enter), a step or a clear; read `valueAsNumber`. Typing alone fires nothing (upstream commits on blur or Enter as well). Neither fires on property writes."
+        },
+        {"upstream": "placeholder", "kind": "prop", "target": "placeholder", "as": "attribute"},
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "target": "width",
+          "as": "attribute",
+          "notes": "A number is px, a string a CSS length. Not reflected."
+        },
+        {"upstream": "labelTooltip", "kind": "prop", "target": "label-tooltip", "as": "attribute"},
+        {
+          "upstream": "hasAutoFocus",
+          "kind": "prop",
+          "target": "autofocus",
+          "as": "attribute",
+          "notes": "The global `autofocus` attribute; the element focuses its input once it has rendered."
+        },
+        {
+          "upstream": "htmlName",
+          "kind": "prop",
+          "target": "name",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "The host submits the plain number under this name (upstream submits the formatted text unless a hidden input carries the number)."
+        },
+        {"upstream": "autoComplete", "kind": "prop", "target": "autocomplete", "as": "attribute"},
+        {
+          "upstream": "min",
+          "kind": "prop",
+          "target": "min",
+          "as": "attribute",
+          "notes": "A smaller entry commits at `min`; a programmatic value below it is `rangeUnderflow`."
+        },
+        {
+          "upstream": "max",
+          "kind": "prop",
+          "target": "max",
+          "as": "attribute",
+          "notes": "A larger entry commits at `max`; a programmatic value above it is `rangeOverflow`."
+        },
+        {"upstream": "step", "kind": "prop", "target": "step", "as": "attribute", "default": 1},
+        {
+          "upstream": "formatValue",
+          "kind": "prop",
+          "target": "formatValue",
+          "as": "property",
+          "notes": "`(value: number) => string` for the text at rest; the editable number shows while focused; `aria-valuetext` carries the formatted text."
+        },
+        {
+          "upstream": "isWheelEnabled",
+          "kind": "prop",
+          "target": "no-wheel",
+          "as": "attribute",
+          "notes": "Inverted: the wheel steps the focused field by default, `no-wheel` turns it off (a boolean attribute cannot default to true)."
+        },
+        {
+          "upstream": "hasNumberSteppers",
+          "kind": "prop",
+          "target": "has-steppers",
+          "as": "attribute",
+          "default": false
+        },
+        {
+          "upstream": "units",
+          "kind": "prop",
+          "target": "units",
+          "as": "attribute",
+          "notes": "Text after the number; part of the description (`aria-describedby`)."
+        },
+        {
+          "upstream": "isIntegerOnly",
+          "kind": "prop",
+          "target": "integer-only",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {"upstream": "onFocus", "kind": "event", "target": "focus", "as": "native-event"},
+        {"upstream": "onBlur", "kind": "event", "target": "blur", "as": "native-event"},
+        {
+          "upstream": "hasClear",
+          "kind": "prop",
+          "target": "has-clear",
+          "as": "attribute",
+          "default": false,
+          "notes": "An empty entry then clears the value (upstream widens onChange to `null`); without it an empty entry returns the last value."
+        },
+        {
+          "upstream": "onEnter",
+          "kind": "event",
+          "target": "tct-enter",
+          "as": "event",
+          "notes": "Fires after the draft was committed; cancelable, and preventing it stops the form's implicit submission. Never fires for the Enter that commits an IME conversion."
+        },
+        {
+          "upstream": "onKeyDown",
+          "kind": "event",
+          "target": "keydown",
+          "as": "native-event",
+          "notes": "Native, composed. The field's own ArrowUp/ArrowDown handling runs first in the inner input, so a host listener cannot cancel a step (upstream lets onKeyDown cancel it)."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style/::part/custom properties"
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useInputContainer",
+          "target": "FieldChromeController",
+          "as": "controller",
+          "notes": "Shadow mode; a click on the box chrome focuses the input."
+        },
+        {
+          "upstream": "useInputStatusIcon",
+          "as": "waived",
+          "reason": "Internal render helper; the status glyph and the tooltip button are part of the element's template."
+        },
+        {
+          "upstream": "useInputGroup",
+          "target": "inputGroupContext",
+          "as": "context",
+          "notes": "Inside a tct-input-group the field drops its own label, description and status and joins the group's single focus ring."
+        },
+        {
+          "upstream": "useResolvedRequired",
+          "target": "formLayoutContext",
+          "as": "context",
+          "notes": "The form layout's optionality default; the indicator follows it."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "ArrowUp / ArrowDown",
+          "action": "Steps the value by `step` (from the empty field: to min or max, else 0), clamped; not while read-only or disabled, and not with a modifier or during an IME composition.",
+          "when": "in the field"
+        },
+        {
+          "keys": "Enter",
+          "action": "Commits the draft, fires tct-enter, then submits the form once unless prevented; ignored while an IME composes.",
+          "when": "in the field"
+        },
+        {
+          "keys": "Tab",
+          "action": "Commits the draft and moves on; the stepper buttons are not tab stops. The clear and tooltip-status buttons are real focusable buttons."
+        }
+      ],
+      "form": {
+        "formAssociated": true,
+        "notes": "Form-associated (ElementInternals): submits `name=number` in the plain machine form (`1234.5`) whatever the text shows or the locale is, resets to the `value` attribute, restores on navigation, joins <fieldset disabled>, works with form= and label for. `required` (valueMissing), `min`/`max` (rangeUnderflow/Overflow) and unreadable text standing in the field (badInput) block the submit; the error is shown after a commit, a blur after an edit or a submit attempt, and unreadable text at once (aria-invalid, announced once)."
+      },
+      "differences": [
+        {
+          "id": "NUMBERINPUT-01",
+          "type": "approved-api-difference",
+          "text": "Uncontrolled by default (D-006): `value` is a plain number string (like a native number input's; `valueAsNumber` is the number) with the `value` attribute as its default, and native `input`/`change` events report a committed change instead of a controlled `value: number | null` plus onChange."
+        },
+        {
+          "id": "NUMBERINPUT-02",
+          "type": "approved-api-difference",
+          "text": "The host submits the number in its machine form; the visible text (localised, or `formatValue`d) is never submitted, so no hidden input is needed and a server never parses a locale."
+        },
+        {
+          "id": "NUMBERINPUT-03",
+          "type": "approved-api-difference",
+          "text": "The text at rest uses the locale's decimal separator (`1234,5` in de-DE) like the text while focused; upstream shows `String(value)` at rest and the localised text only while focused, which flips the separator on focus."
+        },
+        {
+          "id": "NUMBERINPUT-04",
+          "type": "a11y-improvement",
+          "text": "Unreadable text is `validity.badInput` (it blocks the submit and is `aria-invalid` and announced once, assertively, through the shared announcer) instead of an always-mounted `role=alert` node with a hard-coded English string; the message is a catalog entry."
+        },
+        {
+          "id": "NUMBERINPUT-05",
+          "type": "approved-api-difference",
+          "text": "`min` and `max` are also constraints on a programmatic value (rangeUnderflow, rangeOverflow, with the browser's localized message); upstream only clamps entries."
+        },
+        {
+          "id": "NUMBERINPUT-06",
+          "type": "approved-api-difference",
+          "text": "`tct-clear` (cancelable) fires before the clear button clears, and `isWheelEnabled` is the inverted `no-wheel` attribute."
+        },
+        {
+          "id": "NUMBERINPUT-07",
+          "type": "tecton-visual",
+          "text": "Outlined field from the Tecton input tokens (border, hover, focus ring through the shared focus-ring module, 4px element radius); the stepper column spans the box's height on the inline end with a hairline between the buttons and mirrors in right-to-left."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [
+        "The stepper column's width (16px) and hairline follow upstream; no Tecton design frame was compared."
+      ],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "tools/lib/parity.ts",
+          "reason": "The parity check should accept global attributes as targets (`autofocus` for hasAutoFocus); the CEM does not list them for the element."
+        }
+      ],
+      "sizeBudgetKb": 75,
+      "notes": "Guides: [mwg:form-associated-custom-elements] ElementInternals value, validity, reset and restore; [mwg:validate-input-after-interaction]; [mwg:ime-safe-enter-submit] IME-safe Enter and arrows; [mwg:accessible-error-announcement] the unreadable-text announcement; [mwg:required-field-feedback]."
+    }
+  }
+}

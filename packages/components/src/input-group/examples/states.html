@@ -1,0 +1,15 @@
+<!-- title: States; description: Required and optional indicators, an info button on the label, a visually hidden label and a disabled group. disabled dims the group; disable the controls inside too. -->
+<tct-vstack gap="4">
+  <tct-input-group label="Budget" required label-tooltip="The total for the whole project.">
+    <tct-input-group-text>$</tct-input-group-text>
+    <tct-text-input label="Budget amount" label-hidden name="budget" required></tct-text-input>
+  </tct-input-group>
+  <tct-input-group label="Reference" optional description="Shown on the invoice.">
+    <tct-input-group-text>PO-</tct-input-group-text>
+    <tct-text-input label="Reference number" label-hidden name="ref"></tct-text-input>
+  </tct-input-group>
+  <tct-input-group label="Locked amount" disabled>
+    <tct-input-group-text>$</tct-input-group-text>
+    <tct-text-input label="Locked amount value" label-hidden value="1200" disabled></tct-text-input>
+  </tct-input-group>
+</tct-vstack>

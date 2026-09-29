@@ -1,0 +1,23 @@
+<!-- title: In a form; description: The controls inside the group are the form participants: they submit with their own names, and a required control blocks the submit and shows its error on the group. -->
+<tct-vstack max-width="480">
+  <form id="in-form-root">
+    <tct-form-layout>
+      <tct-input-group label="Price">
+        <tct-input-group-text>$</tct-input-group-text>
+        <tct-text-input label="Amount" label-hidden name="amount" required></tct-text-input>
+        <tct-input-group-text>USD</tct-input-group-text>
+      </tct-input-group>
+      <tct-hstack gap="2">
+        <tct-button type="submit" variant="primary">Save</tct-button>
+      </tct-hstack>
+      <output></output>
+    </tct-form-layout>
+  </form>
+</tct-vstack>
+<script type="module">
+  const form = document.getElementById('in-form-root');
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    form.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(form)));
+  });
+</script>

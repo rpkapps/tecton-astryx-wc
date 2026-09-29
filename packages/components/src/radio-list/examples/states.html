@@ -1,0 +1,35 @@
+<!-- title: States; description: A hidden label, required and optional indicators with an info button, a disabled option, a read-only list, a disabled list and every status. Read-only shows the choice at full strength. -->
+<tct-vstack gap="4">
+  <tct-radio-list label="Label hidden but named" label-hidden value="a">
+    <tct-radio-list-item label="A" value="a"></tct-radio-list-item>
+    <tct-radio-list-item label="B" value="b"></tct-radio-list-item>
+  </tct-radio-list>
+  <tct-radio-list label="Required" required label-tooltip="You must choose one.">
+    <tct-radio-list-item label="A" value="a"></tct-radio-list-item>
+    <tct-radio-list-item label="B" value="b"></tct-radio-list-item>
+  </tct-radio-list>
+  <tct-radio-list label="Optional" optional>
+    <tct-radio-list-item label="A" value="a"></tct-radio-list-item>
+    <tct-radio-list-item label="B" value="b"></tct-radio-list-item>
+  </tct-radio-list>
+  <tct-radio-list label="One option disabled" value="a">
+    <tct-radio-list-item label="Available" value="a"></tct-radio-list-item>
+    <tct-radio-list-item label="Unavailable" value="b" disabled description="Sold out."></tct-radio-list-item>
+  </tct-radio-list>
+  <tct-radio-list label="Read-only" readonly value="b">
+    <tct-radio-list-item label="A" value="a"></tct-radio-list-item>
+    <tct-radio-list-item label="B" value="b"></tct-radio-list-item>
+  </tct-radio-list>
+  <tct-radio-list label="Disabled" disabled value="a">
+    <tct-radio-list-item label="A" value="a"></tct-radio-list-item>
+    <tct-radio-list-item label="B" value="b"></tct-radio-list-item>
+  </tct-radio-list>
+  <tct-radio-list label="Error" status-type="error" status-message="Choose one to continue.">
+    <tct-radio-list-item label="A" value="a"></tct-radio-list-item>
+    <tct-radio-list-item label="B" value="b"></tct-radio-list-item>
+  </tct-radio-list>
+  <tct-radio-list label="Warning" value="a" status-type="warning" status-message="This option cannot be changed later.">
+    <tct-radio-list-item label="A" value="a"></tct-radio-list-item>
+    <tct-radio-list-item label="B" value="b"></tct-radio-list-item>
+  </tct-radio-list>
+</tct-vstack>

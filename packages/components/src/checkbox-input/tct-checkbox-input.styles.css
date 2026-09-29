@@ -1,0 +1,46 @@
+/*
+ * tct-checkbox-input: the box is a `tct-checkbox-indicator` (the same visual every checkbox in the
+ * library draws) under the native input. The row, the label block and the focus ring are in
+ * tct-toggle-control.styles.css. Hover reaches the indicator through `.indicator-scope` on the row
+ * (inherited `--_indicator-hover`); a press paints the pressed overlay over the box.
+ * [mwg:brand-consistent-forms] [mwg:styling-web-components]
+ */
+@layer component {
+  .control[data-size='md'] {
+    /* design: the checkbox box is 24px (md) */
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    border-radius: var(--radius-inner);
+  }
+
+  .control[data-size='sm'] {
+    /* design: the checkbox box is 20px (sm) */
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+    border-radius: var(--radius-inner);
+  }
+
+  /* The pressed overlay is the owner's, so a replaced indicator keeps the press feedback. */
+  .control::after {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    content: '';
+    border-radius: inherit;
+    background-color: transparent;
+  }
+}
+
+@layer state {
+  .row:not([data-disabled]):active .control::after {
+    background-color: var(--color-overlay-pressed);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .row:not([data-disabled]):active .control::after {
+      background-color: transparent;
+    }
+  }
+}

@@ -1,0 +1,21 @@
+<!-- title: In a form; description: A required checkbox blocks the submit while it is unchecked and shows its error only then; a checked one submits name=value. Reset returns to the checked attribute. -->
+<tct-vstack max-width="480">
+  <form id="in-form-root">
+    <tct-form-layout>
+      <tct-checkbox-input label="I agree to the terms" name="terms" required></tct-checkbox-input>
+      <tct-checkbox-input label="Send me updates" name="updates" value="yes" checked></tct-checkbox-input>
+      <tct-hstack gap="2">
+        <tct-button type="submit" variant="primary">Save</tct-button>
+        <tct-button type="reset">Reset</tct-button>
+      </tct-hstack>
+      <output></output>
+    </tct-form-layout>
+  </form>
+</tct-vstack>
+<script type="module">
+  const form = document.getElementById('in-form-root');
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    form.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(form, event.submitter)));
+  });
+</script>

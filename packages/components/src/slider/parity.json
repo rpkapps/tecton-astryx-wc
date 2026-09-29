@@ -1,0 +1,236 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "slider",
+  "workPackage": "WP-7",
+  "entries": {
+    "core.slider": {
+      "tag": "tct-slider",
+      "status": "implemented",
+      "upstream": {
+        "name": "Slider",
+        "path": "packages/core/src/Slider/Slider.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "target": "focus",
+          "as": "method",
+          "notes": "The element is the handle: `focus()` reaches the first thumb; `value`, `values` and the form API are on the host."
+        },
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
+        {
+          "upstream": "isLabelHidden",
+          "kind": "prop",
+          "target": "label-hidden",
+          "as": "attribute",
+          "reflect": true
+        },
+        {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute"},
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Also through <fieldset disabled>."
+        },
+        {
+          "upstream": "disabledMessage",
+          "kind": "prop",
+          "target": "disabled-message",
+          "as": "attribute",
+          "notes": "A tooltip on a disabled slider that says why; the thumbs stay focusable (aria-disabled) and values cannot change."
+        },
+        {"upstream": "isOptional", "kind": "prop", "target": "optional", "as": "attribute"},
+        {
+          "upstream": "isRequired",
+          "kind": "prop",
+          "target": "required",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Conveyed by a hidden \"Required\" text and the indicator: `aria-required` is not defined for a slider, and a slider always has a value, so it is no constraint."
+        },
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "target": "status",
+          "as": "property",
+          "notes": "Object `{type, message?}`, or the `status-type` and `status-message` attributes. Always shown detached."
+        },
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "target": "width",
+          "as": "attribute",
+          "notes": "A number is px, a string a CSS length. Not reflected."
+        },
+        {"upstream": "labelTooltip", "kind": "prop", "target": "label-tooltip", "as": "attribute"},
+        {"upstream": "min", "kind": "prop", "target": "min", "as": "attribute", "default": 0},
+        {"upstream": "max", "kind": "prop", "target": "max", "as": "attribute", "default": 100},
+        {"upstream": "step", "kind": "prop", "target": "step", "as": "attribute", "default": 1},
+        {
+          "upstream": "orientation",
+          "kind": "prop",
+          "target": "orientation",
+          "as": "attribute",
+          "reflect": true,
+          "default": "horizontal"
+        },
+        {
+          "upstream": "formatValue",
+          "kind": "prop",
+          "target": "formatValue",
+          "as": "property",
+          "notes": "`(value: number) => string` for the bubble, the text and `aria-valuetext`. Without it the value is written with Intl in the language of the page, and `aria-valuetext` is set when that differs from the plain number."
+        },
+        {
+          "upstream": "valueDisplay",
+          "kind": "prop",
+          "target": "value-display",
+          "as": "attribute",
+          "default": "tooltip",
+          "notes": "tooltip (a bubble over the thumb), text or none."
+        },
+        {
+          "upstream": "marks",
+          "kind": "prop",
+          "target": "marks",
+          "as": "property",
+          "notes": "`{value, label?}[]`; also a JSON attribute (`marks='[{\"value\":0,\"label\":\"Off\"}]'`). A press on a tick or its label snaps to its value."
+        },
+        {
+          "upstream": "htmlName",
+          "kind": "prop",
+          "target": "name",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "The host submits the value under this name; a range submits two entries, the start then the end (upstream renders hidden inputs)."
+        },
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "property",
+          "notes": "A number string (`\"50\"`, or `\"20,80\"` with `range`); `values` is the array and `valueAsNumber` the first number. The `value` attribute is the default (form reset restores it). Upstream is controlled with `number | [number, number]`; a range is the `range` attribute here."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "input",
+          "as": "native-event",
+          "notes": "Upstream onChange runs on every change during a drag and with every key, which is the native `input` event; it never fires for property writes."
+        },
+        {
+          "upstream": "onChangeEnd",
+          "kind": "event",
+          "target": "change",
+          "as": "native-event",
+          "notes": "The native `change` fires when a drag ends with a different value and with every key that changed it (composed, from the host)."
+        },
+        {
+          "upstream": "minStepsBetweenThumbs",
+          "kind": "prop",
+          "target": "min-steps-between-thumbs",
+          "as": "attribute",
+          "default": 0,
+          "notes": "With `range`."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-testid: a test id is the consumer's own attribute on the element."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style/::part/custom properties"
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useTooltip",
+          "target": "tct-tooltip",
+          "as": "controller",
+          "notes": "The disabled reason is a tct-tooltip around the row; the value bubble is the element's own aria-hidden bubble over each thumb, so the value is not announced twice."
+        },
+        {
+          "upstream": "useInteractionModalityTracking",
+          "as": "waived",
+          "reason": "A thumb focused by a press draws no keyboard ring: the press marks it (`data-pointer`) until the next key or a blur."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "ArrowRight / ArrowUp",
+          "action": "Increases by one step (in right-to-left text ArrowLeft increases and ArrowRight decreases, as on a native range).",
+          "when": "a thumb is focused, not disabled or read-only"
+        },
+        {"keys": "ArrowLeft / ArrowDown", "action": "Decreases by one step."},
+        {"keys": "PageUp / PageDown", "action": "Increases or decreases by ten steps."},
+        {
+          "keys": "Home / End",
+          "action": "Goes to the minimum or the maximum (a range thumb stops at its sibling)."
+        },
+        {"keys": "Tab", "action": "Moves through the thumbs of a range in order."}
+      ],
+      "form": {
+        "formAssociated": true,
+        "notes": "Form-associated (ElementInternals): submits `name=value` (a range submits two entries, the start then the end), resets to the `value` attribute, restores on navigation, joins <fieldset disabled>, works with form=. There is no constraint to fail; `disabled` bars submission."
+      },
+      "differences": [
+        {
+          "id": "SLIDER-01",
+          "type": "approved-api-difference",
+          "text": "Uncontrolled by default (D-006): `value` (a number string) or `values` (an array) is a property with the `value` attribute as its default, `range` turns on two thumbs, and native `input` (during a change) and `change` (at its end) events replace the controlled `value` plus onChange/onChangeEnd. Set `value` to control it."
+        },
+        {
+          "id": "SLIDER-02",
+          "type": "approved-api-difference",
+          "text": "The host is the form participant and submits the value under `name`; no hidden inputs are rendered."
+        },
+        {
+          "id": "SLIDER-03",
+          "type": "a11y-improvement",
+          "text": "The value text is localised: without `format-value` the bubble, the text and `aria-valuetext` write the number with Intl in the language of the page (`1.234,5` in German). \"Minimum value\", \"Maximum value\" and \"Required\" come from the locale catalogs instead of hard-coded English."
+        },
+        {
+          "id": "SLIDER-04",
+          "type": "a11y-improvement",
+          "text": "In right-to-left text ArrowLeft increases and ArrowRight decreases a horizontal slider (its minimum is at the right), as a native range does; upstream keeps ArrowRight as increase."
+        },
+        {
+          "id": "SLIDER-05",
+          "type": "a11y-improvement",
+          "text": "In a range the group carries the label and the description and each thumb keeps its own short name; the value bubble is `aria-hidden`, so a screen reader does not hear the value twice."
+        },
+        {
+          "id": "SLIDER-06",
+          "type": "tecton-visual",
+          "text": "The fill, the filled ticks and the thumb use the Tecton checked fill (as the checkbox and the switch do) on the `--color-track` rail; the disabled slider turns neutral grey; the thumb takes the hot-pink focus ring for the keyboard only and the value bubble is the inverted tooltip surface (tecton-astryx components.ts, slider.md)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [
+        "The design frame (slider.md) shows a soft drop shadow under the thumb and a 6px track; neither is in the Tecton theme file, so the thumb has no shadow and the track is 4px like upstream."
+      ],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 72,
+      "notes": "Guides: [mwg:form-associated-custom-elements]; [mwg:accessible-web-components] role=slider, a range's group and thumb names; [mwg:brand-consistent-forms]; [mwg:accessible-error-announcement]."
+    }
+  }
+}

@@ -1,0 +1,188 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "input-group",
+  "workPackage": "WP-7",
+  "entries": {
+    "core.input-group": {
+      "tag": "tct-input-group",
+      "status": "implemented",
+      "upstream": {
+        "name": "InputGroup",
+        "path": "packages/core/src/InputGroup/InputGroup.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "`tct-input-group-text` addons and the controls (`tct-text-input`, `tct-number-input`, a selector, a button)."
+        },
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
+        {
+          "upstream": "isLabelHidden",
+          "kind": "prop",
+          "target": "label-hidden",
+          "as": "attribute",
+          "reflect": true
+        },
+        {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute"},
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Dims the group and its label (as upstream). It does not disable the controls inside."
+        },
+        {"upstream": "isOptional", "kind": "prop", "target": "optional", "as": "attribute"},
+        {"upstream": "isRequired", "kind": "prop", "target": "required", "as": "attribute"},
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md",
+          "notes": "Sets the group height and is provided (sizeContext) to the controls inside. Unset takes an enclosing size provider, else md."
+        },
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "target": "status",
+          "as": "property",
+          "notes": "Object `{type, message?}`, or the `status-type` and `status-message` attributes."
+        },
+        {"upstream": "labelTooltip", "kind": "prop", "target": "label-tooltip", "as": "attribute"},
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style/::part/custom properties"
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "Attributes on the host reach the DOM as they are; no prop is needed."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useInputGroup",
+          "target": "inputGroupContext",
+          "as": "context",
+          "notes": "Provided by the group: `{isInGroup, labelId, describedByIds}`. Controls read it to drop their own label, description and status chrome."
+        },
+        {
+          "upstream": "InputGroupContext",
+          "target": "inputGroupContext",
+          "as": "context"
+        },
+        {
+          "upstream": "SizeProvider",
+          "target": "sizeContext",
+          "as": "context",
+          "notes": "The group provides its size to the controls inside."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Moves through the controls and any button addon in order; the group itself is not a tab stop and addon text is never focusable."
+        }
+      ],
+      "form": {
+        "formAssociated": false,
+        "notes": "The group has no value: the controls inside are the form participants and submit themselves. It observes their displayed invalidity (observeControl) to colour the addon borders."
+      },
+      "differences": [
+        {
+          "id": "INPUTGROUP-01",
+          "type": "approved-api-difference",
+          "text": "One focus ring around the whole group. The group tracks keyboard focus inside itself and draws the ring; the controls inside drop their own ring and square their inner corners. A light-DOM sheet (`tct-input-group.light.css`, adopted into the tree that contains the group) reaches each control's `part=\"input\"`, so any control that names its painted box `input` joins the group."
+        },
+        {
+          "id": "INPUTGROUP-02",
+          "type": "approved-api-difference",
+          "text": "The group's inherited private properties (`--_group-border-color`, `--_group-margin-start`, `--_group-radius-*`) style the addons across the shadow boundary; the member overlap is a margin on each member's painted box because an application reset (`* { margin: 0 }`) beats `::slotted()`."
+        },
+        {
+          "id": "INPUTGROUP-03",
+          "type": "approved-api-difference",
+          "text": "Status is also shown on the addon borders, and a control that displays invalidity colours them too (observeControl). Upstream only passes the status to the theme."
+        },
+        {
+          "id": "INPUTGROUP-04",
+          "type": "tecton-visual",
+          "text": "The group's outer corners are the 4px element radius; the addon cell is the muted surface with the Tecton outlined-input border (`--tecton-color-input-outlined-border`), so it reads as the same edge as the field next to it."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": false,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 56,
+      "notes": "Guides: [mwg:styling-web-components] custom properties cross the boundary, `::part` from the outer tree, `::slotted` loses to light-DOM resets; [mwg:accessible-web-components] the group role and its label live in one shadow root; [mwg:child-state-based-styling] the group follows the focus inside it."
+    },
+    "core.input-group-text": {
+      "tag": "tct-input-group-text",
+      "status": "implemented",
+      "upstream": {
+        "name": "InputGroupText",
+        "path": "packages/core/src/InputGroup/InputGroupText.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style/::part/custom properties"
+        },
+        {
+          "upstream": "className",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class on the host"
+        },
+        {
+          "upstream": "style",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use style on the host"
+        }
+      ],
+      "keyboard": [],
+      "form": {"formAssociated": false},
+      "differences": [],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": false,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 56
+    }
+  }
+}

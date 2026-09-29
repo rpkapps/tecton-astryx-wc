@@ -1,0 +1,21 @@
+<!-- title: In a form; description: The field submits with its name, blocks a submit while a required value is missing (and only then shows the error), and is restored by reset. Enter adds a line. -->
+<tct-vstack max-width="480">
+  <form id="in-form-root">
+    <tct-form-layout>
+      <tct-text-area label="Report" name="report" required maxlength="200" description="Press Enter for a new line."></tct-text-area>
+      <tct-text-area label="Follow-up" name="follow-up" value="None"></tct-text-area>
+      <tct-hstack gap="2">
+        <tct-button type="submit" variant="primary">Save</tct-button>
+        <tct-button type="reset">Reset</tct-button>
+      </tct-hstack>
+      <output></output>
+    </tct-form-layout>
+  </form>
+</tct-vstack>
+<script type="module">
+  const form = document.getElementById('in-form-root');
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    form.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(form, event.submitter)));
+  });
+</script>

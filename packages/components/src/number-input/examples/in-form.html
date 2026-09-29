@@ -1,0 +1,21 @@
+<!-- title: In a form; description: The field submits the plain number under its name, blocks a submit while a required value is missing (and only then shows the error), and is restored by reset. Enter commits and submits. -->
+<tct-vstack max-width="480">
+  <form id="in-form-root">
+    <tct-form-layout>
+      <tct-number-input label="Quantity" name="quantity" required min="1" max="99" description="Press Enter to submit."></tct-number-input>
+      <tct-number-input label="Discount" name="discount" units="%" value="10" min="0" max="100" has-steppers></tct-number-input>
+      <tct-hstack gap="2">
+        <tct-button type="submit" variant="primary">Save</tct-button>
+        <tct-button type="reset">Reset</tct-button>
+      </tct-hstack>
+      <output></output>
+    </tct-form-layout>
+  </form>
+</tct-vstack>
+<script type="module">
+  const form = document.getElementById('in-form-root');
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    form.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(form, event.submitter)));
+  });
+</script>

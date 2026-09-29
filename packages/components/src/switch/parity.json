@@ -1,0 +1,193 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "switch",
+  "workPackage": "WP-7",
+  "entries": {
+    "core.switch": {
+      "tag": "tct-switch",
+      "status": "implemented",
+      "upstream": {
+        "name": "Switch",
+        "path": "packages/core/src/Switch/Switch.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "target": "control",
+          "as": "property",
+          "notes": "The native input inside (read-only getter)."
+        },
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "checked",
+          "as": "attribute",
+          "notes": "Upstream is controlled-only (`value` boolean + onChange). `checked` is the default (attribute) and the current state (property). The `value` attribute is the submitted value (default `on`)."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "change",
+          "as": "native-event",
+          "notes": "The native `input` fires on every user toggle and `change` once after it (composed, from the host). Neither fires on property writes. Cancel the `click` to keep the old state."
+        },
+        {"upstream": "changeAction", "kind": "prop", "target": "changeAction", "as": "property"},
+        {
+          "upstream": "isLoading",
+          "kind": "prop",
+          "target": "loading",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "isLabelHidden",
+          "kind": "prop",
+          "target": "label-hidden",
+          "as": "attribute",
+          "reflect": true
+        },
+        {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute"},
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Also through <fieldset disabled>."
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md"
+        },
+        {
+          "upstream": "htmlName",
+          "kind": "prop",
+          "target": "name",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "disabledMessage",
+          "kind": "prop",
+          "target": "disabled-message",
+          "as": "attribute"
+        },
+        {"upstream": "isOptional", "kind": "prop", "target": "optional", "as": "attribute"},
+        {
+          "upstream": "isRequired",
+          "kind": "prop",
+          "target": "required",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "A constraint (valueMissing while off) and `aria-required`."
+        },
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "target": "status",
+          "as": "property",
+          "notes": "Object `{type, message}`, or the `status-type` and `status-message` attributes. Always shown detached."
+        },
+        {"upstream": "onFocus", "kind": "event", "target": "focus", "as": "native-event"},
+        {"upstream": "onBlur", "kind": "event", "target": "blur", "as": "native-event"},
+        {"upstream": "labelIcon", "kind": "prop", "target": "label-icon", "as": "attribute"},
+        {"upstream": "labelTooltip", "kind": "prop", "target": "label-tooltip", "as": "attribute"},
+        {
+          "upstream": "labelPosition",
+          "kind": "prop",
+          "target": "label-position",
+          "as": "attribute",
+          "reflect": true,
+          "default": "end"
+        },
+        {
+          "upstream": "labelSpacing",
+          "kind": "prop",
+          "target": "label-spacing",
+          "as": "attribute",
+          "reflect": true,
+          "default": "hug"
+        },
+        {"upstream": "width", "kind": "prop", "target": "width", "as": "attribute"}
+      ],
+      "hooks": [
+        {
+          "upstream": "useResolvedRequired",
+          "target": "formLayoutContext",
+          "as": "context",
+          "notes": "A form layout that says \"required by default\" is announced (aria-required) without blocking the form."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Space",
+          "action": "Toggles the switch",
+          "when": "focused, not disabled, read-only or busy"
+        },
+        {
+          "keys": "Tab",
+          "action": "Moves through the switch and the label's info button in reading order"
+        }
+      ],
+      "form": {
+        "formAssociated": true,
+        "notes": "Form-associated (ElementInternals) with a native `role=switch` checkbox inside: submits `name=value` (`on` by default) only while on, resets to the `checked` attribute, restores on navigation, joins <fieldset disabled>, works with form= and label for. `required` blocks the submit while off; the error is shown after a change, a blur after an edit or a submit attempt."
+      },
+      "differences": [
+        {
+          "id": "SWITCH-01",
+          "type": "approved-api-difference",
+          "text": "Uncontrolled by default (D-006): `checked` is a property with the `checked` attribute as its default, and native `input`/`change` events report user toggles, instead of a controlled `value` plus onChange. Cancel the `click` to veto a toggle."
+        },
+        {
+          "id": "SWITCH-02",
+          "type": "approved-api-difference",
+          "text": "`changeAction` runs after each user toggle with the new state and the `input` event; the switch is busy meanwhile (spinner in the thumb, `aria-busy`, no toggling) and returns to its previous state if the promise rejects. The busy state is announced once through the shared announcer instead of a `role=status` node."
+        },
+        {
+          "id": "SWITCH-03",
+          "type": "a11y-improvement",
+          "text": "The browser's own message (\"Please check this box\") is displayed as the detached status after user interaction, on the same clock as `aria-invalid` and `:state(user-invalid)`, announced once; a failed submit focuses the switch."
+        },
+        {
+          "id": "SWITCH-04",
+          "type": "approved-api-difference",
+          "text": "The `checked` thumb travel mirrors in right-to-left text with `translate` and a direction factor (`:host(:dir(rtl))`) instead of a physical transform on `[dir=rtl] *`."
+        },
+        {
+          "id": "SWITCH-05",
+          "type": "tecton-visual",
+          "text": "The off track is an outline round a transparent pill (an inset ring, so it costs no layout), the on track is the violet, the disabled states use the Tecton disabled roles, and the off and on thumbs are two roles (switch.md). Forced colours keep the two states apart with a system border and Highlight."
+        },
+        {
+          "id": "SWITCH-06",
+          "type": "approved-api-difference",
+          "text": "`readonly` is inherited from the form mixin (upstream Switch has no read-only state): it bars changes, keeps the state at full strength and is not submitted differently."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 71,
+      "notes": "Guides: [mwg:form-associated-custom-elements]; [mwg:accessible-web-components] role=switch on the native checkbox, label and description in the same root; [mwg:brand-consistent-forms] native input under a branded track; [mwg:validate-input-after-interaction]; [mwg:accessible-error-announcement]."
+    }
+  }
+}

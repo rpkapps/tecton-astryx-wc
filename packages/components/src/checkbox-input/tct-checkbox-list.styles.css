@@ -1,0 +1,46 @@
+/*
+ * tct-checkbox-list: the field chrome (label, description, status) is the shared field module; this
+ * sheet adds the group around the options. The options are `tct-checkbox-list-item` light-DOM children
+ * projected through a `tct-list`, so density, dividers and the row look come from the list.
+ * [mwg:css] [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  /* In a horizontal-labels form the host disappears so the parent grid places label and group. */
+  :host([data-horizontal-labels]) {
+    display: contents;
+  }
+
+  .group {
+    min-inline-size: 0;
+  }
+
+  /* The vertical collection of rows (the same look as tct-list). */
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-0-5);
+    margin: 0;
+    padding-inline-start: 0;
+    list-style-type: none;
+  }
+
+  .list[data-dividers] {
+    gap: 0;
+  }
+
+  /* The group's status message follows the last option with the field's own gap. */
+  .control-cell {
+    gap: 0;
+  }
+}
+
+@layer state {
+  .group[data-disabled] {
+    cursor: default;
+  }
+}

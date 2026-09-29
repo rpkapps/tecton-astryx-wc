@@ -1,0 +1,325 @@
+{
+  "folder": "radio-list",
+  "elements": {
+    "tct-radio-list": {
+      "class": "TctRadioList",
+      "attributes": [
+        {
+          "name": "description",
+          "property": "description",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "disabled-message",
+          "property": "disabledMessage",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "invalid",
+          "property": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label-hidden",
+          "property": "labelHidden",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label-tooltip",
+          "property": "labelTooltip",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "loading",
+          "property": "loading",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "name",
+          "property": "name",
+          "type": "string",
+          "default": "''",
+          "reflects": true
+        },
+        {
+          "name": "optional",
+          "property": "optional",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "orientation",
+          "property": "orientation",
+          "type": "RadioListOrientation",
+          "values": [
+            "vertical",
+            "horizontal"
+          ],
+          "default": "'vertical'",
+          "reflects": true
+        },
+        {
+          "name": "readonly",
+          "property": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "required",
+          "property": "required",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "RadioListSize",
+          "values": [
+            "sm",
+            "md"
+          ],
+          "default": "'md'",
+          "reflects": true
+        },
+        {
+          "name": "status-message",
+          "property": "statusMessage",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "status-type",
+          "property": "statusType",
+          "type": "InputStatusType | undefined",
+          "values": [
+            "error",
+            "warning",
+            "success",
+            "info"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "value",
+          "property": "defaultValue",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "width",
+          "property": "width",
+          "type": "number | string | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "[BLOCKS_IMPLICIT_SUBMISSION]",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "displayedValidationMessage",
+          "type": "string",
+          "readonly": true
+        },
+        {
+          "name": "form",
+          "type": "HTMLFormElement | null",
+          "readonly": true
+        },
+        {
+          "name": "isDisabled",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "labels",
+          "type": "NodeList",
+          "readonly": true
+        },
+        {
+          "name": "showInvalid",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "status",
+          "type": "InputStatus | undefined",
+          "readonly": false
+        },
+        {
+          "name": "validationMessage",
+          "type": "string",
+          "readonly": true
+        },
+        {
+          "name": "validity",
+          "type": "ValidityState",
+          "readonly": true
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "readonly": false
+        },
+        {
+          "name": "willValidate",
+          "type": "boolean",
+          "readonly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "checkValidity",
+          "signature": "() => boolean"
+        },
+        {
+          "name": "focus",
+          "signature": "(options?: FocusOptions) => void"
+        },
+        {
+          "name": "reportValidity",
+          "signature": "() => boolean"
+        },
+        {
+          "name": "setCustomValidity",
+          "signature": "(message: string) => void"
+        }
+      ],
+      "slots": [
+        "(default)"
+      ],
+      "events": [
+        {
+          "name": "change",
+          "native": true
+        },
+        {
+          "name": "input",
+          "native": true
+        }
+      ],
+      "cssParts": [
+        "description",
+        "field",
+        "group",
+        "label",
+        "label-indicator",
+        "label-tip",
+        "status"
+      ],
+      "cssStates": [
+        "invalid",
+        "user-invalid"
+      ],
+      "cssProperties": []
+    },
+    "tct-radio-list-item": {
+      "class": "TctRadioListItem",
+      "attributes": [
+        {
+          "name": "aria-label",
+          "property": "aria-label",
+          "type": "unknown",
+          "reflects": false
+        },
+        {
+          "name": "description",
+          "property": "description",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "value",
+          "property": "value",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "checked",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "focusTarget",
+          "type": "HTMLElement | null",
+          "readonly": true
+        },
+        {
+          "name": "isDisabled",
+          "type": "boolean",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "description",
+        "end",
+        "label",
+        "start"
+      ],
+      "events": [],
+      "cssParts": [
+        "item",
+        "radio",
+        "radio-indicator",
+        "radio-indicator-dot"
+      ],
+      "cssStates": [
+        "checked",
+        "disabled"
+      ],
+      "cssProperties": []
+    }
+  }
+}

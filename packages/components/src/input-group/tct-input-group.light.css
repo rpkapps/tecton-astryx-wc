@@ -1,0 +1,28 @@
+/*
+ * tct-input-group, light-DOM sheet (A§6.7): shapes the controls inside a group. A control paints its box
+ * on an inner element it exposes as `part="input"`, and only a stylesheet in the tree that contains the
+ * group can address that part. Declarations from the outer tree beat the shadow tree's own for normal
+ * rules, so these win without specificity games. Delivered by TctInputGroup (adoptLightDomStyles) and by
+ * the static light-dom.css build.
+ *
+ * Every member: square corners (the group rounds its outer ones) and no ring of its own, because the
+ * group draws one ring around everything.
+ */
+@layer tecton.light-dom {
+  :where(tct-input-group) > :where(*)::part(input) {
+    margin-inline-start: calc(-1 * var(--border-width));
+    border-radius: 0;
+    outline: none;
+  }
+
+  :where(tct-input-group) > :where(:first-child)::part(input) {
+    margin-inline-start: 0;
+    border-start-start-radius: var(--radius-element);
+    border-end-start-radius: var(--radius-element);
+  }
+
+  :where(tct-input-group) > :where(:last-child)::part(input) {
+    border-start-end-radius: var(--radius-element);
+    border-end-end-radius: var(--radius-element);
+  }
+}

@@ -1,0 +1,6 @@
+<!-- title: Validation; description: accept, max-size and max-files are checked when files are chosen or dropped. Files that do not fit are left out and the reason shows as an error status; the ones that fit are kept. -->
+<tct-vstack gap="4">
+  <tct-file-input label="Images only" accept="image/png,image/jpeg" description="Try choosing a text file."></tct-file-input>
+  <tct-file-input label="Small files" max-size="10240" description="Up to 10 kB per file."></tct-file-input>
+  <tct-file-input label="A file with an error" status-type="error" status-message="The upload failed. Try again."></tct-file-input>
+</tct-vstack>

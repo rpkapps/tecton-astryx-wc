@@ -1,0 +1,15 @@
+<!-- title: Value display; description: The value shows in a bubble over the thumb (tooltip, the default), as text after the track, or not at all. format-value writes it with units; without it the value is written in the language of the page. -->
+<tct-vstack id="value-display-root" gap="4">
+  <tct-slider label="Bubble (default)" value="40"></tct-slider>
+  <tct-slider label="Text" value="40" value-display="text"></tct-slider>
+  <tct-slider label="Text with units" value="40" value-display="text" data-format="percent"></tct-slider>
+  <tct-slider label="None" value="40" value-display="none"></tct-slider>
+  <div lang="de-DE">
+    <tct-slider label="Betrag (de-DE)" min="0" max="5000" step="0.5" value="1234.5" value-display="text"></tct-slider>
+  </div>
+</tct-vstack>
+<script type="module">
+  for (const slider of document.querySelectorAll('#value-display-root [data-format=percent]')) {
+    slider.formatValue = (value) => `${value}%`;
+  }
+</script>

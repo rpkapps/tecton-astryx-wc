@@ -1,0 +1,16 @@
+<!-- title: Rows with descriptions and content; description: Options take a description, a rich label and end content. Density and dividers come from the list; a link or button in the end slot keeps its own meaning and does not toggle the option. -->
+<tct-vstack gap="4">
+  <tct-checkbox-list label="Plan" has-dividers density="spacious" name="plans">
+    <tct-checkbox-list-item label="Free" value="free" checked description="Up to three projects."></tct-checkbox-list-item>
+    <tct-checkbox-list-item value="pro">
+      <span slot="label">Pro <em>Recommended</em></span>
+      <span slot="description">Unlimited projects and <strong>priority</strong> support.</span>
+      <tct-button slot="end" variant="ghost" size="sm">Compare</tct-button>
+    </tct-checkbox-list-item>
+    <tct-checkbox-list-item label="Enterprise" value="enterprise" disabled description="Contact sales."></tct-checkbox-list-item>
+  </tct-checkbox-list>
+  <tct-checkbox-list label="Compact" density="compact">
+    <tct-checkbox-list-item label="One" value="1"></tct-checkbox-list-item>
+    <tct-checkbox-list-item label="Two" value="2"></tct-checkbox-list-item>
+  </tct-checkbox-list>
+</tct-vstack>

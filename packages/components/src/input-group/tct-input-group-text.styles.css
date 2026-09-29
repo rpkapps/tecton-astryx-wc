@@ -1,0 +1,45 @@
+/*
+ * tct-input-group-text: the addon cell of an input group. It joins the group's border: the group publishes
+ * the inherited private properties `--_group-border-color` (status, invalid), `--_group-margin-start` (the
+ * one-border overlap with the previous member) and `--_group-radius-*` (which corners are the group's
+ * outer corners), because ancestors cannot be matched across a shadow
+ * boundary and a custom property is the one channel that crosses it. [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: flex;
+    flex-shrink: 0;
+    align-items: stretch;
+  }
+
+  .text {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    box-sizing: border-box;
+    padding-inline: var(--spacing-2);
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    background-color: var(--color-background-muted);
+    margin-inline-start: var(--_group-margin-start, 0);
+    border: var(--border-width) solid
+      var(--_group-border-color, var(--tecton-color-input-outlined-border));
+    border-start-start-radius: var(--_group-radius-start-start, 0);
+    border-end-start-radius: var(--_group-radius-end-start, 0);
+    border-start-end-radius: var(--_group-radius-start-end, 0);
+    border-end-end-radius: var(--_group-radius-end-end, 0);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .text {
+      color: CanvasText;
+      background-color: Canvas;
+      border-color: ButtonBorder;
+    }
+  }
+}

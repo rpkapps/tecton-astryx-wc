@@ -1,0 +1,6 @@
+<!-- title: Status; description: status-type and status-message show a message; status-variant chooses attached, detached, or a tooltip behind a status button. An error sets aria-invalid. -->
+<tct-vstack gap="4">
+  <tct-text-area label="Comment" value="Too short" status-type="error" status-message="Write at least two sentences."></tct-text-area>
+  <tct-text-area label="Comment" value="Draft" status-type="warning" status-message="This will be visible to the customer." status-variant="detached"></tct-text-area>
+  <tct-text-area label="Comment" value="Saved" status-type="success" status-message="Saved." status-variant="tooltip"></tct-text-area>
+</tct-vstack>
