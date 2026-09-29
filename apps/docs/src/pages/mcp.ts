@@ -10,13 +10,11 @@
  *
  * Only a Node process (`node dist/server/entry.mjs`, the adapter's standalone server) can answer a POST; a
  * static host serves the pages and the card is not reachable there. See the "Working with AI" guide.
- *
- * The handler is imported from the CLI package source (the docs app does not depend on the CLI package).
  */
 import type {APIRoute} from 'astro';
 import registry from '../../public/agent-registry.json';
-import {handleMcpRequest} from '../../../../packages/cli/src/mcp/http.ts';
-import type {AgentRegistry} from '../../../../packages/cli/src/registry/types.ts';
+import {handleMcpRequest} from '@tecton-wc/cli/mcp/http.js';
+import type {AgentRegistry} from '@tecton-wc/cli/registry/types.js';
 
 export const prerender = false;
 

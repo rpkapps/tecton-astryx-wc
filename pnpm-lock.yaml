@@ -117,6 +117,9 @@ importers:
       '@astrojs/node':
         specifier: 11.1.6
         version: 11.1.6(astro@7.3.5(@types/node@24.19.0))
+      '@tecton-wc/cli':
+        specifier: workspace:*
+        version: link:../../packages/cli
 
   packages/cli:
     dependencies:

@@ -82,7 +82,8 @@ async function stop(child: ChildProcess): Promise<void> {
   clearTimeout(timer);
 }
 
-const text = (result: {content?: unknown}): string => (result.content as {text: string}[])[0]!.text;
+/** The text of a tool result's first content block (the client types `callTool`'s result as a union). */
+const text = (result: unknown): string => (result as {content: {text: string}[]}).content[0]!.text;
 
 describe.skipIf(!built)('the docs site MCP endpoint (built standalone server)', () => {
   let child: ChildProcess;

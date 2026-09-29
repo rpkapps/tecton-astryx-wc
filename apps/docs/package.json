@@ -17,6 +17,7 @@
     "astro": "^7.3.5"
   },
   "devDependencies": {
-    "@astrojs/node": "11.1.6"
+    "@astrojs/node": "11.1.6",
+    "@tecton-wc/cli": "workspace:*"
   }
 }
