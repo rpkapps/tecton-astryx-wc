@@ -1,0 +1,242 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "segmented-control",
+  "workPackage": "WP-3",
+  "entries": {
+    "core.segmented-control": {
+      "tag": "tct-segmented-control",
+      "status": "implemented",
+      "upstream": {
+        "name": "SegmentedControl",
+        "path": "packages/core/src/SegmentedControl/SegmentedControl.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "property",
+          "notes": "Current selection (property). The `value` attribute is the initial selection (defaultValue), like a native input; the property follows the attribute until it is set. Upstream is controlled-only; the WC supports both (D-006)."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "change",
+          "as": "native-event",
+          "notes": "A user selecting a segment fires a native `input` and then `change` (both composed, bubbling); read `event.target.value`. Property and attribute writes fire nothing."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Accessible name of the radiogroup; never painted."
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md (explicit, then a size provider, then md)"
+        },
+        {
+          "upstream": "layout",
+          "kind": "prop",
+          "target": "layout",
+          "as": "attribute",
+          "reflect": true,
+          "default": "hug"
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "disabledMessage",
+          "kind": "prop",
+          "target": "disabledMessage",
+          "as": "attribute",
+          "notes": "Attribute `disabled-message`."
+        },
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(control) and custom properties."
+        }
+      ],
+      "hooks": [
+        {"upstream": "useKeyboardHint", "target": "KeyboardHintController", "as": "controller"},
+        {"upstream": "useListFocus", "target": "RovingTabindexController", "as": "controller"},
+        {
+          "upstream": "SegmentedControlContext",
+          "target": "segmentedControlContext (family-private)",
+          "as": "context"
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Enters the control at the selected segment (the first enabled one when nothing is selected) without changing the value; the next Tab leaves",
+          "when": "one tab stop"
+        },
+        {
+          "keys": "ArrowRight",
+          "action": "Moves focus to the next enabled segment and selects it, wrapping after the last",
+          "when": "ArrowLeft in RTL"
+        },
+        {
+          "keys": "ArrowLeft",
+          "action": "Moves focus to the previous enabled segment and selects it, wrapping before the first",
+          "when": "ArrowRight in RTL"
+        },
+        {"keys": "Home", "action": "Moves focus to the first enabled segment and selects it"},
+        {"keys": "End", "action": "Moves focus to the last enabled segment and selects it"},
+        {"keys": "Space", "action": "Selects the focused segment", "when": "not already selected"},
+        {
+          "keys": "Enter",
+          "action": "Selects the focused segment, like Space",
+          "when": "not already selected"
+        }
+      ],
+      "form": {
+        "formAssociated": true,
+        "notes": "Form-associated when named: submits `name=value` (nothing when empty), resets to the `value` attribute, restores, follows a disabled fieldset, `required` reports valueMissing with the browser's radio-group message and anchors the failed-submit focus on the tab-stop segment. Additions to upstream: name, required, readonly, invalid."
+      },
+      "differences": [
+        {
+          "id": "SEGMENTED-01",
+          "type": "approved-api-difference",
+          "text": "Items are light-DOM `tct-segmented-control-item` children; each item's semantics (role=radio, aria-checked, aria-disabled, name) are set on the item host through ElementInternals and the item host is the focus target (roving tabindex). The radiogroup element lives in the control's shadow root and the segments are its slotted children, so the group role, the reason tooltip's aria-describedby, and aria-invalid stay in one tree."
+        },
+        {
+          "id": "SEGMENTED-02",
+          "type": "approved-api-difference",
+          "text": "Upstream is controlled-only (value + onChange). The control owns its value like a native input (D-006): a user selection updates `value` and fires `input` + `change`; a controlled framework binding sets the property back."
+        },
+        {
+          "id": "SEGMENTED-03",
+          "type": "approved-api-difference",
+          "text": "A consumer keydown handler cannot opt out of arrow navigation by preventDefault() on the host in the bubble phase (the roving controller already ran); stop or prevent the key in a capture listener, or listen on an ancestor in the capture phase."
+        },
+        {
+          "id": "SEGMENTED-04",
+          "type": "tecton-visual",
+          "text": "Tecton paints the strip from the tab strip role and the selected segment as a flat fill with no shadow and no weight change (Tecton's semibold is 500, the same as medium). Hover and pressed are the shared overlay washes on unselected segments."
+        },
+        {
+          "id": "SEGMENTED-05",
+          "type": "a11y-improvement",
+          "text": "The disabled reason is attached as aria-describedby on the radiogroup and the tooltip shows on hover and keyboard focus (same as upstream); the whole-control disabled state keeps only the selected segment focusable when a reason is given, and drops out of the tab order entirely otherwise (upstream navigation-13)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": ["--size-element-lg (lg segment height)"],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessibility] (radio group keyboard model, roving tabindex) [mwg:accessible-web-components] (role element and its aria-* in one shadow tree) [mwg:interest-triggered-tooltips] (reason tooltip: hover, focus, hoverable, dismissible). The keyboard hint text is the upstream `@astryx.keyboardHint.toNavigate` message (30 locales)."
+    },
+    "core.segmented-control-item": {
+      "tag": "tct-segmented-control-item",
+      "status": "implemented",
+      "upstream": {
+        "name": "SegmentedControlItem",
+        "path": "packages/core/src/SegmentedControl/SegmentedControlItem.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "attribute",
+          "notes": "Compared with the control's value."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Visible text and accessible name (through ElementInternals)."
+        },
+        {
+          "upstream": "isLabelHidden",
+          "kind": "prop",
+          "target": "labelHidden",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Attribute `label-hidden`."
+        },
+        {
+          "upstream": "icon",
+          "kind": "slot",
+          "target": "icon",
+          "as": "slot",
+          "notes": "Slot an icon (`tct-icon` or an svg); it is sized from the control size."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(item), ::part(label) and custom properties."
+        }
+      ],
+      "hooks": [],
+      "keyboard": [
+        {"keys": "Space", "action": "Selects this segment", "when": "focused and enabled"},
+        {"keys": "Enter", "action": "Selects this segment", "when": "focused and enabled"}
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "SEGMENTEDITEM-01",
+          "type": "approved-api-difference",
+          "text": "The segment is a custom element, not a native button: it is the radio (host semantics) and the roving focus target. A click handler registered by the consumer on the item may call preventDefault() to opt out of selection, as upstream's onClick composition allows."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null
+    }
+  }
+}

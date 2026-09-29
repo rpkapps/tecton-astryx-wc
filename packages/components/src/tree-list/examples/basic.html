@@ -1,0 +1,44 @@
+<!-- title: Basic tree; description: Nested items with guide lines, start icons and a header. Arrow keys move, Right and Left expand and collapse, typing jumps to a label. -->
+<div id="basic-root" style="max-inline-size: 24rem">
+  <tct-tree-list header="Field structure"></tct-tree-list>
+  <script type="module">
+    const icon = (name) => {
+      const node = document.createElement('tct-icon');
+      node.setAttribute('name', name);
+      return node;
+    };
+    document.querySelector('#basic-root tct-tree-list').items = [
+      {
+        id: 'north-sea',
+        label: 'North Sea',
+        isExpanded: true,
+        startContent: icon('seismic'),
+        children: [
+          {
+            id: 'alpha',
+            label: 'Alpha platform',
+            isExpanded: true,
+            startContent: icon('well'),
+            children: [
+              {id: 'a-1', label: 'A-1 producer', startContent: icon('drill-bit')},
+              {id: 'a-2', label: 'A-2 injector', startContent: icon('drill-bit')},
+            ],
+          },
+          {
+            id: 'bravo',
+            label: 'Bravo platform',
+            startContent: icon('well'),
+            children: [{id: 'b-1', label: 'B-1 producer', startContent: icon('drill-bit')}],
+          },
+        ],
+      },
+      {
+        id: 'barents',
+        label: 'Barents Sea',
+        startContent: icon('seismic'),
+        children: [{id: 'faults', label: 'Fault model', startContent: icon('fault')}],
+      },
+      {id: 'notes', label: 'Field notes'},
+    ];
+  </script>
+</div>

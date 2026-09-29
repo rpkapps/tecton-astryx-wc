@@ -2,7 +2,7 @@
  * `pnpm check`: everything, in order, stopping at the first failure (A§18.3).
  *
  *   generate -> format:check -> lint -> lint:css -> typecheck -> tokens:check -> api:check ->
- *   parity:check -> licenses:check -> test -> build -> size -> docs:build
+ *   parity:check -> licenses:check -> test -> build -> size -> docs:build -> docs:a11y
  *
  * Steps that belong to later milestones skip themselves (with a message) until their inputs exist,
  * so this stays green from M1 onwards. Generation runs once; later steps see TCT_GENERATED=1.
@@ -23,6 +23,7 @@ const STEPS: readonly string[] = [
   'build',
   'size',
   'docs:build',
+  'docs:a11y',
 ];
 
 const results: {step: string; seconds: number; ok: boolean}[] = [];

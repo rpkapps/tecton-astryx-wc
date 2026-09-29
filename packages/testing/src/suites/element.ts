@@ -12,7 +12,7 @@
  */
 import type {TemplateResult} from 'lit';
 import type {RunOptions} from 'axe-core';
-import {describe, expect, it, onTestFinished, vi} from 'vitest';
+import {describe, expect, it, vi} from 'vitest';
 import {features} from '@tecton-astryx/core/features.js';
 import {deepActiveElement, getTabbables} from '@tecton-astryx/core/utils/focus.js';
 import {expectAccessible} from '../a11y.js';
@@ -36,6 +36,11 @@ export interface ElementSuiteOptions {
   a11y?: boolean | RunOptions;
   /** Set to `false` for elements that legitimately draw a box on the host (rare; document why). */
   hostBox?: boolean;
+  /**
+   * Set to `false` for light-DOM providers (`tct-theme`, `tct-size-provider`, ...): the element has no
+   * shadow root, and the suite asserts that instead of asserting one exists. Default `true`.
+   */
+  shadow?: boolean;
   /** Checks to skip; state the reason at the call site. */
   skip?: readonly ('upgrade' | 'moveBefore' | 'hidden' | 'hostBox' | 'a11y')[];
 }
@@ -114,7 +119,8 @@ export function runElementSuite(options: ElementSuiteOptions): void {
       });
       expect(errors).toEqual([]);
       expect(element.isConnected).toBe(true);
-      expect(element.shadowRoot).not.toBeNull();
+      if (options.shadow === false) expect(element.shadowRoot).toBeNull();
+      else expect(element.shadowRoot).not.toBeNull();
       for (const [name, value] of Object.entries(properties)) {
         expect((element as unknown as Record<string, unknown>)[name], name).toEqual(value);
       }
@@ -127,12 +133,8 @@ export function runElementSuite(options: ElementSuiteOptions): void {
         Object.assign(element, properties);
         await (element as unknown as {updateComplete: Promise<unknown>}).updateComplete;
         const target = document.createElement('div');
-        element.parentElement!.after(target);
-        // The target sits outside the fixture container, so remove it (and the moved element)
-        // after the test; otherwise it leaks into later tests' Tab order.
-        onTestFinished(() => {
-          target.remove();
-        });
+        // Inside the fixture container, so cleanup removes the target (and the element moved into it).
+        element.parentElement!.append(target);
         const focusable = getTabbables(element)[0];
         focusable?.focus();
         const focused = deepActiveElement();

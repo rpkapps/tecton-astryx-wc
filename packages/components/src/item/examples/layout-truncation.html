@@ -1,0 +1,15 @@
+<!-- title: Inline layout and truncation; description: layout="inline" keeps label and description on one line; label-lines and description-lines clamp long text. -->
+<div style="display: grid; gap: var(--spacing-3); max-inline-size: 20rem">
+  <tct-item
+    layout="inline"
+    label="Inline"
+    description="The description ellipsizes before the label does when the row is narrow"
+  ></tct-item>
+  <tct-item
+    label-lines="2"
+    description-lines="1"
+    label="A long label that wraps onto a second line and is then clamped with an ellipsis when it would need a third line to fit"
+    description="A long description that is clamped to a single line with an ellipsis"
+  ></tct-item>
+  <tct-item label="A plain-text label is a single line by default and ellipsizes when it does not fit the row"></tct-item>
+</div>

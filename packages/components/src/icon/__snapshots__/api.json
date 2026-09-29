@@ -1,0 +1,79 @@
+{
+  "folder": "icon",
+  "elements": {
+    "tct-icon": {
+      "class": "TctIcon",
+      "attributes": [
+        {
+          "name": "color",
+          "property": "color",
+          "type": "IconColor",
+          "values": [
+            "inherit",
+            "primary",
+            "secondary",
+            "tertiary",
+            "disabled",
+            "accent",
+            "success",
+            "error",
+            "warning",
+            "blue",
+            "red",
+            "green",
+            "gray",
+            "cyan",
+            "teal",
+            "yellow",
+            "orange",
+            "pink",
+            "purple"
+          ],
+          "default": "'inherit'",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "name",
+          "property": "name",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "IconSize | undefined",
+          "values": [
+            "xsm",
+            "sm",
+            "md",
+            "lg"
+          ],
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "icon"
+      ],
+      "cssStates": [],
+      "cssProperties": [
+        {
+          "name": "--icon-stroke-width"
+        }
+      ]
+    }
+  }
+}

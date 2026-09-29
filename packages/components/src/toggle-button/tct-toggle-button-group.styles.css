@@ -1,0 +1,17 @@
+@layer component {
+  :host {
+    display: inline-flex;
+  }
+
+  .group {
+    display: inline-flex;
+    flex: 1;
+    align-items: center;
+    gap: var(--spacing-1);
+  }
+
+  .group[data-orientation='vertical'] {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}

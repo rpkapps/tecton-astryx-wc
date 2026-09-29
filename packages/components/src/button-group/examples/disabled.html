@@ -1,0 +1,12 @@
+<!-- title: Disabled; description: One disabled member is skipped by the arrow keys. A disabled group disables every member; do not disable it to show a pending action. -->
+<div style="display: flex; flex-direction: column; align-items: flex-start; gap: var(--spacing-4)">
+  <tct-button-group label="One member disabled">
+    <tct-button label="Copy"></tct-button>
+    <tct-button label="Cut" disabled></tct-button>
+    <tct-button label="Paste"></tct-button>
+  </tct-button-group>
+  <tct-button-group label="Whole group disabled" disabled>
+    <tct-button label="Copy"></tct-button>
+    <tct-button label="Cut"></tct-button>
+  </tct-button-group>
+</div>

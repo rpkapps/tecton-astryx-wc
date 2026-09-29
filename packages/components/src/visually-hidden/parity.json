@@ -1,0 +1,63 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "visually-hidden",
+  "workPackage": "WP-F",
+  "entries": {
+    "core.visually-hidden": {
+      "tag": "tct-visually-hidden",
+      "status": "implemented",
+      "upstream": {
+        "name": "VisuallyHidden",
+        "path": "packages/core/src/VisuallyHidden/VisuallyHidden.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "as",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "Chose the rendered tag (span or div). The host of a custom element is one generic wrapper and the clipped box takes no room in the flow, so the tag has nothing to decide; aria-live and role go on the host."
+        },
+        {
+          "upstream": "ref",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "Framework ref forwarding; the custom element is its own reference."
+        },
+        {
+          "upstream": "aria-*, role, id, data-*, event handlers (BaseProps pass-through)",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "Native attributes and listeners on the host element; not component API."
+        }
+      ],
+      "hooks": [],
+      "differences": [
+        {
+          "id": "VISUALLYHIDDEN-01",
+          "type": "approved-api-difference",
+          "text": "The clip block sits on an inner box (part=base) rather than on the host: the host stays a generic inline wrapper that can carry aria-live, role and id, and the box is 1px with clip-path inset(50%) instead of clip: rect(0,0,0,0) (widest support is met by both; clip-path is the current form)."
+        },
+        {
+          "id": "VISUALLYHIDDEN-02",
+          "type": "approved-api-difference",
+          "text": "The clip declarations are !important in the reset layer, so no author rule (host style, ::part(base), a later layer) can displace them; upstream had no className/style for the same reason."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessibility] the visually-hidden utility (clip, 1px, nowrap) and live regions; [mwg:accessible-web-components] the host stays a generic wrapper, semantics come from the author."
+    }
+  }
+}

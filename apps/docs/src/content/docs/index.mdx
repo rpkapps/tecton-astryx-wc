@@ -1,0 +1,47 @@
+---
+title: Tecton Astryx Web Components
+description: Framework-independent Web Components implementing the Astryx design system with the Tecton visual system.
+template: splash
+hero:
+  tagline: The Astryx design system as framework-independent Web Components, in the Tecton visual system.
+  actions:
+    - text: Browse components
+      link: /components/
+      icon: right-arrow
+    - text: Parity status
+      link: /reference/parity-status/
+      variant: minimal
+---
+
+import {Card, CardGrid} from '@astrojs/starlight/components';
+import GuideList from '@/components/GuideList.astro';
+
+<CardGrid stagger>
+  <Card title="Custom elements, no framework" icon="puzzle">
+    Every public Astryx component as a `tct-*` custom element built on Lit, with native events, slots and
+    form participation. Use it from plain HTML, React, Vue, Angular or Svelte.
+  </Card>
+  <Card title="Tecton skin, Astryx behaviour" icon="approve-check">
+    Astryx's public API and accessibility behaviour, styled entirely from Tecton tokens with light and dark
+    modes, Figtree and IBM Plex Mono.
+  </Card>
+  <Card title="Honest about parity" icon="list-format">
+    Every upstream entry has a recorded status, a mapping for each prop, and disclosed differences on
+    [Differences and open items](/reference/differences-and-open-items/).
+  </Card>
+  <Card title="Built for agents too" icon="rocket">
+    The same metadata feeds [llms.txt](/llms.txt), [llms-full.txt](/llms-full.txt) and a machine-readable
+    [registry](/agent-registry.json) for coding agents.
+  </Card>
+</CardGrid>
+
+## Start here
+
+<GuideList />
+
+## Reference
+
+- [Components](/components/): every category and its implementation status
+- [Parity status](/reference/parity-status/): what is implemented, mapped and tested
+- [Differences and open items](/reference/differences-and-open-items/): approved differences, provisional values, open questions
+- [Design tokens](/reference/tokens/): every token with light and dark values

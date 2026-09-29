@@ -1,0 +1,225 @@
+{
+  "folder": "button",
+  "elements": {
+    "tct-button": {
+      "class": "TctButton",
+      "attributes": [
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "elevation",
+          "property": "elevation",
+          "type": "ButtonElevation",
+          "values": [
+            "none",
+            "low",
+            "med",
+            "high"
+          ],
+          "default": "'none'",
+          "reflects": true
+        },
+        {
+          "name": "formaction",
+          "property": "formAction",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "formenctype",
+          "property": "formEnctype",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "formmethod",
+          "property": "formMethod",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "formnovalidate",
+          "property": "formNoValidate",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "formtarget",
+          "property": "formTarget",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "href",
+          "property": "href",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "icon",
+          "property": "icon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "icon-only",
+          "property": "iconOnly",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "interruptible",
+          "property": "interruptible",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "loading",
+          "property": "loading",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "name",
+          "property": "name",
+          "type": "string",
+          "default": "''",
+          "reflects": true
+        },
+        {
+          "name": "rel",
+          "property": "rel",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "ButtonSize | undefined",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "target",
+          "property": "target",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "tooltip",
+          "property": "tooltip",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "type",
+          "property": "type",
+          "type": "ButtonType",
+          "values": [
+            "button",
+            "submit",
+            "reset"
+          ],
+          "default": "'button'",
+          "reflects": true
+        },
+        {
+          "name": "value",
+          "property": "value",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "variant",
+          "property": "variant",
+          "type": "ButtonVariant",
+          "values": [
+            "primary",
+            "secondary",
+            "ghost",
+            "destructive",
+            "outlined",
+            "text-only"
+          ],
+          "default": "'secondary'",
+          "reflects": true
+        },
+        {
+          "name": "width",
+          "property": "width",
+          "type": "string | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "busy",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "clickAction",
+          "type": "ButtonClickAction | undefined",
+          "readonly": false
+        },
+        {
+          "name": "form",
+          "type": "HTMLFormElement | null",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)",
+        "end",
+        "icon"
+      ],
+      "events": [
+        {
+          "name": "click",
+          "native": true
+        }
+      ],
+      "cssParts": [
+        "button",
+        "end",
+        "icon",
+        "label"
+      ],
+      "cssStates": [
+        "loading"
+      ],
+      "cssProperties": [
+        {
+          "name": "--button-focus-offset"
+        },
+        {
+          "name": "--button-icon-only-aspect"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "folder": "field-status",
+  "elements": {
+    "tct-field-status": {
+      "class": "TctFieldStatus",
+      "attributes": [
+        {
+          "name": "message",
+          "property": "message",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "type",
+          "property": "type",
+          "type": "InputStatusType",
+          "values": [
+            "error",
+            "warning",
+            "success",
+            "info"
+          ],
+          "default": "'error'",
+          "reflects": true
+        },
+        {
+          "name": "variant",
+          "property": "variant",
+          "type": "FieldStatusVariant",
+          "values": [
+            "attached",
+            "detached",
+            "tooltip"
+          ],
+          "default": "'attached'",
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "icon",
+        "status"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

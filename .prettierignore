@@ -4,13 +4,17 @@
 # Generated (never formatted or committed)
 **/generated/
 **/dist/
+**/.tsbuild/
 custom-elements.json
+packages/components/agent-registry.json
 packages/icons/src/lucide/
 packages/icons/src/lucide.ts
 packages/icons/src/tecton/*.ts
 packages/icons/src/tecton.ts
 reports/
 apps/docs/src/content/docs/components/
+apps/docs/src/content/docs/reference/
+apps/docs/public/
 .astro/
 node_modules/
 pnpm-lock.yaml

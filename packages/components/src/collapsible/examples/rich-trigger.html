@@ -1,0 +1,10 @@
+<!-- title: Rich trigger and chevron position; description: slot="trigger" for rich content; chevron-position="start" leads with the arrow (it mirrors in right-to-left). -->
+<div style="display: flex; flex-direction: column; gap: var(--spacing-4); max-inline-size: 28rem">
+  <tct-collapsible open>
+    <span slot="trigger">Billing <span style="color: var(--color-text-secondary)">(3 invoices)</span></span>
+    Invoices are listed here.
+  </tct-collapsible>
+  <tct-collapsible trigger="Leading chevron" chevron-position="start" open>
+    A leading arrow points into the row when closed and turns down when open.
+  </tct-collapsible>
+</div>

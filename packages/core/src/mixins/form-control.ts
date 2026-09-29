@@ -155,7 +155,7 @@ declare class FormControlShape {
   checkValidity(): boolean;
   reportValidity(): boolean;
   setCustomValidity(message: string): void;
-  /** Re-syncs the submitted value and validity now (runs after every update). */
+  /** Re-syncs the submitted value and validity now (runs after every update). For components. @internal */
   syncFormState(): void;
   /** The inner native control, if any: its validity is mirrored and it receives delegated ARIA and labelling. */
   protected get formControl(): HTMLElement | null;
@@ -394,6 +394,7 @@ export function FormControlMixin<T extends Constructor<TctElement>>(
       this.syncFormState();
     }
 
+    /** @internal */
     syncFormState(): void {
       this.internals.setFormValue(this.formValue(), this.formState());
       const control = this.formControl;

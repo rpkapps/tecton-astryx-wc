@@ -32,6 +32,14 @@ import type {TctDialogHeader} from './tct-dialog-header.js';
 const surfaceOf = (dialog: TctDialog): HTMLDialogElement =>
   dialog.shadowRoot!.querySelector<HTMLDialogElement>('dialog')!;
 
+/**
+ * A real pointer press on the backdrop: the top-left corner of the page is outside every dialog box, and
+ * `force` skips the actionability checks that a backdrop (which is not the click target) would fail.
+ */
+async function pressBackdrop(): Promise<void> {
+  await userEvent.click(document.documentElement, {position: {x: 5, y: 5}, force: true});
+}
+
 async function make(attributes = 'heading="Title"', body = '<p>Body</p>'): Promise<TctDialog> {
   const wrapper = await fixture<HTMLElement>(
     `<div><button id="opener">Open</button><tct-dialog ${attributes}>${body}</tct-dialog></div>`,
@@ -198,20 +206,8 @@ describe('tct-dialog: purpose (Dialog.test.tsx)', () => {
     dialog.open = true;
     await waitUntil(() => layerStack().length === 1, 'reopened');
     await animationsFinished(surfaceOf(dialog));
-    await userEvent.click(surfaceOf(dialog), {position: {x: 2, y: 2}});
-    // The click lands on the dialog's own box unless it is outside; press the backdrop instead.
-    if (dialog.open) {
-      const box = surfaceOf(dialog).getBoundingClientRect();
-      surfaceOf(dialog).dispatchEvent(
-        new PointerEvent('pointerdown', {
-          bubbles: true,
-          composed: true,
-          clientX: Math.max(2, box.left - 20),
-          clientY: box.top + 5,
-        }),
-      );
-    }
-    await waitUntil(() => !dialog.open, 'closed by the backdrop press');
+    await pressBackdrop();
+    await waitUntil(() => !dialog.open, 'closed by the backdrop press', 3000);
     expect(changes.events.at(-1)).toMatchObject({reason: 'outside'});
   });
 
@@ -219,16 +215,8 @@ describe('tct-dialog: purpose (Dialog.test.tsx)', () => {
     const dialog = await make('heading="T" open purpose="form"');
     await waitUntil(() => layerStack().length === 1, 'open');
     await animationsFinished(surfaceOf(dialog));
-    const box = surfaceOf(dialog).getBoundingClientRect();
-    surfaceOf(dialog).dispatchEvent(
-      new PointerEvent('pointerdown', {
-        bubbles: true,
-        composed: true,
-        clientX: Math.max(2, box.left - 20),
-        clientY: box.top + 5,
-      }),
-    );
-    await aTimeout(80);
+    await pressBackdrop();
+    await aTimeout(200);
     expect(dialog.open).toBe(true);
     await pressKeys('Escape');
     await waitUntil(() => !dialog.open, 'closed by Escape');
@@ -698,16 +686,8 @@ describe('tct-dialog: nesting and commands', () => {
     await userEvent.click(wrapper.querySelector('#open-inner')!);
     await waitUntil(() => inner.open, 'inner open');
     await animationsFinished(surfaceOf(inner));
-    const box = surfaceOf(inner).getBoundingClientRect();
-    surfaceOf(inner).dispatchEvent(
-      new PointerEvent('pointerdown', {
-        bubbles: true,
-        composed: true,
-        clientX: Math.max(2, box.left - 20),
-        clientY: box.top + 5,
-      }),
-    );
-    await waitUntil(() => !inner.open, 'inner dismissed');
+    await pressBackdrop();
+    await waitUntil(() => !inner.open, 'inner dismissed', 3000);
     expect(outer.open).toBe(true);
   });
 });

@@ -5,7 +5,12 @@ node_modules/
 **/generated/
 **/dist/
 custom-elements.json
+packages/components/agent-registry.json
 apps/docs/src/content/docs/components/
+apps/docs/src/content/docs/reference/
+apps/docs/public/llms.txt
+apps/docs/public/llms-full.txt
+apps/docs/public/agent-registry.json
 # Lucide icon data (D-009): one module per glyph plus the registry helper, from tools/icons/extract-lucide.ts
 packages/icons/src/lucide/
 packages/icons/src/lucide.ts
@@ -17,6 +22,8 @@ reports/
 
 # Build and tool caches
 *.tsbuildinfo
+# tsc -b type-check output (declarations for `pnpm typecheck` live here; `dist/` is only for `pnpm build`)
+.tsbuild/
 .vite/
 .astro/
 .eslintcache

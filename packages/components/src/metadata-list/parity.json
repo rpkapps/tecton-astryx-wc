@@ -1,0 +1,184 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "metadata-list",
+  "workPackage": "WP-5",
+  "entries": {
+    "core.metadata-list": {
+      "tag": "tct-metadata-list",
+      "status": "implemented",
+      "upstream": {
+        "name": "MetadataList",
+        "path": "packages/core/src/MetadataList/MetadataList.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "columns",
+          "kind": "prop",
+          "target": "columns",
+          "as": "attribute",
+          "default": "single",
+          "notes": "`single`, `multi` or a whole number, parsed from the attribute."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label-position",
+          "as": "attribute",
+          "notes": "The `label` config object is two scalar attributes: label-position (start | top; defaults top for several columns, start otherwise) and label-width (a number is px, a string any CSS length) (METADATA-02)."
+        },
+        {
+          "upstream": "maxNumOfItems",
+          "kind": "prop",
+          "target": "max-num-of-items",
+          "as": "attribute"
+        },
+        {
+          "upstream": "orientation",
+          "kind": "prop",
+          "target": "orientation",
+          "as": "attribute",
+          "reflect": true,
+          "default": "vertical"
+        },
+        {
+          "upstream": "title",
+          "kind": "prop",
+          "target": "heading",
+          "as": "attribute",
+          "notes": "`title` is a global attribute (A§7.1): `heading` attribute, or slot=\"heading\" for rich content."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(metadata-list) and the tokens."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "Any data-* attribute on the host is kept as authored."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "MetadataListContext",
+          "target": "--_span, --_item-columns, --_label-min",
+          "as": "css",
+          "notes": "Label position, orientation and column layout reach the items as inherited private custom properties (subgrid), so no context is needed (METADATA-03)."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Moves focus to the Show more toggle",
+          "when": "the list collapses (max-num-of-items exceeded)"
+        },
+        {
+          "keys": "Enter, Space",
+          "action": "Expands or collapses the list",
+          "when": "the toggle is focused"
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "METADATA-01",
+          "type": "approved-api-difference",
+          "text": "Semantics decision: a native <dl> cannot own custom-element children (its <dt>/<dd> would have to be direct children in one tree, and an item cannot be both a term and a definition). The list is role=list on an inner element, each pair is a listitem host (ElementInternals), and each pair's label and value are role=term and role=definition, so a screen reader announces \"list, N items\" and each label with its value. Upstream rendered <dl>/<dt>/<dd>."
+        },
+        {
+          "id": "METADATA-02",
+          "type": "approved-api-difference",
+          "text": "The `label` config object becomes the scalar attributes label-position and label-width (structured data is property-only, A§7.2, but this object is two scalars). `title` is `heading` because `title` is a global attribute."
+        },
+        {
+          "id": "METADATA-03",
+          "type": "approved-api-difference",
+          "text": "Each pair is its own element with its own shadow root, so the grid is shared through subgrid: every pair spans the list's label and value tracks (or its own two tracks for side labels with `multi`). The list publishes --_span, --_item-columns and --_label-min as inherited private custom properties; there is no context. Side labels with `multi` lay each pair out in its own two tracks (upstream put label and value in separate cells of an auto-fill grid)."
+        },
+        {
+          "id": "METADATA-04",
+          "type": "approved-api-difference",
+          "text": "The collapse state is `expanded` (attribute = initial state) with a cancelable tct-open-change intent event when the user toggles it; upstream kept it as internal state with no callback. Items past the cap are marked data-tct-collapsed on the light-DOM children and hidden with display: none (so they leave the accessibility tree). The toggle labels are the upstream @astryx.metadataList.showMore/showLess messages with show-more-label and show-less-label overrides."
+        },
+        {
+          "id": "METADATA-05",
+          "type": "tecton-visual",
+          "text": "The Show more toggle reads in --color-text-accent (the accent ink) because --color-accent is a fill in Tecton (tecton-astryx components.ts `metadata-list`, 2.2:1 otherwise)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "tools/eslint-plugin-tct/rules/no-create-tct-element.ts",
+          "reason": "The rule flags every `new Tct*()`, including the library event classes (`new TctOpenChangeEvent(...)`, which A§7.6 requires), so elements import them under an alias. Exclude class names ending in `Event`.",
+          "diff": "if (node.callee.type === 'Identifier' && /^Tct[A-Z]/.test(node.callee.name) && !node.callee.name.endsWith('Event')) { ... }"
+        }
+      ],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:css-layout] subgrid keeps labels aligned across independent items; [mwg:accessible-web-components] roles through ElementInternals, aria-controls within one root; [mwg:styling-web-components] inherited custom properties as the layout channel, ::slotted; [mwg:shadow-dom] slotchange."
+    },
+    "core.metadata-list-item": {
+      "tag": "tct-metadata-list-item",
+      "status": "implemented",
+      "upstream": {
+        "name": "MetadataListItem",
+        "path": "packages/core/src/MetadataList/MetadataListItem.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
+        {"upstream": "icon", "kind": "slot", "target": "icon", "as": "slot"},
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "Any data-* attribute on the host is kept as authored."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style on the host, ::part(label) and ::part(value)."
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "METADATAITEM-01",
+          "type": "approved-api-difference",
+          "text": "The host is the pair's wrapper and the `astryx-metadata-list-item` target (style the tag itself; hosts carry no paint of their own); the label and value are parts `label` and `value`. See METADATA-01 for the term/definition semantics."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "See core.metadata-list."
+    }
+  }
+}

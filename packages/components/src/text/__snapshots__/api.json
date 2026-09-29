@@ -1,0 +1,180 @@
+{
+  "folder": "text",
+  "elements": {
+    "tct-text": {
+      "class": "TctText",
+      "attributes": [
+        {
+          "name": "as",
+          "property": "as",
+          "type": "TextElement",
+          "values": [
+            "span",
+            "p",
+            "div",
+            "label",
+            "h1",
+            "h2",
+            "h3"
+          ],
+          "default": "'span'",
+          "reflects": false
+        },
+        {
+          "name": "color",
+          "property": "color",
+          "type": "TextColor | undefined",
+          "reflects": true
+        },
+        {
+          "name": "display",
+          "property": "display",
+          "type": "TextDisplay",
+          "values": [
+            "inline",
+            "block"
+          ],
+          "default": "'inline'",
+          "reflects": true
+        },
+        {
+          "name": "has-capsize",
+          "property": "hasCapsize",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "has-strikethrough",
+          "property": "hasStrikethrough",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "has-tabular-numbers",
+          "property": "hasTabularNumbers",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "justify",
+          "property": "justify",
+          "type": "TextJustify",
+          "values": [
+            "start",
+            "center",
+            "end"
+          ],
+          "default": "'start'",
+          "reflects": true
+        },
+        {
+          "name": "max-lines",
+          "property": "maxLines",
+          "type": "number",
+          "default": "0",
+          "reflects": true
+        },
+        {
+          "name": "no-truncate-tooltip",
+          "property": "noTruncateTooltip",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "TextSize | undefined",
+          "values": [
+            "4xs",
+            "3xs",
+            "2xs",
+            "xsm",
+            "sm",
+            "base",
+            "lg",
+            "xl",
+            "2xl",
+            "3xl",
+            "4xl"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "text-wrap",
+          "property": "textWrap",
+          "type": "TextWrap | undefined",
+          "values": [
+            "wrap",
+            "nowrap",
+            "balance",
+            "pretty"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "truncate-tooltip-placement",
+          "property": "truncateTooltipPlacement",
+          "type": "TooltipPlacement",
+          "values": [
+            "above",
+            "below",
+            "start",
+            "end"
+          ],
+          "default": "'above'",
+          "reflects": false
+        },
+        {
+          "name": "type",
+          "property": "type",
+          "type": "TextType",
+          "default": "'body'",
+          "reflects": true
+        },
+        {
+          "name": "weight",
+          "property": "weight",
+          "type": "TextWeight | undefined",
+          "values": [
+            "normal",
+            "medium",
+            "semibold",
+            "bold"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "word-break",
+          "property": "wordBreak",
+          "type": "WordBreak | undefined",
+          "values": [
+            "break-word",
+            "break-all"
+          ],
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "truncated",
+          "type": "boolean",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "text"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

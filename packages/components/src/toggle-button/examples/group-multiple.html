@@ -1,0 +1,12 @@
+<!-- title: Group, multiple; description: type="multiple" toggles buttons independently; value is an array. Vertical orientation stacks them. -->
+<div style="display: flex; gap: var(--spacing-8); align-items: flex-start">
+  <tct-toggle-button-group label="Text style" type="multiple" value="bold italic">
+    <tct-toggle-button value="bold" label="Bold"></tct-toggle-button>
+    <tct-toggle-button value="italic" label="Italic"></tct-toggle-button>
+    <tct-toggle-button value="underline" label="Underline"></tct-toggle-button>
+  </tct-toggle-button-group>
+  <tct-toggle-button-group label="Layers" type="multiple" orientation="vertical" value="grid">
+    <tct-toggle-button value="grid" label="Grid"></tct-toggle-button>
+    <tct-toggle-button value="labels" label="Labels"></tct-toggle-button>
+  </tct-toggle-button-group>
+</div>

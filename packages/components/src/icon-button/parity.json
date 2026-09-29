@@ -1,0 +1,122 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "icon-button",
+  "workPackage": "WP-3",
+  "entries": {
+    "core.icon-button": {
+      "tag": "tct-icon-button",
+      "status": "implemented",
+      "upstream": {
+        "name": "IconButton",
+        "path": "packages/core/src/IconButton/IconButton.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Accessible name and default tooltip; never painted."
+        },
+        {
+          "upstream": "icon",
+          "kind": "slot",
+          "target": "icon",
+          "as": "slot",
+          "notes": "Slot an icon, or set the `icon` attribute to a registered icon name."
+        },
+        {
+          "upstream": "variant",
+          "kind": "prop",
+          "target": "variant",
+          "as": "attribute",
+          "reflect": true,
+          "default": "secondary"
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md (explicit, then a size provider or group, then md)"
+        },
+        {
+          "upstream": "elevation",
+          "kind": "prop",
+          "target": "elevation",
+          "as": "attribute",
+          "reflect": true,
+          "default": "none"
+        },
+        {
+          "upstream": "isLoading",
+          "kind": "prop",
+          "target": "loading",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {"upstream": "tooltip", "kind": "prop", "target": "tooltip", "as": "attribute"},
+        {"upstream": "onClick", "kind": "event", "target": "click", "as": "native-event"},
+        {"upstream": "clickAction", "kind": "prop", "target": "clickAction", "as": "property"}
+      ],
+      "hooks": [],
+      "keyboard": [
+        {"keys": "Enter", "action": "Activates the button", "when": "not disabled or busy"},
+        {
+          "keys": "Space",
+          "action": "Activates the button, like Enter",
+          "when": "not disabled or busy"
+        }
+      ],
+      "form": {
+        "formAssociated": true,
+        "notes": "Inherited from tct-button: type=submit and type=reset take part in the form (submitter semantics)."
+      },
+      "differences": [
+        {
+          "id": "ICONBUTTON-01",
+          "type": "approved-api-difference",
+          "text": "Implemented as a subclass of tct-button that keeps `icon-only` on (writing false or removing the attribute has no effect). It inherits the whole tct-button API, as upstream's IconButtonProps extends ButtonProps minus isIconOnly, children and endContent; `icon-only`, the default slot and the `end` slot have no effect."
+        },
+        {
+          "id": "ICONBUTTON-02",
+          "type": "a11y-improvement",
+          "text": "The tooltip is on by default (the label), because a label that only reaches screen readers leaves sighted users without a hint; upstream documents adding one as a best practice."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/components/src/button/tct-button.ts",
+          "reason": "The inferred literal type 'tct-button' makes `class X extends TctButton { static tagName = 'x' }` a type error (TS2417); tct-icon-button casts today. Declare the field as a plain string so subclasses need no cast.",
+          "diff": "-  static override readonly tagName = 'tct-button';\n+  static override readonly tagName: string = 'tct-button';"
+        }
+      ],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components] (name through the delegated ARIA of the inner button). Behaviour, focus ring and tooltip are tct-button's."
+    }
+  }
+}
