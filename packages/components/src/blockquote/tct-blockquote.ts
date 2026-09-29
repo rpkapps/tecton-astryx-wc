@@ -22,7 +22,7 @@ import styles from './tct-blockquote.styles.css';
  * @upstream Blockquote
  * @slot - The quoted content.
  * @slot cite - A custom attribution (markup) rendered as the `<cite>` after the quotation.
- * @csspart base - The `<blockquote>` with the rule, the padding and the text colour (Astryx target `astryx-blockquote`).
+ * @csspart base - The `<blockquote>` with the rule, the padding and the text colour (theme target `blockquote`).
  * @csspart cite - The `<cite>` attribution.
  * @cloakDisplay block
  */

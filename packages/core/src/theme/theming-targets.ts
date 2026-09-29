@@ -1,14 +1,14 @@
 /**
- * Where a theme's component overrides land (A§6.3). Astryx themes address a component by the stable
- * class on its target element (`.astryx-button`). The web components expose the same targets as
- * shadow parts, so a component key (`button`, `hover-card`) resolves to a tag and a part:
+ * Where a theme's component overrides land (A§6.3). Themes address a component by a stable target key
+ * (`button`, `hover-card`); upstream that key is the class on the target element. The web components
+ * expose the same targets as shadow parts, so a component key resolves to a tag and a part:
  *
  * ```ts
  * resolveThemingTarget('button'); // {tag: 'tct-button', part: 'button'}
  * // components.button['variant:secondary'] -> tct-button[variant="secondary"]::part(button) {…}
  * ```
  *
- * The part is documented on each element with `@csspart <name> … (Astryx target \`astryx-<key>\`)`.
+ * The part is documented on each element with `@csspart <name> … (theme target \`<key>\`)`.
  * The table is read from the custom elements manifest with {@link themingTargetsFromCem} and
  * registered once; until then a key falls back to the convention `tct-<key>` with part `base`.
  */
@@ -36,7 +36,7 @@ const DEPRECATED_KEYS: Readonly<Record<string, string>> = {
 
 const registered = new Map<string, ThemingTarget>();
 
-/** Adds (or replaces) targets, keyed by component key (the Astryx target class minus `astryx-`). */
+/** Adds (or replaces) targets, keyed by component key (the theme target key). */
 export function registerThemingTargets(targets: Readonly<Record<string, ThemingTarget>>): void {
   for (const [key, target] of Object.entries(targets)) registered.set(key, target);
 }
@@ -64,11 +64,11 @@ interface CemModule {
   declarations?: unknown;
 }
 
-const TARGET_PATTERN = /Astryx targets? `astryx-([a-z0-9-]+)`/g;
+const TARGET_PATTERN = /theme targets? `([a-z0-9-]+)`/g;
 
 /**
  * Reads the targets out of a custom elements manifest: every `@csspart` whose description carries
- * `(Astryx target \`astryx-<key>\`)` maps `<key>` to that element and part. Register the result with
+ * `(theme target \`<key>\`)` maps `<key>` to that element and part. Register the result with
  * {@link registerThemingTargets}.
  */
 export function themingTargetsFromCem(manifest: unknown): Record<string, ThemingTarget> {

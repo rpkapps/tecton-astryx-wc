@@ -1,7 +1,7 @@
 // Copyright (c) Meta Platforms, Inc. and affiliates.
 
 /**
- * defineTheme: create a theme from a flat token map (upstream `defineTheme.ts`, adapted from Astryx, MIT).
+ * defineTheme: create a theme from a flat token map (upstream `defineTheme.ts`, adapted from the upstream design system, MIT).
  *
  * Adaptations resolve against the effective root axes and components, retaining
  * authored component pins without repeating root typography defaults.
@@ -65,7 +65,7 @@ export type ThemeIndicatorOverrides = Readonly<Record<string, unknown>>;
 // =============================================================================
 
 /**
- * A token name: a CSS custom property. Astryx types the closed set of its defaults; the set here is
+ * A token name: a CSS custom property. The upstream system types the closed set of its defaults; the set here is
  * the token pipeline's (\`tokens.css\`, checked by \`pnpm tokens:check\`), which a type cannot import,
  * so any \`--*\` name is accepted and unknown names are checked at generation time.
  */
@@ -273,7 +273,7 @@ export interface DefineThemeInput {
    * Component style overrides — keyed by component name (lowercase).
    * Each entry maps style keys to CSS property overrides, scoped under
    * the theme's `data-tct-theme` attribute via @scope. A key is the component key (the
-   * Astryx target minus `astryx-`, e.g. `button`, `hover-card`); it resolves to a tag and a part
+   * theme target key, e.g. `button`, `hover-card`); it resolves to a tag and a part
    * (`tct-button::part(button)`, see `resolveThemingTarget`), and `prop:value` keys select the reflected
    * attribute on the host (`[variant="secondary"]`).
    *

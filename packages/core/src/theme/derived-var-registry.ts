@@ -3,7 +3,7 @@
 /**
  * @file Derived variable registry: maps CSS properties to the public properties a component reads.
  *
- * Adapted from Astryx (MIT). Upstream expands standard CSS properties (borderRadius, padding) into
+ * Adapted from the upstream design system (MIT). Upstream expands standard CSS properties (borderRadius, padding) into
  * component-internal custom properties (`--_button-radius`) because its target element is not the
  * element that paints. Here the painting element is a shadow part, so a plain property on the part
  * (`tct-button::part(button) {border-radius}`) already reaches it and those private aliases are not
@@ -30,7 +30,7 @@ export interface DerivedVarEntry {
 }
 
 /**
- * Component to derived var mappings. Keys are component keys (the Astryx target minus `astryx-`).
+ * Component to derived var mappings. Keys are component keys (the theme target key).
  * Values are ordered arrays: earlier entries emit first when several share a property.
  */
 export const derivedVarRegistry: Record<string, DerivedVarEntry[]> = {

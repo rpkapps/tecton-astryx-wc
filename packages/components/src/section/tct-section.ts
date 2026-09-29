@@ -35,7 +35,7 @@ import styles from './tct-section.styles.css';
  * @tag tct-section
  * @upstream Section
  * @slot - The section's content.
- * @csspart base - The painted box: background, padding and divider rules (Astryx target `astryx-section`).
+ * @csspart base - The painted box: background, padding and divider rules (theme target `section`).
  * @cssprop --section-padding - Padding on all sides when no `padding*` attribute is set and no enclosing section propagates one. Default `var(--spacing-4)` (a theme sets it).
  * @cssprop --section-padding-inline - Inline (left/right) padding; overrides `--section-padding` on that axis.
  * @cssprop --section-padding-inline-start - Inline-start padding; overrides `--section-padding-inline`.

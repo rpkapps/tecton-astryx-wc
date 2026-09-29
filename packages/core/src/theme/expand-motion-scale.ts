@@ -30,7 +30,7 @@
  *
  * @example
  * ```
- * // Default Astryx motion scale
+ * // Default motion scale
  * { fast: 175, medium: 410, slow: 975, ratio: 0.75 }
  *
  * // Snappy theme (reduced motion budget)

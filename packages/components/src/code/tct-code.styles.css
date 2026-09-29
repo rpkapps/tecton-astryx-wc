@@ -4,7 +4,7 @@
  * radius come from tokens; the monospace family carries the numeric `font-size-adjust` so inline code
  * matches the x-height of the surrounding Figtree text; without support the fonts keep their natural
  * size and the metric-matched fallback faces cover the swap. Tecton: --color-background-muted
- * (tecton-astryx components.ts `code-block` / `kbd` surface).
+ * (the owner's React theme, components.ts `code-block` / `kbd` surface).
  * [mwg:visually-stable-mixed-fonts] [mwg:styling-web-components] [mwg:css]
  */
 @layer component {

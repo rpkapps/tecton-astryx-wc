@@ -86,7 +86,7 @@ export type TextWeightOverrides = Partial<
  *
  * @example
  * ```
- * // Default Astryx type scale
+ * // Default type scale
  * { base: 14, ratio: 1.2 }
  *
  * // With custom weights

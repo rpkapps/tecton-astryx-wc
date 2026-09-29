@@ -44,7 +44,7 @@ export type WidthBreakpointName = (typeof WIDTH_BREAKPOINT_NAMES)[number];
 /** A complete, validated map of viewport-width tier start points in CSS px. */
 export type WidthBreakpoints = Record<WidthBreakpointName, number>;
 
-/** The default Astryx viewport-width tier start points in CSS px. */
+/** The default viewport-width tier start points in CSS px. */
 export const DEFAULT_WIDTH_BREAKPOINTS: Readonly<WidthBreakpoints> = Object.freeze({
   sm: 640,
   md: 768,

@@ -25,7 +25,7 @@ import styles from './tct-divider.styles.css';
  * @tag tct-divider
  * @upstream Divider
  * @slot label - A custom label (markup) shown between two rules; the `label` attribute is the plain-text form.
- * @csspart base - The box that holds the rule segments and the label (Astryx target `astryx-divider`).
+ * @csspart base - The box that holds the rule segments and the label (theme target `divider`).
  * @csspart line - A rule segment; there are two when a label is shown.
  * @csspart label - The label between the rule segments.
  * @cssprop --container-padding-inline-start - Inline-start padding of the enclosing padded container, read by `full-bleed` (set by `tct-section` and `tct-card`).

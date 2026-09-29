@@ -163,7 +163,7 @@ export function ensureContrastTone(
 }
 
 /**
- * Expand a color scale config into Astryx color token overrides.
+ * Expand a color scale config into color token overrides.
  *
  * Only generates tokens that meaningfully derive from the accent color.
  * Tokens that are convention-bound (status colors, categorical hues,

@@ -19,7 +19,7 @@ import styles from './tct-center.styles.css';
  * @tag tct-center
  * @upstream Center
  * @slot - The content to centre.
- * @csspart base - The flex box that centres the content and carries the padding (Astryx target `astryx-center`).
+ * @csspart base - The flex box that centres the content and carries the padding (theme target `center`).
  * @cloakDisplay flex
  */
 export class TctCenter extends BoxPropsMixin(TctElement) {

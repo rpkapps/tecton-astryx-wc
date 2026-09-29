@@ -29,7 +29,7 @@ import styles from './tct-aspect-ratio.styles.css';
  * @tag tct-aspect-ratio
  * @upstream AspectRatio
  * @slot - The content that fills the box.
- * @csspart base - The ratio box that clips the content and takes the elliptical shape (Astryx target `astryx-aspect-ratio`).
+ * @csspart base - The ratio box that clips the content and takes the elliptical shape (theme target `aspect-ratio`).
  * @cloakDisplay block
  */
 export class TctAspectRatio extends TctElement {

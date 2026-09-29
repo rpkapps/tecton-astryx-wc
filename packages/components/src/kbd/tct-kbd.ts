@@ -18,7 +18,7 @@ import styles from './tct-kbd.styles.css';
  * @summary Keyboard shortcut rendered as key badges, with a spoken accessible name.
  * @tag tct-kbd
  * @upstream Kbd
- * @csspart base - The group that holds the badges and carries the accessible name (Astryx target `astryx-kbd`).
+ * @csspart base - The group that holds the badges and carries the accessible name (theme target `kbd`).
  * @csspart key - One key badge (a `<kbd>`).
  * @cloakDisplay inline-flex
  */

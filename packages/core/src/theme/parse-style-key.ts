@@ -1,6 +1,6 @@
 /**
  * Turns a component style key into the attribute selectors of the element it targets (upstream
- * `utils/parseStyleKey.ts` and `themeDataAttributeName`, adapted from Astryx, MIT).
+ * `utils/parseStyleKey.ts` and `themeDataAttributeName`, adapted from the upstream design system, MIT).
  *
  * The web components reflect their visual props and runtime states as attributes on the host, so a
  * key needs no `data-` prefix:

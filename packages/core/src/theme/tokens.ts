@@ -6,7 +6,7 @@
  * @output Server-safe token helpers for resolving theme values and building CSS var references
  * @position Public theme utility; backs useTheme and external styling-library adapters
  *
- * Use these helpers when code outside React hooks needs Astryx token values:
+ * Use these helpers when code outside React hooks needs token values:
  * build-time theme adapters, chart configuration, canvas/SVG rendering, tests,
  * or plain JS theme objects for other styling libraries.
  *
@@ -40,11 +40,11 @@ export interface ResolveThemeTokenOptions extends ResolveThemeTokensOptions {
 }
 
 /**
- * Return a CSS custom property reference for an Astryx token name.
+ * Return a CSS custom property reference for a token name.
  *
  * Useful for non-StyleX styling-library configs (Panda, Chakra, MUI,
  * Emotion, styled-components, UnoCSS, CSS Modules) where the value should
- * stay connected to the active Astryx theme through the CSS cascade.
+ * stay connected to the active theme through the CSS cascade.
  *
  * @example
  * ```ts
@@ -65,15 +65,18 @@ export function tokenVar(name: TokenName | (string & {})): string {
  * defaults (`registerTokenDefaults`), read when the map is enumerated, so it stays correct
  * whenever they are registered; any `--*` name reads as its reference.
  */
-export const tokenVars: Record<TokenName, string> = new Proxy({}, {
-  get: (_target, name) => (typeof name === 'string' ? tokenVar(name) : undefined),
-  has: (_target, name) => typeof name === 'string' && name in tokenDefaults,
-  ownKeys: () => Object.keys(tokenDefaults),
-  getOwnPropertyDescriptor: (_target, name) =>
-    typeof name === 'string' && name in tokenDefaults
-      ? {value: tokenVar(name), enumerable: true, configurable: true}
-      : undefined,
-});
+export const tokenVars: Record<TokenName, string> = new Proxy(
+  {},
+  {
+    get: (_target, name) => (typeof name === 'string' ? tokenVar(name) : undefined),
+    has: (_target, name) => typeof name === 'string' && name in tokenDefaults,
+    ownKeys: () => Object.keys(tokenDefaults),
+    getOwnPropertyDescriptor: (_target, name) =>
+      typeof name === 'string' && name in tokenDefaults
+        ? {value: tokenVar(name), enumerable: true, configurable: true}
+        : undefined,
+  },
+);
 
 /**
  * Split the arguments of a CSS function body on the first top-level comma.
@@ -369,7 +372,7 @@ function resolveReferences(raw: Record<string, string>): Record<string, string> 
 }
 
 /**
- * Resolve all Astryx token values for a theme and effective color mode.
+ * Resolve all token values for a theme and effective color mode.
  *
  * The result starts with `tokenDefaults`, applies `theme.tokens`, then
  * reapplies `theme.__inputTokens` when available so explicit tuple overrides
@@ -412,7 +415,7 @@ export function resolveThemeTokens(
   return resolveReferences(resolved);
 }
 
-/** Resolve one Astryx token value for a theme and effective color mode. */
+/** Resolve one token value for a theme and effective color mode. */
 export function resolveThemeToken(
   theme: DefinedTheme | null | undefined,
   name: TokenName | (string & {}),

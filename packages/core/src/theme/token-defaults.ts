@@ -1,6 +1,6 @@
 /**
  * The token defaults a theme resolves against (upstream `tokens.stylex.ts` defaults merged into
- * `tokenDefaults`). Astryx ships its defaults as TypeScript constants; here the values live in one
+ * `tokenDefaults`). The upstream system ships its defaults as TypeScript constants; here the values live in one
  * place, the token pipeline (`@tecton-astryx/tokens`, `tokens.css`), and this module is the seam that
  * lets the runtime theme code see them without `core` depending on the tokens package.
  *

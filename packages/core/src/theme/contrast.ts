@@ -1,6 +1,6 @@
 /**
  * WCAG 2.x relative luminance and contrast ratios (upstream `theme/contrast.ts`, adapted from
- * Astryx, MIT). Dependency-free; backs the contrast guarantees of generated colour tokens
+ * the upstream design system, MIT). Dependency-free; backs the contrast guarantees of generated colour tokens
  * (1.4.3 text >= 4.5:1, 1.4.11 non-text >= 3:1) and `tct-media-theme mode="auto"`.
  *
  * Semi-transparent foregrounds are composited over their backdrop in gamma-encoded sRGB (matching

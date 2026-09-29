@@ -1,6 +1,6 @@
 /**
  * Picks the media context a surface wants by measuring what the browser actually painted (upstream
- * `hooks/useAutoMediaMode.ts`, adapted from Astryx, MIT). It powers `tct-media-theme mode="auto"`.
+ * `hooks/useAutoMediaMode.ts`, adapted from the upstream design system, MIT). It powers `tct-media-theme mode="auto"`.
  *
  * Why measure: `--color-background-inverted` is not required to be inverted. A theme can define it
  * as a pale grey, and a hard-coded `mode="dark"` then paints light text on it at 1.25:1. The

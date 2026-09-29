@@ -1,6 +1,6 @@
 /*
- * tct-kbd. An inline group of key badges. The badge is the Astryx kbd (spacing-5 tall, inner radius,
- * 2px emphasised bottom edge, supporting type) on the Tecton muted surface (tecton-astryx
+ * tct-kbd. An inline group of key badges. The badge is the upstream kbd (spacing-5 tall, inner radius,
+ * 2px emphasised bottom edge, supporting type) on the Tecton muted surface (the owner's React theme
  * components.ts `kbd`). The bottom edge is decorative depth, not the badge's only boundary, so the
  * 2.2:1 border-emphasized role is allowed (D-013 Q-05).
  * [mwg:styling-web-components] host rules, parts; [mwg:css] logical properties

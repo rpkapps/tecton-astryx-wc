@@ -18,7 +18,7 @@ import styles from './tct-code.styles.css';
  * @tag tct-code
  * @upstream Code
  * @slot - The code text.
- * @csspart base - The `<code>` element that carries the background, padding and monospace type (Astryx target `astryx-code`).
+ * @csspart base - The `<code>` element that carries the background, padding and monospace type (theme target `code`).
  * @cloakDisplay inline
  */
 export class TctCode extends TctElement {

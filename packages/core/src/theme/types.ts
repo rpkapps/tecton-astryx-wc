@@ -1,5 +1,5 @@
 /**
- * Types shared by the theme utilities (upstream `theme/types.ts`, adapted from Astryx, MIT). The text
+ * Types shared by the theme utilities (upstream `theme/types.ts`, adapted from the upstream design system, MIT). The text
  * and prose vocabulary (`TextType`, `TextColor`, …) belongs to `tct-text` and `tct-heading` and lives in
  * their folders.
  */

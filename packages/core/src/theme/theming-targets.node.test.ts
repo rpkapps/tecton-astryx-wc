@@ -112,15 +112,15 @@ describe('themingTargetsFromCem', () => {
           {
             tagName: 'tct-button',
             cssParts: [
-              {name: 'button', description: 'The native button. Astryx target `astryx-button`.'},
+              {name: 'button', description: 'The native button (theme target `button`).'},
               {name: 'icon', description: 'The leading icon wrapper.'},
             ],
           },
           {
             tagName: 'tct-selector',
             cssParts: [
-              {name: 'base', description: 'The field (Astryx target `astryx-selector`).'},
-              {name: 'popup', description: 'The list (Astryx target `astryx-selector-popup`).'},
+              {name: 'base', description: 'The field (theme target `selector`).'},
+              {name: 'popup', description: 'The list (theme target `selector-popup`).'},
             ],
           },
           {tagName: 'tct-empty'},

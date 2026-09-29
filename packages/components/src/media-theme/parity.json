@@ -251,7 +251,7 @@
         },
         {
           "file": "tools/vite-plugin-tct-css.ts",
-          "reason": "Light-DOM families ship `<tag>.light.css`, but only `*.styles.css` is compiled into a Lit CSSResult, so the element imports it with Vite `?raw` (declared in media-theme.env.d.ts) and wraps it in unsafeCSS(). Either compile `*.light.css` to a CSSResult like `*.styles.css` or bless the `?raw` import; the light-dom.css generator (M6) reads the same file."
+          "reason": "Light-DOM families ship `<tag>.light.css` (it feeds the generated light-dom.css), but only `*.styles.css` is compiled into a Lit CSSResult. tct-media-theme therefore repeats its two-line sheet in media-theme.light.ts, and a node test keeps them equal (a `?raw` import broke the build: the emitted media-theme.light.js has no .d.ts). Compiling `*.light.css` to a CSSResult like `*.styles.css` would remove the duplicate for every light-DOM family."
         }
       ],
       "sizeBudgetKb": null,

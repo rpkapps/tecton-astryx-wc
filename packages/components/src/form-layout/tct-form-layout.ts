@@ -28,7 +28,7 @@ import styles from './tct-form-layout.styles.css';
  * @tag tct-form-layout
  * @upstream FormLayout
  * @slot - The form fields to arrange.
- * @csspart base - The container that holds the fields (Astryx target `astryx-form-layout`).
+ * @csspart base - The container that holds the fields (theme target `form-layout`).
  * @cloakDisplay block
  */
 export class TctFormLayout extends TctElement {

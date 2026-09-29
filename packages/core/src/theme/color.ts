@@ -1,6 +1,6 @@
 /**
  * Shared colour parsing and formatting primitives for the theme utilities (upstream
- * `utils/color.ts`, adapted from Astryx, MIT; see THIRD-PARTY-NOTICES.md).
+ * `utils/color.ts`, adapted from the upstream design system, MIT; see THIRD-PARTY-NOTICES.md).
  *
  * Pure and Node-safe: nothing here touches the DOM. Values the parser cannot evaluate (`var()`,
  * `oklch()`, unknown names) return `null` so callers keep the original expression instead of guessing.

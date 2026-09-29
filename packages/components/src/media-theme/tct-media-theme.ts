@@ -1,4 +1,4 @@
-import {ReactiveElement, unsafeCSS, type PropertyValues} from 'lit';
+import {ReactiveElement, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
 import {themeContext, type ThemeContextValue} from '@tecton-astryx/core/context/keys.js';
 import {ContextConsumer, ContextProvider} from '@tecton-astryx/core/context/protocol.js';
@@ -10,7 +10,7 @@ import {
   type DetectedMediaMode,
 } from '@tecton-astryx/core/theme/auto-media-mode.js';
 import {devWarn} from '@tecton-astryx/core/utils/dev.js';
-import lightCss from './media-theme.light.css?raw';
+import {mediaThemeLightStyles} from './media-theme.light.js';
 import {
   MEDIA_THEME_ATTRIBUTE,
   MEDIA_THEME_FALLBACKS,
@@ -21,8 +21,6 @@ import {
 
 /** Attributes whose change can move a surface's painted colour or its theme. */
 const WATCHED_ATTRIBUTES = ['style', 'class', 'data-theme', MEDIA_THEME_ATTRIBUTE, 'hidden'];
-
-const lightStyles = unsafeCSS(lightCss);
 
 /**
  * Gives its content the token context of a surface whose luminance differs from the page: media
@@ -88,7 +86,7 @@ export class TctMediaTheme extends TctElement {
 
   override connectedCallback(): void {
     super.connectedCallback();
-    adoptLightDomStyles(this, lightStyles);
+    adoptLightDomStyles(this, mediaThemeLightStyles);
     this.#apply();
     if (this.mode === 'auto') {
       this.#watch();
