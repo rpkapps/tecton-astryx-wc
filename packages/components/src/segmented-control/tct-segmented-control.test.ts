@@ -598,6 +598,13 @@ describe('tct-segmented-control: RTL and forced colours', () => {
     await pressKeys('Shift+Tab');
     await pressKeys('Tab');
     expect(getComputedStyle(painted).outlineStyle).not.toBe('none');
+    // The keyboard hint fades in on the first keyboard focus: axe must not sample it mid-fade.
+    await waitUntil(
+      () =>
+        element.shadowRoot!.querySelectorAll('.keyboard-hint').length === 0 ||
+        getComputedStyle(element.shadowRoot!.querySelector('.keyboard-hint')!).opacity === '1',
+      'keyboard hint settled',
+    );
     await expectAccessible(element);
   });
 });
