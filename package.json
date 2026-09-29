@@ -30,7 +30,7 @@
     "docs:dev": "node tools/run-if-exists.ts apps/docs/astro.config.mjs -- pnpm --filter @tecton-wc/docs dev",
     "docs:public-check": "node tools/docs/public-check.ts",
     "docs:build": "pnpm docs:public-check && node tools/run-if-exists.ts apps/docs/astro.config.mjs -- pnpm --filter @tecton-wc/docs build",
-    "docs:mcp": "TCT_REQUIRE_DOCS_BUILD=1 vitest run --project node packages/cli/src/docs-endpoint.node.test.ts",
+    "docs:mcp": "node tools/docs/test-mcp.ts",
     "docs:a11y": "node tools/run-if-exists.ts tools/docs/a11y.ts -- node tools/docs/a11y.ts",
     "check": "node tools/check.ts",
     "test:tier2": "node tools/test-tier2.ts",

@@ -34,7 +34,7 @@ A package that ships its own elements can make them discoverable by the CLI with
 ```bash
 tct discover                          # the library, then every installed package that ships a registry
 tct discover @acme/widgets            # one package
-tct discover @acme/widgets/acme-card --dense   # one of its elements
+tct discover @acme/widgets/acme-badge --dense   # one of its elements
 tct discover card                     # search element names across all packages
 ```
 
@@ -45,7 +45,7 @@ tct discover card                     # search element names across all packages
 ```text
 name:       @acme/widgets
 version:    1.0.0
-components: acme-card
+components: acme-badge
 
 Usage: tct discover @acme/widgets/<tct-element>
 ```
@@ -62,10 +62,10 @@ export const prerender = false;
 export const ALL = ({request}: {request: Request}) => handleMcpRequest(registry, request);
 ```
 
-A `tools/call` of `search` with the query `card` then answers from your registry only (a real response for the registry above, with the `import` field left out because the sample registry is a renamed copy):
+A `tools/call` of `search` with the query `badge` then answers from your registry only (a real response for the registry above, with the `import` field left out because the sample registry is a renamed copy):
 
 ```json
-{"result":{"content":[{"type":"text","text":"[{\"type\":\"component\",\"name\":\"acme-card\",\"displayName\":\"Card\",\"category\":\"Feedback & Status\",\"description\":\"highlights a status or category tag, NOT for general metadata\",\"keyAttributes\":[\"variant: neutral|info|success|warning|error|blue|cyan|green|orange|pink|purple|red|teal|yellow\",\"label: string\"],\"hint\":\"Use get(\\\"acme-card\\\") for the full API, usage and examples.\"}]"}]},"jsonrpc":"2.0","id":1}
+{"result":{"content":[{"type":"text","text":"[{\"type\":\"component\",\"name\":\"acme-badge\",\"displayName\":\"Badge\",\"category\":\"Feedback & Status\",\"description\":\"highlights a status or category tag, NOT for general metadata\",\"keyAttributes\":[\"variant: neutral|info|success|warning|error|blue|cyan|green|orange|pink|purple|red|teal|yellow\",\"label: string\"],\"hint\":\"Use get(\\\"acme-badge\\\") for the full API, usage and examples.\"}]"}]},"jsonrpc":"2.0","id":1}
 ```
 
 Only a Node process (or another runtime that renders on demand) can answer the POST; a static host serves your pages but not `/mcp`.
