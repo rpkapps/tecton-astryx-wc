@@ -29,15 +29,21 @@ function rpcError(
   });
 }
 
-/** What a browser or `curl` sees at the endpoint: which tools it serves and how to call them. */
-export function mcpServerCard(): Response {
+/**
+ * What a browser or `curl` sees at the endpoint: which tools it serves and how to call them. A static host
+ * cannot answer a POST, so it passes `{remote: false}` and the card points at the stdio server instead.
+ */
+export function mcpServerCard(options: {remote?: boolean} = {}): Response {
+  const remote = options.remote ?? true;
   return new Response(
     JSON.stringify(
       {
         name: MCP_SERVER_NAME,
         version: VERSION,
-        transport: 'streamable-http (stateless, JSON responses)',
-        usage: 'POST JSON-RPC 2.0 messages to this URL (initialize, tools/list, tools/call).',
+        transport: remote ? 'streamable-http (stateless, JSON responses)' : 'stdio',
+        usage: remote
+          ? 'POST JSON-RPC 2.0 messages to this URL (initialize, tools/list, tools/call).'
+          : 'This site is static and cannot answer POST requests. Run the same server locally: `npx --no-install tct mcp` (stdio), with @tecton-wc/cli installed in the project.',
         tools: [SEARCH_TOOL, GET_TOOL].map((tool) => ({
           name: tool.name,
           description: tool.description,

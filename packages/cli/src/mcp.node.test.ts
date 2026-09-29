@@ -309,6 +309,13 @@ describe('over HTTP (the docs-site route)', () => {
       ((await card.json()) as {tools: {name: string}[]}).tools.map((tool) => tool.name),
     ).toEqual(['search', 'get']);
     expect(((await mcpServerCard().json()) as {name: string}).name).toBe('tecton-wc');
+    // A static host cannot take a POST: its card points at the stdio server instead.
+    const staticCard = (await mcpServerCard({remote: false}).json()) as {
+      transport: string;
+      usage: string;
+    };
+    expect(staticCard.transport).toBe('stdio');
+    expect(staticCard.usage).toMatch(/npx --no-install tct mcp/);
     const deleted = await handleMcpRequest(
       registry,
       new Request('http://docs.local/mcp', {method: 'DELETE'}),

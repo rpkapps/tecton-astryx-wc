@@ -86,7 +86,13 @@ interface ProjectScan {
 }
 
 /** A bounded scan of the project's own sources for the stylesheet, registrations and `tct-*` tags. */
-export function scanProject(cwd: string): ProjectScan {
+export /** A path relative to the project, or the absolute one when it lies outside it. */
+function shortPath(cwd: string, path: string): string {
+  const rel = relative(cwd, path);
+  return rel === '' || rel.startsWith('..') ? path : rel;
+}
+
+function scanProject(cwd: string): ProjectScan {
   const scan: ProjectScan = {
     files: 0,
     stylesheet: [],
@@ -223,7 +229,7 @@ function runDoctor(context: CommandContext): Outcome {
       id: 'registry',
       label: 'Agent registry',
       status: 'pass',
-      message: `Read ${relative(cwd, loaded.path) || loaded.path} (${loaded.source}; schema ${loaded.registry.schemaVersion}, ${loaded.registry.components.length} components, ${loaded.registry.controllers.length} controllers).`,
+      message: `Read ${shortPath(cwd, loaded.path)} (${loaded.source}; schema ${loaded.registry.schemaVersion}, ${loaded.registry.components.length} components, ${loaded.registry.controllers.length} controllers).`,
     });
   } catch (error) {
     add({
@@ -377,7 +383,10 @@ function runDoctor(context: CommandContext): Outcome {
     } else {
       const {block} = expectedBlock(context);
       const inspection = inspectAgentDocs(cwd, block);
-      const path = inspection.files.map((file) => file.path).join(', ');
+      const path = inspection.files
+        .filter((file) => inspection.status === 'current' || file.state !== 'current')
+        .map((file) => file.path)
+        .join(', ');
       add(
         inspection.status === 'current'
           ? {

@@ -3,18 +3,11 @@ title: CLI Reference
 description: The tct command-line interface - commands, output modes, the JSON envelope and error codes, for people, scripts and AI agents.
 sidebar:
   order: 15
-  badge:
-    text: Planned
-    variant: caution
 ---
-
-:::caution[Planned]
-The `tct` CLI is not available yet. This page documents the specified surface so that other pages can link to it. Command names and the stable parts (the output modes, the envelope shape and the error-code rules) are fixed; individual flags are confirmed by `tct <command> --help` and by a generated reference when the CLI ships, and this page will be replaced by an equivalent generated one.
-:::
 
 ## Overview
 
-`tct` will be the primary interface for working with the design system, for people and for machines: element documentation, tokens, docs topics, agent-context generation and an MCP server, all through terminal commands, a typed JSON API or programmatic imports. It will live in the private `@tecton-wc/cli` package and read one generated agent registry (the Custom Elements Manifest, the docs frontmatter with `keywords`, `dense` and `related`, the examples, the tokens and the docs topics). That registry already exists: it is published as [agent-registry.json](/agent-registry.json). The docs site and the MCP route read the same registry, so the three surfaces cannot disagree.
+`tct` is the primary interface for working with the design system from a terminal, for people and for machines: element documentation, docs topics, agent-context generation, layout tools and an MCP server, through terminal commands, a typed JSON API or programmatic imports. It lives in the private `@tecton-wc/cli` package and reads one generated agent registry (the Custom Elements Manifest, the docs frontmatter with `keywords`, `dense` and `related`, the examples, the tokens, the controllers and the docs topics). The registry is published as [agent-registry.json](/agent-registry.json) and exported as `@tecton-wc/components/agent-registry.json`. The docs site and the MCP server read the same registry, so the surfaces cannot disagree.
 
 ```bash
 tct --help
@@ -23,75 +16,149 @@ tct component tct-dialog
 tct docs tokens
 ```
 
-Add an npm script alias (`"tct": "tct"`) so that scripts and agents use one stable command, and see [Working with AI](../working-with-ai/#the-tct-pattern) for why.
+The CLI needs Node.js 22.18 or later. It finds the registry in this order: `--registry <file>`, `$TCT_AGENT_REGISTRY`, the `@tecton-wc/components` installed for your project, the workspace copy, then the copy it depends on. So the answers match the version your project runs. Add an npm script alias (`"tct": "tct"`) so that scripts and agents use one stable command, and see [Working with AI](../working-with-ai/#the-tct-pattern) for why.
 
 ## Commands
 
-| Command                      | What it does                                                                                                                                                  |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `component [tag]`            | With no argument, lists elements. With a tag, prints its documentation. Views for the attributes and properties, the examples and the source                    |
-| `docs [topic] [section]`     | With no argument, lists the docs topics (every page in these guides). With a topic, prints it; with a section, prints just that section                       |
-| `search <query>`             | Searches elements, controllers and docs in one ranked list, tagged with the follow-up command to run                                                          |
-| `discover`                   | Finds elements and packages that other installed packages contribute                                                                                          |
-| `controllers [name]`         | Lists the runtime controllers and utilities (the counterpart of the React hooks) or prints one                                                                |
-| `doctor`                     | Diagnoses a project's setup: packages, stylesheet, registered elements and the freshness of the agent docs                                                    |
-| `gap-report`                 | Routes a design-system gap (a missing element, attribute, token or icon) to the package that owns it                                                          |
-| `layout`                     | Generates and checks layouts from a compressed expression: `layout grammar` prints the grammar, `layout check` validates an expression, `layout expand` produces `tct-*` markup |
-| `init --features agents`     | Generates agent context: `--agent claude`, `--agent cursor` or `--agent codex`, and `--agent-docs-path <file>` for a custom location                            |
-| `upgrade`                    | Detects a stale generated agent-docs block. `upgrade --apply` refreshes it without touching your own edits                                                    |
-| `mcp`                        | Starts the MCP server over stdio, exposing `search(query)` and `get(name)`                                                                                    |
+| Command                  | What it does                                                                                                                                                                  |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `component [name]`       | With no name, lists elements by category (`--list`, `--category`). With a name, prints its docs; `--props`, `--example <id>`, `--examples`, `--styling` and `--source` narrow it |
+| `docs [topic] [section]` | With no topic, lists the guides (every page in these guides). With a topic, prints it (`--index` lists its sections); with a section, prints just that section                  |
+| `search <query...>`      | Searches elements, controllers and docs in one ranked list, tagged with the follow-up command to run (`--type component\|controller\|doc`, `--limit`, `--verbose`)              |
+| `discover [query]`       | Lists the library and every installed package that ships an agent registry; browses one package or one of its elements                                                         |
+| `controllers [name]`     | Lists the runtime controllers and utilities of `@tecton-wc/core` (the counterpart of the React hooks) or prints one (`--category`, `--members`)                                  |
+| `doctor`                 | Diagnoses a project's setup: Node, registry, packages, stylesheet, unknown `tct-*` tags and the freshness of the agent docs. Read-only                                          |
+| `gap-report [element]`   | Routes a design-system gap (a missing element, variant, layout or docs page) to the package that owns it (`--category`, `--reason`, `--list-categories`)                        |
+| `layout`                 | `layout grammar` prints the grammar, `layout check` validates an expression, `layout expand` produces `tct-*` markup                                                            |
+| `init --features agents` | Generates agent context: `--agent claude\|cursor\|codex\|all`, `--agent-docs-path <file>`, `--dry-run` and `--remove-agents`                                                    |
+| `upgrade`                | Detects a stale generated agent-docs block. `--apply` refreshes it without touching your own edits; `--check` is a CI gate                                                      |
+| `mcp`                    | Starts the MCP server over stdio, exposing `search(query)` and `get(name)`                                                                                                       |
+| `manifest`               | Prints the whole CLI surface (commands, options, examples, exit codes, response types) as one JSON document                                                                      |
 
-Search results are ranked by relevance, with name and keyword matches outranking incidental mentions in prose, and they can be restricted to one domain. A search result looks like this:
+Text output is a set of aligned `key: value` records separated by a blank line, so a field can be grepped (`tct search button | grep "^command:"`). A search result:
 
 ```text
-$ tct search button
+$ tct search dialog --limit 2
+Results for "dialog" (2 of 50)
 
-Results for "button":
+name:        tct-dialog
+domain:      component
+category:    Overlay
+import:      @tecton-wc/components/dialog
+description: modal overlay on native dialog that blocks page interaction until the user responds; purposes, nesting, focus return, openDialog()
+command:     tct component tct-dialog
 
-  [element]  tct-button
-             Triggers an action when activated. Use it for form submission, confirmation…
-             → tct component tct-button
-
-  [element]  tct-icon-button
-             A button that shows only an icon…
-             → tct component tct-icon-button
+name:        tct-alert-dialog
+domain:      component
+category:    Overlay
+import:      @tecton-wc/components/alert-dialog
+description: modal confirmation for destructive or irreversible actions (delete, revoke access, discard changes); ...
+command:     tct component tct-alert-dialog
 ```
+
+Search ranks a name match above a keyword match above a mention in prose, understands typos and synonyms ("modal", "popup" and "confirm" all reach the dialogs), and puts a whole-phrase match first. `tct <command> --help` documents one command in full; `tct help <command>` is the same.
+
+### Layout expressions
+
+`tct layout` is a compressed way to write layouts that expands to validated `tct-*` markup, so an agent writes a line instead of a page and cannot invent an element or attribute. `tct layout grammar` prints the cheatsheet for the installed version, including the aliases (`V` is `tct-vstack`, `H` is `tct-hstack`, `B` is `tct-button`, `Tx` is `tct-text`, and so on; tags and short names are always valid). Expressions have a compact form and an outline form (indentation is nesting); the form is detected, or forced with `--form`.
+
+```text
+$ tct layout check 'V[gap=4] > (Tx"Title" + H[gap=2] > (B.primary"Save" + B"Cancel"))'
+[ok] Valid (parsed as compact)
+
+compact
+
+V[gap=4] > (Tx"Title" + H[gap=2] > (B.primary"Save" + B"Cancel"))
+
+outline
+
+V gap=4
+  Tx "Title"
+  H gap=2
+    B.primary "Save"
+    B "Cancel"
+```
+
+```html
+<!-- $ tct layout expand 'V[gap=4] > (Tx"Title" + H[gap=2] > (B.primary"Save" + B"Cancel"))' -->
+<tct-vstack gap="4">
+  <tct-text>Title</tct-text>
+  <tct-hstack gap="2">
+    <tct-button variant="primary" label="Save"></tct-button>
+    <tct-button label="Cancel"></tct-button>
+  </tct-hstack>
+</tct-vstack>
+
+<script type="module">
+  import '@tecton-wc/components/button';
+  import '@tecton-wc/components/hstack';
+  import '@tecton-wc/components/text';
+  import '@tecton-wc/components/vstack';
+</script>
+```
+
+A mistake is reported with its line and column and the closest valid names, and nothing is guessed:
+
+```text
+$ tct layout check 'V > (Tx"Title" + Btnn"Save")'
+[fail] Invalid (1 error):
+
+- line 1: Unknown element or alias 'Btnn'
+  did you mean: Bn?
+```
+
+`layout expand` takes the expression as an argument, from a file (`--file`) or from standard input (`-`); an optional path writes the markup there and refuses to overwrite an existing file without `--force`. A trigger with `opens=#id` gets a `data-opens` attribute and a small wiring script that opens the overlay, `fill` on a stack child wraps it in `tct-stack-item`, and repeats (`*N`) and elements are capped so a mistyped count cannot exhaust memory.
+
+### Agent docs
+
+`init` and `upgrade` manage a block of generated text between `<!-- TCT:START -->` and `<!-- TCT:END -->` markers. The block records a hash of its own body, which gives each file a state: `current`, `stale` (an unedited older block), `edited` (someone changed the body; skipped unless `--force`) or `malformed` (duplicate or unterminated markers; reported for repair, never guessed at). Text outside the markers is never read as part of the block and never rewritten. See [Working with AI](../working-with-ai/#quick-start) for the workflow.
 
 ### Not in the first release
 
-Commands beyond agent support (`theme` for building and exporting themes, `build`, `swizzle`, `integration` and `blog`) are tracked as a follow-up. The templates library is deferred, so `template` and the template steps of the agent workflow are too. See [CLI Integrations](../cli-integrations/).
+The commands beyond agent support (`theme` for building and exporting themes, `build`, `swizzle`, `integration` and `blog`) are tracked as a follow-up, and the templates library is deferred, so `template` and the template steps of the agent workflow are too. `gap-report` never files anything publicly (the library is unpublished): it names the owning package and where the request is recorded, and `--output <file>` appends the report to a file in your project. See [CLI Integrations](../cli-integrations/).
 
 ## Global options
 
-These flags work with every command:
-
-| Flag      | Effect                                                                                                                                                                   |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `--dense` | Compressed, token-efficient output for AI context windows. Built from each element's authored dense doc, and complete with respect to its public API                       |
-| `--json`  | Output as a stable, typed JSON envelope                                                                                                                                  |
-
-A `--detail <brief|compact|full>` option for list views and a language switch are under consideration and will show in the generated reference if they ship.
+| Flag                             | Effect                                                                                                                                                  |
+| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--dense`                        | Compressed, token-efficient output for AI context windows. Built from each element's authored dense doc, and complete with respect to its public API     |
+| `--json`                         | Output as a stable, typed JSON envelope. Rejected up front by a command that has no JSON form (`mcp`)                                                   |
+| `--detail <brief\|compact\|full>` | For list views and docs: names only, names with one-line descriptions, or full docs per entry                                                           |
+| `--registry <file>`              | Read this agent registry instead of the installed one (also `$TCT_AGENT_REGISTRY`)                                                                      |
+| `-h`, `--help`, `-V`, `--version` | Help for a command, and the version. Both exit 0                                                                                                        |
 
 ## JSON output
 
-Every command will support `--json`. Responses are typed envelopes:
+Every command that prints data supports `--json`. Responses are typed envelopes: an `apiVersion`, a `type` naming the shape of `data`, the `data` itself and an optional `meta`:
 
 ```json
-{"apiVersion": 1, "type": "component.detail", "data": {"name": "tct-button"}}
+{"apiVersion": 1, "type": "search", "data": {"query": "dialog", "matchCount": 50, "results": ["..."]}}
 ```
+
+The types are `component.list`, `component.detail` (and `.props`, `.examples`, `.styling`, `.source`), `docs.list`, `docs.detail`, `docs.index`, `docs.detail.section`, `search`, `discover.list`, `discover.detail`, `discover.detail.doc`, `discover.search`, `controller.list`, `controller.detail`, `controller.detail.members`, `doctor`, `gap-report.categories`, `gap-report.file`, `layout.grammar`, `layout.check`, `layout.expand`, `init.run`, `init.remove`, `upgrade.run` and `manifest`. `tct manifest --json` lists them per command. `--dense --json` returns a reduced projection and marks it with `meta.dense`.
 
 Errors carry a stable machine-readable `code`:
 
 ```json
 {
   "apiVersion": 1,
-  "error": "No element named \"tct-buttn\"",
+  "error": "No element named \"tct-buttn\".",
   "code": "ERR_UNKNOWN_COMPONENT",
   "suggestions": [{"name": "tct-button", "reason": "similar name"}]
 }
 ```
 
-The `code` is a stable identifier. Branch on it, never on the human-readable `error` string, which changes freely as the wording improves. Every error envelope has a `code` (falling back to a generic one when no specific code applies). Codes are append-only: once shipped, a code's meaning never changes and it is never removed. New error conditions get new codes.
+The `code` is a stable identifier. Branch on it, never on the human-readable `error` string, which changes freely as the wording improves. Every error envelope has a `code` (`ERR_UNKNOWN` when no specific one applies). Codes are append-only: once shipped, a code's meaning never changes and it is never removed.
+
+| Group               | Codes                                                                                                                                                                                                           |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Parsing             | `ERR_UNKNOWN_COMMAND`, `ERR_UNKNOWN_SUBCOMMAND`, `ERR_INVALID_OPTION`, `ERR_INVALID_ARGUMENT`, `ERR_MISSING_ARGUMENT`, `ERR_INVALID_DETAIL`                                                                       |
+| Environment         | `ERR_NODE_VERSION`, `ERR_REGISTRY_NOT_FOUND`, `ERR_REGISTRY_INCOMPATIBLE`                                                                                                                                         |
+| Lookups             | `ERR_UNKNOWN_COMPONENT`, `ERR_UNKNOWN_CONTROLLER`, `ERR_UNKNOWN_TOPIC`, `ERR_UNKNOWN_SECTION`, `ERR_UNKNOWN_CATEGORY`, `ERR_UNKNOWN_PACKAGE`, `ERR_UNKNOWN_AGENT`, `ERR_UNKNOWN_FEATURE`, `ERR_NOT_FOUND`, `ERR_AMBIGUOUS_COMPONENT` |
+| Missing artifacts   | `ERR_NO_DOC`, `ERR_NO_SOURCE`, `ERR_NO_EXAMPLE`                                                                                                                                                                   |
+| Files               | `ERR_FILE_NOT_FOUND`, `ERR_FILE_EXISTS`, `ERR_PATH_TRAVERSAL`, `ERR_WRITE_FAILED`                                                                                                                                 |
+| Agent docs, layout  | `ERR_AGENT_DOCS_MALFORMED`, `ERR_LAYOUT_PARSE`, `ERR_LAYOUT_INVALID`                                                                                                                                              |
+| MCP                 | `ERR_MCP`                                                                                                                                                                                                       |
 
 The CLI package exports a small module for consuming responses in TypeScript:
 
@@ -110,18 +177,26 @@ if (isError(result)) {
 }
 ```
 
-The error code shown here (`ERR_UNKNOWN_COMPONENT`) illustrates the pattern. The full table will be published in the generated reference.
-
 ## Exit codes
 
-A command exits with `0` on success and non-zero on failure, and every non-zero exit that a command chooses is paired with a stable error code in `--json` mode. The contract tests check exit codes, the JSON contract, the dense projection, `init` behaviour, the protection of files you have edited during `upgrade`, and MCP search and get.
+A command exits with `0` on success and `1` on any error, for a `--json` run as for a text run. Help and version exit `0`. In `--json` mode standard error stays empty and the error is the envelope on standard output. Two commands also use the exit code as a verdict: `layout check` exits 1 for an invalid expression, and `upgrade --check` exits 1 when a block is stale, edited or malformed. The contract tests check exit codes, the JSON contract, the dense projection, `init` behaviour, the protection of files you have edited during `upgrade`, and MCP search and get.
 
 ## Programmatic use
 
-The same logic that powers the commands is meant to be importable as type-safe functions, so build tools and agents can call it without spawning a process. The module will expose `component`, `docs`, `search` and so on, each returning the same data as the `--json` form; its final export names are not fixed yet.
+The commands are importable, so build tools and agents can call them without spawning a process. `execute` runs a command in-process and returns what it printed:
+
+```ts
+import {execute} from '@tecton-wc/cli';
+import {assertResponse} from '@tecton-wc/cli/json';
+
+const {exitCode, stdout} = await execute(['component', 'tct-dialog', '--json'], {cwd: process.cwd()});
+const {data} = assertResponse(stdout, 'component.detail');
+```
+
+The package also exports `search`, `loadRegistry`, `RegistryLookup`, `mcpSearch`, `mcpGet` and `createMcpServer` (the pure functions behind the MCP tools and the server itself), and `handleMcpRequest` (the same server as a `Request` to `Response` handler). This is also how an agent-eval harness drives the CLI: `execute` needs no subprocess and takes the working directory and environment as arguments.
 
 {/*
-This page documents the D-011 command surface; a generated reference replaces it when the CLI ships.
-Sources: docs/plan/DECISIONS.md D-011, D-013 Q-07; docs/plan/WORK-BREAKDOWN.md WP-AI.
+This page documents the D-011 command surface; every sample above is real output of the built CLI.
+Sources: docs/plan/DECISIONS.md D-011, D-013 Q-07; docs/plan/WORK-BREAKDOWN.md WP-AI; packages/cli/.
 Guides: [mwg:web-components] [mwg:accessibility]
 */}

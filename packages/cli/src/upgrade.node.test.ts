@@ -142,6 +142,16 @@ describe('--apply', () => {
     expect(read('AGENTS.md')).toContain('WORKFLOW');
   });
 
+  it('doctor names only the files that need attention', async () => {
+    await sandbox.run(['init', '--agent', 'all']);
+    sandbox.write('AGENTS.md', read('AGENTS.md').replace('WORKFLOW', 'MY WORKFLOW'));
+    const doctor = await sandbox.run(['doctor', '--json']);
+    const check = (
+      JSON.parse(doctor.stdout) as {data: {checks: {id: string; message: string}[]}}
+    ).data.checks.find((entry) => entry.id === 'agent-docs')!;
+    expect(check.message).toBe('The agent-docs block is edited in AGENTS.md.');
+  });
+
   it('never overwrites a malformed block, and says which file to repair', async () => {
     const broken = `# Mine\n\n${MARKER_START}\nnever closed\n`;
     sandbox.write('AGENTS.md', broken);
