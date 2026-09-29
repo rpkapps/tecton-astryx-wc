@@ -40,9 +40,14 @@ const card = (
 ) =>
   `<tct-hover-card delay="20" hide-delay="20" ${attributes}>${trigger}<div slot="content">${content}</div></tct-hover-card>`;
 
-async function mount(attributes = '', trigger?: string, content?: string): Promise<TctHoverCard> {
+async function mount(
+  attributes = '',
+  trigger?: string,
+  content?: string,
+  after = '',
+): Promise<TctHoverCard> {
   const root = await fixture<HTMLElement>(
-    `<div style="padding:100px 40px">${card(attributes, trigger, content)}<p id="outside">outside</p></div>`,
+    `<div style="padding:100px 40px">${card(attributes, trigger, content)}${after}<p id="outside">outside</p></div>`,
   );
   const element = root.querySelector<TctHoverCard>('tct-hover-card')!;
   await element.updateComplete;
@@ -424,15 +429,33 @@ describe('Escape key behavior', () => {
   });
 
   it('keeps the card open while focus moves from the trigger into it, and closes it when focus leaves', async () => {
-    const el = await mount('', undefined, '<button id="inside">Follow</button>');
+    // A focusable element after the card gives the last Tab somewhere to land. Without one, focus
+    // leaves the page, wraps to the trigger a few ms later and keyboard focus there reopens the card,
+    // so `open` is false only for that instant (a frame poll under load misses it).
+    const el = await mount(
+      '',
+      undefined,
+      '<button id="inside">Follow</button>',
+      '<button id="after">After</button>',
+    );
+    const intent = recordEvents(el, 'tct-open-change');
+    const requests = () => intent.events.map((event) => event.open);
+
     await pressKeys('Tab');
-    await waitUntil(() => el.open, 'open');
+    // The card must be on screen before the next Tab, or its content is not focusable yet.
+    await waitUntil(() => el.open && shown(el), 'card shown');
     await pressKeys('Tab');
     await waitUntil(() => deepActiveElement()?.id === 'inside', 'focus in the card');
-    await aTimeout(150);
+    // Leaving the trigger scheduled a close after the hide delay; a timer for twice that delay set now
+    // fires after it, so by then the card has had its chance to close and must have declined.
+    await aTimeout(el.hideDelay * 2);
     expect(el.open).toBe(true);
+    expect(requests()).toEqual([true]);
+
     await pressKeys('Tab');
+    await waitUntil(() => deepActiveElement()?.id === 'after', 'focus past the card');
     await waitUntil(() => !el.open, 'closed after focus left');
+    expect(requests()).toEqual([true, false]);
   });
 });
 
