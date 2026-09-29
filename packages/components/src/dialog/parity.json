@@ -67,6 +67,15 @@
           "default": "info"
         },
         {
+          "upstream": "role",
+          "kind": "prop",
+          "target": "alert",
+          "as": "attribute",
+          "reflect": true,
+          "default": "false",
+          "notes": "Upstream Dialog passes `role` through to the surface (AlertDialog sets role=alertdialog with purpose=form). `role` is not a usable property name on a custom element (it is the platform ARIA reflection), so the option is the boolean `alert`: role=alertdialog on the surface; purpose still decides dismissal."
+        },
+        {
           "upstream": "padding",
           "kind": "prop",
           "target": "padding",

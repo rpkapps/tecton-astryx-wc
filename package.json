@@ -15,7 +15,7 @@
     "dev": "pnpm docs:dev",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "lint": "eslint .",
+    "lint": "tsc -b && eslint .",
     "lint:css": "stylelint --allow-empty-input \"packages/**/*.css\" \"apps/**/*.css\"",
     "typecheck": "node tools/generate.ts && tsc -b && tsc -p tools/tsconfig.json",
     "test": "node tools/test.ts",

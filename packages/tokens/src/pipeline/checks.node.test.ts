@@ -64,8 +64,8 @@ describe('failing checks', () => {
   it('provisional: the set is D-013 exact', () => {
     const provisional = real.resolved.tokens.filter((token) => token.status === 'provisional');
     const categories = new Set(provisional.map((token) => token.category));
-    expect([...categories].sort()).toEqual(['data', 'focus', 'font', 'scrollbar', 'size']);
-    expect(provisional).toHaveLength(56 + 1 + 6);
+    expect([...categories].sort()).toEqual(['data', 'focus', 'font', 'scrollbar', 'size', 'text']);
+    expect(provisional).toHaveLength(56 + 1 + 7);
   });
 
   it('astryx-retained: exactly the 10 motion tokens, with a reason (D-013 Q-06)', () => {

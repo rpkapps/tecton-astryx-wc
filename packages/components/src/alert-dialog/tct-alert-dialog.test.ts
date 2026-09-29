@@ -24,6 +24,7 @@ import {
   runOverlaySuite,
   waitUntil,
 } from '@tecton-astryx/testing/index.js';
+import '../popover/define.js';
 import './define.js';
 import type {TctButton} from '../button/tct-button.js';
 import type {TctAlertDialog} from './tct-alert-dialog.js';
@@ -268,6 +269,60 @@ describe('purposes: not light-dismissable', () => {
     await pressKeys('Escape');
     await waitUntil(() => !el.open, 'closed');
     expect(actions.events).toHaveLength(0);
+  });
+
+  it('is an alertdialog whose Escape policy comes from its own layer, not a page-level listener', async () => {
+    const el = await mount('open');
+    await animationsFinished(surface(el));
+    const inner = innerDialog(el);
+    expect(inner.purpose).toBe('form');
+    expect(inner.alert).toBe(true);
+    expect(surface(el).getAttribute('role')).toBe('alertdialog');
+    expect((await axNode(surface(el))).role).toBe('alertdialog');
+    // The dialog's own LayerController is the one that answers: it is on the stack as a modal that
+    // closes on Escape. A capture-phase document listener would have claimed the press before it.
+    const seen: boolean[] = [];
+    const spy = (event: KeyboardEvent): void => {
+      if (event.key === 'Escape') seen.push(event.defaultPrevented);
+    };
+    document.addEventListener('keydown', spy, true);
+    try {
+      await pressKeys('Escape');
+      await waitUntil(() => !el.open, 'closed by Escape');
+    } finally {
+      document.removeEventListener('keydown', spy, true);
+    }
+    expect(seen).toEqual([false]);
+  });
+
+  it('a platform close request (the dialog `cancel` event, Android back) asks to close once', async () => {
+    const el = await mount('open');
+    await animationsFinished(surface(el));
+    const changes = recordEvents(el, 'tct-open-change');
+    surface(el).dispatchEvent(new Event('cancel', {cancelable: true}));
+    await waitUntil(() => !el.open, 'closed by the close request');
+    expect(changes.events).toHaveLength(1);
+    expectEventFlags(changes.events[0]!, {bubbles: true, composed: true, cancelable: true});
+  });
+
+  it('a popover opened inside closes first on Escape, the dialog on the second', async () => {
+    const el = await mount(
+      'open',
+      `<tct-popover id="inner" label="Inner"><button id="inner-trigger">More</button><div slot="content">Details</div></tct-popover>`,
+    );
+    await animationsFinished(surface(el));
+    const popover = el.querySelector<HTMLElement & {open: boolean}>('#inner')!;
+    popover.open = true;
+    await waitUntil(() => layerStack().length === 2, 'popover on top of the dialog');
+    const changes = recordEvents(el, 'tct-open-change');
+    await pressKeys('Escape');
+    await waitUntil(() => !popover.open, 'popover closed by the first Escape');
+    expect(el.open, 'the dialog survives the first Escape').toBe(true);
+    // The popover's own intent event bubbles out of the dialog; the dialog has raised none yet.
+    expect(changes.events.map((event) => event.reason)).toEqual(['escape']);
+    await pressKeys('Escape');
+    await waitUntil(() => !el.open, 'dialog closed by the second Escape');
+    expect(changes.events.map((event) => event.reason)).toEqual(['escape', 'escape']);
   });
 
   it('requestClose() asks with reason "request"', async () => {

@@ -109,5 +109,8 @@ translate. Layout, the icon and the actions follow the writing direction.
 
 - Always set a `heading`; put the status in words, not only in colour or icon.
 - Mount error and warning banners in response to an event.
+- Prefer `tct-link` for links in the heading, description and `end` slots. A plain `<a>` there is also styled
+  (the band's ink and an underline, from the light-DOM sheet the banner adopts into its document or shadow root),
+  but do not restyle its colour: the status fills are dark or saturated, and the UA link colour fails contrast on them.
 - Give focusable content a sensible order and a name; the banner does not manage focus inside its content.
 - After a dismissal, own the state (remove the element, or clear `hidden` deliberately).
