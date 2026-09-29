@@ -1,0 +1,11 @@
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .box {
+    /* Fallback is injected by the CSS plugin when a token fallback map is present. */
+    padding-inline: 12px;
+    content: '\201C';
+  }
+}
