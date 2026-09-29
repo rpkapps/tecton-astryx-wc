@@ -12,9 +12,11 @@ Icons are data, not components. `tct-icon` renders an `IconDefinition` (a viewBo
 <Example
   title="Icons by name"
   description="A role icon, and a Tecton domain icon in its outlined and filled forms."
-  source={`<tct-icon name="close" size="lg"></tct-icon>
-<tct-icon name="well" size="lg"></tct-icon>
-<tct-icon name="well-filled" size="lg"></tct-icon>`}
+  source={`<tct-hstack gap="3" v-align="center">
+  <tct-icon name="close" size="lg"></tct-icon>
+  <tct-icon name="well" size="lg"></tct-icon>
+  <tct-icon name="well-filled" size="lg"></tct-icon>
+</tct-hstack>`}
 />
 
 The icon data (`@tecton-astryx/icons`), the registry (`@tecton-astryx/core/icons/registry.js`) and the `tct-icon` element all exist. Elements that show an icon (buttons, banners, fields) take a registered name through their `icon` attribute or a `tct-icon` in their `icon` slot.
@@ -83,11 +85,13 @@ Eighteen glyphs for subsurface work, each as `<name>` (outlined) and `<name>-fil
 <Example
   title="Decorative and meaningful icons"
   description="The first icon is decorative and hidden from assistive technology. The second has a label, so it is an image with an accessible name."
-  source={`<!-- decorative: hidden from assistive technology (the default) -->
-<tct-icon name="search"></tct-icon>
+  source={`<tct-hstack gap="3" v-align="center">
+  <!-- decorative: hidden from assistive technology (the default) -->
+  <tct-icon name="search"></tct-icon>
 
-<!-- meaningful: a label gives it role="img" and an accessible name -->
-<tct-icon name="warning" label="Warning" color="warning"></tct-icon>`}
+  <!-- meaningful: a label gives it role="img" and an accessible name -->
+  <tct-icon name="warning" label="Warning" color="warning"></tct-icon>
+</tct-hstack>`}
 />
 
 Icons inherit the surrounding text colour. Elements that take an icon (buttons, banners, fields) accept a registered name in their `icon` attribute, a `tct-icon` in an `icon` slot, or a plain inline `<svg>`. Colour options such as `color="accent"` point at the icon colour tokens (`--color-icon-accent` for accent, because the accent fill itself is too low in contrast to be an icon colour).
@@ -147,7 +151,7 @@ registerIcons({close: xMark}); // every close button now uses your glyph
 
 To swap the whole set, register the roles you want (`registerIcons`, or a per-icon import from another set); `resetIcons()` clears both layers. Subscribers (rendered icons) refresh when the registry changes, so registration order relative to rendering does not matter.
 
-A theme-scoped icon override, an `icons` field on `defineTheme`, is _planned_ with the theme utilities. It would not mutate the global registry.
+A theme can carry its own icons: `defineTheme` takes an `icons` map (name to definition or lazy loader, as `registerIcons` takes), and `extends` merges a child's icons over its base's. Applying a defined theme's icons is left to your code for now (`registerIcons(theme.icons)`), because `tct-theme` does not apply a defined theme yet.
 
 ## Tree-shaking and Lucide
 

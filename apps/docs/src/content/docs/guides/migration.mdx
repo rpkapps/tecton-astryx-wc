@@ -28,7 +28,7 @@ Tailwind can coexist during migration. Use it for legacy wrappers and local layo
 3. Make the layer order of your CSS explicit before replacing components.
 4. Render the foundation smoke test page and confirm tokens and light-DOM elements keep their styles before migrating any surface.
 5. Move the persistent frame first: `tct-app-shell`, `tct-top-nav`, `tct-side-nav`, page content and mobile navigation (all _planned_).
-6. Replace shared primitives: `tct-button`, `tct-icon-button`, `tct-text-input`, `tct-dialog`, `tct-alert-dialog`, `tct-banner`, toasts, `tct-badge` and `tct-list-item` are available; `tct-number-input`, `tct-switch`, `tct-checkbox-input`, `tct-radio-list`, `tct-selector`, `tct-tab-list`, `tct-card` and `tct-table` are _planned_.
+6. Replace shared primitives: `tct-button`, `tct-icon-button`, `tct-text-input`, `tct-dialog`, `tct-alert-dialog`, `tct-banner`, toasts, `tct-badge`, `tct-card` and `tct-list-item` are available; `tct-number-input`, `tct-switch`, `tct-checkbox-input`, `tct-radio-list`, `tct-selector`, `tct-tab-list` and `tct-table` are _planned_.
 7. Replace global workflows: the command palette, the settings popover, the theme toggle, search, filters, create flows and destructive confirmation dialogs.
 8. Remove legacy Tailwind classes from each completed surface, keeping only token-backed layout utilities and local wrappers that still await migration.
 9. Verify both colour modes, keyboard navigation, responsive layout, and empty, error and loading states before moving to the next route.
@@ -127,12 +127,15 @@ A broken layer order can fail silently and identically on every page, so catch i
 
 <Example
   title="Foundation check page"
-  description="A primary button and a text input. The button has visible padding and a filled primary background, and the input has a border and internal spacing, when the foundation is sound."
-  source={`<tct-button variant="primary" label="Primary action"></tct-button>
-<tct-text-input label="Email" placeholder="you@example.com"></tct-text-input>`}
+  description="A primary button, a text input and a card. When the foundation is sound the button has visible padding and a filled primary background, and the input and card have borders and internal spacing."
+  source={`<tct-vstack gap="4" h-align="start">
+  <tct-button variant="primary" label="Primary action"></tct-button>
+  <tct-text-input label="Email" placeholder="you@example.com"></tct-text-input>
+  <tct-card padding="4"><tct-text>One card with default padding</tct-text></tct-card>
+</tct-vstack>`}
 />
 
-If the button has visible padding and a filled primary background, and the input has a border and internal spacing, the foundation is sound. Wrap the page in `tct-theme` (a light-DOM element) to check the layered styles too. For an assertion that can run in any test runner or a development-only script, check that the tokens are present and that the light-DOM island has kept its box:
+If the button has visible padding and a filled primary background, and the input and card have borders and internal spacing, the foundation is sound. Wrap the page in `tct-theme` (a light-DOM element) to check the layered styles too. For an assertion that can run in any test runner or a development-only script, check that the tokens are present and that the light-DOM island has kept its box:
 
 ```js title="Foundation assertion"
 const root = getComputedStyle(document.documentElement);

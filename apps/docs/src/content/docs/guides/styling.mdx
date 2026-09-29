@@ -70,9 +70,13 @@ An element's visual axes are ordinary attributes. Boolean attributes follow the 
 <Example
   title="Visual axes as attributes"
   description="A small primary button, a raised icon button and a level 2 heading in the display type."
-  source={`<tct-button variant="primary" size="sm" label="Save"></tct-button>
-<tct-icon-button label="Search" icon="search" elevation="low"></tct-icon-button>
-<tct-heading level="2" type="display-3">Hero title</tct-heading>`}
+  source={`<tct-vstack gap="3">
+  <tct-hstack gap="2" v-align="center">
+    <tct-button variant="primary" size="sm" label="Save"></tct-button>
+    <tct-icon-button label="Search" icon="search" elevation="low"></tct-icon-button>
+  </tct-hstack>
+  <tct-heading level="2" type="display-3">Hero title</tct-heading>
+</tct-vstack>`}
 />
 
 Enumerated attributes are validated. An unknown value falls back to the default, and in development (`globalThis.tctDevMode = true`) the element warns once.
@@ -160,8 +164,10 @@ Native events are not renamed. `click`, `input`, `change`, `focus` and `blur` co
 <Example
   title="ARIA references and data attributes on the host"
   description="The description is in your tree, and the text input's inner control is described by it."
-  source={`<tct-text-input label="Email" name="email" data-testid="email" aria-describedby="email-hint"></tct-text-input>
-<tct-text id="email-hint" type="supporting" display="block">We never share your address.</tct-text>`}
+  source={`<tct-vstack gap="1">
+  <tct-text-input label="Email" name="email" data-testid="email" aria-describedby="email-hint"></tct-text-input>
+  <tct-text id="email-hint" type="supporting">We never share your address.</tct-text>
+</tct-vstack>`}
 />
 
 ```js
@@ -176,15 +182,17 @@ Complex elements are composed from smaller ones. Each child is its own element w
   title="A dialog and its children"
   description="The dialog owns structure and behaviour; each child styles itself. inline shows the dialog in place, for previews."
   source={`<tct-dialog id="edit-profile" inline open heading="Edit profile" width="500">
-  <tct-text-input label="Name" name="name"></tct-text-input>
-  <tct-button variant="primary" label="Save"></tct-button>
+  <tct-vstack gap="3" h-align="start">
+    <tct-text-input label="Name" name="name"></tct-text-input>
+    <tct-button variant="primary" label="Save"></tct-button>
+  </tct-vstack>
 </tct-dialog>`}
 />
 
 ```css
 /* the dialog owns structure and behaviour; each child styles itself */
-#edit-profile tct-text-input {
-  margin-block-end: var(--spacing-3);
+#edit-profile tct-text-input::part(input) {
+  border-radius: var(--radius-inner);
 }
 #edit-profile tct-button::part(button) {
   min-inline-size: 6rem;

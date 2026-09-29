@@ -5,8 +5,10 @@ sidebar:
   order: 5
 ---
 
-:::caution[Planned elements]
-The layout elements (`tct-app-shell`, `tct-layout`, `tct-section`, `tct-card`, `tct-stack`, `tct-hstack`, `tct-vstack`, `tct-grid` and friends) are not available yet, and neither are the navigation elements and `tct-table`. The examples below show the target API from the architecture's mapping rules (`hasX` becomes `has-x`, `isX` becomes `x`, ReactNode content props become named slots). Attribute and slot names on the element pages are authoritative once the elements ship; in particular, how a region attaches to `tct-layout` (a named slot, as shown here, or a child element) is fixed on that page. Elements that exist today (`tct-text`, `tct-heading`, `tct-list`, `tct-toolbar`, `tct-status-dot`, `tct-empty-state`, `tct-size-provider`) are used as documented.
+import Example from '@/components/Example.astro';
+
+:::caution[Some layout elements are planned]
+Available now: `tct-stack`, `tct-hstack`, `tct-vstack`, `tct-stack-item`, `tct-grid`, `tct-grid-span`, `tct-center`, `tct-section`, `tct-card`, `tct-divider`, `tct-form-layout` and `tct-aspect-ratio`, plus `tct-text`, `tct-heading`, `tct-list`, `tct-toolbar`, `tct-status-dot`, `tct-empty-state` and `tct-size-provider`. Planned, and shown as their target API from the architecture's mapping rules (`hasX` becomes `has-x`, `isX` becomes `x`, ReactNode content props become named slots): `tct-app-shell`, `tct-layout` and its `tct-layout-*` parts, `tct-side-nav`, `tct-top-nav`, `tct-tab-list`, `tct-table`, `tct-token` and `tct-resize-handle`. Attribute and slot names on an element's page are authoritative once it ships; in particular, how a region attaches to `tct-layout` (a named slot, as shown here, or a child element) is fixed on that page.
 :::
 
 ## Overview
@@ -102,20 +104,21 @@ Give every region one lead, then rank the rest with weight and colour rather tha
 - **Body, the default:** plain `tct-text` with no `type`, `color` or `size`.
 - **Lead:** `tct-heading` at the level that matches page depth, or body text at a heavier weight.
 - **Support:** step to the secondary colour, not to a smaller size.
-- **Metadata:** the `supporting` type, or a `tct-status-dot` or `tct-token` instead of prose.
+- **Metadata:** the `supporting` type, or a `tct-status-dot` or `tct-token` (_planned_) instead of prose.
 
-```html title="Body copy, then one row of four ranks"
-<!-- Body copy takes no attributes. tct-text already defaults to the body
-     size in the primary colour. -->
-<tct-text>Credentials rotate every 90 days</tct-text>
-
-<tct-hstack gap="2">
-  <tct-text weight="semibold">Payments API</tct-text>
-  <tct-status-dot variant="success" label="Healthy"></tct-status-dot>
-  <tct-text color="secondary">v2.14</tct-text>
-  <tct-text type="supporting">edited 3h ago</tct-text>
-</tct-hstack>
-```
+<Example
+  title="Body copy, then one row of four ranks"
+  description="Body copy takes no attributes: tct-text already defaults to the body size in the primary colour. Lead, support and metadata step by weight and colour, not size."
+  source={`<tct-vstack gap="3">
+  <tct-text>Credentials rotate every 90 days</tct-text>
+  <tct-hstack gap="2" v-align="center">
+    <tct-text weight="semibold">Payments API</tct-text>
+    <tct-status-dot variant="success" label="Healthy"></tct-status-dot>
+    <tct-text color="secondary">v2.14</tct-text>
+    <tct-text type="supporting">edited 3h ago</tct-text>
+  </tct-hstack>
+</tct-vstack>`}
+/>
 
 **Squint test:** blurred, you read lead, then support, then groups, in that order. If everything reads at once, raise contrast with weight and colour, not borders and not smaller text.
 
@@ -130,16 +133,18 @@ Reach for the weakest container that reads as a group, and escalate only when it
 3. **Section:** the default page-structure unit, related content under a heading. No border.
 4. **Card:** a self-contained widget (a KPI tile, a chart, a gallery entry), or a hard boundary around critical content.
 
-```html title="Section as the default unit"
-<!-- Records are rows in one Section, not one Card each.
-     Recommended row height: 32-40px. -->
-<tct-section padding="0">
+<Example
+  title="Section as the default unit"
+  description="Records are rows in one section, not one card each. Recommended row height: 32 to 40 px."
+  source={`<tct-section padding="0">
   <tct-list has-dividers>
     <tct-heading slot="header" level="3">Members</tct-heading>
-    <!-- a tct-list-item per member -->
+    <tct-list-item label="Ada Lovelace" description="Owner"></tct-list-item>
+    <tct-list-item label="Grace Hopper" description="Editor"></tct-list-item>
+    <tct-list-item label="Katherine Johnson" description="Viewer"></tct-list-item>
   </tct-list>
-</tct-section>
-```
+</tct-section>`}
+/>
 
 **Decision test:** records render as rows, `tct-table` for columnar and `tct-list` for single-line; a self-contained widget or hard boundary is a `tct-card`; everything else is a `tct-section`.
 
@@ -220,15 +225,19 @@ The container owns padding and child gaps; children zero their margins, and inte
 - List, tab, menu and navigation items carry a small inset, so the container gives up its padding and the element owns the line.
 - Table cells carry a larger inset, so the container gives up its padding and the cell owns the line.
 
-```html title="One content line, two inset owners"
-<!-- Target content line = 16px.
-     A heading has 0 inset, so the section takes the full padding. -->
-<tct-section padding="4"><tct-heading level="3">Members</tct-heading></tct-section>
-
-<!-- A list has ~8px built in, table cells 12-16px, so the section
-     gives up its padding and the element owns the inset. -->
-<tct-section padding="0"><tct-list><!-- items --></tct-list></tct-section>
-```
+<Example
+  title="One content line, two inset owners"
+  description="A heading has no inset of its own, so the first section takes the full padding. A list has an inset built in, so the second section gives up its padding and the element owns the line."
+  source={`<tct-vstack gap="4">
+  <tct-section padding="4"><tct-heading level="3">Members</tct-heading></tct-section>
+  <tct-section padding="0">
+    <tct-list>
+      <tct-list-item label="Ada Lovelace"></tct-list-item>
+      <tct-list-item label="Grace Hopper"></tct-list-item>
+    </tct-list>
+  </tct-section>
+</tct-vstack>`}
+/>
 
 **Verify:** draw one vertical line down the left of the region. Every label touches it; only hover and selected backgrounds cross it.
 
@@ -240,19 +249,22 @@ Grouping comes from contrast between tight and generous gaps, not one repeated v
 - Generous gaps separate: several steps up, used between sections.
 - Reach for the in-between steps to tune cadence, rather than rounding everything to the same two values.
 
-```html title="Tight inside, generous between"
-<!-- Tight binds at gap 1-2, generous separates at gap 4-6.
-     In-between steps tune cadence: gap 3 = 12px, gap 5 = 20px. -->
-<tct-vstack gap="6">
+<Example
+  title="Tight inside, generous between"
+  description="Tight gaps bind at gap 1 to 2, generous gaps separate at gap 4 to 6. In-between steps tune the cadence: gap 3 is 12 px and gap 5 is 20 px."
+  source={`<tct-vstack gap="6">
   <tct-vstack gap="1">
     <tct-text weight="semibold">Retention</tct-text>
     <tct-text color="secondary">Logs are kept for 30 days</tct-text>
   </tct-vstack>
-  <tct-vstack gap="1"><!-- next label and value --></tct-vstack>
-</tct-vstack>
-```
+  <tct-vstack gap="1">
+    <tct-text weight="semibold">Region</tct-text>
+    <tct-text color="secondary">Western Europe</tct-text>
+  </tct-vstack>
+</tct-vstack>`}
+/>
 
-**Verify:** with every border removed, you can still name the groups from spacing alone. If you cannot, the intervals are too uniform. Form fields are the exception: `tct-form-layout` owns their spacing.
+**Verify:** with every border removed, you can still name the groups from spacing alone. If you cannot, the intervals are too uniform. Form fields are the exception: `tct-form-layout` owns their spacing (see the [Forms guide](../forms/)).
 
 The spacing steps are the 4 px scale, unchanged by Tecton (`--spacing-1` is 4 px, `--spacing-4` is 16 px). See [Spacing](../spacing/).
 
@@ -264,14 +276,22 @@ Match density to how often a region is used, and give every control in a row the
 - **Balanced:** most table and list surfaces.
 - **Spacious:** low-frequency or high-stakes rows, like settings or a short selection list.
 
-```html title="Density paired with control size"
-<!-- Pair density with one control size: compact with sm,
-     balanced with sm or md, spacious with md or lg. -->
-<tct-table density="compact" has-hover><!-- data and columns are properties --></tct-table>
-<tct-button size="sm" variant="ghost">Retry</tct-button>
-```
+<Example
+  title="Density paired with control size"
+  description="Pair density with one control size: compact with sm, balanced with sm or md, spacious with md or lg."
+  source={`<tct-vstack gap="3">
+  <tct-list density="compact" has-dividers>
+    <tct-list-item label="build-7f3a" description="Failed 3 min ago"></tct-list-item>
+    <tct-list-item label="build-7f39" description="Passed 12 min ago"></tct-list-item>
+  </tct-list>
+  <tct-hstack gap="2">
+    <tct-button size="sm" variant="ghost" label="Retry"></tct-button>
+    <tct-button size="sm" variant="ghost" label="Cancel"></tct-button>
+  </tct-hstack>
+</tct-vstack>`}
+/>
 
-To set one size for a whole subtree, wrap it in `tct-size-provider`. An explicit `size` on an element wins over the provider, and the provider wins over the element's default. Control heights are `--size-element-sm` 28 px, `--size-element-md` 32 px and `--size-element-lg` 36 px; the 36 px value has no Tecton source and is _provisional_.
+For a table, the same pairing applies with `tct-table` (_planned_): `<tct-table density="compact" has-hover>`. To set one size for a whole subtree, wrap it in `tct-size-provider`. An explicit `size` on an element wins over the provider, and the provider wins over the element's default. Control heights are `--size-element-sm` 28 px, `--size-element-md` 32 px and `--size-element-lg` 36 px; the 36 px value has no Tecton source and is _provisional_.
 
 **Verify:** every interactive element in a row shares one size, and that size is paired with the density of the region it sits in.
 
@@ -363,6 +383,6 @@ For responsiveness inside a component or a region, prefer container queries over
 Section map (1:1): Overview; Scaffold (Shell, Navigation, Best practices); Structure (Type hierarchy, Containers, Headers and footers, Side panels, Best practices);
 Spacing (Alignment, Rhythm, Density and size, Best practices); Breakpoints (Responsive contract, Best practices). The template steps are deferred (templates library out of scope);
 `useMediaQuery` becomes a plain matchMedia listener in app code (core also has MediaQueryController for element authors).
-Samples that use the planned layout elements (tct-app-shell, tct-layout*, tct-section, tct-card, tct-stack, tct-hstack, tct-vstack, tct-grid, tct-form-layout) await their merge: see the hand-off report.
+Samples that render use only merged elements (stack family, section, card, list, text, heading, status-dot, button); the fenced ones use the planned tct-app-shell, tct-layout*, navigation elements and tct-table, and await their merge.
 Guides: [mwg:css-layout] [mwg:size-aware-styling] [mwg:css] [mwg:accessibility]
 */}

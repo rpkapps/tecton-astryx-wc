@@ -74,13 +74,15 @@ A worked example: the React `Button` takes a `label`, a `variant`, `isDisabled`,
 <Example
   title="A button with an icon"
   description="variant and the icon slot, as in the React Button. An icon-only button always needs a label, which becomes its accessible name and its built-in tooltip."
-  source={`<tct-button variant="primary">
-  <tct-icon slot="icon" name="check"></tct-icon>
-  Save
-</tct-button>
-<tct-button icon-only label="Close">
-  <tct-icon slot="icon" name="close"></tct-icon>
-</tct-button>`}
+  source={`<tct-hstack gap="2">
+  <tct-button variant="primary">
+    <tct-icon slot="icon" name="check"></tct-icon>
+    Save
+  </tct-button>
+  <tct-button icon-only label="Close">
+    <tct-icon slot="icon" name="close"></tct-icon>
+  </tct-button>
+</tct-hstack>`}
 />
 
 ```js
@@ -137,7 +139,7 @@ There are no `ref` props, because the element is the DOM node. Methods mirror na
 | React                                     | Here                                                                                                    |
 | ----------------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | `Theme`                                   | `tct-theme` (`mode`, and a `theme` property). See [Theming](../theme/)                                   |
-| `MediaTheme`, `SyntaxTheme`               | `tct-media-theme`, `tct-syntax-theme` (both _planned_)                                                   |
+| `MediaTheme`, `SyntaxTheme`               | `tct-media-theme`, `tct-syntax-theme` (`tct-syntax-theme` is _planned_)                                                   |
 | `SizeProvider`                            | `tct-size-provider`                                                                                     |
 | `InternationalizationProvider`            | `tct-internationalization-provider` (`locale`, `dir`, `messages`, `overrides`). See [Internationalization](../internationalization/) |
 | `LinkProvider`                            | `tct-link-provider`, exposing a `navigate(href, event)` hook to your router                             |
@@ -164,7 +166,7 @@ Providers have no shadow root and use `display: contents`, with one exception: `
 | `isImeKeyEvent`                                       | `isImeKeyEvent` (`@tecton-astryx/core/utils/ime.js`) and `ImeGuard`                                                       |
 | `useTooltip`                                          | `TooltipController`                                                                                                      |
 | `useDevWarning`                                       | `devWarn()`                                                                                                              |
-| `useTheme`, `ThemeContext`                            | `themeContext`; token values through `@tecton-astryx/tokens/tokens.js` (see [Theming](../theme/#reading-the-theme-from-javascript)) |
+| `useTheme`, `ThemeContext`                            | `themeContext`; token values through `resolveThemeTokens` in `@tecton-astryx/core`, or `@tecton-astryx/tokens/tokens.js` (see [Theming](../theme/#reading-the-theme-from-javascript)) |
 | `useMergedRefs`                                       | Not needed. There are no refs to merge                                                                                    |
 
 Controllers are for authors of custom elements and for advanced composition. As an application developer you will rarely import one.

@@ -28,13 +28,17 @@ Form-associated custom elements are widely available (Chrome 77, Firefox 98, Saf
   title="A form of value controls"
   description="Submit the form to see its FormData. A blocked submit (an empty required field) reports the problem and focuses the field."
   source={`<form id="signup-form">
-  <tct-text-input label="Email" name="email" type="email" autocomplete="email" required></tct-text-input>
-  <tct-segmented-control label="Plan" name="plan" value="team">
-    <tct-segmented-control-item value="solo" label="Solo"></tct-segmented-control-item>
-    <tct-segmented-control-item value="team" label="Team"></tct-segmented-control-item>
-  </tct-segmented-control>
-  <tct-button type="submit" variant="primary" label="Create account"></tct-button>
-  <tct-text id="signup-form-result" type="supporting" display="block">Nothing submitted yet.</tct-text>
+  <tct-vstack gap="4" h-align="start">
+    <tct-form-layout>
+      <tct-text-input label="Email" name="email" type="email" autocomplete="email" required></tct-text-input>
+      <tct-segmented-control label="Plan" name="plan" value="team">
+        <tct-segmented-control-item value="solo" label="Solo"></tct-segmented-control-item>
+        <tct-segmented-control-item value="team" label="Team"></tct-segmented-control-item>
+      </tct-segmented-control>
+    </tct-form-layout>
+    <tct-button type="submit" variant="primary" label="Create account"></tct-button>
+    <tct-text id="signup-form-result" type="supporting">Nothing submitted yet.</tct-text>
+  </tct-vstack>
 </form>
 
 <script type="module">
@@ -180,7 +184,7 @@ For arbitrary or native controls that you want the same chrome around, use `tct-
 
 `tct-field` sets `aria-labelledby` and `aria-describedby` on the slotted control in your tree, honouring `input-id`, `label-id` and `description-id`. For a radio or checkbox group, `group-label` renders a group caption instead of a label. A status message appears as attached text, detached text or a tooltip, and is announced through the announcer, never through a persistent `role="alert"`.
 
-To lay out a whole form, wrap it in `tct-form-layout` (_planned_). It will set the direction (vertical, or a two-column form with the labels beside the controls) and the default optionality, so fields mark the exception rather than repeating what is true of the whole form.
+To lay out a whole form, wrap its fields in `tct-form-layout`. It sets the direction (`vertical`, the default; `horizontal`, fields side by side in equal columns; or `horizontal-labels`, a two-column form with the labels beside the controls) and `default-optionality`, so fields mark the exception rather than repeating what is true of the whole form. It is layout only: the `<form>` still owns state and submission.
 
 ## Autofill and password managers
 

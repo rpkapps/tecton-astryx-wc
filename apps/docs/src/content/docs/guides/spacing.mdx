@@ -5,6 +5,8 @@ sidebar:
   order: 23
 ---
 
+import Example from '@/components/Example.astro';
+
 ## Overview
 
 The design system uses a 4 px base-unit spacing scale. Element `gap` and `padding` attributes accept step values that map to these tokens. The scale gives fine-grained control at the small end (2, 4 and 6 px) and a consistent rhythm at larger sizes (multiples of 4 px).
@@ -35,15 +37,16 @@ The same values are available under the Tecton export's own names as `--tecton-s
 
 ## Usage
 
-Most elements take a `gap` attribute using step values. For custom layouts, use the spacing tokens directly in CSS:
+Layout elements (`tct-stack`, `tct-hstack`, `tct-vstack`, `tct-grid`) and a few others (`tct-toolbar`, `tct-overflow-list`) take a `gap` attribute using step values; `padding` takes the same steps on the layout elements, `tct-card`, `tct-section` and `tct-dialog`. For custom layouts, use the spacing tokens directly in CSS:
 
-```html title="Spacing through element attributes (preferred)"
-<!-- gap 4 is 16 px -->
-<tct-vstack gap="4">
+<Example
+  title="Spacing through element attributes (preferred)"
+  description="gap 4 is 16 px; the stack owns the space between its children."
+  source={`<tct-vstack gap="4">
   <tct-text>First</tct-text>
   <tct-text>Second</tct-text>
-</tct-vstack>
-```
+</tct-vstack>`}
+/>
 
 ```css title="Spacing through tokens (custom layouts)"
 .custom-layout {

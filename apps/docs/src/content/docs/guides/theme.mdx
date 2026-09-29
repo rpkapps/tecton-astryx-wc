@@ -9,8 +9,8 @@ import Example from '@/components/Example.astro';
 
 Theming here is a stylesheet, not a runtime. The Tecton theme ships as `tokens.css`: every design token is a CSS custom property, declared once on the document, with light and dark values. Elements read those properties through the cascade, so a change to a token on any ancestor reaches every element below it, and the browser resolves light and dark natively.
 
-:::caution[What exists today]
-The token stylesheet, its light, dark and inverted-surface blocks, the token metadata (`tokens.js`, `tokens.json`) and the `tct-theme` element exist. The `tct-media-theme` element and the `defineTheme` family of utilities are _planned_ and marked so below. The attribute-based mechanism (`data-theme`, `data-media-theme`) works with the stylesheet alone.
+:::note[What exists today]
+The token stylesheet, its light, dark and inverted-surface blocks, the token metadata (`tokens.js`, `tokens.json`), the `tct-theme` and `tct-media-theme` elements and the `defineTheme` family of utilities in `@tecton-astryx/core` all exist. One limitation: the `theme` property of `tct-theme` still selects a theme by name only, so a theme made with `defineTheme` is applied by loading its generated CSS yourself (see [Loading themes for production](#loading-themes-for-production)). `tct-syntax-theme` is _planned_. The attribute-based mechanism (`data-theme`, `data-media-theme`) works with the stylesheet alone.
 :::
 
 ## Quick start
@@ -48,7 +48,7 @@ The [design tokens reference](/reference/tokens/) shows the status of every toke
 | Attribute or property | Type                              | Default    | Description                                                                                       |
 | --------------------- | --------------------------------- | ---------- | ------------------------------------------------------------------------------------------------- |
 | `mode`                | `system`, `light` or `dark`       | `system`   | Colour mode, reflected. `system` follows the operating system, including changes while the page is open. |
-| `theme`               | A theme name, or an object with a `name` | `tecton` | Selects the token set. Runtime-defined themes (`defineTheme`, _planned_) will be wired to this property. |
+| `theme`               | A theme name, or an object with a `name` | `tecton` | The theme's name, reflected as `data-tct-theme` (the scope of generated theme CSS). Only the name is used: a `defineTheme` object is not applied by the element yet. |
 
 Unlike most providers, it is not `display: contents`: the host is a block that pins `color-scheme` and paints the page surface and text colour, which is what makes a scheme island render correctly (see [Nesting themes](#nesting-themes)). It publishes its name and resolved mode (`light` or `dark`, never `system`) to the elements inside it.
 
@@ -64,7 +64,7 @@ Persist the user's choice yourself and set `mode` from it. Add `<meta name="colo
 
 ## Creating a custom theme
 
-There are two routes. Use the first for a handful of overrides, the second (when it ships) for a reusable, generated theme.
+There are two routes. Use the first for a handful of overrides, the second for a reusable, generated theme.
 
 ### Override tokens in CSS
 
@@ -89,37 +89,50 @@ Two rules keep overrides predictable:
 
 ### `defineTheme`
 
-_Planned._ `defineTheme` will create a theme from token overrides and optional scale configurations, and a generator (`generateThemeCSS`) will turn it into a stylesheet that uses this library's token names. Explicit token overrides always take precedence over scale-generated values, token by token. The module and its export path are not fixed yet.
+`defineTheme` (exported from `@tecton-astryx/core`) creates a theme from token overrides and optional scale configurations, and `generateThemeCSS` turns it into a stylesheet that uses this library's token names. The theme is registered under its `name`, which is the value of the `data-tct-theme` attribute. Explicit `tokens` always take precedence over scale-generated values, token by token, and only the tokens you list are written: everything else keeps its default from `tokens.css`.
 
 ```js
-import {defineTheme} from '@tecton-astryx/core'; // planned: not available yet
+import {defineTheme, generateThemeCSS} from '@tecton-astryx/core';
 
 const brandTheme = defineTheme({
   name: 'brand',
   tokens: {
     // [light, dark] tuples for colour tokens, one value otherwise
+    '--color-accent': ['#0064e0', '#48cae4'],
     '--radius-element': '6px',
   },
 });
+
+const {component, prose} = generateThemeCSS(brandTheme); // two CSS strings, see below
 ```
 
 The configuration axes map onto this library as follows:
 
 | Config             | Generates                                                                | In this library                                                                                                                  |
 | ------------------ | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
-| `color`            | `--color-accent`, `--color-background-*`, `--color-text-*`, `--color-border` and so on | Tecton's colours are explicit role values from the export, not derived from a seed accent, so overriding tokens is the normal path |
-| `typography.scale` | `--text-*-size`, `--text-*-weight`, `--text-*-leading`                    | Tecton's scale is a fixed ladder (10, 12, 14, 16, 20, 24, 32, 40, 48 px), not geometric, so it is written as explicit tokens      |
-| `typography.*`     | `--font-family-body`, `--font-family-heading`, `--font-family-code`       | Figtree and IBM Plex Mono; changing the family is an override of these tokens                                                    |
+| `color`            | `--color-accent`, `--color-background-*`, `--color-text-*`, `--color-border` and so on, from an accent seed | Tecton's own colours are explicit role values from the export, not derived from a seed. Use `color` for a new theme; override tokens to adjust Tecton |
+| `typography.scale` | `--text-*-size`, `--text-*-weight`, `--text-*-leading`                    | Tecton's scale is a fixed ladder (10, 12, 14, 16, 20, 24, 32, 40, 48 px), not geometric, so Tecton writes it as explicit tokens   |
+| `typography.*`     | `--font-family-body`, `--font-family-heading`, `--font-family-code`       | Figtree and IBM Plex Mono; changing the family is an override of these tokens. Loading the fonts stays your job                  |
 | `radius`           | `--radius-inner`, `--radius-element`, `--radius-container`, `--radius-page`, `--radius-chat` | Tecton values 2, 4, 8, 16 and 12 px                                                                                       |
 | `motion`           | `--duration-*`, `--ease-standard`                                         | Retained defaults                                                                                                                |
 
+`localTokens`, `icons`, `indicators`, `syntax`, `onDark`, `onLight` and `components` are the other inputs; the sections below cover the ones you will use most.
+
 ## Extending a theme
 
-_Planned._ `extends` will derive a new theme from an existing one, inheriting its tokens, adaptations and metadata. Only specify what you want to change. Tokens are copied first and the child's tokens override on top. Inheritance is resolved when the theme is defined, so an extended theme is flat: the generated stylesheet is self-contained and the base theme's CSS does not need to be loaded next to it.
+`extends` derives a new theme from an existing `defineTheme` result, inheriting its tokens, component overrides, icons, indicators, media-surface overrides and adaptations. Only specify what you want to change; the base has the lowest precedence. Inheritance is resolved when the theme is defined, so an extended theme is flat: its generated stylesheet is self-contained and the base theme's CSS does not need to be loaded next to it. Passing something that is not a defined theme throws.
+
+```js
+const brandDense = defineTheme({
+  name: 'brand-dense',
+  extends: brandTheme,
+  tokens: {'--size-element-md': '28px'},
+});
+```
 
 ## Theme adaptations
 
-_Planned._ Adaptations are opt-in token changes under a viewport width, primary-pointer precision, contrast preference or motion preference. Conditions in one rule are combined with AND, rules apply in order, and later matching rules win.
+Adaptations are opt-in token and component changes under a viewport width, primary-pointer precision, contrast preference or motion preference, given to `defineTheme` as `adaptations.rules`. Conditions in one rule (`when`) are combined with AND, rules apply in order, and later matching rules win.
 
 | Condition                    | Values                                |
 | ---------------------------- | ------------------------------------- |
@@ -128,7 +141,19 @@ _Planned._ Adaptations are opt-in token changes under a viewport width, primary-
 | `contrast`                   | `more`, `less` or `no-preference`     |
 | `motion`                     | `reduce` or `no-preference`           |
 
-The named widths are retained defaults, because Tecton has none: `sm` 640, `md` 768, `lg` 1024, `xl` 1280, `2xl` 1536 CSS pixels; `from` includes its point and `below` excludes it. Adaptations compile to CSS media queries, so there is no resize listener and no re-render. You can write the same thing by hand today:
+The named widths are retained defaults, because Tecton has none: `sm` 640, `md` 768, `lg` 1024, `xl` 1280, `2xl` 1536 CSS pixels (`adaptations.widthBreakpoints` overrides them); `from` includes its point and `below` excludes it. Adaptations compile to CSS media queries, so there is no resize listener and no re-render.
+
+```js
+defineTheme({
+  name: 'brand-touch',
+  extends: brandTheme,
+  adaptations: {
+    rules: [{when: {pointer: 'coarse'}, value: {tokens: {'--size-element-md': '40px'}}}],
+  },
+});
+```
+
+You can write the same thing by hand without `defineTheme`:
 
 ```css
 /* coarse pointers get larger controls */
@@ -141,7 +166,7 @@ The named widths are retained defaults, because Tecton has none: `sm` 640, `md` 
 }
 ```
 
-`prefers-contrast: more` is not handled by the elements in version 1. Forced-colours mode is required and handled: the stylesheet maps roles to system colours (`Canvas`, `CanvasText`, `ButtonBorder`, `Highlight`, `LinkText`, `GrayText`) under `@media (forced-colors: active)`.
+`prefers-contrast: more` is not handled by the elements in version 1, so a `contrast` adaptation is the way to add it for your product. Forced-colours mode is required and handled: the stylesheet maps roles to system colours (`Canvas`, `CanvasText`, `ButtonBorder`, `Highlight`, `LinkText`, `GrayText`) under `@media (forced-colors: active)`.
 
 ## Component style overrides
 
@@ -162,15 +187,31 @@ tct-button[variant='ghost']::part(button) {
 
 Prefer re-pointing the token an element already reads over setting a property on it. Setting the property directly bypasses the state and hover mixing that the element does from tokens, and it can defeat forced-colours handling. The names of the public custom properties and parts are listed on each element's page, and private properties (those that start with `--_`) are not an API.
 
-Whether `defineTheme` will accept a `components` map that compiles to part and custom-property rules is still open (_planned_). A theme family (one keyed bundle holding several themes) has no equivalent here, because a page loads one stylesheet.
+`defineTheme` also takes a `components` map for the same intent: each key is a component name (`button`, `banner`, ...), and its values map a style key to CSS properties. The key `base` styles every instance, and `prop:value` (or `prop:value+prop:value`) selects on the reflected attribute of the host, with pseudo-classes such as `:hover` nested inside. The generator resolves each key to the element's tag and part (`tct-button::part(button)`).
+
+```js
+defineTheme({
+  name: 'brand',
+  components: {
+    button: {
+      base: {fontWeight: '600'},
+      'variant:secondary': {backgroundColor: 'var(--color-background-muted)'},
+    },
+  },
+});
+```
+
+A theme family (one keyed bundle holding several themes) has no equivalent here, because a page loads one stylesheet.
 
 ## Custom variants
 
-Elements validate an enumerated attribute against its documented list: an unknown value falls back to the default and warns once in development (`globalThis.tctDevMode = true`). A theme therefore cannot add a value to an element it does not own. The values Tecton adds to the standard lists (the `outlined` and `text-only` button variants, for example) are part of the elements and documented on their pages. How a theme could extend an element is _planned_.
+Elements validate an enumerated attribute against its documented list: an unknown value falls back to the default and warns once in development (`globalThis.tctDevMode = true`). A `prop:value` key in a theme's `components` map only matches when an element carries that attribute value, so a theme cannot add a variant to an element it does not own. The values Tecton adds to the standard lists (the `outlined` and `text-only` button variants, for example) are part of the elements and documented on their pages.
 
 ## Loading themes for production
 
-Load the stylesheet, not a script. A static stylesheet is present at first paint, before any JavaScript runs, so there is no flash of unthemed content, and it works for server rendering. For a custom theme, generate its CSS at build time (`generateThemeCSS`, _planned_) and load it after `tokens.css`, or write the overrides by hand in your own stylesheet.
+Load the stylesheet, not a script. A static stylesheet is present at first paint, before any JavaScript runs, so there is no flash of unthemed content, and it works for server rendering. For a custom theme, generate its CSS at build time with `generateThemeCSS` and load it after `tokens.css`, or write the overrides by hand in your own stylesheet.
+
+`generateThemeCSS(theme)` returns two strings. `prose` holds the theme's defaults for bare HTML elements and belongs in `@layer tecton.reset`, so any class wins over it. `component` holds the token and component overrides and belongs in a layer that follows `tecton.tokens` (such as `tecton.light-dom` or a layer of your own declared after it), so the theme wins over the defaults. Both are scoped to `[data-tct-theme="<name>"]` with `@scope`, so put `data-tct-theme` on the element that should take the theme, or on an outermost `tct-theme` with `theme="<name>"`. `@scope` is in current Chromium and Safari releases (Chrome 143, Safari 26.4) but not yet in every Tier 1 engine, so a generated theme is a progressive enhancement until it is; the hand-written token overrides above work everywhere.
 
 | Concern                        | Static stylesheet (recommended)                | JavaScript-injected styles                        |
 | ------------------------------ | ---------------------------------------------- | ------------------------------------------------- |
@@ -242,21 +283,27 @@ Without that, text would keep the ancestor's already-resolved colour on a backgr
 <Example
   title="Scheme islands"
   description="A dark island and a light island on the same page. Text and controls inside each follow its scheme, whatever the page is set to."
-  source={`<div data-theme="dark">
-  <tct-text>A dark island</tct-text>
-  <tct-button variant="primary" label="Primary"></tct-button>
-</div>
-<div data-theme="light">
-  <tct-text>A light island</tct-text>
-  <tct-button variant="primary" label="Primary"></tct-button>
-</div>`}
+  source={`<tct-vstack gap="4">
+  <div data-theme="dark">
+    <tct-vstack padding="4" gap="2" h-align="start">
+      <tct-text>A dark island</tct-text>
+      <tct-button variant="primary" label="Primary"></tct-button>
+    </tct-vstack>
+  </div>
+  <div data-theme="light">
+    <tct-vstack padding="4" gap="2" h-align="start">
+      <tct-text>A light island</tct-text>
+      <tct-button variant="primary" label="Primary"></tct-button>
+    </tct-vstack>
+  </div>
+</tct-vstack>`}
 />
 
 ### Content over media
 
-`data-media-theme="dark"` and `data-media-theme="light"` (and the planned `tct-media-theme` element) pin the dark or light side of each colour pair for content that sits on an image or a coloured surface. They set the primary and secondary text colours, the surface, border, icon and accent colours.
+`data-media-theme="dark"` and `data-media-theme="light"` pin the dark or light side of each colour pair for content that sits on an image or a coloured surface. They set the primary and secondary text colours, the surface, border, icon and accent colours. The `tct-media-theme` element sets the attribute for you and adds a `mode`: `dark` or `light` to pin a side, `auto` (the default) to measure the surface that was painted and decide, and `off` to remove the context. `fallback` (`dark` or `light`) is the side `auto` uses while it cannot measure, for example over a background image. It has no box and paints no background: put the background on the parent, and use it for local surface inversions, not for the page's colour mode.
 
-Focus ring: the ring is Tecton hot pink everywhere, and pink fails the 3:1 non-text contrast on inverted surfaces. On those surfaces the ring is meant to gain a second, inner ring (`--tecton-color-focus-inner`) in the surface's contrast colour. `--tecton-color-focus-inner` is _provisional_: it is a proposal, not a Tecton value.
+Focus ring: the ring is Tecton hot pink everywhere, and pink fails the 3:1 non-text contrast on inverted surfaces. On those surfaces the ring gains a second, inner ring (`--tecton-color-focus-inner`) in the surface's contrast colour, and `tct-media-theme` moves the ring with the side. `--tecton-color-focus-inner` is _provisional_: it is a proposal, not a Tecton value.
 
 ### Overlays
 
@@ -292,11 +339,11 @@ function resolvedColor(element, token) {
 }
 ```
 
-_Planned:_ theme utilities to resolve, register and look up runtime-defined themes (`resolveThemeTokens`, `registerTheme`, `getRegisteredTheme`), and a token-reading controller for element authors. Elements can already read the name and resolved mode of the nearest `tct-theme` through the theme context (`themeContext` in `@tecton-astryx/core/context/keys.js`).
+For a theme made with `defineTheme`, `resolveThemeTokens(theme, {mode})` returns every token as a concrete value for `light` or `dark`, following `var()` references and `color-mix()`, and `resolveThemeToken(theme, name, {mode})` returns one. `registerTheme` and `getRegisteredTheme(name)` look themes up by name. Elements read the name and resolved mode of the nearest `tct-theme` through the theme context (`themeContext` in `@tecton-astryx/core/context/keys.js`). A token-reading controller for element authors is _planned_.
 
 {/*
-Sources: docs/ARCHITECTURE.md sections 6, 12; packages/components/src/theme/ (tct-theme.ts, theme.docs.md); packages/tokens/dist/tokens.css and tokens.js.
-Section map: Quick start; Available themes; The theme element; Creating a custom theme (Override tokens in CSS, defineTheme: planned); Extending a theme (planned); Theme adaptations (planned);
+Sources: docs/ARCHITECTURE.md sections 6, 12; packages/components/src/theme/ and media-theme/ (docs); packages/core/src/theme/ (define-theme.ts, generate-theme-rules.ts, tokens.ts); packages/tokens/dist/tokens.css and tokens.js.
+Section map: Quick start; Available themes; The theme element; Creating a custom theme (Override tokens in CSS, defineTheme); Extending a theme; Theme adaptations;
 Component style overrides; Custom variants; Loading themes for production; Light and dark mode; Nesting themes; Reading the theme from JavaScript.
 Guides: [mwg:dark-mode] [mwg:component-specific-light-dark-theme] [mwg:design-token-reactivity] [mwg:styling-web-components] [mwg:custom-elements] [mwg:accessible-web-components]
 */}

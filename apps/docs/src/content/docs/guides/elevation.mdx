@@ -50,23 +50,27 @@ If two surfaces overlap, the one on top takes the higher level. If a surface doe
 
 ## The elevation attribute
 
-Configurable surfaces expose a single `elevation` attribute instead of asking you to hand-write a `box-shadow`. It takes the graded enumeration `none`, `low`, `med` or `high`, narrowed per element to the steps that surface needs. `tct-button`, `tct-icon-button`, `tct-toggle-button`, `tct-button-group` and `tct-banner` expose the full scale today. `tct-card`, `tct-clickable-card` and `tct-selectable-card` will expose it too, and `tct-chat-composer` only `none` and `low` (all four _planned_). `none` is a flat literal (`box-shadow: none`); the other levels map to the `--shadow-*` tokens above, so a surface stays theme-agnostic.
+Configurable surfaces expose a single `elevation` attribute instead of asking you to hand-write a `box-shadow`. It takes the graded enumeration `none`, `low`, `med` or `high`, narrowed per element to the steps that surface needs. `tct-button`, `tct-icon-button`, `tct-toggle-button`, `tct-button-group`, `tct-banner` and `tct-card` expose the full scale today. `tct-clickable-card` and `tct-selectable-card` will expose it too, and `tct-chat-composer` only `none` and `low` (all three _planned_). `none` is a flat literal (`box-shadow: none`); the other levels map to the `--shadow-*` tokens above, so a surface stays theme-agnostic.
 
 Defaults preserve the current appearance: every surface defaults to `none` except the chat composer, which defaults to `low`. Set `elevation="none"` to flatten it; the flat composer draws a border with the same rest, hover and focus treatment as a text input.
 
 <Example
   title="The elevation attribute"
-  description="Flat by default. A button that floats over content is raised to med; a banner that sits in the flow is raised to low."
-  source={`<tct-icon-button label="Search" icon="search" variant="primary" elevation="med"></tct-icon-button>
-<tct-banner status="info" heading="Raised, low" description="An inline banner that needs emphasis." elevation="low"></tct-banner>`}
+  description="Flat by default; raise only when the surface needs to float. A button that floats over content is raised to med, a card or banner that needs emphasis in the flow to low."
+  source={`<tct-vstack gap="4">
+  <tct-hstack>
+    <tct-icon-button label="Search" icon="search" variant="primary" elevation="med"></tct-icon-button>
+  </tct-hstack>
+  <tct-card elevation="low" padding="4">
+    <tct-text>Raised card</tct-text>
+  </tct-card>
+  <tct-banner status="info" heading="Raised, low" description="An inline banner that needs emphasis." elevation="low"></tct-banner>
+</tct-vstack>`}
 />
 
-The same attribute on the planned surfaces:
+The same attribute on the planned surface:
 
 ```html
-<!-- Flat by default; raise only when the surface needs to float. -->
-<tct-card elevation="low">Raised card</tct-card>
-
 <!-- Flatten the composer (it defaults to low). -->
 <tct-chat-composer elevation="none"></tct-chat-composer>
 ```
@@ -111,6 +115,6 @@ Depth in Tecton is also drawn without shadows. Use a border (`var(--border-width
 
 {/*
 Sources: docs/research/tecton-theme.md 3.6 and D-013 Q-06 ("menus, popovers and panels follow no drop shadow; border plus recessed surface"). Values from packages/tokens/dist/tokens.json.
-Elements with an elevation attribute: button, icon-button, toggle-button, button-group, banner (merged); card, clickable-card, selectable-card, chat-composer (planned).
+Elements with an elevation attribute: button, icon-button, toggle-button, button-group, banner, card (merged); clickable-card, selectable-card, chat-composer (planned).
 Guides: [mwg:css] [mwg:dark-mode]
 */}

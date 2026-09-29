@@ -27,8 +27,10 @@ The element finds the catalog for `fr`, loads it, and re-renders. There is nothi
   title="A provider sets the language of a region"
   description="The optional and required indicators, and the clear button's name, come from the French catalog. The labels are your own text."
   source={`<tct-internationalization-provider locale="fr-FR">
-  <tct-text-input label="Nom" optional value="Ada" has-clear></tct-text-input>
-  <tct-text-input label="Adresse e-mail" required></tct-text-input>
+  <tct-vstack gap="3">
+    <tct-text-input label="Nom" optional value="Ada" has-clear></tct-text-input>
+    <tct-text-input label="Adresse e-mail" required></tct-text-input>
+  </tct-vstack>
 </tct-internationalization-provider>`}
 />
 
