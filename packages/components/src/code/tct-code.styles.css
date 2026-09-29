@@ -1,0 +1,53 @@
+/*
+ * tct-code. The host is an inline box; the inner `<code>` (part "base") carries the type and the
+ * muted surface (paint on :host would be erased by an application reset). Colour, type size and
+ * radius come from tokens; the monospace family carries the numeric `font-size-adjust` so inline code
+ * matches the x-height of the surrounding Figtree text; without support the fonts keep their natural
+ * size and the metric-matched fallback faces cover the swap. Tecton: --color-background-muted
+ * (tecton-astryx components.ts `code-block` / `kbd` surface).
+ * [mwg:visually-stable-mixed-fonts] [mwg:styling-web-components] [mwg:css]
+ */
+@layer component {
+  :host {
+    display: inline;
+  }
+
+  .base {
+    color: var(--color-text-primary);
+    font-family: var(--font-family-code);
+    font-size: var(--text-code-size);
+    font-size-adjust: var(--font-size-adjust-code);
+    line-height: inherit;
+    background-color: var(--color-background-muted);
+    padding-inline: var(--spacing-1);
+    padding-block: var(--spacing-0);
+    border-radius: var(--radius-inner);
+
+    /* Long identifiers and paths must not break the parent layout. */
+    overflow-wrap: anywhere;
+  }
+
+  :host([color='secondary']) .base {
+    color: var(--color-text-secondary);
+  }
+
+  :host([color='inherit']) .base {
+    color: inherit;
+  }
+
+  /* Adopt the surrounding text's font-size and line-height (inline code in larger or smaller text). */
+  :host([size='inherit']) .base {
+    font-size: inherit;
+    line-height: inherit;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    /* Backgrounds are dropped in forced-colors mode: mark the code with an edge instead. */
+    .base {
+      color: CanvasText;
+      border: var(--border-width) solid ButtonBorder;
+    }
+  }
+}

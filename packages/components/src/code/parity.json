@@ -1,0 +1,108 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "code",
+  "workPackage": "WP-1",
+  "entries": {
+    "core.code": {
+      "tag": "tct-code",
+      "status": "implemented",
+      "upstream": {
+        "name": "Code",
+        "path": "packages/core/src/Code/Code.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use the host (class, style), ::part(base) or the documented attributes."
+        },
+        {
+          "upstream": "className",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: `class` on the host."
+        },
+        {
+          "upstream": "style",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: `style` on the host."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A test-selector attribute; any attribute on the host passes through."
+        },
+        {
+          "upstream": "color",
+          "kind": "prop",
+          "target": "color",
+          "as": "attribute",
+          "reflect": true,
+          "default": "primary"
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Only `inherit`; unset uses the Tecton code text size."
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "The element itself is the handle; the `<code>` is reachable as part \"base\"."
+        }
+      ],
+      "hooks": [],
+      "keyboard": [],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "CODE-01",
+          "type": "tecton-visual",
+          "text": "The muted surface is --color-background-muted (as upstream) with the Tecton code type: --font-family-code (IBM Plex Mono), --text-code-size (mediumData) and the numeric font-size-adjust --font-size-adjust-code so inline code matches the x-height of Figtree text (styling.md §13)."
+        },
+        {
+          "id": "CODE-02",
+          "type": "approved-api-difference",
+          "text": "The host is an inline box and the real <code> is inside the shadow root (part \"base\"), so the browser exposes the code role. The text is slotted, so it wraps with the paragraph; overflow-wrap is anywhere instead of upstream's break-word plus word-break."
+        },
+        {
+          "id": "CODE-03",
+          "type": "a11y-improvement",
+          "text": "Forced colours give the code a ButtonBorder edge (backgrounds are dropped there) and CanvasText text."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": ["--font-size-adjust-code"],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:visually-stable-mixed-fonts] numeric font-size-adjust for the mono family, unsupported browsers keep natural size and the metric-matched fallback faces; [mwg:styling-web-components] part=base; [mwg:css] logical properties, tokens."
+    }
+  }
+}
