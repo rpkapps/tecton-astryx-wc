@@ -29,7 +29,7 @@ e.g. `[mwg:form-associated-custom-elements]`.
 | A-10 | Context via an **in-house implementation of the Context Community Protocol** (`@tecton-astryx/core/context`). | `@lit/context` is not approved (D-007); the protocol is small and interoperable. |
 | A-11 | Events: native `input`/`change`/`click` for native concepts; `tct-<x>-change` cancelable intent events; `tct-after-<x>-change` commit events only where the commit is asynchronous; one `Event` subclass per name (§7.6). | Platform `beforetoggle`/`toggle` model, Web Awesome typing model, no feedback loops. |
 | A-12 | i18n: upstream's 30 catalogs (+ generated pseudo) shipped as `@tecton-astryx/locales`; ICU via `intl-messageformat` behind `core/i18n/format.ts`; locale = nearest `lang`. | D-006 locale target; approved dependency; one resolution mechanism. |
-| A-13 | Icons: registry + `tct-icon`; default set = Astryx role names mapped to **Lucide** glyphs, generated at build time from the dev-only `lucide` package (D-009). Tecton set pending provenance (D-004). | Owner chose Lucide (ISC/MIT); no runtime icon dependency. |
+| A-13 | Icons: registry + `tct-icon`; default set = Astryx role names mapped to **Lucide** glyphs, generated at build time from the dev-only `lucide` package (D-009). The owner's Tecton domain icon set (18 glyphs, outlined and filled) ships in the default set (D-013 Q-02). | Owner chose Lucide (ISC/MIT); no runtime icon dependency. |
 | A-14 | Every generated artifact is **gitignored** and produced by `pnpm generate`; only snapshots that act as API guards are committed, one file per component folder. | Parallel worktrees never conflict on generated files. |
 | A-15 | Docs: Astro 7 + Starlight 0.42; component pages generated from CEM + `*.docs.md` + `examples/*.html` + `parity.json`; Starlight UI progressively replaced with our elements (WP-D). | Approved; search, sidebar and content collections for free; plan §8 docs-built-with-components satisfied incrementally. |
 | A-16 | Tests: Vitest 5 browser mode + Playwright provider; local Chromium via `executablePath`; CI runs Chromium, Firefox, WebKit. | Approved; proven in the owner's previous project and the spike. |
@@ -395,9 +395,13 @@ For every emitted semantic token and mode:
 4. Every value must resolve to a palette path or be a structural literal (lengths, `transparent`,
    durations). A colour that resolves to no palette path is an error unless allowlisted in
    `unresolved.allow.json` with a reason (D-001: "flag any that don't").
-5. Status per token: `tecton-export`, `tecton-astryx`, `upstream-default`, or **`provisional`**
-   (D-002: data-viz, motion, breakpoints, z-index, letter-spacing, `--size-element-lg`,
-   destructive button, missing icons).
+5. Status per token: `tecton-export`, `tecton-astryx`, `upstream-default`, **`astryx-retained`** or
+   **`provisional`**. D-013 Q-06 settles what has no Tecton token: motion (10 tokens), breakpoints and
+   z-index keep the Astryx values on purpose and are `astryx-retained`; headings 3-6 (Tecton's
+   large/medium/small/tiny), letter-spacing (`normal`) and the destructive button (bound to
+   `--tecton-color-status-error-*`, recorded in the token metadata) are Tecton-derived; only data-viz colours
+   (a proposed mapping from palette colours), `--size-element-lg` and the pipeline-defined extras stay
+   `provisional`. `provisional.json` holds the three groups.
 
 ### 5.3 Normalisation
 
@@ -439,7 +443,11 @@ system fonts; this is a safety net, not a mode (styling.md §4.2).
   backdrop): text roles ≥ 4.5:1, icon/boundary roles and the focus ring ≥ 3:1 on every surface, both
   modes. Known design shortfalls live in `contrast.allow.json` with a reason (e.g.
   `--color-border-emphasized` 2.2:1). D-005 inverted-surface double ring is checked here.
-- Provisional tokens are exactly the D-002 set; docs list them on "Differences and open items".
+- The **provisional** set (data-viz 56, `--size-element-lg`, the 6 pipeline extras) and the
+  **astryx-retained** set (motion 10; non-tokens: breakpoints, z-index) are exact and disjoint (D-013); the
+  Tecton-derived items are checked (headings 3-6 follow the export's large/medium/small/tiny sizes,
+  letter-spacing is `normal` everywhere, the destructive button binds only emitted
+  `--tecton-color-status-error-*` roles). Docs list all three groups on "Differences and open items".
 
 ---
 
@@ -495,7 +503,9 @@ No `:host-context()`, no utility-class visuals on hosts, no documented subclass 
 
 ### 6.4 Values
 
-No colour literals (hex/rgb/hsl/oklch), no px font sizes, no palette variables, no unknown
+No colour literals (hex, rgb(), hsl(), oklch(), named colours; only `transparent`, `currentColor`, `inherit`, and
+CSS system colours inside `@media (forced-colors: active)`), so every colour a component paints resolves to a
+Tecton token (D-013 Q-06; `tct/no-color-literals`, also on `*.light.css`), no px font sizes, no palette variables, no unknown
 custom properties (allowed: token set ∪ this component's `--<component>-*` `@cssprop`s ∪
 `--_<component>-*` ∪ documented `@internal` coupling names). Structural literals (`0`, `100%`,
 `1 / 1`, `none`) are fine; a named geometry literal needs a `/* design: … */` comment. `color-mix(in oklab, …)`
@@ -1249,7 +1259,7 @@ Controllers owned by later work packages (new files in `core/src/controllers/`):
 
 ---
 
-## 12. Icons (D-004, D-007)
+## 12. Icons (D-004, D-007, D-009, D-013)
 
 - `core/src/icons/registry.ts`:
 
@@ -1260,7 +1270,8 @@ export interface IconDefinition {
   mode: 'fill' | 'stroke';                           // stroke: strokeWidth from definition
   strokeWidth?: number;
   mirrorInRtl?: boolean;                             // chevrons, arrows
-  colored?: boolean;                                 // does not inherit currentColor
+  colored?: boolean;                                 // carries colours of its own (D-013: strata)
+  svg?: string;                                      // D-013 Q-02: optional raw SVG body, see below
 }
 export type IconLoader = () => Promise<IconDefinition>;
 export function registerIcons(icons: Record<string, IconDefinition | IconLoader>, options?: {namespace?: string}): void;
@@ -1272,16 +1283,32 @@ export function resetIcons(): void;
   from **Lit `svg` templates** (no `unsafeSVG`). A labelled icon (`label="…"`) gets `role=img` +
   `ariaLabel` via internals. Custom SVG: slot an `<svg>`; registering a raw SVG string goes through
   `sanitizeHtml(…, {svg: true})` once and is cloned.
+- **`IconDefinition.svg`** (D-013 Q-02, the one addition to this shape): optional raw SVG body (inner markup, no
+  `<svg>` wrapper) for glyphs that `paths` cannot express, i.e. per-shape colours. It goes through the same
+  sanitiser once at registration and is cloned per instance, never trusted as-is; when present it replaces
+  `paths` for rendering, and `paths` stays as the single-colour outline for renderers that ignore it. Generated
+  bodies contain only `<path d fill fill-rule>` (no `<defs>`, ids, `url()`, `style`, `<foreignObject>`), so they
+  survive the sanitiser unchanged. The Tecton `strata` glyph is the only user. Core's registry and `tct-icon`
+  implement the field; `packages/icons/src/types.ts` mirrors it.
 - **Default set** (`@tecton-astryx/icons/default.js`, registered as the lowest-priority layer by
   `tct-icon` on its first connect. It has no module side effect, and consumer registrations override it):
   upstream Astryx's role names (close, check, chevrons, status icons, calendar, clock, externalLink,
   menu, moreHorizontal, search, arrows, funnel, eyeSlash, viewColumns, copy, checkDouble, wrench, …)
   mapped to **Lucide** glyphs (D-009). Stroke icons: `mode: 'stroke'`, 24×24, stroke width 2, overridable
   through `--icon-stroke-width`.
+  The default set also registers the **Tecton domain icons** (D-013 Q-02) as lazy loaders under their kebab
+  names (`well`, `fault`, `seismic`, `strata`, …, outlined) and `<name>-filled`.
 - **Full Lucide set**: `tools/icons/extract-lucide.ts` reads the dev-only `lucide` package and generates
   `@tecton-astryx/icons/lucide/<name>.js` data modules, one per icon, tree-shakeable and gitignored. It also
   generates a `lucide` registry helper. Notices: Lucide ISC + Feather MIT in THIRD-PARTY-NOTICES.
-- **Tecton set**: drop-in registry package once provenance is cleared (D-004); not shipped.
+- **Tecton domain set** (D-013 Q-02, owner-supplied): 18 oil & gas / subsurface glyphs, each outlined and filled.
+  The authored data is `packages/icons/src/tecton/glyphs/` (provenance in `packages/icons/src/tecton/README.md`);
+  `tools/icons/extract-tecton.ts` generates `@tecton-astryx/icons/tecton/<name>.js` (exports `outlined`,
+  `filled`, default = outlined) and `@tecton-astryx/icons/tecton.js` (`tectonIcons` loaders,
+  `tectonIconNames`, `tectonIconMeta`). `<rect>` and simple `<g>` wrappers convert to paths exactly; 17 of the 18
+  glyphs render pixel-identically to the original markup. `strata` (a CSS conic gradient through
+  `<foreignObject>`) is re-expressed as a wedge fan in `svg` and is a bounded approximation. The 131-glyph
+  tecton-astryx set is not used.
 
 ---
 
@@ -1525,7 +1552,9 @@ No publish or release job (D-008). Artifacts: reports/, docs build, CDN bundle.
 `tools/licenses/check.ts` reads `pnpm licenses list --json` (built into pnpm; prod and dev) and fails on
 any licence outside the allowlist: MIT, BSD-2-Clause, BSD-3-Clause, Apache-2.0, ISC, 0BSD, OFL-1.1;
 explicit exceptions: `dompurify` (Apache-2.0 election), `axe-core` (MPL-2.0, dev only, must not
-appear in the prod tree); our own workspace packages (`@tecton-astryx/*`, `UNLICENSED`, private).
+appear in the prod tree) and the transitive dev-only licences approved under D-013 Q-01 (MIT-0, BlueOak-1.0.0,
+CC0-1.0, Python-2.0, MPL-2.0; each pinned to an exact package and licence, never in the shipped tree; any new
+licence still fails and needs review); our own workspace packages (`@tecton-astryx/*`, `UNLICENSED`, private).
 It also verifies `THIRD-PARTY-NOTICES.md` lists every production dependency.
 `THIRD-PARTY-NOTICES.md` records: runtime licences (lit, @floating-ui/*, @internationalized/date +
 @swc/helpers, intl-messageformat + @formatjs/* + tslib, dompurify under Apache-2.0), OFL-1.1 notices for
