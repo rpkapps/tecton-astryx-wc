@@ -216,15 +216,22 @@
     border-inline-end: var(--border-width) solid var(--color-border);
   }
 
-  /* The empty and pending rows are not data: no divider, no hover. */
-  :where(tct-table) :where(tr.tct-table-empty > td, tr.tct-table-pending > td) {
+  /* The empty and spacer rows are not data: no divider, no hover. */
+  :where(tct-table) :where(tr.tct-table-empty > td, tr.tct-table-spacer > td) {
     border: 0;
     padding: 0;
   }
 
   /* ------------------------------------------------------------------------------ row states */
-  :where(tct-table[striped])
+  :where(tct-table[striped]:not([data-windowed]))
     :where(tbody > tr:nth-child(even), tct-table-body > tct-table-row:nth-child(even)) {
+    --_table-row-overlay: var(--tecton-color-table-stripe);
+    background-color: var(--tecton-color-table-stripe);
+  }
+
+  /* A windowed body starts with a spacer row, so its data rows count from the second child. */
+  :where(tct-table[striped][data-windowed])
+    :where(tbody > tr:nth-child(odd):not(.tct-table-spacer)) {
     --_table-row-overlay: var(--tecton-color-table-stripe);
     background-color: var(--tecton-color-table-stripe);
   }
@@ -232,7 +239,7 @@
   @media (hover: hover) {
     :where(tct-table[has-hover])
       :where(
-        tbody > tr:not([aria-disabled='true'], .tct-table-empty, .tct-table-pending):hover,
+        tbody > tr:not([aria-disabled='true'], .tct-table-empty, .tct-table-spacer):hover,
         tct-table-body > tct-table-row:not([aria-disabled='true']):hover
       ) {
       --_table-row-overlay: var(--tecton-color-table-row-hover);

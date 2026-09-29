@@ -35,6 +35,7 @@ import {
   TABLE_DIVIDERS,
   TABLE_TEXT_OVERFLOWS,
   TABLE_VERTICAL_ALIGNS,
+  TABLE_WINDOWINGS,
   type BodyCellRenderProps,
   type BodyRowRenderProps,
   type HeaderCellRenderProps,
@@ -54,6 +55,7 @@ import {
   type TableRenderProps,
   type TableTextOverflow,
   type TableVerticalAlign,
+  type TableWindowing,
 } from './table.types.js';
 import {
   defaultCellRenderer,
@@ -62,17 +64,18 @@ import {
   type ResolvedColumnWidths,
 } from './table.utils.js';
 import {contextActionsOf, tableProps} from './table-props.directive.js';
-import {yieldToMain} from './table-scheduler.js';
 import lightStyles from './tct-table.light.css?inline';
 
-/** Datasets up to this many rows render in one synchronous update; larger ones render progressively. */
-export const TABLE_SYNC_ROW_LIMIT = 200;
-/** Rows of the first chunk of a progressive render: a screenful, so the first paint is quick. */
-const FIRST_CHUNK = 60;
-/** Time budget of one chunk of a progressive render (ms), well below the 50 ms long-task line. */
-const CHUNK_BUDGET_MS = 16;
-const MIN_CHUNK = 40;
-const MAX_CHUNK = 1500;
+/** With `windowing="auto"`, datasets larger than this render only the rows near the viewport. */
+export const TABLE_WINDOWING_THRESHOLD = 200;
+/** Rows a window always holds at least (a screenful and more). */
+const WINDOW_MIN_ROWS = 40;
+/** The window edges snap to multiples of this, so scrolling re-renders in batches, not per row. */
+const WINDOW_STEP = 8;
+/** Rows rendered beyond the viewport on each side, at least. */
+const WINDOW_MIN_OVERSCAN = 8;
+/** Row block size (px) assumed until a rendered row has been measured. */
+const ESTIMATED_ROW_BLOCK_SIZE = 44;
 
 type Row = Record<string, unknown>;
 
@@ -109,10 +112,13 @@ function oneOf<V extends string>(allowed: readonly V[], value: V, fallback: V, n
  * a canonical order. Interactive plugins add their own controls (buttons, checkboxes, a separator
  * handle) to the cells, in the tab order; the table is not a grid and adds no arrow-key model.
  *
- * Large datasets render progressively: the first rows in one update and the rest in chunks that each
- * stay well under the long-task line, so an interaction such as sorting ten thousand rows paints
- * quickly. `updateComplete` resolves when every row has been rendered.
- * [mwg:break-up-long-tasks] [mwg:interactions-in-complex-layouts] [mwg:responsive-table]
+ * Large datasets are windowed: above 200 rows only the rows near the viewport are in the DOM, between
+ * two spacer rows that keep the scroll height, and `aria-rowcount` / `aria-rowindex` describe the whole
+ * set to assistive technology. Sorting or selecting in ten thousand rows therefore costs the same as in
+ * fifty. Windowing assumes rows of a similar block size (use `text-overflow="truncate"` for text columns);
+ * `windowing="off"` renders every row. Table rows cannot use `content-visibility`, which is why the
+ * table windows instead. [mwg:defer-rendering-heavy-content] [mwg:interactions-in-complex-layouts]
+ * [mwg:break-up-long-tasks] [mwg:responsive-table]
  *
  * @summary A data table with density, dividers, striping, hover and a plugin pipeline.
  * @tag tct-table
@@ -151,6 +157,12 @@ export class TctTable<T extends Row = Row> extends TctElement {
    * truncate; cells with `renderCell` control their own overflow.
    */
   @property({reflect: true, attribute: 'text-overflow'}) textOverflow: TableTextOverflow = 'wrap';
+
+  /**
+   * Windowing of large datasets: `auto` (default) renders only the rows near the viewport once there
+   * are more than 200; `off` renders every row.
+   */
+  @property({reflect: true}) windowing: TableWindowing = 'auto';
 
   /** Accessible name of the scroll region. Default: the localised "Table". */
   @property() label = '';
@@ -215,7 +227,7 @@ export class TctTable<T extends Row = Row> extends TctElement {
     return this.#scrollable;
   }
 
-  /** Body rows currently in the DOM; less than `data.length` only while a large render is in progress. */
+  /** Data rows currently in the DOM: fewer than `data.length` while the table is windowed. */
   get renderedRowCount(): number {
     return this.#rendered;
   }
@@ -273,15 +285,14 @@ export class TctTable<T extends Row = Row> extends TctElement {
   #children = false;
   #childrenObserver: MutationObserver | undefined;
 
-  // Progressive rendering.
-  #limit = Number.POSITIVE_INFINITY;
+  // Windowing.
+  #windowed = false;
+  #windowStart = 0;
+  #windowEnd = WINDOW_MIN_ROWS;
   #rendered = 0;
-  #chunk = FIRST_CHUNK;
-  #chunkStart = 0;
-  #chunkFrom = 0;
   #rowBlockSize = 0;
-  #progress: {promise: Promise<void>; resolve: () => void} | null = null;
-  #chunkQueued = false;
+  #windowScroller: HTMLElement | null | undefined;
+  #stopWindow: (() => void) | undefined;
 
   #menuWanted = false;
   #menuOpener: HTMLElement | null = null;
@@ -342,8 +353,10 @@ export class TctTable<T extends Row = Row> extends TctElement {
     this.#stopLocale?.();
     this.#stopLocale = undefined;
     this.#releaseObservers();
+    this.#stopWindow?.();
+    this.#stopWindow = undefined;
+    this.#windowScroller = undefined;
     for (const plugin of this.#attached) plugin.detach?.(this.#pluginHost);
-    this.#finishProgress();
   }
 
   protected override willUpdate(changed: PropertyValues<this>): void {
@@ -364,6 +377,9 @@ export class TctTable<T extends Row = Row> extends TctElement {
     if (changed.has('textOverflow')) {
       this.textOverflow = oneOf(TABLE_TEXT_OVERFLOWS, this.textOverflow, 'wrap', 'text-overflow');
     }
+    if (changed.has('windowing')) {
+      this.windowing = oneOf(TABLE_WINDOWINGS, this.windowing, 'auto', 'windowing');
+    }
 
     this.#children = this.#detectChildren();
     this.toggleAttribute('data-children', this.#children);
@@ -379,18 +395,16 @@ export class TctTable<T extends Row = Row> extends TctElement {
       this.#syncAttached();
     }
 
-    // Progressive rendering restarts whenever the rows change.
-    if (
-      changed.has('data') ||
-      changed.has('columns') ||
-      changed.has('plugins') ||
-      changed.has('idKey')
-    ) {
-      const total = this.data?.length ?? 0;
-      this.#limit = total > TABLE_SYNC_ROW_LIMIT ? FIRST_CHUNK : Number.POSITIVE_INFINITY;
+    this.#windowed =
+      !this.#children &&
+      this.windowing === 'auto' &&
+      (this.data?.length ?? 0) > TABLE_WINDOWING_THRESHOLD;
+    this.toggleAttribute('data-windowed', this.#windowed);
+
+    // A different row size (density, wrapping, other columns) means the next measurement is the truth.
+    if (changed.has('density') || changed.has('textOverflow') || changed.has('columns')) {
+      this.#rowBlockSize = 0;
     }
-    this.#chunkStart = performance.now();
-    this.#chunkFrom = this.#rendered;
 
     // A different locale changes every localised string a row holds.
     const localeKey = this.#locales.table!.locale;
@@ -415,17 +429,27 @@ export class TctTable<T extends Row = Row> extends TctElement {
     this.toggleState('scrollable', this.#scrollable);
     this.#syncHostScrollRegion();
     this.#observeScroll();
-    this.#advanceProgress();
+    this.#syncWindow();
     for (const plugin of this.#resolved) plugin.updated?.(this.#pluginHost);
   }
 
+  /** Settles the follow-up updates a render triggers itself (measuring rows, moving the window). */
   protected override async getUpdateComplete(): Promise<boolean> {
     let result = await super.getUpdateComplete();
-    while (this.#progress) {
-      await this.#progress.promise;
+    while (this.isUpdatePending || this.#followUps > 0) {
       result = await super.getUpdateComplete();
     }
     return result;
+  }
+
+  /** An update the last update asked for (measuring, moving the window), requested outside it. */
+  #followUps = 0;
+  #requestFollowUp(): void {
+    this.#followUps += 1;
+    queueMicrotask(() => {
+      this.#followUps -= 1;
+      this.requestUpdate();
+    });
   }
 
   // ------------------------------------------------------------------------------- children mode
@@ -460,64 +484,82 @@ export class TctTable<T extends Row = Row> extends TctElement {
   #stopLocale: (() => void) | undefined;
   #localeKey = '';
 
-  // --------------------------------------------------------------------------- progressive render
+  // ------------------------------------------------------------------------------------ windowing
 
-  #advanceProgress(): void {
-    if (this.#children) {
-      this.#rendered = 0;
-      this.#finishProgress();
+  /** Measures the rows once, moves the window to the scroll position, and listens for scrolling. */
+  #syncWindow(): void {
+    if (!this.#windowed) {
+      this.#stopWindow?.();
+      this.#stopWindow = undefined;
+      this.#windowScroller = undefined;
       return;
     }
+    let changed = false;
+    // Rows are measured while the list starts at the top: only the bottom spacer depends on the size
+    // then, so a correction cannot move what the reader is looking at.
+    if (this.#rowBlockSize === 0 || this.#windowStart === 0) changed = this.#measureRows();
+    const scroller = findVerticalScroller(this);
+    if (scroller !== this.#windowScroller || !this.#stopWindow) {
+      this.#stopWindow?.();
+      this.#windowScroller = scroller;
+      const target: EventTarget = scroller ?? window;
+      target.addEventListener('scroll', this.#onWindowScroll, {passive: true});
+      const stopResize = observeResize(scroller ?? document.documentElement, this.#onWindowScroll);
+      this.#stopWindow = () => {
+        target.removeEventListener('scroll', this.#onWindowScroll);
+        stopResize();
+      };
+    }
+    if (this.#moveWindow()) changed = true;
+    if (changed) this.#requestFollowUp();
+  }
+
+  /** The average block size of the rendered rows; the spacers stand in for the rest at that size. */
+  #measureRows(): boolean {
+    const rows = this.querySelectorAll<HTMLElement>('tbody > tr:not(.tct-table-spacer)');
+    const count = this.#windowEnd - this.#windowStart;
+    if (rows.length === 0 || count < 1) return false;
+    let total = 0;
+    for (const row of rows) total += row.getBoundingClientRect().height;
+    const size = total / Math.min(count, rows.length);
+    if (!(size > 0) || Math.abs(size - this.#rowBlockSize) < 0.5) return false;
+    this.#rowBlockSize = size;
+    return true;
+  }
+
+  /** Recomputes the window from the scroll position; true when it moved. */
+  #moveWindow(): boolean {
     const total = this.data?.length ?? 0;
-    const rendered = Math.min(this.#limit, total);
-    // Size the next chunk from what this one cost.
-    const rows = rendered - this.#chunkFrom;
-    if (rows > 20) {
-      const perRow = (performance.now() - this.#chunkStart) / rows;
-      this.#chunk = Math.max(
-        MIN_CHUNK,
-        Math.min(MAX_CHUNK, Math.floor(CHUNK_BUDGET_MS / Math.max(perRow, 0.001))),
-      );
-    }
-    this.#rendered = rendered;
-    if (this.#limit >= total) {
-      this.#finishProgress();
-      return;
-    }
-    // The spacer for rows still to come is sized from a real row.
-    if (this.#rowBlockSize === 0) {
-      const row = this.querySelector<HTMLElement>('tbody > tr:not(.tct-table-pending)');
-      const height = row?.getBoundingClientRect().height ?? 0;
-      if (height > 0) {
-        this.#rowBlockSize = height;
-        this.style.setProperty('--_table-row-block-size', `${height}px`);
-      }
-    }
-    if (!this.#progress) {
-      let resolve!: () => void;
-      const promise = new Promise<void>((done) => {
-        resolve = done;
-      });
-      this.#progress = {promise, resolve};
-    }
-    if (this.#chunkQueued) return;
-    this.#chunkQueued = true;
-    void yieldToMain().then(() => {
-      this.#chunkQueued = false;
-      if (!this.isConnected) {
-        this.#finishProgress();
-        return;
-      }
-      this.#limit += this.#chunk;
-      this.requestUpdate();
-    });
+    const tbody = this.querySelector('tbody');
+    if (!tbody || total === 0) return false;
+    const size = this.#rowBlockSize || ESTIMATED_ROW_BLOCK_SIZE;
+    const scroller = this.#windowScroller;
+    const viewTop = scroller ? scroller.getBoundingClientRect().top + scroller.clientTop : 0;
+    const viewSize = scroller ? scroller.clientHeight : window.innerHeight;
+    // The body starts at its first (spacer) row, so its top is where row 0 logically begins.
+    const bodyTop = tbody.getBoundingClientRect().top;
+    const first = Math.floor((viewTop - bodyTop) / size);
+    const last = Math.ceil((viewTop + viewSize - bodyTop) / size);
+    const overscan = Math.max(WINDOW_MIN_OVERSCAN, Math.ceil((last - first) / 2));
+    let end = Math.min(total, Math.ceil(Math.max(last + overscan, 0) / WINDOW_STEP) * WINDOW_STEP);
+    end = Math.min(total, Math.max(end, WINDOW_MIN_ROWS));
+    let start = Math.max(0, Math.floor(Math.max(first - overscan, 0) / WINDOW_STEP) * WINDOW_STEP);
+    start = Math.max(0, Math.min(start, end - WINDOW_MIN_ROWS));
+    if (start === this.#windowStart && end === this.#windowEnd) return false;
+    this.#windowStart = start;
+    this.#windowEnd = end;
+    return true;
   }
 
-  #finishProgress(): void {
-    const progress = this.#progress;
-    this.#progress = null;
-    progress?.resolve();
-  }
+  /** Rows grow after they render (custom elements upgrading, fonts loading): measure again at the top. */
+  readonly #onTableResize = (): void => {
+    this.#measureScroll();
+    if (this.#windowed && this.#windowStart === 0 && this.#measureRows()) this.requestUpdate();
+  };
+
+  readonly #onWindowScroll = (): void => {
+    if (this.#windowed && this.#moveWindow()) this.requestUpdate();
+  };
 
   // ----------------------------------------------------------------------------------- scrolling
 
@@ -532,7 +574,7 @@ export class TctTable<T extends Row = Row> extends TctElement {
     const overflowing = scroller.scrollWidth - scroller.clientWidth > 1;
     if (overflowing !== this.#scrollable) {
       this.#scrollable = overflowing;
-      this.requestUpdate();
+      this.#requestFollowUp();
     }
   };
 
@@ -544,7 +586,7 @@ export class TctTable<T extends Row = Row> extends TctElement {
       if (scroller) {
         this.#stopObserving.push(observeResize(scroller, this.#measureScroll));
         const table = scroller.querySelector('table');
-        if (table) this.#stopObserving.push(observeResize(table, this.#measureScroll));
+        if (table) this.#stopObserving.push(observeResize(table, this.#onTableResize));
       }
     }
     // Measured after every update too, so the state settles within `updateComplete` and does not
@@ -673,11 +715,13 @@ export class TctTable<T extends Row = Row> extends TctElement {
       ...tableRender.htmlProps.style,
     };
     if (widths.tableMinWidth > 0) tableStyle['min-width'] = `${widths.tableMinWidth}px`;
-    const indexing = this.rowIndexStart != null || this.rowCount != null;
+    // A windowed table describes the whole set: `aria-rowcount` and a row index on every rendered row.
+    const indexing = this.rowIndexStart != null || this.rowCount != null || this.#windowed;
+    const unknownCount = this.rowIndexStart != null ? -1 : (data?.length ?? -1);
     const tableHtmlProps: TableHtmlProps = {
       ...tableRender.htmlProps,
       attributes: {
-        ...(indexing ? {'aria-rowcount': this.rowCount ?? -1} : null),
+        ...(indexing ? {'aria-rowcount': this.rowCount ?? unknownCount} : null),
         ...tableRender.htmlProps.attributes,
       },
       style: tableStyle,
@@ -827,18 +871,26 @@ export class TctTable<T extends Row = Row> extends TctElement {
   }
 
   #rows(data: T[], columns: TableColumn<T>[], plugins: TablePlugin<T>[]): TemplateResult {
-    const visible = this.#limit < data.length ? data.slice(0, this.#limit) : data;
-    const indexing = this.rowIndexStart != null || this.rowCount != null;
+    const total = data.length;
+    const windowed = this.#windowed;
+    // The window is clamped to the data: it may be left over from a longer dataset.
+    const end = windowed ? Math.min(total, Math.max(this.#windowEnd, WINDOW_MIN_ROWS)) : total;
+    const start = windowed ? Math.max(0, Math.min(this.#windowStart, end - WINDOW_MIN_ROWS)) : 0;
+    this.#rendered = end - start;
+    const visible = windowed ? data.slice(start, end) : data;
+    const indexing = this.rowIndexStart != null || this.rowCount != null || windowed;
     const first = this.rowIndexStart ?? 1;
     const revision = this.#rowRevision;
     const overflow = this.textOverflow;
     const signers = plugins.filter((plugin) => typeof plugin.rowSignature === 'function');
-    const pending = data.length - visible.length;
+    const size = this.#rowBlockSize || ESTIMATED_ROW_BLOCK_SIZE;
 
-    return html`${repeat(
+    return html`${windowed ? this.#spacer(start * size, columns.length) : nothing}${repeat(
       visible,
-      (item, index) => this.#key(item, index),
-      (item, index) => {
+      (item, offset) => this.#key(item, start + offset),
+      (item, offset) => {
+        // The index is the row's place in the whole dataset, so a row keeps it as the window moves.
+        const index = start + offset;
         const ariaRowIndex = indexing ? first + index : undefined;
         // A row is rebuilt only when its item, position, columns, plugins or a plugin-declared
         // signature changed: selecting one row of ten thousand rebuilds one row.
@@ -856,16 +908,13 @@ export class TctTable<T extends Row = Row> extends TctElement {
           () => this.#row(item, index, columns, plugins, ariaRowIndex),
         );
       },
-    )}${pending > 0 ? this.#pending(pending, columns.length) : nothing}`;
+    )}${windowed && end < total ? this.#spacer((total - end) * size, columns.length) : nothing}`;
   }
 
-  /** A spacer for the rows still to come, so the scroll height stays roughly stable while rendering. */
-  #pending(count: number, columnCount: number): TemplateResult {
-    return html`<tr class="tct-table-pending" aria-hidden="true">
-      <td
-        colspan=${Math.max(columnCount, 1)}
-        style="block-size: calc(${count} * var(--_table-row-block-size, 2.75rem))"
-      ></td>
+  /** A row that stands in for the rows outside the window, so the scroll height stays true. */
+  #spacer(blockSize: number, columnCount: number): TemplateResult {
+    return html`<tr class="tct-table-spacer" aria-hidden="true">
+      <td colspan=${Math.max(columnCount, 1)} style="block-size: ${blockSize}px"></td>
     </tr>`;
   }
 
@@ -922,6 +971,24 @@ export class TctTable<T extends Row = Row> extends TctElement {
       </tr>
       ${row.afterRow ?? nothing}`;
   }
+}
+
+/** The scrolling ancestor that clips `start` vertically, through slots and shadow roots; `null`: the page scrolls. */
+function findVerticalScroller(start: Element): HTMLElement | null {
+  let element: Element | null = start;
+  while (element) {
+    if (element instanceof HTMLElement && element !== document.documentElement) {
+      const {overflowY} = getComputedStyle(element);
+      const scrolls = overflowY === 'auto' || overflowY === 'scroll' || overflowY === 'overlay';
+      if (scrolls && element.scrollHeight > element.clientHeight + 1) return element;
+    }
+    const root: Node = element.getRootNode();
+    element =
+      element.assignedSlot ??
+      element.parentElement ??
+      (root instanceof ShadowRoot ? root.host : null);
+  }
+  return null;
 }
 
 /** The actions attached to a rendered cell/row (by the pipeline) or set on a `tct-table-*` part. */

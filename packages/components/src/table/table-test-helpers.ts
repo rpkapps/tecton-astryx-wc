@@ -42,7 +42,7 @@ export function useLayeredPreflight(): void {
 
 /** Rows of the rendered body, as arrays of cell text. */
 export function bodyText(table: Element): string[][] {
-  return [...table.querySelectorAll<HTMLTableRowElement>('tbody > tr:not(.tct-table-pending)')].map(
+  return [...table.querySelectorAll<HTMLTableRowElement>('tbody > tr:not(.tct-table-spacer)')].map(
     (row) => [...row.cells].map((cell) => cell.textContent.trim()),
   );
 }

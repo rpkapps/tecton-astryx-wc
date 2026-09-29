@@ -24,6 +24,10 @@ export type TableVerticalAlign = (typeof TABLE_VERTICAL_ALIGNS)[number];
 export const TABLE_TEXT_OVERFLOWS = ['wrap', 'truncate'] as const;
 export type TableTextOverflow = (typeof TABLE_TEXT_OVERFLOWS)[number];
 
+/** Windowing of large datasets: `auto` windows above 200 rows, `off` renders every row. */
+export const TABLE_WINDOWINGS = ['auto', 'off'] as const;
+export type TableWindowing = (typeof TABLE_WINDOWINGS)[number];
+
 /** Horizontal alignment of a column (logical: `start` follows the writing direction). */
 export const TABLE_COLUMN_ALIGNS = ['start', 'center', 'end'] as const;
 export type TableColumnAlign = (typeof TABLE_COLUMN_ALIGNS)[number];

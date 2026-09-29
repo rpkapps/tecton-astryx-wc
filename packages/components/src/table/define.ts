@@ -39,7 +39,12 @@ export {
 export {tableProps, contextActionsOf} from './table-props.directive.js';
 export {TablePluginController, TableStateController} from './table-plugin.js';
 export {TableSortableController} from './plugins/sortable.js';
-export {TableSortableStateController, sortRows} from './plugins/sortable-state.js';
+export {
+  TableSortableStateController,
+  TABLE_ASYNC_SORT_ROWS,
+  sortRows,
+  sortRowsSliced,
+} from './plugins/sortable-state.js';
 export type {
   TableSortableConfig,
   TableSortDirection,
@@ -112,4 +117,5 @@ export type {
   TableSortableColumnConfig,
   TableTextOverflow,
   TableVerticalAlign,
+  TableWindowing,
 } from './table.types.js';
