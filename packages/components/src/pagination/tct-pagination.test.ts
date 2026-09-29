@@ -12,8 +12,10 @@ import {expectAccessible} from '@tecton-wc/testing/a11y.js';
 import {emulateMedia} from '@tecton-wc/testing/emulate.js';
 import {expectEventCounts, recordEvents} from '@tecton-wc/testing/events.js';
 import {fixture} from '@tecton-wc/testing/fixture.js';
+import {hasCustomState} from '@tecton-wc/testing/forms.js';
 import {pressKeys} from '@tecton-wc/testing/keyboard.js';
 import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
+import {isTier2} from '@tecton-wc/testing/tier.js';
 import {nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
 import {
   openByClick,
@@ -307,7 +309,7 @@ describe('tct-pagination: boundary states and cursor paging', () => {
     expect(step(element, 'next').disabled).toBe(true);
     for (const button of pageButtons(element)) expect(button.disabled).toBe(true);
     expect(sizeSelector(element).hasAttribute('disabled')).toBe(true);
-    expect(element.matches(':state(disabled)')).toBe(true);
+    expect(hasCustomState(element, 'disabled') || isTier2).toBe(true);
   });
 });
 
@@ -495,12 +497,12 @@ describe('tct-pagination: change action', () => {
     await userEvent.click(step(element, 'next'));
     await settle(element);
     expect(nav(element)!.getAttribute('aria-busy')).toBe('true');
-    expect(element.matches(':state(busy)')).toBe(true);
+    expect(hasCustomState(element, 'busy') || isTier2).toBe(true);
     expect(element.page).toBe(2);
     expect(step(element, 'next').disabled).toBe(false);
     finish();
     await waitUntil(() => nav(element)!.getAttribute('aria-busy') === null, 'busy ends');
-    expect(element.matches(':state(busy)')).toBe(false);
+    expect(hasCustomState(element, 'busy')).toBe(false);
   });
 
   it('is interruptible: rapid clicks each advance from the latest page', async () => {

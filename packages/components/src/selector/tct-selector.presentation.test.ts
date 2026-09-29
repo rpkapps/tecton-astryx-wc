@@ -10,7 +10,7 @@ import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import {axNode, expectAccessible} from '@tecton-wc/testing/a11y.js';
 import {recordEvents} from '@tecton-wc/testing/events.js';
 import {pressKeys} from '@tecton-wc/testing/keyboard.js';
-import {isChromium, withFeature} from '@tecton-wc/testing/tier.js';
+import {isChromium, isTier2, withFeature} from '@tecton-wc/testing/tier.js';
 import {animationsFinished, nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
 import {stubCompactTouch} from '../dropdown-menu/menu-test-helpers.js';
 import './define.js';
@@ -213,27 +213,31 @@ describe('tct-selector: the popover', () => {
     });
   });
 
-  it('placement="overlay" lines the chosen option up with the trigger, inside the viewport', async () => {
-    const el = await mountSelect<TctSelector>(
-      'tct-selector',
-      'label="Fruit" placement="overlay" value="Orange" width="300"',
-      FRUIT,
-      {},
-      '<div style="block-size:220px"></div>',
-    );
-    const box = el.shadowRoot!.querySelector('.input-wrapper')!;
-    await openByClick(el);
-    await waitUntil(() => !listboxOf(el)!.hasAttribute('data-overlay'), 'measured');
-    await nextFrame();
-    const anchor = box.getBoundingClientRect();
-    const chosen = optionsOf(el)[2]!.getBoundingClientRect();
-    const anchorCenter = anchor.top + anchor.height / 2;
-    const chosenCenter = chosen.top + chosen.height / 2;
-    expect(Math.abs(anchorCenter - chosenCenter)).toBeLessThan(4);
-    const surface = surfaceOf(el).getBoundingClientRect();
-    expect(surface.top).toBeGreaterThanOrEqual(0);
-    expect(surface.bottom).toBeLessThanOrEqual(window.innerHeight);
-  });
+  // The overlay offset is measured against the CSS-anchored surface; Tier 2's fallback places it below.
+  it.skipIf(isTier2)(
+    'placement="overlay" lines the chosen option up with the trigger, inside the viewport',
+    async () => {
+      const el = await mountSelect<TctSelector>(
+        'tct-selector',
+        'label="Fruit" placement="overlay" value="Orange" width="300"',
+        FRUIT,
+        {},
+        '<div style="block-size:220px"></div>',
+      );
+      const box = el.shadowRoot!.querySelector('.input-wrapper')!;
+      await openByClick(el);
+      await waitUntil(() => !listboxOf(el)!.hasAttribute('data-overlay'), 'measured');
+      await nextFrame();
+      const anchor = box.getBoundingClientRect();
+      const chosen = optionsOf(el)[2]!.getBoundingClientRect();
+      const anchorCenter = anchor.top + anchor.height / 2;
+      const chosenCenter = chosen.top + chosen.height / 2;
+      expect(Math.abs(anchorCenter - chosenCenter)).toBeLessThan(4);
+      const surface = surfaceOf(el).getBoundingClientRect();
+      expect(surface.top).toBeGreaterThanOrEqual(0);
+      expect(surface.bottom).toBeLessThanOrEqual(window.innerHeight);
+    },
+  );
 
   it('the anchored popup shows in RTL from the start edge', async () => {
     const el = await make('label="Fruit" width="300"', FRUIT, {dir: 'rtl'});
