@@ -53,6 +53,15 @@ export interface FieldChromeOptions {
   state: () => FieldChromeState;
   /** Satellite tags for light mode (registered by the component's `dependencies`). */
   tags?: {label?: string; description?: string; status?: string};
+  /**
+   * Author-chosen ids for the label, description and status elements (upstream `labelID`,
+   * `descriptionID`, `messageID`). An empty result falls back to the generated id.
+   */
+  ids?: {
+    label?: () => string | undefined;
+    description?: () => string | undefined;
+    status?: () => string | undefined;
+  };
 }
 
 type PartName = 'label' | 'description' | 'status';
@@ -95,15 +104,15 @@ export class FieldChromeController implements ReactiveController {
 
   /** Id of the label element. */
   get labelId(): string {
-    return this.#ids.id('label');
+    return this.#options.ids?.label?.() || this.#ids.id('label');
   }
   /** Id of the description element. */
   get descriptionId(): string {
-    return this.#ids.id('description');
+    return this.#options.ids?.description?.() || this.#ids.id('description');
   }
   /** Id of the status element. */
   get statusId(): string {
-    return this.#ids.id('status');
+    return this.#options.ids?.status?.() || this.#ids.id('status');
   }
   /** Id given to the control in shadow mode (target of `label for`). */
   get controlId(): string {
@@ -206,10 +215,16 @@ export class FieldChromeController implements ReactiveController {
         : name === 'description'
           ? (state.description ?? '')
           : (state.status?.message ?? '');
-    element.id = this.#ids.id(name);
+    element.id =
+      name === 'label' ? this.labelId : name === 'description' ? this.descriptionId : this.statusId;
     element.setAttribute('data-part', name);
     if (name === 'status') element.setAttribute('data-status-type', state.status?.type ?? 'info');
     if (name === 'label') {
+      // The satellite renders the "Required"/"Optional" indicator itself (its text lives in its own
+      // shadow root, next to the label text that stays in the light DOM).
+      const indicator = this.#indicator(state);
+      if (indicator) element.setAttribute('indicator', indicator);
+      else element.removeAttribute('indicator');
       element.toggleAttribute('data-disabled', state.disabled);
       element.removeEventListener('click', this.#onLabelClick);
       element.addEventListener('click', this.#onLabelClick);

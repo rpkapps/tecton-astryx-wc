@@ -1,0 +1,23 @@
+/*
+ * tct-field. The host is a plain block: the field chrome (`.field`, `.label-cell`, `.control-cell`) is
+ * the shared field module, which also draws horizontal labels. In a horizontal-labels form the host
+ * disappears from layout, so the parent grid (`auto 1fr` columns) places the label and the control.
+ */
+@layer component {
+  :host {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  :host([data-horizontal-labels]) {
+    display: contents;
+  }
+
+  /* Author controls in the default slot fill the width the field gives them. */
+  ::slotted(input),
+  ::slotted(select),
+  ::slotted(textarea) {
+    box-sizing: border-box;
+    max-inline-size: 100%;
+  }
+}
