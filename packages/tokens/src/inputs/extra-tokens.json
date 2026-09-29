@@ -1,0 +1,50 @@
+{
+  "$comment": "Authored (WP-F). Tokens the pipeline defines that neither the Astryx inventory nor the Tecton export contains. All are provisional (D-002): no Tecton decision exists. Colours name palette paths.",
+  "tokens": [
+    {
+      "name": "--tecton-color-focus-inner",
+      "category": "focus",
+      "light": "foundational.color.gray.onDark.contrasts.1570",
+      "dark": "foundational.color.gray.onDark.contrasts.50",
+      "description": "Inner ring of the documented double focus ring (D-005): drawn as box-shadow 0 0 0 1px between the control and the hot-pink outline on inverted surfaces, where pink alone is under 3:1 (dark-mode inverted surface #f6f5f8 is 2.75:1). It is the on-inverted ink: near-white on the light-mode inverted surface, near-black on the dark-mode one.",
+      "provisional": "Pipeline-defined for D-005. Tecton defines a single focus colour; the inner ring is a proposal."
+    },
+    {
+      "name": "--tecton-color-scrollbar-thumb",
+      "category": "scrollbar",
+      "light": "foundational.color.graphite.onLight.310",
+      "dark": "foundational.color.graphite.onDark.310",
+      "description": "Scrollbar thumb for scrollbar-color: the divider-strong step, 3:1 or more on the body and on the track. The thumb never depends on the track colour (macOS overlay scrollbars render a transparent track).",
+      "provisional": "Pipeline-defined (styling.md 10, mwg:dark-mode). Tecton has no scrollbar design."
+    },
+    {
+      "name": "--tecton-color-scrollbar-track",
+      "category": "scrollbar",
+      "light": "foundational.color.shades.black.transparent.0",
+      "dark": "foundational.color.shades.black.transparent.0",
+      "description": "Scrollbar track for scrollbar-color: fully transparent, so the thumb is always measured against the surface behind it.",
+      "provisional": "Pipeline-defined (styling.md 10). Tecton has no scrollbar design."
+    },
+    {
+      "name": "--tecton-font-numeric",
+      "category": "font",
+      "value": "tabular-nums",
+      "description": "font-variant-numeric role for aligned digits (tables, stats, data variants). IBM Plex Mono is tabular by default; Figtree text needs this where the Tecton spec wants aligned numerals.",
+      "provisional": "Pipeline-defined (styling.md 13). Tecton specifies tabular numerals only for the mono data variants."
+    },
+    {
+      "name": "--font-size-adjust-body",
+      "category": "font",
+      "value": "0.5",
+      "description": "Numeric font-size-adjust for UI text: Figtree x-height 500/1000. Normalises fallback fonts during the font swap. Apply on component hosts, not on the document root. [mwg:visually-stable-font-fallbacks]",
+      "provisional": "Pipeline-defined (styling.md 13); checked against the Capsize metrics by tokens:check."
+    },
+    {
+      "name": "--font-size-adjust-code",
+      "category": "font",
+      "value": "0.516",
+      "description": "Numeric font-size-adjust for code: IBM Plex Mono x-height 516/1000. Keeps inline code visually matched in mixed text. [mwg:visually-stable-mixed-fonts]",
+      "provisional": "Pipeline-defined (styling.md 13); checked against the Capsize metrics by tokens:check."
+    }
+  ]
+}

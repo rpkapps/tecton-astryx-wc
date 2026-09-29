@@ -1,0 +1,576 @@
+{
+  "$comment": "Authored (WP-F). Foreground/background token pairs measured by tokens:check in both modes after alpha compositing (A§5.6). Text 4.5:1, icons/boundaries/focus ring 3:1. A `{light, dark}` side names a different token per mode. Translucent backgrounds composite over `over` (default --color-background-body). Failures must be listed in contrast.allow.json with a reason.",
+  "rules": [
+    {
+      "id": "text-on-surfaces",
+      "kind": "text",
+      "min": 4.5,
+      "description": "Ink roles on the four page surfaces.",
+      "fg": [
+        "--color-text-primary",
+        "--color-text-secondary",
+        "--color-text-accent",
+        "--color-text-blue",
+        "--color-text-cyan",
+        "--color-text-gray",
+        "--color-text-green",
+        "--color-text-orange",
+        "--color-text-pink",
+        "--color-text-purple",
+        "--color-text-red",
+        "--color-text-teal",
+        "--color-text-yellow",
+        "--tecton-color-text-lime",
+        "--tecton-color-info",
+        "--tecton-color-info-bright",
+        "--tecton-color-text-placeholder",
+        "--tecton-color-input-outlined-text-value",
+        "--tecton-color-input-outlined-text",
+        "--tecton-color-input-outlined-text-placeholder"
+      ],
+      "bg": [
+        "--color-background-body",
+        "--color-background-surface",
+        "--color-background-card",
+        "--color-background-popover"
+      ]
+    },
+    {
+      "id": "text-on-muted",
+      "kind": "text",
+      "min": 4.5,
+      "description": "Primary and secondary ink on the muted surface (code blocks, kbd, table stripe fallback).",
+      "fg": [
+        "--color-text-primary",
+        "--color-text-secondary",
+        "--color-text-accent"
+      ],
+      "bg": [
+        "--color-background-muted"
+      ]
+    },
+    {
+      "id": "text-on-tecton-surfaces",
+      "kind": "text",
+      "min": 4.5,
+      "description": "Primary ink on the Tecton table and filled-input surfaces.",
+      "fg": [
+        "--color-text-primary"
+      ],
+      "bg": [
+        "--tecton-color-table-cell-bg",
+        "--tecton-color-table-cell-bg-alt",
+        "--tecton-color-table-cell-bg-hover",
+        "--tecton-color-table-cell-bg-active",
+        "--tecton-color-table-header-bg",
+        "--tecton-color-table-footer-bg",
+        "--tecton-color-input-filled-bg"
+      ]
+    },
+    {
+      "id": "on-fill",
+      "kind": "text",
+      "min": 4.5,
+      "description": "Label on its filled background (buttons, badges, banners).",
+      "pairs": [
+        [
+          "--color-on-accent",
+          "--color-accent"
+        ],
+        [
+          "--color-on-success",
+          "--color-success"
+        ],
+        [
+          "--color-on-error",
+          "--color-error"
+        ],
+        [
+          "--color-on-warning",
+          "--color-warning"
+        ],
+        [
+          "--tecton-color-on-info",
+          "--tecton-color-info-filled"
+        ],
+        [
+          "--tecton-color-on-status-neutral",
+          "--tecton-color-status-neutral-filled"
+        ],
+        [
+          "--tecton-color-chip-default-text",
+          "--tecton-color-chip-default-fill"
+        ],
+        [
+          "--tecton-color-toggle-button-activated-text",
+          "--tecton-color-toggle-button-activated-fill"
+        ],
+        [
+          "--tecton-color-top-nav-text",
+          "--tecton-color-top-nav-background"
+        ],
+        [
+          "--tecton-color-avatar-text",
+          "--tecton-color-avatar-fill"
+        ]
+      ]
+    },
+    {
+      "id": "inverted-surface",
+      "kind": "text",
+      "min": 4.5,
+      "description": "Text on the inverted surface (tooltip): the on-dark ink in light mode, the on-light ink in dark mode.",
+      "pairs": [
+        [
+          {
+            "light": "--color-on-dark",
+            "dark": "--color-on-light"
+          },
+          "--color-background-inverted"
+        ],
+        [
+          {
+            "light": "--color-on-dark",
+            "dark": "--color-on-light"
+          },
+          "--color-background-error-inverted"
+        ]
+      ]
+    },
+    {
+      "id": "hue-text-on-wash",
+      "kind": "text",
+      "min": 4.5,
+      "description": "Hue text on its own 25% wash (badges, tags), composited over the body.",
+      "pairs": [
+        [
+          "--color-text-blue",
+          "--color-background-blue"
+        ],
+        [
+          "--color-text-cyan",
+          "--color-background-cyan"
+        ],
+        [
+          "--color-text-gray",
+          "--color-background-gray"
+        ],
+        [
+          "--color-text-green",
+          "--color-background-green"
+        ],
+        [
+          "--color-text-orange",
+          "--color-background-orange"
+        ],
+        [
+          "--color-text-pink",
+          "--color-background-pink"
+        ],
+        [
+          "--color-text-purple",
+          "--color-background-purple"
+        ],
+        [
+          "--color-text-red",
+          "--color-background-red"
+        ],
+        [
+          "--color-text-teal",
+          "--color-background-teal"
+        ],
+        [
+          "--color-text-yellow",
+          "--color-background-yellow"
+        ]
+      ]
+    },
+    {
+      "id": "status-text-on-wash",
+      "kind": "text",
+      "min": 4.5,
+      "description": "Status ink on the success/error/warning wash, composited over the body.",
+      "pairs": [
+        [
+          "--color-text-green",
+          "--color-success-muted"
+        ],
+        [
+          "--color-text-red",
+          "--color-error-muted"
+        ],
+        [
+          "--color-text-yellow",
+          "--color-warning-muted"
+        ]
+      ]
+    },
+    {
+      "id": "status-outline-text",
+      "kind": "text",
+      "min": 4.5,
+      "description": "Outlined status message ink on the page.",
+      "fg": [
+        "--tecton-color-status-success-outline-text",
+        "--tecton-color-status-error-outline-text",
+        "--tecton-color-status-warning-outline-text",
+        "--tecton-color-status-info-outline-text",
+        "--tecton-color-status-neutral-outline-text"
+      ],
+      "bg": [
+        "--color-background-body"
+      ]
+    },
+    {
+      "id": "syntax-on-background",
+      "kind": "text",
+      "min": 4.5,
+      "description": "Syntax highlighting on the syntax background.",
+      "fg": [
+        "--color-syntax-keyword",
+        "--color-syntax-string",
+        "--color-syntax-comment",
+        "--color-syntax-number",
+        "--color-syntax-function",
+        "--color-syntax-type",
+        "--color-syntax-variable",
+        "--color-syntax-operator",
+        "--color-syntax-constant",
+        "--color-syntax-tag",
+        "--color-syntax-attribute",
+        "--color-syntax-property",
+        "--color-syntax-punctuation"
+      ],
+      "bg": [
+        "--color-syntax-background"
+      ]
+    },
+    {
+      "id": "button-primary",
+      "kind": "text",
+      "min": 4.5,
+      "description": "Button primary: label on fill in every state (translucent fills over the body).",
+      "pairs": [
+        [
+          "--tecton-color-action-primary-text",
+          "--tecton-color-action-primary-bg"
+        ],
+        [
+          "--tecton-color-action-primary-text-hover",
+          "--tecton-color-action-primary-bg-hover"
+        ],
+        [
+          "--tecton-color-action-primary-text-focus",
+          "--tecton-color-action-primary-bg-focus"
+        ],
+        [
+          "--tecton-color-action-primary-text-press",
+          "--tecton-color-action-primary-bg-press"
+        ],
+        [
+          "--tecton-color-action-primary-text-active",
+          "--tecton-color-action-primary-bg-active"
+        ]
+      ]
+    },
+    {
+      "id": "button-secondary",
+      "kind": "text",
+      "min": 4.5,
+      "description": "Button secondary: label on fill in every state (translucent fills over the body).",
+      "pairs": [
+        [
+          "--tecton-color-action-secondary-text",
+          "--tecton-color-action-secondary-bg"
+        ],
+        [
+          "--tecton-color-action-secondary-text-hover",
+          "--tecton-color-action-secondary-bg-hover"
+        ],
+        [
+          "--tecton-color-action-secondary-text-focus",
+          "--tecton-color-action-secondary-bg-focus"
+        ],
+        [
+          "--tecton-color-action-secondary-text-press",
+          "--tecton-color-action-secondary-bg-press"
+        ],
+        [
+          "--tecton-color-action-secondary-text-active",
+          "--tecton-color-action-secondary-bg-active"
+        ]
+      ]
+    },
+    {
+      "id": "button-tertiary",
+      "kind": "text",
+      "min": 4.5,
+      "description": "Button tertiary: label on fill in every state (translucent fills over the body).",
+      "pairs": [
+        [
+          "--tecton-color-action-tertiary-text",
+          "--tecton-color-action-tertiary-bg"
+        ],
+        [
+          "--tecton-color-action-tertiary-text-hover",
+          "--tecton-color-action-tertiary-bg-hover"
+        ],
+        [
+          "--tecton-color-action-tertiary-text-focus",
+          "--tecton-color-action-tertiary-bg-focus"
+        ],
+        [
+          "--tecton-color-action-tertiary-text-press",
+          "--tecton-color-action-tertiary-bg-press"
+        ],
+        [
+          "--tecton-color-action-tertiary-text-active",
+          "--tecton-color-action-tertiary-bg-active"
+        ]
+      ]
+    },
+    {
+      "id": "button-outlined",
+      "kind": "text",
+      "min": 4.5,
+      "description": "Button outlined: label on fill in every state (translucent fills over the body).",
+      "pairs": [
+        [
+          "--tecton-color-action-outlined-text",
+          "--tecton-color-action-outlined-bg"
+        ],
+        [
+          "--tecton-color-action-outlined-text-hover",
+          "--tecton-color-action-outlined-bg-hover"
+        ],
+        [
+          "--tecton-color-action-outlined-text-focus",
+          "--tecton-color-action-outlined-bg-focus"
+        ],
+        [
+          "--tecton-color-action-outlined-text-press",
+          "--tecton-color-action-outlined-bg-press"
+        ],
+        [
+          "--tecton-color-action-outlined-text-active",
+          "--tecton-color-action-outlined-bg-active"
+        ]
+      ]
+    },
+    {
+      "id": "icons",
+      "kind": "icon",
+      "min": 3,
+      "description": "Meaningful glyphs on the page surfaces.",
+      "fg": [
+        "--color-icon-primary",
+        "--color-icon-secondary",
+        "--color-icon-accent",
+        "--color-icon-blue",
+        "--color-icon-cyan",
+        "--color-icon-gray",
+        "--color-icon-green",
+        "--color-icon-orange",
+        "--color-icon-pink",
+        "--color-icon-purple",
+        "--color-icon-red",
+        "--color-icon-teal",
+        "--color-icon-yellow"
+      ],
+      "bg": [
+        "--color-background-body",
+        "--color-background-surface",
+        "--color-background-card",
+        "--color-background-popover"
+      ]
+    },
+    {
+      "id": "icons-on-muted",
+      "kind": "icon",
+      "min": 3,
+      "fg": [
+        "--color-icon-primary",
+        "--color-icon-secondary",
+        "--color-icon-accent"
+      ],
+      "bg": [
+        "--color-background-muted"
+      ]
+    },
+    {
+      "id": "icon-on-pressed-row",
+      "kind": "icon",
+      "min": 3,
+      "description": "Secondary icon on a row under the pressed overlay (10% ink wash over the body).",
+      "pairs": [
+        [
+          "--color-icon-secondary",
+          "--color-overlay-pressed"
+        ]
+      ]
+    },
+    {
+      "id": "icon-on-table-header",
+      "kind": "icon",
+      "min": 3,
+      "pairs": [
+        [
+          "--color-icon-secondary",
+          "--tecton-color-table-header-bg"
+        ]
+      ]
+    },
+    {
+      "id": "icon-on-table-header-mitigated",
+      "kind": "icon",
+      "min": 3,
+      "description": "Mitigation for the icon-secondary shortfall on the table header: the header re-points its icons to text-secondary.",
+      "pairs": [
+        [
+          "--color-text-secondary",
+          "--tecton-color-table-header-bg"
+        ]
+      ]
+    },
+    {
+      "id": "boundaries",
+      "kind": "boundary",
+      "min": 3,
+      "description": "Component boundaries and tracks that must be perceivable (WCAG 1.4.11).",
+      "fg": [
+        "--color-border-emphasized",
+        "--tecton-color-divider-strong",
+        "--tecton-color-input-outlined-border",
+        "--color-track",
+        "--tecton-color-scrollbar-thumb",
+        "--tecton-color-checkbox-border",
+        "--tecton-color-switch-off-border"
+      ],
+      "bg": [
+        "--color-background-body"
+      ]
+    },
+    {
+      "id": "boundaries-on-surface",
+      "kind": "boundary",
+      "min": 3,
+      "fg": [
+        "--tecton-color-divider-strong",
+        "--tecton-color-input-outlined-border",
+        "--tecton-color-scrollbar-thumb"
+      ],
+      "bg": [
+        "--color-background-surface"
+      ]
+    },
+    {
+      "id": "hue-borders",
+      "kind": "boundary",
+      "min": 3,
+      "description": "Hue border/accent fills as a graphical object on the page.",
+      "fg": [
+        "--color-border-blue",
+        "--color-border-cyan",
+        "--color-border-gray",
+        "--color-border-green",
+        "--color-border-orange",
+        "--color-border-pink",
+        "--color-border-purple",
+        "--color-border-red",
+        "--color-border-teal",
+        "--color-border-yellow"
+      ],
+      "bg": [
+        "--color-background-body"
+      ]
+    },
+    {
+      "id": "focus-ring",
+      "kind": "focus",
+      "min": 3,
+      "description": "The hot-pink focus ring against every surface a control can sit on (D-005).",
+      "fg": [
+        "--focus-outline-color"
+      ],
+      "bg": [
+        "--color-background-body",
+        "--color-background-surface",
+        "--color-background-card",
+        "--color-background-popover",
+        "--color-background-muted",
+        "--tecton-color-table-cell-bg",
+        "--tecton-color-table-cell-bg-alt",
+        "--tecton-color-table-cell-bg-hover",
+        "--tecton-color-table-cell-bg-active",
+        "--tecton-color-table-header-bg",
+        "--tecton-color-table-footer-bg",
+        "--tecton-color-input-filled-bg",
+        "--color-background-inverted"
+      ]
+    },
+    {
+      "id": "focus-inner-on-inverted",
+      "kind": "focus",
+      "min": 3,
+      "description": "D-005 double ring: where pink fails on an inverted surface the inner ring must read on it.",
+      "pairs": [
+        [
+          "--tecton-color-focus-inner",
+          "--color-background-inverted"
+        ]
+      ]
+    },
+    {
+      "id": "data-categorical",
+      "kind": "icon",
+      "min": 3,
+      "description": "Categorical data-viz colours against the body (provisional palette).",
+      "fg": [
+        "--color-data-categorical-blue",
+        "--color-data-categorical-orange",
+        "--color-data-categorical-purple",
+        "--color-data-categorical-green",
+        "--color-data-categorical-pink",
+        "--color-data-categorical-cyan",
+        "--color-data-categorical-red",
+        "--color-data-categorical-teal",
+        "--color-data-categorical-brown",
+        "--color-data-categorical-indigo",
+        "--color-data-neutral"
+      ],
+      "bg": [
+        "--color-background-body"
+      ]
+    },
+    {
+      "id": "component-glyphs",
+      "kind": "icon",
+      "min": 3,
+      "pairs": [
+        [
+          "--tecton-color-checkbox-glyph",
+          "--tecton-color-checkbox-checked-fill"
+        ],
+        [
+          "--tecton-color-switch-on-thumb",
+          "--tecton-color-switch-on-track"
+        ]
+      ]
+    },
+    {
+      "id": "tab-text",
+      "kind": "text",
+      "min": 4.5,
+      "pairs": [
+        [
+          "--tecton-color-tab-rest-text",
+          "--color-background-body"
+        ],
+        [
+          "--tecton-color-tab-selected-text",
+          "--color-background-body"
+        ]
+      ]
+    }
+  ]
+}

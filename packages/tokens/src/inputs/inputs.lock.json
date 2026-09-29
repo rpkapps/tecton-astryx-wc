@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "files": {
+    "astryx-tokens.json": {
+      "sha256": "a6e7de11b0b0c89f44451f7b0f597d4e313ccd37ae1ee9736f092ea6e3ff1942",
+      "bytes": 28393,
+      "origin": "astryx@ca632c6 theme/tokens.stylex.ts + domainTokens/dataTokens.ts + syntax/tokens.ts (names), semantic map (defaults)"
+    },
+    "semantic-map.json": {
+      "sha256": "9157de82bf5811372cdfdc94d64b57af33ae633abcdaecf9d2a90c67a20434da",
+      "bytes": 271917,
+      "origin": "docs/research/tecton-semantic-map.json"
+    },
+    "tailwind-v4-theme-names.json": {
+      "sha256": "4b0c12b86f41367c18891dc4b54d54d0b15cd63c23b826e82d83bc9eb6eae3b8",
+      "bytes": 10573,
+      "origin": "tailwindcss@4.3.3 theme.css (sha256 of the source in `source`)"
+    },
+    "tecton-tokens.css": {
+      "sha256": "dd78a197d938fae1006c7ab16510d809ca5da82687238dff07de115cd504bf28",
+      "bytes": 48068,
+      "origin": "tecton-webcomponents/packages/wc/tokens/tecton-tokens.css"
+    },
+    "tecton.tokens.json": {
+      "sha256": "4731ddd0b9f362261c77fbd4531dfc4cc0d924406eeb5636a8442d4a951367f3",
+      "bytes": 532503,
+      "origin": "tecton-webcomponents/packages/wc/tokens/tecton.tokens.json"
+    }
+  }
+}

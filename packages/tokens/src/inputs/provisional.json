@@ -1,0 +1,41 @@
+{
+  "$comment": "Authored (WP-F). The exact provisional set (D-002). `tokens:check` fails when the emitted provisional tokens differ from categories + names + the pipeline-defined extras, so adding or removing one is a reviewed change. `nonTokens` are D-002 items that have no custom property; they are listed in the docs' 'Differences and open items' page.",
+  "categories": [
+    {
+      "category": "data",
+      "reason": "Data-viz colours: Tecton documents none. Proposed from the accent fill stops (categorical) and the onLight ramp (sequential); the teal/brown/indigo slots borrow lime/yellow/orchid (docs/research/tecton-theme.md 3.8)."
+    },
+    {
+      "category": "motion",
+      "reason": "Motion: Tecton has no source; the upstream Astryx durations and easing are kept."
+    }
+  ],
+  "names": [
+    {
+      "name": "--size-element-lg",
+      "reason": "Control height 36px has no Tecton source (Tecton names only sm 28 and md 32); the upstream value is kept."
+    }
+  ],
+  "nonTokens": [
+    {
+      "name": "breakpoints",
+      "reason": "sm 640, md 768, lg 1024, xl 1280, 2xl 1536: upstream DEFAULT_WIDTH_BREAKPOINTS, no Tecton source. Exported from tokens.js / tokens.json (not custom properties: they cannot be used in media queries)."
+    },
+    {
+      "name": "z-index",
+      "reason": "Astryx defines no z-index tokens; overlays use the top layer. Nothing to map."
+    },
+    {
+      "name": "letter-spacing",
+      "reason": "Tecton has no letter-spacing anywhere; components use `normal`. Astryx has no tracking tokens either."
+    },
+    {
+      "name": "destructive button",
+      "reason": "No Tecton source; painted from the --tecton-color-status-error-filled-* roles (component work packages)."
+    },
+    {
+      "name": "icons: chevronsLeft, chevronsRight, calendar, clock, checkDouble, stop",
+      "reason": "Six roles without a Tecton glyph; covered by the Lucide default set (D-009)."
+    }
+  ]
+}
