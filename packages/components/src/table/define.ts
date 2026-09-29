@@ -58,6 +58,14 @@ export {
   pageWindow,
 } from './plugins/pagination.js';
 export type {TablePaginationConfig, TablePaginationVariant} from './plugins/pagination.js';
+export {TableColumnSettingsController} from './plugins/column-settings.js';
+export {TableColumnSettingsStateController} from './plugins/column-settings-state.js';
+export type {ColumnSettingsOption, TableColumnSettingsConfig} from './plugins/column-settings.js';
+export type {TableColumnSettingsStateOptions} from './plugins/column-settings-state.js';
+export {TableColumnResizeController, computeColumnWidths} from './plugins/column-resize.js';
+export type {TableColumnResizeConfig} from './plugins/column-resize.js';
+export {TableStickyColumnsController} from './plugins/sticky-columns.js';
+export type {TableStickyColumnsConfig} from './plugins/sticky-columns.js';
 export type {
   BodyCellRenderProps,
   BodyRowRenderProps,

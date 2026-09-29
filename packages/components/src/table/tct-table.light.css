@@ -664,8 +664,8 @@
   }
 
   /* A soft shadow over the scrolling region, shown only while content hides behind the pinned edge. */
-  :where(tct-table) :where(.tct-table-sticky[data-sticky='start'])::after,
-  :where(tct-table) :where(.tct-table-sticky[data-sticky='end'])::after {
+  :where(tct-table) :where(.tct-table-sticky[data-sticky='start'][data-edge])::after,
+  :where(tct-table) :where(.tct-table-sticky[data-sticky='end'][data-edge])::after {
     content: '';
     position: absolute;
     inset-block: 0;
@@ -673,32 +673,32 @@
     pointer-events: none;
   }
 
-  :where(tct-table) :where(.tct-table-sticky[data-sticky='start'])::after {
+  :where(tct-table) :where(.tct-table-sticky[data-sticky='start'][data-edge])::after {
     inset-inline-end: 0;
     translate: 100% 0;
     opacity: var(--_table-sticky-shadow-start, 0);
     background-image: linear-gradient(to right, var(--color-shadow), transparent);
   }
 
-  :where(tct-table) :where(.tct-table-sticky[data-sticky='start']:dir(rtl))::after {
+  :where(tct-table) :where(.tct-table-sticky[data-sticky='start'][data-edge]:dir(rtl))::after {
     translate: -100% 0;
     background-image: linear-gradient(to left, var(--color-shadow), transparent);
   }
 
-  :where(tct-table) :where(.tct-table-sticky[data-sticky='end'])::after {
+  :where(tct-table) :where(.tct-table-sticky[data-sticky='end'][data-edge])::after {
     inset-inline-start: 0;
     translate: -100% 0;
     opacity: var(--_table-sticky-shadow-end, 0);
     background-image: linear-gradient(to left, var(--color-shadow), transparent);
   }
 
-  :where(tct-table) :where(.tct-table-sticky[data-sticky='end']:dir(rtl))::after {
+  :where(tct-table) :where(.tct-table-sticky[data-sticky='end'][data-edge]:dir(rtl))::after {
     translate: 100% 0;
     background-image: linear-gradient(to right, var(--color-shadow), transparent);
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    :where(tct-table) :where(.tct-table-sticky)::after {
+    :where(tct-table) :where(.tct-table-sticky[data-edge])::after {
       transition: opacity var(--duration-fast) var(--ease-standard);
     }
   }

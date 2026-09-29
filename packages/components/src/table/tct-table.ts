@@ -525,22 +525,31 @@ export class TctTable<T extends Row = Row> extends TctElement {
     return this.label || this.t('@tct.table.label');
   }
 
+  /** Whether the scroll region overflows: only then is it keyboard reachable and does it contain overscroll. */
+  readonly #measureScroll = (): void => {
+    const scroller = this.scrollRegion;
+    if (!scroller) return;
+    const overflowing = scroller.scrollWidth - scroller.clientWidth > 1;
+    if (overflowing !== this.#scrollable) {
+      this.#scrollable = overflowing;
+      this.requestUpdate();
+    }
+  };
+
   #observeScroll(): void {
     const scroller = this.scrollRegion;
-    if (scroller === this.#observed) return;
-    this.#releaseObservers();
-    this.#observed = scroller;
-    if (!scroller) return;
-    const measure = (): void => {
-      const overflowing = scroller.scrollWidth - scroller.clientWidth > 1;
-      if (overflowing !== this.#scrollable) {
-        this.#scrollable = overflowing;
-        this.requestUpdate();
+    if (scroller !== this.#observed) {
+      this.#releaseObservers();
+      this.#observed = scroller;
+      if (scroller) {
+        this.#stopObserving.push(observeResize(scroller, this.#measureScroll));
+        const table = scroller.querySelector('table');
+        if (table) this.#stopObserving.push(observeResize(table, this.#measureScroll));
       }
-    };
-    this.#stopObserving.push(observeResize(scroller, measure));
-    const table = scroller.querySelector('table');
-    if (table) this.#stopObserving.push(observeResize(table, measure));
+    }
+    // Measured after every update too, so the state settles within `updateComplete` and does not
+    // wait for the observer's first callback.
+    this.#measureScroll();
   }
 
   #releaseObservers(): void {
