@@ -131,18 +131,23 @@ export class RovingTabindexController<T extends HTMLElement> implements Reactive
     return items.find((item) => !this.#disabled(item));
   }
 
-  #targetOf(item: T): HTMLElement {
-    return this.#options.focusTarget?.(item) ?? item;
+  /**
+   * The element that carries `tabindex` and focus. With a `focusTarget` option a missing target means
+   * the wrapper has not rendered its inner control yet: `null`, never the host, because
+   * `tabindex="-1"` on a shadow host removes its whole subtree from sequential navigation.
+   */
+  #targetOf(item: T): HTMLElement | null {
+    return this.#options.focusTarget ? this.#options.focusTarget(item) : item;
   }
 
   #writeTabindex(items: readonly T[]): void {
     for (const item of items) {
-      this.#targetOf(item).setAttribute('tabindex', item === this.#active ? '0' : '-1');
+      this.#targetOf(item)?.setAttribute('tabindex', item === this.#active ? '0' : '-1');
     }
   }
 
   #focusItem(item: T): void {
-    this.#targetOf(item).focus();
+    this.#targetOf(item)?.focus();
   }
 
   #orientation(): Orientation {
