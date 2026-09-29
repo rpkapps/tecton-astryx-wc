@@ -1,0 +1,15 @@
+<!-- title: Placement and alignment; description: placement (above, below, start, end) and alignment (start, center, end) are logical and mirror in right-to-left text. The browser flips the menu when it does not fit. -->
+<tct-hstack gap="4" wrap="wrap" v-align="center">
+  <tct-dropdown-menu label="Below start">
+    <tct-dropdown-menu-item label="One"></tct-dropdown-menu-item>
+    <tct-dropdown-menu-item label="Two"></tct-dropdown-menu-item>
+  </tct-dropdown-menu>
+  <tct-dropdown-menu label="Below end" alignment="end">
+    <tct-dropdown-menu-item label="One"></tct-dropdown-menu-item>
+    <tct-dropdown-menu-item label="Two"></tct-dropdown-menu-item>
+  </tct-dropdown-menu>
+  <tct-dropdown-menu label="End" placement="end">
+    <tct-dropdown-menu-item label="One"></tct-dropdown-menu-item>
+    <tct-dropdown-menu-item label="Two"></tct-dropdown-menu-item>
+  </tct-dropdown-menu>
+</tct-hstack>

@@ -1,0 +1,15 @@
+<!-- title: Bottom sheet and adaptive presentation; description: presentation="adaptive" keeps the cursor-positioned popover on desktop and uses a bottom action sheet on a compact touch device, where long-press opens it. Always keep a visible route to important actions: long-press is not discoverable. -->
+<div id="presentation-root">
+  <tct-vstack gap="4">
+    <tct-context-menu label="Adaptive" presentation="adaptive">
+      <tct-card padding="6" tabindex="0"><tct-text color="secondary">Adaptive: right-click, or long-press on touch</tct-text></tct-card>
+    </tct-context-menu>
+    <tct-context-menu label="Sheet" presentation="bottom-sheet">
+      <tct-card padding="6" tabindex="0"><tct-text color="secondary">Always a bottom sheet</tct-text></tct-card>
+    </tct-context-menu>
+  </tct-vstack>
+  <script type="module">
+    const items = [{label: 'Edit'}, {label: 'Duplicate'}, {label: 'Move to', items: [{label: 'Inbox'}, {label: 'Archive'}]}, {label: 'Delete', variant: 'destructive'}];
+    for (const menu of document.querySelectorAll('#presentation-root tct-context-menu')) menu.items = items;
+  </script>
+</div>

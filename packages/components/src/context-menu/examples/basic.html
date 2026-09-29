@@ -1,0 +1,17 @@
+<!-- title: Basic; description: Right-click the area (or focus it and press the ContextMenu key or Shift+F10; long-press on touch). The menu opens at the pointer. Assign items for a data-driven menu. -->
+<div id="basic-root">
+  <tct-context-menu label="Editing actions">
+    <tct-card padding="6" tabindex="0">
+      <tct-text color="secondary">Right-click this area</tct-text>
+    </tct-card>
+  </tct-context-menu>
+  <script type="module">
+    document.querySelector('#basic-root tct-context-menu').items = [
+      {label: 'Cut'},
+      {label: 'Copy'},
+      {label: 'Paste'},
+      {type: 'divider'},
+      {label: 'Delete', variant: 'destructive'},
+    ];
+  </script>
+</div>

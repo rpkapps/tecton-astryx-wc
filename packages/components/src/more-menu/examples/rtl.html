@@ -1,0 +1,11 @@
+<!-- title: Right-to-left; description: The menu mirrors in right-to-left text. -->
+<div dir="rtl" lang="ar" id="rtl-root">
+  <tct-more-menu label="خيارات إضافية"></tct-more-menu>
+  <script type="module">
+    document.querySelector('#rtl-root tct-more-menu').items = [
+      {label: 'تعديل', icon: 'wrench'},
+      {label: 'نسخ', icon: 'copy'},
+      {label: 'حذف', variant: 'destructive'},
+    ];
+  </script>
+</div>

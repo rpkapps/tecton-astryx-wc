@@ -1,0 +1,20 @@
+<!-- title: Compound rows; description: Put the rows in slot="menu": the same tct-dropdown-menu-item, checkbox, radio, divider and submenu tags every menu uses. -->
+<tct-context-menu label="Layer actions">
+  <tct-card padding="6" tabindex="0">
+    <tct-text color="secondary">Right-click this layer</tct-text>
+  </tct-card>
+  <tct-dropdown-menu-item slot="menu" label="Rename" icon="wrench"></tct-dropdown-menu-item>
+  <tct-dropdown-menu-item slot="menu" label="Duplicate" icon="copy"></tct-dropdown-menu-item>
+  <tct-dropdown-menu-divider slot="menu"></tct-dropdown-menu-divider>
+  <tct-dropdown-menu-checkbox-item slot="menu" label="Visible" checked></tct-dropdown-menu-checkbox-item>
+  <tct-dropdown-menu-checkbox-item slot="menu" label="Locked"></tct-dropdown-menu-checkbox-item>
+  <tct-dropdown-menu-divider slot="menu"></tct-dropdown-menu-divider>
+  <tct-dropdown-menu-radio-group slot="menu" label="Blend mode" value="normal">
+    <tct-dropdown-menu-radio-item value="normal" label="Normal"></tct-dropdown-menu-radio-item>
+    <tct-dropdown-menu-radio-item value="multiply" label="Multiply"></tct-dropdown-menu-radio-item>
+  </tct-dropdown-menu-radio-group>
+  <tct-dropdown-menu-sub-menu slot="menu" label="Arrange">
+    <tct-dropdown-menu-item label="Bring to front"></tct-dropdown-menu-item>
+    <tct-dropdown-menu-item label="Send to back"></tct-dropdown-menu-item>
+  </tct-dropdown-menu-sub-menu>
+</tct-context-menu>

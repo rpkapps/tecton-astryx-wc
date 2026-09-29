@@ -1,0 +1,166 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "more-menu",
+  "workPackage": "WP-6",
+  "entries": {
+    "core.more-menu": {
+      "tag": "tct-more-menu",
+      "status": "implemented",
+      "upstream": {
+        "name": "MoreMenu",
+        "path": "packages/core/src/MoreMenu/MoreMenu.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "items",
+          "kind": "prop",
+          "target": "items",
+          "as": "property",
+          "notes": "Inherited from tct-dropdown-menu; compound rows go in the default slot."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "default": "More options",
+          "notes": "The trigger's accessible name (always: the button is icon-only), its tooltip and the menu's name. Default: the localized @tct.moreMenu.label."
+        },
+        {
+          "upstream": "variant",
+          "kind": "prop",
+          "target": "variant",
+          "as": "attribute",
+          "default": "ghost"
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "notes": "Unset: the nearest size provider, else md."
+        },
+        {
+          "upstream": "icon",
+          "kind": "prop",
+          "target": "icon",
+          "as": "attribute",
+          "default": "moreHorizontal",
+          "notes": "A registered icon name, or slot your own into slot=\"icon\"."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "placement",
+          "kind": "prop",
+          "target": "placement",
+          "as": "attribute",
+          "default": "below"
+        },
+        {
+          "upstream": "alignment",
+          "kind": "prop",
+          "target": "alignment",
+          "as": "attribute",
+          "default": "start"
+        },
+        {
+          "upstream": "presentation",
+          "kind": "prop",
+          "target": "presentation",
+          "as": "attribute",
+          "reflect": true,
+          "default": "popover"
+        },
+        {
+          "upstream": "isMenuOpen",
+          "kind": "prop",
+          "target": "open",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Optional-controlled upstream; here the element owns the state (D-006)."
+        },
+        {
+          "upstream": "onOpenChange",
+          "kind": "event",
+          "target": "tct-open-change",
+          "as": "event",
+          "notes": "Cancelable intent event; `tct-after-open-change` once settled."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: attributes go on the host element."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(trigger), ::part(menu) and the tokens."
+        },
+        {
+          "upstream": "className",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: `class` goes on the host."
+        },
+        {
+          "upstream": "style",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: `style` goes on the host."
+        }
+      ],
+      "hooks": [],
+      "keyboard": [
+        {
+          "keys": "Enter, Space, ArrowDown",
+          "action": "Opens the menu and focuses the first enabled row (a pointer open focuses the menu; the first ArrowDown enters)",
+          "when": "trigger focused"
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes the menu and returns focus to the trigger",
+          "when": "menu open"
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "MOREMENU-01",
+          "type": "approved-api-difference",
+          "text": "tct-more-menu extends tct-dropdown-menu (a thin wrapper upstream too): it changes only the defaults (ghost variant, moreHorizontal icon, icon-only trigger with the label as tooltip) and the label default, so its API, events, keyboard and presentation are the dropdown menu's. `icon-only` cannot be turned off; `no-chevron` is moot. The upstream `ref` forwarded to the trigger is the shadow `trigger` part."
+        },
+        {
+          "id": "MOREMENU-02",
+          "type": "tecton-visual",
+          "text": "The painted menu is the dropdown menu's Tecton surface (1px rule on the recessed popover fill, no drop shadow); part `menu` also serves the upstream `astryx-more-menu` target."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 82,
+      "notes": "Guides: as dropdown-menu ([mwg:resilient-context-menus-and-nested-dropdowns] [mwg:accessible-web-components])."
+    }
+  }
+}

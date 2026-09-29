@@ -1,0 +1,13 @@
+<!-- title: Right-to-left; description: The menu, its flyouts and the keyboard directions mirror in right-to-left text. -->
+<div dir="rtl" lang="ar" id="rtl-root">
+  <tct-context-menu label="إجراءات">
+    <tct-card padding="6" tabindex="0"><tct-text color="secondary">انقر بزر الفأرة الأيمن هنا</tct-text></tct-card>
+  </tct-context-menu>
+  <script type="module">
+    document.querySelector('#rtl-root tct-context-menu').items = [
+      {label: 'قص'},
+      {label: 'نسخ'},
+      {label: 'نقل إلى', items: [{label: 'الوارد'}, {label: 'الأرشيف'}]},
+    ];
+  </script>
+</div>

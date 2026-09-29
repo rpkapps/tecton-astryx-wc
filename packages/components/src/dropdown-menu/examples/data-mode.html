@@ -1,0 +1,22 @@
+<!-- title: Data-driven items; description: Assign items instead of writing rows: actions, dividers, titled sections and nested items for submenus. A row's onClick runs on click, Enter and Space. -->
+<div id="data-mode-root">
+  <tct-dropdown-menu label="Actions"></tct-dropdown-menu>
+  <script type="module">
+    const menu = document.querySelector('#data-mode-root tct-dropdown-menu');
+    menu.items = [
+      {label: 'Edit project', icon: 'wrench', onClick: () => console.log('edit')},
+      {label: 'Duplicate project', icon: 'copy', description: 'Make a copy of this project', endContent: 'Ctrl+D'},
+      {type: 'divider'},
+      {
+        type: 'section',
+        title: 'Danger zone',
+        items: [{label: 'Delete project', variant: 'destructive', icon: 'stop'}],
+      },
+      {
+        label: 'Move to',
+        icon: 'externalLink',
+        items: [{label: 'Inbox'}, {label: 'Archive'}],
+      },
+    ];
+  </script>
+</div>

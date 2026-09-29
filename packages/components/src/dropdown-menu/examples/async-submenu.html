@@ -1,0 +1,18 @@
+<!-- title: Async submenu; description: has-spinner replaces the caret with a spinner while a submenu's rows load. The flyout holds keyboard focus itself until rows arrive, then the arrow keys enter them. -->
+<div id="async-submenu-root">
+  <tct-dropdown-menu label="Recent">
+    <tct-dropdown-menu-item label="Open workspace"></tct-dropdown-menu-item>
+    <tct-dropdown-menu-sub-menu id="async-submenu" label="Recent files" has-spinner></tct-dropdown-menu-sub-menu>
+  </tct-dropdown-menu>
+  <script type="module">
+    const sub = document.querySelector('#async-submenu-root #async-submenu');
+    setTimeout(() => {
+      sub.removeAttribute('has-spinner');
+      for (const name of ['report.pdf', 'seismic.segy', 'notes.md']) {
+        const row = document.createElement('tct-dropdown-menu-item');
+        row.setAttribute('label', name);
+        sub.append(row);
+      }
+    }, 2500);
+  </script>
+</div>

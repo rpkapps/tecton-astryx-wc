@@ -1,0 +1,17 @@
+<!-- title: Variants, sizes and icon; description: The trigger takes a variant and size, and a custom icon (a registered name, or a tct-icon in slot="icon"). disabled blocks the trigger. -->
+<div id="variants-sizes-root">
+  <tct-hstack gap="3" wrap="wrap" v-align="center">
+    <tct-more-menu label="Ghost (default)"></tct-more-menu>
+    <tct-more-menu label="Secondary" variant="secondary"></tct-more-menu>
+    <tct-more-menu label="Small" size="sm"></tct-more-menu>
+    <tct-more-menu label="Large" size="lg"></tct-more-menu>
+    <tct-more-menu label="Custom icon" icon="wrench"></tct-more-menu>
+    <tct-more-menu label="Slotted icon"><tct-icon slot="icon" name="search"></tct-icon></tct-more-menu>
+    <tct-more-menu label="Disabled" disabled></tct-more-menu>
+  </tct-hstack>
+  <script type="module">
+    for (const menu of document.querySelectorAll('#variants-sizes-root tct-more-menu')) {
+      menu.items = [{label: 'Edit'}, {label: 'Duplicate'}];
+    }
+  </script>
+</div>

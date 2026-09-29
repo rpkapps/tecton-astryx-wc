@@ -1,0 +1,17 @@
+<!-- title: Presentation and placement; description: presentation="adaptive" uses a bottom sheet on a compact touch device and the anchored popover elsewhere. placement and alignment position the popover. -->
+<div id="presentation-root">
+  <tct-hstack gap="4" wrap="wrap" v-align="center">
+    <tct-more-menu label="Adaptive" presentation="adaptive"></tct-more-menu>
+    <tct-more-menu label="Bottom sheet" presentation="bottom-sheet"></tct-more-menu>
+    <tct-more-menu label="Aligned to the end" alignment="end"></tct-more-menu>
+  </tct-hstack>
+  <script type="module">
+    for (const menu of document.querySelectorAll('#presentation-root tct-more-menu')) {
+      menu.items = [
+        {label: 'Edit', icon: 'wrench'},
+        {label: 'Duplicate', icon: 'copy'},
+        {label: 'Move to', items: [{label: 'Inbox'}, {label: 'Archive'}]},
+      ];
+    }
+  </script>
+</div>

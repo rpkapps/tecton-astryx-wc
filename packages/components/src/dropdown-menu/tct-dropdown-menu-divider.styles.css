@@ -1,0 +1,10 @@
+/* The rule takes the menu's vertical rhythm: one spacing step above and below (upstream `divider` style). */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .divider {
+    margin-block: var(--spacing-1);
+  }
+}

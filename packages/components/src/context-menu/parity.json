@@ -1,0 +1,211 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "context-menu",
+  "workPackage": "WP-6",
+  "entries": {
+    "core.context-menu": {
+      "tag": "tct-context-menu",
+      "status": "implemented",
+      "upstream": {
+        "name": "ContextMenu",
+        "path": "packages/core/src/ContextMenu/ContextMenu.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "The trigger area."
+        },
+        {"upstream": "items", "kind": "prop", "target": "items", "as": "property"},
+        {
+          "upstream": "menuContent",
+          "kind": "slot",
+          "target": "menu",
+          "as": "slot",
+          "notes": "Compound rows: tct-dropdown-menu-item, -checkbox-item, -radio-group, -divider, -sub-menu with slot=\"menu\"."
+        },
+        {
+          "upstream": "menuWidth",
+          "kind": "prop",
+          "target": "menuWidth",
+          "as": "attribute",
+          "default": "160px",
+          "notes": "`menu-width`: a bare number is px; intrinsic keywords set the preferred width."
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "default": "md",
+          "notes": "Unset: the nearest size provider, else md."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "default": "Context menu",
+          "notes": "Default: the localized @tct.contextMenu.label."
+        },
+        {
+          "upstream": "onOpenChange",
+          "kind": "event",
+          "target": "tct-open-change",
+          "as": "event",
+          "notes": "Cancelable intent event before a user-driven open (right-click, keys, long press) or close; `tct-after-open-change` once settled."
+        },
+        {
+          "upstream": "presentation",
+          "kind": "prop",
+          "target": "presentation",
+          "as": "attribute",
+          "reflect": true,
+          "default": "popover"
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "The browser's own context menu shows, and long press does nothing."
+        },
+        {
+          "upstream": "triggerXstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: the trigger area is the host (`display: block`); size it with class/style or ::part(trigger)."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: attributes go on the host element."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(menu) and the tokens."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useLongPress",
+          "target": "LongPressController",
+          "as": "controller",
+          "notes": "core/controllers/long-press.ts (WP-6): a single still touch held for delayMs (500) calls back with the point; cancels on movement past moveCancelPx (10), release, a second finger, pointercancel, disabled and disconnect."
+        },
+        {"upstream": "useListFocus", "target": "MenuKeyboardController", "as": "controller"},
+        {"upstream": "useTypeahead", "target": "TypeaheadController", "as": "controller"},
+        {
+          "upstream": "useLayer",
+          "target": "LayerController + PositionController (virtual point anchor)",
+          "as": "controller"
+        },
+        {
+          "upstream": "useAdaptivePresentation",
+          "target": "AdaptivePresentationController",
+          "as": "controller"
+        },
+        {
+          "upstream": "ContextMenuItem",
+          "target": "tct-dropdown-menu-item",
+          "as": "slot",
+          "notes": "Aliases are served by the dropdown-menu tags (no alias tags)."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "ContextMenu, Shift+F10",
+          "action": "Opens the menu at the bottom-start of the focused element (of the trigger area when none) and focuses the first enabled row",
+          "when": "focus in the trigger area"
+        },
+        {
+          "keys": "Right-click",
+          "action": "Opens the menu with its top-start corner at the pointer and focuses the first enabled row",
+          "when": "pointer over the trigger area"
+        },
+        {
+          "keys": "Long press (touch)",
+          "action": "Opens the menu at the finger after 500ms; movement, release or a second finger cancels",
+          "when": "touch on the trigger area"
+        },
+        {
+          "keys": "ArrowDown, ArrowUp, Home, End",
+          "action": "Roves the rows; no wrap; disabled rows are focusable",
+          "when": "menu open"
+        },
+        {
+          "keys": "Printable character",
+          "action": "Focuses the next enabled row whose label starts with the typed text",
+          "when": "menu open"
+        },
+        {
+          "keys": "Enter, Space",
+          "action": "Activates the focused row and closes the menu",
+          "when": "row focused"
+        },
+        {
+          "keys": "ArrowRight (ArrowLeft in RTL)",
+          "action": "Opens a submenu",
+          "when": "submenu row focused"
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes the top-most level (IME-guarded); focus returns to the element that had it before the menu opened",
+          "when": "menu open"
+        },
+        {"keys": "Tab, Shift+Tab", "action": "Closes the menu", "when": "menu open"}
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "CTXMENU-01",
+          "type": "approved-api-difference",
+          "text": "`menuContent` is `slot=\"menu\"`, `children` the default slot, `triggerXstyle` is styling the host, `isDisabled` is `disabled`; the aliases `ContextMenuItem`, `ContextMenuDivider`, `ContextMenuCheckboxItem`, `ContextMenuRadioGroup`, `ContextMenuRadioItem`, `ContextMenuSubMenu` are the dropdown-menu tags (A§7.1). Added: `show()`, `showAt(x, y)`, `hide()`, `toggle()` and `requestClose()` (A§7.5)."
+        },
+        {
+          "id": "CTXMENU-02",
+          "type": "approved-api-difference",
+          "text": "The menu is anchored to a 0x0 viewport-fixed element at the pointer (the position controller's virtual anchor, A§9.10), so it uses CSS anchor positioning and the Floating UI module is never fetched in Chromium and Firefox. Upstream anchors to an element inside the trigger, so its menu follows the content when the page scrolls; here the menu stays at its viewport point while open."
+        },
+        {
+          "id": "CTXMENU-03",
+          "type": "a11y-improvement",
+          "text": "Dismissal goes through the shared layer stack (Escape closes the top-most level once, IME composing Escape is ignored, outside presses close it) instead of upstream's own document listeners. ContextMenu and Shift+F10 are also handled on keydown so the menu opens at the focused element even where the engine does not synthesise a `contextmenu` event."
+        },
+        {
+          "id": "CTXMENU-04",
+          "type": "approved-api-difference",
+          "text": "Touch long press uses Pointer Events (`pointerType === 'touch'`) instead of Touch Events: the same cancel rules plus `pointercancel` when the browser takes the gesture over. Mice and pens open through `contextmenu`."
+        },
+        {
+          "id": "CTXMENU-05",
+          "type": "tecton-visual",
+          "text": "The painted menu is the dropdown menu's Tecton surface (1px rule on the recessed popover fill, no drop shadow); part `menu` is the `astryx-context-menu` target."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 75,
+      "notes": "Guides: [mwg:resilient-context-menus-and-nested-dropdowns] [mwg:accessibility] [mwg:accessible-web-components]. Compound content also renders in the bottom sheet (a `role=menu` container holding the slotted rows), as upstream."
+    }
+  }
+}

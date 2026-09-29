@@ -1,0 +1,17 @@
+<!-- title: Bottom sheet and adaptive presentation; description: Data-driven menus can present as a bottom action sheet (presentation="bottom-sheet"), or adaptively: a sheet on a compact touch device and an anchored popover elsewhere. Nested items drill into a new view with a Back button. -->
+<div id="bottom-sheet-root">
+  <tct-hstack gap="4" wrap="wrap" v-align="center">
+    <tct-dropdown-menu label="Sheet" presentation="bottom-sheet"></tct-dropdown-menu>
+    <tct-dropdown-menu label="Adaptive" presentation="adaptive"></tct-dropdown-menu>
+  </tct-hstack>
+  <script type="module">
+    const items = [
+      {label: 'Edit project', icon: 'wrench'},
+      {label: 'Duplicate project', icon: 'copy'},
+      {label: 'Move to', icon: 'externalLink', items: [{label: 'Inbox'}, {label: 'Archive'}]},
+      {type: 'divider'},
+      {label: 'Delete project', variant: 'destructive', icon: 'stop'},
+    ];
+    for (const menu of document.querySelectorAll('#bottom-sheet-root tct-dropdown-menu')) menu.items = items;
+  </script>
+</div>

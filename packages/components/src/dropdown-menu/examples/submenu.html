@@ -1,0 +1,16 @@
+<!-- title: Submenus; description: A row with children opens a flyout. ArrowRight (ArrowLeft in right-to-left text), Enter or Space opens it; ArrowLeft or Escape closes only the flyout and returns to its row, and a second Escape closes the menu. Choosing a nested row closes everything. -->
+<tct-dropdown-menu label="Actions">
+  <tct-dropdown-menu-item label="Rename"></tct-dropdown-menu-item>
+  <tct-dropdown-menu-sub-menu label="Move to" icon="externalLink">
+    <tct-dropdown-menu-item label="Inbox"></tct-dropdown-menu-item>
+    <tct-dropdown-menu-item label="Archive"></tct-dropdown-menu-item>
+    <tct-dropdown-menu-sub-menu label="Projects">
+      <tct-dropdown-menu-item label="North Sea"></tct-dropdown-menu-item>
+      <tct-dropdown-menu-item label="Barents Sea"></tct-dropdown-menu-item>
+    </tct-dropdown-menu-sub-menu>
+  </tct-dropdown-menu-sub-menu>
+  <tct-dropdown-menu-sub-menu label="Share (disabled)" disabled>
+    <tct-dropdown-menu-item label="Never shown"></tct-dropdown-menu-item>
+  </tct-dropdown-menu-sub-menu>
+  <tct-dropdown-menu-item label="Delete" variant="destructive"></tct-dropdown-menu-item>
+</tct-dropdown-menu>

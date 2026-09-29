@@ -1,0 +1,150 @@
+/*
+ * The menu panel shared by tct-dropdown-menu, tct-context-menu and the submenu flyout. The positioned
+ * `.layer` is a top-layer `popover="manual"` that paints nothing (its inset, margins and `position-area`
+ * are written inline by PositionController); the inner `.surface` is the painted `role="menu"` box.
+ *
+ * Tecton (design/components/menu.md, theme components.ts `dropdown-menu`): a 1px rule on the recessed
+ * popover fill, no drop shadow, a small element radius. The panel scrolls only when its rows do not fit
+ * (`overflow-y: auto`): row focus rings are drawn inset, so scrolling never clips them.
+ * [mwg:resilient-context-menus-and-nested-dropdowns] [mwg:animate-to-from-top-layer]
+ */
+@layer component {
+  /* Without the Popover API (Tier 2) the attribute is inert: hidden until LayerController shows it. */
+  @supports not selector(:popover-open) {
+    .layer {
+      position: fixed;
+      display: none;
+    }
+  }
+
+  /*
+   * PositionController clamps the layer to the `position-area` cell (`max-*-size: 100%`). In a small cell
+   * (a context menu opened at a viewport edge, a flyout near the screen edge) that shrinks the layer to
+   * the cell, so the browser never sees an overflow and never tries the flipped areas: the menu spills
+   * off screen instead of flipping. The surface carries the viewport clamps itself, so the layer is left
+   * to its content, as upstream does (the clamp lives on the surface, not on the popover).
+   */
+  .layer {
+    max-inline-size: none !important;
+    max-block-size: none !important;
+  }
+
+  .surface {
+    --_menu-radius: var(--radius-element);
+    --_menu-padding: var(--spacing-1);
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-0-5);
+    box-sizing: border-box;
+    inline-size: var(--_menu-inline-size, auto);
+    min-inline-size: var(--_menu-min-inline-size, 0);
+
+    /* Viewport gutter: never wider or taller than the screen minus 16px each side. */
+    max-inline-size: calc(100vi - var(--spacing-8));
+    max-block-size: min(
+      300px /* design: upstream menu height cap */,
+      calc(100dvb - var(--spacing-8))
+    );
+    padding: var(--_menu-padding);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--_menu-radius);
+    background: var(--color-background-popover);
+    color: var(--color-text-primary);
+    font-family: var(--font-family-body);
+    font-size: var(--text-label-size);
+    line-height: var(--text-label-leading);
+    /* physical: overflow-block / overflow-inline are not available in every Tier-2 engine */
+    overflow-x: hidden;
+
+    /* physical: as above */
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-user-select: none;
+    user-select: none;
+
+    /* A pointer open focuses the panel itself so no row reads as pre-selected: an internal target, not a control. */
+    outline: none;
+  }
+
+  /* Data-mode group: an optional heading and its rows, at the menu's own row rhythm. */
+  .section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-0-5);
+  }
+
+  .section-heading {
+    padding-block: var(--spacing-1);
+    padding-inline: var(--spacing-2);
+    color: var(--color-text-secondary);
+    font-size: var(--text-supporting-size);
+    line-height: var(--text-supporting-leading);
+  }
+
+  /* Entry: a fade and a small slide away from the anchor. Exit runs from JS (WAAPI) before hidePopover(). */
+  .layer:popover-open {
+    opacity: 1;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+}
+
+@layer state {
+  @media (prefers-reduced-motion: no-preference) {
+    .layer:popover-open {
+      translate: 0 0;
+      transition:
+        opacity var(--duration-fast) var(--ease-standard),
+        translate var(--duration-fast) var(--ease-standard);
+
+      @starting-style {
+        translate: 0 var(--spacing-1);
+      }
+    }
+
+    .layer[data-placement='below']:popover-open {
+      @starting-style {
+        translate: 0 calc(-1 * var(--spacing-1));
+      }
+    }
+
+    .layer[data-placement='start']:popover-open {
+      @starting-style {
+        translate: var(--spacing-1) 0;
+      }
+    }
+
+    .layer[data-placement='end']:popover-open {
+      @starting-style {
+        translate: calc(-1 * var(--spacing-1)) 0;
+      }
+    }
+
+    /* Right-to-left mirrors the horizontal nudge: start/end are logical, translate is physical. */
+    :host(:dir(rtl)) .layer[data-placement='start']:popover-open {
+      @starting-style {
+        translate: calc(-1 * var(--spacing-1)) 0;
+      }
+    }
+
+    :host(:dir(rtl)) .layer[data-placement='end']:popover-open {
+      @starting-style {
+        translate: var(--spacing-1) 0;
+      }
+    }
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .surface {
+      border-color: CanvasText;
+      background: Canvas;
+      color: CanvasText;
+    }
+  }
+}

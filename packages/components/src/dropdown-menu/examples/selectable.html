@@ -1,0 +1,11 @@
+<!-- title: Checkbox and radio rows; description: Checkbox rows toggle independent options and keep the menu open. A radio group is a named single choice and closes the menu when a row is chosen. Both change state through the cancelable tct-value-change event. -->
+<tct-dropdown-menu label="View">
+  <tct-dropdown-menu-checkbox-item label="Show grid" checked></tct-dropdown-menu-checkbox-item>
+  <tct-dropdown-menu-checkbox-item label="Show rulers"></tct-dropdown-menu-checkbox-item>
+  <tct-dropdown-menu-divider></tct-dropdown-menu-divider>
+  <tct-dropdown-menu-radio-group label="Sort by" value="name">
+    <tct-dropdown-menu-radio-item value="name" label="Name"></tct-dropdown-menu-radio-item>
+    <tct-dropdown-menu-radio-item value="date" label="Date modified"></tct-dropdown-menu-radio-item>
+    <tct-dropdown-menu-radio-item value="size" label="Size" disabled></tct-dropdown-menu-radio-item>
+  </tct-dropdown-menu-radio-group>
+</tct-dropdown-menu>

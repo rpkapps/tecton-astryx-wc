@@ -1,0 +1,58 @@
+/*
+ * The touch presentation of a data-driven menu: a heading row and spacious pressable list rows inside a
+ * bottom sheet. Shared by tct-dropdown-menu and tct-context-menu. The sheet frame (panel, handle,
+ * scrim, scrolling) belongs to tct-bottom-sheet.
+ * [mwg:css-layout]
+ */
+@layer component {
+  /* The sheet's elements load lazily; until they are defined nothing of it shows. */
+  tct-bottom-sheet:not(:defined) {
+    display: none;
+  }
+
+  .sheet-content {
+    box-sizing: border-box;
+    inline-size: 100%;
+    padding-block-start: var(--spacing-4);
+    padding-inline: var(--spacing-1);
+  }
+
+  .sheet-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--spacing-1);
+    margin-block-end: var(--spacing-2);
+  }
+
+  /* The heading names the current view and takes focus after a drill-in; it is not a control. */
+  .sheet-heading {
+    outline: none;
+  }
+
+  /* At the root the heading lines up with the content edge of a spacious row. */
+  .sheet-heading[data-root] {
+    margin-inline-start: var(--spacing-3);
+  }
+
+  .sheet-row[data-destructive] {
+    --_item-label-color: var(--color-error);
+    --_item-description-color: var(--color-error);
+
+    color: var(--color-error);
+  }
+
+  .sheet-structure {
+    list-style-type: none;
+  }
+
+  .sheet-divider {
+    margin-block: var(--spacing-1);
+  }
+
+  .sheet-section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+  }
+}

@@ -1,0 +1,11 @@
+/*
+ * The group box only lays its rows out: the rows keep the menu's own inter-row rhythm, so grouped rows
+ * sit at the same gap as ungrouped ones instead of flush against each other (upstream `group` style).
+ */
+@layer component {
+  :host {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-0-5);
+  }
+}
