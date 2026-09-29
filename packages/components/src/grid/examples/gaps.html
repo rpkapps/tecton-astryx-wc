@@ -1,0 +1,15 @@
+<!-- title: Gaps; description: gap sets both axes; row-gap and column-gap override it per axis. -->
+<div id="gaps" style="display: grid; gap: var(--spacing-6)">
+  <tct-grid columns="3" gap="1">
+    <div style="padding: var(--spacing-2); background: var(--color-background-muted)">gap="1"</div>
+    <div style="padding: var(--spacing-2); background: var(--color-background-muted)">b</div>
+    <div style="padding: var(--spacing-2); background: var(--color-background-muted)">c</div>
+    <div style="padding: var(--spacing-2); background: var(--color-background-muted)">d</div>
+  </tct-grid>
+  <tct-grid columns="3" gap="1" row-gap="6" column-gap="3">
+    <div style="padding: var(--spacing-2); background: var(--color-background-muted)">row 6, column 3</div>
+    <div style="padding: var(--spacing-2); background: var(--color-background-muted)">b</div>
+    <div style="padding: var(--spacing-2); background: var(--color-background-muted)">c</div>
+    <div style="padding: var(--spacing-2); background: var(--color-background-muted)">d</div>
+  </tct-grid>
+</div>

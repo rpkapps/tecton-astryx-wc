@@ -1,0 +1,17 @@
+<!-- title: Fill and fit; description: With few items, fill keeps empty tracks so the items stay at their minimum width; fit collapses them so the items stretch. -->
+<div id="fill-vs-fit" style="display: grid; gap: var(--spacing-4)">
+  <div>
+    <p>column-repeat="fill" (default)</p>
+    <tct-grid column-min-width="100" column-repeat="fill" gap="2">
+      <div style="padding: var(--spacing-3); background: var(--color-background-muted)">A</div>
+      <div style="padding: var(--spacing-3); background: var(--color-background-muted)">B</div>
+    </tct-grid>
+  </div>
+  <div>
+    <p>column-repeat="fit"</p>
+    <tct-grid column-min-width="100" column-repeat="fit" gap="2">
+      <div style="padding: var(--spacing-3); background: var(--color-background-muted)">A</div>
+      <div style="padding: var(--spacing-3); background: var(--color-background-muted)">B</div>
+    </tct-grid>
+  </div>
+</div>

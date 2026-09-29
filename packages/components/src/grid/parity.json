@@ -1,0 +1,220 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "grid",
+  "workPackage": "WP-1",
+  "entries": {
+    "core.grid": {
+      "tag": "tct-grid",
+      "status": "implemented",
+      "upstream": {
+        "name": "Grid",
+        "path": "packages/core/src/Grid/Grid.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "columns",
+          "kind": "prop",
+          "target": "columns",
+          "as": "attribute",
+          "notes": "A number attribute for fixed columns. The upstream object form {minWidth, max, repeat} is the same property (`columns`) and the attribute trio column-min-width / column-max / column-repeat (never a JSON attribute)."
+        },
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "target": "width",
+          "as": "attribute",
+          "notes": "Number is px, string a CSS length; not reflected. Sizes the host."
+        },
+        {
+          "upstream": "height",
+          "kind": "prop",
+          "target": "height",
+          "as": "attribute",
+          "notes": "Sizes the host, so a percentage resolves against the parent."
+        },
+        {
+          "upstream": "maxWidth",
+          "kind": "prop",
+          "target": "max-width",
+          "as": "attribute"
+        },
+        {
+          "upstream": "minHeight",
+          "kind": "prop",
+          "target": "min-height",
+          "as": "attribute"
+        },
+        {
+          "upstream": "gap",
+          "kind": "prop",
+          "target": "gap",
+          "as": "attribute",
+          "notes": "Spacing step; a number attribute."
+        },
+        {
+          "upstream": "rowGap",
+          "kind": "prop",
+          "target": "row-gap",
+          "as": "attribute"
+        },
+        {
+          "upstream": "columnGap",
+          "kind": "prop",
+          "target": "column-gap",
+          "as": "attribute"
+        },
+        {
+          "upstream": "align",
+          "kind": "prop",
+          "target": "alignment",
+          "as": "attribute",
+          "notes": "Renamed: `align` attribute has presentational meaning in browsers (A§7.2). Default stretch."
+        },
+        {
+          "upstream": "justify",
+          "kind": "prop",
+          "target": "justify",
+          "as": "attribute",
+          "notes": "Default stretch."
+        },
+        {
+          "upstream": "rowHeight",
+          "kind": "prop",
+          "target": "row-height",
+          "as": "attribute",
+          "notes": "px number; sets grid-auto-rows."
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use the host, `::part(base)` (also for `grid-template-columns` inside media or container queries), or the documented attributes or the documented attributes."
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "The element itself is the handle; the box is reachable as part \"base\"."
+        }
+      ],
+      "hooks": [],
+      "keyboard": [],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "GRID-01",
+          "type": "approved-api-difference",
+          "text": "`align` is the `alignment` attribute (A§7.2). The responsive `columns` object is also written as the attributes `column-min-width`, `column-max` and `column-repeat`, because config objects are never JSON attributes; the object form stays available as the `columns` property and wins over the attributes."
+        },
+        {
+          "id": "GRID-02",
+          "type": "approved-api-difference",
+          "text": "The host carries the sizes; an inner part=\"base\" grid container carries the tracks, gaps and padding. Grid also accepts the padding attributes of BoxPropsMixin (upstream Grid has none)."
+        },
+        {
+          "id": "GRID-03",
+          "type": "approved-api-difference",
+          "text": "The track template is set through the private --_columns custom property computed in the class and consumed by the stylesheet, so a consumer rule on ::part(base) (also inside @media or @container) can override it, as upstream's CSS-variable indirection allows for xstyle."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:css-layout] grid, repeat(auto-fill, minmax()), logical properties; [mwg:styling-web-components] host rules, part=base, custom-property inheritance; [mwg:shadow-dom] slot inside the grid container."
+    },
+    "core.grid-span": {
+      "tag": "tct-grid-span",
+      "status": "implemented",
+      "upstream": {
+        "name": "GridSpan",
+        "path": "packages/core/src/Grid/GridSpan.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "columns",
+          "kind": "prop",
+          "target": "columns",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "A positive whole number, or \"full\" for every column. Rules cover 1-12 without JavaScript; larger spans use a per-instance constructed sheet."
+        },
+        {
+          "upstream": "rows",
+          "kind": "prop",
+          "target": "rows",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "A positive whole number (same 1-12 static rules)."
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use the host (it is the grid item), `class`, `style` or the documented attributes."
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "The element itself is the handle."
+        }
+      ],
+      "hooks": [],
+      "keyboard": [],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "GRIDSPAN-01",
+          "type": "approved-api-difference",
+          "text": "The host is the grid item (display: grid, min-inline-size 0, block-size 100%), so styles on <tct-grid-span> (margin, grid placement) reach the item directly; upstream renders a div with those styles."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:css-layout] `grid-column: span n`, `min-inline-size: 0` on grid items; [mwg:custom-elements] reflected converters for `columns`."
+    }
+  }
+}
