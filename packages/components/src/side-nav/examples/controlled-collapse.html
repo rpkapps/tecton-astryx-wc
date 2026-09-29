@@ -1,0 +1,25 @@
+<!-- title: Controlled collapse; description: The user's collapse asks with a cancelable tct-collapse-change. Prevent it and set collapsed yourself to own the state. A tct-side-nav-collapse-button anywhere on the page, named with for, toggles the same navigation. -->
+<div id="side-nav-controlled-collapse-root">
+  <tct-vstack gap="2">
+    <tct-side-nav-collapse-button for="side-nav-controlled-collapse-nav"></tct-side-nav-collapse-button>
+    <div style="block-size: 360px">
+      <tct-side-nav id="side-nav-controlled-collapse-nav" collapsible no-collapse-button label="Controlled navigation">
+        <tct-side-nav-item label="Dashboard" icon="home" href="#dashboard" selected></tct-side-nav-item>
+        <tct-side-nav-item label="Projects" icon="folder" href="#projects"></tct-side-nav-item>
+        <tct-side-nav-item label="Settings" icon="settings" href="#settings"></tct-side-nav-item>
+      </tct-side-nav>
+    </div>
+    <tct-text id="side-nav-controlled-collapse-status" color="secondary">Expanded</tct-text>
+  </tct-vstack>
+</div>
+<script type="module">
+  const root = document.getElementById('side-nav-controlled-collapse-root');
+  const nav = root.querySelector('#side-nav-controlled-collapse-nav');
+  const status = root.querySelector('#side-nav-controlled-collapse-status');
+  nav.addEventListener('tct-collapse-change', (event) => {
+    if (event.target !== nav) return;
+    event.preventDefault();
+    nav.collapsed = event.collapsed;
+    status.textContent = event.collapsed ? 'Collapsed' : 'Expanded';
+  });
+</script>

@@ -1,0 +1,143 @@
+/*
+ * tct-side-nav. Five zones in a flex column: the pinned top (header, top content), the scrolling
+ * content, and the pinned bottom (footer, footer icons). The host only takes the height of its container;
+ * `.root` (part "base") carries the width (a token-free 260px rail unless resizable, a fixed 48px
+ * collapsed rail), so the width can follow a drag without an application reset getting in the way. The
+ * mobile drawer form stacks the zones. [mwg:css-layout] [mwg:styling-web-components] [mwg:accessibility]
+ */
+@layer component {
+  :host {
+    display: block;
+    block-size: 100%;
+    min-block-size: 0;
+  }
+
+  /* The positioned box the resize handle overlays; it clips the handle's ring, which is drawn inside. */
+  .frame {
+    position: relative;
+    display: flex;
+    flex-shrink: 0;
+    block-size: 100%;
+    overflow: clip;
+  }
+
+  .root {
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    inline-size: var(--_width, var(--side-nav-width, 260px)); /* design: upstream width (260px) */
+    block-size: 100%;
+    overflow: hidden;
+  }
+
+  .root[data-collapsed] {
+    inline-size: var(--spacing-12);
+  }
+
+  .top {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: var(--spacing-2);
+    padding-block: var(--spacing-2);
+    padding-inline: var(--spacing-2);
+  }
+
+  .top[data-collapsed] {
+    align-items: center;
+  }
+
+  .content {
+    flex: 1;
+    min-block-size: 0;
+    padding-block-start: var(--spacing-2);
+    padding-block-end: var(--spacing-2);
+    padding-inline: var(--spacing-2);
+    overflow-inline: hidden;
+    overflow-block: auto;
+    overscroll-behavior: contain;
+  }
+
+  .content[data-top] {
+    padding-block-start: var(--spacing-1);
+  }
+
+  .content[data-bottom] {
+    padding-block-end: var(--spacing-1);
+  }
+
+  .content[data-collapsed] {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .bottom {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    gap: var(--spacing-2);
+    margin-block-start: auto;
+    padding-block: var(--spacing-1) var(--spacing-2);
+    padding-inline: var(--spacing-2);
+  }
+
+  .bottom[data-collapsed] {
+    align-items: center;
+    padding-block-start: 0;
+  }
+
+  .footer-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+  }
+
+  .footer-row[data-collapsed] {
+    flex-direction: column-reverse;
+  }
+
+  tct-size-provider {
+    display: contents;
+  }
+
+  /* The mobile drawer: the zones one under the other. */
+  .drawer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+  }
+
+  .drawer-footer {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+    margin-block-start: auto;
+    padding-block-start: var(--spacing-2);
+  }
+
+  .drawer-icons {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+  }
+
+  /* A horizontal bar: the heading, then the icons at the end. */
+  .topbar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    inline-size: 100%;
+    block-size: 48px; /* design: upstream top bar height (48px) */
+    overflow: hidden;
+  }
+
+  .topbar-icons {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    margin-inline-start: auto;
+  }
+}

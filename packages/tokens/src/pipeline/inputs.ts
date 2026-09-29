@@ -24,6 +24,15 @@ export function sha256(buffer: Buffer | string): string {
   return createHash('sha256').update(buffer).digest('hex');
 }
 
+/**
+ * Hash of a locked text input with CRLF normalised to LF. The inputs are text (JSON, CSS); a Windows
+ * checkout can turn them into CRLF (`core.autocrlf`), which must not count as a content change. On an
+ * LF file this equals the plain sha256, so existing locks stay valid.
+ */
+export function textSha256(path: string): string {
+  return sha256(readFileSync(path).toString('utf8').replace(/\r\n/g, '\n'));
+}
+
 const readInput = (name: string) => readFileSync(join(INPUTS_DIR, name));
 const readJson = <T>(name: string): T => JSON.parse(readInput(name).toString('utf8')) as T;
 
@@ -34,7 +43,7 @@ export function verifyInputHashes(dir: string = INPUTS_DIR): string[] {
   for (const [name, entry] of Object.entries(lock.files)) {
     let actual: string;
     try {
-      actual = sha256(readFileSync(join(dir, name)));
+      actual = textSha256(join(dir, name));
     } catch {
       problems.push(`${name}: file is missing`);
       continue;

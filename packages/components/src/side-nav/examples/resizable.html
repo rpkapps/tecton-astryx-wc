@@ -1,0 +1,11 @@
+<!-- title: Resizable; description: resizable adds a drag handle at the inline-end edge, a keyboard-operable separator (arrow keys, Home and End). Dragging below the collapse threshold collapses a collapsible navigation. auto-save-id remembers the width and the collapse state in localStorage. -->
+<div style="block-size: 480px">
+  <tct-side-nav resizable collapsible default-width="280" min-width="200" max-width="420" auto-save-id="docs-side-nav-resizable" label="Resizable navigation">
+    <tct-side-nav-heading slot="header" heading="Acme" heading-href="#home">
+      <tct-nav-icon slot="icon"><tct-icon name="layers"></tct-icon></tct-nav-icon>
+    </tct-side-nav-heading>
+    <tct-side-nav-item label="Dashboard" icon="home" href="#dashboard" selected></tct-side-nav-item>
+    <tct-side-nav-item label="Projects" icon="folder" href="#projects"></tct-side-nav-item>
+    <tct-side-nav-item label="A destination with a rather long label that truncates" icon="file" href="#long"></tct-side-nav-item>
+  </tct-side-nav>
+</div>

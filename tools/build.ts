@@ -26,9 +26,8 @@ import {readPackage, verifyExports, workspaceResolveRoot} from './build/verify-e
 import {componentFolderNames} from './lib/docs-model.ts';
 import {walkFiles} from './lib/fs.ts';
 import {ROOT, rel} from './lib/paths.ts';
-import {run} from './lib/run.ts';
+import {run, runPackageBin} from './lib/run.ts';
 
-const TSC = join(ROOT, 'node_modules/.bin/tsc');
 const pkgDir = (name: string) => join(ROOT, 'packages', name);
 
 function step(message: string): void {
@@ -37,7 +36,9 @@ function step(message: string): void {
 
 function tsc(name: string): void {
   const project = join(pkgDir(name), 'tsconfig.build.json');
-  const result = run(TSC, ['-p', project, '--emitDeclarationOnly']);
+  const result = runPackageBin('typescript', ['-p', project, '--emitDeclarationOnly'], {
+    binName: 'tsc',
+  });
   if (result.status !== 0) throw new Error(`tsc failed for @tecton-wc/${name}`);
 }
 
@@ -49,7 +50,7 @@ function tsc(name: string): void {
 function cli(): void {
   const project = join(pkgDir('cli'), 'tsconfig.build.json');
   step('@tecton-wc/cli: tsc emit (JavaScript + declarations)');
-  const result = run(TSC, ['-p', project]);
+  const result = runPackageBin('typescript', ['-p', project], {binName: 'tsc'});
   if (result.status !== 0) throw new Error('tsc failed for @tecton-wc/cli');
 }
 
@@ -67,7 +68,7 @@ function cliSmoke(): string[] {
     ['component', 'tct-button', '--dense'],
     ['layout', 'grammar', '--json'],
   ]) {
-    const result = spawnSync('node', [join(dir, 'bin/tct.js'), ...argv], {
+    const result = spawnSync(process.execPath, [join(dir, 'bin/tct.js'), ...argv], {
       cwd: ROOT,
       encoding: 'utf8',
       env: {...process.env, TCT_NO_NUDGE: '1'},
@@ -147,7 +148,7 @@ async function cdn(): Promise<void> {
 
 async function main(): Promise<number> {
   if (process.env.TCT_GENERATED !== '1') {
-    const generated = run('node', ['tools/generate.ts']);
+    const generated = run(process.execPath, ['tools/generate.ts']);
     if (generated.status !== 0) return generated.status;
   }
   console.log('build');

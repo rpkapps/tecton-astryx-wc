@@ -1,0 +1,15 @@
+<!-- title: End content and actions; description: The end slot holds passive content such as a count, the actions slot holds row-level controls that stay operable beside the row. Actions are hidden in the collapsed rail and take the compact control size. -->
+<div style="block-size: 360px">
+  <tct-side-nav label="Navigation with actions">
+    <tct-side-nav-item label="Inbox" icon="inbox" href="#inbox" selected>
+      <tct-badge slot="end" label="12"></tct-badge>
+    </tct-side-nav-item>
+    <tct-side-nav-item label="Projects" icon="folder" href="#projects">
+      <tct-icon-button slot="actions" label="Add a project" icon="plus" variant="ghost"></tct-icon-button>
+    </tct-side-nav-item>
+    <tct-side-nav-item label="Drafts" icon="file" href="#drafts" has-action>
+      <tct-side-nav-item label="Untitled" href="#untitled"></tct-side-nav-item>
+      <tct-icon-button slot="actions" label="New draft" icon="plus" variant="ghost"></tct-icon-button>
+    </tct-side-nav-item>
+  </tct-side-nav>
+</div>

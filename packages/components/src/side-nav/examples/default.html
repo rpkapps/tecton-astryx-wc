@@ -1,0 +1,23 @@
+<!-- title: Default; description: The five zones of a side navigation: a pinned header, top content, the scrolling sections, a footer and the footer icons. The current page is selected and carries aria-current="page". -->
+<div style="block-size: 480px">
+  <tct-side-nav label="Workspace">
+    <tct-side-nav-heading slot="header" heading="Acme" subheading="Team workspace" heading-href="#home">
+      <tct-nav-icon slot="icon"><tct-icon name="layers"></tct-icon></tct-nav-icon>
+    </tct-side-nav-heading>
+    <tct-button slot="top-content" label="Create" variant="primary" icon="plus"></tct-button>
+    <tct-side-nav-section heading="Main">
+      <tct-side-nav-item label="Dashboard" icon="home" href="#dashboard" selected></tct-side-nav-item>
+      <tct-side-nav-item label="Projects" icon="folder" href="#projects"></tct-side-nav-item>
+      <tct-side-nav-item label="Inbox" icon="inbox" href="#inbox">
+        <tct-badge slot="end" label="4"></tct-badge>
+      </tct-side-nav-item>
+    </tct-side-nav-section>
+    <tct-side-nav-section heading="Workspace">
+      <tct-side-nav-item label="Members" icon="users" href="#members"></tct-side-nav-item>
+      <tct-side-nav-item label="Settings" icon="settings" href="#settings"></tct-side-nav-item>
+    </tct-side-nav-section>
+    <tct-side-nav-item slot="footer" label="Upgrade plan" icon="star" href="#upgrade"></tct-side-nav-item>
+    <tct-icon-button slot="footer-icons" label="Help" icon="info" variant="ghost"></tct-icon-button>
+    <tct-icon-button slot="footer-icons" label="Notifications" icon="bell" variant="ghost"></tct-icon-button>
+  </tct-side-nav>
+</div>

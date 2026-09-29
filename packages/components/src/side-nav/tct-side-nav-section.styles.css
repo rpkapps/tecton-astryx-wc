@@ -1,0 +1,58 @@
+/*
+ * tct-side-nav-section. A vertical group: an optional header (title, subtitle and end content, in the
+ * secondary text role) above the items. [mwg:css] [mwg:accessibility]
+ */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .root {
+    display: flex;
+    flex-direction: column;
+    padding-block: var(--spacing-1);
+  }
+
+  .header {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding-block: var(--spacing-1);
+    padding-inline: var(--spacing-2);
+    cursor: default;
+    user-select: none;
+  }
+
+  .titles {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+
+  .title,
+  .subtitle {
+    overflow: hidden;
+    color: var(--color-text-secondary);
+    font-size: var(--text-supporting-size);
+    line-height: var(--text-supporting-leading);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .title {
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .end {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  .items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-0-5);
+  }
+}
