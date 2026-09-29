@@ -74,6 +74,7 @@ function declarationComment(token: Token): string {
   }
   if (token.override) parts.push('override');
   if (token.provisional !== undefined) parts.push('provisional');
+  if (token.retained !== undefined) parts.push('astryx-retained');
   return parts.length === 0 ? '' : ` /* ${parts.join(' ')} */`;
 }
 

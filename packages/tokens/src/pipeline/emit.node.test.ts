@@ -166,9 +166,21 @@ describe('tecton.css', () => {
 
 describe('metadata', () => {
   const json = JSON.parse(css('tokens.json')) as {
-    tokens: Record<string, {light: string; dark: string; status: string; provisional?: string}>;
+    tokens: Record<
+      string,
+      {
+        light: string;
+        dark: string;
+        status: string;
+        provisional?: string;
+        retained?: string;
+        derived?: string;
+      }
+    >;
     counts: {tokens: number; palette: number};
-    breakpoints: {values: Record<string, number>};
+    breakpoints: {status: string; values: Record<string, number>};
+    astryxRetainedNonTokens: {name: string}[];
+    tectonDerivedNonTokens: {name: string; value?: string; binds?: Record<string, string>}[];
   };
 
   it('describes every token with resolved light and dark values', () => {
@@ -182,6 +194,33 @@ describe('metadata', () => {
     expect(json.tokens['--color-data-blue-5']!.provisional).toBeTruthy();
     expect(json.tokens['--color-syntax-keyword']!.light).toBe('#5c3878'); // reference resolved
     expect(json.breakpoints.values).toEqual({sm: 640, md: 768, lg: 1024, xl: 1280, '2xl': 1536});
+  });
+
+  it('records astryx-retained tokens, non-tokens and the Tecton-derived bindings (D-013)', () => {
+    expect(json.breakpoints.status).toBe('astryx-retained');
+    expect(json.tokens['--duration-fast']).toMatchObject({status: 'astryx-retained'});
+    expect(json.tokens['--duration-fast']!.retained).toMatch(/D-013/);
+    expect(json.tokens['--duration-fast']!.provisional).toBeUndefined();
+    expect(json.tokens['--text-heading-3-size']!.derived).toMatch(/large/);
+    expect(json.astryxRetainedNonTokens.map((item) => item.name)).toEqual([
+      'breakpoints',
+      'z-index',
+    ]);
+    const derived = Object.fromEntries(
+      json.tectonDerivedNonTokens.map((item) => [item.name, item]),
+    );
+    expect(derived['letter-spacing']!.value).toBe('normal');
+    expect(derived['destructive button']!.binds!.background).toBe(
+      '--tecton-color-status-error-filled-bg',
+    );
+    const js = css('tokens.js');
+    expect(js).toContain('export const astryxRetainedNonTokens');
+    expect(js).toContain('export const tectonDerivedNonTokens');
+    expect(css('tokens.d.ts')).toContain("| 'astryx-retained'");
+  });
+
+  it('marks retained declarations in tokens.css', () => {
+    expect(css('tokens.css')).toMatch(/--duration-fast: 175ms; \/\* astryx-retained \*\//);
   });
 
   it('exports tokens.js and tokens.d.ts with the same names', () => {

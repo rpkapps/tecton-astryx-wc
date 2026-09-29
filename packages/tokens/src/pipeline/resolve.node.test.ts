@@ -57,14 +57,11 @@ describe('resolveTokens (D-001)', () => {
     expect(value('--spacing-4', 'light')).toBe('16px');
   });
 
-  it('marks data-viz, motion and --size-element-lg provisional (D-002)', () => {
-    for (const name of [
-      '--color-data-categorical-blue',
-      '--duration-fast',
-      '--ease-standard',
-      '--size-element-lg',
-    ])
+  it('marks data-viz and --size-element-lg provisional, motion astryx-retained (D-013)', () => {
+    for (const name of ['--color-data-categorical-blue', '--size-element-lg'])
       expect(real.byName.get(name)?.status).toBe('provisional');
+    for (const name of ['--duration-fast', '--ease-standard'])
+      expect(real.byName.get(name)?.status).toBe('astryx-retained');
     expect(real.byName.get('--color-accent')?.status).toBe('tecton-export');
   });
 

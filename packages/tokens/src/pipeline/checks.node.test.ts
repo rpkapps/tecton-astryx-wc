@@ -55,24 +55,106 @@ describe('failing checks', () => {
   it('provisional: fails when a token is provisional but not listed', () => {
     const inputs = fresh();
     inputs.provisional.categories = inputs.provisional.categories.filter(
-      (c) => c.category !== 'motion',
+      (c) => c.category !== 'data',
     );
     const problems = checkProvisional(build(inputs)).problems;
     expect(problems.length).toBeGreaterThan(0);
   });
 
-  it('provisional: the set is D-002 exact', () => {
+  it('provisional: the set is D-013 exact', () => {
     const provisional = real.resolved.tokens.filter((token) => token.status === 'provisional');
     const categories = new Set(provisional.map((token) => token.category));
-    expect([...categories].sort()).toEqual([
-      'data',
-      'focus',
-      'font',
-      'motion',
-      'scrollbar',
-      'size',
-    ]);
-    expect(provisional).toHaveLength(56 + 10 + 1 + 6);
+    expect([...categories].sort()).toEqual(['data', 'focus', 'font', 'scrollbar', 'size']);
+    expect(provisional).toHaveLength(56 + 1 + 6);
+  });
+
+  it('astryx-retained: exactly the 10 motion tokens, with a reason (D-013 Q-06)', () => {
+    const retained = real.resolved.tokens.filter((token) => token.status === 'astryx-retained');
+    expect(new Set(retained.map((token) => token.category))).toEqual(new Set(['motion']));
+    expect(retained).toHaveLength(10);
+    for (const token of retained) expect(token.retained).toMatch(/D-013/);
+    expect(real.resolved.byName.get('--duration-fast')?.provisional).toBeUndefined();
+  });
+
+  it('astryx-retained: fails when motion is listed as provisional too, or drops out of retained', () => {
+    const both = fresh();
+    both.provisional.categories.push({category: 'motion', reason: 'x'});
+    expect(() => build(both)).toThrow(/more than one of provisional, astryxRetained/);
+
+    const missing = fresh();
+    missing.provisional.astryxRetained.categories = [];
+    const problems = checkProvisional(build(missing)).problems.join('\n');
+    expect(problems).toContain('astryx-retained categories: motion is required by D-013');
+  });
+
+  it('astryx-retained: fails when a retained value drifts from the upstream Astryx value', () => {
+    const inputs = fresh();
+    inputs.semanticMap.tokens['--duration-fast']!.value = '200ms';
+    expect(checkProvisional(build(inputs)).problems.join('\n')).toMatch(
+      /--duration-fast is 200ms, the retained Astryx value is 175ms/,
+    );
+  });
+
+  it('astryx-retained: fails when breakpoints or z-index are not listed', () => {
+    const inputs = fresh();
+    inputs.provisional.astryxRetained.nonTokens =
+      inputs.provisional.astryxRetained.nonTokens.filter((item) => item.name !== 'z-index');
+    expect(checkProvisional(build(inputs)).problems.join('\n')).toContain(
+      'astryx-retained non-tokens: z-index is required by D-013',
+    );
+  });
+
+  it('tecton-derived: headings 3-6 are never provisional and record their reason', () => {
+    for (const level of [3, 4, 5, 6]) {
+      for (const part of ['size', 'weight', 'leading']) {
+        const token = real.resolved.byName.get(`--text-heading-${level}-${part}`)!;
+        expect(token.status).toBe('tecton-astryx');
+        expect(token.derived).toMatch(/D-013/);
+      }
+    }
+    const inputs = fresh();
+    inputs.provisional.tectonDerived.names.pop();
+    expect(checkProvisional(build(inputs)).problems.join('\n')).toContain(
+      'tectonDerived names: --text-heading-6-leading is required by D-013',
+    );
+  });
+
+  it('tecton-derived: the destructive button binds only emitted --tecton-color-status-error-* roles', () => {
+    const item = real.inputs.provisional.tectonDerived.nonTokens.find(
+      (entry) => entry.name === 'destructive button',
+    )!;
+    expect(Object.values(item.binds!).every((name) => real.resolved.byName.has(name))).toBe(true);
+
+    const wrong = fresh();
+    wrong.provisional.tectonDerived.nonTokens.find(
+      (entry) => entry.name === 'destructive button',
+    )!.binds!.background = '--color-accent';
+    expect(checkProvisional(build(wrong)).problems.join('\n')).toMatch(
+      /destructive button \(background\) must bind a --tecton-color-status-error-\* role/,
+    );
+
+    const missing = fresh();
+    missing.provisional.tectonDerived.nonTokens.find(
+      (entry) => entry.name === 'destructive button',
+    )!.binds!.text = '--tecton-color-status-error-nope';
+    expect(checkProvisional(build(missing)).problems.join('\n')).toContain('is not emitted');
+  });
+
+  it('typography: letter-spacing resolves to normal and headings 3-6 follow large/medium/small/tiny', () => {
+    const inputs = fresh();
+    const typography = inputs.semanticMap as unknown as {
+      typography: {variants: Record<string, {letterSpacing: string}>};
+    };
+    typography.typography.variants.medium!.letterSpacing = '0.02em';
+    expect(checkTypography(build(inputs)).problems.join('\n')).toMatch(
+      /typography variant medium: letter-spacing is 0\.02em/,
+    );
+
+    const drift = fresh();
+    drift.semanticMap.tokens['--text-heading-4-size']!.value = '1rem';
+    expect(checkTypography(build(drift)).problems.join('\n')).toMatch(
+      /--text-heading-4-size is 16px, the export medium is 14px/,
+    );
   });
 
   it('snapshot: fails when the committed names differ', () => {

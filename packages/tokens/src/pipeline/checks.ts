@@ -25,9 +25,33 @@ export const DOCUMENTED_TAILWIND_COLLISIONS = [
   '--font-weight-semibold',
 ];
 
-/** D-002: what has no Tecton decision and is therefore provisional (breakpoints, z-index, letter-spacing, the destructive button and icons have no custom property: provisional.json `nonTokens`). */
-export const D002_TOKEN_CATEGORIES = ['data', 'motion'];
-export const D002_TOKEN_NAMES = ['--size-element-lg'];
+/**
+ * D-002 as amended by D-013 Q-06: what has no Tecton decision and is therefore provisional. Data-viz
+ * colours stay a proposed mapping (palette colours only); `--size-element-lg` and the pipeline-defined
+ * extras (extra-tokens.json) stay provisional. Nothing else may be.
+ */
+export const D013_PROVISIONAL_CATEGORIES = ['data'];
+export const D013_PROVISIONAL_NAMES = ['--size-element-lg'];
+/** Provisional items without a custom property (provisional.json `nonTokens`). */
+export const D013_PROVISIONAL_NON_TOKENS = [
+  'icons: chevronsLeft, chevronsRight, calendar, clock, checkDouble, stop',
+];
+
+/**
+ * D-013 Q-06: not brand tokens and Tecton has none, so the Astryx values are kept on purpose:
+ * motion (custom properties), breakpoints and z-index (no custom property).
+ */
+export const D013_RETAINED_CATEGORIES = ['motion'];
+export const D013_RETAINED_NON_TOKENS = ['breakpoints', 'z-index'];
+
+/** D-013 Q-06: Tecton's own scale, so Tecton-derived and never provisional (headings 3-6). */
+export const D013_HEADING_VARIANTS: Readonly<Record<string, string>> = {
+  'heading-3': 'large',
+  'heading-4': 'medium',
+  'heading-5': 'small',
+  'heading-6': 'tiny',
+};
+export const D013_DERIVED_NON_TOKENS = ['letter-spacing', 'destructive button'];
 
 /** D-001 spot checks: the export is authoritative for role values in both modes; overrides are explicit. */
 export const D001_SPOT_CHECKS: {
@@ -194,16 +218,21 @@ export function checkTypography(result: BuildResult): CheckResult {
     if (value.endsWith('px')) return Number.parseFloat(value);
     return Number.parseFloat(value);
   };
+  // D-013 Q-06: headings 3-6 are Tecton's large / medium / small / tiny (size and line height).
+  const headingRoles = (variant: string) =>
+    Object.entries(D013_HEADING_VARIANTS)
+      .filter(([, tecton]) => tecton === variant)
+      .map(([role]) => role);
   const variants: Record<string, string[]> = {
     'display-1': ['display-1'],
     'display-2': ['display-2'],
     'display-3': ['display-3'],
     'heading-1': ['heading-1'],
     'heading-2': ['heading-2'],
-    large: ['large', 'heading-3'],
-    medium: ['body'],
-    small: ['supporting'],
-    tiny: ['heading-6'],
+    large: ['large', ...headingRoles('large')],
+    medium: ['body', ...headingRoles('medium')],
+    small: ['supporting', ...headingRoles('small')],
+    tiny: [...headingRoles('tiny')],
   };
   for (const [variant, roles] of Object.entries(variants)) {
     const size = px(`--tecton-font-size-${variant}`);
@@ -221,11 +250,36 @@ export function checkTypography(result: BuildResult): CheckResult {
             `--text-${role}-leading ${leading} x ${size}px is ${(leading * size).toFixed(1)}px, the export ${variant} line height is ${lineHeight}px`,
           );
       }
-      if (weight !== undefined && roleWeight !== weight)
+      // Headings keep the heading weight (500) even on Tecton's 400-weight medium/small sizes.
+      const isHeading = role in D013_HEADING_VARIANTS;
+      if (!isHeading && weight !== undefined && roleWeight !== weight)
         problems.push(`--text-${role}-weight is ${roleWeight}, the export ${variant} is ${weight}`);
+      if (isHeading && roleWeight !== 500)
+        problems.push(`--text-${role}-weight is ${roleWeight}, headings use weight 500`);
     }
   }
-  return {name: 'typography (export type scale = Astryx type-scale tokens)', problems};
+  // D-013 Q-06: Tecton specifies no letter-spacing, so every text style resolves to `normal`.
+  const typography = (
+    result.inputs.semanticMap as unknown as {
+      typography?: {variants?: Record<string, {letterSpacing?: string}>};
+    }
+  ).typography;
+  const spacings = Object.entries(typography?.variants ?? {});
+  if (spacings.length === 0) problems.push('semantic map: no typography variants to check');
+  for (const [variant, entry] of spacings) {
+    if (entry.letterSpacing !== 'normal')
+      problems.push(
+        `typography variant ${variant}: letter-spacing is ${entry.letterSpacing ?? 'unset'}, D-013 Q-06 resolves it to normal`,
+      );
+  }
+  for (const token of result.resolved.tokens) {
+    if (/letter-spacing|tracking/.test(token.name))
+      problems.push(`${token.name}: no letter-spacing token may exist (D-013 Q-06: normal)`);
+  }
+  return {
+    name: 'typography (export type scale = Astryx type-scale tokens; headings 3-6; letter-spacing normal)',
+    problems,
+  };
 }
 
 export function checkAstryxCoverage(result: BuildResult): CheckResult {
@@ -319,9 +373,18 @@ export function checkContrast(
 
 export function checkProvisional(result: BuildResult): CheckResult {
   const problems: string[] = [];
-  const {tokens} = result.resolved;
+  const {tokens, byName} = result.resolved;
   const {provisional, extraTokens} = result.inputs;
-  const categories = new Set(provisional.categories.map((entry) => entry.category));
+  const setOf = (values: Iterable<string>) => new Set(values);
+  const sameSet = (label: string, actual: Set<string>, expected: readonly string[]) => {
+    for (const name of expected)
+      if (!actual.has(name)) problems.push(`${label}: ${name} is required by D-013 but missing`);
+    for (const name of actual)
+      if (!expected.includes(name)) problems.push(`${label}: ${name} is not part of D-013`);
+  };
+
+  // ---- Exact provisional set (D-002 as amended by D-013) ------------------------------------------
+  const categories = setOf(provisional.categories.map((entry) => entry.category));
   const expected = new Set<string>();
   for (const token of tokens) {
     if (categories.has(token.category)) expected.add(token.name);
@@ -339,22 +402,112 @@ export function checkProvisional(result: BuildResult): CheckResult {
     if (token.status === 'provisional' && !token.provisional)
       problems.push(`${token.name}: provisional without a reason`);
   }
-  // D-002 itself: data-viz colours, motion and --size-element-lg are provisional whatever the file says.
-  for (const category of D002_TOKEN_CATEGORIES) {
-    if (!categories.has(category))
-      problems.push(`D-002: category "${category}" must be listed as provisional`);
+  sameSet('provisional categories', categories, D013_PROVISIONAL_CATEGORIES);
+  sameSet(
+    'provisional names',
+    setOf(provisional.names.map((entry) => entry.name)),
+    D013_PROVISIONAL_NAMES,
+  );
+  sameSet(
+    'provisional non-tokens',
+    setOf(provisional.nonTokens.map((entry) => entry.name)),
+    D013_PROVISIONAL_NON_TOKENS,
+  );
+  for (const token of tokens) {
+    if (token.status === 'provisional' && (token.retained || token.derived))
+      problems.push(`${token.name}: provisional and retained/derived at once`);
   }
-  for (const name of D002_TOKEN_NAMES) {
-    if (!actual.has(name)) problems.push(`D-002: ${name} must be provisional`);
+
+  // ---- Exact astryx-retained set (D-013 Q-06) -----------------------------------------------------
+  const retainedCategories = setOf(provisional.astryxRetained.categories.map((e) => e.category));
+  const retainedExpected = new Set<string>();
+  for (const token of tokens) {
+    if (retainedCategories.has(token.category)) retainedExpected.add(token.name);
   }
-  // D-002 numbers: 56 data-viz tokens, 10 motion tokens.
+  for (const entry of provisional.astryxRetained.names) retainedExpected.add(entry.name);
+  const retainedActual = new Set(
+    tokens.filter((token) => token.status === 'astryx-retained').map((token) => token.name),
+  );
+  for (const name of retainedExpected)
+    if (!retainedActual.has(name)) problems.push(`${name} should be astryx-retained`);
+  for (const name of retainedActual)
+    if (!retainedExpected.has(name))
+      problems.push(`${name} is astryx-retained but not in provisional.json`);
+  for (const token of tokens) {
+    if (token.status === 'astryx-retained' && !token.retained)
+      problems.push(`${token.name}: astryx-retained without a reason`);
+  }
+  sameSet('astryx-retained categories', retainedCategories, D013_RETAINED_CATEGORIES);
+  sameSet(
+    'astryx-retained non-tokens',
+    setOf(provisional.astryxRetained.nonTokens.map((entry) => entry.name)),
+    D013_RETAINED_NON_TOKENS,
+  );
+  // Retained values are the upstream Astryx values: they must not drift.
+  const upstream = result.inputs.astryxTokens.tokens;
+  for (const token of tokens) {
+    if (token.status !== 'astryx-retained') continue;
+    const known = upstream[token.name];
+    if (!known) {
+      problems.push(`${token.name}: astryx-retained but not an upstream Astryx token`);
+    } else if (
+      token.value.kind === 'literal' &&
+      token.value.value.replaceAll(' ', '') !== known.default.replaceAll(' ', '')
+    ) {
+      problems.push(
+        `${token.name} is ${token.value.value}, the retained Astryx value is ${known.default}`,
+      );
+    }
+  }
+  const breakpoints = result.inputs.semanticMap.breakpoints;
+  if (breakpoints.source !== 'upstream-default')
+    problems.push(
+      `breakpoints must be the retained upstream defaults, source is ${breakpoints.source}`,
+    );
+
+  // ---- Tecton-derived by decision (headings 3-6, letter-spacing, destructive button) ---------------
+  const derivedNames = provisional.tectonDerived.names.map((entry) => entry.name);
+  const expectedHeadingTokens = Object.keys(D013_HEADING_VARIANTS).flatMap((role) =>
+    ['size', 'weight', 'leading'].map((part) => `--text-${role}-${part}`),
+  );
+  sameSet('tectonDerived names', setOf(derivedNames), expectedHeadingTokens);
+  for (const name of derivedNames) {
+    const token = byName.get(name);
+    if (!token) problems.push(`tectonDerived: ${name} is not emitted`);
+    else if (token.status !== 'tecton-export' && token.status !== 'tecton-astryx')
+      problems.push(`${name} is ${token.status}, D-013 Q-06 makes it Tecton-derived`);
+    else if (!token.derived) problems.push(`${name}: Tecton-derived without a recorded reason`);
+  }
+  sameSet(
+    'tectonDerived non-tokens',
+    setOf(provisional.tectonDerived.nonTokens.map((entry) => entry.name)),
+    D013_DERIVED_NON_TOKENS,
+  );
+  for (const item of provisional.tectonDerived.nonTokens) {
+    if (item.name === 'letter-spacing' && item.value !== 'normal')
+      problems.push(`letter-spacing resolves to normal (D-013 Q-06), not ${item.value ?? 'unset'}`);
+    if (item.name === 'destructive button') {
+      const binds = Object.entries(item.binds ?? {});
+      if (binds.length === 0) problems.push('destructive button: no recorded token bindings');
+      for (const [usage, name] of binds) {
+        if (!name.startsWith('--tecton-color-status-error-'))
+          problems.push(
+            `destructive button (${usage}) must bind a --tecton-color-status-error-* role, not ${name}`,
+          );
+        if (!byName.has(name))
+          problems.push(`destructive button (${usage}) binds ${name}, which is not emitted`);
+      }
+    }
+  }
+
+  // ---- Counts ---------------------------------------------------------------------------------------
   const count = (category: string) => tokens.filter((token) => token.category === category).length;
   if (count('data') !== 56) problems.push(`expected 56 data-viz tokens, found ${count('data')}`);
   if (count('motion') !== 10) problems.push(`expected 10 motion tokens, found ${count('motion')}`);
   return {
-    name: 'provisional set (D-002) exact',
+    name: 'provisional (D-013) and astryx-retained sets exact; Tecton-derived items bound',
     problems,
-    note: `${actual.size} provisional tokens`,
+    note: `${actual.size} provisional, ${retainedActual.size} astryx-retained, ${derivedNames.length} Tecton-derived tokens`,
   };
 }
 
