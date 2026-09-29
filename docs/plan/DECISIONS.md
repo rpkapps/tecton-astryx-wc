@@ -208,3 +208,43 @@ CLI read the same generated registry as the docs site.
   (common-ancestor-path, lru-cache, minimatch, sax), CC0-1.0 (mdn-data), Python-2.0 (argparse),
   MPL-2.0 (lightningcss + binary). They are tolerated as `pending-owner-review` by exact package and
   licence, and fail the build if they ever reach the shipped runtime tree.
+
+## D-013 — Owner answers to the open questions (2026-09-29)
+
+- **Q-01, licences:** approved. The owner's condition is free use in enterprise/commercial settings.
+  All the tolerated dev-only licences meet it: MIT-0, BlueOak-1.0.0, CC0-1.0, Python-2.0 and MPL-2.0 are
+  royalty-free, allow commercial use, and are never shipped. Mark them approved in
+  `tools/licenses/policy.ts`. New licences still need review.
+- **Q-02, icons:** use the owner's **Tecton domain icon set**: 18 oil & gas / subsurface glyphs, each with
+  outlined and filled variants, from `rpkapps/tecton-webcomponents` branch
+  `claude/busy-johnson-0wz57h`, `packages/wc/src/icons`. A copy is at `/home/user/refs/tecton-icons` with
+  the source commit recorded. Provenance: supplied by the owner as part of Tecton.
+  - Ship the set as `@tecton-astryx/icons/tecton/<name>.js`, registered by default under its kebab names
+    (outlined) and `<name>-filled`.
+  - Lucide stays the general-purpose set and the source for Astryx role names (D-009).
+  - The larger 131-glyph tecton-astryx set is **not** used.
+  - Glyphs that use `<g>`, `<defs>` or `<rect>` are converted to paths at build time where exact, and
+    otherwise registered through the sanitised raw-SVG path (A§12). `colored` icons keep their colours.
+- **Q-03 (top-nav text 4.0:1 light) and Q-04 (dark outlined input border):** accepted as designed. They
+  stay in `contrast.allow.json` with "owner accepted (D-013)".
+- **Q-05, `--color-border-emphasized` 2.2:1 (orchestrator decision):** allowed for decorative separation
+  only. A component whose border is the sole indicator of a control boundary or of state (WCAG 1.4.11)
+  must use a border token that measures ≥ 3:1 on its surface. Component review enforces this, and the
+  contrast allowlist entry says so.
+- **Q-06, provisional values:** "Use the Tecton palette/tokens throughout." Resolution:
+  - Headings 3–6 are Tecton's own scale (large 16 / medium 14 / small 12 / tiny 10). They are
+    Tecton-derived, not provisional.
+  - Letter-spacing: Tecton specifies none (`design/components/button.md`), so `normal`. Not provisional.
+  - Destructive button: Tecton has no destructive variant. Keep the Astryx `destructive` variant and style
+    it only from Tecton `--tecton-color-status-error-*` roles. Tecton-derived.
+  - Data-viz colours come from Tecton accent hues and status roles: palette-only, proposed mapping.
+  - Shadows and elevation follow tecton-astryx: black-alpha shadows with palette-hued insets. Menus,
+    popovers and panels follow Tecton's "no drop shadow; border plus recessed surface" per-component
+    overrides.
+  - Motion, breakpoints and z-index are not brand tokens and Tecton has none, so they keep Astryx values
+    labelled `astryx-retained` rather than provisional.
+  - **Rule:** every colour a component paints resolves to a Tecton token. No hex, rgb or hsl literals and
+    no palette variables in component CSS (Stylelint), and the token build has no unresolved colours.
+- **Q-07, MCP:** approved. Use `@modelcontextprotocol/sdk` 1.31.0 (MIT; tree of 91 packages, all
+  MIT/ISC/BSD, checked 2026-09-29) as a dependency of the private `@tecton-astryx/cli` package only. It
+  is never a dependency of the component packages.

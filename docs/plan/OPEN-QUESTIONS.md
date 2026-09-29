@@ -3,6 +3,8 @@
 Items that need a decision from the owner or a designer. None of them blocks implementation, but they
 block final sign-off. The orchestrator keeps this list current.
 
+**Q-01 … Q-07 were resolved on 2026-09-29; see D-013.** New questions are added below.
+
 | Id | Question | Context / current handling |
 | --- | --- | --- |
 | Q-01 | Can the transitive dev-only licences (MIT-0, BlueOak-1.0.0, CC0-1.0, Python-2.0, MPL-2.0 lightningcss) be approved? | D-012. The build tolerates them with a warning, and they fail the build if they ever reach the shipped tree. |
