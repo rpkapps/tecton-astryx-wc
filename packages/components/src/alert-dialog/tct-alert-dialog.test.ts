@@ -78,7 +78,7 @@ async function openIt(el: TctAlertDialog): Promise<void> {
  */
 function smallScreen(narrow: boolean): () => void {
   const original = window.matchMedia.bind(window);
-  window.matchMedia = ((query: string): MediaQueryList => {
+  window.matchMedia = (query: string): MediaQueryList => {
     if (query !== '(max-width: 640px)') return original(query);
     return Object.assign(new EventTarget(), {
       matches: narrow,
@@ -87,7 +87,7 @@ function smallScreen(narrow: boolean): () => void {
       addListener: () => undefined,
       removeListener: () => undefined,
     });
-  });
+  };
   return () => {
     window.matchMedia = original;
   };

@@ -43,16 +43,16 @@ let restoreScreen: (() => void) | undefined;
 beforeEach(() => {
   // The test page is phone-sized: make the wide layout (Cancel first) the one under test.
   const original = window.matchMedia.bind(window);
-  window.matchMedia = ((query: string): MediaQueryList =>
+  window.matchMedia = (query: string): MediaQueryList =>
     query === '(max-width: 640px)'
-      ? (Object.assign(new EventTarget(), {
+      ? Object.assign(new EventTarget(), {
           matches: false,
           media: query,
           onchange: null,
           addListener: () => undefined,
           removeListener: () => undefined,
-        }))
-      : original(query));
+        })
+      : original(query);
   restoreScreen = () => {
     window.matchMedia = original;
   };

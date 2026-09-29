@@ -54,7 +54,7 @@ function stubCompactTouch(initial: boolean): {set: (value: boolean) => void; res
   const original = window.matchMedia.bind(window);
   const lists = new Set<FakeQuery>();
   let current = initial;
-  window.matchMedia = ((query: string): MediaQueryList => {
+  window.matchMedia = (query: string): MediaQueryList => {
     if (query !== COMPACT_TOUCH_PRESENTATION_QUERY) return original(query);
     const list = Object.assign(new EventTarget(), {
       media: query,
@@ -65,7 +65,7 @@ function stubCompactTouch(initial: boolean): {set: (value: boolean) => void; res
     Object.defineProperty(list, 'matches', {get: () => current});
     lists.add(list);
     return list as unknown as MediaQueryList;
-  });
+  };
   return {
     set(value) {
       current = value;

@@ -478,7 +478,9 @@ describe('the resizable handle (WCAG 2.5.7: keyboard and single-pointer alternat
     await pressKeys('ArrowUp');
     await settled(el);
     expect(el.snapIndex).toBe(1);
-    expect((changes.events as TctSnapChangeEvent[]).map((event) => [event.index, event.reason])).toEqual([
+    expect(
+      (changes.events as TctSnapChangeEvent[]).map((event) => [event.index, event.reason]),
+    ).toEqual([
       [1, 'keyboard'],
       [2, 'keyboard'],
       [1, 'keyboard'],

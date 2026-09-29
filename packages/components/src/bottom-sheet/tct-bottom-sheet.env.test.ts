@@ -427,7 +427,7 @@ describe('adaptive presentation', () => {
     const original = window.matchMedia.bind(window);
     const lists = new Set<EventTarget & {matches: boolean}>();
     let compact = false;
-    window.matchMedia = ((query: string): MediaQueryList => {
+    window.matchMedia = (query: string): MediaQueryList => {
       if (query !== '(max-width: 768px) and (pointer: coarse)') return original(query);
       const list = Object.assign(new EventTarget(), {media: query}) as unknown as EventTarget & {
         matches: boolean;
@@ -435,7 +435,7 @@ describe('adaptive presentation', () => {
       Object.defineProperty(list, 'matches', {get: () => compact});
       lists.add(list);
       return list as unknown as MediaQueryList;
-    });
+    };
     try {
       const root = await fixture<HTMLElement>('<tct-adaptive-demo-host></tct-adaptive-demo-host>');
       const host = root as unknown as AdaptiveHost;
