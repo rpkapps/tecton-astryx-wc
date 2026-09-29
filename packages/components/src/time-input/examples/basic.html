@@ -1,0 +1,13 @@
+<!-- title: Basic; description: Type a time in your own format (2:30 PM, 2:30pm, 14:30, 1430, 2pm) or step it with the arrow keys. The value is always HH:MM. -->
+<tct-vstack id="basic-root" gap="3" max-width="360">
+  <tct-time-input label="Start time" description="Try 2pm, then Arrow Up." value="14:30" has-clear name="start"></tct-time-input>
+  <tct-text data-output color="secondary">Value: 14:30</tct-text>
+</tct-vstack>
+<script type="module">
+  const root = document.getElementById('basic-root');
+  const field = root.querySelector('tct-time-input');
+  const output = root.querySelector('[data-output]');
+  field.addEventListener('change', () => {
+    output.textContent = `Value: ${field.value || '(empty)'}`;
+  });
+</script>

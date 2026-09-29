@@ -1,0 +1,13 @@
+<!-- title: Presets; description: presets is an array of {label, getRange}. A preset applies at once; the one that matches the value is marked, and one that breaks min, max or a span limit is disabled. -->
+<tct-vstack id="presets-root" gap="3" max-width="420">
+  <tct-date-range-input label="Reporting period" min="2026-01-01" max="2026-03-31" name="period"></tct-date-range-input>
+</tct-vstack>
+<script type="module">
+  const field = document.querySelector('#presets-root tct-date-range-input');
+  field.presets = [
+    {label: 'First week', getRange: () => ({start: '2026-03-01', end: '2026-03-07'})},
+    {label: 'March', getRange: () => ({start: '2026-03-01', end: '2026-03-31'})},
+    {label: 'Q1', getRange: () => ({start: '2026-01-01', end: '2026-03-31'})},
+    {label: 'Next quarter', getRange: () => ({start: '2026-04-01', end: '2026-06-30'})},
+  ];
+</script>

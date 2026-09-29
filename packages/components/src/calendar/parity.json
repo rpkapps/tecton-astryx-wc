@@ -1,0 +1,268 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "calendar",
+  "workPackage": "WP-13",
+  "entries": {
+    "core.calendar": {
+      "tag": "tct-calendar",
+      "status": "implemented",
+      "upstream": {
+        "name": "Calendar",
+        "path": "packages/core/src/Calendar/Calendar.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "mode",
+          "kind": "prop",
+          "target": "mode",
+          "as": "attribute",
+          "reflect": true,
+          "default": "single",
+          "notes": "`single` or `range`; anything else warns and reads as `single`."
+        },
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "property",
+          "notes": "A date `YYYY-MM-DD` in single mode, `{start, end}` in range mode as a property or the attribute `2026-03-01/2026-03-07` (an ISO 8601 interval). Uncontrolled: the element holds its own selection; setting `value` never fires an event."
+        },
+        {
+          "upstream": "defaultValue",
+          "kind": "prop",
+          "target": "value",
+          "as": "attribute",
+          "notes": "The `value` attribute is the initial selection; there is no separate default (D-006)."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "change",
+          "as": "native-event",
+          "notes": "A pick fires the cancelable `tct-value-change` (the new value in `detail`), then native `input` and `change`, composed. In range mode the first click of a range fires nothing."
+        },
+        {
+          "upstream": "numberOfMonths",
+          "kind": "prop",
+          "target": "number-of-months",
+          "as": "attribute",
+          "default": 1,
+          "notes": "1 or 2 side-by-side panes."
+        },
+        {
+          "upstream": "min",
+          "kind": "prop",
+          "target": "min",
+          "as": "attribute",
+          "notes": "Earliest selectable date; unreadable values are ignored."
+        },
+        {
+          "upstream": "max",
+          "kind": "prop",
+          "target": "max",
+          "as": "attribute",
+          "notes": "Latest selectable date."
+        },
+        {
+          "upstream": "dateConstraints",
+          "kind": "prop",
+          "target": "dateConstraints",
+          "as": "property",
+          "notes": "`readonly ((date: Date) => boolean)[]`; a day is unavailable when any returns `false`."
+        },
+        {
+          "upstream": "maxRangeSpan",
+          "kind": "prop",
+          "target": "max-range-span",
+          "as": "attribute",
+          "notes": "Days a range may span, both endpoints counted; later days are disabled once the start is picked."
+        },
+        {
+          "upstream": "minRangeSpan",
+          "kind": "prop",
+          "target": "min-range-span",
+          "as": "attribute",
+          "notes": "Fewest days a range may span; the start itself stays selectable."
+        },
+        {
+          "upstream": "focusDate",
+          "kind": "prop",
+          "target": "focus-date",
+          "as": "attribute",
+          "notes": "The visible month (and the day that is the tab stop): `YYYY-MM-DD`. Follows the page the user turns to."
+        },
+        {
+          "upstream": "onFocusDateChange",
+          "kind": "event",
+          "target": "tct-focus-date-change",
+          "as": "event",
+          "notes": "Cancelable intent event before the user moves the visible month (arrows off the grid, PageUp/PageDown, the buttons); `detail.focusDate` and `detail.reason`."
+        },
+        {
+          "upstream": "handleRef",
+          "kind": "prop",
+          "target": "navigateTo",
+          "as": "method",
+          "notes": "`navigateTo(date)` shows the month of `date` and makes it the tab stop, without an event; `focus()` focuses the tab stop."
+        },
+        {
+          "upstream": "hasOutsideDays",
+          "kind": "prop",
+          "target": "no-outside-days",
+          "as": "attribute",
+          "notes": "Inverted: days of the neighbouring months show by default, `no-outside-days` hides them (a boolean attribute cannot default to true)."
+        },
+        {
+          "upstream": "hasWeekNumbers",
+          "kind": "prop",
+          "target": "has-week-numbers",
+          "as": "attribute",
+          "default": false
+        },
+        {
+          "upstream": "hasVariableRowCount",
+          "kind": "prop",
+          "target": "has-variable-row-count",
+          "as": "attribute",
+          "default": false,
+          "notes": "Months take as many week rows as they need instead of six."
+        },
+        {
+          "upstream": "weekStartsOn",
+          "kind": "prop",
+          "target": "week-starts-on",
+          "as": "attribute",
+          "default": 0,
+          "notes": "0 (Sunday) to 6, or `sun` to `sat`."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useCalendarDays",
+          "target": "getCalendarDays",
+          "as": "module-function",
+          "notes": "Pure function in `@tecton-wc/components/calendar/utils.js`: the weeks of a month as `CalendarDay` records. Not a controller: it holds no state."
+        },
+        {
+          "upstream": "useCalendarConstraints",
+          "target": "createCalendarConstraints",
+          "as": "module-function",
+          "notes": "Pure factory in the utils subpath: `isDateDisabled`, the min/max window and the range-span rules from an anchor."
+        },
+        {
+          "upstream": "useCalendarNavigation",
+          "target": "CalendarNavigationController",
+          "as": "controller",
+          "notes": "Owns the visible month, the focus date and the pending focus after a page turn; asks the element to dispatch `tct-focus-date-change` before it moves."
+        },
+        {
+          "upstream": "useGridFocus",
+          "target": "GridFocusController",
+          "as": "controller",
+          "notes": "`@tecton-wc/core/controllers/grid-focus.js`: arrow, Home/End and page navigation over a grid with a roving tab stop; RTL-aware; never handles a key the browser needs (Alt, IME, defaultPrevented)."
+        },
+        {
+          "upstream": "useAnnounce",
+          "target": "announce",
+          "as": "module-function",
+          "notes": "The shared polite/assertive announcer (`@tecton-wc/core/a11y/announcer.js`)."
+        },
+        {
+          "upstream": "utils subpath (isSameDay, isDateInRange, getWeekNumber, parseISO, dateToISO)",
+          "target": "@tecton-wc/components/calendar/utils.js",
+          "as": "module-function",
+          "notes": "Re-exported from `@tecton-wc/core/date/plain-date.js` with the calendar helpers, so the upstream utils import path has one home here."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "ArrowLeft / ArrowRight",
+          "action": "Moves one day (mirrored in right-to-left); at the edge of the visible months the page turns.",
+          "when": "focus on a day"
+        },
+        {
+          "keys": "ArrowUp / ArrowDown",
+          "action": "Moves one week; the page turns at the edge.",
+          "when": "focus on a day"
+        },
+        {
+          "keys": "Home / End",
+          "action": "First / last day of the week (APG date grid).",
+          "when": "focus on a day"
+        },
+        {
+          "keys": "PageUp / PageDown",
+          "action": "Same day of the previous / next month, clamped to the shorter month; with Shift the previous / next year.",
+          "when": "focus on a day"
+        },
+        {
+          "keys": "Enter / Space",
+          "action": "Picks the day; in range mode the first pick is the start and the second the end.",
+          "when": "focus on an available day"
+        },
+        {
+          "keys": "Escape",
+          "action": "Cancels a range pick in progress; otherwise left alone so a picker around the calendar can close.",
+          "when": "range mode"
+        },
+        {
+          "keys": "Tab",
+          "action": "One tab stop per month grid (the selected day, else today, else the first available day); the previous/next buttons are tab stops before the grids."
+        }
+      ],
+      "form": {
+        "formAssociated": false,
+        "notes": "Not form-associated: it is a picker surface. `tct-date-input`, `tct-date-range-input` and `tct-date-time-input` own the form value and render it."
+      },
+      "differences": [
+        {
+          "id": "CALENDAR-01",
+          "type": "approved-api-difference",
+          "text": "Uncontrolled (D-006): the element holds its own selection with `value` (a date, or a range) and native `input`/`change` events after the cancelable `tct-value-change`; upstream is controlled with `value`/`defaultValue` and `onChange`. A range value is `{start, end}` as a property and an ISO 8601 interval `start/end` as an attribute."
+        },
+        {
+          "id": "CALENDAR-02",
+          "type": "approved-api-difference",
+          "text": "The intent event `tct-focus-date-change` (cancelable, before the month moves) replaces `onFocusDateChange`, and `navigateTo()`/`focus()` on the element replace `handleRef`. `hasOutsideDays` is the inverted `no-outside-days`."
+        },
+        {
+          "id": "CALENDAR-03",
+          "type": "a11y-improvement",
+          "text": "PageUp/PageDown follow the APG date grid (a month, with Shift a year, on the same day clamped to the month), Home/End the week, and a page turn is announced through the shared announcer. Range progress (\"Select end date\") and the selected range are announced politely."
+        },
+        {
+          "id": "CALENDAR-04",
+          "type": "approved-api-difference",
+          "text": "The week-number cell is the ISO week of the first day of the row that belongs to the month (the row of 2026-01-04 is week 1), computed from indices, never from a `Date` anchor."
+        },
+        {
+          "id": "CALENDAR-05",
+          "type": "a11y-improvement",
+          "text": "A disabled month button stays focusable (`aria-disabled`, tooltip) so keyboard users find out why; unavailable days are `aria-disabled` buttons with the disabled text role, not a second layer of opacity."
+        },
+        {
+          "id": "CALENDAR-06",
+          "type": "tecton-visual",
+          "text": "Tecton day cells: selected endpoints use the primary action fill and its own text roles, hover and focus the tertiary state roles, the range band the muted accent wash, today a ring; nothing relies on a colour literal."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 74,
+      "notes": "Guides: [mwg:spatial-navigation] the date grid keys and the browser-owned keys; [mwg:support-global-calendar-systems] Gregorian display with the locale's names and digits, `Intl` only; [mwg:capture-location-agnostic-data] the value is a calendar date, never an instant; [mwg:coordinate-global-events] no zone in a date. Dates come from `@tecton-wc/core/date`, the only module that imports `@internationalized/date`."
+    }
+  }
+}

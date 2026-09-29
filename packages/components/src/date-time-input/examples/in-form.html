@@ -1,0 +1,21 @@
+<!-- title: In a form; description: The field submits YYYY-MM-DDTHH:MM under its name, blocks a submit while a required value is missing (a date without a time is not a value), and is restored by reset. -->
+<tct-vstack max-width="540">
+  <form id="in-form-root">
+    <tct-form-layout>
+      <tct-date-time-input label="Starts" name="starts" required min="2026-03-01T00:00"></tct-date-time-input>
+      <tct-date-time-input label="Ends" name="ends" value="2026-03-21T15:00"></tct-date-time-input>
+      <tct-hstack gap="2">
+        <tct-button type="submit" variant="primary">Schedule</tct-button>
+        <tct-button type="reset">Reset</tct-button>
+      </tct-hstack>
+      <output></output>
+    </tct-form-layout>
+  </form>
+</tct-vstack>
+<script type="module">
+  const form = document.getElementById('in-form-root');
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    form.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(form, event.submitter)));
+  });
+</script>

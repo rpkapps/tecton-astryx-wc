@@ -1,0 +1,6 @@
+<!-- title: Stepping; description: Arrow Up and Down step by increment minutes, wrap past midnight and announce the new time. min and max stop the step. -->
+<tct-vstack gap="4" max-width="360">
+  <tct-time-input label="Every minute" value="09:00"></tct-time-input>
+  <tct-time-input label="Every 15 minutes" increment="15" value="09:00"></tct-time-input>
+  <tct-time-input label="Between 9 and 5" description="The arrows stop at the bounds." min="09:00" max="17:00" value="16:45" increment="15"></tct-time-input>
+</tct-vstack>

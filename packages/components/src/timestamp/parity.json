@@ -1,0 +1,189 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "timestamp",
+  "workPackage": "WP-13",
+  "entries": {
+    "core.timestamp": {
+      "tag": "tct-timestamp",
+      "status": "implemented",
+      "upstream": {
+        "name": "Timestamp",
+        "path": "packages/core/src/Timestamp/Timestamp.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "property",
+          "notes": "An ISO 8601 string, or Unix time as a number (seconds, or milliseconds from 10^12 on); the attribute reads a numeric string as a number. An ISO string with no offset reads in the viewer's zone. A value that names no moment renders nothing (and warns in dev)."
+        },
+        {
+          "upstream": "format",
+          "kind": "prop",
+          "target": "format",
+          "as": "attribute",
+          "reflect": true,
+          "default": "auto",
+          "notes": "`relative`, `relative_short`, `auto`, `date`, `date_long`, `date_weekday`, `date_time`, `time`, `system_date`, `system_date_time`, `system_time` or `unix_seconds`; an unknown value warns and reads as `auto`."
+        },
+        {
+          "upstream": "autoThreshold",
+          "kind": "prop",
+          "target": "auto-threshold",
+          "as": "attribute",
+          "default": 604800,
+          "notes": "Seconds after which `auto` stops being relative."
+        },
+        {
+          "upstream": "hasTooltip",
+          "kind": "prop",
+          "target": "no-tooltip",
+          "as": "attribute",
+          "default": true,
+          "notes": "Inverted: the card is on by default (upstream default true) for relative readings and for any reading with `tooltipEntries`; `no-tooltip` turns it off."
+        },
+        {
+          "upstream": "tooltipEntries",
+          "kind": "prop",
+          "target": "tooltipEntries",
+          "as": "property",
+          "notes": "`readonly {timezoneID?, format?, label?, isCopyable?}[]`, one card line each in order. `timezoneID` is an IANA zone, `local` or omitted for the viewer's; an unknown zone falls back to it with a warning. An empty array counts as none."
+        },
+        {
+          "upstream": "isTimezoneShown",
+          "kind": "prop",
+          "target": "timezone-shown",
+          "as": "attribute",
+          "default": false,
+          "notes": "Appends the zone abbreviation to `date_time` and `time`; never to the `system_*` shapes. Visible text only."
+        },
+        {
+          "upstream": "isLive",
+          "kind": "prop",
+          "target": "live",
+          "as": "attribute",
+          "default": false,
+          "notes": "Updates a relative reading as time passes: every second for the first minute, every 30 seconds up to an hour, every minute up to a day, then every five minutes."
+        },
+        {
+          "upstream": "type",
+          "kind": "prop",
+          "target": "type",
+          "as": "attribute",
+          "reflect": true,
+          "default": "supporting",
+          "notes": "Semantic text type, as `tct-text`."
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Font size override, as `tct-text`."
+        },
+        {
+          "upstream": "color",
+          "kind": "prop",
+          "target": "color",
+          "as": "attribute",
+          "reflect": true,
+          "default": "secondary",
+          "notes": "Text colour, as `tct-text`."
+        },
+        {
+          "upstream": "weight",
+          "kind": "prop",
+          "target": "weight",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Font weight override, as `tct-text`."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-testid: test hooks are the host element and its `::part` names; a `data-testid` attribute on the host is ordinary HTML."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style/::part/custom properties"
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useClipboard",
+          "target": "navigator.clipboard.writeText",
+          "as": "module-function",
+          "notes": "The copy button writes the line's value, flips to a check for 1.5 s with the tooltip and label \"Copied\", announces \"Copied\" politely through the shared announcer, and treats a refused write as a no-op."
+        },
+        {
+          "upstream": "useDevWarning",
+          "target": "devWarn",
+          "as": "module-function",
+          "notes": "Dev-mode warnings once per id (`@tecton-wc/core/utils/dev.js`)."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Focuses the `<time>` when it has a card (it is a tab stop only then); focus opens the card."
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes the card and returns focus to the `<time>` (the hover card's own dismissal).",
+          "when": "card open"
+        },
+        {
+          "keys": "Enter / Space",
+          "action": "Activates the focused copy button of a copyable line.",
+          "when": "focus on a copy button"
+        }
+      ],
+      "form": {
+        "formAssociated": false,
+        "notes": "Not form-associated: it displays a moment, it does not collect one."
+      },
+      "differences": [
+        {
+          "id": "TIMESTAMP-01",
+          "type": "approved-api-difference",
+          "text": "`hasTooltip` (default true) is the inverted `no-tooltip`, `isTimezoneShown` is `timezone-shown` and `isLive` is `live`; `value` reads a numeric attribute as Unix time. The card's `open` events stay inside the element (upstream exposes none)."
+        },
+        {
+          "id": "TIMESTAMP-02",
+          "type": "approved-api-difference",
+          "text": "The formatting lives in `@tecton-wc/core/date/instant.js` (`Intl` only; zones through `Intl`, never a date library) and the hover card and the copy buttons load lazily, so a card-less timestamp never pays for the overlay stack; the `<time>` stays visible while they load. \"Now\" for a relative reading is when the element connected or its value changed, then each live tick."
+        },
+        {
+          "id": "TIMESTAMP-03",
+          "type": "a11y-improvement",
+          "text": "A relative reading is named by the full date with the zone spelled out (a screen reader would read \"PST\" as an initialism), and the card's action cells are `<dd>`s so the definition list stays valid. The copy confirmation is a polite announcement, not only a swapped label."
+        },
+        {
+          "id": "TIMESTAMP-04",
+          "type": "tecton-visual",
+          "text": "The card is the library's hover card on the Tecton popover fill with a 1px rule; labels use the supporting text role in secondary colour and values the body role in primary colour; the dashed underline marks the reading as interactive."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 46,
+      "notes": "Guides: [mwg:coordinate-global-events] an instant is shown per zone as a display choice, the `datetime` is always UTC; [mwg:capture-location-agnostic-data]; [mwg:format-human-readable-durations] relative wording from `Intl.RelativeTimeFormat`; [mwg:accessible-web-components] the card on focus, the `<time>` as its tab stop."
+    }
+  }
+}

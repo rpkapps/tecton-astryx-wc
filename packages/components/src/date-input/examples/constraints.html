@@ -1,0 +1,10 @@
+<!-- title: Constraints; description: min and max bound the days, dateConstraints rules out more (weekends here). Typing a date that is ruled out is announced and refused; unavailable days stay visible in the calendar. -->
+<tct-vstack id="constraints-root" gap="4" max-width="360">
+  <tct-date-input label="Delivery date" description="Weekdays in March 2026 only." value="2026-03-11" min="2026-03-02" max="2026-03-27" name="delivery"></tct-date-input>
+  <tct-date-input label="Not a weekend" value="2026-03-12" name="weekday"></tct-date-input>
+</tct-vstack>
+<script type="module">
+  const root = document.getElementById('constraints-root');
+  root.querySelectorAll('tct-date-input')[0].dateConstraints = [(date) => date.getDay() !== 0 && date.getDay() !== 6];
+  root.querySelectorAll('tct-date-input')[1].dateConstraints = [(date) => date.getDay() !== 0 && date.getDay() !== 6];
+</script>

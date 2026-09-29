@@ -1,0 +1,13 @@
+<!-- title: Basic; description: A date and a time side by side under one label, submitted as one YYYY-MM-DDTHH:MM. Choosing a date on an empty field takes the current time; a time chosen first is kept until the date is. -->
+<tct-vstack id="basic-root" gap="3" max-width="520">
+  <tct-date-time-input label="Meeting" value="2026-03-21T14:30" name="meeting" has-clear></tct-date-time-input>
+  <tct-text data-output color="secondary">Value: 2026-03-21T14:30</tct-text>
+</tct-vstack>
+<script type="module">
+  const root = document.getElementById('basic-root');
+  const field = root.querySelector('tct-date-time-input');
+  const output = root.querySelector('[data-output]');
+  field.addEventListener('change', () => {
+    output.textContent = `Value: ${field.value || '(empty)'}`;
+  });
+</script>

@@ -1,0 +1,14 @@
+<!-- title: Range; description: mode="range" picks a start and an end. The first click sets the start, the second the end; Escape cancels a pick in progress. The value is an ISO interval. -->
+<tct-vstack id="range-root" gap="3" h-align="start">
+  <tct-calendar mode="range" number-of-months="2" value="2026-03-10/2026-03-14" focus-date="2026-03-01"></tct-calendar>
+  <tct-text data-output color="secondary">Range: 2026-03-10 to 2026-03-14</tct-text>
+</tct-vstack>
+<script type="module">
+  const root = document.getElementById('range-root');
+  const calendar = root.querySelector('tct-calendar');
+  const output = root.querySelector('[data-output]');
+  calendar.addEventListener('change', () => {
+    const {start, end} = calendar.value;
+    output.textContent = `Range: ${start} to ${end}`;
+  });
+</script>

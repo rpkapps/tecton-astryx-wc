@@ -1,0 +1,369 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "date-time-input",
+  "workPackage": "WP-13",
+  "entries": {
+    "core.date-time-input": {
+      "tag": "tct-date-time-input",
+      "status": "implemented",
+      "upstream": {
+        "name": "DateTimeInput",
+        "path": "packages/core/src/DateTimeInput/DateTimeInput.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute"
+        },
+        {
+          "upstream": "isLabelHidden",
+          "kind": "prop",
+          "target": "label-hidden",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "description",
+          "kind": "prop",
+          "target": "description",
+          "as": "attribute"
+        },
+        {
+          "upstream": "isOptional",
+          "kind": "prop",
+          "target": "optional",
+          "as": "attribute"
+        },
+        {
+          "upstream": "isRequired",
+          "kind": "prop",
+          "target": "required",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Also a validity constraint (valueMissing) and `aria-required`."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Also through <fieldset disabled>."
+        },
+        {
+          "upstream": "disabledMessage",
+          "kind": "prop",
+          "target": "disabled-message",
+          "as": "attribute",
+          "notes": "A tooltip on a disabled field that says why; every part of the field stays focusable (aria-disabled) and read-only."
+        },
+        {
+          "upstream": "isLoading",
+          "kind": "prop",
+          "target": "loading",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Shows a spinner, sets `aria-busy` and refuses edits."
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md",
+          "notes": "Unset takes the nearest size provider, else md."
+        },
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "target": "status",
+          "as": "property",
+          "notes": "Object `{type, message?}`, or the `status-type` and `status-message` attributes."
+        },
+        {
+          "upstream": "labelTooltip",
+          "kind": "prop",
+          "target": "label-tooltip",
+          "as": "attribute"
+        },
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "target": "width",
+          "as": "attribute",
+          "notes": "A number is px, a string a CSS length. Not reflected."
+        },
+        {
+          "upstream": "changeAction",
+          "kind": "prop",
+          "target": "changeAction",
+          "as": "property",
+          "notes": "`(value: string, event: Event) => void | Promise<void>` run after every user change; the field is busy (`:state(busy)`, spinner, `aria-busy`) until the promise settles and refuses further changes. Never runs for a property write."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style/::part/custom properties"
+        },
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "property",
+          "notes": "The date-time `YYYY-MM-DDTHH:MM` (with `:SS` when the time has seconds), or `\"\"`: a real date and a real time, whatever the language or zone, never an instant. The `value` attribute is the default a form reset restores."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "change",
+          "as": "native-event",
+          "notes": "Uncontrolled (D-006): native `input` and then `change` fire, composed, when the combined value changes: typed text when its part is left or Enter is pressed, a pick, a step, a clear; read `value`. Neither fires for a property or attribute write."
+        },
+        {
+          "upstream": "min",
+          "kind": "prop",
+          "target": "min",
+          "as": "attribute",
+          "notes": "`YYYY-MM-DDTHH:MM[:SS]`: a native constraint on the value; its date bounds the calendar and its time of day bounds the time part on its own day."
+        },
+        {
+          "upstream": "max",
+          "kind": "prop",
+          "target": "max",
+          "as": "attribute",
+          "notes": "As `min`, from above."
+        },
+        {
+          "upstream": "dateConstraints",
+          "kind": "prop",
+          "target": "dateConstraints",
+          "as": "property",
+          "notes": "A day is unavailable when any predicate returns `false`."
+        },
+        {
+          "upstream": "hasSeconds",
+          "kind": "prop",
+          "target": "has-seconds",
+          "as": "attribute",
+          "default": false
+        },
+        {
+          "upstream": "hourFormat",
+          "kind": "prop",
+          "target": "hour-format",
+          "as": "attribute",
+          "default": "12h",
+          "notes": "`12h` or `24h`."
+        },
+        {
+          "upstream": "timeIncrement",
+          "kind": "prop",
+          "target": "time-increment",
+          "as": "attribute",
+          "default": 1,
+          "notes": "1, 5, 10, 15 or 30 minutes for the arrow keys; another value than 1 keeps the typed time part on a touch device."
+        },
+        {
+          "upstream": "timeOptionInterval",
+          "kind": "prop",
+          "target": "time-option-interval",
+          "as": "attribute",
+          "notes": "5, 10, 15, 30 or 60 minutes: turns the time part into a combobox listing every valid time at that cadence; typing any time still works."
+        },
+        {
+          "upstream": "hasClear",
+          "kind": "prop",
+          "target": "has-clear",
+          "as": "attribute",
+          "default": false,
+          "notes": "Clears both parts; fires the cancelable `tct-clear`."
+        },
+        {
+          "upstream": "placeholder",
+          "kind": "prop",
+          "target": "placeholder",
+          "as": "attribute",
+          "notes": "Placeholder of the date part; default \"Select a date\"."
+        },
+        {
+          "upstream": "timePlaceholder",
+          "kind": "prop",
+          "target": "time-placeholder",
+          "as": "attribute",
+          "notes": "Placeholder of the time part; default \"Select a time\"."
+        },
+        {
+          "upstream": "timeLabel",
+          "kind": "prop",
+          "target": "time-label",
+          "as": "attribute",
+          "notes": "Accessible name of the time part; default \"{label} time\"."
+        },
+        {
+          "upstream": "numberOfMonths",
+          "kind": "prop",
+          "target": "number-of-months",
+          "as": "attribute",
+          "default": 1
+        },
+        {
+          "upstream": "weekStartsOn",
+          "kind": "prop",
+          "target": "week-starts-on",
+          "as": "attribute",
+          "default": 0
+        },
+        {
+          "upstream": "presentation",
+          "kind": "prop",
+          "target": "presentation",
+          "as": "attribute",
+          "default": "adaptive-native",
+          "notes": "As `tct-date-input`; the sheet is a Date/Time tabbed bottom sheet."
+        },
+        {
+          "upstream": "nativePicker",
+          "kind": "prop",
+          "target": "native-picker",
+          "as": "attribute",
+          "notes": "Deprecated, mapped as upstream: `touch` is `adaptive-native`, `always` is `native`, `never` is `adaptive-bottom-sheet`."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useAnnounce",
+          "target": "announce",
+          "as": "module-function",
+          "notes": "The shared polite/assertive announcer (`@tecton-wc/core/a11y/announcer.js`)."
+        },
+        {
+          "upstream": "useDevWarning",
+          "target": "devWarn",
+          "as": "module-function",
+          "notes": "Dev-mode warnings once per id (`@tecton-wc/core/utils/dev.js`)."
+        },
+        {
+          "upstream": "useHighlightedOptionScroll",
+          "as": "waived",
+          "reason": "The list highlight scrolls its option into view through `aria-activedescendant` and the option list's own overflow; no separate hook."
+        },
+        {
+          "upstream": "useInputContainer",
+          "target": "FieldChromeController",
+          "as": "controller",
+          "notes": "A press on the box chrome focuses the field (the time box has its own handler)."
+        },
+        {
+          "upstream": "useInputStatusIcon",
+          "as": "waived",
+          "reason": "Internal render helper; the status glyph and the tooltip button are part of the shared box (`TctBoxControl.renderStatusIcon`)."
+        },
+        {
+          "upstream": "useMediaQuery",
+          "target": "PickerPresentationController",
+          "as": "controller",
+          "notes": "Follows `(pointer: coarse)` and the compact-touch query live (`MediaQueryController`); the surface (popover, sheet, native) re-renders when it changes."
+        },
+        {
+          "upstream": "useResolvedRequired",
+          "target": "formLayoutContext",
+          "as": "context",
+          "notes": "The form layout's optionality default; the indicator follows it."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "ArrowDown",
+          "action": "Opens the calendar and keeps focus in the date part; with it open moves focus into it.",
+          "when": "in the date part"
+        },
+        {
+          "keys": "ArrowUp / ArrowDown",
+          "action": "Steps the time by `time-increment` minutes (wrapping past midnight) and announces it; not past `min`/`max`, and not while read-only, disabled or busy.",
+          "when": "in the time part, list closed"
+        },
+        {
+          "keys": "Alt+ArrowDown",
+          "action": "Opens the list of preset times without moving.",
+          "when": "in the time part with `time-option-interval`"
+        },
+        {
+          "keys": "ArrowUp / ArrowDown / Home / End",
+          "action": "Move the highlight in the list (aria-activedescendant); focus stays in the field.",
+          "when": "list open"
+        },
+        {
+          "keys": "Enter",
+          "action": "Commits the typed time if the highlight still follows it, else the highlighted time, and closes the list; with the list closed, commits the part, fires tct-enter and submits the form once.",
+          "when": "in the time part"
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes the list, or the calendar; one layer per press.",
+          "when": "a picker is open"
+        },
+        {
+          "keys": "Tab",
+          "action": "Closes the list and commits the typed text of the part."
+        }
+      ],
+      "form": {
+        "formAssociated": true,
+        "notes": "Form-associated (`ElementInternals`): submits `name=2026-03-21T14:30` (an empty string when empty) whatever the language, calendar or time zone, resets to the `value` attribute, restores on navigation, and joins `<fieldset disabled>`. `required` (valueMissing: a date without a time is not a value), `min`/`max` (rangeUnderflow / rangeOverflow), `dateConstraints` (a custom error) and text that is not a date or a time (badInput) block the submit; the error shows after the user acted or a submit attempt, and unreadable text once typing pauses."
+      },
+      "differences": [
+        {
+          "id": "DATETIMEINPUT-01",
+          "type": "approved-api-difference",
+          "text": "Uncontrolled by default (D-006): `value` is a plain string with the `value` attribute as its default (a form reset restores it), and native `input`/`change` events report a committed change instead of a controlled `value` plus `onChange`. The value is one string `YYYY-MM-DDTHH:MM[:SS]`; both parts submit and read back the same whatever the locale, calendar or time zone."
+        },
+        {
+          "id": "DATETIMEINPUT-02",
+          "type": "approved-api-difference",
+          "text": "Typed text in either part is a draft that commits when its part is left or Enter is pressed (see DATEINPUT-02). A time typed or chosen before any date is held and shown, then combined with the date chosen after it (upstream only holds it for the native controls); choosing a date takes the current time (moved inside `min`/`max` on their own day). Emptying the date clears the whole value; emptying the time only reverts it."
+        },
+        {
+          "id": "DATETIMEINPUT-03",
+          "type": "a11y-improvement",
+          "text": "Text that is not a date or a time is `validity.badInput`, `aria-invalid` and announced once assertively after typing pauses, instead of two always-mounted `role=alert` nodes; the time part carries its own `aria-invalid`."
+        },
+        {
+          "id": "DATETIMEINPUT-04",
+          "type": "approved-api-difference",
+          "text": "`min`/`max`/`dateConstraints` are also constraints on the value (rangeUnderflow, rangeOverflow, a custom error); `statusVariant` is not offered (the message is always the detached one, as upstream); an `open` property and the cancelable `tct-open-change` / `tct-after-open-change` events expose the calendar popover and the sheet; `tct-clear` is cancelable."
+        },
+        {
+          "id": "DATETIMEINPUT-05",
+          "type": "approved-api-difference",
+          "text": "The touch sheet is a bottom sheet with Date and Time tabs (a segmented control): the Date tab holds the one-month calendar (a pick commits and stays), the Time tab hour, minute, second and AM/PM columns (`tct-time-panel`, listboxes that commit live); \"Save date\" moves to the Time tab and \"Save\" closes. Upstream's swipe-paged date wheels are not reproduced. The native surface is two real inputs with painted text; the upstream per-part fallbacks (seconds, a `time-increment` other than 1, `time-option-interval`) keep the typed time part except under an explicit `presentation=\"native\"`."
+        },
+        {
+          "id": "DATETIMEINPUT-06",
+          "type": "tecton-visual",
+          "text": "Two outlined boxes (the date box wider than the time box) share one row and wrap on a narrow field; the time list uses the muted accent wash for the picked time and the tertiary hover roles for the highlight, with a heavier weight on the picked time so colour is not the only cue."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 68,
+      "notes": "Guides: [mwg:model-partial-time-concepts] a wall-clock date-time with no zone; [mwg:capture-location-agnostic-data]; [mwg:support-global-calendar-systems]; [mwg:validate-input-after-interaction]; [mwg:form-associated-custom-elements]; [mwg:ime-safe-enter-submit]; [mwg:accessible-error-announcement]. The preset-time list is an ARIA 1.2 combobox with a listbox popup (aria-activedescendant, focus stays in the input)."
+    }
+  }
+}

@@ -1,0 +1,12 @@
+<!-- title: States; description: Hidden label, required and optional indicators, disabled (with a reason), read-only, loading, sizes and statuses. -->
+<tct-vstack gap="4" max-width="360">
+  <tct-time-input label="Label hidden but named" label-hidden></tct-time-input>
+  <tct-time-input label="Required" required></tct-time-input>
+  <tct-time-input label="Optional" optional label-tooltip="You can add this later."></tct-time-input>
+  <tct-time-input label="Disabled with a reason" disabled disabled-message="Locked once the shift starts." value="14:30"></tct-time-input>
+  <tct-time-input label="Read-only" readonly value="14:30"></tct-time-input>
+  <tct-time-input label="Loading" loading value="14:30"></tct-time-input>
+  <tct-time-input label="Small" size="sm" value="14:30"></tct-time-input>
+  <tct-time-input label="Error" status-type="error" status-message="Opening hours are 9 to 5." value="18:30"></tct-time-input>
+  <tct-time-input label="Warning" status-type="warning" status-message="That is late." status-variant="tooltip" value="17:45"></tct-time-input>
+</tct-vstack>

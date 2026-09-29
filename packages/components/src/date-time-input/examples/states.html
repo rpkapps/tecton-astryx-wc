@@ -1,0 +1,11 @@
+<!-- title: States; description: Hidden label, required and optional indicators, disabled (with a reason), read-only, loading, sizes and a status (always the detached message). -->
+<tct-vstack gap="4" max-width="520">
+  <tct-date-time-input label="Label hidden but named" label-hidden></tct-date-time-input>
+  <tct-date-time-input label="Required" required></tct-date-time-input>
+  <tct-date-time-input label="Optional" optional label-tooltip="You can add this later."></tct-date-time-input>
+  <tct-date-time-input label="Disabled with a reason" disabled disabled-message="Locked once the meeting starts." value="2026-03-21T14:30"></tct-date-time-input>
+  <tct-date-time-input label="Read-only" readonly value="2026-03-21T14:30"></tct-date-time-input>
+  <tct-date-time-input label="Loading" loading value="2026-03-21T14:30"></tct-date-time-input>
+  <tct-date-time-input label="Small" size="sm" value="2026-03-21T14:30"></tct-date-time-input>
+  <tct-date-time-input label="Error" status-type="error" status-message="The room is booked at that time." value="2026-03-21T14:30"></tct-date-time-input>
+</tct-vstack>

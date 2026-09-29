@@ -1,0 +1,6 @@
+<!-- title: Status; description: status-type and status-message show a message; status-variant chooses attached, detached, or a tooltip behind a status button. An error sets aria-invalid. -->
+<tct-vstack gap="4" max-width="360">
+  <tct-date-input label="Start date" value="2026-03-21" status-type="error" status-message="The event has already started."></tct-date-input>
+  <tct-date-input label="End date" value="2026-03-22" status-type="warning" status-message="This is a Sunday." status-variant="detached"></tct-date-input>
+  <tct-date-input label="Booked" value="2026-03-23" status-type="success" status-message="Available." status-variant="tooltip"></tct-date-input>
+</tct-vstack>

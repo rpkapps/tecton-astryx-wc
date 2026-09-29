@@ -1,0 +1,24 @@
+<!-- title: Navigation; description: navigateTo() shows a month without an event, and tct-focus-date-change is the cancelable intent event before the user moves the month. Here a script keeps the calendar inside 2026. -->
+<tct-vstack id="navigation-root" gap="3" h-align="start">
+  <tct-hstack gap="2">
+    <tct-button size="sm" data-go="2026-01-01" label="January"></tct-button>
+    <tct-button size="sm" data-go="2026-06-01" label="June"></tct-button>
+    <tct-button size="sm" data-go="2026-12-01" label="December"></tct-button>
+  </tct-hstack>
+  <tct-calendar focus-date="2026-03-01"></tct-calendar>
+  <tct-text data-output color="secondary">Try PageDown past December.</tct-text>
+</tct-vstack>
+<script type="module">
+  const root = document.getElementById('navigation-root');
+  const calendar = root.querySelector('tct-calendar');
+  const output = root.querySelector('[data-output]');
+  for (const button of root.querySelectorAll('[data-go]')) {
+    button.addEventListener('click', () => calendar.navigateTo(button.dataset.go));
+  }
+  calendar.addEventListener('tct-focus-date-change', (event) => {
+    if (!event.focusDate.startsWith('2026')) {
+      event.preventDefault();
+      output.textContent = `Refused ${event.focusDate} (${event.reason}).`;
+    }
+  });
+</script>

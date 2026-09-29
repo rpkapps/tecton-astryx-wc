@@ -1,0 +1,112 @@
+/*
+ * tct-time-panel: columns of options for the touch time pickers. The picked option is the primary action
+ * fill with its own text roles, the hovered and focused ones the tertiary roles, and an option no time in the
+ * window can produce the disabled text role. [mwg:css] [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  .panel {
+    display: flex;
+    gap: var(--spacing-2);
+    inline-size: 100%;
+    min-inline-size: 0;
+    block-size: 12rem;
+  }
+
+  .column {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--spacing-1);
+    min-inline-size: 0;
+    padding: var(--spacing-1);
+    /* physical: the options stack vertically in every writing mode, and overflow-block is missing from Chrome before 135 */
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scroll-snap-type: y proximity;
+  }
+
+  .option {
+    --_option-bg: transparent;
+    --_option-fg: var(--color-text-primary);
+
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-block-size: var(--size-element-md);
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-size);
+    font-variant-numeric: tabular-nums;
+    line-height: var(--text-body-leading);
+    color: var(--_option-fg);
+    cursor: pointer;
+    scroll-snap-align: center;
+    background-color: var(--_option-bg);
+    border-radius: var(--radius-element);
+    user-select: none;
+    --_focus-offset: 1px;
+  }
+
+  .option[aria-selected='true'] {
+    --_option-bg: var(--color-accent);
+    --_option-fg: var(--color-on-accent);
+
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .option[aria-disabled='true'] {
+    --_option-bg: transparent;
+    --_option-fg: var(--tecton-color-disabled-text-only-text);
+
+    cursor: default;
+  }
+}
+
+@layer state {
+  @media (hover: hover) {
+    .option:hover:not([aria-selected='true'], [aria-disabled='true']) {
+      --_option-bg: var(--tecton-color-action-tertiary-bg-hover);
+      --_option-fg: var(--tecton-color-action-tertiary-text-hover);
+    }
+
+    .option[aria-selected='true']:hover:not([aria-disabled='true']) {
+      --_option-bg: var(--tecton-color-action-primary-bg-hover);
+      --_option-fg: var(--tecton-color-action-primary-text-hover);
+    }
+  }
+
+  .option:focus-visible:not([aria-selected='true'], [aria-disabled='true']) {
+    --_option-bg: var(--tecton-color-action-tertiary-bg-focus);
+    --_option-fg: var(--tecton-color-action-tertiary-text-focus);
+  }
+
+  .option[aria-selected='true']:focus-visible {
+    --_option-bg: var(--tecton-color-action-primary-bg-focus);
+    --_option-fg: var(--tecton-color-action-primary-text-focus);
+  }
+
+  .option:active:not([aria-selected='true'], [aria-disabled='true']) {
+    --_option-bg: var(--tecton-color-action-tertiary-bg-press);
+    --_option-fg: var(--tecton-color-action-tertiary-text-press);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .option[aria-selected='true'] {
+      color: HighlightText;
+      background-color: Highlight;
+      forced-color-adjust: none;
+    }
+
+    .option[aria-disabled='true'] {
+      color: GrayText;
+    }
+  }
+}

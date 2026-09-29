@@ -1,0 +1,6 @@
+<!-- title: Time options; description: time-option-interval turns the time part into a combobox of preset times at that cadence; typing any other time still works. time-increment sets the arrow-key step. -->
+<tct-vstack gap="4" max-width="520">
+  <tct-date-time-input label="Every 30 minutes" time-option-interval="30" value="2026-03-21T14:30"></tct-date-time-input>
+  <tct-date-time-input label="Every hour, 24-hour clock" time-option-interval="60" hour-format="24h" value="2026-03-21T14:00"></tct-date-time-input>
+  <tct-date-time-input label="Arrow keys step by 15" time-increment="15" value="2026-03-21T14:30"></tct-date-time-input>
+</tct-vstack>
