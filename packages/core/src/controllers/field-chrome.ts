@@ -18,6 +18,7 @@
  *
  * Markup contract for styling: `part="label|description|status|label-indicator"`, `data-hidden`,
  * `data-disabled`, `data-status-type="error|warning|success|info"`.
+ * Guides: [mwg:required-field-feedback]
  */
 import {html, nothing, type ReactiveController, type TemplateResult} from 'lit';
 import fieldMessages from '@tecton-astryx/locales/en/field.js';

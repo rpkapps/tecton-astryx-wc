@@ -13,6 +13,7 @@
  *    stack (outside press) closes a tap-opened layer.
  *
  * The owner keeps the state: `onOpen`/`onClose` are requests with a reason.
+ * Guides: [mwg:interest-triggered-tooltips]
  */
 import type {ReactiveController, ReactiveControllerHost} from 'lit';
 import type {ChangeReason} from '../events/tct-event.js';

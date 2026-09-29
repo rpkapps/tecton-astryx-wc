@@ -12,6 +12,7 @@
  *
  * Escape closes the tip first and leaves the dialog under it open (WCAG 1.4.13 dismissible; one press
  * dismisses exactly one layer); the surface is hoverable; nothing here ever moves focus.
+ * Guides: [mwg:interest-triggered-tooltips] [mwg:position-aware-tooltips]
  */
 import type {ReactiveController} from 'lit';
 import type {ChangeReason} from '../events/tct-event.js';

@@ -21,6 +21,7 @@
  *   },
  * });
  * ```
+ * Guides: [mwg:animate-to-from-top-layer] [mwg:platform-controls-dismiss-dialog] [mwg:light-dismiss-a-dialog] [mwg:move-dom-element-without-losing-state] [mwg:declarative-dialog-popover-control]
  */
 import type {ReactiveController} from 'lit';
 import {ContextConsumer, ContextProvider} from '../context/protocol.js';

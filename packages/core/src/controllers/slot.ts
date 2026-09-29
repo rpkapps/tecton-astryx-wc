@@ -9,6 +9,7 @@
  * #slots = new SlotController(this, 'icon', 'description', 'default');
  * render() { return html`${this.#slots.has('icon') ? html`<span part="icon"><slot name="icon"></slot></span>` : nothing}…`; }
  * ```
+ * Guides: [mwg:shadow-dom]
  */
 import type {ReactiveController, ReactiveControllerHost} from 'lit';
 

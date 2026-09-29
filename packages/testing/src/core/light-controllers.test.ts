@@ -26,7 +26,8 @@ import {fixture} from '../fixture.js';
 import {hasCustomState} from '../forms.js';
 import {pressKeys} from '../keyboard.js';
 import {aTimeout, nextFrame, waitUntil} from '../timing.js';
-import {isTier2} from '../tier.js';
+import {isChromium, isTier2} from '../tier.js';
+import {emulateMedia} from '../emulate.js';
 
 // ---------------------------------------------------------------------------------- fixtures
 
@@ -89,6 +90,19 @@ class TctTestWatcher extends TctElement {
   }
 }
 
+class TctTestScheme extends TctElement {
+  static override readonly tagName = 'tct-test-scheme';
+  readonly dark: MediaQueryController = new MediaQueryController(
+    this,
+    '(prefers-color-scheme: dark)',
+  );
+  renders = 0;
+  override render() {
+    this.renders++;
+    return html`${this.dark.matches ? 'dark' : 'light'}`;
+  }
+}
+
 class TctTestCard extends TctElement {
   static override readonly tagName = 'tct-test-card';
   @property() href = 'https://example.invalid/target';
@@ -116,12 +130,14 @@ declare global {
     'tct-test-satellite': TctTestSatellite;
     'tct-test-owner': TctTestOwner;
     'tct-test-watcher': TctTestWatcher;
+    'tct-test-scheme': TctTestScheme;
     'tct-test-card': TctTestCard;
   }
 }
 
 beforeAll(() => {
-  for (const ctor of [TctTestSlots, TctTestOwner, TctTestWatcher, TctTestCard]) defineElement(ctor);
+  for (const ctor of [TctTestSlots, TctTestOwner, TctTestWatcher, TctTestScheme, TctTestCard])
+    defineElement(ctor);
 });
 
 // -------------------------------------------------------------------------------------- slots
@@ -289,12 +305,29 @@ describe('shared resize observer', () => {
 });
 
 describe('MediaQueryController', () => {
-  it('reflects the query for the host and re-renders when it changes', async () => {
+  it('agrees with the platform for the host’s query', async () => {
     const host = await fixture<TctTestWatcher>(`<tct-test-watcher></tct-test-watcher>`);
-    expect(host.narrow.matches).toBe(window.innerWidth <= 300);
-    // The result must agree with the platform at every moment.
     expect(host.narrow.matches).toBe(matchMedia('(max-width: 300px)').matches);
   });
+
+  it.skipIf(!isChromium)(
+    're-renders the host when the query result changes, and stops after disconnect',
+    async () => {
+      const host = await fixture<TctTestScheme>(`<tct-test-scheme></tct-test-scheme>`);
+      expect(host.renderRoot.textContent).toContain('light');
+      const restore = await emulateMedia({colorScheme: 'dark'});
+      try {
+        await waitUntil(() => host.renderRoot.textContent.includes('dark'), 'switched to dark');
+        const renders = host.renders;
+        host.remove();
+        await emulateMedia({colorScheme: 'light'});
+        await aTimeout(50);
+        expect(host.renders).toBe(renders);
+      } finally {
+        await restore();
+      }
+    },
+  );
 });
 
 // -------------------------------------------------------------------------- interaction modality

@@ -6,6 +6,7 @@
  *
  * Coordinates are `strategy: 'fixed'` (popovers live in the top layer), written as `left`/`top` so
  * they never fight an enter animation's `transform`.
+ * Guides: [mwg:resilient-context-menus-and-nested-dropdowns]
  */
 import type * as FloatingUi from '@floating-ui/dom';
 import {devWarn} from '../utils/dev.js';

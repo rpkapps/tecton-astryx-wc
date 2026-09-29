@@ -16,6 +16,7 @@
  *    closes a parent because of a press in its child.
  *  - The stack, not the browser, decides: handled presses call `preventDefault()`, which suppresses
  *    native `<dialog>` `cancel` and popover close requests, so there is one code path everywhere.
+ * Guides: [mwg:platform-controls-dismiss-dialog] [mwg:resilient-context-menus-and-nested-dropdowns]
  */
 import type {ChangeReason} from '../events/tct-event.js';
 import {containsFlat} from '../utils/focus.js';

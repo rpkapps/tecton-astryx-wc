@@ -13,6 +13,7 @@
  * Rules: internals are attached in the constructor (exactly once, never call `attachInternals()`
  * yourself); set default semantics through `this.internals.role`/`aria*` (never a host `role`
  * attribute); no DOM reads in the constructor or `render()`.
+ * Guides: [mwg:custom-elements] [mwg:web-components] [mwg:shadow-dom]
  */
 import {LitElement, type CSSResultGroup} from 'lit';
 import {features} from './features.js';

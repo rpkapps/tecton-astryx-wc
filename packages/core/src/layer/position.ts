@@ -11,6 +11,7 @@
  *
  * Virtual anchors (a context menu at the pointer) are a 0x0 fixed element owned by the controller,
  * so even they stay on the CSS path. Never `@container anchored` (not in every Tier-1 engine).
+ * Guides: [mwg:resilient-context-menus-and-nested-dropdowns] [mwg:position-aware-tooltips]
  */
 import type {ReactiveController, ReactiveControllerHost} from 'lit';
 import {features} from '../features.js';

@@ -13,6 +13,7 @@
  *   init: (el) => { el.textContent = this.content; },
  * }]});
  * ```
+ * Guides: [mwg:shadow-dom] [mwg:accessible-web-components]
  */
 import type {ReactiveController, ReactiveControllerHost} from 'lit';
 

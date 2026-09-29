@@ -3,6 +3,7 @@
  * `@layer tecton.light-dom`; the static `light-dom.css` serves SSR/no-JS pages, and this helper
  * appends the same sheet at runtime to the root node that contains the host (document or shadow
  * root) so components rendered into an application's shadow root are styled too.
+ * Guides: [mwg:styling-web-components]
  */
 import type {CSSResult} from 'lit';
 

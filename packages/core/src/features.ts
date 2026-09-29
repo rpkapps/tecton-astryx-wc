@@ -5,6 +5,7 @@
  *
  * Probes are lazy and read at call time (never cached by consumers), so an override applies to code
  * that already ran its import. Nothing here touches the DOM at import time (Node-safe, A§14).
+ * Guides: [mwg:prerendering-custom-elements] [mwg:web-components]
  */
 
 export interface Features {
