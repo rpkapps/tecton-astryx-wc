@@ -17,35 +17,42 @@ temporary button probes are at `<scratchpad>/button-probes.test.ts`. To run them
 
 Machine: 4 cores, shared. Keep about 7 concurrent engineers at most.
 
-| Stream | Agent id | Status / waiting on |
+| Stream | Agent id | Status |
 | --- | --- | --- |
-| WP-7 basic form controls | ae829a7c68f66a548 | Running. Told that the layout components merged and a rename codemod is coming. |
-| Examples migration A (overflow-list, list, item, metadata-list, indicator, button, button-group, icon-button, collapsible, icon) | a20739f0eddf5105f | Running. |
-| Examples migration B (bottom-sheet, dialog, hover-card, banner, field, field-status, i18n-provider, avatar, link, badge, citation, heading, nav-icon, empty-state) | aca15832d8e9916a1 | Running. |
-| WP-D guides reconciliation (D-015 prose, dead links, real APIs, `<Example>`) | a0422133074a702cb | Running. |
-| D-015 rename to `@tecton-wc/*`, `@tct.*` ids, codemod `tools/codemods/d015-rename.ts`, third-party notices page | a32e9d1ad7c2c92f4 | Running. |
-| WP-6 menus | a1670232dc74bd9dc | Running. |
-| WP-8 layout and app frame | a627274cd9f0fda52 | Running. |
-| WP-9 chat messages | a4474048d684578af | Running. |
+| WP-8 layout and app frame | a627274cd9f0fda52 | Running. Told about the rename, codemod and typed-host rule. |
+| WP-9 chat messages | a4474048d684578af | Running. Told the same. |
+| WP-11 selectors and pagination | abea70a11591a3e22 | Running. |
+| WP-15 table | ad313baf75515edcf | Running. |
+| WP-AI (`@tecton-wc/cli`, MCP, guides) | ad1cc289aef6c2d4d | Running. Authorised to add `@modelcontextprotocol/sdk` 1.31.0 (D-013). |
+| Examples migration C (overlay, popover, toast, tooltip, progress-bar, skeleton, status-dot, timer, toolbar) + hover-card test timing | a082276d3e2201244 | Running. |
+| Examples migration D (segmented-control, size-provider, spinner, text, text-input, theme, toggle-button, tree-list, visually-hidden) + the slotted-native-input bug in `tct-field` | a4eb5bd7d8fe8730e | Running. |
 
-Merged: WP-F (M1–M6, slices A/B), WP-1, WP-2, WP-3, WP-4, WP-5, and the wave-1 fix-ups. Wave 1 is complete.
-`pnpm check` was fully green at 5533370, the first time since wave 1 began. The lint flake was fixed at its root: typecheck now runs before lint.
+Merged: WP-F, WP-1 to WP-7, WP-D reconciliation, the D-015 rename, wave-1 fix-ups, and examples migrations A and B.
+After migrations C and D merge, add `examples:check` to the `pnpm check` STEPS.
 
-Follow-ups noted at review:
-- WP-1 did not wire `tct-theme`'s `theme` property to a `DefinedTheme`; the core theme utilities exist.
-- WP-4's alert-dialog size budgets are explicit in parity.json and move to the performance WP.
-- Stack, hstack, vstack and card budgets were raised by ScrollFocusController (15 kB); review in the performance WP.
+Root-cause fixes made by the orchestrator (do not regress):
+- Typed lint: `tct/typed-host-controller`. Fields initialised with `new X(this, …)` are annotated, which
+  fixes the circular-inference `any`. Typecheck runs before lint.
+- docs:a11y waits for scroll-region state (example previews and Expressive Code blocks) instead of a fixed delay.
+- Subprocess and module-loading tests have realistic timeouts. Clicking a disabled control uses `force`.
+- `examples:check` sets `exitCode`, so a large report is not truncated.
+
+Follow-ups (unassigned):
+- `tct-theme` `theme` property: wire it to a `DefinedTheme`.
+- `generateThemeCSS` uses `@scope` with no fallback; `@scope` is not native in every Tier-1 engine (D-014).
+- Core requests from WP-6: a `clamp` option in `layer/position.ts` (menus use an `!important` override
+  until then), and a `renderIndicator` helper in the indicator registry.
+- The WP-7 checkbox toggles when its description is clicked; check this against upstream.
+- `--font-size-adjust-*` tokens are unused, and the `data-tct-unstyled` opt-out is unimplemented (both from the WP-D report).
+- WP-7 parity requests: global attributes as parity targets (`tools/lib/parity.ts`).
+- Size budgets: form controls and menus are 70–82 kB. Tackle in the performance WP (lazy ICU parser).
 
 ## Orchestrator queue (in order)
 
-1. Examples migration (715 declarations in 24 folders, listed by `node tools/check-examples.ts`).
-   Split into 3 engineers by folder once capacity frees up. Then add `examples:check` to the
-   `pnpm check` STEPS.
-2. Merge the rename as soon as it lands, and tell every stream to merge it and run the codemod.
-3. WP-AI after the rename (creates `packages/cli` = `@tecton-wc/cli`; MCP SDK approved).
-4. Wave 3 as dependencies merge: WP-10 (3,4,6), WP-11 (4,5,7), WP-12 (4,5,7), WP-13 (3,4,7),
-   WP-14 (4,8), WP-15 (2,6,7), WP-16 (2,4,9). Then wave 4: WP-17, WP-18, WP-I, WP-H.
-5. Performance WP: lazy ICU parser and lazy truncation tooltip; remove provisional size budgets.
+1. Wave 3 as capacity frees: WP-10 (3, 4, 6), WP-12 (4, 5, 7), WP-13 (3, 4, 7), WP-14 (4, 8; after WP-8),
+   WP-16 (2, 4, 9; after WP-9). Then wave 4: WP-17 (after 15), WP-18 (after 11, 12, 13, 15), WP-I, WP-H.
+2. Performance WP: lazy ICU parser and lazy truncation tooltip; replace the provisional size budgets.
+3. The follow-ups above, bundled into fix-up engineers.
 
 ## Next actions
 
