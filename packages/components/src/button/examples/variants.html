@@ -1,19 +1,19 @@
 <!-- title: Variants; description: The six variants: primary, secondary (default), ghost, destructive, and the Tecton outlined and text-only. Disabled is a recessed fill. -->
-<div style="display: flex; flex-direction: column; gap: var(--spacing-3)">
-  <div style="display: flex; flex-wrap: wrap; gap: var(--spacing-3)">
+<tct-vstack gap="3">
+  <tct-hstack wrap="wrap" gap="3">
     <tct-button variant="primary" label="Primary"></tct-button>
     <tct-button variant="secondary" label="Secondary"></tct-button>
     <tct-button variant="ghost" label="Ghost"></tct-button>
     <tct-button variant="outlined" label="Outlined"></tct-button>
     <tct-button variant="text-only" label="Text only"></tct-button>
     <tct-button variant="destructive" label="Destructive"></tct-button>
-  </div>
-  <div style="display: flex; flex-wrap: wrap; gap: var(--spacing-3)">
+  </tct-hstack>
+  <tct-hstack wrap="wrap" gap="3">
     <tct-button variant="primary" label="Primary" disabled></tct-button>
     <tct-button variant="secondary" label="Secondary" disabled></tct-button>
     <tct-button variant="ghost" label="Ghost" disabled></tct-button>
     <tct-button variant="outlined" label="Outlined" disabled></tct-button>
     <tct-button variant="text-only" label="Text only" disabled></tct-button>
     <tct-button variant="destructive" label="Destructive" disabled></tct-button>
-  </div>
-</div>
+  </tct-hstack>
+</tct-vstack>
