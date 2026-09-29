@@ -69,6 +69,9 @@ describe('what the gate scans', () => {
     writeFileSync(join(packages, 'core', 'dist', 'sub', 'b.d.ts'), 'x');
     writeFileSync(join(packages, 'core', 'dist', 'a.js.map'), 'x');
     writeFileSync(join(packages, 'core', 'dist', 'font.woff2'), 'x');
+    // testing never ships and is never built: a dist/ there is a stale leftover and is not scanned.
+    mkdirSync(join(packages, 'testing', 'dist'), {recursive: true});
+    writeFileSync(join(packages, 'testing', 'dist', 'old.d.ts'), 'x');
     expect(packageMetadataFiles(packages)).toEqual([join(packages, 'core', 'package.json')]);
     expect(distFiles(packages).map((file) => file.slice(packages.length + 1))).toEqual([
       'core/dist/a.js',
