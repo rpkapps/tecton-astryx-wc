@@ -1,9 +1,9 @@
 <!-- title: Overrides and catalogs; description: overrides change single messages, messages adds a catalog. Both are properties, set from script. -->
 <tct-internationalization-provider id="i18n-overrides" locale="en">
-  <div style="display: flex; gap: var(--spacing-4); align-items: center">
+  <tct-hstack gap="4" v-align="center">
     <tct-spinner size="lg" id="i18n-spinner"></tct-spinner>
     <tct-text type="body" color="secondary">The spinner's accessible name is now "Working on it".</tct-text>
-  </div>
+  </tct-hstack>
 </tct-internationalization-provider>
 <script type="module">
   const provider = document.getElementById('i18n-overrides');
