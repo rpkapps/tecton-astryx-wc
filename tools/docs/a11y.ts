@@ -396,13 +396,6 @@ try {
 mkdirSync(PATHS.reports, {recursive: true});
 writeIfChanged(join(PATHS.reports, 'docs-a11y.json'), `${JSON.stringify({pages: all.length, findings, exemptions}, null, 2)}\n`);
 
-if (findings.length > 0) {
-  for (const finding of findings) {
-    console.error(`FAIL [${finding.kind}] ${finding.page} (${finding.scheme}): ${finding.message}`);
-  }
-  console.error(`\ndocs:a11y FAILED: ${findings.length} finding(s) over ${all.length} page(s) (${axeViolations} axe violation(s)).`);
-  process.exit(1);
-}
 if (exemptions.length > 0) {
   console.log('docs:a11y exemptions applied (declared in the example header as a11y-exempt, each with a reason):');
   const seen = new Set<string>();
@@ -412,5 +405,12 @@ if (exemptions.length > 0) {
     seen.add(key);
     console.log(`  ${e.rule} in ${e.page} ("${e.example}"): ${e.reason}`);
   }
+}
+if (findings.length > 0) {
+  for (const finding of findings) {
+    console.error(`FAIL [${finding.kind}] ${finding.page} (${finding.scheme}): ${finding.message}`);
+  }
+  console.error(`\ndocs:a11y FAILED: ${findings.length} finding(s) over ${all.length} page(s) (${axeViolations} axe violation(s)).`);
+  process.exit(1);
 }
 console.log(`docs:a11y OK: ${all.length} page(s) in light and dark, keyboard smoke passed.`);
