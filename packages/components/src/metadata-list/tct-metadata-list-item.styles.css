@@ -1,0 +1,46 @@
+/*
+ * tct-metadata-list-item: one label-value pair. The host is a grid whose columns are the enclosing
+ * list's tracks (a subgrid) or its own two tracks, as the list publishes through the inherited private
+ * properties `--_span`, `--_item-columns` and `--_label-min`. With two tracks the label and value sit
+ * side by side; with one they stack, so the same markup serves side, top and horizontal labels.
+ * Outside a list the pair simply stacks. [mwg:css-layout] (subgrid) [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: grid;
+    grid-template-columns: var(--_item-columns, none);
+    grid-column: span var(--_span, 1);
+    align-items: baseline;
+    row-gap: var(--spacing-0-5);
+  }
+
+  .label {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    min-block-size: var(--_label-min, 0);
+    color: var(--color-text-secondary);
+    font-size: var(--text-body-size);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--text-body-leading);
+    overflow-wrap: anywhere;
+  }
+
+  .value {
+    min-block-size: var(--_label-min, 0);
+    min-inline-size: 0;
+    color: var(--color-text-primary);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+    overflow-wrap: anywhere;
+  }
+
+  .icon {
+    --_icon-size: var(--tecton-icon-size-100);
+
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    color: var(--color-text-secondary);
+  }
+}

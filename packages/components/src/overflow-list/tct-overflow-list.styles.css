@@ -1,0 +1,96 @@
+/*
+ * tct-overflow-list: a row that hides the items that do not fit. The items are the host's light-DOM
+ * children: the list measures them in place (revealing every item, reading, and hiding again in one
+ * synchronous pass, so nothing flickers) and marks the collapsed ones `data-tct-overflow`, which the
+ * shadow stylesheet hides with `display: none` (they leave the tab order and the accessibility tree).
+ * Items are natural width (`flex: none`), so a measurement never sees a shrunken item.
+ * The indicator's width is reserved from a hidden, inert copy rendered for all items (its widest).
+ * [mwg:size-aware-styling] [mwg:css-layout] [mwg:overflow-clipping-control]
+ */
+@layer component {
+  :host {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  .list {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: var(--_gap, var(--spacing-2));
+    min-inline-size: 0;
+    white-space: nowrap;
+
+    /* Clip what does not fit; fall back to `hidden` where a clip margin is unknown. */
+    overflow: hidden;
+  }
+
+  @supports (overflow-clip-margin: 1px) {
+    .list {
+      /* A little bleed so a focus ring on an edge item is not cut. */
+      overflow: clip;
+      overflow-clip-margin: calc(var(--focus-outline-offset) + var(--focus-outline-width));
+    }
+  }
+
+  .list[data-rows] {
+    flex-wrap: wrap;
+    align-content: flex-start;
+    white-space: normal;
+    max-block-size: var(--_max-block-size, none);
+  }
+
+  /* observe-parent: content-sized until it overflows, then it fills the parent it measures. */
+  .list[data-fill] {
+    inline-size: 100%;
+  }
+
+  ::slotted(*) {
+    flex: none;
+  }
+
+  ::slotted([data-tct-overflow]) {
+    display: none !important;
+  }
+
+  .indicator {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+  }
+
+  /* The measurement copy: laid out, never seen or reached. */
+  .measure {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    block-size: 0;
+    overflow: hidden;
+    visibility: hidden;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+
+  /* The built-in "+N" indicator (show-count). */
+  .count {
+    display: inline-flex;
+    align-items: center;
+    padding-inline: var(--spacing-2);
+    border-radius: var(--radius-full);
+    background-color: var(--color-background-muted);
+    color: var(--color-text-secondary);
+    font-size: var(--text-supporting-size);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--text-supporting-leading);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .count {
+      border: var(--border-width) solid CanvasText;
+      background-color: Canvas;
+      color: CanvasText;
+    }
+  }
+}

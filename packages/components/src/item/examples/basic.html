@@ -1,0 +1,12 @@
+<!-- title: Label and description; description: A row with a label, a description, start content and end content. -->
+<div style="display: grid; gap: var(--spacing-1); max-inline-size: 24rem">
+  <tct-item label="Contact name"></tct-item>
+  <tct-item label="Settings" description="Manage your preferences"></tct-item>
+  <tct-item label="Ada Lovelace" description="Mathematician">
+    <tct-icon slot="start" name="info"></tct-icon>
+    <span slot="end" style="color: var(--color-text-secondary)">2h ago</span>
+  </tct-item>
+  <tct-item description="Rich content goes through slots">
+    <strong slot="label">Rich <em>label</em></strong>
+  </tct-item>
+</div>

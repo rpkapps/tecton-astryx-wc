@@ -1,0 +1,18 @@
+<!-- title: Hover from the owner; description: An owner publishes hover to its indicator with the inherited --_indicator-hover property (the indicator-scope class in a component sheet). Here the row does it by hand. -->
+<style>
+  #owner-hover-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2);
+    border-radius: var(--radius-element);
+  }
+
+  #owner-hover-row:hover {
+    --_indicator-hover: 1;
+  }
+</style>
+<div id="owner-hover-row">
+  <tct-checkbox-indicator state="unchecked"></tct-checkbox-indicator>
+  <span>Hover this row: the box border brightens</span>
+</div>

@@ -1,0 +1,116 @@
+/*
+ * tct-list-item: a row of a tct-list, composed from tct-item. The row wrapper carries the divider and
+ * the edge compensation (margins cannot be set on the host); the painted row is the item's exported
+ * `item` part. Markers are custom rendered (bullet, ring or CSS counter) and slotted into the item's
+ * marker slot, where they are direct flex children of the row and align to the first line's baseline.
+ *
+ * Tecton: hover is the Tecton table-row hover fill, which the item paints (tecton-astryx components.ts
+ * `list-item`); rows keep the item's element radius, and divided rows are flush rectangles.
+ * [mwg:css-layout] [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  /* A disabled row takes no pointer input, so no click reaches the row. */
+  :host([disabled]) {
+    pointer-events: none;
+  }
+
+  .row {
+    /* The item's own inline inset, restated so edge compensation can cancel exactly that much. */
+    --_inset: var(--spacing-2);
+  }
+
+  .row[data-density='spacious'] {
+    --_inset: var(--spacing-3);
+  }
+
+  /*
+   * Edge compensation cancels as much of the row's built-in inline inset as the container padding
+   * allows, each logical edge against its own container padding (a single-edge clamp over-cancels the
+   * end edge under asymmetric padding). A zero-padding surface (min(inset, 0px) = 0px) leaves the row
+   * where it is. Logical margins keep RTL correct.
+   */
+  .row[data-edge-compensation='inline'] {
+    margin-inline-start: calc(-1 * min(var(--_inset), var(--_container-padding-inline-start, 0px)));
+    margin-inline-end: calc(-1 * min(var(--_inset), var(--_container-padding-inline-end, 0px)));
+  }
+
+  .row[data-dividers] {
+    border-block-end: var(--border-width) solid var(--color-border);
+  }
+
+  :host(:last-of-type) .row[data-dividers] {
+    border-block-end-width: 0;
+  }
+
+  /* Divided rows are flush rectangles. */
+  .row[data-dividers] tct-item::part(item) {
+    border-radius: 0;
+  }
+
+  /* -------------------------------------------------------------------------- markers */
+
+  .marker {
+    /* design: the marker column is one spacing step wide, the bullet is 6px */
+    --_marker-size: 0.375rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: baseline;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    inline-size: var(--spacing-4);
+    margin-block-start: calc((1em * var(--text-body-leading) - var(--_marker-size)) / 2);
+  }
+
+  .dot,
+  .ring {
+    inline-size: var(--_marker-size);
+    block-size: var(--_marker-size);
+    border-radius: var(--radius-full);
+  }
+
+  .dot {
+    background-color: var(--color-text-primary);
+  }
+
+  .ring {
+    border: var(--border-width) solid var(--color-text-primary);
+    background-color: transparent;
+  }
+
+  .number {
+    align-self: baseline;
+    flex-shrink: 0;
+    inline-size: var(--spacing-4);
+    color: var(--color-text-primary);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+  }
+
+  /* The number is generated: the list resets the counter, every row increments it. */
+  .number::before {
+    content: counter(tct-list) '.';
+    counter-increment: tct-list;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .dot {
+      background-color: CanvasText;
+    }
+
+    .ring {
+      border-color: CanvasText;
+    }
+
+    .row[data-dividers] {
+      border-block-end-color: CanvasText;
+    }
+  }
+}

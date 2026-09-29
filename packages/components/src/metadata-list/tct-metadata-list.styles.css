@@ -1,0 +1,114 @@
+/*
+ * tct-metadata-list: key-value pairs in a grid. The label and value tracks are the grid's own, and each
+ * item is a SUBGRID spanning them, so labels line up across rows although every pair is its own
+ * element with its own shadow root. The list publishes the layout to the items through inherited
+ * private custom properties (they cross the shadow boundary): `--_span` (tracks an item spans),
+ * `--_item-columns` (`subgrid`, or its own two tracks) and `--_label-min` (row height of a side label).
+ * Semantics are roles, not a <dl> (an item cannot be both a term and a definition): see the docs.
+ * Tecton: the "Show more" toggle reads in the accent ink (`--color-text-accent`), because
+ * `--color-accent` is a fill in Tecton (components.ts `metadata-list`).
+ * [mwg:css-layout] (subgrid) [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .root {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .heading {
+    margin-block-end: var(--spacing-3);
+  }
+
+  .list {
+    display: grid;
+    grid-template-columns: var(--_label-width, auto) minmax(0, 1fr);
+    align-items: baseline;
+    gap: var(--spacing-2) var(--spacing-4);
+    margin: 0;
+    padding: 0;
+
+    /* Read by the items. */
+    --_span: 2;
+    --_item-columns: subgrid;
+    --_label-min: 1.5rem; /* design: a side label row is 24px tall, as upstream */
+  }
+
+  /* Side labels in a fixed number of columns: a label track and a value track per column. */
+  .list[data-mode='side'][data-count] {
+    grid-template-columns: repeat(var(--_count), auto minmax(0, 1fr));
+    gap: var(--spacing-4);
+  }
+
+  /*
+   * Side labels with `multi`: upstream leaves label and value as separate cells of an auto-fill grid;
+   * here each pair fills a cell and lays its label and value out in two tracks of its own.
+   */
+  .list[data-mode='side'][data-columns='multi'] {
+    /* design: a cell is at least 280px wide */
+    grid-template-columns: repeat(auto-fill, minmax(17.5rem, 1fr));
+    gap: var(--spacing-4);
+    --_span: 1;
+    --_item-columns: auto minmax(0, 1fr);
+  }
+
+  /* Stacked labels: one column of pairs, a label above its value. */
+  .list[data-mode='stacked'] {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: var(--spacing-3);
+    --_span: 1;
+    --_label-min: 0;
+  }
+
+  .list[data-mode='stacked'][data-columns='multi'] {
+    grid-template-columns: repeat(auto-fill, minmax(17.5rem, 1fr));
+    gap: var(--spacing-4);
+  }
+
+  .list[data-mode='stacked'][data-count] {
+    grid-template-columns: repeat(var(--_count), 1fr);
+    gap: var(--spacing-4);
+  }
+
+  /* Horizontal: pairs flow in a wrapping row, label above value, each pair as wide as its content. */
+  .list[data-mode='horizontal'] {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: flex-start;
+    gap: var(--spacing-4);
+    --_item-columns: none;
+    --_label-min: 0;
+  }
+
+  /* Items past `max-num-of-items` are collapsed by the list; `!important` so a consumer rule cannot show them. */
+  ::slotted([data-tct-collapsed]) {
+    display: none !important;
+  }
+
+  .toggle {
+    align-self: flex-start;
+    appearance: none;
+    margin: 0;
+    padding: var(--spacing-2) 0;
+    border: 0;
+    background: none;
+    color: var(--color-text-accent);
+    font-size: var(--text-body-size);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--text-body-leading);
+    text-align: start;
+    cursor: pointer;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .toggle {
+      color: LinkText;
+    }
+  }
+}

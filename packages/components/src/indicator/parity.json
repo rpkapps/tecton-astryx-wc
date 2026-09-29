@@ -1,0 +1,227 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "indicator",
+  "workPackage": "WP-5",
+  "entries": {
+    "core.check-indicator": {
+      "tag": "tct-check-indicator",
+      "status": "implemented",
+      "upstream": {
+        "name": "CheckIndicator",
+        "path": "packages/core/src/Indicator/CheckIndicator.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "state",
+          "kind": "prop",
+          "target": "state",
+          "as": "attribute",
+          "reflect": true,
+          "default": "unchecked"
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md"
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "Drawn instead of the mark in either state. Whitespace and comments are not content (INDICATOR-04)."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "defaultIndicators",
+          "target": "defaultIndicators",
+          "as": "module-function",
+          "notes": "@tecton-astryx/core/indicators/registry.js; maps name to tag (INDICATOR-01)."
+        },
+        {"upstream": "getIndicator", "target": "getIndicator", "as": "module-function"},
+        {
+          "upstream": "useIndicator",
+          "target": "IndicatorController",
+          "as": "controller",
+          "notes": "Follows the nearest tct-theme through themeContext."
+        },
+        {
+          "upstream": "indicatorScope",
+          "target": "indicatorScope",
+          "as": "css",
+          "notes": "CSS module: the indicator-scope class publishes the inherited --_indicator-hover (INDICATOR-02)."
+        },
+        {
+          "upstream": "useIndicatorFocusRing",
+          "as": "waived",
+          "reason": "Owner-side: the owning control rings the indicator element with ::part(checkbox-indicator) or ::part(radio-indicator) using the shared focus-ring tokens; an indicator never draws its own ring."
+        },
+        {
+          "upstream": "defineTheme({indicators})",
+          "target": "defineIndicators",
+          "as": "module-function",
+          "notes": "Per theme name; values are tag names."
+        }
+      ],
+      "form": {"formAssociated": false, "notes": "Decorative; the owning control submits."},
+      "differences": [
+        {
+          "id": "INDICATOR-01",
+          "type": "approved-api-difference",
+          "text": "An indicator \"component\" is a tag name: defaultIndicators maps check, checkbox and radio to tct-check-indicator, tct-checkbox-indicator and tct-radio-indicator, and defineIndicators(overrides, theme) registers replacement tags per theme name. Owners render through getIndicator() or IndicatorController; dynamic tag rendering without unsafeStatic is the owner's template concern."
+        },
+        {
+          "id": "INDICATOR-02",
+          "type": "approved-api-difference",
+          "text": "stylex.defineMarker() and when.ancestor(':hover') cannot match an ancestor across a shadow boundary, so indicatorScope is a CSS module: the indicator-scope class publishes the inherited private --_indicator-hover (0 or 1), which the indicators read to brighten. Owners add the class only while enabled."
+        },
+        {
+          "id": "INDICATOR-03",
+          "type": "a11y-improvement",
+          "text": "Decorative by contract: the host is aria-hidden through ElementInternals and the painted box carries its own aria-hidden, so an author aria-hidden=\"false\" on the host never exposes the mark (upstream re-asserted aria-hidden after the props spread for the same reason)."
+        },
+        {
+          "id": "INDICATOR-04",
+          "type": "approved-api-difference",
+          "text": "`children` is default-slot content. Upstream's isRenderable(children) guard (a `false` from `children={isBusy && <Spinner/>}` must not delete the mark) becomes slot presence: whitespace-only text and comments do not count as content."
+        },
+        {
+          "id": "INDICATOR-05",
+          "type": "tecton-visual",
+          "text": "Checkbox and radio follow design/components/checkbox.md and radio.md: the box border, checked fill, indeterminate fill and glyph use the Tecton checkbox roles (--tecton-color-checkbox-*), a checked radio is a brighter ring plus a filled dot, and hover brightens toward --tecton-color-checkbox-hover-border. The check mark draws in the icon accent ink. All boundaries and fills are checked at >= 3:1 against the page and card surfaces in both modes (D-013 Q-05)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components] aria-hidden as an ElementInternals default; [mwg:styling-web-components] inherited custom properties cross the shadow boundary (hover), ::part for owner focus rings; [mwg:brand-consistent-forms] token-driven control colours; [mwg:css] forced-colors overrides in the a11y layer."
+    },
+    "core.checkbox-indicator": {
+      "tag": "tct-checkbox-indicator",
+      "status": "implemented",
+      "upstream": {
+        "name": "CheckboxIndicator",
+        "path": "packages/core/src/Indicator/CheckboxIndicator.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "state",
+          "kind": "prop",
+          "target": "state",
+          "as": "attribute",
+          "reflect": true,
+          "default": "unchecked"
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md"
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"}
+      ],
+      "form": {"formAssociated": false, "notes": "Decorative; the owning control submits."},
+      "differences": [],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "See core.check-indicator for the family differences (INDICATOR-01 to INDICATOR-05). Parts: checkbox-indicator (+ legacy checkbox), checkbox-indicator-check, checkbox-indicator-dash."
+    },
+    "core.radio-indicator": {
+      "tag": "tct-radio-indicator",
+      "status": "implemented",
+      "upstream": {
+        "name": "RadioIndicator",
+        "path": "packages/core/src/Indicator/RadioIndicator.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "state",
+          "kind": "prop",
+          "target": "state",
+          "as": "attribute",
+          "reflect": true,
+          "default": "unchecked"
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md"
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"}
+      ],
+      "form": {"formAssociated": false, "notes": "Decorative; the owning control submits."},
+      "differences": [],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "See core.check-indicator for the family differences (INDICATOR-01 to INDICATOR-05). Parts: radio-indicator (+ legacy radio), radio-indicator-dot (+ legacy radio-dot)."
+    }
+  }
+}
