@@ -61,12 +61,13 @@ This is the project's recorded browser policy (also in `AGENTS.md`):
 2. **Available in every Tier-1 engine** (Newly available or better): use natively, **no polyfill**.
    APIs whose absence would throw or silently break a core feature go through `core/features.ts`
    detection so Tier 2 degrades instead of crashing (§9.5). Examples: Popover, element reflection,
-   `internals.states`, `showPopover({source})`, `requestClose()`, `@scope`, `light-dark()`.
+   `internals.states`, `showPopover({source})`, `requestClose()`, `light-dark()`.
 3. **Not in every Tier-1 engine**: progressive enhancement only, feature-detected, following the
    guide's fallback. Current list: `ariaNotify` (Safari 27), invoker commands (Safari 26.2),
    `CloseWatcher`, `<dialog closedby>`, `moveBefore()`/`connectedMoveCallback`,
    `hidden="until-found"`, Reference Target, scoped custom element registries, `popover="hint"`,
-   `interestfor`, anchored container queries, `field-sizing`, `scrollbar-color` (Safari 26.2),
+   `interestfor`, anchored container queries, CSS anchor positioning in Safari 26 and `@scope` in
+   Chrome < 143 (D-014), `field-sizing`, `scrollbar-color` (Safari 26.2),
    `contrast-color()`, Sanitizer API, customizable `<select>`.
 4. **Never used**: `:host-context()`, customized built-ins (`is=`), CSS module scripts at runtime,
    `@function`, the `overlay` property for exit animations.

@@ -266,3 +266,10 @@ The support floor (D-010) is unchanged. Consequences:
 - Features listed in ARCHITECTURE §1.2 rule 2 ("available in every Tier-1 engine") must be checked
   against `web-features` data before a component depends on them natively. Any other mismatch
   found is fixed the same way.
+
+**D-014 addendum (checked against `web-features` 3.40):** `@scope` is native only from Chrome 143 and
+Safari 26.4, so it moves to progressive enhancement. Nothing in the code uses it yet. The following
+are confirmed native across the Tier-1 floor: Popover (Chrome 116, Firefox 125, Safari 17), `:state()`
+(125 / 126 / 17.4), `requestClose()` (134 / 139 / 18.4), `light-dark()`, and form-associated custom
+elements. CloseWatcher, `closedby`, `moveBefore`, `hidden="until-found"`, Sanitizer, invokers,
+`field-sizing` and `scrollbar-color` were already listed as enhancements.
