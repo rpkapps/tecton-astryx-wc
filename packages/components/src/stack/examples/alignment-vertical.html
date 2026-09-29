@@ -1,0 +1,19 @@
+<!-- title: Vertical alignment; description: In a vertical stack h-align is the cross axis (start, center, end, stretch) and v-align the main axis. -->
+<div id="alignment-vertical" style="display: flex; flex-wrap: wrap; gap: var(--spacing-4)">
+  <tct-stack h-align="start" gap="1" padding="2" width="140" style="background: var(--color-background-muted)">
+    <span>start</span><span>a</span>
+  </tct-stack>
+  <tct-stack h-align="center" gap="1" padding="2" width="140" style="background: var(--color-background-muted)">
+    <span>center</span><span>a</span>
+  </tct-stack>
+  <tct-stack h-align="end" gap="1" padding="2" width="140" style="background: var(--color-background-muted)">
+    <span>end</span><span>a</span>
+  </tct-stack>
+  <tct-stack h-align="stretch" gap="1" padding="2" width="140" style="background: var(--color-background-muted)">
+    <span style="background: var(--color-neutral)">stretch</span>
+    <span style="background: var(--color-neutral)">a</span>
+  </tct-stack>
+  <tct-stack v-align="between" height="120" padding="2" width="140" style="background: var(--color-background-muted)">
+    <span>between</span><span>b</span><span>c</span>
+  </tct-stack>
+</div>

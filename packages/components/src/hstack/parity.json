@@ -1,0 +1,144 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "hstack",
+  "workPackage": "WP-1",
+  "entries": {
+    "core.h-stack": {
+      "tag": "tct-hstack",
+      "status": "implemented",
+      "upstream": {
+        "name": "HStack",
+        "path": "packages/core/src/HStack/HStack.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "gap",
+          "kind": "prop",
+          "target": "gap",
+          "as": "attribute",
+          "notes": "Inherited from tct-stack."
+        },
+        {"upstream": "padding", "kind": "prop", "target": "padding", "as": "attribute"},
+        {
+          "upstream": "paddingInline",
+          "kind": "prop",
+          "target": "padding-inline",
+          "as": "attribute"
+        },
+        {
+          "upstream": "paddingInlineStart",
+          "kind": "prop",
+          "target": "padding-inline-start",
+          "as": "attribute"
+        },
+        {
+          "upstream": "paddingInlineEnd",
+          "kind": "prop",
+          "target": "padding-inline-end",
+          "as": "attribute"
+        },
+        {"upstream": "paddingBlock", "kind": "prop", "target": "padding-block", "as": "attribute"},
+        {
+          "upstream": "paddingBlockStart",
+          "kind": "prop",
+          "target": "padding-block-start",
+          "as": "attribute"
+        },
+        {
+          "upstream": "paddingBlockEnd",
+          "kind": "prop",
+          "target": "padding-block-end",
+          "as": "attribute"
+        },
+        {
+          "upstream": "isScrollable",
+          "kind": "prop",
+          "target": "scrollable",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {"upstream": "width", "kind": "prop", "target": "width", "as": "attribute"},
+        {"upstream": "height", "kind": "prop", "target": "height", "as": "attribute"},
+        {"upstream": "maxWidth", "kind": "prop", "target": "max-width", "as": "attribute"},
+        {"upstream": "minHeight", "kind": "prop", "target": "min-height", "as": "attribute"},
+        {
+          "upstream": "hAlign",
+          "kind": "prop",
+          "target": "h-align",
+          "as": "attribute",
+          "notes": "Main axis of a horizontal stack (start, center, end, between, around, evenly)."
+        },
+        {
+          "upstream": "vAlign",
+          "kind": "prop",
+          "target": "v-align",
+          "as": "attribute",
+          "notes": "Cross axis (start, center, end, stretch); stretch is the flex default."
+        },
+        {"upstream": "justify", "kind": "prop", "target": "justify", "as": "attribute"},
+        {
+          "upstream": "align",
+          "kind": "prop",
+          "target": "alignment",
+          "as": "attribute",
+          "notes": "Renamed: `align` attribute has presentational meaning in browsers (A§7.2)."
+        },
+        {
+          "upstream": "wrap",
+          "kind": "prop",
+          "target": "wrap",
+          "as": "attribute",
+          "reflect": true,
+          "default": "nowrap"
+        },
+        {"upstream": "as", "kind": "prop", "target": "as", "as": "attribute", "default": "div"},
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style on the host, ::part(base), or the padding/gap attributes."
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "The element itself is the handle; the flex box is reachable as part \"base\"."
+        }
+      ],
+      "hooks": [],
+      "keyboard": [],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "HSTACK-01",
+          "type": "approved-api-difference",
+          "text": "Subclass of tct-stack with the direction fixed: the inherited `direction` attribute is ignored and reset to horizontal (upstream omits the prop from the HStack type)."
+        },
+        {
+          "id": "HSTACK-02",
+          "type": "approved-api-difference",
+          "text": "`align` is the `alignment` attribute (see STACK-01); the other differences of tct-stack (STACK-02..05) apply."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:css-layout] flexbox row, gap; [mwg:styling-web-components] host rules; forced-colors: the stack paints nothing, covered by the tct-stack forced-colors test."
+    }
+  }
+}

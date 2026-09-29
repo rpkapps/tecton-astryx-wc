@@ -1,0 +1,11 @@
+<!-- title: Semantic elements; description: as renders the stack box as a landmark or list element. aria-label on the host names it. Use native li children inside a ul stack. -->
+<div id="semantic-elements" style="display: grid; gap: var(--spacing-4)">
+  <tct-stack as="nav" aria-label="Breadcrumb" direction="horizontal" gap="2">
+    <a href="#home">Home</a><span aria-hidden="true">/</span><a href="#wells">Wells</a>
+  </tct-stack>
+  <tct-stack as="ul" aria-label="Steps" gap="1">
+    <li>Connect the data source</li>
+    <li>Map the columns</li>
+    <li>Review and import</li>
+  </tct-stack>
+</div>

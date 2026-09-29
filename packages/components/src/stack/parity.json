@@ -1,0 +1,276 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "stack",
+  "workPackage": "WP-1",
+  "entries": {
+    "core.stack": {
+      "tag": "tct-stack",
+      "status": "implemented",
+      "upstream": {
+        "name": "Stack",
+        "path": "packages/core/src/Stack/Stack.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "direction",
+          "kind": "prop",
+          "target": "direction",
+          "as": "attribute",
+          "reflect": true,
+          "default": "vertical"
+        },
+        {
+          "upstream": "gap",
+          "kind": "prop",
+          "target": "gap",
+          "as": "attribute",
+          "notes": "Spacing step; a number attribute (gap=\"4\"). A value off the scale is ignored with a dev warning."
+        },
+        {
+          "upstream": "padding",
+          "kind": "prop",
+          "target": "padding",
+          "as": "attribute",
+          "notes": "BoxPropsMixin (A§9.18): spacing step."
+        },
+        {
+          "upstream": "paddingInline",
+          "kind": "prop",
+          "target": "padding-inline",
+          "as": "attribute"
+        },
+        {
+          "upstream": "paddingInlineStart",
+          "kind": "prop",
+          "target": "padding-inline-start",
+          "as": "attribute"
+        },
+        {
+          "upstream": "paddingInlineEnd",
+          "kind": "prop",
+          "target": "padding-inline-end",
+          "as": "attribute"
+        },
+        {"upstream": "paddingBlock", "kind": "prop", "target": "padding-block", "as": "attribute"},
+        {
+          "upstream": "paddingBlockStart",
+          "kind": "prop",
+          "target": "padding-block-start",
+          "as": "attribute"
+        },
+        {
+          "upstream": "paddingBlockEnd",
+          "kind": "prop",
+          "target": "padding-block-end",
+          "as": "attribute"
+        },
+        {
+          "upstream": "isScrollable",
+          "kind": "prop",
+          "target": "scrollable",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "target": "width",
+          "as": "attribute",
+          "notes": "Number is px, string a CSS length; not reflected. Sizes the host."
+        },
+        {
+          "upstream": "height",
+          "kind": "prop",
+          "target": "height",
+          "as": "attribute",
+          "notes": "Sizes the host, so a percentage resolves against the stack's parent."
+        },
+        {"upstream": "maxWidth", "kind": "prop", "target": "max-width", "as": "attribute"},
+        {"upstream": "minHeight", "kind": "prop", "target": "min-height", "as": "attribute"},
+        {"upstream": "hAlign", "kind": "prop", "target": "h-align", "as": "attribute"},
+        {"upstream": "vAlign", "kind": "prop", "target": "v-align", "as": "attribute"},
+        {"upstream": "justify", "kind": "prop", "target": "justify", "as": "attribute"},
+        {
+          "upstream": "align",
+          "kind": "prop",
+          "target": "alignment",
+          "as": "attribute",
+          "notes": "Renamed: browsers give an `align` attribute presentational meaning (A§7.2, CONVENTIONS §9)."
+        },
+        {
+          "upstream": "wrap",
+          "kind": "prop",
+          "target": "wrap",
+          "as": "attribute",
+          "reflect": true,
+          "default": "nowrap"
+        },
+        {
+          "upstream": "as",
+          "kind": "prop",
+          "target": "as",
+          "as": "attribute",
+          "default": "div",
+          "notes": "Enumerated (div, section, article, aside, nav, header, footer, main, ul, ol, li); renders the real element inside the shadow root."
+        },
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style on the host (sizes, flex, margin), ::part(base), or the padding/gap attributes."
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "The element itself is the handle; the flex box is reachable as part \"base\"."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "stack",
+          "as": "waived",
+          "reason": "StyleX utility that adds flex-container styles to any element. tct-stack is the element form; a plain element uses the same display:flex declarations."
+        }
+      ],
+      "keyboard": [],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "STACK-01",
+          "type": "approved-api-difference",
+          "text": "`align` is the `alignment` attribute (and property): browsers treat an `align` attribute on some elements as `text-align` (A§7.2)."
+        },
+        {
+          "id": "STACK-02",
+          "type": "approved-api-difference",
+          "text": "`as` is enumerated (div, section, article, aside, nav, header, footer, main, ul, ol, li) instead of any ElementType. `form` is left out because a <form> in a shadow root does not own slotted controls."
+        },
+        {
+          "id": "STACK-03",
+          "type": "approved-api-difference",
+          "text": "The host carries the sizes (width, height, max-width, min-height) and an inner part=\"base\" box carries flex, gap and padding, so a percentage size resolves against the stack's parent and padding survives an application reset. Custom properties inherit through slots, so the host resets the private box values for nested stacks."
+        },
+        {
+          "id": "STACK-04",
+          "type": "a11y-improvement",
+          "text": "A stack rendered as ul or ol gets role=\"list\" on the inner element so list semantics survive list-style:none in Safari; aria-* on the host is mirrored onto a non-div inner element so a landmark can be named."
+        },
+        {
+          "id": "STACK-05",
+          "type": "approved-api-difference",
+          "text": "isScrollable is the `scrollable` boolean attribute."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/core/src/mixins/box-props.ts",
+          "reason": "Optional hardening: BoxPropsMixin removes a custom property when its attribute goes away, but custom properties inherit through the flat tree, so a nested box reads its parent's padding/size unless its own sheet resets them. The layout folders reset `--_box-*` to `initial` on :host (and write the values on the host, see STACK-03). Writing `initial` instead of removing the property would make the reset part of the mixin."
+        }
+      ],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:css-layout] flexbox, gap, logical properties, flex items; [mwg:styling-web-components] host rules, part=base, custom-property inheritance; [mwg:shadow-dom] slots inside the flex container; [mwg:accessible-web-components] landmark and list semantics in the shadow root, aria delegation; [mwg:custom-elements] reflection of enumerated attributes."
+    },
+    "core.stack-item": {
+      "tag": "tct-stack-item",
+      "status": "implemented",
+      "upstream": {
+        "name": "StackItem",
+        "path": "packages/core/src/Stack/StackItem.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "static"
+        },
+        {
+          "upstream": "isScrollable",
+          "kind": "prop",
+          "target": "scrollable",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "crossAlignSelf",
+          "kind": "prop",
+          "target": "cross-align-self",
+          "as": "attribute",
+          "reflect": true
+        },
+        {"upstream": "as", "kind": "prop", "target": "as", "as": "attribute", "default": "div"},
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style on the host (it is the flex item), or ::part(base)."
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "The element itself is the handle."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "stackItem",
+          "as": "waived",
+          "reason": "StyleX utility that adds flex-item styles to any element. tct-stack-item is the element form; a plain element uses flex, min-width and min-height declarations."
+        }
+      ],
+      "keyboard": [],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "STACKITEM-01",
+          "type": "approved-api-difference",
+          "text": "The host is the flex item: size and cross-align-self are reflected attributes read by :host rules, so consumer styles on <tct-stack-item> (margin, width, flex) reach the flex item directly."
+        },
+        {
+          "id": "STACKITEM-02",
+          "type": "a11y-improvement",
+          "text": "as=\"li\" renders a real <li> in the shadow root, which the browser exposes as a list item; axe wants native <li> children of a list, so the docs recommend them."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:css-layout] flex item min-size reset, flex shorthand; [mwg:styling-web-components] host rules."
+    }
+  }
+}

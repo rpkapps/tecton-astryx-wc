@@ -1,0 +1,23 @@
+<!-- title: Page layout; description: A header, a sidebar and a scrolling content region built from nested stacks and fill items. -->
+<div id="page-layout" style="block-size: 320px; display: flex; border: var(--border-width) solid var(--color-border)">
+  <tct-vstack height="100%" style="flex: 1">
+    <tct-hstack padding="3" v-align="center" gap="3" style="border-block-end: var(--border-width) solid var(--color-border)">
+      <tct-stack-item size="fill"><strong>Workspace</strong></tct-stack-item>
+      <span>Account</span>
+    </tct-hstack>
+    <tct-stack-item size="fill">
+      <tct-hstack height="100%">
+        <tct-stack-item style="inline-size: 140px; border-inline-end: var(--border-width) solid var(--color-border)">
+          <tct-vstack padding="3" gap="2"><span>Overview</span><span>Wells</span><span>Reports</span></tct-vstack>
+        </tct-stack-item>
+        <tct-stack-item size="fill" scrollable>
+          <tct-vstack padding="3" gap="3">
+            <p>The content region grows to fill the space and scrolls on its own.</p>
+            <p style="block-size: 260px">Tall content.</p>
+            <p>End.</p>
+          </tct-vstack>
+        </tct-stack-item>
+      </tct-hstack>
+    </tct-stack-item>
+  </tct-vstack>
+</div>

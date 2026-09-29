@@ -1,0 +1,17 @@
+<!-- title: Alignment; description: h-align distributes along the row (main axis); v-align aligns across it (cross axis). justify and alignment are the aliases. -->
+<div id="alignment" style="display: grid; gap: var(--spacing-4)">
+  <tct-hstack h-align="between" padding="2" style="background: var(--color-background-muted)">
+    <span>h-align="between"</span><span>b</span><span>c</span>
+  </tct-hstack>
+  <tct-hstack h-align="center" padding="2" gap="3" style="background: var(--color-background-muted)">
+    <span>h-align="center"</span><span>b</span>
+  </tct-hstack>
+  <tct-hstack v-align="center" gap="3" min-height="72" style="background: var(--color-background-muted)">
+    <span>v-align="center"</span>
+    <span style="font-size: var(--font-size-2xl)">tall</span>
+  </tct-hstack>
+  <tct-hstack v-align="end" gap="3" min-height="72" style="background: var(--color-background-muted)">
+    <span>v-align="end"</span>
+    <span style="font-size: var(--font-size-2xl)">tall</span>
+  </tct-hstack>
+</div>
