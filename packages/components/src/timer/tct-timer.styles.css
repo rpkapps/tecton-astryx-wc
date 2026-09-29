@@ -1,0 +1,21 @@
+/*
+ * tct-timer. The host is inline text; typography and colour come from the wrapping tct-text (type, size, colour,
+ * weight). The <time> takes them through inheritance and only adds tabular numerals so the reading does not
+ * jitter as digits change. [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: inline;
+  }
+
+  time {
+    display: inline;
+    color: inherit;
+    font-family: inherit;
+    font-size: inherit;
+    font-style: normal;
+    font-variant-numeric: tabular-nums;
+    font-weight: inherit;
+    line-height: inherit;
+  }
+}
