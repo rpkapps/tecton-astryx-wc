@@ -39,6 +39,7 @@ pnpm check          # everything CI runs for Chromium, stops at the first failur
 | `pnpm build`                                | package and CDN builds                                                      |
 | `pnpm build:smoke`                          | loads the built CDN bundle in Chromium (needs a browser; `build` does not)  |
 | `pnpm docs:dev` / `docs:build` / `docs:a11y` | documentation site                                                          |
+| `pnpm preview`                              | builds the docs site and serves it at http://localhost:4321 (`--no-build` reuses the last build) |
 | `pnpm docs:mcp`                             | the built site's live `/mcp` endpoint, over HTTP with the MCP SDK client    |
 | `pnpm check`                                | all of the above, in order                                                  |
 

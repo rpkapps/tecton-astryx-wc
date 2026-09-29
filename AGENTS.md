@@ -82,6 +82,7 @@ docs/                plan/, research/, ARCHITECTURE.md, CONVENTIONS.md
 | `pnpm tokens:check`, `pnpm size`, `pnpm licenses:check` | token drift, size budgets, licence allowlist |
 | `pnpm examples:check` | examples use layout components, no hand-written layout/surface CSS (CONVENTIONS §7) |
 | `pnpm docs:dev` / `pnpm docs:build` / `pnpm docs:a11y` | docs site |
+| `pnpm preview` | build the docs site and serve it like a deployment, `/mcp` included (`--no-build`, `--port`) |
 | **`pnpm check`** | everything above in order; must pass before hand-off |
 
 Environment: Node 22, pnpm 10. Only Chromium is installed locally (`/opt/pw-browsers/chromium`,
