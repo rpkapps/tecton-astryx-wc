@@ -1,0 +1,8 @@
+<!-- title: Full bleed; description: full-bleed extends the rule to the edges of a padded card by cancelling its padding. The card publishes its padding through --container-padding-* properties. -->
+<div id="full-bleed" style="max-inline-size: 360px; padding: var(--spacing-4); border: var(--border-width) solid var(--color-border); border-radius: var(--radius-container); --container-padding-inline-start: var(--spacing-4); --container-padding-inline-end: var(--spacing-4)">
+  <div style="display: grid; gap: var(--spacing-3)">
+    <strong>Card title</strong>
+    <tct-divider full-bleed></tct-divider>
+    <span>Content that stays inside the padding.</span>
+  </div>
+</div>

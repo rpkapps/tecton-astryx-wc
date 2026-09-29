@@ -1,0 +1,126 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "divider",
+  "workPackage": "WP-1",
+  "entries": {
+    "core.divider": {
+      "tag": "tct-divider",
+      "status": "implemented",
+      "upstream": {
+        "name": "Divider",
+        "path": "packages/core/src/Divider/Divider.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "orientation",
+          "kind": "prop",
+          "target": "orientation",
+          "as": "attribute",
+          "reflect": true,
+          "default": "horizontal",
+          "notes": "Also exposed as aria-orientation through ElementInternals."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Plain text; also the separator name (aria-label default). Markup goes in the `label` slot."
+        },
+        {
+          "upstream": "label",
+          "kind": "slot",
+          "target": "label",
+          "as": "slot",
+          "notes": "ReactNode label: the `label` slot (A§7.2)."
+        },
+        {
+          "upstream": "variant",
+          "kind": "prop",
+          "target": "variant",
+          "as": "attribute",
+          "reflect": true,
+          "default": "subtle"
+        },
+        {
+          "upstream": "isFullBleed",
+          "kind": "prop",
+          "target": "full-bleed",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use the host, `::part(base)`, `::part(line)`, `::part(label)` or the documented attributes."
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "The element itself is the handle."
+        },
+        {
+          "upstream": "aria-label",
+          "kind": "prop",
+          "target": "aria-label",
+          "as": "attribute",
+          "notes": "Host attribute; overrides the label-derived name (ElementInternals default)."
+        },
+        {
+          "upstream": "aria-labelledby",
+          "kind": "prop",
+          "target": "aria-labelledby",
+          "as": "attribute",
+          "notes": "Host attribute, resolved in the host tree; overrides the label-derived name."
+        }
+      ],
+      "hooks": [],
+      "keyboard": [],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "DIVIDER-01",
+          "type": "approved-api-difference",
+          "text": "role=\"separator\", aria-orientation and the label-derived name are default ElementInternals state on the host, so host aria-label and aria-labelledby win over the label exactly as upstream lets them, without the aria-labelledby id upstream generates for the rendered label (an id in the shadow root could not be referenced from the host)."
+        },
+        {
+          "id": "DIVIDER-02",
+          "type": "tecton-visual",
+          "text": "The rule takes the Tecton divider roles: subtle is --tecton-color-divider-subtle and strong is --tecton-color-divider-strong (tecton-astryx components.ts `divider`); both weights are one border-width thick (design/components/divider.md: emphasis is colour only)."
+        },
+        {
+          "id": "DIVIDER-03",
+          "type": "a11y-improvement",
+          "text": "Under forced colours the rule is repainted with ButtonBorder, because backgrounds are dropped in that mode and a background-painted hairline would disappear."
+        },
+        {
+          "id": "DIVIDER-04",
+          "type": "approved-api-difference",
+          "text": "full-bleed reads --container-padding-* custom properties (documented as @cssprop) that tct-section and tct-card publish, like upstream; the negative margins sit on part=\"base\"."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components] separator role and name through ElementInternals, no id references across roots; [mwg:css-layout] flex, logical properties; [mwg:styling-web-components] parts base/line/label; [mwg:dark-mode] tokens resolve per colour scheme."
+    }
+  }
+}
