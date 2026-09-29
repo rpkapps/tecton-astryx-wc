@@ -25,7 +25,7 @@ import styles from './tct-badge.styles.css';
  * @upstream Badge
  * @slot - The badge label (used when the `label` attribute is not set).
  * @slot icon - Optional leading icon; always pair it with a text label.
- * @csspart base - The painted pill (Astryx target `astryx-badge`).
+ * @csspart base - The painted pill.
  * @csspart icon - The wrapper of the leading icon.
  * @csspart label - The clipped label text.
  * @cloakDisplay inline-flex

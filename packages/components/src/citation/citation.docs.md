@@ -76,8 +76,7 @@ meaning on its own. The source icon is decorative.
 
 ## Localisation
 
-The name pattern comes from the `@astryx.citation.label` message (`Citation {number}: {title}`) in the 30
-shipped locales; the title, the number and the URL are yours. The chip mirrors in right-to-left contexts.
+The name pattern ("Citation {number}: {title}") is a message translated in all 30 shipped locales; the title, the number and the URL are yours. The chip mirrors in right-to-left contexts.
 
 ## Consumer responsibilities
 

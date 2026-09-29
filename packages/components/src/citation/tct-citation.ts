@@ -31,7 +31,7 @@ import styles from './tct-citation.styles.css';
  * @tag tct-citation
  * @upstream Citation
  * @slot icon - Source icon before the label (label variant only); wins over `source.src`.
- * @csspart base - The chip or badge: the link, or the plain element without a URL (Astryx target `astryx-citation`).
+ * @csspart base - The chip or badge: the link, or the plain element without a URL.
  * @csspart icon - The round wrapper of the source icon.
  * @csspart label - The source title, clipped with an ellipsis.
  * @cloakDisplay inline
@@ -82,7 +82,7 @@ export class TctCitation extends TctElement {
     const title = this.source?.title ?? this.sourceTitle ?? String(number);
     const url = this.source?.url ?? this.sourceUrl;
     const href = url ? (safeUrl(url, {allowData: true}) ?? undefined) : undefined;
-    const name = this.#locale.t('@astryx.citation.label', {number, title});
+    const name = this.#locale.t('label', {number, title});
     const isNumber = this.variant === 'number';
     const content = isNumber ? html`${number}` : this.#renderLabel(title);
     return href

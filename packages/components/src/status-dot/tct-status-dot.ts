@@ -26,7 +26,7 @@ import styles from './tct-status-dot.styles.css';
  * @tag tct-status-dot
  * @upstream StatusDot
  * @slot icon - Optional icon centred in the dot, painted in the variant's ink. Use a different icon per status.
- * @csspart base - The dot (Astryx target `astryx-status-dot`), the `img` that carries the label.
+ * @csspart base - The dot, the `img` that carries the label.
  * @csspart icon - The wrapper of the slotted icon.
  * @csspart tooltip - The tooltip surface, when `tooltip` is set.
  * @cloakDisplay inline-flex

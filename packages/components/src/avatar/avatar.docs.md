@@ -106,8 +106,8 @@ A static avatar with a name tooltip is a tab stop so keyboard users can reveal t
 
 ## Localisation
 
-The messages `@astryx.avatar.nameWithStatus`, `@astryx.avatarGroup.label`, `@astryx.avatarGroup.keyboardHint` and
-`@astryx.avatarGroup.overflow` ship in the 30 catalogs; names, status labels and tooltip text are yours. Groups overlap toward the inline start,
+The composed name with a status ("Jane Doe, Online"), the default group name ("Avatars"), the group keyboard hint and the
+overflow name ("N more") are messages translated in all 30 shipped locales; names, status labels and tooltip text are yours. Groups overlap toward the inline start,
 so a right-to-left facepile mirrors, and the status dot moves to the inline-end corner.
 
 ## Consumer responsibilities

@@ -450,13 +450,20 @@ describe('tct-progress-bar: localisation, accessibility and forced colours', () 
     }
   });
 
-  it('a disabled bar uses the disabled text role (exempt from WCAG 1.4.3) and is otherwise clean', async () => {
+  it('a disabled bar is marked aria-disabled (inactive, exempt from WCAG 1.4.3) and passes axe', async () => {
     const wrapper = await fixture<HTMLElement>(
       html`<div>
         <tct-progress-bar value="30" label="Canceled" disabled has-value-label></tct-progress-bar>
       </div>`,
     );
-    await expectAccessible(wrapper, {rules: {'color-contrast': {enabled: false}}});
+    const bar = wrapper.querySelector<TctProgressBar>('tct-progress-bar')!;
+    expect($(bar, '.base')!.getAttribute('aria-disabled')).toBe('true');
+    // The progressbar keeps its value semantics; only the container says "disabled".
+    expect(track(bar).getAttribute('aria-valuenow')).toBe('30');
+    await expectAccessible(wrapper);
+    bar.disabled = false;
+    await bar.updateComplete;
+    expect($(bar, '.base')!.hasAttribute('aria-disabled')).toBe(false);
   });
 
   it.skipIf(!isChromium)(

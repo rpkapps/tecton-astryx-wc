@@ -60,9 +60,9 @@ const tooltipConverter = {
  * @tag tct-avatar
  * @upstream Avatar
  * @slot status - Corner content, typically a `tct-avatar-status-dot`.
- * @csspart base - The avatar: a `<div>`, or the `<a>` / `<button>` when interactive (Astryx target `astryx-avatar`).
+ * @csspart base - The avatar: a `<div>`, or the `<a>` / `<button>` when interactive.
  * @csspart content - The clipping container of the photo or fallback.
- * @csspart fallback - The initials or default icon surface (Astryx target `astryx-avatar-fallback`).
+ * @csspart fallback - The initials or default icon surface.
  * @csspart status - The positioned wrapper of the status slot.
  * @csspart tooltip - The tooltip surface, when there is one.
  * @fires click - Native click, retargeted from the inner link or button (only when `href` or `interactive`).
@@ -269,7 +269,7 @@ export class TctAvatar extends TctElement {
     const statusLabel = this.#statusLabel;
     const composed =
       nameLabel && statusLabel
-        ? this.#locale.t('@astryx.avatar.nameWithStatus', {name: nameLabel, status: statusLabel})
+        ? this.#locale.t('nameWithStatus', {name: nameLabel, status: statusLabel})
         : (nameLabel ?? statusLabel);
     // A host aria-label wins over the derived name.
     const accessibleName = meaningful(this.getAttribute('aria-label')) ?? composed;

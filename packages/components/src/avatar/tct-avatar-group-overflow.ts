@@ -27,7 +27,7 @@ import styles from './tct-avatar-group-overflow.styles.css';
  * @tag tct-avatar-group-overflow
  * @upstream AvatarGroupOverflow
  * @slot - Custom content instead of the default "+N" label.
- * @csspart base - The chip: a `<button>` when interactive, otherwise a plain element (Astryx target `astryx-avatar-group-overflow`).
+ * @csspart base - The chip: a `<button>` when interactive, otherwise a plain element.
  * @fires click - Native click, retargeted from the inner button (only when `interactive`).
  * @cloakDisplay inline-flex
  */
@@ -81,7 +81,7 @@ export class TctAvatarGroupOverflow extends TctElement {
     const size = group?.numericSize ?? resolveSize('md');
     const shape = group?.shape ?? 'circle';
     const count = Number.isFinite(this.count) ? Math.max(0, this.count) : 0;
-    const label = this.#locale.t('@astryx.avatarGroup.overflow', {count});
+    const label = this.#locale.t('overflow', {count});
     const content = this.#slots.has('default') ? html`<slot></slot>` : `+${count}`;
     const shared = {
       '--_size': `${size}px`,

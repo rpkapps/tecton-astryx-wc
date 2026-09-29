@@ -33,7 +33,7 @@ import styles from './tct-timer.styles.css';
  * @summary An elapsed-time readout that updates itself without re-rendering.
  * @tag tct-timer
  * @upstream Timer
- * @csspart text - The `tct-text` wrapper that carries the typography (Astryx target `astryx-timer`).
+ * @csspart text - The `tct-text` wrapper that carries the typography.
  * @csspart time - The `<time>` element holding the reading.
  * @cloakDisplay inline
  */

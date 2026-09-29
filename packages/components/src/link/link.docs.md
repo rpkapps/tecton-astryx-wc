@@ -102,7 +102,7 @@ description (`aria-describedby`), never the name.
 
 ## Localisation
 
-The new-tab hint is the message `@astryx.link.newTab` in the 30 catalogs (override per link with
+The new-tab hint ("opens in new tab") is a message translated in all 30 shipped locales (override per link with
 `new-tab-label`). Link text and tooltips are yours to translate. The external icon sits at the inline end, so it
 mirrors in right-to-left contexts.
 

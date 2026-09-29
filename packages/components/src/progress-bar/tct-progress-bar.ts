@@ -36,12 +36,12 @@ import {TctProgressBarMark} from './tct-progress-bar-mark.js';
  * @summary A linear progress bar, determinate or indeterminate, with an optional value label and target marks.
  * @tag tct-progress-bar
  * @upstream ProgressBar
- * @csspart base - The column holding the label row and the track (Astryx target `astryx-progress-bar`).
+ * @csspart base - The column holding the label row and the track.
  * @csspart label - The label text.
  * @csspart value-label - The formatted value text.
- * @csspart track - The rail carrying the progressbar semantics (Astryx target `astryx-progress-bar-track`).
- * @csspart fill - The filled segment (Astryx target `astryx-progress-bar-fill`).
- * @csspart mark - A target mark (Astryx target `astryx-progress-bar-mark`); carries `data-placement` (`fill` or `track`) and `data-variant`.
+ * @csspart track - The rail carrying the progressbar semantics.
+ * @csspart fill - The filled segment.
+ * @csspart mark - A target mark; carries `data-placement` (`fill` or `track`) and `data-variant`.
  * @cloakDisplay block
  */
 export class TctProgressBar extends TctElement {
@@ -127,7 +127,9 @@ export class TctProgressBar extends TctElement {
     const fillVariant = this.disabled ? 'disabled' : this.variant;
     const showHeader = !this.labelHidden || showValueLabel;
 
-    return html`<div class="base" part="base">
+    // A disabled (cancelled, inactive) bar says so with aria-disabled on its container: assistive technology
+    // hears "dimmed", and contrast checkers exempt the greyed text (WCAG 1.4.3 inactive components).
+    return html`<div class="base" part="base" aria-disabled=${this.disabled ? 'true' : nothing}>
       ${
         showHeader
           ? html`<div class="header">

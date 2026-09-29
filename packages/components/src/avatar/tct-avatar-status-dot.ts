@@ -51,8 +51,8 @@ const GLYPHS: Readonly<Partial<Record<AvatarStatusDotVariant, 'ring' | 'minus'>>
  * @tag tct-avatar-status-dot
  * @upstream AvatarStatusDot
  * @slot icon - Optional icon inside the dot (medium and large avatars); replaces the built-in glyph. Use a different icon per status.
- * @csspart base - The dot (Astryx target `astryx-avatar-status-dot`).
- * @csspart glyph - The built-in shape glyph (Astryx target `astryx-avatar-status-dot-glyph`).
+ * @csspart base - The dot.
+ * @csspart glyph - The built-in shape glyph.
  * @csspart icon - The wrapper of the slotted icon.
  * @cloakDisplay inline-flex
  */

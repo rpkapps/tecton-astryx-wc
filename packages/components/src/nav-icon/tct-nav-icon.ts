@@ -18,7 +18,7 @@ import styles from './tct-nav-icon.styles.css';
  * @tag tct-nav-icon
  * @upstream NavIcon
  * @slot icon - The icon inside the circle. Unnamed content is treated the same way.
- * @csspart base - The painted circle (Astryx target `astryx-nav-icon`).
+ * @csspart base - The painted circle.
  * @cloakDisplay inline-flex
  */
 export class TctNavIcon extends TctElement {

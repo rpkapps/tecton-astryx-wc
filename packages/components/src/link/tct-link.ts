@@ -50,7 +50,7 @@ import styles from './tct-link.styles.css';
  * @tag tct-link
  * @upstream Link
  * @slot - The link content (text, or an icon with a `label`).
- * @csspart base - The `<a>` or `<button>` (Astryx target `astryx-link`); carries `data-color`.
+ * @csspart base - The `<a>` or `<button>`; carries `data-color`.
  * @csspart text - The `tct-text` around the content.
  * @csspart external-icon - The external-link icon.
  * @csspart tooltip - The tooltip surface, when `tooltip` is set.
@@ -223,9 +223,7 @@ export class TctLink extends TctElement {
                 size="xsm"
                 color="inherit"
               ></tct-icon
-              ><span class="visually-hidden"
-                >${this.newTabLabel ?? this.#locale.t('@astryx.link.newTab')}</span
-              >`
+              ><span class="visually-hidden">${this.newTabLabel ?? this.#locale.t('newTab')}</span>`
           : nothing
       }`;
 

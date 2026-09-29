@@ -40,7 +40,7 @@ const radiusConverter = {
  * @summary A pulsing placeholder for content that is loading.
  * @tag tct-skeleton
  * @upstream Skeleton
- * @csspart base - The painted placeholder (Astryx target `astryx-skeleton`).
+ * @csspart base - The painted placeholder.
  * @cloakDisplay block
  */
 export class TctSkeleton extends TctElement {

@@ -85,7 +85,7 @@
           "as": "attribute",
           "reflect": true,
           "default": false,
-          "notes": "Visual only, as upstream; the progressbar keeps its semantics and is not aria-disabled."
+          "notes": "Visual as upstream, plus aria-disabled on the container (PROGRESS-BAR-05); the progressbar is not aria-disabled itself."
         },
         {
           "upstream": "ref",
@@ -136,6 +136,11 @@
           "id": "PROGRESS-BAR-04",
           "type": "approved-api-difference",
           "text": "Each mark is rendered by the internal helper element tct-progress-bar-mark (own shadow root) so the focusable target and its tooltip surface share one tree; the tooltip is the built-in TooltipController (above, focus trigger always), as upstream's ProgressBarMarkTooltip. The tick itself keeps part=\"mark\" on that host."
+        },
+        {
+          "id": "PROGRESS-BAR-05",
+          "type": "a11y-improvement",
+          "text": "A disabled bar also sets aria-disabled=\"true\" on its container (upstream's disabled is purely visual), so assistive technology hears that the operation is inactive and contrast checkers treat the greyed text as an inactive component (WCAG 1.4.3). The progressbar keeps its value semantics."
         }
       ],
       "tests": {

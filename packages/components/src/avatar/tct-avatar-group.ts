@@ -52,7 +52,7 @@ interface AvatarItem extends HTMLElement {
  * @tag tct-avatar-group
  * @upstream AvatarGroup
  * @slot - `tct-avatar` elements, optionally followed by one `tct-avatar-group-overflow`.
- * @csspart base - The row container with `role="group"` (Astryx target `astryx-avatar-group`).
+ * @csspart base - The row container with `role="group"`.
  * @cloakDisplay inline-flex
  */
 export class TctAvatarGroup extends TctElement {
@@ -156,14 +156,14 @@ export class TctAvatarGroup extends TctElement {
   }
 
   override render(): TemplateResult {
-    const label = this.#locale.t('@astryx.avatarGroup.label', undefined, 'aria-label');
+    const label = this.#locale.t('label', undefined, 'aria-label');
     const hasInteractive = this.#items().length > 0;
     return html`<div class="base" part="base" role="group" aria-label=${label}>
       <slot @slotchange=${this.#onSlotChange}></slot>
       ${
         hasInteractive
           ? html`<span class="visually-hidden" id=${this.#ids.id('hint')}
-              >${this.#locale.t('@astryx.avatarGroup.keyboardHint')}</span
+              >${this.#locale.t('keyboardHint')}</span
             >`
           : nothing
       }

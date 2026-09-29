@@ -25,10 +25,10 @@ import styles from './tct-empty-state.styles.css';
  * @slot heading - Rich title content (used when the `heading` attribute is not set).
  * @slot description - Rich supporting text (used when the `description` attribute is not set).
  * @slot actions - One or two buttons that give the user a next step.
- * @csspart base - The centred column (Astryx target `astryx-empty-state`).
+ * @csspart base - The centred column.
  * @csspart icon - The wrapper of the icon slot.
- * @csspart title - The heading element (Astryx target `astryx-empty-state-title`).
- * @csspart description - The supporting text (Astryx target `astryx-empty-state-description`).
+ * @csspart title - The heading element.
+ * @csspart description - The supporting text.
  * @csspart actions - The row of actions.
  * @cloakDisplay block
  */
