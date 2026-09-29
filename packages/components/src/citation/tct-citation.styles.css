@@ -1,0 +1,115 @@
+/*
+ * tct-citation. The host is inline; `.base` is the chip or badge (the link, or a span without a URL).
+ * Variants set the box; hover paints only on links. [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: inline;
+  }
+
+  .base {
+    display: inline-flex;
+    align-items: center;
+    box-sizing: border-box;
+    color: var(--color-text-secondary);
+    font-size: var(--text-supporting-size);
+    line-height: var(--text-supporting-leading);
+    text-decoration: none;
+    transition-property: background-color, border-color, color;
+    transition-duration: var(--duration-fast-max);
+    transition-timing-function: var(--ease-standard);
+  }
+
+  /* Label variant: a bordered chip with the source title. */
+  :host(:not([variant='number'])) .base {
+    gap: var(--spacing-1);
+    vertical-align: baseline;
+    block-size: var(--spacing-5);
+    max-inline-size: 15em; /* design: the chip never grows past this measure (upstream) */
+    margin-inline-start: var(--spacing-0-5);
+    padding-inline: var(--spacing-2);
+    overflow: hidden;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-element);
+    font-weight: var(--text-supporting-weight);
+  }
+
+  :host(:not([variant='number'])) .base:has(.icon) {
+    padding-inline-start: var(--spacing-0-5);
+  }
+
+  /* Number variant: a superscript badge. */
+  :host([variant='number']) .base {
+    justify-content: center;
+    vertical-align: super;
+    min-inline-size: var(--spacing-5);
+    block-size: var(--spacing-5);
+    padding-inline: var(--spacing-1);
+    border-radius: var(--radius-full);
+    background-color: var(--color-accent-muted);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  a.base {
+    cursor: pointer;
+  }
+
+  .label {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--spacing-4);
+    block-size: var(--spacing-4);
+    overflow: hidden;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-full);
+    background-color: var(--color-background-surface);
+    --_icon-size: var(--spacing-3);
+  }
+
+  .icon img {
+    inline-size: var(--spacing-3);
+    block-size: var(--spacing-3);
+  }
+
+  ::slotted(svg),
+  ::slotted(tct-icon),
+  ::slotted(img) {
+    display: block;
+    inline-size: var(--spacing-3);
+    block-size: var(--spacing-3);
+  }
+}
+
+@layer state {
+  @media (hover: hover) {
+    :host(:not([variant='number'])) a.base:hover {
+      background-color: var(--color-overlay-hover);
+      color: var(--color-text-primary);
+    }
+
+    :host([variant='number']) a.base:hover {
+      background-color: var(--color-overlay-hover);
+    }
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    :host([variant='number']) .base {
+      border: var(--border-width) solid ButtonBorder;
+    }
+
+    a.base {
+      color: LinkText;
+    }
+  }
+}

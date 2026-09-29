@@ -1,0 +1,20 @@
+{
+  "folder": "nav-icon",
+  "elements": {
+    "tct-nav-icon": {
+      "class": "TctNavIcon",
+      "attributes": [],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "icon"
+      ],
+      "events": [],
+      "cssParts": [
+        "base"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

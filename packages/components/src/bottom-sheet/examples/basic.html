@@ -1,0 +1,26 @@
+<!-- title: Basic; description: A sheet rises from the bottom edge with a scrim, a grab handle and Escape or a scrim press to dismiss. It needs a label; the content scrolls in the area below the handle. -->
+<tct-button id="sheet-basic-open" label="Open filters"></tct-button>
+<tct-bottom-sheet id="sheet-basic" label="Filters">
+  <div style="display: grid; gap: var(--spacing-4); padding: var(--spacing-4)">
+    <tct-heading level="3">Filters</tct-heading>
+    <label style="display: flex; align-items: center; gap: var(--spacing-2)">
+      <input type="checkbox" /> In stock
+    </label>
+    <label style="display: flex; align-items: center; gap: var(--spacing-2)">
+      <input type="checkbox" /> On sale
+    </label>
+    <label style="display: flex; align-items: center; gap: var(--spacing-2)">
+      <input type="checkbox" /> Free shipping
+    </label>
+    <tct-button id="sheet-basic-apply" label="Apply"></tct-button>
+  </div>
+</tct-bottom-sheet>
+<script type="module">
+  const sheet = document.getElementById('sheet-basic');
+  document.getElementById('sheet-basic-open').addEventListener('click', () => {
+    sheet.open = true;
+  });
+  document.getElementById('sheet-basic-apply').addEventListener('click', () => {
+    sheet.open = false;
+  });
+</script>

@@ -1,0 +1,154 @@
+/*
+ * tct-overlay. The scrim is absolutely positioned inside a clipping container. Hidden content is only
+ * transparent and click-through (never display: none or visibility: hidden), so it stays in the
+ * accessibility tree and the tab order and reveals on :focus-within. Movement (the strip slide) runs only
+ * without reduced-motion. [mwg:css] [mwg:interactive-content-reveal] (its accessibility guarantee)
+ */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .root {
+    position: relative;
+    overflow: clip;
+    border-radius: var(--_overlay-radius, 0);
+  }
+
+  .scrim {
+    --_scrim-bg: var(--color-overlay);
+
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+    padding: var(--spacing-3);
+    pointer-events: none;
+    color: var(--color-text-primary);
+    opacity: 0;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+  }
+
+  .scrim[data-scrim='dark'] {
+    --_scrim-bg: var(--color-overlay);
+
+    background: var(--_scrim-bg);
+  }
+
+  /* A light wash over the media: the near-white "on dark" ink at 60%. */
+  .scrim[data-scrim='light'] {
+    --_scrim-bg: color-mix(in srgb, var(--color-on-dark) 60%, transparent);
+
+    background: var(--_scrim-bg);
+  }
+
+  .scrim[data-position='fill'] {
+    inset: 0;
+  }
+
+  .scrim[data-position='bottom'] {
+    inset-inline: 0;
+    inset-block-end: 0;
+  }
+
+  .scrim[data-position='top'] {
+    inset-inline: 0;
+    inset-block-start: 0;
+  }
+
+  .scrim[data-alignment='start'] {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+  .scrim[data-alignment='center'] {
+    align-items: center;
+    justify-content: center;
+  }
+
+  .scrim[data-alignment='end'] {
+    align-items: flex-end;
+    justify-content: flex-start;
+  }
+
+  /* Shown: forced open, or show-on="always". */
+  .scrim[data-state='open'] {
+    opacity: 1;
+    pointer-events: auto;
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+
+  /* Hover and focus reveal (CSS only; the hover branch needs a real hover device). */
+  @media (hover: hover) {
+    .root:hover > .scrim[data-state='auto'][data-show-on='hover'] {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  .root:focus-within > .scrim[data-state='auto'] {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  /* Strips slide in from their edge; the slide is movement, so reduced motion keeps only the fade. */
+  @media (prefers-reduced-motion: no-preference) {
+    .scrim {
+      transition:
+        opacity var(--duration-fast) var(--ease-standard),
+        translate var(--duration-fast) var(--ease-standard);
+    }
+
+    .scrim[data-position='bottom']:not([data-state='open']) {
+      translate: 0 100%;
+    }
+
+    .scrim[data-position='top']:not([data-state='open']) {
+      translate: 0 -100%;
+    }
+
+    .scrim[data-position='bottom'][data-state='open'],
+    .scrim[data-position='top'][data-state='open'] {
+      translate: 0 0;
+    }
+
+    .scrim[data-position='bottom'][data-state='open'] {
+      @starting-style {
+        translate: 0 100%;
+      }
+    }
+
+    .scrim[data-position='top'][data-state='open'] {
+      @starting-style {
+        translate: 0 -100%;
+      }
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) and (hover: hover) {
+    .root:hover > .scrim[data-position='bottom'][data-state='auto'][data-show-on='hover'],
+    .root:hover > .scrim[data-position='top'][data-state='auto'][data-show-on='hover'] {
+      translate: 0 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .root:focus-within > .scrim[data-position='bottom'][data-state='auto'],
+    .root:focus-within > .scrim[data-position='top'][data-state='auto'] {
+      translate: 0 0;
+    }
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .scrim[data-scrim] {
+      border: var(--border-width) solid CanvasText;
+      background: Canvas;
+      color: CanvasText;
+    }
+  }
+}

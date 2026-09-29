@@ -1,0 +1,76 @@
+/*
+ * tct-status-dot. A fixed 8px dot. Plate and ink are a pair per variant, chosen so a slotted icon (painted
+ * from currentcolor) can never drift out of contrast: the dedicated --color-on-* ink for the status roles
+ * (on-warning is a fixed dark ink that keeps an icon legible on the yellow plate), the surface colour on the
+ * neutral grey plate. [mwg:styling-web-components] [mwg:css]
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+    flex-shrink: 0;
+    vertical-align: middle;
+  }
+
+  .dot {
+    --_bg: var(--tecton-color-status-success);
+    --_fg: var(--color-on-success);
+    --_icon-size: 8px; /* design: an icon fills the same fixed field as the dot (upstream) */
+
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    inline-size: 8px; /* design: fixed dot size (upstream) */
+    block-size: 8px;
+    border-radius: var(--radius-full);
+    background-color: var(--_bg);
+    color: var(--_fg);
+  }
+
+  :host([variant='warning']) .dot {
+    --_bg: var(--tecton-color-status-warning);
+    --_fg: var(--color-on-warning);
+  }
+
+  :host([variant='error']) .dot {
+    --_bg: var(--tecton-color-status-error);
+    --_fg: var(--color-on-error);
+  }
+
+  :host([variant='accent']) .dot {
+    --_bg: var(--color-accent);
+    --_fg: var(--color-on-accent);
+  }
+
+  :host([variant='neutral']) .dot {
+    --_bg: var(--color-icon-secondary);
+    --_fg: var(--color-background-surface);
+  }
+
+  .icon-slot {
+    line-height: 0;
+    inline-size: 8px;
+    block-size: 8px;
+  }
+
+  :host([pulsing]) .dot {
+    animation: tct-pulse 2s ease-in-out infinite;
+    /* Reduced motion stops the pulse: it is decorative (upstream). */
+    --_animation-reduced: none;
+  }
+}
+
+@layer a11y {
+  /* Forced colours strip painted backgrounds: paint the dot in a system colour so it stays visible; the ink
+     stays Canvas so a slotted icon keeps contrast. */
+  @media (forced-colors: active) {
+    .dot {
+      background-color: CanvasText;
+      color: Canvas;
+    }
+
+    :host([variant='neutral']) .dot {
+      background-color: GrayText;
+    }
+  }
+}

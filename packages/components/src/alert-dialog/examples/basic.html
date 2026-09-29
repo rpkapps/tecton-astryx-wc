@@ -1,0 +1,17 @@
+<!-- title: Basic; description: Confirm a destructive action. Cancel takes the initial focus, Escape cancels, and the dialog does not close when the backdrop is pressed. The action button raises tct-action and the dialog closes only when you say so. -->
+<button type="button" id="alert-basic-open">Delete project</button>
+<tct-alert-dialog
+  id="alert-basic"
+  heading="Delete project?"
+  description="This action cannot be undone. The project and all of its files will be permanently removed."
+  action-label="Delete project"
+></tct-alert-dialog>
+<script type="module">
+  const dialog = document.getElementById('alert-basic');
+  document.getElementById('alert-basic-open').addEventListener('click', () => {
+    dialog.open = true;
+  });
+  dialog.addEventListener('tct-action', () => {
+    dialog.open = false;
+  });
+</script>

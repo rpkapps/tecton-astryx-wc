@@ -1,0 +1,37 @@
+/*
+ * tct-nav-icon. The host only takes part in layout; the circle is `.base`. Fill and ink are the accent
+ * roles; the slotted glyph is sized through the shared `--_icon-size` seam. [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+
+  .base {
+    --_icon-size: var(--tecton-icon-size-100);
+
+    box-sizing: border-box;
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--size-element-md);
+    block-size: var(--size-element-md);
+    /* Transparent, not absent: forced colours draw it as the circle's edge (A§6.6). */
+    border: var(--border-width) solid transparent;
+    border-radius: 50%;
+    background-color: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .base {
+      border-color: ButtonBorder;
+      background-color: Canvas;
+      color: CanvasText;
+    }
+  }
+}

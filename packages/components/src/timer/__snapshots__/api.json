@@ -1,0 +1,88 @@
+{
+  "folder": "timer",
+  "elements": {
+    "tct-timer": {
+      "class": "TctTimer",
+      "attributes": [
+        {
+          "name": "color",
+          "property": "color",
+          "type": "TextColor",
+          "default": "'secondary'",
+          "reflects": true
+        },
+        {
+          "name": "format",
+          "property": "format",
+          "type": "TimerFormat",
+          "values": [
+            "elapsed",
+            "clock"
+          ],
+          "default": "'elapsed'",
+          "reflects": true
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "TextSize | undefined",
+          "values": [
+            "4xs",
+            "3xs",
+            "2xs",
+            "xsm",
+            "sm",
+            "base",
+            "lg",
+            "xl",
+            "2xl",
+            "3xl",
+            "4xl"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "start-time",
+          "property": "startTime",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "type",
+          "property": "type",
+          "type": "TextType",
+          "default": "'supporting'",
+          "reflects": true
+        },
+        {
+          "name": "weight",
+          "property": "weight",
+          "type": "TextWeight | undefined",
+          "values": [
+            "normal",
+            "medium",
+            "semibold",
+            "bold"
+          ],
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "timeElement",
+          "type": "HTMLTimeElement | null",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [],
+      "events": [],
+      "cssParts": [
+        "text",
+        "time"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

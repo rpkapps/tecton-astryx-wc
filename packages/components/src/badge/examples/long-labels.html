@@ -1,0 +1,12 @@
+<!-- title: Long labels in tight space; description: A label wider than its container is clipped with an ellipsis; the icon holds its place and the full text is in the title. -->
+<div style="display: flex; flex-direction: column; gap: var(--spacing-4)">
+  <div style="inline-size: 100px; outline: 1px dashed var(--color-border); padding: var(--spacing-1)">
+    <tct-badge variant="pink">Awaiting security review</tct-badge>
+  </div>
+  <div style="inline-size: 140px; outline: 1px dashed var(--color-border); padding: var(--spacing-1)">
+    <tct-badge variant="warning"><tct-icon slot="icon" name="warning"></tct-icon>Awaiting security review</tct-badge>
+  </div>
+  <div style="inline-size: 300px; outline: 1px dashed var(--color-border); padding: var(--spacing-1)">
+    <tct-badge variant="success">Active</tct-badge>
+  </div>
+</div>

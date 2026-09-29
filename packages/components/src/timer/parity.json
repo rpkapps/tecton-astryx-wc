@@ -1,0 +1,126 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "timer",
+  "workPackage": "WP-2",
+  "entries": {
+    "core.timer": {
+      "tag": "tct-timer",
+      "status": "implemented",
+      "upstream": {
+        "name": "Timer",
+        "path": "packages/core/src/Timer/Timer.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "startTime",
+          "kind": "prop",
+          "target": "start-time",
+          "as": "attribute",
+          "notes": "Number attribute and the startTime property; a non-finite value counts as omitted (counts from connection)."
+        },
+        {
+          "upstream": "format",
+          "kind": "prop",
+          "target": "format",
+          "as": "attribute",
+          "reflect": true,
+          "default": "elapsed"
+        },
+        {
+          "upstream": "type",
+          "kind": "prop",
+          "target": "type",
+          "as": "attribute",
+          "reflect": true,
+          "default": "supporting",
+          "notes": "Forwarded to the wrapping tct-text."
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Forwarded to the wrapping tct-text."
+        },
+        {
+          "upstream": "color",
+          "kind": "prop",
+          "target": "color",
+          "as": "attribute",
+          "reflect": true,
+          "default": "secondary",
+          "notes": "Forwarded to the wrapping tct-text."
+        },
+        {
+          "upstream": "weight",
+          "kind": "prop",
+          "target": "weight",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Forwarded to the wrapping tct-text."
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "target": "timeElement",
+          "as": "property",
+          "notes": "Upstream forwards the ref to the <time>; timeElement is that node."
+        },
+        {
+          "upstream": "className",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: class and style go on the host, which stands for upstream's Text wrapper."
+        },
+        {
+          "upstream": "style",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: class and style go on the host, which stands for upstream's Text wrapper."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle family: data-* attributes are set on the host directly; nothing to map."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(text|time) or the tokens."
+        }
+      ],
+      "keyboard": [],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "TIMER-01",
+          "type": "approved-api-difference",
+          "text": "Digits and unit letters are localised with Intl.NumberFormat (unit style, narrow) for the element's language; English output is identical to upstream (34s, 2m 08s, 1h 02m, 2:08, 1:02:33). Upstream is English only."
+        },
+        {
+          "id": "TIMER-02",
+          "type": "approved-api-difference",
+          "text": "Arbitrary props on the <time> (id, aria-live, handlers) go on the host instead: an aria-live on the host makes the readout a live region, and events from the <time> bubble to the host. The <time> is part=\"time\" and timeElement."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "rtl": false,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 41,
+      "notes": "Guides: [mwg:format-human-readable-durations] Intl.NumberFormat unit style used instead of Intl.DurationFormat to keep the zero-padded shape; [mwg:styling-web-components] parts and inherited typography. Size: measured 38.94 kB gzip on 2026-09-29 (family entry with lit, core and the shared tooltip/layer/locale runtime inlined), budget 41 kB; revisit when the shared runtime is split out of family entries."
+    }
+  }
+}

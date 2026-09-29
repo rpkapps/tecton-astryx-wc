@@ -1,0 +1,9 @@
+/*
+ * tct-link-provider is a light-DOM provider: it draws nothing and must not take part in layout, so its
+ * children lay out as if it were not there. Delivered through the shared light-dom.css. [mwg:styling-web-components]
+ */
+@layer tecton.light-dom {
+  :where(tct-link-provider) {
+    display: contents;
+  }
+}

@@ -1,0 +1,11 @@
+<!-- title: Basic; description: toast() shows a toast and returns a function that dismisses it. An info toast hides itself after five seconds and pauses while you hover or focus it. -->
+<div id="toast-basic-root" style="display: flex; gap: var(--spacing-3)">
+  <button type="button" id="toast-basic-info">Show toast</button>
+  <button type="button" id="toast-basic-error">Show error</button>
+  <script type="module">
+    import {toast} from '@tecton-astryx/components/toast/toast.api.js';
+    const root = document.getElementById('toast-basic-root');
+    root.querySelector('#toast-basic-info').addEventListener('click', () => toast({body: 'Changes saved'}));
+    root.querySelector('#toast-basic-error').addEventListener('click', () => toast({body: 'Could not save the changes', type: 'error'}));
+  </script>
+</div>

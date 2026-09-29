@@ -1,0 +1,57 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "nav-icon",
+  "workPackage": "WP-2",
+  "entries": {
+    "core.nav-icon": {
+      "tag": "tct-nav-icon",
+      "status": "implemented",
+      "upstream": {
+        "name": "NavIcon",
+        "path": "packages/core/src/NavIcon/NavIcon.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "icon",
+          "kind": "slot",
+          "target": "icon",
+          "as": "slot",
+          "notes": "Named slot per A§7.2; unnamed content is projected into the same circle (the natural way to write it)."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base) or the tokens."
+        }
+      ],
+      "keyboard": [],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "NAVICON-01",
+          "type": "approved-api-difference",
+          "text": "The host is inline-flex (upstream's root is a block-level flex span that only ever sits inside a flex container); the circle keeps its fixed 32px size and never shrinks."
+        },
+        {
+          "id": "NAVICON-02",
+          "type": "tecton-visual",
+          "text": "The circle carries a transparent 1px border so forced colours draw its edge; the box stays 32px (border-box). Fill and ink are --color-accent / --color-on-accent, the Tecton primary-action pair."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "rtl": true,
+        "forcedColors": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:shadow-dom] slots; [mwg:styling-web-components] parts and slotted sizing; [mwg:css] forced colours."
+    }
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "empty-state",
+  "workPackage": "WP-2",
+  "entries": {
+    "core.empty-state": {
+      "tag": "tct-empty-state",
+      "status": "implemented",
+      "upstream": {
+        "name": "EmptyState",
+        "path": "packages/core/src/EmptyState/EmptyState.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "title",
+          "kind": "prop",
+          "target": "heading",
+          "as": "attribute",
+          "notes": "`title` is a global attribute and is never shadowed (A§7.1); a heading is `heading` (+ slot=\"heading\" for rich content), A§7.2."
+        },
+        {
+          "upstream": "description",
+          "kind": "prop",
+          "target": "description",
+          "as": "attribute",
+          "notes": "Plain text; the `description` slot carries rich content."
+        },
+        {
+          "upstream": "icon",
+          "kind": "slot",
+          "target": "icon",
+          "as": "slot",
+          "notes": "Wrapped in an aria-hidden container, drawn only when slotted."
+        },
+        {
+          "upstream": "actions",
+          "kind": "slot",
+          "target": "actions",
+          "as": "slot",
+          "notes": "Row by default, column when compact."
+        },
+        {
+          "upstream": "headingLevel",
+          "kind": "prop",
+          "target": "headingLevel",
+          "as": "attribute",
+          "default": "3",
+          "notes": "Attribute heading-level; invalid values fall back to 3."
+        },
+        {
+          "upstream": "isCompact",
+          "kind": "prop",
+          "target": "compact",
+          "as": "attribute",
+          "reflect": true,
+          "default": "false"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base|icon|title|description|actions) or the tokens."
+        }
+      ],
+      "keyboard": [],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "EMPTYSTATE-01",
+          "type": "approved-api-difference",
+          "text": "role=\"status\" is the default ElementInternals role of the host (not a role attribute), so a host role attribute overrides it. The title is a native h1-h6 inside the shadow root chosen with a switch over six static templates; no dynamic tag names are ever created."
+        },
+        {
+          "id": "EMPTYSTATE-02",
+          "type": "approved-api-difference",
+          "text": "`title` (the message) is `heading` because `title` is a global attribute; rich titles and descriptions use the `heading` and `description` slots (upstream accepted only strings for both)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "rtl": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:shadow-dom] slot presence and whitespace; [mwg:accessible-web-components] status role through ElementInternals; [mwg:styling-web-components] parts and private custom properties."
+    }
+  }
+}

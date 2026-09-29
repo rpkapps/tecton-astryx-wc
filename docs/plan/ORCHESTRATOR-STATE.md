@@ -15,19 +15,31 @@ temporary button probes are at `<scratchpad>/button-probes.test.ts`. To run them
 
 ## Running streams (Sonnet, one worktree each under `.claude/worktrees/agent-<id>`)
 
-| Stream | Agent id | Status / waiting on |
-| --- | --- | --- |
-| WP-F M5a slice A (styles, icon, text, heading, spinner, button, visually-hidden, theme, size-provider, i18n-provider) | abc9ea6dbf1c367fb | Merged so far: styles, icon, text, heading, layer and typography styles, button, spinner. **Owes the tct-button form-bridge fix** (Enter in a native input does not use tct-button as the default submitter; with 2 text fields nothing happens). Then docs/parity and the providers. |
-| WP-F M5b slice B (field, field-status, text-input, dialog, tooltip; owns `styles/field.styles.css`) | af749f906c2c855bf | Asked to commit tct-tooltip and tct-dialog early and notify. |
-| WP-F M6 (CEM, API snapshots, generators, agent registry, build/CDN, size, Astro docs site) | ab361e81d23c847ee | Told that WP-D owns `apps/docs/src/content/docs/guides/`. |
-| WP-1 layout primitives | acded57bd1ca4753e | Running. |
-| WP-2 content & status | a3ee263248691897a | 6/10 done. Waits on tct-tooltip (B) and the provider pattern (A). |
-| WP-3 actions & disclosure | a34a46febba69f09a | 7/10 done. Finishing IconButton, ToggleButton and Banner now that Button has landed. Shared requests to review at hand-off: base `[hidden]:not([hidden=until-found])`; tct-button `data-tct-edge-comp`; `keyboardHintStyles` location. |
-| WP-4 overlay surfaces | ac379c35b2b1eb75d | Popover done. Waits on tct-dialog (B) for AlertDialog. |
-| WP-5 collections & rows | a600f0be0a37778ec | Waits on tct-link (WP-2) for Item. |
+The original wave-1 agents were stopped by the owner on 2026-09-29; replacements resumed the same
+worktrees (the old ids live on only as worktree directory names).
 
-Finished and merged: research (4 Opus agents), architecture (Opus), M1, M2 (tokens/fonts/icons), M3/M4
-(core/locales/testing), D-013 follow-ups, WP-D docs guides.
+| Stream | Agent id | Worktree | Status / waiting on |
+| --- | --- | --- | --- |
+| WP-1 layout primitives & static text | a1afeefa92cab3d5f | agent-acded57bd1ca4753e | Resumed. Priority: layout recipes for the examples migration. |
+| WP-2 content & status | af36d3808bd5519a6 | agent-a3ee263248691897a | Resumed; tooltip, dialog, providers now merged. |
+| WP-4 overlay surfaces | a86b7f259ce8499ef | agent-ac379c35b2b1eb75d | Resumed; AlertDialog on the real tct-dialog. |
+| M6 docs site: D-015 public text + docs:a11y | adac51d71c6a610e2 | agent-ab361e81d23c847ee | Resumed; the local 48 commits are not pushed until docs:a11y is green. |
+| WP-7 basic form controls | ae829a7c68f66a548 | (own) | Started 2026-09-29. |
+
+Merged: WP-F M1–M6, slices A and B, WP-3, WP-5, D-015 text.
+
+## Orchestrator queue (in order)
+
+1. Merge WP-1 first → add the examples lint rule (no layout properties in example `style=`), then
+   the examples migration pass (task: 142/158 examples use inline layout CSS; split by folder,
+   screenshot before/after, light and dark).
+2. D-015 package-scope rename `@tecton-astryx/*` → `@tecton-wc/*` and shipped message ids
+   `@astryx.*` → `@tct.*` (upstream locale catalogs stay byte-identical; map in the generator), token
+   status id `tecton-astryx`, `/vendor/tecton-astryx/` paths. Do it in a quiet window after the
+   wave-1 merges; streams then merge and update their imports.
+3. WP-AI (after the rename; creates `packages/cli` = `@tecton-wc/cli`, MCP SDK approved).
+4. Wave 2: WP-6 (1,4,5), WP-8 (1), WP-9 (1,2) as their dependencies merge.
+5. Performance WP: lazy ICU parser + lazy truncation tooltip, remove provisional size budgets.
 
 ## Next actions
 

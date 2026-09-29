@@ -1,0 +1,19 @@
+<!-- title: Custom labels and variant; description: Make the action label specific ("Discard changes", not "OK") and rename Cancel when the safe choice has a better name. action-variant takes any button variant; the destructive default suits deletion. -->
+<button type="button" id="alert-labels-open">Close editor</button>
+<tct-alert-dialog
+  id="alert-labels"
+  heading="Discard unsaved changes?"
+  description="You have edits that have not been saved. Closing the editor now loses them."
+  cancel-label="Keep editing"
+  action-label="Discard changes"
+  action-variant="primary"
+></tct-alert-dialog>
+<script type="module">
+  const dialog = document.getElementById('alert-labels');
+  document.getElementById('alert-labels-open').addEventListener('click', () => {
+    dialog.open = true;
+  });
+  dialog.addEventListener('tct-action', () => {
+    dialog.open = false;
+  });
+</script>

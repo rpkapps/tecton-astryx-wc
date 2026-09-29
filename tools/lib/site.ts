@@ -50,7 +50,5 @@ export function componentUrl(category: string, folder: string): string {
 }
 
 export const REFERENCE_URLS = {
-  parity: '/reference/parity-status/',
-  differences: '/reference/differences-and-open-items/',
   tokens: '/reference/tokens/',
 } as const;

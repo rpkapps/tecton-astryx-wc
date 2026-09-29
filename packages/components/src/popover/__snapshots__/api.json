@@ -1,0 +1,163 @@
+{
+  "folder": "popover",
+  "elements": {
+    "tct-popover": {
+      "class": "TctPopover",
+      "attributes": [
+        {
+          "name": "alignment",
+          "property": "alignment",
+          "type": "PopoverAlignment",
+          "default": "'start'",
+          "reflects": false
+        },
+        {
+          "name": "anchor",
+          "property": "anchor",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "close-label",
+          "property": "closeLabel",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "no-auto-focus",
+          "property": "noAutoFocus",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "no-close-button",
+          "property": "noCloseButton",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "no-escape-dismiss",
+          "property": "noEscapeDismiss",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "no-light-dismiss",
+          "property": "noLightDismiss",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "non-modal",
+          "property": "nonModal",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "open",
+          "property": "open",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "placement",
+          "property": "placement",
+          "type": "PopoverPlacement",
+          "default": "'below'",
+          "reflects": false
+        },
+        {
+          "name": "popup-role",
+          "property": "popupRole",
+          "type": "PopoverRole",
+          "values": [
+            "dialog",
+            "none"
+          ],
+          "default": "'dialog'",
+          "reflects": false
+        },
+        {
+          "name": "width",
+          "property": "width",
+          "type": "string | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "anchorElement",
+          "type": "HTMLElement | null",
+          "default": "null",
+          "readonly": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "hide",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "requestClose",
+          "signature": "(reason: ChangeReason) => void"
+        },
+        {
+          "name": "show",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "toggle",
+          "signature": "(force?: boolean) => Promise<void>"
+        }
+      ],
+      "slots": [
+        "(default)",
+        "content"
+      ],
+      "events": [
+        {
+          "name": "tct-after-open-change",
+          "class": "TctAfterOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "anchor",
+        "close-button",
+        "popover"
+      ],
+      "cssStates": [
+        "open"
+      ],
+      "cssProperties": []
+    }
+  }
+}

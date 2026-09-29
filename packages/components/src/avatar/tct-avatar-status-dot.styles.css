@@ -1,0 +1,66 @@
+/*
+ * tct-avatar-status-dot. Size, border and icon size arrive as private custom properties from the avatar
+ * size tier (data, computed in the class). Plate and ink are Tecton status roles; the built-in glyph and
+ * any slotted icon paint from currentcolor, so plate and ink can never drift out of contrast.
+ * [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+  }
+
+  .dot {
+    --_bg: var(--tecton-color-status-success);
+    --_fg: var(--color-background-surface);
+
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--_dot-size);
+    block-size: var(--_dot-size);
+    border: var(--_dot-border) solid var(--color-background-surface);
+    border-radius: var(--radius-full);
+    background-color: var(--_bg);
+    color: var(--_fg);
+  }
+
+  /* The ring variant inverts: a hollow shape only reads as hollow if its interior is not the variant
+     colour, so the plate is the surface and the colour moves to the stroke. */
+  :host([variant='neutral']) .dot {
+    --_bg: var(--color-background-surface);
+    --_fg: var(--color-text-secondary);
+  }
+
+  :host([variant='error']) .dot {
+    --_bg: var(--tecton-color-status-error);
+    --_fg: var(--color-background-surface);
+  }
+
+  .icon-slot {
+    line-height: 0;
+    min-inline-size: 0;
+    min-block-size: 0;
+  }
+
+  .glyph {
+    display: block;
+  }
+}
+
+@layer a11y {
+  /* Forced colours strip the plate; keep each shape: success is a solid disc, neutral a hollow ring,
+     error a solid disc with a bar. The stroke and any icon follow currentcolor. */
+  @media (forced-colors: active) {
+    .dot {
+      border-color: Canvas;
+      background-color: CanvasText;
+      color: Canvas;
+    }
+
+    :host([variant='neutral']) .dot {
+      background-color: Canvas;
+      color: CanvasText;
+    }
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "progress-bar",
+  "workPackage": "WP-2",
+  "entries": {
+    "core.progress-bar": {
+      "tag": "tct-progress-bar",
+      "status": "implemented",
+      "upstream": {
+        "name": "ProgressBar",
+        "path": "packages/core/src/ProgressBar/ProgressBar.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "attribute",
+          "default": 0,
+          "notes": "Number attribute; clamped to 0..max, non-finite counts as 0."
+        },
+        {
+          "upstream": "max",
+          "kind": "prop",
+          "target": "max",
+          "as": "attribute",
+          "default": 100
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Required for accessibility; names the progressbar via aria-labelledby."
+        },
+        {
+          "upstream": "isLabelHidden",
+          "kind": "prop",
+          "target": "label-hidden",
+          "as": "attribute",
+          "default": false
+        },
+        {
+          "upstream": "hasValueLabel",
+          "kind": "prop",
+          "target": "has-value-label",
+          "as": "attribute",
+          "default": false
+        },
+        {
+          "upstream": "formatValueLabel",
+          "kind": "prop",
+          "target": "formatValueLabel",
+          "as": "property",
+          "notes": "Function; property only."
+        },
+        {
+          "upstream": "variant",
+          "kind": "prop",
+          "target": "variant",
+          "as": "attribute",
+          "reflect": true,
+          "default": "accent"
+        },
+        {
+          "upstream": "isIndeterminate",
+          "kind": "prop",
+          "target": "indeterminate",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "marks",
+          "kind": "prop",
+          "target": "marks",
+          "as": "property",
+          "notes": "Array of {value, label}; property only. Values outside 0..max clamp to the track edges."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Visual as upstream, plus aria-disabled on the container (PROGRESS-BAR-05); the progressbar is not aria-disabled itself."
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "A-ref: the element itself is the ref; the track is reachable as part=\"track\"."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle family: data-* attributes are set on the host directly; nothing to map."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base|label|value-label|track|fill|mark) or the tokens."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Moves focus to each target mark in order and opens its tooltip; Escape closes the tooltip.",
+          "when": "marks is set"
+        }
+      ],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "PROGRESS-BAR-01",
+          "type": "tecton-visual",
+          "text": "Fills are Tecton roles: accent uses --tecton-color-progress-primary on --color-track; success, warning and error use the filled status roles; neutral uses the neutral status role. Disabled greys fill and text."
+        },
+        {
+          "id": "PROGRESS-BAR-02",
+          "type": "a11y-improvement",
+          "text": "Marks are rendered beside the progressbar, not inside it, as focusable role=img elements named by their label, so the progressbar's children stay presentational and axe accepts the tree."
+        },
+        {
+          "id": "PROGRESS-BAR-03",
+          "type": "approved-api-difference",
+          "text": "The default value text is the percentage formatted with Intl.NumberFormat for the element's language (via LocaleController) instead of a fixed string."
+        },
+        {
+          "id": "PROGRESS-BAR-04",
+          "type": "approved-api-difference",
+          "text": "Each mark is rendered by the internal helper element tct-progress-bar-mark (own shadow root) so the focusable target and its tooltip surface share one tree; the tooltip is the built-in TooltipController (above, focus trigger always), as upstream's ProgressBarMarkTooltip. The tick itself keeps part=\"mark\" on that host."
+        },
+        {
+          "id": "PROGRESS-BAR-05",
+          "type": "a11y-improvement",
+          "text": "A disabled bar also sets aria-disabled=\"true\" on its container (upstream's disabled is purely visual), so assistive technology hears that the operation is inactive and contrast checkers treat the greyed text as an inactive component (WCAG 1.4.3). The progressbar keeps its value semantics."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 41,
+      "notes": "Guides: [mwg:progress-ring] native <progress> not used (cannot carry marks or custom value text); [mwg:spinner] reduced-motion slowdown; [mwg:css] --_animation-reduced and forced colours; [mwg:accessible-web-components] ids in one root. [mwg:interest-triggered-tooltips] and [mwg:position-aware-tooltips] for the mark tooltips. Size: measured 38.37 kB gzip on 2026-09-29 (family entry with lit, core and the shared tooltip/layer/locale runtime inlined), budget 41 kB; revisit when the shared runtime is split out of family entries."
+    }
+  }
+}

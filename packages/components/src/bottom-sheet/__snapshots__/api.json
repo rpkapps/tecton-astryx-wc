@@ -1,0 +1,225 @@
+{
+  "folder": "bottom-sheet",
+  "elements": {
+    "tct-bottom-sheet": {
+      "class": "TctBottomSheet",
+      "attributes": [
+        {
+          "name": "final-focus",
+          "property": "finalFocus",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "handle-label",
+          "property": "handleLabel",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "height",
+          "property": "height",
+          "type": "string | number",
+          "default": "'capped'",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "no-scrim",
+          "property": "noScrim",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "open",
+          "property": "open",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "purpose",
+          "property": "purpose",
+          "type": "BottomSheetPurpose",
+          "values": [
+            "required",
+            "form",
+            "info"
+          ],
+          "default": "'info'",
+          "reflects": true
+        },
+        {
+          "name": "sheet-id",
+          "property": "sheetId",
+          "type": "string | undefined",
+          "reflects": true
+        },
+        {
+          "name": "snap-points",
+          "property": "snapPoints",
+          "type": "readonly BottomSheetSnapPoint[]",
+          "default": "[]",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "finalFocusElement",
+          "type": "HTMLElement | null",
+          "default": "null",
+          "readonly": false
+        },
+        {
+          "name": "snapCount",
+          "type": "number",
+          "readonly": true
+        },
+        {
+          "name": "snapIndex",
+          "type": "number",
+          "readonly": true
+        },
+        {
+          "name": "visibleHeight",
+          "type": "number",
+          "readonly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "hide",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "requestClose",
+          "signature": "(reason: ChangeReason) => void"
+        },
+        {
+          "name": "show",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "snapTo",
+          "signature": "(index: number) => void"
+        },
+        {
+          "name": "toggle",
+          "signature": "(force?: boolean) => Promise<void>"
+        }
+      ],
+      "slots": [
+        "(default)"
+      ],
+      "events": [
+        {
+          "name": "tct-after-open-change",
+          "class": "TctAfterOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        },
+        {
+          "name": "tct-snap-change",
+          "class": "TctSnapChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        }
+      ],
+      "cssParts": [
+        "body",
+        "dialog",
+        "handle",
+        "sheet"
+      ],
+      "cssStates": [
+        "open"
+      ],
+      "cssProperties": []
+    },
+    "tct-bottom-sheet-switcher": {
+      "class": "TctBottomSheetSwitcher",
+      "attributes": [
+        {
+          "name": "active-sheet",
+          "property": "activeSheet",
+          "type": "string | null",
+          "default": "null",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "no-scrim",
+          "property": "noScrim",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "settled",
+          "type": "Promise<void>",
+          "readonly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "requestClose",
+          "signature": "(reason: ChangeReason) => void"
+        }
+      ],
+      "slots": [
+        "(default)"
+      ],
+      "events": [
+        {
+          "name": "tct-after-open-change",
+          "class": "TctAfterOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "dialog"
+      ],
+      "cssStates": [
+        "open"
+      ],
+      "cssProperties": []
+    }
+  }
+}

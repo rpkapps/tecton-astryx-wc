@@ -1,14 +1,13 @@
 ---
-/** Header facts of a generated component page: tag(s), status, category, upstream mapping. */
+/** Header facts of a generated component page: tag(s), status, category. */
 interface Props {
   tags: string[];
   status: string;
   category: string;
-  upstream: string[];
   provisional?: number;
 }
 
-const {tags, status, category, upstream, provisional = 0} = Astro.props;
+const {tags, status, category, provisional = 0} = Astro.props;
 const tone = status === 'verified' || status === 'implemented' ? 'success' : 'warning';
 ---
 
@@ -16,6 +15,5 @@ const tone = status === 'verified' || status === 'implemented' ? 'success' : 'wa
   {tags.map((tag) => <li><code>{`<${tag}>`}</code></li>)}
   <li><span class="tct-badge" data-tone={tone}>{status}</span></li>
   <li><span class="tct-badge">{category}</span></li>
-  {upstream.length > 0 && <li><span class="tct-badge">Astryx: {upstream.join(', ')}</span></li>}
   {provisional > 0 && <li><span class="tct-badge" data-tone="warning">{provisional} provisional</span></li>}
 </ul>

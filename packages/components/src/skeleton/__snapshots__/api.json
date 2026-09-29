@@ -1,0 +1,54 @@
+{
+  "folder": "skeleton",
+  "elements": {
+    "tct-skeleton": {
+      "class": "TctSkeleton",
+      "attributes": [
+        {
+          "name": "height",
+          "property": "height",
+          "type": "number | string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "index",
+          "property": "index",
+          "type": "number",
+          "default": "0",
+          "reflects": false
+        },
+        {
+          "name": "radius",
+          "property": "radius",
+          "type": "SkeletonRadius",
+          "values": [
+            "none",
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "rounded"
+          ],
+          "default": "3",
+          "reflects": false
+        },
+        {
+          "name": "width",
+          "property": "width",
+          "type": "number | string | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [],
+      "events": [],
+      "cssParts": [
+        "base"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

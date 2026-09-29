@@ -1,0 +1,134 @@
+{
+  "folder": "alert-dialog",
+  "elements": {
+    "tct-alert-dialog": {
+      "class": "TctAlertDialog",
+      "attributes": [
+        {
+          "name": "action-label",
+          "property": "actionLabel",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "action-loading",
+          "property": "actionLoading",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "action-variant",
+          "property": "actionVariant",
+          "type": "ButtonVariant",
+          "values": [
+            "primary",
+            "secondary",
+            "ghost",
+            "destructive",
+            "outlined",
+            "text-only"
+          ],
+          "default": "'destructive'",
+          "reflects": false
+        },
+        {
+          "name": "cancel-label",
+          "property": "cancelLabel",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "description",
+          "property": "description",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "heading",
+          "property": "heading",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "inline",
+          "property": "inline",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "open",
+          "property": "open",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "width",
+          "property": "width",
+          "type": "number | string",
+          "default": "400",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "name": "hide",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "requestClose",
+          "signature": "(reason: ChangeReason) => void"
+        },
+        {
+          "name": "show",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "toggle",
+          "signature": "(force?: boolean) => Promise<void>"
+        }
+      ],
+      "slots": [
+        "(default)"
+      ],
+      "events": [
+        {
+          "name": "tct-action",
+          "class": "TctActionEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-after-open-change",
+          "class": "TctAfterOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "content",
+        "dialog",
+        "footer"
+      ],
+      "cssStates": [
+        "open"
+      ],
+      "cssProperties": []
+    }
+  }
+}

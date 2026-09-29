@@ -1,0 +1,11 @@
+<!-- title: Bottom strip; description: position="bottom" is a strip on the block end that slides in. Use top for the block start. -->
+<div style="display: flex; gap: var(--spacing-4); flex-wrap: wrap">
+  <tct-overlay show-on="always" position="bottom" alignment="start" style="inline-size: 320px">
+    <div style="display: grid; place-items: center; inline-size: 320px; block-size: 180px; background: var(--color-on-light); color: var(--color-on-dark)">Media</div>
+    <div slot="content" style="display: grid"><strong>Deepwater A-12</strong><span>Updated 2 hours ago</span></div>
+  </tct-overlay>
+  <tct-overlay show-on="hover" position="top" alignment="end" style="inline-size: 320px">
+    <a href="#top" style="display: block"><div style="display: grid; place-items: center; inline-size: 320px; block-size: 180px; background: var(--color-on-light); color: var(--color-on-dark)">Media</div></a>
+    <div slot="content"><button type="button">Open</button></div>
+  </tct-overlay>
+</div>

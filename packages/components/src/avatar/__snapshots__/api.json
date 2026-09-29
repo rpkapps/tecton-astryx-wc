@@ -1,0 +1,283 @@
+{
+  "folder": "avatar",
+  "elements": {
+    "tct-avatar": {
+      "class": "TctAvatar",
+      "attributes": [
+        {
+          "name": "alt",
+          "property": "alt",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "aria-label",
+          "property": "aria-label",
+          "type": "unknown",
+          "reflects": false
+        },
+        {
+          "name": "fallback-src",
+          "property": "fallbackSrc",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "href",
+          "property": "href",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "interactive",
+          "property": "interactive",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "name",
+          "property": "name",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "rel",
+          "property": "rel",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "shape",
+          "property": "shape",
+          "type": "AvatarShape",
+          "values": [
+            "circle",
+            "rounded",
+            "square"
+          ],
+          "default": "'circle'",
+          "reflects": false
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "AvatarSize",
+          "values": [
+            "xsm",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "16",
+            "20",
+            "24",
+            "32",
+            "36",
+            "40",
+            "48",
+            "60",
+            "64",
+            "72",
+            "96",
+            "128",
+            "144",
+            "180"
+          ],
+          "default": "'md'",
+          "reflects": false
+        },
+        {
+          "name": "src",
+          "property": "src",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "target",
+          "property": "target",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "tooltip",
+          "property": "tooltip",
+          "type": "string | boolean",
+          "default": "true",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "control",
+          "type": "HTMLElement | null",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "status"
+      ],
+      "events": [
+        {
+          "name": "click",
+          "native": true
+        }
+      ],
+      "cssParts": [
+        "base",
+        "content",
+        "fallback",
+        "status",
+        "tooltip"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-avatar-group": {
+      "class": "TctAvatarGroup",
+      "attributes": [
+        {
+          "name": "aria-describedby",
+          "property": "aria-describedby",
+          "type": "unknown",
+          "reflects": false
+        },
+        {
+          "name": "aria-label",
+          "property": "aria-label",
+          "type": "unknown",
+          "reflects": false
+        },
+        {
+          "name": "shape",
+          "property": "shape",
+          "type": "AvatarShape",
+          "values": [
+            "circle",
+            "rounded",
+            "square"
+          ],
+          "default": "'circle'",
+          "reflects": true
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "AvatarSize",
+          "values": [
+            "xsm",
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "16",
+            "20",
+            "24",
+            "32",
+            "36",
+            "40",
+            "48",
+            "60",
+            "64",
+            "72",
+            "96",
+            "128",
+            "144",
+            "180"
+          ],
+          "default": "'md'",
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "base"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-avatar-group-overflow": {
+      "class": "TctAvatarGroupOverflow",
+      "attributes": [
+        {
+          "name": "count",
+          "property": "count",
+          "type": "number",
+          "default": "0",
+          "reflects": false
+        },
+        {
+          "name": "interactive",
+          "property": "interactive",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "control",
+          "type": "HTMLElement | null",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [
+        {
+          "name": "click",
+          "native": true
+        }
+      ],
+      "cssParts": [
+        "base"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-avatar-status-dot": {
+      "class": "TctAvatarStatusDot",
+      "attributes": [
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "variant",
+          "property": "variant",
+          "type": "AvatarStatusDotVariant",
+          "values": [
+            "success",
+            "neutral",
+            "error"
+          ],
+          "default": "'success'",
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "icon"
+      ],
+      "events": [],
+      "cssParts": [
+        "base",
+        "glyph",
+        "icon"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

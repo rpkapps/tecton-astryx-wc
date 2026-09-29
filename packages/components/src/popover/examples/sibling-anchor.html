@@ -1,0 +1,7 @@
+<!-- title: Anchor to another element; description: When the trigger lives elsewhere, point `anchor` at its id (same tree) or set the anchorElement property. The element must be, or contain, a button. -->
+<div id="sibling-anchor-root" style="display: flex; align-items: center; gap: var(--spacing-3)">
+  <button id="sibling-anchor-button" type="button">External trigger</button>
+  <tct-popover anchor="sibling-anchor-button" label="Actions" placement="below">
+    <div slot="content">Attached to the button next to it, not wrapped by it.</div>
+  </tct-popover>
+</div>

@@ -1,0 +1,70 @@
+/*
+ * The native `<dialog>` shell of the bottom sheet family, shared by `tct-bottom-sheet` (standalone) and
+ * `tct-bottom-sheet-switcher`. The dialog is a ZERO-HEIGHT strip along the bottom edge: the panels
+ * overflow it upwards, so a press on the backdrop is outside the strip (the layer stack dismisses) and a
+ * press on a panel is inside. The scrim is the `::backdrop`, its opacity `--_sheet-scrim-opacity`.
+ * [mwg:light-dismiss-a-dialog] [mwg:animate-to-from-top-layer]
+ */
+@layer component {
+  .dialog {
+    position: fixed;
+    inset-block: auto 0;
+    inset-inline: 0;
+    box-sizing: border-box;
+    inline-size: 100%;
+    block-size: 0;
+    max-inline-size: none;
+    max-block-size: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    overflow: visible;
+    outline: none;
+  }
+
+  /* Without a scrim the dialog is not in the top layer: sit above the page. */
+  .dialog:not(:modal) {
+    z-index: 1000; /* design: the upstream non-modal sheet layer */
+  }
+
+  .dialog::backdrop {
+    background-color: var(--color-overlay);
+    opacity: var(--_sheet-scrim-opacity, 1);
+    transition: opacity var(--duration-medium) var(--ease-standard);
+  }
+
+  /* The dim leaves with the sheet, on a curve that matches: a fade covers no distance, so a decelerate
+     curve would front-load it and clear the page under a sheet that is still sliding. */
+  .dialog[inert]::backdrop {
+    transition-timing-function: linear;
+  }
+
+  @starting-style {
+    .dialog::backdrop {
+      opacity: 0;
+    }
+  }
+
+  /* The edge tint (iOS Safari 26 samples a fixed element at the viewport's bottom edge for its toolbar
+     colour): full width, flush with the edge, taller than WebKit's 10px minimum, invisible through a mask. */
+  .edge-tint {
+    position: fixed;
+    inset-inline: 0;
+    inset-block-end: 0;
+    z-index: 2;
+    block-size: 12px; /* design: above WebKit's 10px minimum for reading a declared colour */
+    background-color: var(--color-background-surface);
+    pointer-events: none;
+    mask-image: linear-gradient(transparent, transparent);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .dialog::backdrop {
+      background-color: transparent;
+    }
+  }
+}

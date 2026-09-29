@@ -1,0 +1,119 @@
+/*
+ * tct-popover. Tecton surface: a 1px rule on a recessed (popover) fill, no drop shadow (D-013,
+ * design/components/menu.md). The positioned layer paints nothing; the inner `.surface` is the painted
+ * box and the `popover` part. [mwg:css] [mwg:animate-to-from-top-layer] [mwg:position-aware-tooltips]
+ * The UA popover reset is the shared `.layer-surface` (styles/layer.styles.css); the enter rules stay here
+ * because the layer element also carries the placement nudge of this surface.
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+    vertical-align: middle;
+  }
+
+  /* Stable anchor: pressed-state transforms on the trigger never move it, so the surface does not jitter. */
+  .anchor {
+    display: inline-flex;
+  }
+
+  /* The positioned top-layer element. Inset, margin, clamps and position-area are written inline by PositionController. */
+  /* Without the Popover API (Tier 2) the attribute is inert: hide until LayerController shows it. */
+  @supports not selector(:popover-open) {
+    .layer {
+      position: fixed;
+      display: none;
+    }
+  }
+
+  .surface {
+    --_bg: var(--color-background-popover);
+    --_border: var(--color-border);
+    --_radius: var(--radius-container);
+    --_padding: var(--spacing-3);
+
+    position: relative;
+    box-sizing: border-box;
+    inline-size: var(--_popover-width, auto);
+    /* Viewport gutter: the surface never gets wider or taller than the screen minus 16px each side. */
+    max-inline-size: calc(100vi - var(--spacing-8));
+    max-block-size: calc(100dvb - var(--spacing-8));
+    padding: var(--_padding);
+    border: var(--border-width) solid var(--_border);
+    border-radius: var(--_radius);
+    background: var(--_bg);
+    color: var(--color-text-primary);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+  }
+
+  /* Scrolls only when the content overflows (measured), so focus rings of fitting content are never clipped. */
+  .surface[data-overflow] {
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* Fallback close button: revealed by :focus-within, drawn below the surface, centred on the inline axis. */
+  .close {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-start: 50%;
+    z-index: 1;
+    translate: -50% 100%;
+    padding-block-start: var(--spacing-1);
+  }
+
+  :host(:dir(rtl)) .close {
+    translate: 50% 100%;
+  }
+
+  /* Entry: fade and a small slide away from the anchor. Exit runs from JS (WAAPI) before hidePopover(). */
+  .layer:popover-open {
+    opacity: 1;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .layer:popover-open {
+      translate: 0 0;
+      transition:
+        opacity var(--duration-fast) var(--ease-standard),
+        translate var(--duration-fast) var(--ease-standard);
+
+      @starting-style {
+        translate: 0 var(--spacing-1);
+      }
+    }
+
+    .layer[data-placement='below']:popover-open {
+      @starting-style {
+        translate: 0 calc(-1 * var(--spacing-1));
+      }
+    }
+
+    .layer[data-placement='start']:popover-open {
+      @starting-style {
+        translate: var(--spacing-1) 0;
+      }
+    }
+
+    .layer[data-placement='end']:popover-open {
+      @starting-style {
+        translate: calc(-1 * var(--spacing-1)) 0;
+      }
+    }
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .surface {
+      border-color: CanvasText;
+      background: Canvas;
+      color: CanvasText;
+    }
+  }
+}

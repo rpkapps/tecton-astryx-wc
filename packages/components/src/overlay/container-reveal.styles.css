@@ -1,0 +1,167 @@
+/*
+ * Container reveal (upstream `useContainerReveal`, WP-4): a scoped, CSS-only hover/focus reveal of
+ * content inside a container. Component sheets include this module; the consumer marks its own
+ * elements with the classes below (no JavaScript, no hover state, no re-render on hover).
+ *
+ *   .reveal-container                  the container whose hover / :focus-within drives the reveal
+ *   .reveal-container[data-reveal-state="inactive" | "active"]
+ *                                      pins the trigger state a caller owns (a motion gate, a scroll, an
+ *                                      open row menu). `inactive` never overrides keyboard focus or a
+ *                                      coarse pointer, so it cannot hide content from those users
+ *   --_hover-delay                     hover-intent gate, a time (default 0s), set on the container
+ *   .reveal                            content revealed on hover/focus (collapses out of flow at rest)
+ *   .reveal-preserved                  the same, reserving its layout box while hidden (opacity only)
+ *   .conceal                           content visible at rest that fades out on hover (mouse only)
+ *   [data-reveal-visibility="shown" | "hidden"]   pins ONE element's look; `hidden` yields to focus
+ *
+ * Accessibility by construction: hidden content is never display: none. It is visually hidden with
+ * position and opacity, so it stays in the accessibility tree and the tab order, and reveals on
+ * :focus-within; touch (coarse pointers) always shows it; concealed content ignores focus (a keyboard
+ * user never watches content vanish); the fades honour reduced motion, the dwell gate does not (it is
+ * timing, not motion). Nesting is isolated because every container re-declares its own state.
+ *
+ * Every consumer of the private `--_reveal-*` properties reads them with a fallback, so content
+ * outside a container fails visible. Do not reach past this API into those properties.
+ * TODO(shared style): this module belongs in packages/components/src/styles/ (WP-4 may not write there).
+ */
+@layer component {
+  .reveal-container {
+    --_hover-delay: 0s;
+
+    /* The position flip is discrete: it transitions with allow-discrete and a state-conditional delay,
+       the dwell on entry and the fade duration on exit, so content never snaps out at full opacity. */
+    --_reveal-opacity: 0;
+    --_reveal-position: absolute;
+    --_reveal-delay: 0s, var(--duration-fast);
+    --_reveal-delay-reduced: 0s, 0s;
+    --_conceal-opacity: 1;
+    --_fade-delay: 0s;
+  }
+
+  @media (hover: hover) {
+    .reveal-container:hover:where(:not(:disabled, [aria-disabled='true'])) {
+      --_reveal-opacity: 1;
+      --_reveal-position: static;
+      --_reveal-delay: var(--_hover-delay), var(--_hover-delay);
+      --_reveal-delay-reduced: var(--_hover-delay), var(--_hover-delay);
+      --_conceal-opacity: 0;
+      --_fade-delay: var(--_hover-delay);
+    }
+  }
+
+  .reveal-container:focus-within {
+    --_reveal-opacity: 1;
+    --_reveal-position: static;
+    --_reveal-delay: 0s, 0s;
+    --_reveal-delay-reduced: 0s, 0s;
+    --_fade-delay: 0s;
+  }
+
+  @media (any-pointer: coarse) {
+    .reveal-container {
+      --_reveal-opacity: 1;
+      --_reveal-position: static;
+      --_reveal-delay: 0s, 0s;
+      --_reveal-delay-reduced: 0s, 0s;
+      --_fade-delay: 0s;
+    }
+  }
+
+  /* Pinned inactive: the pointer stops driving the reveal; keyboard focus and coarse pointers keep theirs. */
+  .reveal-container[data-reveal-state='inactive'] {
+    --_reveal-opacity: 0;
+    --_reveal-position: absolute;
+    --_reveal-delay: 0s, var(--duration-fast);
+    --_reveal-delay-reduced: 0s, 0s;
+    --_conceal-opacity: 1;
+    --_fade-delay: 0s;
+  }
+
+  .reveal-container[data-reveal-state='inactive']:focus-within {
+    --_reveal-opacity: 1;
+    --_reveal-position: static;
+    --_reveal-delay: 0s, 0s;
+  }
+
+  @media (any-pointer: coarse) {
+    .reveal-container[data-reveal-state='inactive'] {
+      --_reveal-opacity: 1;
+      --_reveal-position: static;
+      --_reveal-delay: 0s, 0s;
+    }
+  }
+
+  /* Pinned active: every branch reads as pointed-at, with no dwell to wait through. */
+  .reveal-container[data-reveal-state='active'] {
+    --_reveal-opacity: 1;
+    --_reveal-position: static;
+    --_reveal-delay: 0s, 0s;
+    --_reveal-delay-reduced: 0s, 0s;
+    --_conceal-opacity: 0;
+    --_fade-delay: 0s;
+  }
+
+  .reveal {
+    position: var(--_reveal-position, static);
+    opacity: var(--_reveal-opacity, 1);
+    transition-property: opacity, position;
+    transition-duration: var(--duration-fast), 0s;
+    transition-timing-function: var(--ease-standard);
+    transition-behavior: allow-discrete;
+    transition-delay: var(--_reveal-delay, 0s, 0s);
+  }
+
+  .reveal-preserved {
+    opacity: var(--_reveal-opacity, 1);
+    transition-property: opacity;
+    transition-duration: var(--duration-fast);
+    transition-timing-function: var(--ease-standard);
+    transition-delay: var(--_fade-delay, 0s);
+  }
+
+  .conceal {
+    opacity: var(--_conceal-opacity, 1);
+    transition-property: opacity;
+    transition-duration: var(--duration-fast);
+    transition-timing-function: var(--ease-standard);
+    transition-delay: var(--_fade-delay, 0s);
+  }
+
+  /* Per-element pins read no container state at all. `hidden` yields to focus: a forced-hidden element is
+     still mounted and tabbable, so it reappears when focus lands inside it. */
+  :is(.reveal, .reveal-preserved, .conceal)[data-reveal-visibility='shown'] {
+    position: static;
+    opacity: 1;
+    transition-delay: 0s;
+  }
+
+  .reveal[data-reveal-visibility='hidden'] {
+    position: absolute;
+    opacity: 0;
+    transition-delay: 0s;
+  }
+
+  .reveal-preserved[data-reveal-visibility='hidden'] {
+    opacity: 0;
+    transition-delay: 0s;
+  }
+
+  :is(.reveal, .reveal-preserved)[data-reveal-visibility='hidden']:focus-within {
+    position: static;
+    opacity: 1;
+  }
+}
+
+@layer a11y {
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      transition-duration: 0s, 0s;
+      transition-delay: var(--_reveal-delay-reduced, 0s, 0s);
+    }
+
+    .reveal-preserved,
+    .conceal {
+      transition-duration: 0s;
+    }
+  }
+}
