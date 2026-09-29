@@ -2,7 +2,7 @@
  * tct-card. The host carries the sizes and is a one-item column flex box; the inner `.base` (part
  * "base") is the painted box: background, border, radius, shadow and padding (paint on :host would be
  * erased by an application reset). Tecton: 1px `--color-border` rule on the default variant, radius
- * `--radius-container`, fill `--color-background-card`, padding step 4 (tecton-astryx components.ts
+ * `--radius-container`, fill `--color-background-card`, padding step 4 (the owner's React theme, components.ts
  * `Surfaces`). The default variant's border is drawn inside the padding: its width is subtracted from
  * each side, so border plus padding equals the padding asked for.
  * [mwg:styling-web-components] host rules, part=base; [mwg:css] logical properties, custom properties

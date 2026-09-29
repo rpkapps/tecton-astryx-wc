@@ -12,6 +12,8 @@ import {
 import {TctElement} from '@tecton-astryx/core/tct-element.js';
 import {devWarn} from '@tecton-astryx/core/utils/dev.js';
 import base from '../styles/base.styles.css';
+import focusRing from '../styles/focus-ring.styles.css';
+import {ScrollFocusController} from './scroll-focus.js';
 import {STACK_TAGS} from './stack-elements.js';
 import {
   oneOf,
@@ -49,12 +51,12 @@ import styles from './tct-stack.styles.css';
  * @tag tct-stack
  * @upstream Stack
  * @slot - The stack's children, laid out as flex items.
- * @csspart base - The flex container that holds the children and the padding (Astryx target `astryx-stack`).
+ * @csspart base - The flex container that holds the children and the padding (theme target `stack`).
  * @cloakDisplay flex
  */
 export class TctStack extends BoxPropsMixin(TctElement) {
   static override readonly tagName: string = 'tct-stack';
-  static override styles: CSSResultGroup = [base, styles];
+  static override styles: CSSResultGroup = [base, focusRing, styles];
 
   /**
    * Direction of the layout: `horizontal` flows items in the inline direction (left to right in
@@ -121,6 +123,11 @@ export class TctStack extends BoxPropsMixin(TctElement) {
   }
 
   // The element `aria-*` on the host is mirrored onto: a landmark or list, never a plain div.
+  constructor() {
+    super();
+    ScrollFocusController.attach(this);
+  }
+
   readonly #aria = new AriaDelegateController(this, {
     target: () => {
       const inner = this.renderRoot.querySelector<HTMLElement>('[part~="base"]');
@@ -163,7 +170,7 @@ export class TctStack extends BoxPropsMixin(TctElement) {
         : undefined;
     return staticHtml`<${tag}
       part="base"
-      class="base"
+      class="base focus-ring"
       role=${ifDefined(name === 'ul' || name === 'ol' ? 'list' : undefined)}
       data-direction=${direction}
       data-wrap=${wrap}

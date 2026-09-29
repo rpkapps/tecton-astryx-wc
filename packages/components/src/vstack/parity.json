@@ -19,7 +19,12 @@
           "as": "attribute",
           "notes": "Inherited from tct-stack."
         },
-        {"upstream": "padding", "kind": "prop", "target": "padding", "as": "attribute"},
+        {
+          "upstream": "padding",
+          "kind": "prop",
+          "target": "padding",
+          "as": "attribute"
+        },
         {
           "upstream": "paddingInline",
           "kind": "prop",
@@ -38,7 +43,12 @@
           "target": "padding-inline-end",
           "as": "attribute"
         },
-        {"upstream": "paddingBlock", "kind": "prop", "target": "padding-block", "as": "attribute"},
+        {
+          "upstream": "paddingBlock",
+          "kind": "prop",
+          "target": "padding-block",
+          "as": "attribute"
+        },
         {
           "upstream": "paddingBlockStart",
           "kind": "prop",
@@ -59,10 +69,30 @@
           "reflect": true,
           "default": false
         },
-        {"upstream": "width", "kind": "prop", "target": "width", "as": "attribute"},
-        {"upstream": "height", "kind": "prop", "target": "height", "as": "attribute"},
-        {"upstream": "maxWidth", "kind": "prop", "target": "max-width", "as": "attribute"},
-        {"upstream": "minHeight", "kind": "prop", "target": "min-height", "as": "attribute"},
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "target": "width",
+          "as": "attribute"
+        },
+        {
+          "upstream": "height",
+          "kind": "prop",
+          "target": "height",
+          "as": "attribute"
+        },
+        {
+          "upstream": "maxWidth",
+          "kind": "prop",
+          "target": "max-width",
+          "as": "attribute"
+        },
+        {
+          "upstream": "minHeight",
+          "kind": "prop",
+          "target": "min-height",
+          "as": "attribute"
+        },
         {
           "upstream": "hAlign",
           "kind": "prop",
@@ -77,13 +107,18 @@
           "as": "attribute",
           "notes": "Main axis (start, center, end, between, around, evenly)."
         },
-        {"upstream": "justify", "kind": "prop", "target": "justify", "as": "attribute"},
+        {
+          "upstream": "justify",
+          "kind": "prop",
+          "target": "justify",
+          "as": "attribute"
+        },
         {
           "upstream": "align",
           "kind": "prop",
           "target": "alignment",
           "as": "attribute",
-          "notes": "Renamed: `align` attribute has presentational meaning in browsers (A§7.2)."
+          "notes": "Renamed: `align` attribute has presentational meaning in browsers (A\u00a77.2)."
         },
         {
           "upstream": "wrap",
@@ -93,8 +128,19 @@
           "reflect": true,
           "default": "nowrap"
         },
-        {"upstream": "as", "kind": "prop", "target": "as", "as": "attribute", "default": "div"},
-        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "as",
+          "kind": "prop",
+          "target": "as",
+          "as": "attribute",
+          "default": "div"
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
         {
           "upstream": "ref",
           "kind": "ref",
@@ -104,7 +150,9 @@
       ],
       "hooks": [],
       "keyboard": [],
-      "form": {"formAssociated": false},
+      "form": {
+        "formAssociated": false
+      },
       "differences": [
         {
           "id": "VSTACK-01",
@@ -131,8 +179,8 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
-      "notes": "Guides: [mwg:css-layout] flexbox column, gap; [mwg:styling-web-components] host rules; RTL and forced-colors: the stack paints nothing and is covered by the tct-stack tests."
+      "sizeBudgetKb": 14,
+      "notes": "Guides: [mwg:css-layout] flexbox column, gap; [mwg:styling-web-components] host rules; RTL and forced-colors: the stack paints nothing and is covered by the tct-stack tests. Size budget 14 kB (above the S default of 12): The direction wrappers ship the whole Stack class they extend (13.3 kB gzip measured)."
     }
   }
 }

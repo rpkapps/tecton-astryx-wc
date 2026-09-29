@@ -4,6 +4,8 @@ import {BoxPropsMixin} from '@tecton-astryx/core/mixins/box-props.js';
 import {TctElement} from '@tecton-astryx/core/tct-element.js';
 import {devWarn} from '@tecton-astryx/core/utils/dev.js';
 import base from '../styles/base.styles.css';
+import focusRing from '../styles/focus-ring.styles.css';
+import {ScrollFocusController} from '../stack/scroll-focus.js';
 import {CARD_ELEVATIONS, type CardElevation, type CardVariant} from './card.types.js';
 import styles from './tct-card.styles.css';
 
@@ -23,7 +25,7 @@ import styles from './tct-card.styles.css';
  * @tag tct-card
  * @upstream Card
  * @slot - The card's content.
- * @csspart base - The painted box: background, border, radius, shadow and padding (Astryx target `astryx-card`).
+ * @csspart base - The painted box: background, border, radius, shadow and padding (theme target `card`).
  * @cssprop --card-padding - Padding on all sides when no `padding*` attribute is set. Default `var(--spacing-4)` (a theme sets it).
  * @cssprop --card-padding-inline - Inline (left/right) padding; overrides `--card-padding` on that axis.
  * @cssprop --card-padding-inline-start - Inline-start padding; overrides `--card-padding-inline`.
@@ -42,7 +44,7 @@ import styles from './tct-card.styles.css';
  */
 export class TctCard extends BoxPropsMixin(TctElement) {
   static override readonly tagName = 'tct-card';
-  static override styles: CSSResultGroup = [base, styles];
+  static override styles: CSSResultGroup = [base, focusRing, styles];
 
   /**
    * Background variant: `default` (card surface plus a border), `transparent` (no background),
@@ -57,6 +59,11 @@ export class TctCard extends BoxPropsMixin(TctElement) {
   @property({reflect: true}) elevation: CardElevation = 'none';
 
   // Sizes go on the host (not part="base") so a percentage resolves against the parent.
+  constructor() {
+    super();
+    ScrollFocusController.attach(this);
+  }
+
   protected override get boxTarget(): HTMLElement {
     return this;
   }
@@ -77,7 +84,7 @@ export class TctCard extends BoxPropsMixin(TctElement) {
     const fixedHeight = this.height !== undefined && this.height !== '' && this.height !== 'auto';
     return html`<div
       part="base"
-      class="base"
+      class="base focus-ring"
       data-variant=${this.variant}
       data-elevation=${elevation}
       ?data-scrollable=${fixedHeight}

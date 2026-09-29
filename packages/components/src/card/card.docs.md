@@ -103,6 +103,10 @@ one: a heading inside it, or `role="group"` (or `region`) with `aria-labelledby`
 click target is a different component (a clickable card); do not attach click handlers to a plain card
 without a keyboard-operable control inside it.
 
+A card with a fixed `height` that really overflows, and has nothing focusable inside, is a tab stop (the
+inner box gets `tabindex="0"` and the shared focus ring), so its content can be scrolled with the keyboard
+in every engine. When the content fits, or brings its own focusable elements, no tab stop is added.
+
 ## Localisation
 
 Not applicable: no strings. Padding uses logical edges, so `padding-inline-start` pads the right edge in

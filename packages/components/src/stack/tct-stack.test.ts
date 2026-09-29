@@ -8,7 +8,9 @@ import {axNode, expectAccessible} from '@tecton-astryx/testing/a11y.js';
 import {emulateMedia} from '@tecton-astryx/testing/emulate.js';
 import {fixture} from '@tecton-astryx/testing/fixture.js';
 import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
+import {pressKeys} from '@tecton-astryx/testing/keyboard.js';
 import {isChromium} from '@tecton-astryx/testing/tier.js';
+import {waitUntil} from '@tecton-astryx/testing/timing.js';
 import {resolveStackAlignment} from './stack.types.js';
 import './define.js';
 import type {TctStack} from './tct-stack.js';
@@ -574,5 +576,89 @@ describe('tct-stack: right-to-left and forced colours', () => {
     expect(css(element).flexDirection).toBe('row');
     expect(css(element).columnGap).toBe('8px');
     await expectAccessible(element);
+  });
+});
+
+describe('tct-stack: keyboard access to a scrolling box', () => {
+  // flex: none, or the column would shrink the child to fit the fixed height instead of overflowing
+  const tall = '<div style="block-size: 600px; flex: none">tall</div>';
+
+  it('makes an overflowing scroll region focusable, and scrolls it from the keyboard', async () => {
+    const element = await stack('scrollable height="100"', tall);
+    await waitUntil(() => baseOf(element).getAttribute('tabindex') === '0', 'tabindex applied');
+    baseOf(element).focus();
+    expect(element.shadowRoot!.activeElement).toBe(baseOf(element));
+    await pressKeys('ArrowDown', 'ArrowDown', 'ArrowDown');
+    expect(baseOf(element).scrollTop).toBeGreaterThan(0);
+  });
+
+  it('gives no tab stop when the content fits, or the box does not scroll', async () => {
+    const fits = await stack('scrollable height="200"', '<span>short</span>');
+    expect(baseOf(fits).hasAttribute('tabindex')).toBe(false);
+    const visible = await stack('height="100"', tall);
+    expect(baseOf(visible).hasAttribute('tabindex')).toBe(false);
+  });
+
+  it('leaves the tab stop to focusable content inside it', async () => {
+    const element = await stack('scrollable height="100"', `${tall}<a href="#end">end</a>`);
+    await new Promise((resolve) => setTimeout(resolve, 60));
+    expect(baseOf(element).hasAttribute('tabindex')).toBe(false);
+  });
+
+  it('follows the content: the stop appears when it grows and goes when it shrinks', async () => {
+    const element = await stack(
+      'scrollable height="100"',
+      '<div id="c" style="block-size: 20px; flex: none">x</div>',
+    );
+    expect(baseOf(element).hasAttribute('tabindex')).toBe(false);
+    const content = element.querySelector<HTMLElement>('#c')!;
+    content.style.blockSize = '600px';
+    await waitUntil(() => baseOf(element).getAttribute('tabindex') === '0', 'grown');
+    content.style.blockSize = '20px';
+    await waitUntil(() => !baseOf(element).hasAttribute('tabindex'), 'shrunk');
+  });
+
+  it('follows slotted children being added and removed', async () => {
+    const element = await stack('scrollable height="100"', '<span>one</span>');
+    const extra = document.createElement('div');
+    extra.style.blockSize = '600px';
+    extra.style.flex = 'none';
+    element.append(extra);
+    await waitUntil(() => baseOf(element).getAttribute('tabindex') === '0', 'child added');
+    extra.remove();
+    await waitUntil(() => !baseOf(element).hasAttribute('tabindex'), 'child removed');
+  });
+
+  it('makes tct-stack-item scrollable regions reachable too', async () => {
+    const root = await fixture<HTMLElement>(
+      `<div style="block-size: 120px; display: flex"><tct-stack height="120"><tct-stack-item id="i" size="fill" scrollable>${tall}</tct-stack-item></tct-stack></div>`,
+    );
+    const item = root.querySelector<TctStackItem>('#i')!;
+    await waitUntil(() => baseOf(item).getAttribute('tabindex') === '0', 'item tab stop');
+  });
+
+  it('draws the shared focus ring on the focused box', async () => {
+    const element = await stack('scrollable height="100"', tall);
+    await waitUntil(() => baseOf(element).getAttribute('tabindex') === '0', 'tabindex applied');
+    await pressKeys('Tab');
+    expect(element.shadowRoot!.activeElement).toBe(baseOf(element));
+    expect(css(element).outlineStyle).toBe('solid');
+    expect(css(element).outlineWidth).toBe('2px');
+  });
+
+  it('passes axe for a scrolling region with only static text', async () => {
+    const element = await stack('scrollable height="100" width="200"', tall);
+    await waitUntil(() => baseOf(element).getAttribute('tabindex') === '0', 'tabindex applied');
+    await expectAccessible(element.parentElement!);
+  });
+
+  it('drops the tab stop when the element is disconnected', async () => {
+    const element = await stack('scrollable height="100"', tall);
+    await waitUntil(() => baseOf(element).getAttribute('tabindex') === '0', 'tabindex applied');
+    const parent = element.parentElement!;
+    element.remove();
+    expect(baseOf(element).hasAttribute('tabindex')).toBe(false);
+    parent.append(element);
+    await waitUntil(() => baseOf(element).getAttribute('tabindex') === '0', 're-applied');
   });
 });

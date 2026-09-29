@@ -106,6 +106,11 @@
           "id": "CARD-04",
           "type": "approved-api-difference",
           "text": "The padding custom properties (`--card-padding*` / `--section-padding*`) are the WC form of the documented themed padding (`derived: padding, expand: container`); private steps propagate through --_section-padding-propagated."
+        },
+        {
+          "id": "CARD-05",
+          "type": "a11y-improvement",
+          "text": "A fixed-height card that really overflows and holds nothing tabbable becomes a tab stop (see STACK-06), so its scrolling content is reachable from the keyboard in every engine. Upstream leaves this to the browser."
         }
       ],
       "tests": {

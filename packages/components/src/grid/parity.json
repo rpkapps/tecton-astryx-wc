@@ -69,7 +69,7 @@
           "kind": "prop",
           "target": "alignment",
           "as": "attribute",
-          "notes": "Renamed: `align` attribute has presentational meaning in browsers (A§7.2). Default stretch."
+          "notes": "Renamed: `align` attribute has presentational meaning in browsers (A\u00a77.2). Default stretch."
         },
         {
           "upstream": "justify",
@@ -113,7 +113,7 @@
         {
           "id": "GRID-01",
           "type": "approved-api-difference",
-          "text": "`align` is the `alignment` attribute (A§7.2). The responsive `columns` object is also written as the attributes `column-min-width`, `column-max` and `column-repeat`, because config objects are never JSON attributes; the object form stays available as the `columns` property and wins over the attributes."
+          "text": "`align` is the `alignment` attribute (A\u00a77.2). The responsive `columns` object is also written as the attributes `column-min-width`, `column-max` and `column-repeat`, because config objects are never JSON attributes; the object form stays available as the `columns` property and wins over the attributes."
         },
         {
           "id": "GRID-02",
@@ -140,8 +140,8 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
-      "notes": "Guides: [mwg:css-layout] grid, repeat(auto-fill, minmax()), logical properties; [mwg:styling-web-components] host rules, part=base, custom-property inheritance; [mwg:shadow-dom] slot inside the grid container."
+      "sizeBudgetKb": 13,
+      "notes": "Guides: [mwg:css-layout] grid, repeat(auto-fill, minmax()), logical properties; [mwg:styling-web-components] host rules, part=base, custom-property inheritance; [mwg:shadow-dom] slot inside the grid container. Size budget 13 kB (above the S default of 12): Grid plus GridSpan (per-instance adopted sheet for spans beyond 12) on top of lit (12.5 kB gzip measured)."
     },
     "core.grid-span": {
       "tag": "tct-grid-span",
@@ -213,8 +213,8 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
-      "notes": "Guides: [mwg:css-layout] `grid-column: span n`, `min-inline-size: 0` on grid items; [mwg:custom-elements] reflected converters for `columns`."
+      "sizeBudgetKb": 13,
+      "notes": "Guides: [mwg:css-layout] `grid-column: span n`, `min-inline-size: 0` on grid items; [mwg:custom-elements] reflected converters for `columns`. Size budget 13 kB (above the S default of 12): Grid plus GridSpan (per-instance adopted sheet for spans beyond 12) on top of lit (12.5 kB gzip measured)."
     }
   }
 }

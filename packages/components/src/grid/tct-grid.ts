@@ -51,7 +51,7 @@ const spacingToken = (step: SpacingStep | undefined, what: string): string | und
  * @tag tct-grid
  * @upstream Grid
  * @slot - The grid items.
- * @csspart base - The grid container that holds the items (Astryx target `astryx-grid`).
+ * @csspart base - The grid container that holds the items (theme target `grid`).
  * @cloakDisplay flex
  */
 export class TctGrid extends BoxPropsMixin(TctElement) {

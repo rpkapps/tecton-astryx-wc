@@ -32,7 +32,7 @@
           "kind": "prop",
           "target": "padding",
           "as": "attribute",
-          "notes": "BoxPropsMixin (A§9.18): spacing step."
+          "notes": "BoxPropsMixin (A\u00a79.18): spacing step."
         },
         {
           "upstream": "paddingInline",
@@ -52,7 +52,12 @@
           "target": "padding-inline-end",
           "as": "attribute"
         },
-        {"upstream": "paddingBlock", "kind": "prop", "target": "padding-block", "as": "attribute"},
+        {
+          "upstream": "paddingBlock",
+          "kind": "prop",
+          "target": "padding-block",
+          "as": "attribute"
+        },
         {
           "upstream": "paddingBlockStart",
           "kind": "prop",
@@ -87,17 +92,42 @@
           "as": "attribute",
           "notes": "Sizes the host, so a percentage resolves against the stack's parent."
         },
-        {"upstream": "maxWidth", "kind": "prop", "target": "max-width", "as": "attribute"},
-        {"upstream": "minHeight", "kind": "prop", "target": "min-height", "as": "attribute"},
-        {"upstream": "hAlign", "kind": "prop", "target": "h-align", "as": "attribute"},
-        {"upstream": "vAlign", "kind": "prop", "target": "v-align", "as": "attribute"},
-        {"upstream": "justify", "kind": "prop", "target": "justify", "as": "attribute"},
+        {
+          "upstream": "maxWidth",
+          "kind": "prop",
+          "target": "max-width",
+          "as": "attribute"
+        },
+        {
+          "upstream": "minHeight",
+          "kind": "prop",
+          "target": "min-height",
+          "as": "attribute"
+        },
+        {
+          "upstream": "hAlign",
+          "kind": "prop",
+          "target": "h-align",
+          "as": "attribute"
+        },
+        {
+          "upstream": "vAlign",
+          "kind": "prop",
+          "target": "v-align",
+          "as": "attribute"
+        },
+        {
+          "upstream": "justify",
+          "kind": "prop",
+          "target": "justify",
+          "as": "attribute"
+        },
         {
           "upstream": "align",
           "kind": "prop",
           "target": "alignment",
           "as": "attribute",
-          "notes": "Renamed: browsers give an `align` attribute presentational meaning (A§7.2, CONVENTIONS §9)."
+          "notes": "Renamed: browsers give an `align` attribute presentational meaning (A\u00a77.2, CONVENTIONS \u00a79)."
         },
         {
           "upstream": "wrap",
@@ -115,7 +145,12 @@
           "default": "div",
           "notes": "Enumerated (div, section, article, aside, nav, header, footer, main, ul, ol, li); renders the real element inside the shadow root."
         },
-        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
         {
           "upstream": "xstyle",
           "kind": "prop",
@@ -137,12 +172,14 @@
         }
       ],
       "keyboard": [],
-      "form": {"formAssociated": false},
+      "form": {
+        "formAssociated": false
+      },
       "differences": [
         {
           "id": "STACK-01",
           "type": "approved-api-difference",
-          "text": "`align` is the `alignment` attribute (and property): browsers treat an `align` attribute on some elements as `text-align` (A§7.2)."
+          "text": "`align` is the `alignment` attribute (and property): browsers treat an `align` attribute on some elements as `text-align` (A\u00a77.2)."
         },
         {
           "id": "STACK-02",
@@ -163,6 +200,11 @@
           "id": "STACK-05",
           "type": "approved-api-difference",
           "text": "isScrollable is the `scrollable` boolean attribute."
+        },
+        {
+          "id": "STACK-06",
+          "type": "a11y-improvement",
+          "text": "A scrolling stack, stack item or fixed-height card that really overflows and holds nothing tabbable becomes a tab stop (`tabindex=\"0\"` on the inner box, shared focus ring), so it can be scrolled with the keyboard in Safari as well as in the engines that make scrollers focusable themselves (Chromium 130+, Firefox). Upstream leaves this to the browser. The stop is removed when the content fits or brings its own tab stop; it follows content and slot changes through the shared resize observer. [mwg:accessibility]"
         }
       ],
       "tests": {
@@ -184,8 +226,8 @@
           "reason": "Optional hardening: BoxPropsMixin removes a custom property when its attribute goes away, but custom properties inherit through the flat tree, so a nested box reads its parent's padding/size unless its own sheet resets them. The layout folders reset `--_box-*` to `initial` on :host (and write the values on the host, see STACK-03). Writing `initial` instead of removing the property would make the reset part of the mixin."
         }
       ],
-      "sizeBudgetKb": null,
-      "notes": "Guides: [mwg:css-layout] flexbox, gap, logical properties, flex items; [mwg:styling-web-components] host rules, part=base, custom-property inheritance; [mwg:shadow-dom] slots inside the flex container; [mwg:accessible-web-components] landmark and list semantics in the shadow root, aria delegation; [mwg:custom-elements] reflection of enumerated attributes."
+      "sizeBudgetKb": 14,
+      "notes": "Guides: [mwg:css-layout] flexbox, gap, logical properties, flex items; [mwg:styling-web-components] host rules, part=base, custom-property inheritance; [mwg:shadow-dom] slots inside the flex container; [mwg:accessible-web-components] landmark and list semantics in the shadow root, aria delegation; [mwg:custom-elements] reflection of enumerated attributes. Size budget 14 kB (above the S default of 12): Stack bundles BoxPropsMixin, the static-tag switch for as=\"ul|ol|nav|\u2026\" and StackItem on top of lit (13.7 kB gzip measured)."
     },
     "core.stack-item": {
       "tag": "tct-stack-item",
@@ -219,8 +261,19 @@
           "as": "attribute",
           "reflect": true
         },
-        {"upstream": "as", "kind": "prop", "target": "as", "as": "attribute", "default": "div"},
-        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "as",
+          "kind": "prop",
+          "target": "as",
+          "as": "attribute",
+          "default": "div"
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
         {
           "upstream": "xstyle",
           "kind": "prop",
@@ -242,7 +295,9 @@
         }
       ],
       "keyboard": [],
-      "form": {"formAssociated": false},
+      "form": {
+        "formAssociated": false
+      },
       "differences": [
         {
           "id": "STACKITEM-01",
@@ -269,8 +324,8 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
-      "notes": "Guides: [mwg:css-layout] flex item min-size reset, flex shorthand; [mwg:styling-web-components] host rules."
+      "sizeBudgetKb": 14,
+      "notes": "Guides: [mwg:css-layout] flex item min-size reset, flex shorthand; [mwg:styling-web-components] host rules. Size budget 14 kB (above the S default of 12): Stack bundles BoxPropsMixin, the static-tag switch for as=\"ul|ol|nav|\u2026\" and StackItem on top of lit (13.7 kB gzip measured)."
     }
   }
 }

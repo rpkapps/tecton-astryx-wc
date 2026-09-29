@@ -9,6 +9,7 @@ import {emulateMedia} from '@tecton-astryx/testing/emulate.js';
 import {fixture} from '@tecton-astryx/testing/fixture.js';
 import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
 import {isChromium} from '@tecton-astryx/testing/tier.js';
+import {waitUntil} from '@tecton-astryx/testing/timing.js';
 import {defineTheme} from '@tecton-astryx/core/theme/define-theme.js';
 import {generateThemeCSS} from '@tecton-astryx/core/theme/generate-theme-rules.js';
 import {CARD_ELEVATIONS, CARD_VARIANTS} from './card.types.js';
@@ -347,5 +348,28 @@ describe('tct-card with a generated theme (--card-padding* from generateThemeCSS
     const style = await themedCard({card: {base: {padding: '20px'}}}, 'padding="2"');
     // padding step 2 is the second rung of the spacing scale: 8px in Tecton
     expect(style.paddingBlockStart).toBe('8px');
+  });
+});
+
+describe('tct-card: keyboard access to a scrolling card', () => {
+  const long = '<div style="block-size: 600px">tall</div>';
+
+  it('makes a fixed-height card with overflowing content focusable', async () => {
+    const element = await card('height="120"', long);
+    await waitUntil(() => baseOf(element).getAttribute('tabindex') === '0', 'tabindex applied');
+    await expectAccessible(element.parentElement!);
+  });
+
+  it('gives no tab stop when the content fits or the height is not fixed', async () => {
+    const fits = await card('height="300"', '<span>short</span>');
+    expect(baseOf(fits).hasAttribute('tabindex')).toBe(false);
+    const grows = await card('', long);
+    expect(baseOf(grows).hasAttribute('tabindex')).toBe(false);
+  });
+
+  it('leaves the tab stop to focusable content', async () => {
+    const element = await card('height="120"', `${long}<button>Act</button>`);
+    await new Promise((resolve) => setTimeout(resolve, 60));
+    expect(baseOf(element).hasAttribute('tabindex')).toBe(false);
   });
 });

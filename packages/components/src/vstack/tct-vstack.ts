@@ -13,7 +13,7 @@ import type {StackDirection} from '../stack/stack.types.js';
  * @upstream VStack
  * @hideInherited direction - fixed to vertical by this element
  * @slot - The stack's children, laid out as flex items in a column.
- * @csspart base - The flex container that holds the children and the padding (Astryx target `astryx-stack`).
+ * @csspart base - The flex container that holds the children and the padding (theme target `stack`).
  * @cloakDisplay flex
  */
 export class TctVStack extends TctStack {

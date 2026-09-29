@@ -5,6 +5,8 @@ import {ifDefined} from 'lit/directives/if-defined.js';
 import {AriaDelegateController} from '@tecton-astryx/core/controllers/aria-delegate.js';
 import {TctElement} from '@tecton-astryx/core/tct-element.js';
 import base from '../styles/base.styles.css';
+import focusRing from '../styles/focus-ring.styles.css';
+import {ScrollFocusController} from './scroll-focus.js';
 import {STACK_TAGS} from './stack-elements.js';
 import {
   oneOf,
@@ -29,12 +31,12 @@ import styles from './tct-stack-item.styles.css';
  * @tag tct-stack-item
  * @upstream StackItem
  * @slot - The item's content.
- * @csspart base - The box that holds the content and scrolls (Astryx target `astryx-stack-item`).
+ * @csspart base - The box that holds the content and scrolls (theme target `stack-item`).
  * @cloakDisplay flex
  */
 export class TctStackItem extends TctElement {
   static override readonly tagName = 'tct-stack-item';
-  static override styles: CSSResultGroup = [base, styles];
+  static override styles: CSSResultGroup = [base, focusRing, styles];
 
   /**
    * Flex participation: `static` (default) uses the intrinsic size and neither grows nor shrinks;
@@ -61,6 +63,11 @@ export class TctStackItem extends TctElement {
    */
   @property() as: StackElement = 'div';
 
+  constructor() {
+    super();
+    ScrollFocusController.attach(this);
+  }
+
   readonly #aria = new AriaDelegateController(this, {
     target: () => {
       const inner = this.renderRoot.querySelector<HTMLElement>('[part~="base"]');
@@ -86,7 +93,7 @@ export class TctStackItem extends TctElement {
     const tag = STACK_TAGS[name];
     return staticHtml`<${tag}
       part="base"
-      class="base"
+      class="base focus-ring"
       role=${ifDefined(name === 'ul' || name === 'ol' ? 'list' : undefined)}
       ?data-scrollable=${this.scrollable}
     ><slot></slot></${tag}>`;

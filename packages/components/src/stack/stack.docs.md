@@ -114,7 +114,10 @@ it associate with their own form as usual.
   `role="list"` so list semantics survive `list-style: none` in Safari. A `tct-stack-item as="li"` is
   a list item in the browser's accessibility tree, but automated checkers such as axe want native
   `<li>` children of a list.
-- A scrollable stack has no accessible name by itself; see the consumer responsibilities.
+- A scrollable stack or stack item can be scrolled with the keyboard in every engine: while it really
+  overflows and holds nothing tabbable, its box is a tab stop (`tabindex="0"` on the inner box, with the
+  shared focus ring). When the content fits, or brings its own focusable elements, no tab stop is added.
+  The box has no accessible name by itself; see the consumer responsibilities.
 
 ## Localisation
 
@@ -125,8 +128,8 @@ the flow of a horizontal stack follow `dir="rtl"` without extra work.
 
 - Choose the element with `as` when the container has a role, and name landmarks (`aria-label`).
 - Keep list markup native: `<li>` children for `as="ul"` and `as="ol"`.
-- Make a scrollable region reachable: browsers that make scrollers keyboard focusable (Chromium 130+)
-  do it for you; elsewhere give the region a `tabindex="0"`, a `role="region"` and an accessible name.
+- Say what a scrolling region is: put a heading before it, or wrap it in a labelled group, so the tab stop
+  the box adds while it overflows is announced with a name.
 - Prefer `gap` and padding over margins on children, and `wrap` over deep nesting.
 - Do not put background, border or shadow on the host expecting them to survive an application CSS
   reset; style `::part(base)` or wrap the stack in a `tct-section` or `tct-card`.
