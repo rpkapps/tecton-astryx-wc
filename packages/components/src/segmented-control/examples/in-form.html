@@ -1,19 +1,21 @@
 <!-- title: In a form; description: With a name the control submits its value, resets to the value attribute, and reports required. -->
-<form id="in-form" style="display: flex; flex-direction: column; align-items: flex-start; gap: var(--spacing-3)">
-  <label for="in-form-density" style="color: var(--color-text-secondary)">Density</label>
-  <tct-segmented-control id="in-form-density" name="density" label="Density" required>
-    <tct-segmented-control-item value="compact" label="Compact"></tct-segmented-control-item>
-    <tct-segmented-control-item value="balanced" label="Balanced"></tct-segmented-control-item>
-    <tct-segmented-control-item value="spacious" label="Spacious"></tct-segmented-control-item>
-  </tct-segmented-control>
-  <div style="display: flex; gap: var(--spacing-2)">
-    <button type="submit">Submit</button>
-    <button type="reset">Reset</button>
-  </div>
-  <output data-output style="color: var(--color-text-secondary)">Nothing submitted yet.</output>
+<form id="in-form-root">
+  <tct-vstack gap="3" h-align="start">
+    <label for="in-form-density"><tct-text color="secondary">Density</tct-text></label>
+    <tct-segmented-control id="in-form-density" name="density" label="Density" required>
+      <tct-segmented-control-item value="compact" label="Compact"></tct-segmented-control-item>
+      <tct-segmented-control-item value="balanced" label="Balanced"></tct-segmented-control-item>
+      <tct-segmented-control-item value="spacious" label="Spacious"></tct-segmented-control-item>
+    </tct-segmented-control>
+    <tct-hstack gap="2">
+      <tct-button type="submit" variant="primary" label="Submit"></tct-button>
+      <tct-button type="reset" label="Reset"></tct-button>
+    </tct-hstack>
+    <output><tct-text data-output color="secondary">Nothing submitted yet.</tct-text></output>
+  </tct-vstack>
 </form>
 <script type="module">
-  const form = document.getElementById('in-form');
+  const form = document.getElementById('in-form-root');
   form.addEventListener('submit', (event) => {
     event.preventDefault();
     form.querySelector('[data-output]').textContent = `Submitted: ${JSON.stringify(Object.fromEntries(new FormData(form)))}`;

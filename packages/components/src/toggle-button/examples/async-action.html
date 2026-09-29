@@ -1,11 +1,11 @@
 <!-- title: API-backed toggle; description: pressedChangeAction runs after the change. The button flips at once, shows a spinner while the promise is pending, is interruptible, and restores the previous state if it rejects. -->
-<div id="async-action" style="display: flex; align-items: center; gap: var(--spacing-3)">
+<tct-hstack id="async-action-root" gap="3" v-align="center">
   <tct-toggle-button label="Favourite"></tct-toggle-button>
-  <tct-toggle-button label="Fails" ></tct-toggle-button>
-  <span data-output style="color: var(--color-text-secondary)">Waiting.</span>
-</div>
+  <tct-toggle-button label="Fails"></tct-toggle-button>
+  <tct-text data-output color="secondary">Waiting.</tct-text>
+</tct-hstack>
 <script type="module">
-  const root = document.getElementById('async-action');
+  const root = document.getElementById('async-action-root');
   const output = root.querySelector('[data-output]');
   const [favourite, fails] = root.querySelectorAll('tct-toggle-button');
   const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));

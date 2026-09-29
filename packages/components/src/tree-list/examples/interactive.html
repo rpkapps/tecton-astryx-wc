@@ -1,10 +1,10 @@
 <!-- title: Actions, links and nested controls; description: onClick makes a row a button, href a link; a nested control in end content owns its own click. Enter and Space activate the focused item. -->
-<div id="interactive-root" style="display: grid; gap: var(--spacing-3); max-inline-size: 26rem">
+<tct-vstack id="interactive-root" gap="3" max-width="26rem">
   <tct-tree-list header="Projects"></tct-tree-list>
-  <output style="color: var(--color-text-secondary)">Nothing activated yet</output>
+  <output><tct-text color="secondary">Nothing activated yet</tct-text></output>
   <script type="module">
     const root = document.getElementById('interactive-root');
-    const output = root.querySelector('output');
+    const output = root.querySelector('output tct-text');
     const say = (text) => {
       output.textContent = text;
     };
@@ -26,4 +26,4 @@
       {id: 'archive', label: 'Archive (a parent without an action toggles)', children: [{id: 'old', label: 'Old plans', onClick: () => say('Opened Old plans')}]},
     ];
   </script>
-</div>
+</tct-vstack>
