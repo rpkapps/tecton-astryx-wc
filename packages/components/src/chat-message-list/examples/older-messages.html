@@ -1,0 +1,39 @@
+<!-- title: Older messages; description: scrollToTopAction runs when the top of the list scrolls into view. The list shows a spinner and is aria-busy while it is pending, and the older messages are not announced. -->
+<tct-vstack id="list-older-root" max-width="520">
+  <div id="list-older-scroller" style="block-size: 260px; overflow: auto">
+    <tct-chat-message-list id="list-older" align="top"></tct-chat-message-list>
+  </div>
+</tct-vstack>
+<script type="module">
+  const list = document.getElementById('list-older');
+  const scroller = document.getElementById('list-older-scroller');
+  let oldest = 20;
+
+  const message = (text, sender) => {
+    const row = document.createElement('tct-chat-message');
+    row.setAttribute('sender', sender);
+    const bubble = document.createElement('tct-chat-message-bubble');
+    bubble.textContent = text;
+    row.append(bubble);
+    return row;
+  };
+
+  for (let n = oldest; n < oldest + 12; n++) {
+    list.append(message(`Message ${n}`, n % 2 ? 'user' : 'assistant'));
+  }
+  requestAnimationFrame(() => {
+    scroller.scrollTop = scroller.scrollHeight;
+  });
+
+  list.scrollToTopAction = async () => {
+    await new Promise((resolve) => setTimeout(resolve, 800));
+    const first = list.firstElementChild;
+    const before = scroller.scrollHeight - scroller.scrollTop;
+    for (let n = oldest - 1; n > Math.max(oldest - 6, 0); n--) {
+      list.insertBefore(message(`Message ${n}`, n % 2 ? 'user' : 'assistant'), first);
+    }
+    oldest -= 5;
+    // Keep the reader where they were while the older messages are added above.
+    scroller.scrollTop = scroller.scrollHeight - before;
+  };
+</script>
