@@ -1,0 +1,38 @@
+<!-- title: Row selection; description: A checkbox column with a select-all header that turns indeterminate for a partial selection. Rows can be disabled or non-selectable, and getRowLabel names each checkbox. -->
+<tct-vstack id="table-selection" gap="3">
+  <tct-table label="Invoices"></tct-table>
+  <tct-text type="supporting" data-role="summary">Nothing selected</tct-text>
+  <script type="module">
+    import {TableSelectionController, TableSelectionStateController} from '@tecton-wc/components/table/define.js';
+
+    const rows = [
+      {id: 'inv-1', customer: 'Northwind', amount: 1200, state: 'Paid'},
+      {id: 'inv-2', customer: 'Globex', amount: 830, state: 'Open'},
+      {id: 'inv-3', customer: 'Initech', amount: 4100, state: 'Open'},
+      {id: 'inv-4', customer: 'Umbrella', amount: 260, state: 'Void'},
+    ];
+    const root = document.querySelector('#table-selection');
+    const table = root.querySelector('tct-table');
+    const summary = root.querySelector('[data-role="summary"]');
+    const selection = new TableSelectionStateController(table, {
+      data: rows,
+      idKey: 'id',
+      defaultSelectedKeys: ['inv-2'],
+      getRowLabel: (row) => row.customer,
+      // A voided invoice is shown but cannot be selected or changed.
+      getIsItemEnabled: (row) => row.state !== 'Void',
+      onSelectedKeysChange: (keys) => {
+        summary.textContent = keys.size === 0 ? 'Nothing selected' : `${keys.size} selected`;
+      },
+    });
+    summary.textContent = '1 selected';
+    table.idKey = 'id';
+    table.columns = [
+      {key: 'customer', header: 'Customer'},
+      {key: 'state', header: 'State'},
+      {key: 'amount', header: 'Amount', align: 'end'},
+    ];
+    table.data = rows;
+    table.plugins = {selection: new TableSelectionController(table, selection.selectionConfig)};
+  </script>
+</tct-vstack>

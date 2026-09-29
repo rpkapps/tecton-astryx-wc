@@ -1,0 +1,357 @@
+{
+  "folder": "table",
+  "elements": {
+    "tct-table": {
+      "class": "TctTable",
+      "attributes": [
+        {
+          "name": "density",
+          "property": "density",
+          "type": "TableDensity",
+          "values": [
+            "compact",
+            "balanced",
+            "spacious"
+          ],
+          "default": "'balanced'",
+          "reflects": true
+        },
+        {
+          "name": "dividers",
+          "property": "dividers",
+          "type": "TableDividers",
+          "values": [
+            "rows",
+            "columns",
+            "grid",
+            "none"
+          ],
+          "default": "'rows'",
+          "reflects": true
+        },
+        {
+          "name": "empty-label",
+          "property": "emptyLabel",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "has-hover",
+          "property": "hasHover",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "id-key",
+          "property": "idKey",
+          "type": "TableIdKey<T> | undefined",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "no-empty-state",
+          "property": "noEmptyState",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "row-count",
+          "property": "rowCount",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "row-index-start",
+          "property": "rowIndexStart",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "striped",
+          "property": "striped",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "text-overflow",
+          "property": "textOverflow",
+          "type": "TableTextOverflow",
+          "values": [
+            "wrap",
+            "truncate"
+          ],
+          "default": "'wrap'",
+          "reflects": true
+        },
+        {
+          "name": "vertical-align",
+          "property": "verticalAlign",
+          "type": "TableVerticalAlign",
+          "values": [
+            "middle",
+            "top",
+            "bottom"
+          ],
+          "default": "'middle'",
+          "reflects": true
+        },
+        {
+          "name": "windowing",
+          "property": "windowing",
+          "type": "TableWindowing",
+          "values": [
+            "auto",
+            "off"
+          ],
+          "default": "'auto'",
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "columns",
+          "type": "TableColumn<T>[] | undefined",
+          "readonly": false
+        },
+        {
+          "name": "data",
+          "type": "T[] | undefined",
+          "readonly": false
+        },
+        {
+          "name": "direction",
+          "type": "'ltr' | 'rtl'",
+          "values": [
+            "ltr",
+            "rtl"
+          ],
+          "readonly": true
+        },
+        {
+          "name": "emptyState",
+          "type": "TableContent | false | undefined",
+          "readonly": false
+        },
+        {
+          "name": "pluginHost",
+          "type": "TablePluginHost",
+          "readonly": true
+        },
+        {
+          "name": "plugins",
+          "type": "TablePluginRecord<T> | undefined",
+          "readonly": false
+        },
+        {
+          "name": "renderedRowCount",
+          "type": "number",
+          "readonly": true
+        },
+        {
+          "name": "scrollRegion",
+          "type": "HTMLElement | null",
+          "readonly": true
+        },
+        {
+          "name": "scrollable",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "tableElement",
+          "type": "HTMLTableElement | null",
+          "readonly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "t",
+          "signature": "(id: string, args?: Record<string, unknown>) => string"
+        }
+      ],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [],
+      "cssStates": [
+        "scrollable"
+      ],
+      "cssProperties": [
+        {
+          "name": "--container-padding-block-end"
+        },
+        {
+          "name": "--container-padding-block-start"
+        },
+        {
+          "name": "--container-padding-inline-end"
+        },
+        {
+          "name": "--container-padding-inline-start"
+        },
+        {
+          "name": "--table-sticky-background"
+        }
+      ]
+    },
+    "tct-table-body": {
+      "class": "TctTableBody",
+      "attributes": [],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-table-cell": {
+      "class": "TctTableCell",
+      "attributes": [
+        {
+          "name": "col-span",
+          "property": "colSpan",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "headers",
+          "property": "headers",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "row-span",
+          "property": "rowSpan",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "scope",
+          "property": "scope",
+          "type": "TableCellScope | undefined",
+          "values": [
+            "col",
+            "row",
+            "colgroup",
+            "rowgroup"
+          ],
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "contextMenuActions",
+          "type": "TableContextActions | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-table-footer": {
+      "class": "TctTableFooter",
+      "attributes": [],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-table-header": {
+      "class": "TctTableHeader",
+      "attributes": [],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-table-header-cell": {
+      "class": "TctTableHeaderCell",
+      "attributes": [
+        {
+          "name": "scope",
+          "property": "scope",
+          "type": "TableCellScope | undefined",
+          "values": [
+            "col",
+            "row",
+            "colgroup",
+            "rowgroup"
+          ],
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "contextMenuActions",
+          "type": "TableContextActions | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-table-row": {
+      "class": "TctTableRow",
+      "attributes": [
+        {
+          "name": "header-row",
+          "property": "headerRow",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "contextMenuActions",
+          "type": "TableContextActions | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

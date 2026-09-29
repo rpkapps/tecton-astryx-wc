@@ -1,0 +1,38 @@
+<!-- title: Ten thousand rows; description: Above 200 rows the table renders only the rows near the viewport, and large sorts run in slices, so sorting and selecting stay responsive. aria-rowcount and aria-rowindex describe the whole set. -->
+<div id="table-large-data" style="block-size: 360px; overflow: auto">
+  <tct-table label="Ten thousand employees"></tct-table>
+  <script type="module">
+    import {
+      TableSelectionController,
+      TableSelectionStateController,
+      TableSortableController,
+      TableSortableStateController,
+    } from '@tecton-wc/components/table/define.js';
+
+    const DEPARTMENTS = ['Engineering', 'Design', 'Operations', 'Finance', 'Legal', 'Support'];
+    const rows = Array.from({length: 10000}, (_, i) => ({
+      id: `e${i}`,
+      name: `Employee ${String(i).padStart(5, '0')}`,
+      department: DEPARTMENTS[(i * 7) % DEPARTMENTS.length],
+      score: (i * 7919) % 1000,
+    }));
+
+    const table = document.querySelector('#table-large-data tct-table');
+    const sort = new TableSortableStateController(table, {data: rows});
+    sort.subscribe(() => {
+      table.data = sort.sortedData;
+    });
+    const selection = new TableSelectionStateController(table, {data: rows, idKey: 'id'});
+    table.idKey = 'id';
+    table.columns = [
+      {key: 'name', header: 'Name', sortable: true},
+      {key: 'department', header: 'Department', sortable: true},
+      {key: 'score', header: 'Score', sortable: true, align: 'end'},
+    ];
+    table.data = sort.sortedData;
+    table.plugins = {
+      sort: new TableSortableController(table, sort.sortConfig),
+      selection: new TableSelectionController(table, selection.selectionConfig),
+    };
+  </script>
+</div>
