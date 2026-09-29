@@ -377,14 +377,16 @@ describe('trigger menu: searching', () => {
 
   it('debounces an asynchronous source after its first answer, and searches at once before', async () => {
     const {trigger, calls} = asyncSource();
-    const input = await make([trigger], 'debounce-ms="120"');
+    // A window long enough that four keystrokes always fall inside it: with 120 ms, typing 'alan' under
+    // load took longer than the window and made a second search.
+    const input = await make([trigger], 'debounce-ms="1000"');
     await type(input, '@');
     // The first query is not delayed (nothing is known about the source yet).
     await waitUntil(() => calls.length === 1, 'the first search runs at once');
     calls[0]!.resolve([]);
     await userEvent.keyboard('alan');
-    // Three more keystrokes inside one debounce window make a single search.
-    await waitUntil(() => calls.length >= 2, 'the debounced search');
+    // Four keystrokes inside one debounce window make a single search.
+    await waitUntil(() => calls.length >= 2, 'the debounced search', 5000);
     expect(calls).toHaveLength(2);
     expect(calls[1]!.query).toBe('alan');
   });

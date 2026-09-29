@@ -126,7 +126,25 @@ describe.each([
     for (const theme of ['light', 'dark']) {
       document.documentElement.dataset.theme = theme;
       const el = fixture('<div style="color: var(--color-text-accent)">x</div>').firstElementChild!;
-      expect(computed(el, 'color')).toBe(theme === 'light' ? rgb('#5c3878') : rgb('#beb1c8'));
+      // This failed intermittently in full runs only (the light ink under data-theme="dark"); the
+      // message records the page state so the cause is visible when it happens.
+      const html = document.documentElement;
+      const state = () =>
+        JSON.stringify({
+          htmlAttributes: [...html.attributes].map((a) => `${a.name}=${a.value}`),
+          htmlColorScheme: getComputedStyle(html).colorScheme,
+          elementColorScheme: getComputedStyle(el).colorScheme,
+          accentOnHtml: getComputedStyle(html).getPropertyValue('--color-text-accent'),
+          prefersDark: matchMedia('(prefers-color-scheme: dark)').matches,
+          forcedColors: matchMedia('(forced-colors: active)').matches,
+          sheets: [...document.styleSheets].map(
+            (sheet) => (sheet.ownerNode as Element | null)?.outerHTML.slice(0, 60) ?? sheet.href,
+          ),
+          adopted: document.adoptedStyleSheets.length,
+        });
+      expect(computed(el, 'color'), state()).toBe(
+        theme === 'light' ? rgb('#5c3878') : rgb('#beb1c8'),
+      );
       el.parentElement!.remove();
     }
   });

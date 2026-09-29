@@ -17,6 +17,7 @@ import '../hstack/define.js';
 import '../vstack/define.js';
 import './define.js';
 import type {TctMultiSelector} from './tct-multi-selector.js';
+import {runModuleScript} from '@tecton-wc/testing/scripts.js';
 
 const examples = import.meta.glob<string>('./examples/*.html', {
   eager: true,
@@ -36,10 +37,7 @@ async function mountExample(source: string, theme: 'light' | 'dark'): Promise<HT
     {theme},
   );
   for (const code of scripts) {
-    const script = document.createElement('script');
-    script.type = 'module';
-    script.textContent = code;
-    root.append(script);
+    await runModuleScript(root, code);
   }
   await nextFrame();
   await nextFrame();
@@ -59,6 +57,7 @@ describe('multi-selector examples', () => {
         const selectors = [...root.querySelectorAll<TctMultiSelector>('tct-multi-selector')];
         expect(selectors.length).toBeGreaterThan(0);
         await Promise.all(selectors.map((selector) => selector.updateComplete));
+        await animationsFinished(root);
         await expectAccessible(root);
 
         // Open the first selector that can open, and check the popup too.
@@ -69,6 +68,7 @@ describe('multi-selector examples', () => {
           await first.show();
           await animationsFinished(first.shadowRoot!.querySelector('.layer')!);
           await nextFrame();
+          await animationsFinished(root);
           await expectAccessible(root);
           if (shoot) {
             const dir = `${server.config.root}/reports/screenshots/multi-selector`;

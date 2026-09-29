@@ -13,6 +13,7 @@ import {
 } from '@tecton-wc/testing/index.js';
 import './define.js';
 import type {TctPopover} from './tct-popover.js';
+import {runModuleScript} from '@tecton-wc/testing/scripts.js';
 
 const examples = import.meta.glob<string>('./examples/*.html', {
   eager: true,
@@ -32,10 +33,7 @@ async function mountExample(source: string, theme: 'light' | 'dark'): Promise<HT
     {theme},
   );
   for (const code of scripts) {
-    const script = document.createElement('script');
-    script.type = 'module';
-    script.textContent = code;
-    root.append(script);
+    await runModuleScript(root, code);
   }
   await nextFrame();
   return root;

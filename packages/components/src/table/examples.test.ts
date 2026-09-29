@@ -25,6 +25,7 @@ import './define.js';
 import * as api from './define.js';
 import {useLayeredPreflight} from './table-test-helpers.js';
 import type {TctTable} from './tct-table.js';
+import {runModuleScript} from '@tecton-wc/testing/scripts.js';
 
 const examples = import.meta.glob<string>('./examples/*.html', {
   eager: true,
@@ -51,10 +52,7 @@ async function mountExample(source: string, theme: 'light' | 'dark'): Promise<HT
       /import\s+\{([^}]*)\}\s+from\s+'[^']*';?/g,
       (_, names: string) => `const {${names}} = window.__tctExample;`,
     );
-    const script = document.createElement('script');
-    script.type = 'module';
-    script.textContent = rewritten;
-    root.append(script);
+    await runModuleScript(root, rewritten);
   }
   await nextFrame();
   await Promise.all(
