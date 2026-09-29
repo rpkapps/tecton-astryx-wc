@@ -1,0 +1,16 @@
+<!-- title: Group, single; description: One pressed at a time. Pressing the pressed button releases it (value becomes null). Every button stays a tab stop. -->
+<div id="group-single">
+  <tct-toggle-button-group label="View mode" value="grid">
+    <tct-toggle-button value="list" label="List" icon="menu"></tct-toggle-button>
+    <tct-toggle-button value="grid" label="Grid" icon="viewColumns"></tct-toggle-button>
+    <tct-toggle-button value="table" label="Table" icon="funnel"></tct-toggle-button>
+  </tct-toggle-button-group>
+  <p data-output style="margin-block-start: var(--spacing-3); color: var(--color-text-secondary)">Value: grid</p>
+</div>
+<script type="module">
+  const root = document.getElementById('group-single');
+  const group = root.querySelector('tct-toggle-button-group');
+  group.addEventListener('tct-value-change', (event) => {
+    root.querySelector('[data-output]').textContent = `Value: ${event.value ?? 'none'}`;
+  });
+</script>
