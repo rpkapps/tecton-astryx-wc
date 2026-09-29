@@ -1,5 +1,6 @@
 <!-- title: Status; description: status-type and status-message show a message; status-variant chooses attached, detached, or a tooltip behind a status button. An error sets aria-invalid. -->
-<!-- layout: pending tct-stack -->
-<tct-number-input label="Quantity" value="120" status-type="error" status-message="At most 99 per order."></tct-number-input>
-<tct-number-input label="Quantity" value="98" status-type="warning" status-message="Almost at the limit." status-variant="detached"></tct-number-input>
-<tct-number-input label="Quantity" value="10" status-type="success" status-message="In stock." status-variant="tooltip"></tct-number-input>
+<tct-vstack gap="4">
+  <tct-number-input label="Quantity" value="120" status-type="error" status-message="At most 99 per order."></tct-number-input>
+  <tct-number-input label="Quantity" value="98" status-type="warning" status-message="Almost at the limit." status-variant="detached"></tct-number-input>
+  <tct-number-input label="Quantity" value="10" status-type="success" status-message="In stock." status-variant="tooltip"></tct-number-input>
+</tct-vstack>

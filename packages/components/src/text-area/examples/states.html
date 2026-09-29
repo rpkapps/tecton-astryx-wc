@@ -1,10 +1,11 @@
 <!-- title: States; description: Hidden label, required and optional indicators, a start icon, disabled (with a reason), read-only and loading. -->
-<!-- layout: pending tct-stack -->
-<tct-text-area label="Label hidden but named" label-hidden rows="2" placeholder="Label hidden but named"></tct-text-area>
-<tct-text-area label="Required" required rows="2"></tct-text-area>
-<tct-text-area label="Optional" optional label-tooltip="You can add this later." rows="2"></tct-text-area>
-<tct-text-area label="With an icon" start-icon="search" rows="2" placeholder="Search notes"></tct-text-area>
-<tct-text-area label="Disabled" disabled value="Locked" rows="2"></tct-text-area>
-<tct-text-area label="Disabled with a reason" disabled disabled-message="The report is closed." value="Locked" rows="2"></tct-text-area>
-<tct-text-area label="Read-only" readonly value="Cannot be edited, but is submitted." rows="2"></tct-text-area>
-<tct-text-area label="Loading" loading value="Saving" rows="2"></tct-text-area>
+<tct-vstack gap="4">
+  <tct-text-area label="Label hidden but named" label-hidden rows="2" placeholder="Label hidden but named"></tct-text-area>
+  <tct-text-area label="Required" required rows="2"></tct-text-area>
+  <tct-text-area label="Optional" optional label-tooltip="You can add this later." rows="2"></tct-text-area>
+  <tct-text-area label="With an icon" start-icon="search" rows="2" placeholder="Search notes"></tct-text-area>
+  <tct-text-area label="Disabled" disabled value="Locked" rows="2"></tct-text-area>
+  <tct-text-area label="Disabled with a reason" disabled disabled-message="The report is closed." value="Locked" rows="2"></tct-text-area>
+  <tct-text-area label="Read-only" readonly value="Cannot be edited, but is submitted." rows="2"></tct-text-area>
+  <tct-text-area label="Loading" loading value="Saving" rows="2"></tct-text-area>
+</tct-vstack>

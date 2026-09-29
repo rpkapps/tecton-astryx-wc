@@ -1,7 +1,8 @@
 <!-- title: Disabled with a reason; description: disabled-message keeps a disabled control focusable and explains why in a tooltip on hover and keyboard focus; toggling stays blocked. On a list the reason belongs to the whole group. -->
-<!-- layout: pending tct-stack -->
-<tct-checkbox-input label="Accept terms" disabled disabled-message="Terms are managed by your administrator."></tct-checkbox-input>
-<tct-checkbox-list label="Notifications" disabled disabled-message="Notification channels are locked while billing is overdue.">
-  <tct-checkbox-list-item label="Email" value="email" checked></tct-checkbox-list-item>
-  <tct-checkbox-list-item label="SMS" value="sms"></tct-checkbox-list-item>
-</tct-checkbox-list>
+<tct-vstack gap="4">
+  <tct-checkbox-input label="Accept terms" disabled disabled-message="Terms are managed by your administrator."></tct-checkbox-input>
+  <tct-checkbox-list label="Notifications" disabled disabled-message="Notification channels are locked while billing is overdue.">
+    <tct-checkbox-list-item label="Email" value="email" checked></tct-checkbox-list-item>
+    <tct-checkbox-list-item label="SMS" value="sms"></tct-checkbox-list-item>
+  </tct-checkbox-list>
+</tct-vstack>

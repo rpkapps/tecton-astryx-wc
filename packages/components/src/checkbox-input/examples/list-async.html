@@ -1,12 +1,13 @@
 <!-- title: Async changes; description: changeAction runs after a toggle. The toggled option shows a spinner and is blocked while the promise is pending, the others stay interactive, and a rejection restores the previous selection. -->
-<!-- layout: pending tct-stack -->
-<tct-checkbox-list id="list-async-example" label="Saved filters" description="Each change is saved to the server.">
-  <tct-checkbox-list-item label="Open issues" value="open" checked></tct-checkbox-list-item>
-  <tct-checkbox-list-item label="Assigned to me" value="mine"></tct-checkbox-list-item>
-  <tct-checkbox-list-item label="Fails to save" value="fail" description="Reverts after a moment."></tct-checkbox-list-item>
-</tct-checkbox-list>
+<tct-vstack id="list-async-root">
+  <tct-checkbox-list label="Saved filters" description="Each change is saved to the server.">
+    <tct-checkbox-list-item label="Open issues" value="open" checked></tct-checkbox-list-item>
+    <tct-checkbox-list-item label="Assigned to me" value="mine"></tct-checkbox-list-item>
+    <tct-checkbox-list-item label="Fails to save" value="fail" description="Reverts after a moment."></tct-checkbox-list-item>
+  </tct-checkbox-list>
+</tct-vstack>
 <script type="module">
-  const list = document.getElementById('list-async-example');
+  const list = document.querySelector('#list-async-root tct-checkbox-list');
   list.changeAction = (values) =>
     new Promise((resolve, reject) => {
       setTimeout(() => (values.includes('fail') ? reject(new Error('Could not save')) : resolve()), 1200);

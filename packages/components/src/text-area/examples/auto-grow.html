@@ -1,4 +1,5 @@
 <!-- title: Auto-grow; description: auto-grow makes the field follow its text between rows and max-rows. It uses CSS field-sizing where the browser has it and measures the text otherwise. -->
-<!-- layout: pending tct-stack -->
-<tct-text-area label="Grows with the text" auto-grow rows="2" value="Type here and the field grows."></tct-text-area>
-<tct-text-area label="Grows, then scrolls after 5 lines" auto-grow rows="2" max-rows="5" value="One&#10;Two&#10;Three&#10;Four&#10;Five&#10;Six&#10;Seven"></tct-text-area>
+<tct-vstack gap="4">
+  <tct-text-area label="Grows with the text" auto-grow rows="2" value="Type here and the field grows."></tct-text-area>
+  <tct-text-area label="Grows, then scrolls after 5 lines" auto-grow rows="2" max-rows="5" value="One&#10;Two&#10;Three&#10;Four&#10;Five&#10;Six&#10;Seven"></tct-text-area>
+</tct-vstack>

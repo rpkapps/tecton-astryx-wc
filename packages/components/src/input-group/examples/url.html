@@ -1,15 +1,16 @@
 <!-- title: Prefix and suffix text; description: A prefix, a suffix, or both. tct-input-group-text takes text or an icon. -->
-<!-- layout: pending tct-stack -->
-<tct-input-group label="Website">
-  <tct-input-group-text>https://</tct-input-group-text>
-  <tct-text-input label="Address" label-hidden name="site" placeholder="example"></tct-text-input>
-  <tct-input-group-text>.com</tct-input-group-text>
-</tct-input-group>
-<tct-input-group label="Weight">
-  <tct-text-input label="Weight value" label-hidden name="weight" value="72"></tct-text-input>
-  <tct-input-group-text>kg</tct-input-group-text>
-</tct-input-group>
-<tct-input-group label="Search" label-hidden>
-  <tct-input-group-text><tct-icon name="search" size="sm" color="secondary"></tct-icon></tct-input-group-text>
-  <tct-text-input label="Search the catalog" label-hidden name="q" placeholder="Search"></tct-text-input>
-</tct-input-group>
+<tct-vstack gap="4">
+  <tct-input-group label="Website">
+    <tct-input-group-text>https://</tct-input-group-text>
+    <tct-text-input label="Address" label-hidden name="site" placeholder="example"></tct-text-input>
+    <tct-input-group-text>.com</tct-input-group-text>
+  </tct-input-group>
+  <tct-input-group label="Weight">
+    <tct-text-input label="Weight value" label-hidden name="weight" value="72"></tct-text-input>
+    <tct-input-group-text>kg</tct-input-group-text>
+  </tct-input-group>
+  <tct-input-group label="Search" label-hidden>
+    <tct-input-group-text><tct-icon name="search" size="sm" color="secondary"></tct-icon></tct-input-group-text>
+    <tct-text-input label="Search the catalog" label-hidden name="q" placeholder="Search"></tct-text-input>
+  </tct-input-group>
+</tct-vstack>

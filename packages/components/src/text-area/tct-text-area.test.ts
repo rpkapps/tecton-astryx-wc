@@ -5,7 +5,7 @@
  * upstream TextArea.test.tsx where the behaviour applies.
  */
 import {html} from 'lit';
-import {userEvent} from 'vitest/browser';
+import {page, userEvent} from 'vitest/browser';
 import {describe, expect, it} from 'vitest';
 import {getAnnouncerRegions} from '@tecton-astryx/core/a11y/announcer.js';
 import {overrideFeature} from '@tecton-astryx/core/features.js';
@@ -21,6 +21,7 @@ import {runFormControlSuite} from '@tecton-astryx/testing/suites/form-control.js
 import {isChromium, isTier2} from '@tecton-astryx/testing/tier.js';
 import {aTimeout, nextFrame, waitUntil} from '@tecton-astryx/testing/timing.js';
 import '../field/define.js';
+import '../form-layout/define.js';
 import '../tooltip/define.js';
 import './define.js';
 import type {TctTextArea} from './tct-text-area.js';
@@ -635,5 +636,24 @@ describe('tct-text-area: appearance, accessibility and i18n', () => {
     } finally {
       restore();
     }
+  });
+});
+
+describe('tct-text-area: form layout', () => {
+  it('in a horizontal-labels layout the label sits beside the control', async () => {
+    await page.viewport(800, 800);
+    const wrapper = await fixture<HTMLElement>(
+      `<div style="padding:40px;inline-size:640px"><tct-form-layout direction="horizontal-labels"><tct-text-area label="Notes" name="n"></tct-text-area></tct-form-layout></div>`,
+    );
+    const field = wrapper.querySelector<TctTextArea>('tct-text-area')!;
+    await field.updateComplete;
+    await nextFrame();
+    const label = field
+      .shadowRoot!.querySelector<HTMLElement>('[part="label"]')!
+      .getBoundingClientRect();
+    const control = field
+      .shadowRoot!.querySelector<HTMLElement>('[part="input"]')!
+      .getBoundingClientRect();
+    expect(label.right).toBeLessThanOrEqual(control.left);
   });
 });

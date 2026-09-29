@@ -6,7 +6,7 @@
  * behaviour applies.
  */
 import {html} from 'lit';
-import {userEvent} from 'vitest/browser';
+import {page, userEvent} from 'vitest/browser';
 import {describe, expect, it} from 'vitest';
 import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
 import {axNode, expectAccessible} from '@tecton-astryx/testing/a11y.js';
@@ -20,6 +20,7 @@ import {runFormControlSuite} from '@tecton-astryx/testing/suites/form-control.js
 import {isChromium, isTier2} from '@tecton-astryx/testing/tier.js';
 import {nextFrame, waitUntil} from '@tecton-astryx/testing/timing.js';
 import '../field/define.js';
+import '../form-layout/define.js';
 import '../tooltip/define.js';
 import './define.js';
 import type {TctRadioList} from './tct-radio-list.js';
@@ -609,5 +610,24 @@ describe('tct-radio-list: accessibility and i18n', () => {
       list.shadowRoot!.querySelector('[part="label-indicator"]')?.textContent ?? 'Required';
     await waitUntil(() => !indicator().includes('Required'), 'German indicator');
     expect(indicator()).toMatch(/Erforderlich|Pflicht/i);
+  });
+});
+
+describe('tct-radio-list: form layout', () => {
+  it('in a horizontal-labels layout the label sits beside the control', async () => {
+    await page.viewport(800, 800);
+    const wrapper = await fixture<HTMLElement>(
+      `<div style="padding:40px;inline-size:640px"><tct-form-layout direction="horizontal-labels"><tct-radio-list label="Size" name="s"><tct-radio-list-item label="Small" value="s"></tct-radio-list-item></tct-radio-list></tct-form-layout></div>`,
+    );
+    const field = wrapper.querySelector<TctRadioList>('tct-radio-list')!;
+    await field.updateComplete;
+    await nextFrame();
+    const label = field
+      .shadowRoot!.querySelector<HTMLElement>('[part="label"]')!
+      .getBoundingClientRect();
+    const control = field
+      .shadowRoot!.querySelector<HTMLElement>('[part="group"]')!
+      .getBoundingClientRect();
+    expect(label.right).toBeLessThanOrEqual(control.left);
   });
 });

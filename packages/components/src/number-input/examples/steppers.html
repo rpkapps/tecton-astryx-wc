@@ -1,5 +1,6 @@
 <!-- title: Steppers; description: has-steppers adds increment and decrement buttons at the end. They are not tab stops: keyboard users step with the arrow keys. step sets the amount, integer-only allows whole numbers. -->
-<!-- layout: pending tct-stack -->
-<tct-number-input label="Copies" has-steppers min="1" max="10" value="1" integer-only name="copies"></tct-number-input>
-<tct-number-input label="Opacity" has-steppers min="0" max="1" step="0.1" value="0.5" name="opacity"></tct-number-input>
-<tct-number-input label="Wheel steps this field while it has focus; no-wheel turns it off" no-wheel value="5" name="nowheel"></tct-number-input>
+<tct-vstack gap="4">
+  <tct-number-input label="Copies" has-steppers min="1" max="10" value="1" integer-only name="copies"></tct-number-input>
+  <tct-number-input label="Opacity" has-steppers min="0" max="1" step="0.1" value="0.5" name="opacity"></tct-number-input>
+  <tct-number-input label="Wheel steps this field while it has focus; no-wheel turns it off" no-wheel value="5" name="nowheel"></tct-number-input>
+</tct-vstack>

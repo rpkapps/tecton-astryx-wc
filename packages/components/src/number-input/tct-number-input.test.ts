@@ -5,7 +5,7 @@
  * NumberInput.test.tsx where the behaviour applies.
  */
 import {html} from 'lit';
-import {userEvent} from 'vitest/browser';
+import {page, userEvent} from 'vitest/browser';
 import {describe, expect, it} from 'vitest';
 import {getAnnouncerRegions} from '@tecton-astryx/core/a11y/announcer.js';
 import {overrideFeature} from '@tecton-astryx/core/features.js';
@@ -21,6 +21,9 @@ import {runFormControlSuite} from '@tecton-astryx/testing/suites/form-control.js
 import {isChromium} from '@tecton-astryx/testing/tier.js';
 import {nextFrame, waitUntil} from '@tecton-astryx/testing/timing.js';
 import '../field/define.js';
+import '../form-layout/define.js';
+import '../hstack/define.js';
+import '../vstack/define.js';
 import '../tooltip/define.js';
 import './define.js';
 import type {TctNumberInput} from './tct-number-input.js';
@@ -654,5 +657,24 @@ describe('tct-number-input: appearance, accessibility and i18n', () => {
     expect(
       field.shadowRoot!.querySelector('tct-input-clear-button')!.getAttribute('label'),
     ).not.toBe('Clear Menge');
+  });
+});
+
+describe('tct-number-input: form layout', () => {
+  it('in a horizontal-labels layout the label sits beside the box; a required default shows aria-required', async () => {
+    await page.viewport(800, 800);
+    const wrapper = await fixture<HTMLElement>(
+      `<div style="padding:40px;inline-size:640px"><tct-form-layout direction="horizontal-labels" default-optionality="required"><tct-number-input label="Quantity" name="q"></tct-number-input></tct-form-layout></div>`,
+    );
+    const field = wrapper.querySelector<TctNumberInput>('tct-number-input')!;
+    await field.updateComplete;
+    await nextFrame();
+    const label = field
+      .shadowRoot!.querySelector<HTMLElement>('[part="label"]')!
+      .getBoundingClientRect();
+    const box = part(field, 'input')!.getBoundingClientRect();
+    expect(label.right).toBeLessThanOrEqual(box.left);
+    expect(inner(field).getAttribute('aria-required')).toBe('true');
+    expect(field.validity.valueMissing).toBe(false);
   });
 });

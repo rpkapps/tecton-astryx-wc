@@ -5,7 +5,7 @@
  * Ported from upstream CheckboxList.test.tsx where the behaviour applies.
  */
 import {html} from 'lit';
-import {userEvent} from 'vitest/browser';
+import {page, userEvent} from 'vitest/browser';
 import {describe, expect, it} from 'vitest';
 import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
 import {axNode, expectAccessible} from '@tecton-astryx/testing/a11y.js';
@@ -19,6 +19,7 @@ import {isChromium, isTier2} from '@tecton-astryx/testing/tier.js';
 import {nextFrame, waitUntil} from '@tecton-astryx/testing/timing.js';
 import '../button/define.js';
 import '../field/define.js';
+import '../form-layout/define.js';
 import '../tooltip/define.js';
 import './define.js';
 import type {TctCheckboxList} from './tct-checkbox-list.js';
@@ -569,5 +570,24 @@ describe('tct-checkbox-list: appearance and accessibility', () => {
       .shadowRoot!.querySelector('[part="label"]')!;
     await waitUntil(() => hidden.textContent.trim() !== 'Checkbox', 'German word');
     expect(hidden.textContent.trim()).toBe('Kontrollkästchen');
+  });
+});
+
+describe('tct-checkbox-list: form layout', () => {
+  it('in a horizontal-labels layout the label sits beside the control', async () => {
+    await page.viewport(800, 800);
+    const wrapper = await fixture<HTMLElement>(
+      `<div style="padding:40px;inline-size:640px"><tct-form-layout direction="horizontal-labels"><tct-checkbox-list label="Options" name="o"><tct-checkbox-list-item label="A" value="a"></tct-checkbox-list-item></tct-checkbox-list></tct-form-layout></div>`,
+    );
+    const field = wrapper.querySelector<TctCheckboxList>('tct-checkbox-list')!;
+    await field.updateComplete;
+    await nextFrame();
+    const label = field
+      .shadowRoot!.querySelector<HTMLElement>('[part="label"]')!
+      .getBoundingClientRect();
+    const control = field
+      .shadowRoot!.querySelector<HTMLElement>('[role="list"]')!
+      .getBoundingClientRect();
+    expect(label.right).toBeLessThanOrEqual(control.left);
   });
 });

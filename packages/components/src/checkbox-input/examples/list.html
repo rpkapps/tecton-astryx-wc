@@ -1,7 +1,8 @@
 <!-- title: Checkbox list; description: A labelled group of options. The options marked checked are the default selection; values is the current one, and the list submits one entry for each checked value. -->
-<!-- layout: pending tct-stack -->
-<tct-checkbox-list label="Notifications" description="Choose how we reach you." name="channels">
-  <tct-checkbox-list-item label="Email" value="email" checked></tct-checkbox-list-item>
-  <tct-checkbox-list-item label="SMS" value="sms"></tct-checkbox-list-item>
-  <tct-checkbox-list-item label="Push" value="push" checked></tct-checkbox-list-item>
-</tct-checkbox-list>
+<tct-vstack gap="4">
+  <tct-checkbox-list label="Notifications" description="Choose how we reach you." name="channels">
+    <tct-checkbox-list-item label="Email" value="email" checked></tct-checkbox-list-item>
+    <tct-checkbox-list-item label="SMS" value="sms"></tct-checkbox-list-item>
+    <tct-checkbox-list-item label="Push" value="push" checked></tct-checkbox-list-item>
+  </tct-checkbox-list>
+</tct-vstack>
