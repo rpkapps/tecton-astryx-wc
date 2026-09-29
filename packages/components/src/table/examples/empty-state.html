@@ -1,0 +1,15 @@
+<!-- title: Empty state; description: An empty data array renders a compact empty state row. Set empty-label for the text, emptyState for your own content, or no-empty-state to leave the body empty. -->
+<tct-vstack id="table-empty" gap="6">
+  <tct-table label="No results (default)"></tct-table>
+  <tct-table label="No results (custom text)" empty-label="No invoices match your filters"></tct-table>
+  <script type="module">
+    for (const table of document.querySelectorAll('#table-empty tct-table')) {
+      table.columns = [
+        {key: 'invoice', header: 'Invoice'},
+        {key: 'customer', header: 'Customer'},
+        {key: 'total', header: 'Total', align: 'end'},
+      ];
+      table.data = [];
+    }
+  </script>
+</tct-vstack>

@@ -165,6 +165,107 @@
           "upstream": "resolveContextActions",
           "target": "resolveContextActions",
           "as": "module-function"
+        },
+        {
+          "upstream": "useTableSortable",
+          "target": "TableSortableController",
+          "as": "controller",
+          "notes": "Sort buttons with aria-sort, an announcement and header context-menu actions; `multiSort` is upstream `isMultiSortEnabled` (TABLE-12)."
+        },
+        {
+          "upstream": "useTableSortableState",
+          "target": "TableSortableStateController",
+          "as": "controller",
+          "notes": "Owns the sort, sorts a copy; above 2,000 rows it sorts in yielding slices (`sorting`, `settled()`); missing values sort last (TABLE-10)."
+        },
+        {
+          "upstream": "useTableSelection",
+          "target": "TableSelectionController",
+          "as": "controller",
+          "notes": "Checkbox column (tct-checkbox-input), select-all with the indeterminate state, aria-selected, selected fill."
+        },
+        {
+          "upstream": "useTableSelectionState",
+          "target": "TableSelectionStateController",
+          "as": "controller",
+          "notes": "`noRowHighlight` is upstream `hasNoRowHighlight` (TABLE-12)."
+        },
+        {
+          "upstream": "useTablePagination",
+          "target": "TablePaginationController",
+          "as": "controller",
+          "notes": "The controls are the table's own small pager built from tct-button and the pagination message catalog, not the standalone pagination component (TABLE-11)."
+        },
+        {
+          "upstream": "paginateData",
+          "target": "paginateData",
+          "as": "module-function"
+        },
+        {
+          "upstream": "useTableColumnSettings",
+          "target": "TableColumnSettingsController",
+          "as": "controller"
+        },
+        {
+          "upstream": "useTableColumnSettingsState",
+          "target": "TableColumnSettingsStateController",
+          "as": "controller",
+          "notes": "`alwaysVisible` is upstream `isAlwaysVisible` (TABLE-12)."
+        },
+        {
+          "upstream": "useTableColumnResize",
+          "target": "TableColumnResizeController",
+          "as": "controller",
+          "notes": "A role=\"separator\" window-splitter handle per header; drag or arrow keys (10 px, Shift 50 px, Home, End), mirrored in RTL; the handle is a focusable control in the tab order."
+        },
+        {
+          "upstream": "useTableStickyColumns",
+          "target": "TableStickyColumnsController",
+          "as": "controller",
+          "notes": "Logical offsets, so pinned columns flip in RTL."
+        },
+        {
+          "upstream": "useTableGroupedRows",
+          "target": "TableGroupedRowsController",
+          "as": "controller",
+          "notes": "The controller is both the plugin and the data source: give the table `grouped.data` and `grouped.idKey`."
+        },
+        {
+          "upstream": "useTableRowIndex",
+          "target": "TableRowIndexController",
+          "as": "controller"
+        },
+        {
+          "upstream": "useTableRowStatus",
+          "target": "TableRowStatusController",
+          "as": "controller",
+          "notes": "A role=\"img\" marker named by its label, with a native title tooltip (TABLE-13); a raw CSS colour is validated and set as a custom property, never as markup."
+        },
+        {
+          "upstream": "useTableRowExpansion",
+          "target": "TableRowExpansionController",
+          "as": "controller"
+        },
+        {
+          "upstream": "useTableTreeData",
+          "target": "TableTreeDataController",
+          "as": "controller",
+          "notes": "`expandAllControl` and `rowClickExpansion` are upstream `hasExpandAllControl` and `hasRowClickExpansion` (TABLE-12). Rows carry data attributes, not aria-level/aria-expanded (TABLE-09)."
+        },
+        {
+          "upstream": "useTableTreeState",
+          "target": "TableTreeStateController",
+          "as": "controller"
+        },
+        {
+          "upstream": "useTableFiltering",
+          "as": "waived",
+          "reason": "Filtering belongs to the search work package (WP-18). The plugin pipeline, `TableColumn.filter` and `rowSignature` are its hooks."
+        },
+        {
+          "upstream": "useTableFilterState",
+          "as": "waived",
+          "reason": "Filtering belongs to the search work package (WP-18)."
         }
       ],
       "keyboard": [
@@ -271,7 +372,7 @@
         {
           "id": "TABLE-06",
           "type": "approved-api-difference",
-          "text": "Large datasets render progressively: above 200 rows the first 60 render in one update and the rest in adaptive chunks (scheduler.yield / setTimeout) that each stay under the long-task line; `updateComplete` resolves when every row exists and a spacer row keeps the scroll height stable meanwhile [mwg:break-up-long-tasks]."
+          "text": "Large datasets are windowed instead of rendered whole: above 200 rows (`windowing=\"auto\"`, `windowing=\"off\"` renders every row) only the rows near the viewport are in the DOM between two aria-hidden spacer rows, sized from a measured row height, and the table sets aria-rowcount and aria-rowindex. The window follows the nearest vertical scroller (an ancestor or the page) and snaps to steps of 8 rows with an overscan of half a viewport. Consequences: rows outside the window are not found by find-in-page, and rows of very different heights make the spacers approximate. TctTable adds the `windowing` attribute and `renderedRowCount`. Table rows cannot use content-visibility, so windowing is the way to keep the DOM small [mwg:defer-rendering-heavy-content] [mwg:interactions-in-complex-layouts]."
         },
         {
           "id": "TABLE-07",
@@ -282,27 +383,71 @@
           "id": "TABLE-08",
           "type": "approved-api-difference",
           "text": "An empty table (no `data` and no `columns`) renders nothing instead of an empty <table>; `data=[]` with columns renders the empty state row."
+        },
+        {
+          "id": "TABLE-09",
+          "type": "a11y-improvement",
+          "text": "Tree rows and group heading rows do not carry aria-level or aria-expanded. Both are valid only on a treegrid/grid row: on a native table row axe reports aria-conditional-attr, and a treegrid would promise arrow-key navigation the table does not have. The state is on the expander button (`aria-expanded`, named \"Expand row\" / \"Collapse group X\"); the depth is `data-tree-level` (1-based) and the state `data-tree-expanded` / `data-group-expanded` on the row for styling and tests."
+        },
+        {
+          "id": "TABLE-10",
+          "type": "approved-api-difference",
+          "text": "Default sorting orders missing values (null, undefined, NaN) last in both directions, numbers numerically and other values with an Intl.Collator for the element's language with numeric collation. Sorting decorates each row once and is stable. Datasets above 2,000 rows sort asynchronously in slices of about 8 ms (`sorting`, `settled()`); until the sort is done `sortedData` is the previous order, or the raw rows when the data itself changed [mwg:break-up-long-tasks]."
+        },
+        {
+          "id": "TABLE-11",
+          "type": "approved-api-difference",
+          "text": "The pagination plugin renders the table's own small pager (previous/next, page numbers with ellipses, a count or \"Page x of y\", an optional page-size select, variants pages, count, compact, dots) built from tct-button, tct-icon and the shared pagination catalog, so it works without the standalone pagination component (WP-11), which this package must not depend on. When that component is merged the pager can switch to it without an API change."
+        },
+        {
+          "id": "TABLE-12",
+          "type": "approved-api-difference",
+          "text": "Boolean plugin config fields drop upstream's is/has prefix, like the element attributes: `multiSort` (isMultiSortEnabled), `noRowHighlight` (hasNoRowHighlight), `alwaysVisible` (isAlwaysVisible), `expandAllControl` (hasExpandAllControl), `rowClickExpansion` (hasRowClickExpansion). State controllers do not take React state: the config is a live object with a `subscribe` method, so `state.sortConfig`, `state.selectionConfig`, `state.treeConfig` and `state.columnSettingsConfig` follow every change."
+        },
+        {
+          "id": "TABLE-13",
+          "type": "approved-api-difference",
+          "text": "Row status markers are role=\"img\" elements named by their label and carry the label as a native `title` tooltip (upstream uses the design system tooltip component per marker, which would add a popover per row). A custom colour is one of the named roles or a plain CSS colour expression; anything that could end the declaration falls back to the inherited colour."
+        },
+        {
+          "id": "TABLE-14",
+          "type": "approved-api-difference",
+          "text": "Pixel columns take their declared width as the minimum a resize can reach (a global `minWidth` on the resize plugin lowers it), and the resize handle is a role=\"separator\" control in the tab order with aria-valuenow, aria-valuemin and aria-valuetext; arrow keys follow the visual direction, so they mirror in RTL. Column resize does not depend on the resize-handle component (WP-8)."
         }
       ],
       "tests": {
         "render": true,
         "a11y": true,
         "api": true,
-        "keyboard": false,
+        "keyboard": true,
         "form": false,
         "events": false,
-        "rtl": false,
-        "forcedColors": false,
-        "i18n": false
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
       },
       "provisional": [],
       "tokenRequests": [],
-      "requests": [],
+      "requests": [
+        {
+          "file": "packages/components/src/pagination (WP-11)",
+          "reason": "When the standalone pagination component is merged, TablePaginationController can render it instead of its own small pager (TABLE-11). Nothing depends on it today."
+        },
+        {
+          "file": "packages/components/src/resize-handle (WP-8)",
+          "reason": "The column resize handle is implemented inside the table (a separator control with drag, keyboard and RTL). If the resize-handle component ships the same contract it can replace it (TABLE-14)."
+        },
+        {
+          "file": "tools/lib/example-style.ts or apps/docs (orchestrator)",
+          "reason": "Table examples import the plugin controllers from @tecton-wc/components/table/define.js and from lit inside inline module scripts (as the toast examples do); the docs bundler must resolve those specifiers. The examples test replaces the imports with the already loaded modules."
+        }
+      ],
       "sizeBudgetKb": null,
       "notes": [
-        "Plugin architecture (write-up before implementation): a plugin is a TablePlugin (optional transformColumns, transformTable, transformHeaderRow, transformHeaderCell, transformBodyRow, transformBodyCell, transformScrollWrapper, transformTableContext) plus optional rowSignature/attach/detach; TablePluginController is the base class (config read live, refresh(), tables attach/detach, Lit host optional). State helpers (Sortable/Selection/ColumnSettings/Tree state) are controllers that own state, expose the derived data and implement the plugin config interface, notifying subscribers and their Lit host. tct-table resolves the record into one ordered array (canonical order columnSettings, sort, tree, selection, pagination), runs every transform through applyPlugins (a throwing transform is isolated), and rebuilds only the rows whose signature changed.",
-        "Slices: static table, sort, selection, pagination, column settings/resize/sticky, grouped rows/expansion/tree, row status/index/context menu. Filtering (useTableFiltering) belongs to the search work package; the plugin pipeline, `TableColumn.filter` and `rowSignature` are its hooks.",
-        "Guides: [mwg:break-up-long-tasks] chunked progressive rendering and scheduler.yield with the setTimeout fallback; [mwg:interactions-in-complex-layouts] and [mwg:defer-rendering-heavy-content] considered for content-visibility (not applicable: internal table boxes do not take size containment); [mwg:responsive-table] semantic table, sticky columns with logical offsets; [mwg:accessibility] native table semantics, live-region discipline through the announcer; [mwg:styling-web-components] light-DOM sheet in @layer tecton.light-dom at zero specificity."
+        "Plugin architecture (written before implementation): a plugin is a TablePlugin (optional transformColumns, transformTable, transformHeaderRow, transformHeaderCell, transformBodyRow, transformBodyCell, transformScrollWrapper, transformTableContext) plus optional rowSignature/attach/updated/detach and contributesContextActions; TablePluginController is the base class (config read live, refresh(), tables attach/detach, Lit host optional). State helpers (Sortable/Selection/ColumnSettings/Tree state) are TableStateControllers that own state, expose the derived data and implement the config interface of the plugin they feed, notifying subscribers and their Lit host. tct-table resolves the record into one ordered array (canonical order columnSettings, sort, tree, selection, pagination), runs every transform through applyPlugins (a throwing transform is isolated), and rebuilds only the rows whose signature changed (guard() per row).",
+        "Slices, each committed with tests: static table, sort, selection, pagination, column settings/resize/sticky, grouped rows/expansion/tree/row index/row status/row context menu, windowing and sliced sorting, keyboard table, examples, docs. Filtering (useTableFiltering) belongs to the search work package.",
+        "Measured on 10,000 rows in Chromium (table-performance.test.ts, event timing INP and long tasks from the pointer going down): initial render about 35-40 ms and no long task over 65 ms; sort by name/age/score INP 0-24 ms (below the 16 ms event-timing threshold reads 0), every task under 50 ms, sort complete in 90-360 ms with the table responsive throughout; single selection INP 24-56 ms; select all INP 40-56 ms. The budget asserted is INP <= 200 ms and longest task < 120 ms.",
+        "Guides: [mwg:break-up-long-tasks] sliced sorting with scheduler.yield and the setTimeout fallback; [mwg:defer-rendering-heavy-content] and [mwg:interactions-in-complex-layouts] windowing (content-visibility does not apply to table rows); [mwg:identify-inp-causes] the INP measurement; [mwg:responsive-table] semantic table, sticky columns with logical offsets, scroll region; [mwg:accessibility] native table semantics, announcer discipline, no invalid row ARIA; [mwg:styling-web-components] light-DOM sheet in @layer tecton.light-dom at zero specificity; [mwg:schedule-tasks-by-priority] yielding."
       ]
     },
     "core.table-header": {

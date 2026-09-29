@@ -304,6 +304,11 @@ export interface TablePlugin<T extends Record<string, unknown> = Record<string, 
   attach?: (table: TablePluginHost) => void;
   /** Called after every table update, once the DOM matches the render (measure, announce, observe). */
   updated?: (table: TablePluginHost) => void;
+  /**
+   * Set to `true` when the plugin adds right-click actions (`contextMenuActions`): the table then
+   * renders its shared context menu without waiting for a cell to ask for it.
+   */
+  contributesContextActions?: boolean;
   /** Called when the plugin is removed from a table, or the table disconnects. */
   detach?: (table: TablePluginHost) => void;
 }

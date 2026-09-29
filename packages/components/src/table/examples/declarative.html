@@ -1,0 +1,45 @@
+<!-- title: Declarative markup; description: Without data or columns the table styles what you write: a native table (the best choice for static content) or the tct-table-* parts. -->
+<tct-vstack gap="6">
+  <tct-vstack gap="2">
+    <tct-text type="label">Native table markup</tct-text>
+    <tct-table label="Release schedule" striped>
+      <table>
+        <thead>
+          <tr><th scope="col">Version</th><th scope="col">Date</th><th scope="col">Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>3.2</td><td>12 March</td><td>Shipped</td></tr>
+          <tr><td>3.3</td><td>18 April</td><td>In review</td></tr>
+          <tr><td>4.0</td><td>2 June</td><td>Planned</td></tr>
+        </tbody>
+        <tfoot>
+          <tr><td colspan="3">Dates are targets.</td></tr>
+        </tfoot>
+      </table>
+    </tct-table>
+  </tct-vstack>
+  <tct-vstack gap="2">
+    <tct-text type="label">Table parts</tct-text>
+    <tct-table label="Release schedule (parts)" has-hover>
+      <tct-table-header>
+        <tct-table-row>
+          <tct-table-header-cell>Version</tct-table-header-cell>
+          <tct-table-header-cell>Date</tct-table-header-cell>
+          <tct-table-header-cell>Status</tct-table-header-cell>
+        </tct-table-row>
+      </tct-table-header>
+      <tct-table-body>
+        <tct-table-row>
+          <tct-table-cell>3.2</tct-table-cell>
+          <tct-table-cell>12 March</tct-table-cell>
+          <tct-table-cell>Shipped</tct-table-cell>
+        </tct-table-row>
+        <tct-table-row>
+          <tct-table-cell>3.3</tct-table-cell>
+          <tct-table-cell>18 April</tct-table-cell>
+          <tct-table-cell>In review</tct-table-cell>
+        </tct-table-row>
+      </tct-table-body>
+    </tct-table>
+  </tct-vstack>
+</tct-vstack>

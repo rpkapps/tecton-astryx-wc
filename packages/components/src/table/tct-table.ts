@@ -122,6 +122,7 @@ function oneOf<V extends string>(allowed: readonly V[], value: V, fallback: V, n
  *
  * @summary A data table with density, dividers, striping, hover and a plugin pipeline.
  * @tag tct-table
+ * @slot - Children mode (no `data` and no `columns`): authored table markup or `tct-table-*` parts, styled in place. Light DOM has no slots; the content stays where it is written.
  * @upstream Table
  * @cssprop --container-padding-inline-start - Read from an enclosing padded container (a card, a section): the table bleeds to its edge and its first column lines up with its content inset.
  * @cssprop --container-padding-inline-end - Read like the inline-start one, for the inline end.

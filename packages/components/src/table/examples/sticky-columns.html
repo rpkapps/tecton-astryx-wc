@@ -1,0 +1,24 @@
+<!-- title: Sticky columns; description: Pin columns to either edge while the table scrolls sideways. The pinned columns use logical offsets, so they flip in right-to-left text. -->
+<div id="table-sticky" style="max-inline-size: 520px">
+  <tct-table label="Accounts, pinned columns" dividers="columns"></tct-table>
+  <script type="module">
+    import {TableStickyColumnsController, pixel} from '@tecton-wc/components/table/define.js';
+
+    const table = document.querySelector('#table-sticky tct-table');
+    table.idKey = 'id';
+    table.columns = [
+      {key: 'account', header: 'Account', width: pixel(160)},
+      {key: 'region', header: 'Region', width: pixel(140)},
+      {key: 'plan', header: 'Plan', width: pixel(140)},
+      {key: 'seats', header: 'Seats', width: pixel(120), align: 'end'},
+      {key: 'renewal', header: 'Renewal', width: pixel(140)},
+      {key: 'owner', header: 'Owner', width: pixel(160)},
+    ];
+    table.data = [
+      {id: 'a1', account: 'Northwind', region: 'Europe', plan: 'Enterprise', seats: 250, renewal: 'Jan 2027', owner: 'Alice Chen'},
+      {id: 'a2', account: 'Globex', region: 'North America', plan: 'Team', seats: 40, renewal: 'Mar 2027', owner: 'Bob Smith'},
+      {id: 'a3', account: 'Initech', region: 'Asia Pacific', plan: 'Enterprise', seats: 900, renewal: 'Jun 2027', owner: 'Carol Wu'},
+    ];
+    table.plugins = {sticky: new TableStickyColumnsController(table, {startKeys: ['account'], endKeys: ['owner']})};
+  </script>
+</div>

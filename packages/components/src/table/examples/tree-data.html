@@ -1,0 +1,41 @@
+<!-- title: Tree data; description: Nested rows share the parent's columns. The tree state controller flattens the visible rows; the plugin indents the first column and adds the chevron, with an optional expand-all control and row-click expansion. -->
+<div id="table-tree-data">
+  <tct-table label="Project files"></tct-table>
+  <script type="module">
+    import {TableTreeDataController, TableTreeStateController} from '@tecton-wc/components/table/define.js';
+
+    const table = document.querySelector('#table-tree-data tct-table');
+    const tree = new TableTreeStateController(table, {
+      idKey: 'id',
+      expandAllControl: true,
+      rowClickExpansion: true,
+      defaultExpandedIds: ['src'],
+      data: [
+        {
+          id: 'src',
+          name: 'src',
+          kind: 'Folder',
+          children: [
+            {id: 'components', name: 'components', kind: 'Folder', children: [
+              {id: 'table', name: 'table.ts', kind: 'TypeScript'},
+              {id: 'button', name: 'button.ts', kind: 'TypeScript'},
+            ]},
+            {id: 'index', name: 'index.ts', kind: 'TypeScript'},
+          ],
+        },
+        {id: 'docs', name: 'docs', kind: 'Folder', children: [{id: 'readme', name: 'README.md', kind: 'Markdown'}]},
+        {id: 'license', name: 'NOTICE.txt', kind: 'Text'},
+      ],
+    });
+    tree.subscribe(() => {
+      table.data = tree.visibleData;
+    });
+    table.idKey = 'id';
+    table.columns = [
+      {key: 'name', header: 'Name'},
+      {key: 'kind', header: 'Kind'},
+    ];
+    table.data = tree.visibleData;
+    table.plugins = {tree: new TableTreeDataController(table, tree.treeConfig)};
+  </script>
+</div>

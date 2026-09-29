@@ -1,0 +1,32 @@
+<!-- title: Density, dividers, stripes and hover; description: The visual variants are attributes: density, dividers, striped, has-hover, vertical-align and text-overflow. -->
+<tct-vstack id="table-variants" gap="6">
+  <tct-vstack gap="2">
+    <tct-text type="label">Compact, column dividers, striped</tct-text>
+    <tct-table density="compact" dividers="grid" striped label="Compact grid"></tct-table>
+  </tct-vstack>
+  <tct-vstack gap="2">
+    <tct-text type="label">Spacious, no dividers, row hover</tct-text>
+    <tct-table density="spacious" dividers="none" has-hover label="Spacious rows"></tct-table>
+  </tct-vstack>
+  <tct-vstack gap="2">
+    <tct-text type="label">Truncated text, top-aligned cells</tct-text>
+    <tct-table text-overflow="truncate" vertical-align="top" label="Truncated text"></tct-table>
+  </tct-vstack>
+  <script type="module">
+    const rows = [
+      {id: 'r1', name: 'Alice Chen', note: 'Leads the platform team and reviews every infrastructure change before it ships.', age: 31},
+      {id: 'r2', name: 'Bob Smith', note: 'Design systems, accessibility audits and the yearly brand refresh.', age: 27},
+      {id: 'r3', name: 'Carol Wu', note: 'Owns the roadmap.', age: 45},
+    ];
+    const columns = [
+      {key: 'name', header: 'Name', width: {type: 'proportional', value: 1, minWidth: 140}},
+      {key: 'note', header: 'Note', width: {type: 'proportional', value: 3, minWidth: 200}},
+      {key: 'age', header: 'Age', align: 'end', width: {type: 'pixel', value: 80}},
+    ];
+    for (const table of document.querySelectorAll('#table-variants tct-table')) {
+      table.idKey = 'id';
+      table.columns = columns;
+      table.data = rows;
+    }
+  </script>
+</tct-vstack>

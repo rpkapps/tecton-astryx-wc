@@ -76,7 +76,9 @@ const KNOWN_KEYS = new Set<string>([
   ...TABLE_PLUGIN_TRANSFORMS,
   'rowSignature',
   'attach',
+  'updated',
   'detach',
+  'contributesContextActions',
 ]);
 
 function isPlainObject(value: object): boolean {
