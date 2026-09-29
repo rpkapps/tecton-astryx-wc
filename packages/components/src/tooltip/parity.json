@@ -6,7 +6,11 @@
     "core.tooltip": {
       "tag": "tct-tooltip",
       "status": "implemented",
-      "upstream": {"name": "Tooltip", "path": "packages/core/src/Tooltip/Tooltip.tsx", "commit": "ca632c6"},
+      "upstream": {
+        "name": "Tooltip",
+        "path": "packages/core/src/Tooltip/Tooltip.tsx",
+        "commit": "ca632c6"
+      },
       "api": [
         {
           "upstream": "children",
@@ -28,12 +32,44 @@
           "as": "property",
           "notes": "Attribute and property, plain text. See TOOLTIP-01."
         },
-        {"upstream": "placement", "kind": "prop", "target": "placement", "as": "attribute", "reflect": true, "default": "above"},
-        {"upstream": "alignment", "kind": "prop", "target": "alignment", "as": "attribute", "reflect": true, "default": "center"},
+        {
+          "upstream": "placement",
+          "kind": "prop",
+          "target": "placement",
+          "as": "attribute",
+          "reflect": true,
+          "default": "above"
+        },
+        {
+          "upstream": "alignment",
+          "kind": "prop",
+          "target": "alignment",
+          "as": "attribute",
+          "reflect": true,
+          "default": "center"
+        },
         {"upstream": "delay", "kind": "prop", "target": "delay", "as": "attribute", "default": 200},
-        {"upstream": "hideDelay", "kind": "prop", "target": "hide-delay", "as": "attribute", "default": 0},
-        {"upstream": "focusTrigger", "kind": "prop", "target": "focus-trigger", "as": "attribute", "default": "auto"},
-        {"upstream": "touchTrigger", "kind": "prop", "target": "touch-trigger", "as": "attribute", "default": "auto"},
+        {
+          "upstream": "hideDelay",
+          "kind": "prop",
+          "target": "hide-delay",
+          "as": "attribute",
+          "default": 0
+        },
+        {
+          "upstream": "focusTrigger",
+          "kind": "prop",
+          "target": "focus-trigger",
+          "as": "attribute",
+          "default": "auto"
+        },
+        {
+          "upstream": "touchTrigger",
+          "kind": "prop",
+          "target": "touch-trigger",
+          "as": "attribute",
+          "default": "auto"
+        },
         {
           "upstream": "isEnabled",
           "kind": "prop",
@@ -82,13 +118,35 @@
         }
       ],
       "hooks": [
-        {"upstream": "useLayer", "target": "LayerController", "as": "controller", "notes": "Layer stack membership, Escape, hint kind, anchor positioning through PositionController."},
-        {"upstream": "useLayerDismissal", "target": "LayerController", "as": "controller", "notes": "Escape and outside presses go through the shared layer stack: the tooltip closes before its dialog."},
-        {"upstream": "useTouchTrigger", "target": "TooltipController", "as": "controller", "notes": "touch-trigger auto | tap | none, in packages/core/src/controllers/tooltip.ts."}
+        {
+          "upstream": "useLayer",
+          "target": "LayerController",
+          "as": "controller",
+          "notes": "Layer stack membership, Escape, hint kind, anchor positioning through PositionController."
+        },
+        {
+          "upstream": "useLayerDismissal",
+          "target": "LayerController",
+          "as": "controller",
+          "notes": "Escape and outside presses go through the shared layer stack: the tooltip closes before its dialog."
+        },
+        {
+          "upstream": "useTouchTrigger",
+          "target": "TooltipController",
+          "as": "controller",
+          "notes": "touch-trigger auto | tap | none, in packages/core/src/controllers/tooltip.ts."
+        }
       ],
       "keyboard": [
-        {"keys": "Tab (focus on the trigger)", "action": "Shows the tooltip after keyboard focus (focus-visible), when the trigger is naturally focusable or focus-trigger is always.", "when": "focus-trigger is not never"},
-        {"keys": "Escape", "action": "Hides the tooltip, and only the tooltip: an enclosing dialog or popup stays open (WCAG 1.4.13, IME-guarded)."}
+        {
+          "keys": "Tab (focus on the trigger)",
+          "action": "Shows the tooltip after keyboard focus (focus-visible), when the trigger is naturally focusable or focus-trigger is always.",
+          "when": "focus-trigger is not never"
+        },
+        {
+          "keys": "Escape",
+          "action": "Hides the tooltip, and only the tooltip: an enclosing dialog or popup stays open (WCAG 1.4.13, IME-guarded)."
+        }
       ],
       "differences": [
         {
@@ -122,8 +180,18 @@
           "text": "The surface keeps the inverted look and 300px cap of tct-button's built-in tooltip (styles/layer.styles.css): primary-text fill, surface-colour ink, container radius, no shadow. Tecton has no tooltip design; entry is a fade only, because a tooltip must not move while the pointer travels to it."
         }
       ],
-      "tests": {"render": true, "a11y": true, "api": true, "keyboard": true, "events": true, "rtl": true, "forcedColors": true},
-      "provisional": ["Entry is a fade with no movement; upstream nudges the surface away from the trigger."],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true
+      },
+      "provisional": [
+        "Entry is a fade with no movement; upstream nudges the surface away from the trigger."
+      ],
       "tokenRequests": [],
       "requests": [],
       "sizeBudgetKb": null,
