@@ -1,0 +1,32 @@
+<!-- title: Manual activation; description: activation="manual" moves focus with the arrow keys and selects only with Enter or Space. Use it when showing a panel is costly (a request, a heavy render) and automatic activation would be disruptive. -->
+<div id="manual-activation-root">
+  <tct-vstack gap="3">
+    <tct-tab-list pattern="tabs" activation="manual" value="a" label="Reports">
+      <tct-tab value="a" label="Daily" panel-id="manual-activation-a"></tct-tab>
+      <tct-tab value="b" label="Weekly" panel-id="manual-activation-b"></tct-tab>
+      <tct-tab value="c" label="Monthly" panel-id="manual-activation-c"></tct-tab>
+    </tct-tab-list>
+    <tct-card id="manual-activation-a" role="tabpanel" variant="muted" padding="3">
+      <tct-text>Daily report.</tct-text>
+    </tct-card>
+    <tct-card id="manual-activation-b" role="tabpanel" variant="muted" padding="3" hidden>
+      <tct-text>Weekly report.</tct-text>
+    </tct-card>
+    <tct-card id="manual-activation-c" role="tabpanel" variant="muted" padding="3" hidden>
+      <tct-text>Monthly report.</tct-text>
+    </tct-card>
+  </tct-vstack>
+  <script type="module">
+    const root = document.querySelector('#manual-activation-root');
+    const list = root.querySelector('tct-tab-list');
+    const panels = [...root.querySelectorAll('[role="tabpanel"]')];
+    for (const panel of panels) {
+      const tab = list.querySelector(`tct-tab[panel-id="${panel.id}"]`);
+      tab.id = `${panel.id}-tab`;
+      panel.setAttribute('aria-labelledby', tab.id);
+    }
+    list.addEventListener('tct-value-change', (event) => {
+      for (const panel of panels) panel.hidden = panel.id !== `manual-activation-${event.value}`;
+    });
+  </script>
+</div>

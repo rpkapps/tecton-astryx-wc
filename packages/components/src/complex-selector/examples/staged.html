@@ -1,0 +1,31 @@
+<!-- title: Staged editor; description: Content can keep a draft and commit only from its own Apply button. Cancel just closes the popover, and the value is unchanged. The trigger-label slot shows rich content in the closed trigger. -->
+<div id="staged-root">
+  <tct-vstack max-width="360">
+    <tct-complex-selector label="Price range" value="10-50">
+      <span slot="trigger-label">$10 - $50</span>
+      <tct-vstack gap="3">
+        <tct-number-input label="Minimum" value="10" min="0" data-field="min"></tct-number-input>
+        <tct-number-input label="Maximum" value="50" min="0" data-field="max"></tct-number-input>
+        <tct-hstack gap="2" justify="end">
+          <tct-button variant="ghost" data-action="cancel">Cancel</tct-button>
+          <tct-button variant="primary" data-action="apply">Apply</tct-button>
+        </tct-hstack>
+      </tct-vstack>
+    </tct-complex-selector>
+  </tct-vstack>
+  <script type="module">
+    const selector = document.querySelector('#staged-root tct-complex-selector');
+    const label = selector.querySelector('[slot="trigger-label"]');
+    selector.addEventListener('click', (event) => {
+      const action = event.target.closest('[data-action]')?.dataset.action;
+      if (!action) return;
+      if (action === 'apply') {
+        const min = selector.querySelector('[data-field="min"]').value;
+        const max = selector.querySelector('[data-field="max"]').value;
+        selector.commit(`${min}-${max}`);
+        label.textContent = `$${min} - $${max}`;
+      }
+      selector.hide();
+    });
+  </script>
+</div>

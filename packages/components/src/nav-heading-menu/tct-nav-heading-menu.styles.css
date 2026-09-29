@@ -1,0 +1,27 @@
+/*
+ * tct-nav-heading-menu. A column of rows with the half-step gap; Tecton menus and popovers have no drop
+ * shadow (the heading's popover paints the surface). The width follows `size` unless `min-width` says
+ * otherwise. [mwg:css]
+ */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .menu {
+    --_min-inline-size: 200px; /* design: upstream's md minimum width */
+
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-0-5);
+    min-inline-size: var(--_min-inline-size);
+  }
+
+  .menu[data-size='sm'] {
+    --_min-inline-size: 160px; /* design: upstream's sm minimum width */
+  }
+
+  .menu[data-size='lg'] {
+    --_min-inline-size: 240px; /* design: upstream's lg minimum width */
+  }
+}

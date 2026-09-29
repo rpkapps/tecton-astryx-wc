@@ -1,0 +1,18 @@
+/*
+ * tct-selector-value: the box of the closed trigger's value. It takes the free width and clips
+ * horizontally, so a long value ellipsizes instead of widening the trigger. Inside an input group the
+ * group's row is the height, so the value is clamped to it (the box paints nothing; overflow is layout).
+ */
+@layer component {
+  :host {
+    display: block;
+    flex: 1 1 0;
+    min-inline-size: 0;
+    overflow: hidden;
+    text-align: start;
+  }
+
+  :host([layout='inline']) {
+    max-block-size: 100%;
+  }
+}

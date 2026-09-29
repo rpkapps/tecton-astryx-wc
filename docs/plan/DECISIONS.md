@@ -312,3 +312,16 @@ Owner decision: nothing named `tecton-astryx`, and the name "Astryx" appears now
   - `pnpm docs:public-check` is absolute (no transitional identifiers) and also scans the manifest, the
     registry, every `package.json` and `dist/`. Authored guides stay report-only until their prose pass.
   - Branches that predate the rename run `node tools/codemods/d015-rename.ts` after merging it.
+
+## D-016 — Astro Node adapter for a live MCP endpoint on the docs site (2026-09-29)
+
+Owner approval: add `@astrojs/node` so the docs site can serve MCP `search`/`get` live at `/mcp`
+(WP-AI shipped a static server card because a static build cannot host a POST route).
+
+- **Package:** `@astrojs/node` 11.1.6 (MIT; peer `astro` ^7.2.1), `apps/docs` only, dev tooling for the
+  docs site: never a dependency of a library package.
+- **Licence check (orchestrator):** direct deps `send` 1.2.1 (MIT; its tree is already installed via the
+  MCP SDK), `@astrojs/internal-helpers` 0.11.0 (MIT; already installed via Astro) and
+  `server-destroy` 1.0.1 (ISC, no dependencies) — the only new package. All on the allowlist.
+- **Shape:** the site stays prerendered; only `/mcp` renders on demand, mounting
+  `handleMcpRequest` from `@tecton-wc/cli/mcp/http.js`. `GET /mcp` keeps the server card.

@@ -1,0 +1,817 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "chat-composer",
+  "workPackage": "WP-16",
+  "entries": {
+    "core.chat-composer": {
+      "tag": "tct-chat-composer",
+      "status": "implemented",
+      "upstream": {
+        "name": "ChatComposer",
+        "path": "packages/core/src/Chat/ChatComposer.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "onSubmit",
+          "kind": "event",
+          "target": "tct-chat-submit",
+          "as": "event",
+          "notes": "Cancelable, detail `value` is the trimmed draft. It fires for Enter in the input and for the send button; a blank draft or a disabled composer never submits. The draft is cleared unless the event is prevented."
+        },
+        {
+          "upstream": "onStop",
+          "kind": "event",
+          "target": "tct-chat-stop",
+          "as": "event",
+          "notes": "Bubbles up from the send button (the default one or a slotted one)."
+        },
+        {
+          "upstream": "isStopShown",
+          "kind": "prop",
+          "target": "stop-shown",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Property `stopShown`."
+        },
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "property",
+          "notes": "The draft. The attribute is the initial draft (uncontrolled); the property is the current one. Writing it never fires events, so there is no controlled/uncontrolled pair to keep in step."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "input",
+          "as": "event",
+          "notes": "The native `input` event, retargeted, bubbles up from the input after every edit; read `composer.value`."
+        },
+        {
+          "upstream": "placeholder",
+          "kind": "prop",
+          "target": "placeholder",
+          "as": "attribute",
+          "default": "Type a message…",
+          "notes": "Localised default (`@tct.chat-composer` catalog of the input)."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "density",
+          "kind": "prop",
+          "target": "density",
+          "as": "attribute",
+          "reflect": true,
+          "default": "balanced"
+        },
+        {
+          "upstream": "elevation",
+          "kind": "prop",
+          "target": "elevation",
+          "as": "attribute",
+          "reflect": true,
+          "default": "low"
+        },
+        {
+          "upstream": "drawer",
+          "kind": "slot",
+          "target": "drawer",
+          "as": "slot"
+        },
+        {
+          "upstream": "headerActions",
+          "kind": "slot",
+          "target": "header-actions",
+          "as": "slot"
+        },
+        {
+          "upstream": "headerContext",
+          "kind": "slot",
+          "target": "header-context",
+          "as": "slot"
+        },
+        {
+          "upstream": "input",
+          "kind": "slot",
+          "target": "input",
+          "as": "slot",
+          "notes": "Replaces the default input. A custom input joins the draft, submit, disabled and focus contract through `chatComposerContext`."
+        },
+        {
+          "upstream": "footerActions",
+          "kind": "slot",
+          "target": "footer-actions",
+          "as": "slot"
+        },
+        {
+          "upstream": "sendActions",
+          "kind": "slot",
+          "target": "send-actions",
+          "as": "slot"
+        },
+        {
+          "upstream": "sendButton",
+          "kind": "slot",
+          "target": "send-button",
+          "as": "slot"
+        },
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "target": "status-type",
+          "as": "attribute",
+          "notes": "The upstream object `{type, message}` is two attributes, `status-type` (error or warning) and `status-message`; properties `statusType`, `statusMessage`."
+        },
+        {
+          "upstream": "statusPosition",
+          "kind": "prop",
+          "target": "status-position",
+          "as": "attribute",
+          "reflect": true,
+          "default": "bottom"
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useChatComposerContext",
+          "target": "chatComposerContext",
+          "as": "context",
+          "notes": "chat-composer.context.ts: {value, setValue, submit, placeholder, disabled, stopShown, canSend, registerInput}. Provided by tct-chat-composer; the input, the send button and any custom input consume it."
+        },
+        {
+          "upstream": "useHighlightedOptionScroll",
+          "target": "ChatTriggerMenuController",
+          "as": "controller",
+          "notes": "The composer itself only hosts the input; the highlighted option of a trigger menu is scrolled into view (`block: 'nearest'`) by the trigger-menu controller of the input."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Enter",
+          "action": "Submits the draft (tct-chat-submit).",
+          "when": "Focus in the default input; not while an IME composes, not with Shift."
+        },
+        {
+          "keys": "Shift+Enter",
+          "action": "Inserts a newline.",
+          "when": "Focus in the default input."
+        }
+      ],
+      "form": {
+        "formAssociated": false,
+        "notes": "The composer is not a form control: the submit is an event, not a form submission."
+      },
+      "differences": [
+        {
+          "id": "CHATCOMPOSER-01",
+          "type": "approved-api-difference",
+          "text": "The draft is always the property/attribute `value` on the element (no controlled/uncontrolled pairing, no onChange callback): the native `input` event bubbles up from the input for every user edit, and property writes never fire it. `onSubmit`/`onStop` are the `tct-chat-submit` and `tct-chat-stop` events."
+        },
+        {
+          "id": "CHATCOMPOSER-02",
+          "type": "approved-api-difference",
+          "text": "`status` is `status-type` plus `status-message`. The message is announced once through the shared announcer when it appears or changes (assertive for an error), never through a live region on the strip, which would re-announce on every re-render."
+        },
+        {
+          "id": "CHATCOMPOSER-03",
+          "type": "approved-api-difference",
+          "text": "With no `input` or `send-button` content the composer renders a default tct-chat-composer-input and tct-chat-send-button, so `<tct-chat-composer></tct-chat-composer>` is a complete composer; upstream renders them when the props are absent. The defaults are removed as soon as the slot has content."
+        },
+        {
+          "id": "CHATCOMPOSER-04",
+          "type": "a11y-improvement",
+          "text": "The keyboard focus ring is drawn around the whole body while the editor has keyboard focus and nothing for pointer focus (interaction modality), as upstream; `disabled` also keeps the Stop action operable so a running response can always be stopped."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 83,
+      "notes": "Size: the folder budget (all six elements) is the measured gzip size, 75.4 kB, plus about 10%; it includes the ICU message parser (about 33 kB) that every translating family bundles (see provisional-budgets.json), and the hover card, badge, button and popover the input and token use. Guides: [mwg:css] (layers, logical properties, concentric radius through custom properties); [mwg:accessible-web-components] (announcements through the shared announcer, roles through ElementInternals); [mwg:shadow-dom] (slots, contexts across roots)."
+    },
+    "core.chat-composer-input": {
+      "tag": "tct-chat-composer-input",
+      "status": "implemented",
+      "upstream": {
+        "name": "ChatComposerInput",
+        "path": "packages/core/src/Chat/ChatComposerInput.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "handleRef",
+          "kind": "ref",
+          "target": "insertToken",
+          "as": "method",
+          "notes": "The element is its own handle: `insertToken(token)`, `expandToken(value)`, `insertText(text)`, `getValue()`, `focus()`, plus `submit()`, `setInterimText()` and `clearInterimText()` (used by dictation)."
+        },
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "property",
+          "notes": "Serialized draft: text as typed, each token as its `value`. The attribute is the initial draft. Inside a tct-chat-composer it stays in step with the composer's `value`."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "input",
+          "as": "event",
+          "notes": "The native `input` event, retargeted; it also fires after insertText/insertToken/expandToken, paste, history recall, dictation and choosing a suggestion, but never for property writes."
+        },
+        {
+          "upstream": "placeholder",
+          "kind": "prop",
+          "target": "placeholder",
+          "as": "attribute",
+          "default": "Type a message…",
+          "notes": "Unset inside a composer: the composer's placeholder."
+        },
+        {
+          "upstream": "maxRows",
+          "kind": "prop",
+          "target": "max-rows",
+          "as": "attribute",
+          "default": 8
+        },
+        {
+          "upstream": "triggers",
+          "kind": "prop",
+          "target": "triggers",
+          "as": "property",
+          "notes": "Property only: `{character, searchSource, onSelect, deserialize?, renderItem?, emptySearchResultsText?, loadingText?, menuLabel?}`. `searchSource` is a `{search, cancel?}` object (structurally the upstream `SearchSource`); `onSelect` returns the text or token a chosen item inserts."
+        },
+        {
+          "upstream": "debounceMs",
+          "kind": "prop",
+          "target": "debounce-ms",
+          "as": "attribute",
+          "default": 150
+        },
+        {
+          "upstream": "hasHistory",
+          "kind": "prop",
+          "target": "no-history",
+          "as": "attribute",
+          "notes": "Inverted: history recall is on by default, `no-history` turns it off (attributes cannot default to true)."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "default": "Message input"
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "onPaste",
+          "kind": "event",
+          "target": "tct-chat-paste",
+          "as": "event",
+          "notes": "Cancelable, detail `text`; preventing it means you handled the paste (upstream returns true)."
+        },
+        {
+          "upstream": "pasteAsToken",
+          "kind": "prop",
+          "target": "pasteAsToken",
+          "as": "property",
+          "notes": "A `ChatPasteAsTokenController`, or `false`; `no-paste-as-token` (attribute, `noPasteAsToken`) is the declarative off switch. Default: pastes longer than 200 characters become an expandable chip (`threshold` option)."
+        },
+        {
+          "upstream": "onFiles",
+          "kind": "event",
+          "target": "tct-chat-files",
+          "as": "event",
+          "notes": "Detail `files` and `source` ('paste' or 'drop'). Not fired while disabled."
+        },
+        {
+          "upstream": "onSubmit",
+          "kind": "event",
+          "target": "tct-chat-submit",
+          "as": "event",
+          "notes": "Cancelable. Inside a tct-chat-composer the composer fires it (the input is a passive part of it)."
+        },
+        {
+          "upstream": "onKeyDown",
+          "kind": "event",
+          "target": "keydown",
+          "as": "native-event",
+          "notes": "The native keydown bubbles as usual. To take a key over, listen in the capture phase on the composer or an ancestor and call `preventDefault()`: the input skips keys an ancestor claimed."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useHighlightedOptionScroll",
+          "target": "ChatTriggerMenuController",
+          "as": "controller",
+          "notes": "chat-trigger-menu.ts: the highlighted option of the open menu is scrolled into view with `block: 'nearest'`."
+        },
+        {
+          "upstream": "useChatComposerTokens",
+          "target": "ChatComposerTokensController",
+          "as": "controller",
+          "notes": "chat-composer.tokens.ts: creates token elements, inserts and expands tokens, deletes a token as a unit, prunes orphaned data."
+        },
+        {
+          "upstream": "useChatPasteAsToken",
+          "target": "ChatPasteAsTokenController",
+          "as": "controller",
+          "notes": "chat-paste-as-token.ts: decides whether a paste becomes a token (threshold option) and builds the expandable token."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Enter",
+          "action": "Submits the draft (tct-chat-submit).",
+          "when": "Not while an IME composes (isComposing or keyCode 229), not with Shift, not with a menu open."
+        },
+        {
+          "keys": "Shift+Enter",
+          "action": "Inserts a newline."
+        },
+        {
+          "keys": "Enter",
+          "action": "Expands the selected pasted-text chip into editable text.",
+          "when": "An expandable token is the selection."
+        },
+        {
+          "keys": "Backspace / Delete",
+          "action": "Removes the adjacent token as one unit (and the space after it).",
+          "when": "The caret is next to a token, or a token is selected."
+        },
+        {
+          "keys": "ArrowUp",
+          "action": "Recalls the previous sent draft.",
+          "when": "Caret at the very start of the draft, history on."
+        },
+        {
+          "keys": "ArrowDown",
+          "action": "Steps forward through history; past the newest restores the draft being typed.",
+          "when": "Caret at the very end of the draft, history on and a recalled draft showing."
+        },
+        {
+          "keys": "ArrowUp / ArrowDown",
+          "action": "Moves the highlighted suggestion.",
+          "when": "A trigger menu is open."
+        },
+        {
+          "keys": "Enter / Tab",
+          "action": "Chooses the highlighted suggestion.",
+          "when": "A trigger menu is open."
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes the trigger menu.",
+          "when": "A trigger menu is open."
+        }
+      ],
+      "form": {
+        "formAssociated": false,
+        "notes": "Not a form control: a chat draft is submitted as an event. Put a hidden input in a form if the draft must post."
+      },
+      "differences": [
+        {
+          "id": "CHATINPUT-01",
+          "type": "approved-api-difference",
+          "text": "DECISION: the editing surface is a contenteditable element (plaintext-only), not a textarea with an overlay. Inline tokens that wrap with the text, are selectable, copyable and deleted as a unit exist only inside an editable flow; an overlay has to mirror the textarea's wrapping, scroll offset, font metrics, selection and IME underlines in a second layer, and gets every one of them subtly wrong (caret above a chip, drift after a resize, no native undo for a token). The price of contenteditable is accepted and handled in code: the selection is read through getComposedRanges with the ShadowRoot.getSelection fallback and written with setBaseAndExtent; tokens are non-editable inline elements that `beforeinput` removes as a unit; plain-text paste is inserted by hand; an NBSP follows each token so the caret has a place after it; line breaks in engines without plaintext-only are inserted on `beforeinput`; the trailing newline needs a placeholder <br>. An engine without contenteditable=plaintext-only (Firefox 125 to 135, Tier 2) falls back to `true` with formatting commands prevented on `beforeinput`, verified by a test that forces the fallback."
+        },
+        {
+          "id": "CHATINPUT-02",
+          "type": "a11y-improvement",
+          "text": "The editable is `role=\"textbox\"` with `aria-multiline` and the accessible name `label`, or `role=\"combobox\"` (`aria-expanded`, `aria-controls`, `aria-activedescendant`, `aria-autocomplete=\"list\"`, `aria-haspopup=\"listbox\"`) while triggers are configured. The suggestion popup is a `popover=\"manual\"` listbox in the same shadow root, so the ID references resolve; options are named by their label and grouped by `auxiliaryData.group`. A disabled input stays a focus stop (`aria-disabled`, not editable) so focus is not dropped when a send disables the composer while a reply streams."
+        },
+        {
+          "id": "CHATINPUT-03",
+          "type": "a11y-improvement",
+          "text": "Tokens are named for screen readers: a badge chip is `role=\"img\"` named by its label (else its value), so the token is read as one unit where it sits in the draft. An expandable (pasted-text) chip is named with its line and character count; its hover card is a pointer enhancement outside the image and the keyboard route is Shift+Arrow to select the chip and Enter to expand."
+        },
+        {
+          "id": "CHATINPUT-04",
+          "type": "approved-api-difference",
+          "text": "IME-safe Enter [mwg:ime-safe-enter-submit]: a keydown with `isComposing` or `keyCode` 229 never submits, never recalls history and never chooses a suggestion, and a submit whose Enter also commits an IME candidate is swallowed (the `compositionend` guard covers Safari's ordering). Verified with real IME events through the Chrome DevTools protocol (`Input.imeSetComposition`), not only synthetic keydowns. The soft-keyboard hint is `enterkeyhint=\"send\"` on the editable, overridable by the global attribute on the host; `preventDefault()` on `tct-chat-submit` turns Enter into a newline on a touch keyboard."
+        },
+        {
+          "id": "CHATINPUT-05",
+          "type": "approved-api-difference",
+          "text": "`handleRef` is the element itself (its methods); `onKeyDown` is the native event with capture-phase `preventDefault()` claiming a key; `hasHistory` is the inverted `no-history`; `pasteAsToken` is a controller (or `false`) plus the `no-paste-as-token` attribute; `triggers` is property only. The trigger-menu items are `{id, label, auxiliaryData}` and the source is any object with `search(query)` (sync or async) and optional `cancel()`, so a typeahead search source can be used directly."
+        },
+        {
+          "id": "CHATINPUT-06",
+          "type": "tecton-visual",
+          "text": "The text is the Tecton body size, raised to a 16px floor only on iOS WebKit with a coarse pointer (the upstream iOS-zoom guard), the caret and selection follow the theme, the placeholder is drawn by a sibling element (a contenteditable has none) with `aria-hidden`, and the field grows to `max-rows` before it scrolls. A trigger menu is a Tecton popup surface anchored to the caret (a virtual point anchor)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/core/src/features.ts",
+          "reason": "Move the three platform probes that chat-composer/chat-composer.platform.ts and speech-recognition.ts carry (`supportsPlaintextOnly`, a `getComposedRanges` probe, the Web Speech `SpeechRecognition` constructor lookup) into the central feature registry (tct/no-feature-checks intends them to live there). The composer wraps them lazily and cached today, so the move is mechanical: export the same names from features.ts and re-point the imports.",
+          "diff": "export function supportsPlaintextOnly(): boolean; export function supportsGetComposedRanges(): boolean; export function speechRecognitionConstructor(): SpeechRecognitionConstructor | undefined;"
+        },
+        {
+          "file": "packages/components/src/typeahead (WP-12)",
+          "reason": "ChatComposerSearchSource / ChatComposerSearchItem (chat-composer.types.ts) are structurally the upstream SearchSource / SearchableItem; WP-12 can import them (or declare the same shape) so one search source drives both a typeahead and a composer trigger."
+        }
+      ],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:ime-safe-enter-submit] (isComposing or keyCode 229 gate, verified with a real IME through CDP); [mwg:accessible-web-components] (textbox/combobox roles, aria-activedescendant inside one shadow root); [mwg:shadow-dom] (selection APIs across the shadow boundary: getComposedRanges, ShadowRoot.getSelection); [mwg:resilient-context-menus-and-nested-dropdowns] and [mwg:position-aware-tooltips] (a manual popover anchored to the caret, flipped by the shared position controller); [mwg:break-up-long-tasks] (the paste path and token pruning do bounded work); [mwg:privacy] (dictation: nothing is recorded or sent by the component, the microphone is requested only on user activation); [mwg:css]."
+    },
+    "core.chat-composer-drawer": {
+      "tag": "tct-chat-composer-drawer",
+      "status": "implemented",
+      "upstream": {
+        "name": "ChatComposerDrawer",
+        "path": "packages/core/src/Chat/ChatComposerDrawer.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "prop",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "count",
+          "kind": "prop",
+          "target": "count",
+          "as": "attribute",
+          "notes": "Without a count the drawer does not collapse."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "default": "Items"
+        },
+        {
+          "upstream": "collapsedSummary",
+          "kind": "slot",
+          "target": "collapsed-summary",
+          "as": "slot"
+        },
+        {
+          "upstream": "isCollapsed",
+          "kind": "prop",
+          "target": "collapsed",
+          "as": "property",
+          "reflect": true,
+          "notes": "The state is always the `collapsed` property; the user's toggle asks first through the cancelable `tct-collapse-change`, so a page owns the state by preventing it and setting `collapsed` itself (controlled mode)."
+        },
+        {
+          "upstream": "defaultIsCollapsed",
+          "kind": "prop",
+          "target": "collapsed",
+          "as": "attribute",
+          "notes": "The attribute is the initial state (uncontrolled mode)."
+        },
+        {
+          "upstream": "onCollapsedChange",
+          "kind": "event",
+          "target": "tct-collapse-change",
+          "as": "event",
+          "notes": "Cancelable; property and attribute writes never fire it."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base|toggle|summary|handle|content) or the tokens."
+        },
+        {
+          "upstream": "className",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "The class attribute is native."
+        },
+        {
+          "upstream": "style",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "The style attribute is native."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "Attributes on the host reach the DOM as they are; no prop is needed."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Enter / Space",
+          "action": "Toggles the drawer.",
+          "when": "The toggle button has focus."
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "CHATDRAWER-01",
+          "type": "a11y-improvement",
+          "text": "The toggle is a real button named \"Collapse {label}\" or \"Expand {label}\" with `aria-expanded` and `aria-controls` for the content region (a disclosure). Collapsed content is `inert`, removed from the tab order and the accessibility tree, and the collapse animates the block size to and from the intrinsic size [mwg:animate-to-intrinsic-sizes] without `overlay`, and not at all under reduced motion."
+        },
+        {
+          "id": "CHATDRAWER-02",
+          "type": "approved-api-difference",
+          "text": "`isCollapsed`/`defaultIsCollapsed`/`onCollapsedChange` collapse into one `collapsed` state plus the cancelable `tct-collapse-change` event (see the api rows)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:animate-to-intrinsic-sizes] (grid-track collapse); [mwg:accessible-web-components] (disclosure pattern, inert)."
+    },
+    "core.chat-composer-token-element": {
+      "tag": "tct-chat-composer-token-element",
+      "status": "implemented",
+      "upstream": {
+        "name": "ChatComposerTokenElement",
+        "path": "packages/core/src/Chat/ChatComposerInput.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "token",
+          "kind": "prop",
+          "target": "token",
+          "as": "property",
+          "notes": "`{value, label?, variant?, icon?}` (badge) or `{value, render}` (custom). Wins over the `value`, `label`, `variant` and `icon` attributes, which cover the badge case declaratively; `expandable` marks a pasted-text chip."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base|chip|preview) or the tokens."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useHighlightedOptionScroll",
+          "as": "waived",
+          "reason": "Not used by the token element itself: the hook belongs to the trigger menu of the input (see core.chat-composer-input)."
+        }
+      ],
+      "keyboard": [],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "CHATTOKENEL-01",
+          "type": "a11y-improvement",
+          "text": "The chip is `role=\"img\"` named by the label (else the value); an expandable chip is named with its line and character count. The element has no focus stop: inside the draft the caret steps over it. Its hover card previews the text and offers Expand as a pointer enhancement; keyboard users select the chip with Shift+Arrow and press Enter in the input. A custom `render()` may return a string (text, never HTML), a Lit template or a DOM node."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components] (an interactive control must not sit inside role=img; the card is a sibling); [mwg:shadow-dom]."
+    },
+    "core.chat-send-button": {
+      "tag": "tct-chat-send-button",
+      "status": "implemented",
+      "upstream": {
+        "name": "ChatSendButton",
+        "path": "packages/core/src/Chat/ChatSendButton.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "isStopShown",
+          "kind": "prop",
+          "target": "stop-shown",
+          "as": "attribute",
+          "notes": "Unset inside a composer: the composer's `stop-shown`. Setting it wins over the composer, so the button also works on its own."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Unset inside a composer: disabled while there is nothing to send. The stop state is never disabled."
+        },
+        {
+          "upstream": "onSend",
+          "kind": "event",
+          "target": "tct-chat-send",
+          "as": "event",
+          "notes": "Cancelable; the default action inside a composer submits the draft, `preventDefault()` replaces that."
+        },
+        {
+          "upstream": "onStop",
+          "kind": "event",
+          "target": "tct-chat-stop",
+          "as": "event"
+        },
+        {
+          "upstream": "sendIcon",
+          "kind": "slot",
+          "target": "send-icon",
+          "as": "slot"
+        },
+        {
+          "upstream": "stopIcon",
+          "kind": "slot",
+          "target": "stop-icon",
+          "as": "slot"
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(button) or the tokens."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Enter / Space",
+          "action": "Sends the draft, or stops the response in the stop state."
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "CHATSEND-01",
+          "type": "a11y-improvement",
+          "text": "The button is an icon-only `tct-button` named \"Send\" or \"Stop\" (localised), and the name changes with the state (primary when sending, secondary when stopping). The stop state stays operable while the composer is disabled so a running response can always be stopped."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessibility]; [mwg:accessible-web-components]."
+    },
+    "core.chat-dictation-button": {
+      "tag": "tct-chat-dictation-button",
+      "status": "implemented",
+      "upstream": {
+        "name": "ChatDictationButton",
+        "path": "packages/core/src/Chat/ChatDictationButton.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "dictation",
+          "kind": "prop",
+          "target": "dictation",
+          "as": "property",
+          "notes": "A `ChatDictationController` (or anything with the same read-only state and `toggle()`); property only. See the hooks."
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md"
+        },
+        {
+          "upstream": "isHiddenWhenUnsupported",
+          "kind": "prop",
+          "target": "show-unsupported",
+          "as": "attribute",
+          "notes": "Inverted: where the Web Speech API is missing the button is hidden by default (`display: none`, nothing rendered or focusable), `show-unsupported` keeps it visible and disabled."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Default: the localised \"Start dictation\" while idle and \"Stop dictation\" while listening."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base|bars|bar|button) or the tokens."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useSpeechRecognition",
+          "target": "SpeechRecognitionController",
+          "as": "controller",
+          "notes": "speech-recognition.ts: feature-detected Web Speech recognition with a microphone level meter (noise-floor calibrated bands). `subscribe()` delivers every per-frame level, the host update only the coarse state."
+        },
+        {
+          "upstream": "useChatDictation",
+          "target": "ChatDictationController",
+          "as": "controller",
+          "notes": "chat-dictation.ts: `new ChatDictationController(host, {input: () => composerInput})` writes interim text as a ghost line in the input, commits final text, turns caps lock on for sustained loud speech and plays optional cues."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Enter / Space",
+          "action": "Starts or stops dictation."
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "CHATDICT-01",
+          "type": "approved-api-difference",
+          "text": "Dictation is feature-detected: without `SpeechRecognition` (Firefox) or `webkitSpeechRecognition` the controller reports `isSupported = false`, the button hides itself or (with `show-unsupported`) is disabled, and nothing throws. Permission denial, no-speech and a failed start end the session and reset the state; the microphone tracks, the frame loop and the recognition session are released on stop and when the host disconnects."
+        },
+        {
+          "id": "CHATDICT-02",
+          "type": "a11y-improvement",
+          "text": "The equalizer bars are decoration (`aria-hidden`), their movement stops under `prefers-reduced-motion`, and the listening state is exposed by the button's changing name (\"Start dictation\" / \"Stop dictation\"). Recognition results reach the draft through the input, so a screen reader hears them as typed text."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:privacy] (the microphone is requested only after a user activation and released on stop; no audio leaves the component); [mwg:accessible-web-components]; [mwg:css]. Firefox has no Web Speech recognition, so the unsupported path is the tested default there."
+    }
+  }
+}

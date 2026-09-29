@@ -113,7 +113,8 @@ describe('the real generated registry', () => {
       expect(envelope.apiVersion).toBe(1);
       expect(envelope.type).toEqual(expect.any(String));
     }
-  });
+    // Runs every read command against the full generated registry.
+  }, 60_000);
 
   it('prints a dense doc for tct-button that names its import and API', async () => {
     const result = await run(['component', 'tct-button', '--dense']);

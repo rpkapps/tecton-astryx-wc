@@ -1,0 +1,220 @@
+{
+  "folder": "stepper",
+  "elements": {
+    "tct-step": {
+      "class": "TctStep",
+      "attributes": [
+        {
+          "name": "density",
+          "property": "density",
+          "type": "StepperDensity | undefined",
+          "values": [
+            "compact",
+            "balanced",
+            "spacious"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "description",
+          "property": "description",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "indicator",
+          "property": "indicator",
+          "type": "StepIndicatorPreset",
+          "values": [
+            "auto",
+            "number",
+            "none"
+          ],
+          "default": "'auto'",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "optional",
+          "property": "optional",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "status",
+          "property": "status",
+          "type": "StepStatus | undefined",
+          "values": [
+            "accent",
+            "success",
+            "warning",
+            "error"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "step",
+          "property": "step",
+          "type": "number | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "active",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "index",
+          "type": "number",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)",
+        "end",
+        "indicator"
+      ],
+      "events": [],
+      "cssParts": [
+        "bar",
+        "connector",
+        "description",
+        "indicator",
+        "label",
+        "step"
+      ],
+      "cssStates": [
+        "active",
+        "completed",
+        "disabled"
+      ],
+      "cssProperties": [
+        {
+          "name": "--step-connector-gap"
+        }
+      ]
+    },
+    "tct-stepper": {
+      "class": "TctStepper",
+      "attributes": [
+        {
+          "name": "active-step",
+          "property": "activeStep",
+          "type": "number",
+          "default": "0",
+          "reflects": false
+        },
+        {
+          "name": "collapsed-variant",
+          "property": "collapsedVariant",
+          "type": "StepperCollapsedVariant",
+          "values": [
+            "with-label-and-controls",
+            "with-label",
+            "hidden-label"
+          ],
+          "default": "'with-label-and-controls'",
+          "reflects": true
+        },
+        {
+          "name": "density",
+          "property": "density",
+          "type": "StepperDensity",
+          "values": [
+            "compact",
+            "balanced",
+            "spacious"
+          ],
+          "default": "'balanced'",
+          "reflects": true
+        },
+        {
+          "name": "indicator-position",
+          "property": "indicatorPosition",
+          "type": "StepperIndicatorPosition",
+          "values": [
+            "separated",
+            "on-track"
+          ],
+          "default": "'separated'",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "minimum-step-width",
+          "property": "minimumStepWidth",
+          "type": "unknown",
+          "default": "DEFAULT_MINIMUM_STEP_WIDTH",
+          "reflects": false
+        },
+        {
+          "name": "navigable",
+          "property": "navigable",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "orientation",
+          "property": "orientation",
+          "type": "StepperOrientation",
+          "values": [
+            "horizontal",
+            "vertical"
+          ],
+          "default": "'horizontal'",
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [
+        {
+          "name": "tct-value-change",
+          "class": "TctValueChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "frame",
+        "list",
+        "summary"
+      ],
+      "cssStates": [],
+      "cssProperties": [
+        {
+          "name": "--step-connector-gap"
+        }
+      ]
+    }
+  }
+}

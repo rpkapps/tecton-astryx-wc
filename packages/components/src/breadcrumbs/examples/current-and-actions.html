@@ -1,0 +1,22 @@
+<!-- title: Current page and actions; description: current marks the page explicitly (plain text, not a link); current="false" stops the last item being chosen automatically. A crumb without href is a button that fires click. -->
+<div id="current-and-actions-root">
+  <tct-vstack gap="4">
+    <tct-breadcrumbs label="Explicit current page">
+      <tct-breadcrumb-item href="#home">Home</tct-breadcrumb-item>
+      <tct-breadcrumb-item current>Settings</tct-breadcrumb-item>
+      <tct-breadcrumb-item href="#billing">Billing</tct-breadcrumb-item>
+    </tct-breadcrumbs>
+    <tct-breadcrumbs label="Action crumb">
+      <tct-breadcrumb-item href="#home">Home</tct-breadcrumb-item>
+      <tct-breadcrumb-item data-action>Go up one level</tct-breadcrumb-item>
+      <tct-breadcrumb-item>Files</tct-breadcrumb-item>
+    </tct-breadcrumbs>
+    <tct-text color="secondary" data-output>Nothing clicked yet.</tct-text>
+  </tct-vstack>
+  <script type="module">
+    const root = document.querySelector('#current-and-actions-root');
+    root.querySelector('[data-action]').addEventListener('click', () => {
+      root.querySelector('[data-output]').textContent = 'Went up one level.';
+    });
+  </script>
+</div>

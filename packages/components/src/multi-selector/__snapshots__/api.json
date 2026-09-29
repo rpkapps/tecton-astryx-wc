@@ -1,0 +1,510 @@
+{
+  "folder": "multi-selector",
+  "elements": {
+    "tct-multi-selector": {
+      "class": "TctMultiSelector",
+      "attributes": [
+        {
+          "name": "alignment",
+          "property": "alignment",
+          "type": "Alignment",
+          "values": [
+            "start",
+            "center",
+            "end"
+          ],
+          "default": "'start'",
+          "reflects": false
+        },
+        {
+          "name": "description",
+          "property": "description",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "disabled-message",
+          "property": "disabledMessage",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "empty-search-text",
+          "property": "emptySearchText",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "empty-text",
+          "property": "emptyText",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "error-text",
+          "property": "errorText",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "has-clear",
+          "property": "hasClear",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "has-search",
+          "property": "hasSearch",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "has-select-all",
+          "property": "hasSelectAll",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "indicator-position",
+          "property": "indicatorPosition",
+          "type": "IndicatorPosition | undefined",
+          "values": [
+            "start",
+            "end"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "invalid",
+          "property": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label-hidden",
+          "property": "labelHidden",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label-icon",
+          "property": "labelIcon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label-tooltip",
+          "property": "labelTooltip",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "loading",
+          "property": "loading",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "loading-text",
+          "property": "loadingText",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "max-badges",
+          "property": "maxBadges",
+          "type": "number",
+          "default": "3",
+          "reflects": false
+        },
+        {
+          "name": "name",
+          "property": "name",
+          "type": "string",
+          "default": "''",
+          "reflects": true
+        },
+        {
+          "name": "open",
+          "property": "open",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "optional",
+          "property": "optional",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "options-state",
+          "property": "optionsState",
+          "type": "OptionsState",
+          "values": [
+            "ready",
+            "loading",
+            "error"
+          ],
+          "default": "'ready'",
+          "reflects": false
+        },
+        {
+          "name": "placeholder",
+          "property": "placeholder",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "placement",
+          "property": "placement",
+          "type": "SelectorPlacement | undefined",
+          "values": [
+            "overlay",
+            "above",
+            "below",
+            "start",
+            "end"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "presentation",
+          "property": "presentation",
+          "type": "SelectorPresentation",
+          "default": "'popover'",
+          "reflects": true
+        },
+        {
+          "name": "readonly",
+          "property": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "required",
+          "property": "required",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "search-placeholder",
+          "property": "searchPlaceholder",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "select-all-label",
+          "property": "selectAllLabel",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "FieldSize | undefined",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "start-icon",
+          "property": "startIcon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "status-message",
+          "property": "statusMessage",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "status-type",
+          "property": "statusType",
+          "type": "InputStatusType | undefined",
+          "values": [
+            "error",
+            "warning",
+            "success",
+            "info"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "status-variant",
+          "property": "statusVariant",
+          "type": "FieldStatusVariant",
+          "values": [
+            "attached",
+            "detached",
+            "tooltip"
+          ],
+          "default": "'attached'",
+          "reflects": false
+        },
+        {
+          "name": "trigger-display",
+          "property": "triggerDisplay",
+          "type": "TriggerDisplay",
+          "values": [
+            "count",
+            "labels",
+            "badges"
+          ],
+          "default": "'count'",
+          "reflects": false
+        },
+        {
+          "name": "value",
+          "property": "defaultValue",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "variant",
+          "property": "variant",
+          "type": "SelectorVariant",
+          "values": [
+            "input",
+            "ghost"
+          ],
+          "default": "'input'",
+          "reflects": true
+        },
+        {
+          "name": "width",
+          "property": "width",
+          "type": "number | string | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "[BLOCKS_IMPLICIT_SUBMISSION]",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "changeAction",
+          "type": "((values: string[]) => void | Promise<void>) | undefined",
+          "readonly": false
+        },
+        {
+          "name": "displayedValidationMessage",
+          "type": "string",
+          "readonly": true
+        },
+        {
+          "name": "form",
+          "type": "HTMLFormElement | null",
+          "readonly": true
+        },
+        {
+          "name": "formatValue",
+          "type": "MultiSelectorFormatter | undefined",
+          "readonly": false
+        },
+        {
+          "name": "isDisabled",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "labels",
+          "type": "NodeList",
+          "readonly": true
+        },
+        {
+          "name": "options",
+          "type": "SelectorOptionType[]",
+          "default": "[]",
+          "readonly": false
+        },
+        {
+          "name": "renderOption",
+          "type": "SelectorRenderer | undefined",
+          "readonly": false
+        },
+        {
+          "name": "showInvalid",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "status",
+          "type": "InputStatus | undefined",
+          "readonly": false
+        },
+        {
+          "name": "validationMessage",
+          "type": "string",
+          "readonly": true
+        },
+        {
+          "name": "validity",
+          "type": "ValidityState",
+          "readonly": true
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "readonly": false
+        },
+        {
+          "name": "values",
+          "type": "string[]",
+          "readonly": false
+        },
+        {
+          "name": "willValidate",
+          "type": "boolean",
+          "readonly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "checkValidity",
+          "signature": "() => boolean"
+        },
+        {
+          "name": "focus",
+          "signature": "(options?: FocusOptions) => void"
+        },
+        {
+          "name": "hide",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "reportValidity",
+          "signature": "() => boolean"
+        },
+        {
+          "name": "requestClose",
+          "signature": "(reason: ChangeReason) => void"
+        },
+        {
+          "name": "setCustomValidity",
+          "signature": "(message: string) => void"
+        },
+        {
+          "name": "show",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "toggle",
+          "signature": "(force?: boolean) => Promise<void>"
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "change",
+          "native": true
+        },
+        {
+          "name": "input",
+          "native": true
+        },
+        {
+          "name": "tct-after-open-change",
+          "class": "TctAfterOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-clear",
+          "class": "TctClearEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        },
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "badge",
+        "badges",
+        "busy",
+        "check",
+        "description",
+        "empty-state",
+        "field",
+        "indicator",
+        "input",
+        "label",
+        "label-icon",
+        "label-indicator",
+        "label-tip",
+        "listbox",
+        "option",
+        "overflow",
+        "placeholder",
+        "popup",
+        "search",
+        "section-heading",
+        "sheet",
+        "sheet-content",
+        "start-icon",
+        "status",
+        "status-button",
+        "status-icon",
+        "trigger",
+        "value"
+      ],
+      "cssStates": [
+        "busy",
+        "invalid",
+        "open",
+        "user-invalid"
+      ],
+      "cssProperties": []
+    }
+  }
+}

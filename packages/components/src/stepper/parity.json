@@ -1,0 +1,260 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "stepper",
+  "workPackage": "WP-10",
+  "entries": {
+    "core.stepper": {
+      "tag": "tct-stepper",
+      "status": "implemented",
+      "upstream": {
+        "name": "Stepper",
+        "path": "packages/core/src/Stepper/Stepper.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "activeStep",
+          "kind": "prop",
+          "target": "activeStep",
+          "as": "property",
+          "notes": "Attribute `active-step`, zero-based. The element applies a user-requested step itself unless the request is prevented (D-006); upstream is controlled-only."
+        },
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "orientation",
+          "kind": "prop",
+          "target": "orientation",
+          "as": "attribute",
+          "reflect": true,
+          "default": "horizontal"
+        },
+        {
+          "upstream": "onStepClick",
+          "kind": "event",
+          "target": "tct-value-change",
+          "as": "event",
+          "notes": "Cancelable intent event before a click on a step or a compact control activates a step (`value` is the requested index). `navigable` is the attribute that makes steps clickable: upstream detected the handler, a custom element cannot."
+        },
+        {
+          "upstream": "isNonLinear",
+          "kind": "prop",
+          "target": "navigable",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Derived upstream from `onStepClick != null`; explicit here."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Accessible name of the list; default the localized `@tct.stepper.label`. A host aria-label wins."
+        },
+        {
+          "upstream": "density",
+          "kind": "prop",
+          "target": "density",
+          "as": "attribute",
+          "reflect": true,
+          "default": "balanced"
+        },
+        {
+          "upstream": "indicatorPosition",
+          "kind": "prop",
+          "target": "indicator-position",
+          "as": "attribute",
+          "reflect": true,
+          "default": "separated"
+        },
+        {
+          "upstream": "horizontalOptions",
+          "kind": "prop",
+          "target": "minimum-step-width",
+          "as": "attribute",
+          "default": 112,
+          "notes": "The object splits into two attributes: `minimum-step-width` (px) and `collapsed-variant` (`with-label-and-controls`, `with-label`, `hidden-label`)."
+        },
+        {
+          "upstream": "collapsedVariant",
+          "kind": "prop",
+          "target": "collapsed-variant",
+          "as": "attribute",
+          "reflect": true,
+          "default": "with-label-and-controls"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(frame), ::part(list), ::part(summary) and custom properties."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useStepperContext",
+          "target": "stepperContext (family-private)",
+          "as": "context"
+        },
+        {
+          "upstream": "registerStep",
+          "as": "waived",
+          "reason": "The stepper reads its tct-step children directly (index, disabled state) instead of registering them; duplicate indexes are still reported."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Moves through the enabled steps in document order (buttons in a navigable stepper); disabled and collapsed steps are skipped",
+          "when": "navigable"
+        },
+        {
+          "keys": "Enter, Space",
+          "action": "Activates the focused step (asks to make it the active step)",
+          "when": "navigable, step enabled"
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "STEPPER-01",
+          "type": "approved-api-difference",
+          "text": "The list is an inner <ol role=\"list\"> in the shadow root; the steps are slotted custom elements whose hosts are list items with aria-current=\"step\" through ElementInternals (as tct-list, LIST-01). `onStepClick` is the cancelable tct-value-change plus the `navigable` attribute; a step click applies the index unless prevented."
+        },
+        {
+          "id": "STEPPER-02",
+          "type": "approved-api-difference",
+          "text": "The compact summary is rendered by the stepper from the active step's own parts (indicator, label, Optional, description); a step's end slot and a slotted custom indicator are not repeated there (a slot cannot be projected twice: the progress glyph stands in). Upstream portalled the step's React tree."
+        },
+        {
+          "id": "STEPPER-03",
+          "type": "approved-api-difference",
+          "text": "The connector fill animates the one span a single forward step crosses (medium duration, linear, the two halves of an on-track span in order); going back, jumping more than one step and mounting mid-flow land at once; reduced motion lands at once. Timing is passed as custom properties from the step, not as inline animations."
+        },
+        {
+          "id": "STEPPER-04",
+          "type": "tecton-visual",
+          "text": "The accent of the indicator and the connector is the adornment lilac (upstream-derived accent is 2.2:1 as ink, the owner's step-indicator override); a number badge on it takes the surface colour, status badges pair each filled status fill with its own text role, status glyphs use the status adornment, and clickable steps use the tertiary action fills each paired with its own text role."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 69,
+      "notes": "Guides: [mwg:accessible-web-components] (list and list-item semantics on the hosts, aria-current=step through internals) [mwg:accessibility] (status as text, names of clickable steps, reduced motion) [mwg:css-layout] (flex track, container-width collapse measured, not a container query, because the collapse changes what renders)."
+    },
+    "core.step": {
+      "tag": "tct-step",
+      "status": "implemented",
+      "upstream": {
+        "name": "Step",
+        "path": "packages/core/src/Stepper/Step.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "step",
+          "kind": "prop",
+          "target": "step",
+          "as": "attribute",
+          "notes": "Zero-based index; unset, the step's position among its siblings."
+        },
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
+        {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute"},
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "Content below the label; stays mounted, hidden, in a compact horizontal stepper."
+        },
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "target": "status",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "indicator",
+          "kind": "prop",
+          "target": "indicator",
+          "as": "attribute",
+          "reflect": true,
+          "default": "auto",
+          "notes": "The presets `auto`, `number`, `none`; a custom indicator (upstream: any ReactNode) is `slot=\"indicator\"`."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "isOptional",
+          "kind": "prop",
+          "target": "optional",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {"upstream": "endContent", "kind": "slot", "target": "end", "as": "slot"},
+        {
+          "upstream": "density",
+          "kind": "prop",
+          "target": "density",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(step), ::part(indicator), ::part(label), ::part(description) and custom properties."
+        }
+      ],
+      "hooks": [],
+      "keyboard": [
+        {
+          "keys": "Enter, Space",
+          "action": "Asks the stepper to activate this step",
+          "when": "navigable stepper, step enabled and not collapsed"
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "STEP-01",
+          "type": "approved-api-difference",
+          "text": "The decorative indicator glyphs are inline SVGs and registry icons, as upstream, but the progress marks (the completed check and the current ring) are local svg templates by design, independent of the icon registry: `completed` marks progress, the `success` status marks an outcome. The status word (completed, warning, error) is visually hidden text next to the label and is composed into the name of a clickable step (\"Go to step 2: Payment, error\")."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null
+    }
+  }
+}

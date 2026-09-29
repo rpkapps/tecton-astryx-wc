@@ -1,0 +1,19 @@
+<!-- title: Basic; description: A strip that switches between related views. The default pattern is a navigation landmark: the current tab carries aria-current, arrows move focus and Enter or a click selects. -->
+<div id="basic-root">
+  <tct-vstack gap="3">
+    <tct-tab-list value="overview" label="Project sections">
+      <tct-tab value="overview" label="Overview"></tct-tab>
+      <tct-tab value="activity" label="Activity"></tct-tab>
+      <tct-tab value="settings" label="Settings"></tct-tab>
+    </tct-tab-list>
+    <tct-text color="secondary" data-output>Showing: overview</tct-text>
+  </tct-vstack>
+  <script type="module">
+    const root = document.querySelector('#basic-root');
+    const list = root.querySelector('tct-tab-list');
+    const output = root.querySelector('[data-output]');
+    list.addEventListener('tct-value-change', (event) => {
+      output.textContent = `Showing: ${event.value}`;
+    });
+  </script>
+</div>

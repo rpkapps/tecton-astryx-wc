@@ -62,7 +62,7 @@ packages/icons       @tecton-wc/icons       icon data (default set = upstream ro
 packages/locales     @tecton-wc/locales     30 upstream catalogs + pseudo
 packages/components  @tecton-wc/components  src/<folder>/ per component family (ARCHITECTURE §4)
 packages/testing     @tecton-wc/testing     fixtures, a11y helpers, standard suites
-packages/cli          @tecton-wc/cli          the tct command (agent docs, search, layout, init/upgrade) and MCP server
+packages/cli         @tecton-wc/cli         the tct command (agent docs, search, layout, init/upgrade) and MCP server
 apps/docs            Astro + Starlight docs site
 tools/               generators, checks, Vite/ESLint/Stylelint/CEM plugins
 docs/                plan/, research/, ARCHITECTURE.md, CONVENTIONS.md

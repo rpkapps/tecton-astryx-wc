@@ -172,6 +172,10 @@ describe('tct-number-input: rendering', () => {
     expect(inner(field).value).toBe('1.5 GB');
     expect(inner(field).getAttribute('aria-valuetext')).toBe('1.5 GB');
     expect(inner(field).getAttribute('aria-valuenow')).toBe('1500');
+    // Something focusable after the field: Tab from the last tab stop leaves the document for the
+    // browser UI, and whether the input then sees focusout is timing-dependent (reproduced under load:
+    // the formatted text never came back). With a next stop, 30 of 30 repeats pass under load.
+    field.after(Object.assign(document.createElement('button'), {textContent: 'next'}));
     await userEvent.click(inner(field));
     await waitUntil(() => inner(field).value === '1500', 'the editable number while focused');
     await pressKeys('Tab');
