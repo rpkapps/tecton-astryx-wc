@@ -1,0 +1,117 @@
+---
+/**
+ * `<Example>`: a live preview of an HTML fragment (the real components) plus its source, with a copy
+ * button that reports its result to assistive technology (A§16.3, A§16.5). Import it from MDX:
+ *
+ *   import Example from '@/components/Example.astro';
+ *   import variants from '@examples/button/examples/variants.html?raw';
+ *   <Example source={variants} />
+ *
+ * `source` is the text of an `examples/<id>.html` file (CONVENTIONS §7): an optional first-line
+ * `<!-- title: …; description: … -->` comment (used for the caption and stripped from the displayed
+ * source), then an HTML fragment. `title` and `description` props override the comment.
+ * The same fragment is the rendered preview and the displayed source.
+ *
+ * Guides: [mwg:accessibility] (named controls: every copy button names its example; one centralised
+ * polite live region for the whole page).
+ */
+import {Code} from 'astro:components';
+
+interface Props {
+  source: string;
+  title?: string;
+  description?: string;
+}
+
+const {source, title: titleProp, description: descriptionProp} = Astro.props;
+
+const header = /^\s*<!--\s*title:\s*([^;]*?)\s*(?:;\s*description:\s*([\s\S]*?))?\s*-->\s*\n?/.exec(
+  source,
+);
+const fragment = (header ? source.slice(header[0].length) : source).trimEnd();
+const title = titleProp ?? header?.[1] ?? 'Example';
+const description = descriptionProp ?? header?.[2]?.trim() ?? '';
+---
+
+<figure class="tct-example not-content" data-tct-example>
+  <figcaption class="tct-visually-hidden">{title}{description ? `. ${description}` : ''}</figcaption>
+  <div class="tct-example__preview" set:html={fragment} />
+  <div class="tct-example__bar">
+    <span class="tct-example__label" aria-hidden="true">HTML</span>
+    <button type="button" class="tct-example__button" data-tct-copy hidden>
+      <span data-copy-label>Copy</span><span class="tct-visually-hidden"> source of {title}</span>
+    </button>
+  </div>
+  <div class="tct-example__code" data-tct-code>
+    <Code code={fragment} lang="html" theme="css-variables" wrap />
+  </div>
+</figure>
+
+<script>
+  // Registers the components used by the previews: the autoloader defines tct-* tags on sight
+  // (A§2.5), so a page only pays for the families its examples use. Called explicitly rather than
+  // imported for its side effect, because the source condition is not in the package's `sideEffects`.
+  import {observe} from '@tecton-astryx/components/autoloader.js';
+
+  observe(document);
+
+  const STATUS_ID = 'tct-copy-status';
+  let timer: number | undefined;
+
+  /** One polite live region for the whole page (created up front so announcements are reliable). */
+  function status(): HTMLElement {
+    let region = document.getElementById(STATUS_ID);
+    if (!region) {
+      region = document.createElement('div');
+      region.id = STATUS_ID;
+      region.className = 'tct-visually-hidden';
+      region.setAttribute('role', 'status');
+      document.body.append(region);
+    }
+    return region;
+  }
+
+  async function copy(text: string): Promise<boolean> {
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+    } catch {
+      // Permission denied or an insecure context: the caller falls back to selecting the text.
+    }
+    return false;
+  }
+
+  status();
+  for (const figure of document.querySelectorAll<HTMLElement>('[data-tct-example]')) {
+    const button = figure.querySelector<HTMLButtonElement>('[data-tct-copy]');
+    const code = figure.querySelector<HTMLElement>('[data-tct-code]');
+    if (!button || !code) continue;
+
+    button.hidden = false; // without JavaScript there is nothing to press
+    button.addEventListener('click', async () => {
+      const label = button.querySelector('[data-copy-label]');
+      const ok = await copy(code.textContent?.replace(/\n$/, '') ?? '');
+      if (!ok) {
+        // Select the source so the reader can copy it with the keyboard.
+        const pre = code.querySelector('pre');
+        if (pre) {
+          const range = document.createRange();
+          range.selectNodeContents(pre);
+          getSelection()?.removeAllRanges();
+          getSelection()?.addRange(range);
+        }
+      }
+      status().textContent = ok
+        ? 'Copied the example source to the clipboard.'
+        : 'Copying was blocked. The source is selected: press Ctrl+C or Command+C.';
+      if (label) label.textContent = ok ? 'Copied' : 'Select and copy';
+      clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        if (label) label.textContent = 'Copy';
+        status().textContent = '';
+      }, 2500);
+    });
+  }
+</script>
