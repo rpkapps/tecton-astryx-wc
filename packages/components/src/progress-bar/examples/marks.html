@@ -1,8 +1,8 @@
 <!-- title: Target marks; description: Marks are fixed ticks on the track, in the same 0..max scale as the value. They take their colour from what they sit on; hover or focus a mark to read its label. -->
-<div id="marks-example" style="display: flex; flex-direction: column; gap: var(--spacing-8); max-inline-size: 360px; padding-block-start: var(--spacing-8)">
+<tct-vstack id="marks-example" gap="8" max-width="360" padding-block-start="8">
   <tct-progress-bar data-case="below" label="Sales goal" value="40" has-value-label></tct-progress-bar>
   <tct-progress-bar data-case="past" label="Sales goal (reached)" value="85" has-value-label variant="success"></tct-progress-bar>
-</div>
+</tct-vstack>
 <script type="module">
   const root = document.getElementById('marks-example');
   root.querySelector('[data-case="below"]').marks = [{value: 75, label: 'Goal: 75%'}];
