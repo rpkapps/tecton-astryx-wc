@@ -28,10 +28,7 @@ import {TctIcon} from '../icon/tct-icon.js';
 import base from '../styles/base.styles.css';
 import layer from '../styles/layer.styles.css';
 import motion from '../styles/motion.styles.css';
-import {
-  dropdownMenuContext,
-  type DropdownMenuContextValue,
-} from './dropdown-menu.context.js';
+import {dropdownMenuContext, type DropdownMenuContextValue} from './dropdown-menu.context.js';
 import {
   MENU_ALIGNMENTS,
   MENU_PLACEMENTS,
@@ -114,7 +111,14 @@ export class TctDropdownMenu extends TctElement {
     TctDropdownMenuDivider,
     TctDropdownMenuSubMenu,
   ];
-  static override styles: CSSResultGroup = [base, layer, motion, surfaceStyles, sheetStyles, styles];
+  static override styles: CSSResultGroup = [
+    base,
+    layer,
+    motion,
+    surfaceStyles,
+    sheetStyles,
+    styles,
+  ];
 
   /** Whether the menu is open. Property and attribute writes never emit events. */
   @property({type: Boolean, reflect: true}) open = false;
@@ -362,9 +366,7 @@ export class TctDropdownMenu extends TctElement {
   #exitAnimation(): Animation[] {
     const layerElement = this.#layerElement;
     if (!layerElement || matchMedia('(prefers-reduced-motion: reduce)').matches) return [];
-    return [
-      layerElement.animate([{opacity: 1}, {opacity: 0}], {duration: 120, easing: 'ease-in'}),
-    ];
+    return [layerElement.animate([{opacity: 1}, {opacity: 0}], {duration: 120, easing: 'ease-in'})];
   }
 
   // -------------------------------------------------------------------------- trigger wiring
@@ -434,7 +436,12 @@ export class TctDropdownMenu extends TctElement {
     if (this.#usesSheet) {
       // The sheet is a separate layer: the trigger toggles it, and a click from assistive technology
       // (detail 0) is a keyboard open, so focus lands on the first action.
-      this.#sheetFocus = (event as MouseEvent).detail === 0 ? 'keyboard' : getModality() === 'pointer' ? 'pointer' : 'keyboard';
+      this.#sheetFocus =
+        (event as MouseEvent).detail === 0
+          ? 'keyboard'
+          : getModality() === 'pointer'
+            ? 'pointer'
+            : 'keyboard';
       this.#request(!this.open, 'trigger');
       return;
     }
@@ -446,7 +453,8 @@ export class TctDropdownMenu extends TctElement {
   };
 
   readonly #onTriggerKeyDown = (event: KeyboardEvent): void => {
-    if (event.isComposing || this.disabled || event.altKey || event.ctrlKey || event.metaKey) return;
+    if (event.isComposing || this.disabled || event.altKey || event.ctrlKey || event.metaKey)
+      return;
     if (event.key === 'ArrowDown') {
       event.preventDefault();
       this.#sheetFocus = 'keyboard';
@@ -463,6 +471,12 @@ export class TctDropdownMenu extends TctElement {
   };
 
   // ------------------------------------------------------------------------------ lifecycle
+
+  override connectedCallback(): void {
+    super.connectedCallback();
+    // A moved element (disconnect, then connect) lost its trigger binding on the way out.
+    if (this.hasUpdated) this.#bindTrigger();
+  }
 
   override disconnectedCallback(): void {
     super.disconnectedCallback();
@@ -485,7 +499,11 @@ export class TctDropdownMenu extends TctElement {
         `presentation="${this.presentation}" is not one of ${MENU_PRESENTATIONS.join(', ')}.`,
       );
     }
-    if (changed.has('presentation') && this.presentation !== 'popover' && this.items === undefined) {
+    if (
+      changed.has('presentation') &&
+      this.presentation !== 'popover' &&
+      this.items === undefined
+    ) {
       devWarn(
         'tct-dropdown-menu:presentation-compound',
         'Only data-driven menus (`items`) support the bottom sheet; compound children are always a popover.',
@@ -646,7 +664,9 @@ export class TctDropdownMenu extends TctElement {
   protected override render(): TemplateResult {
     return html`
       <span class="anchor" part="anchor">
-        <slot name="trigger" @slotchange=${() => this.#bindTrigger()}>${this.#renderTrigger()}</slot>
+        <slot name="trigger" @slotchange=${() => this.#bindTrigger()}
+          >${this.#renderTrigger()}</slot
+        >
       </span>
       <div class="layer layer-surface" popover="manual" data-placement=${this.#placement}>
         <div

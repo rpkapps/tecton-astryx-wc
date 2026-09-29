@@ -41,8 +41,10 @@ const triggerOf = (el: TctMoreMenu): HTMLElement =>
   el.shadowRoot!.querySelector<HTMLElement>('.trigger')!;
 const nativeTrigger = (el: TctMoreMenu): HTMLButtonElement =>
   triggerOf(el).shadowRoot!.querySelector<HTMLButtonElement>('button')!;
-const layerOf = (el: TctMoreMenu): HTMLElement => el.shadowRoot!.querySelector<HTMLElement>('.layer')!;
-const surfaceOf = (el: TctMoreMenu): HTMLElement => el.shadowRoot!.querySelector<HTMLElement>('.surface')!;
+const layerOf = (el: TctMoreMenu): HTMLElement =>
+  el.shadowRoot!.querySelector<HTMLElement>('.layer')!;
+const surfaceOf = (el: TctMoreMenu): HTMLElement =>
+  el.shadowRoot!.querySelector<HTMLElement>('.surface')!;
 const isShown = (el: TctMoreMenu): boolean => layerOf(el).matches(':popover-open');
 
 async function openByClick(el: TctMoreMenu): Promise<void> {
@@ -65,7 +67,12 @@ runElementSuite({
     presentation: 'adaptive',
     tooltip: 'Tip',
   },
-  attributes: {label: 'label', placement: 'placement', alignment: 'alignment', presentation: 'presentation'},
+  attributes: {
+    label: 'label',
+    placement: 'placement',
+    alignment: 'alignment',
+    presentation: 'presentation',
+  },
   events: ['tct-open-change', 'tct-after-open-change'],
 });
 
@@ -115,7 +122,11 @@ describe('MoreMenu', () => {
     await openByClick(el);
     expect((await axNode(surfaceOf(el))).role).toBe('menu');
     const items = [...surfaceOf(el).querySelectorAll('tct-dropdown-menu-item')];
-    expect(items.map((item) => item.getAttribute('label'))).toEqual(['Edit', 'Duplicate', 'Delete']);
+    expect(items.map((item) => item.getAttribute('label'))).toEqual([
+      'Edit',
+      'Duplicate',
+      'Delete',
+    ]);
     expect(surfaceOf(el).querySelectorAll('tct-dropdown-menu-divider')).toHaveLength(1);
     const group = surfaceOf(el).querySelector('[role="group"]')!;
     expect((await axNode(group)).name).toBe('Danger');
@@ -205,7 +216,10 @@ describe('MoreMenu', () => {
       stub = stubCompactTouch(true);
       const el = await mount('presentation="adaptive"');
       await userEvent.click(triggerOf(el));
-      await waitUntil(() => el.shadowRoot!.querySelector('tct-bottom-sheet')?.open === true, 'sheet open');
+      await waitUntil(
+        () => el.shadowRoot!.querySelector('tct-bottom-sheet')?.open === true,
+        'sheet open',
+      );
     });
   });
 

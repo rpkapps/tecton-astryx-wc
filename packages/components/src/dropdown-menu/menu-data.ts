@@ -28,7 +28,9 @@ function itemKey(item: DropdownMenuItemData, index: number): string {
 
 /** A leaf row, or (with nested `items`) a submenu row. */
 function renderItem(item: DropdownMenuItemData): TemplateResult {
-  const richLabel = isPlainText(item.label) ? nothing : html`<span slot="label">${item.label}</span>`;
+  const richLabel = isPlainText(item.label)
+    ? nothing
+    : html`<span slot="label">${item.label}</span>`;
   const end =
     item.endContent === undefined || item.endContent === null
       ? nothing

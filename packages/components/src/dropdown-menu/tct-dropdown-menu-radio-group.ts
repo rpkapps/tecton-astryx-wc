@@ -81,7 +81,11 @@ export class TctDropdownMenuRadioGroup extends TctElement {
       );
     }
     const current = this.#provider.value;
-    if (!current || current.value !== this.value || current.closeOnSelect === this.noCloseOnSelect) {
+    if (
+      !current ||
+      current.value !== this.value ||
+      current.closeOnSelect === this.noCloseOnSelect
+    ) {
       this.#provider.setValue(this.#contextValue());
     }
   }

@@ -33,7 +33,11 @@ const ITEMS: DropdownMenuOption[] = [
   {label: 'Move to', items: [{label: 'Folder A'}, {label: 'Folder B'}]},
 ];
 
-async function mount(attributes = '', items: DropdownMenuOption[] | undefined = ITEMS, options: {dir?: 'rtl'} = {}): Promise<TctDropdownMenu> {
+async function mount(
+  attributes = '',
+  items: DropdownMenuOption[] | undefined = ITEMS,
+  options: {dir?: 'rtl'} = {},
+): Promise<TctDropdownMenu> {
   const root = await fixture<HTMLElement>(
     `<div style="padding:60px 40px"><tct-dropdown-menu label="Actions" ${attributes}></tct-dropdown-menu><p id="outside">outside</p></div>`,
     options,
@@ -44,13 +48,17 @@ async function mount(attributes = '', items: DropdownMenuOption[] | undefined = 
   return el;
 }
 
-const layerOf = (el: TctDropdownMenu): HTMLElement => el.shadowRoot!.querySelector<HTMLElement>('.layer')!;
-const surfaceOf = (el: TctDropdownMenu): HTMLElement => el.shadowRoot!.querySelector<HTMLElement>('.surface')!;
-const triggerOf = (el: TctDropdownMenu): HTMLElement => el.shadowRoot!.querySelector<HTMLElement>('.trigger')!;
+const layerOf = (el: TctDropdownMenu): HTMLElement =>
+  el.shadowRoot!.querySelector<HTMLElement>('.layer')!;
+const surfaceOf = (el: TctDropdownMenu): HTMLElement =>
+  el.shadowRoot!.querySelector<HTMLElement>('.surface')!;
+const triggerOf = (el: TctDropdownMenu): HTMLElement =>
+  el.shadowRoot!.querySelector<HTMLElement>('.trigger')!;
 const nativeTrigger = (el: TctDropdownMenu): HTMLElement =>
   triggerOf(el).shadowRoot!.querySelector<HTMLElement>('button')!;
 const isShown = (el: TctDropdownMenu): boolean => layerOf(el).matches(':popover-open');
-const active = (): string => (deepActiveElement() as HTMLElement | null)?.getAttribute('label') ?? '';
+const active = (): string =>
+  (deepActiveElement() as HTMLElement | null)?.getAttribute('label') ?? '';
 const sheetOf = (el: TctDropdownMenu) => el.shadowRoot!.querySelector('tct-bottom-sheet');
 
 async function openByClick(el: TctDropdownMenu): Promise<void> {
@@ -63,7 +71,9 @@ describe('DropdownMenu data mode', () => {
   it('renders items, a divider and a titled section with group role', async () => {
     const el = await mount();
     await openByClick(el);
-    const labels = [...surfaceOf(el).querySelectorAll('tct-dropdown-menu-item')].map((row) => row.getAttribute('label'));
+    const labels = [...surfaceOf(el).querySelectorAll('tct-dropdown-menu-item')].map((row) =>
+      row.getAttribute('label'),
+    );
     // The submenu's rows are children of its row, in the same tree.
     expect(labels).toEqual(['Edit', 'Duplicate', 'Delete', 'Folder A', 'Folder B']);
     expect(surfaceOf(el).querySelectorAll('tct-dropdown-menu-divider')).toHaveLength(1);
@@ -103,7 +113,9 @@ describe('DropdownMenu data mode', () => {
 
   it('keeps the menu open when the row opts out of closing (closeOnSelect: false), for pointer and keyboard', async () => {
     const calls: string[] = [];
-    const el = await mount('', [{label: 'Copy', closeOnSelect: false, onClick: () => calls.push('copy')}]);
+    const el = await mount('', [
+      {label: 'Copy', closeOnSelect: false, onClick: () => calls.push('copy')},
+    ]);
     await openByClick(el);
     await userEvent.click(surfaceOf(el).querySelector('tct-dropdown-menu-item')!);
     await pressKeys('ArrowDown', 'Enter');
@@ -223,7 +235,12 @@ describe('DropdownMenu controlled use and mounting', () => {
     await el.toggle();
     await el.hide();
     expect(events.named('tct-open-change')).toHaveLength(0);
-    expect(events.named('tct-after-open-change').map((event) => event.open)).toEqual([true, false, true, false]);
+    expect(events.named('tct-after-open-change').map((event) => event.open)).toEqual([
+      true,
+      false,
+      true,
+      false,
+    ]);
   });
 
   it('requestClose asks as the user would, and honours a cancel', async () => {
@@ -262,6 +279,17 @@ describe('DropdownMenu trigger', () => {
     await pressKeys('Escape');
     await waitUntil(() => !el.open, 'closed');
     await waitUntil(() => deepActiveElement() === mine, 'focus back on the custom trigger');
+  });
+
+  it('keeps the trigger wired after the element is moved in the document', async () => {
+    const el = await mount();
+    const target = document.createElement('div');
+    el.parentElement!.append(target);
+    target.append(el);
+    await el.updateComplete;
+    await userEvent.click(triggerOf(el));
+    await waitUntil(() => el.open && isShown(el), 'opened after the move');
+    expect(nativeTrigger(el).getAttribute('aria-expanded')).toBe('true');
   });
 
   it('opens with ArrowDown and Space, and toggles closed on a second click', async () => {
@@ -355,7 +383,10 @@ describe('DropdownMenu placement and width', () => {
   });
 
   it('caps the height and scrolls only when the rows overflow', async () => {
-    const many = await mount('', Array.from({length: 30}, (_, index) => ({label: `Row ${index}`})));
+    const many = await mount(
+      '',
+      Array.from({length: 30}, (_, index) => ({label: `Row ${index}`})),
+    );
     await openByClick(many);
     const surface = surfaceOf(many);
     expect(surface.getBoundingClientRect().height).toBeLessThanOrEqual(300);
@@ -419,7 +450,10 @@ describe('DropdownMenu bottom sheet presentation', () => {
     await waitUntil(() => sheet.querySelectorAll('tct-list-item').length === 2, 'drilled in');
     expect(sheet.querySelector('tct-heading')!.textContent).toBe('Move to');
     expect(sheet.getAttribute('label')).toBe('Move to');
-    await waitUntil(() => (deepActiveElement() as HTMLElement | null)?.localName === 'tct-heading', 'heading focused');
+    await waitUntil(
+      () => (deepActiveElement() as HTMLElement | null)?.localName === 'tct-heading',
+      'heading focused',
+    );
     sheet.querySelector<HTMLElement>('.sheet-back')!.click();
     await waitUntil(() => sheet.querySelectorAll('tct-list-item').length === 4, 'back at the root');
   });
@@ -440,7 +474,9 @@ describe('DropdownMenu bottom sheet presentation', () => {
 
   it('calls onClick, closes, and returns focus to the trigger without a stuck layer', async () => {
     const calls: string[] = [];
-    const el = await mount('presentation="bottom-sheet"', [{label: 'Edit', onClick: () => calls.push('edit')}]);
+    const el = await mount('presentation="bottom-sheet"', [
+      {label: 'Edit', onClick: () => calls.push('edit')},
+    ]);
     await userEvent.click(triggerOf(el));
     const sheet = sheetOf(el)!;
     await waitUntil(() => sheet.open, 'sheet open');
@@ -498,7 +534,12 @@ describe('DropdownMenu bottom sheet presentation', () => {
     await pressKeys('Enter');
     const sheet = sheetOf(el)!;
     await waitUntil(() => sheet.open, 'sheet open');
-    await waitUntil(() => (deepActiveElement() as HTMLElement | null)?.closest?.('.action') !== undefined && !!deepActiveElement()?.classList.contains('action'), 'first action focused');
+    await waitUntil(
+      () =>
+        (deepActiveElement() as HTMLElement | null)?.closest?.('.action') !== undefined &&
+        !!deepActiveElement()?.classList.contains('action'),
+      'first action focused',
+    );
     await animationsFinished(sheet);
     await pressKeys('Escape');
     await waitUntil(() => !el.open, 'closed');

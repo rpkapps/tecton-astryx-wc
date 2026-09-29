@@ -101,7 +101,14 @@ export class TctContextMenu extends TctElement {
     TctDropdownMenuDivider,
     TctDropdownMenuSubMenu,
   ];
-  static override styles: CSSResultGroup = [base, layer, motion, surfaceStyles, sheetStyles, styles];
+  static override styles: CSSResultGroup = [
+    base,
+    layer,
+    motion,
+    surfaceStyles,
+    sheetStyles,
+    styles,
+  ];
 
   /** Whether the menu is open. Property and attribute writes never emit events. */
   @property({type: Boolean, reflect: true}) open = false;

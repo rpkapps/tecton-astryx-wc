@@ -1,4 +1,10 @@
-import {html, nothing, type ReactiveController, type ReactiveControllerHost, type TemplateResult} from 'lit';
+import {
+  html,
+  nothing,
+  type ReactiveController,
+  type ReactiveControllerHost,
+  type TemplateResult,
+} from 'lit';
 import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
 import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
 import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';

@@ -251,7 +251,10 @@ describe('DropdownMenu keyboard', () => {
     await openByKeyboard(el);
     await pressKeys('Escape');
     await waitUntil(() => !el.open && !isShown(el), 'closed');
-    await waitUntil(() => deepActiveElement() === nativeTrigger(el), 'focus returned to the trigger');
+    await waitUntil(
+      () => deepActiveElement() === nativeTrigger(el),
+      'focus returned to the trigger',
+    );
   });
 });
 

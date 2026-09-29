@@ -53,7 +53,8 @@ const surfaceOf = (el: TctContextMenu): HTMLElement =>
   el.shadowRoot!.querySelector<HTMLElement>('.surface')!;
 const areaOf = (el: TctContextMenu): HTMLElement => el.querySelector<HTMLElement>('#area')!;
 const isShown = (el: TctContextMenu): boolean => layerOf(el).matches(':popover-open');
-const active = (): string => (deepActiveElement() as HTMLElement | null)?.getAttribute('label') ?? '';
+const active = (): string =>
+  (deepActiveElement() as HTMLElement | null)?.getAttribute('label') ?? '';
 
 async function opened(el: TctContextMenu): Promise<void> {
   await waitUntil(() => el.open && isShown(el), 'opened');
@@ -239,7 +240,13 @@ describe('ContextMenu', () => {
     const el = await mount();
     areaOf(el).focus();
     areaOf(el).dispatchEvent(
-      new MouseEvent('contextmenu', {bubbles: true, composed: true, cancelable: true, clientX: 0, clientY: 0}),
+      new MouseEvent('contextmenu', {
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+        clientX: 0,
+        clientY: 0,
+      }),
     );
     await opened(el);
     const anchor = areaOf(el).getBoundingClientRect();
@@ -251,9 +258,8 @@ describe('ContextMenu', () => {
     const rect = areaOf(el).getBoundingClientRect();
     const [x, y] = [rect.left + 50, rect.top + 30];
     touch(areaOf(el), 'pointerdown', x, y);
-    await aTimeout(200);
+    // Not before the delay elapsed (the exact timing is covered by the controller's own test).
     expect(el.open).toBe(false);
-    await aTimeout(400);
     await opened(el);
     const box = surfaceOf(el).getBoundingClientRect();
     expect(Math.abs(box.left - x)).toBeLessThan(2);
@@ -266,9 +272,8 @@ describe('ContextMenu', () => {
     const el = await mount();
     const rect = areaOf(el).getBoundingClientRect();
     touch(areaOf(el), 'pointerdown', rect.left + 50, rect.top + 30);
-    await aTimeout(100);
     touch(areaOf(el), 'pointermove', rect.left + 50, rect.top + 60);
-    await aTimeout(550);
+    await aTimeout(650);
     expect(el.open).toBe(false);
   });
 
@@ -276,14 +281,13 @@ describe('ContextMenu', () => {
     const el = await mount();
     const rect = areaOf(el).getBoundingClientRect();
     touch(areaOf(el), 'pointerdown', rect.left + 50, rect.top + 30);
-    await aTimeout(100);
     touch(areaOf(el), 'pointerup', rect.left + 50, rect.top + 30);
-    await aTimeout(550);
+    await aTimeout(650);
     expect(el.open).toBe(false);
     areaOf(el).dispatchEvent(
       new PointerEvent('pointerdown', {pointerType: 'mouse', bubbles: true, composed: true}),
     );
-    await aTimeout(550);
+    await aTimeout(650);
     expect(el.open).toBe(false);
   });
 
@@ -365,7 +369,12 @@ describe('ContextMenu keyboard', () => {
     await rightClick(el);
     await opened(el);
     document.dispatchEvent(
-      new KeyboardEvent('keydown', {key: 'Escape', isComposing: true, bubbles: true, cancelable: true}),
+      new KeyboardEvent('keydown', {
+        key: 'Escape',
+        isComposing: true,
+        bubbles: true,
+        cancelable: true,
+      }),
     );
     await aTimeout(60);
     expect(el.open).toBe(true);
@@ -414,7 +423,9 @@ describe('ContextMenu items', () => {
     await rightClick(el);
     await opened(el);
     const roles = await Promise.all(
-      [...surfaceOf(el).querySelectorAll('[role="group"]')].map(async (node) => (await axNode(node)).name),
+      [...surfaceOf(el).querySelectorAll('[role="group"]')].map(
+        async (node) => (await axNode(node)).name,
+      ),
     );
     expect(roles).toEqual(['Danger']);
     await pressKeys('ArrowDown', 'ArrowDown', 'ArrowDown');

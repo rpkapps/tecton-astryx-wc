@@ -5,6 +5,7 @@
 import {describe, expect, it} from 'vitest';
 import {page, server} from 'vitest/browser';
 import {
+  aTimeout,
   animationsFinished,
   cleanupFixtures,
   expectAccessible,
@@ -60,6 +61,10 @@ describe('examples', () => {
         await first.show();
         await animationsFinished(first.shadowRoot!.querySelector('.layer')!);
         await nextFrame();
+        // A pointer left over a submenu row from an earlier test opens its flyout after the hover delay.
+        // Contrast is measured on settled colours: let that and every transition (buttons, rows) finish.
+        await aTimeout(300);
+        await Promise.allSettled(document.getAnimations().map((animation) => animation.finished));
         await expectAccessible(root);
         if (shoot) {
           const dir = `${server.config.root}/reports/screenshots/dropdown-menu`;

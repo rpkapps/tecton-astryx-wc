@@ -19,6 +19,7 @@ import './define.js';
 import type {TctDropdownMenu} from './tct-dropdown-menu.js';
 import type {TctDropdownMenuCheckboxItem} from './tct-dropdown-menu-checkbox-item.js';
 import type {TctDropdownMenuRadioGroup} from './tct-dropdown-menu-radio-group.js';
+import type {TctDropdownMenuRadioItem} from './tct-dropdown-menu-radio-item.js';
 
 runElementSuite({
   tag: 'tct-dropdown-menu-item',
@@ -37,7 +38,14 @@ runElementSuite({
 runElementSuite({
   tag: 'tct-dropdown-menu-checkbox-item',
   render: () => '<tct-dropdown-menu-checkbox-item label="Bold"></tct-dropdown-menu-checkbox-item>',
-  properties: {label: 'Other', description: 'Hint', icon: 'search', checked: true, disabled: true, closeOnSelect: true},
+  properties: {
+    label: 'Other',
+    description: 'Hint',
+    icon: 'search',
+    checked: true,
+    disabled: true,
+    closeOnSelect: true,
+  },
   attributes: {label: 'label', description: 'description', icon: 'icon'},
   events: ['tct-value-change'],
 });
@@ -81,18 +89,27 @@ const SELECTABLE = `
     </tct-dropdown-menu-radio-group>
   </tct-dropdown-menu>`;
 
-async function mount(markup = SELECTABLE, options: {dir?: 'rtl'; lang?: string} = {}): Promise<TctDropdownMenu> {
-  const root = await fixture<HTMLElement>(`<div style="padding:60px 40px">${markup}</div>`, options);
+async function mount(
+  markup = SELECTABLE,
+  options: {dir?: 'rtl'; lang?: string} = {},
+): Promise<TctDropdownMenu> {
+  const root = await fixture<HTMLElement>(
+    `<div style="padding:60px 40px">${markup}</div>`,
+    options,
+  );
   const el = root.querySelector<TctDropdownMenu>('tct-dropdown-menu')!;
   await el.updateComplete;
   return el;
 }
 
-const layerOf = (el: TctDropdownMenu): HTMLElement => el.shadowRoot!.querySelector<HTMLElement>('.layer')!;
-const surfaceOf = (el: TctDropdownMenu): HTMLElement => el.shadowRoot!.querySelector<HTMLElement>('.surface')!;
+const layerOf = (el: TctDropdownMenu): HTMLElement =>
+  el.shadowRoot!.querySelector<HTMLElement>('.layer')!;
+const surfaceOf = (el: TctDropdownMenu): HTMLElement =>
+  el.shadowRoot!.querySelector<HTMLElement>('.surface')!;
 const nativeTrigger = (el: TctDropdownMenu): HTMLElement =>
   el.shadowRoot!.querySelector('.trigger')!.shadowRoot!.querySelector<HTMLElement>('button')!;
-const active = (): string => (deepActiveElement() as HTMLElement | null)?.getAttribute('label') ?? '';
+const active = (): string =>
+  (deepActiveElement() as HTMLElement | null)?.getAttribute('label') ?? '';
 
 async function openByKeyboard(el: TctDropdownMenu): Promise<void> {
   nativeTrigger(el).focus();
@@ -107,7 +124,11 @@ describe('DropdownMenuCheckboxItem', () => {
     await openByKeyboard(el);
     const bold = el.querySelector<TctDropdownMenuCheckboxItem>('#bold')!;
     const italic = el.querySelector<TctDropdownMenuCheckboxItem>('#italic')!;
-    expect(await axNode(bold)).toMatchObject({role: 'menuitemcheckbox', checked: 'true', name: 'Bold'});
+    expect(await axNode(bold)).toMatchObject({
+      role: 'menuitemcheckbox',
+      checked: 'true',
+      name: 'Bold',
+    });
     expect(await axNode(italic)).toMatchObject({role: 'menuitemcheckbox', checked: 'false'});
     const indicator = bold.shadowRoot!.querySelector('tct-checkbox-indicator')!;
     expect((await axNode(indicator)).ignored).toBe('true');
@@ -219,11 +240,13 @@ describe('DropdownMenuRadioGroup / RadioItem', () => {
     expect((changes.events[0] as unknown as {oldValue: string}).oldValue).toBe('left');
     expect(group.value).toBe('right');
     await waitUntil(() => !el.open, 'closed');
-    expect((await axNode(group.querySelector('[value="right"]')!)).checked).toBe('true');
+    expect(group.querySelector<TctDropdownMenuRadioItem>('[value="right"]')!.checked).toBe(true);
   });
 
   it('no-close-on-select keeps the menu open', async () => {
-    const el = await mount(SELECTABLE.replace('id="align" label="Align"', 'id="align" label="Align" no-close-on-select'));
+    const el = await mount(
+      SELECTABLE.replace('id="align" label="Align"', 'id="align" label="Align" no-close-on-select'),
+    );
     await openByKeyboard(el);
     await userEvent.click(el.querySelector('#align [value="right"]')!);
     expect(el.open).toBe(true);
@@ -314,7 +337,9 @@ describe('DropdownMenuItem', () => {
   });
 
   it('a row outside any menu is inert: no close, no throw', async () => {
-    const root = await fixture<HTMLElement>(`<tct-dropdown-menu-item label="Alone"></tct-dropdown-menu-item>`);
+    const root = await fixture<HTMLElement>(
+      `<tct-dropdown-menu-item label="Alone"></tct-dropdown-menu-item>`,
+    );
     const clicks = recordEvents(root, 'click');
     await userEvent.click(root);
     expect(clicks.events).toHaveLength(1);
@@ -326,7 +351,9 @@ describe('menu RTL and i18n', () => {
     const el = await mount(SELECTABLE, {dir: 'rtl'});
     await openByKeyboard(el);
     const bold = el.querySelector('#bold')!;
-    const marker = bold.shadowRoot!.querySelector('tct-checkbox-indicator')!.getBoundingClientRect();
+    const marker = bold
+      .shadowRoot!.querySelector('tct-checkbox-indicator')!
+      .getBoundingClientRect();
     const row = bold.getBoundingClientRect();
     expect(row.right - marker.right).toBeLessThan(marker.left - row.left);
     await expectAccessible(el);
@@ -343,7 +370,10 @@ describe('menu RTL and i18n', () => {
       );
       const el = root.querySelector<TctDropdownMenu>('tct-dropdown-menu')!;
       await el.updateComplete;
-      await waitUntil(() => el.shadowRoot!.querySelector('.trigger')!.getAttribute('label') !== 'Menu', 'localized');
+      await waitUntil(
+        () => el.shadowRoot!.querySelector('.trigger')!.getAttribute('label') !== 'Menu',
+        'localized',
+      );
       expect(surfaceOf(el).getAttribute('aria-label')).toBe(
         el.shadowRoot!.querySelector('.trigger')!.getAttribute('label'),
       );

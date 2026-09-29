@@ -124,12 +124,15 @@ export class LongPressController implements ReactiveController {
     this.cancel();
     if (this.#touches.size !== 1) return; // multi-touch is not a long press
     this.#start = {x: event.clientX, y: event.clientY, pointerId: event.pointerId};
-    this.#timer = setTimeout(() => {
-      const start = this.#start;
-      this.#timer = undefined;
-      this.#start = undefined;
-      if (start) this.#options.onLongPress({x: start.x, y: start.y}, event);
-    }, this.#read(this.#options.delayMs, LONG_PRESS_DEFAULT_DELAY_MS));
+    this.#timer = setTimeout(
+      () => {
+        const start = this.#start;
+        this.#timer = undefined;
+        this.#start = undefined;
+        if (start) this.#options.onLongPress({x: start.x, y: start.y}, event);
+      },
+      this.#read(this.#options.delayMs, LONG_PRESS_DEFAULT_DELAY_MS),
+    );
   };
 
   readonly #onMove = (event: PointerEvent): void => {

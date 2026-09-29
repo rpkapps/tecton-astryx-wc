@@ -76,9 +76,7 @@ export interface DropdownMenuSection {
 }
 
 export type DropdownMenuOption =
-  | DropdownMenuItemData
-  | DropdownMenuDividerData
-  | DropdownMenuSection;
+  DropdownMenuItemData | DropdownMenuDividerData | DropdownMenuSection;
 
 export const isDividerOption = (option: DropdownMenuOption): option is DropdownMenuDividerData =>
   'type' in option && option.type === 'divider';
@@ -103,8 +101,7 @@ const INTRINSIC_AND_CSS_WIDE_WIDTHS = new Set([
 
 /** Where a `menu-width` value goes: the preferred inline size, or the minimum the menu may grow from. */
 export type ResolvedMenuWidth =
-  | {property: 'inline-size'; value: string}
-  | {property: 'min-inline-size'; value: string};
+  {property: 'inline-size'; value: string} | {property: 'min-inline-size'; value: string};
 
 /**
  * Upstream `resolveMenuWidth`. CSS intrinsic and CSS-wide keywords cannot be arguments to `min()`, so

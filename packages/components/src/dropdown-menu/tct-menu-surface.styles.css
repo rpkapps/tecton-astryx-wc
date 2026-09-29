@@ -42,7 +42,10 @@
 
     /* Viewport gutter: never wider or taller than the screen minus 16px each side. */
     max-inline-size: calc(100vi - var(--spacing-8));
-    max-block-size: min(300px /* design: upstream menu height cap */, calc(100dvb - var(--spacing-8)));
+    max-block-size: min(
+      300px /* design: upstream menu height cap */,
+      calc(100dvb - var(--spacing-8))
+    );
     padding: var(--_menu-padding);
     border: var(--border-width) solid var(--color-border);
     border-radius: var(--_menu-radius);

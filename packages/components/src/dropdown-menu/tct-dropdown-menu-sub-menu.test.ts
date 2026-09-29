@@ -55,12 +55,16 @@ const flyout = (sub: TctDropdownMenuSubMenu): HTMLElement =>
 const flyoutSurface = (sub: TctDropdownMenuSubMenu): HTMLElement =>
   sub.shadowRoot!.querySelector<HTMLElement>('.surface')!;
 const isOpen = (sub: TctDropdownMenuSubMenu): boolean => flyout(sub).matches(':popover-open');
-const active = (): string => (deepActiveElement() as HTMLElement | null)?.getAttribute('label') ?? '';
+const active = (): string =>
+  (deepActiveElement() as HTMLElement | null)?.getAttribute('label') ?? '';
 
 async function openMenu(menu: TctDropdownMenu): Promise<void> {
   trigger(menu).shadowRoot!.querySelector('button')!.focus();
   await pressKeys('Enter');
-  await waitUntil(() => menu.open && menu.shadowRoot!.querySelector('.layer')!.matches(':popover-open'), 'open');
+  await waitUntil(
+    () => menu.open && menu.shadowRoot!.querySelector('.layer')!.matches(':popover-open'),
+    'open',
+  );
   await animationsFinished(menu.shadowRoot!.querySelector('.layer')!);
 }
 
@@ -74,7 +78,14 @@ async function focusSubRow(menu: TctDropdownMenu, sub: TctDropdownMenuSubMenu): 
 runElementSuite({
   tag: 'tct-dropdown-menu-sub-menu',
   render: () => MENU,
-  properties: {label: 'Other', description: 'Hint', icon: 'search', disabled: true, hasSpinner: true, menuWidth: '240'},
+  properties: {
+    label: 'Other',
+    description: 'Hint',
+    icon: 'search',
+    disabled: true,
+    hasSpinner: true,
+    menuWidth: '240',
+  },
   attributes: {label: 'label', description: 'description', icon: 'icon', menuWidth: 'menu-width'},
   events: ['tct-open-change', 'tct-after-open-change'],
   skip: ['a11y'],
@@ -94,7 +105,8 @@ describe('DropdownMenuSubMenu', () => {
   it('opens on click and exposes its items; the flyout is a menu named from the row', async () => {
     const {menu, sub} = await mount();
     await openMenu(menu);
-    await userEvent.click(sub);
+    // A programmatic click: a real mouse click after a hover longer than the click guard would toggle it shut.
+    sub.click();
     await waitUntil(() => sub.open && isOpen(sub), 'flyout open');
     await animationsFinished(flyout(sub));
     expect((await axNode(sub)).expanded).toBe('true');
@@ -146,9 +158,7 @@ describe('DropdownMenuSubMenu', () => {
     await waitUntil(() => !menu.open, 'menu closed');
     await waitUntil(() => deepActiveElement() === nativeTrigger(menu), 'focus on the trigger');
     // The menu's own intent event fired for the second Escape only.
-    expect(
-      changes.events.filter((e) => e.target === menu).map((e) => [e.open, e.reason]),
-    ).toEqual([
+    expect(changes.events.filter((e) => e.target === menu).map((e) => [e.open, e.reason])).toEqual([
       [true, 'trigger'],
       [false, 'escape'],
     ]);
@@ -158,7 +168,8 @@ describe('DropdownMenuSubMenu', () => {
     const {menu, sub} = await mount();
     const clicks = recordEvents(sub.querySelector('#a')!, 'click');
     await openMenu(menu);
-    await userEvent.click(sub);
+    // A programmatic click: a real mouse click after a hover longer than the click guard would toggle it shut.
+    sub.click();
     await waitUntil(() => isOpen(sub), 'flyout open');
     await userEvent.click(sub.querySelector('#a')!);
     expect(clicks.events).toHaveLength(1);
@@ -181,7 +192,8 @@ describe('DropdownMenuSubMenu', () => {
     const {menu, sub} = await mount(MENU.replace('id="move"', 'id="move" disabled'));
     await focusSubRow(menu, sub);
     await pressKeys('ArrowRight');
-    await userEvent.click(sub);
+    // A programmatic click: a real mouse click after a hover longer than the click guard would toggle it shut.
+    sub.click();
     await aTimeout(80);
     expect(sub.open).toBe(false);
     expect((await axNode(sub)).disabled).toBe('true');
@@ -240,9 +252,20 @@ describe('DropdownMenuSubMenu', () => {
     await openMenu(menu);
     await userEvent.hover(sub);
     await waitUntil(() => isOpen(sub), 'hover-opened');
-    await userEvent.click(sub);
+    // A programmatic click right after the hover-open: within the guard however slow the machine is.
+    sub.click();
     await aTimeout(50);
     expect(sub.open).toBe(true);
+  });
+
+  it('closes on a click that lands well after the hover-open', async () => {
+    const {menu, sub} = await mount();
+    await openMenu(menu);
+    await userEvent.hover(sub);
+    await waitUntil(() => isOpen(sub), 'hover-opened');
+    await aTimeout(650);
+    sub.click();
+    await waitUntil(() => !sub.open, 'closed by the click');
   });
 
   it('mirrors its keyboard directions under RTL', async () => {
@@ -264,7 +287,9 @@ describe('DropdownMenuSubMenu', () => {
     await pressKeys('ArrowLeft');
     await waitUntil(() => isOpen(sub), 'flyout open again');
     await animationsFinished(flyout(sub));
-    expect(flyoutSurface(sub).getBoundingClientRect().right).toBeLessThanOrEqual(sub.getBoundingClientRect().left + 1);
+    expect(flyoutSurface(sub).getBoundingClientRect().right).toBeLessThanOrEqual(
+      sub.getBoundingClientRect().left + 1,
+    );
   });
 
   it('places the flyout beside the row on the inline end', async () => {
@@ -311,7 +336,10 @@ describe('DropdownMenuSubMenu async items (spinner)', () => {
     await pressKeys('ArrowRight');
     await waitUntil(() => isOpen(sub), 'flyout open');
     sub.removeAttribute('has-spinner');
-    sub.insertAdjacentHTML('beforeend', '<tct-dropdown-menu-item label="Loaded"></tct-dropdown-menu-item>');
+    sub.insertAdjacentHTML(
+      'beforeend',
+      '<tct-dropdown-menu-item label="Loaded"></tct-dropdown-menu-item>',
+    );
     await sub.updateComplete;
     await pressKeys('ArrowDown');
     expect(active()).toBe('Loaded');

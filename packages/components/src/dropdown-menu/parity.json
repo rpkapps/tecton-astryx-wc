@@ -58,8 +58,20 @@
           "as": "attribute",
           "notes": "`menu-width`: a bare number is px; intrinsic keywords set the preferred width; capped to the viewport gutter."
         },
-        {"upstream": "placement", "kind": "prop", "target": "placement", "as": "attribute", "default": "below"},
-        {"upstream": "alignment", "kind": "prop", "target": "alignment", "as": "attribute", "default": "start"},
+        {
+          "upstream": "placement",
+          "kind": "prop",
+          "target": "placement",
+          "as": "attribute",
+          "default": "below"
+        },
+        {
+          "upstream": "alignment",
+          "kind": "prop",
+          "target": "alignment",
+          "as": "attribute",
+          "default": "start"
+        },
         {
           "upstream": "onClick",
           "kind": "event",
@@ -108,8 +120,16 @@
           "as": "controller",
           "notes": "Hover intent for submenus lives in the submenu element."
         },
-        {"upstream": "useLayer", "target": "LayerController + PositionController", "as": "controller"},
-        {"upstream": "useAdaptivePresentation", "target": "AdaptivePresentationController", "as": "controller"},
+        {
+          "upstream": "useLayer",
+          "target": "LayerController + PositionController",
+          "as": "controller"
+        },
+        {
+          "upstream": "useAdaptivePresentation",
+          "target": "AdaptivePresentationController",
+          "as": "controller"
+        },
         {
           "upstream": "useFocusReturnVisibility",
           "target": "LayerController returnFocus (focus({focusVisible}) from the last input device)",
@@ -122,17 +142,57 @@
         }
       ],
       "keyboard": [
-        {"keys": "Enter, Space", "action": "Opens the menu and focuses the first enabled row", "when": "trigger focused"},
-        {"keys": "ArrowDown", "action": "Opens the menu and focuses the first enabled row; walks into an already open menu", "when": "trigger focused"},
-        {"keys": "ArrowDown, ArrowUp", "action": "Moves to the next / previous row; no wrap; disabled rows are focusable", "when": "menu open, focus in the rows"},
+        {
+          "keys": "Enter, Space",
+          "action": "Opens the menu and focuses the first enabled row",
+          "when": "trigger focused"
+        },
+        {
+          "keys": "ArrowDown",
+          "action": "Opens the menu and focuses the first enabled row; walks into an already open menu",
+          "when": "trigger focused"
+        },
+        {
+          "keys": "ArrowDown, ArrowUp",
+          "action": "Moves to the next / previous row; no wrap; disabled rows are focusable",
+          "when": "menu open, focus in the rows"
+        },
         {"keys": "Home, End", "action": "Focuses the first / last row", "when": "menu open"},
-        {"keys": "ArrowDown, ArrowUp, Home, End", "action": "First key after a pointer open enters the rows (the surface holds focus, so no row reads as pre-selected)", "when": "surface focused"},
-        {"keys": "Printable character", "action": "Focuses the next enabled row whose label starts with the typed text (locale-aware)", "when": "menu open"},
-        {"keys": "Enter, Space", "action": "Activates the focused row through its own click; closes the menu unless the row opts out", "when": "row focused"},
-        {"keys": "ArrowRight (ArrowLeft in RTL), Enter, Space", "action": "Opens a submenu and focuses its first enabled row", "when": "submenu row focused"},
-        {"keys": "ArrowLeft (ArrowRight in RTL)", "action": "Closes the submenu and focuses its row", "when": "focus inside a flyout"},
-        {"keys": "Escape", "action": "Closes only the top-most level: a submenu (focus returns to its row), else the menu (focus returns to the trigger)", "when": "menu open; one layer per press"},
-        {"keys": "Tab, Shift+Tab", "action": "Closes the whole menu; focus continues from the trigger", "when": "menu open"}
+        {
+          "keys": "ArrowDown, ArrowUp, Home, End",
+          "action": "First key after a pointer open enters the rows (the surface holds focus, so no row reads as pre-selected)",
+          "when": "surface focused"
+        },
+        {
+          "keys": "Printable character",
+          "action": "Focuses the next enabled row whose label starts with the typed text (locale-aware)",
+          "when": "menu open"
+        },
+        {
+          "keys": "Enter, Space",
+          "action": "Activates the focused row through its own click; closes the menu unless the row opts out",
+          "when": "row focused"
+        },
+        {
+          "keys": "ArrowRight (ArrowLeft in RTL), Enter, Space",
+          "action": "Opens a submenu and focuses its first enabled row",
+          "when": "submenu row focused"
+        },
+        {
+          "keys": "ArrowLeft (ArrowRight in RTL)",
+          "action": "Closes the submenu and focuses its row",
+          "when": "focus inside a flyout"
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes only the top-most level: a submenu (focus returns to its row), else the menu (focus returns to the trigger)",
+          "when": "menu open; one layer per press"
+        },
+        {
+          "keys": "Tab, Shift+Tab",
+          "action": "Closes the whole menu; focus continues from the trigger",
+          "when": "menu open"
+        }
       ],
       "form": {"formAssociated": false},
       "differences": [
@@ -212,12 +272,43 @@
         "commit": "ca632c6"
       },
       "api": [
-        {"upstream": "icon", "kind": "prop", "target": "icon", "as": "attribute", "notes": "A registered icon name; a custom icon goes in slot=\"icon\"."},
-        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute", "notes": "Rich label: slot=\"label\"."},
-        {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute", "notes": "Rich description: slot=\"description\"."},
+        {
+          "upstream": "icon",
+          "kind": "prop",
+          "target": "icon",
+          "as": "attribute",
+          "notes": "A registered icon name; a custom icon goes in slot=\"icon\"."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Rich label: slot=\"label\"."
+        },
+        {
+          "upstream": "description",
+          "kind": "prop",
+          "target": "description",
+          "as": "attribute",
+          "notes": "Rich description: slot=\"description\"."
+        },
         {"upstream": "endContent", "kind": "slot", "target": "end", "as": "slot"},
-        {"upstream": "onClick", "kind": "event", "target": "click", "as": "native-event", "notes": "Once per activation (pointer, Enter, Space); never for a disabled row."},
-        {"upstream": "isDisabled", "kind": "prop", "target": "disabled", "as": "attribute", "reflect": true, "default": false},
+        {
+          "upstream": "onClick",
+          "kind": "event",
+          "target": "click",
+          "as": "native-event",
+          "notes": "Once per activation (pointer, Enter, Space); never for a disabled row."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
         {
           "upstream": "hasCloseOnSelect",
           "kind": "prop",
@@ -226,10 +317,32 @@
           "default": false,
           "notes": "Inverted: `no-close-on-select` (A§7.2)."
         },
-        {"upstream": "variant", "kind": "prop", "target": "variant", "as": "attribute", "reflect": true, "default": "default"},
-        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style and ::part(item)."},
-        {"upstream": "className", "kind": "prop", "as": "waived", "reason": "A-xstyle: `class` goes on the host."},
-        {"upstream": "style", "kind": "prop", "as": "waived", "reason": "A-xstyle: `style` goes on the host."}
+        {
+          "upstream": "variant",
+          "kind": "prop",
+          "target": "variant",
+          "as": "attribute",
+          "reflect": true,
+          "default": "default"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style and ::part(item)."
+        },
+        {
+          "upstream": "className",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: `class` goes on the host."
+        },
+        {
+          "upstream": "style",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: `style` goes on the host."
+        }
       ],
       "hooks": [
         {
@@ -255,7 +368,16 @@
           "text": "A disabled row swallows its click before any listener (`stopImmediatePropagation`), so no consumer or parent handler runs for it; it stays focusable and announced as unavailable (see DDMENU-02)."
         }
       ],
-      "tests": {"render": true, "a11y": true, "api": true, "keyboard": true, "events": true, "rtl": true, "forcedColors": true, "i18n": true},
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
@@ -271,9 +393,24 @@
         "commit": "ca632c6"
       },
       "api": [
-        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style and ::part(divider)."},
-        {"upstream": "className", "kind": "prop", "as": "waived", "reason": "A-xstyle: `class` goes on the host."},
-        {"upstream": "style", "kind": "prop", "as": "waived", "reason": "A-xstyle: `style` goes on the host."}
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style and ::part(divider)."
+        },
+        {
+          "upstream": "className",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: `class` goes on the host."
+        },
+        {
+          "upstream": "style",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: `style` goes on the host."
+        }
       ],
       "hooks": [],
       "keyboard": [],
@@ -285,7 +422,16 @@
           "text": "The host is the `separator` (ElementInternals); the inner tct-divider only draws the rule. Serves the `ContextMenuDivider` and `BreadcrumbMenuDivider` aliases. The rule takes one spacing step of block margin, as upstream."
         }
       ],
-      "tests": {"render": true, "a11y": true, "api": true, "keyboard": true, "events": true, "rtl": true, "forcedColors": true, "i18n": false},
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
@@ -319,7 +465,14 @@
           "as": "event",
           "notes": "Cancelable intent event before activation flips `checked`; `value` is the requested state (non-form selection, A§7.6)."
         },
-        {"upstream": "isDisabled", "kind": "prop", "target": "disabled", "as": "attribute", "reflect": true, "default": false},
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
         {
           "upstream": "hasCloseOnSelect",
           "kind": "prop",
@@ -332,7 +485,11 @@
       ],
       "hooks": [],
       "keyboard": [
-        {"keys": "Enter, Space", "action": "Toggles the row (one tct-value-change, one click)", "when": "focused"}
+        {
+          "keys": "Enter, Space",
+          "action": "Toggles the row (one tct-value-change, one click)",
+          "when": "focused"
+        }
       ],
       "form": {"formAssociated": false},
       "differences": [
@@ -342,7 +499,16 @@
           "text": "`value`/`onChange` become `checked` plus the cancelable `tct-value-change` (a menu row is not a form control, so no native `input`/`change`). The checkbox drawn in the row is the built-in decorative indicator (aria-hidden): the row is the one announced control, with `aria-checked`. On a coarse pointer the box moves to the inline end."
         }
       ],
-      "tests": {"render": true, "a11y": true, "api": true, "keyboard": true, "events": true, "rtl": true, "forcedColors": true, "i18n": true},
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
@@ -371,7 +537,13 @@
           "as": "event",
           "notes": "Cancelable intent event before a user choice changes `value`; not fired for the value that is already selected."
         },
-        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute", "notes": "Required: the group's accessible name."},
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Required: the group's accessible name."
+        },
         {
           "upstream": "hasCloseOnSelect",
           "kind": "prop",
@@ -399,7 +571,16 @@
           "text": "The host is the `group` (ElementInternals) named by `label`. Choosing the value that is already selected fires no event (native radio semantics); upstream calls `onChange` every time."
         }
       ],
-      "tests": {"render": true, "a11y": true, "api": true, "keyboard": true, "events": true, "rtl": true, "forcedColors": true, "i18n": true},
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
@@ -418,12 +599,23 @@
         {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
         {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute"},
         {"upstream": "icon", "kind": "prop", "target": "icon", "as": "attribute"},
-        {"upstream": "isDisabled", "kind": "prop", "target": "disabled", "as": "attribute", "reflect": true, "default": false},
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
         {"upstream": "endContent", "kind": "slot", "target": "end", "as": "slot"}
       ],
       "hooks": [],
       "keyboard": [
-        {"keys": "Enter, Space", "action": "Chooses the option (asks the group to change value)", "when": "focused"}
+        {
+          "keys": "Enter, Space",
+          "action": "Chooses the option (asks the group to change value)",
+          "when": "focused"
+        }
       ],
       "form": {"formAssociated": false},
       "differences": [
@@ -433,7 +625,16 @@
           "text": "Outside a radio group the row cannot be chosen and a warning is logged in development; upstream throws during render, which a custom element must not do."
         }
       ],
-      "tests": {"render": true, "a11y": true, "api": true, "keyboard": true, "events": true, "rtl": true, "forcedColors": true, "i18n": true},
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
@@ -451,8 +652,21 @@
         {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
         {"upstream": "icon", "kind": "prop", "target": "icon", "as": "attribute"},
         {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute"},
-        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot", "notes": "The flyout rows."},
-        {"upstream": "isDisabled", "kind": "prop", "target": "disabled", "as": "attribute", "reflect": true, "default": false},
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "The flyout rows."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
         {
           "upstream": "hasSpinner",
           "kind": "prop",
@@ -461,7 +675,13 @@
           "default": false,
           "notes": "`has-spinner` (A§7.2 `hasX`): a spinner in place of the caret while the children load."
         },
-        {"upstream": "menuWidth", "kind": "prop", "target": "menuWidth", "as": "attribute", "notes": "`menu-width`."},
+        {
+          "upstream": "menuWidth",
+          "kind": "prop",
+          "target": "menuWidth",
+          "as": "attribute",
+          "notes": "`menu-width`."
+        },
         {
           "upstream": "onOpenChange",
           "kind": "event",
@@ -469,19 +689,60 @@
           "as": "event",
           "notes": "Cancelable intent event before a user-driven open or close; `tct-after-open-change` once settled."
         },
-        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style, ::part(item) and ::part(menu)."},
-        {"upstream": "data-testid", "kind": "prop", "as": "waived", "reason": "A-xstyle: attributes go on the host element."},
-        {"upstream": "menuDataTestId", "kind": "prop", "as": "waived", "reason": "A-xstyle: the flyout is ::part(menu) of the host."},
-        {"upstream": "className", "kind": "prop", "as": "waived", "reason": "A-xstyle: `class` goes on the host."},
-        {"upstream": "style", "kind": "prop", "as": "waived", "reason": "A-xstyle: `style` goes on the host."}
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(item) and ::part(menu)."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: attributes go on the host element."
+        },
+        {
+          "upstream": "menuDataTestId",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: the flyout is ::part(menu) of the host."
+        },
+        {
+          "upstream": "className",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: `class` goes on the host."
+        },
+        {
+          "upstream": "style",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: `style` goes on the host."
+        }
       ],
       "hooks": [
-        {"upstream": "useMenuHover", "target": "hover intent in tct-dropdown-menu-sub-menu (150ms open, 200ms close, 500ms click guard)", "as": "controller"}
+        {
+          "upstream": "useMenuHover",
+          "target": "hover intent in tct-dropdown-menu-sub-menu (150ms open, 200ms close, 500ms click guard)",
+          "as": "controller"
+        }
       ],
       "keyboard": [
-        {"keys": "ArrowRight (ArrowLeft in RTL), Enter, Space", "action": "Opens the flyout and focuses its first enabled row (the flyout itself when it has none yet)", "when": "row focused"},
-        {"keys": "ArrowLeft (ArrowRight in RTL)", "action": "Closes the flyout and focuses the row", "when": "focus in the flyout"},
-        {"keys": "Escape", "action": "Closes only the flyout and focuses the row; the next Escape closes the menu", "when": "flyout open"}
+        {
+          "keys": "ArrowRight (ArrowLeft in RTL), Enter, Space",
+          "action": "Opens the flyout and focuses its first enabled row (the flyout itself when it has none yet)",
+          "when": "row focused"
+        },
+        {
+          "keys": "ArrowLeft (ArrowRight in RTL)",
+          "action": "Closes the flyout and focuses the row",
+          "when": "focus in the flyout"
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes only the flyout and focuses the row; the next Escape closes the menu",
+          "when": "flyout open"
+        }
       ],
       "form": {"formAssociated": false},
       "differences": [
@@ -496,7 +757,16 @@
           "text": "Escape closes only the top-most level through the shared layer stack (one layer per press) and hands focus back to the row; upstream marked the event handled by hand."
         }
       ],
-      "tests": {"render": true, "a11y": true, "api": true, "keyboard": true, "events": true, "rtl": true, "forcedColors": true, "i18n": true},
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
