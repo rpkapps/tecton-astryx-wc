@@ -43,15 +43,15 @@
     },
     "pathConvention": "Every `path` is a dot path into tecton.tokens.json exactly as written there (e.g. foundational.color.hotPink.onDark.460 (focus outline), foundational.color.shades.black.transparent.50). `value` is the $value at that path.",
     "sourceValues": {
-      "tecton-astryx": "value decided in tecton-astryx (theme code is authoritative over its docs)",
+      "tecton-binding": "value decided in the Tecton binding (theme code is authoritative over its docs)",
       "proposed": "no Tecton decision exists; proposed here, needs owner approval",
-      "upstream-default": "Tecton made no change; Astryx default kept (tecton-astryx also kept it)"
+      "upstream-default": "Tecton made no change; upstream default kept (the Tecton binding also kept it)"
     },
-    "lightModeDecision": "OPEN. `light` = tecton-astryx derived value (same family+stop, onLight ramp). `exportAlt.light` = the Tecton export light value where a matching role exists; 114/161 comparable roles differ. Owner must choose before light sign-off; see tecton-theme.md §3.4.",
+    "lightModeDecision": "OPEN. `light` = Tecton binding derived value (same family+stop, onLight ramp). `exportAlt.light` = the Tecton export light value where a matching role exists; 114/161 comparable roles differ. Owner must choose before light sign-off; see tecton-theme.md §3.4.",
     "counts": {
       "upstreamTokens": 258,
       "bySource": {
-        "tecton-astryx": 174,
+        "tecton-binding": 174,
         "proposed": 56,
         "upstream-default": 28
       },
@@ -72,7 +72,7 @@
         "value": "#5d4d68"
       },
       "css": "light-dark(#b89dc8, #5d4d68)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "action.primary.background",
       "exportAlt": {
         "var": "--tecton-color-action-primary-bg",
@@ -100,7 +100,7 @@
         "value": "#80708b40"
       },
       "css": "light-dark(#976dac40, #80708b40)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "verdict": "wash",
       "notes": "25% violet wash; selection/hover tint derived from accent."
     },
@@ -116,7 +116,7 @@
         "value": "#e5e0eb"
       },
       "css": "light-dark(#35214b, #e5e0eb)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "action.primary.text",
       "exportAlt": {
         "var": "--tecton-color-action-primary-text",
@@ -143,7 +143,7 @@
         "value": "#3a343e"
       },
       "css": "light-dark(#d5cddb, #3a343e)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "action.secondary.background",
       "exportAlt": {
         "var": "--tecton-color-action-secondary-bg",
@@ -171,7 +171,7 @@
         "value": "#1d1c1f"
       },
       "css": "light-dark(#f6f4f7, #1d1c1f)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "surface.backgroundDefault",
       "exportAlt": {
         "var": "--tecton-color-bg-default",
@@ -198,7 +198,7 @@
         "value": "#131214"
       },
       "css": "light-dark(#fafafb, #131214)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "surface.backgroundElevated",
       "exportAlt": {
         "var": "--tecton-color-bg-elevated",
@@ -226,7 +226,7 @@
         "value": "#131214"
       },
       "css": "light-dark(#fafafb, #131214)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "surface.backgroundElevated",
       "exportAlt": {
         "var": "--tecton-color-bg-elevated",
@@ -253,7 +253,7 @@
         "value": "#131214"
       },
       "css": "light-dark(#fafafb, #131214)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "surface.backgroundElevated",
       "exportAlt": {
         "var": "--tecton-color-bg-elevated",
@@ -280,7 +280,7 @@
         "value": "#28232c"
       },
       "css": "light-dark(#ebe9ee, #28232c)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "component.input.filled.background",
       "exportAlt": {
         "var": "--tecton-color-component-input-filled-background",
@@ -309,7 +309,7 @@
         "value": "#f6f5f8"
       },
       "css": "light-dark(#1e1825, #f6f5f8)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "text.primary",
       "exportAlt": {
         "var": "--tecton-color-text-primary",
@@ -337,7 +337,7 @@
         "value": "#e3a6a6"
       },
       "css": "light-dark(#8b1f0b, #e3a6a6)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "status.error.bright",
       "exportAlt": {
         "var": "--tecton-color-status-error-bright",
@@ -364,7 +364,7 @@
         "value": "#00000080"
       },
       "css": "#00000080",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "verdict": "approximated",
       "notes": "Modal scrim, black 50% in both modes (heavy in light mode; light-mode.md weak point 6)."
     },
@@ -380,7 +380,7 @@
         "value": "#ffffff0d"
       },
       "css": "light-dark(#0000000d, #ffffff0d)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "verdict": "approximated",
       "notes": "No Tecton source. Ink wash (black in light, white in dark) at 5%; was 10% until theme-audit §16 (icon-secondary on a 20% pressed row fell to 2.44:1). light-mode.md still quotes the old 10/20 - code is authoritative."
     },
@@ -396,7 +396,7 @@
         "value": "#ffffff1a"
       },
       "css": "light-dark(#0000001a, #ffffff1a)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "verdict": "approximated",
       "notes": "As overlay-hover, 10%."
     },
@@ -412,7 +412,7 @@
         "value": "#f6f5f8"
       },
       "css": "light-dark(#1e1825, #f6f5f8)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "text.primary",
       "exportAlt": {
         "var": "--tecton-color-text-primary",
@@ -439,7 +439,7 @@
         "value": "#a7a2ac"
       },
       "css": "light-dark(#604e6e, #a7a2ac)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "text.secondary",
       "exportAlt": {
         "var": "--tecton-color-text-secondary",
@@ -466,7 +466,7 @@
         "value": "#545356"
       },
       "css": "light-dark(#ada3b2, #545356)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "text.disabled",
       "exportAlt": {
         "var": "--tecton-color-text-disabled",
@@ -494,7 +494,7 @@
         "value": "#beb1c8"
       },
       "css": "light-dark(#5c3878, #beb1c8)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "action.primary.adornment",
       "exportAlt": {
         "var": "--tecton-color-action-primary-adornment",
@@ -522,7 +522,7 @@
         "value": "#f6f5f8"
       },
       "css": "#f6f5f8",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Fixed: dark side of Text primary in both modes."
     },
     "--color-on-light": {
@@ -537,7 +537,7 @@
         "value": "#131214"
       },
       "css": "#131214",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Fixed: dark side of Text inverse (#131214) in both modes."
     },
     "--color-icon-primary": {
@@ -552,7 +552,7 @@
         "value": "#f6f5f8"
       },
       "css": "light-dark(#1e1825, #f6f5f8)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "text.primary",
       "exportAlt": {
         "var": "--tecton-color-text-primary",
@@ -579,7 +579,7 @@
         "value": "#89848e"
       },
       "css": "light-dark(#7b668b, #89848e)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "text.subtlest",
       "exportAlt": {
         "var": "--tecton-color-text-subtlest",
@@ -607,7 +607,7 @@
         "value": "#403f42"
       },
       "css": "light-dark(#c7c1cc, #403f42)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "action.disabled.filledAdornment",
       "exportAlt": {
         "var": "--tecton-color-disabled-filled-adornment",
@@ -634,7 +634,7 @@
         "value": "#beb1c8"
       },
       "css": "light-dark(#5c3878, #beb1c8)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "action.primary.adornment",
       "exportAlt": {
         "var": "--tecton-color-action-primary-adornment",
@@ -661,7 +661,7 @@
         "value": "#4fa66f"
       },
       "css": "light-dark(#0c703e, #4fa66f)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "status.success.filledBackground",
       "exportAlt": {
         "var": "--tecton-color-status-success-filled-bg",
@@ -689,7 +689,7 @@
         "value": "#61b67f40"
       },
       "css": "light-dark(#10a05540, #61b67f40)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "verdict": "wash",
       "notes": "WASH (25% alpha), not Tecton \"success Muted\" (a solid, kept as --tecton-color-success-muted)."
     },
@@ -705,7 +705,7 @@
         "value": "#001607"
       },
       "css": "light-dark(#f3fef8, #001607)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "status.success.filledText",
       "exportAlt": {
         "var": "--tecton-color-status-success-filled-text",
@@ -732,7 +732,7 @@
         "value": "#c16e6c"
       },
       "css": "light-dark(#d22f11, #c16e6c)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "status.error.filledBackground",
       "exportAlt": {
         "var": "--tecton-color-status-error-filled-bg",
@@ -759,7 +759,7 @@
         "value": "#b25d5940"
       },
       "css": "light-dark(#ed371d40, #b25d5940)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "verdict": "wash",
       "notes": "Wash; solid Muted lives on --tecton-color-error-muted."
     },
@@ -775,7 +775,7 @@
         "value": "#2e0000"
       },
       "css": "light-dark(#fffaf9, #2e0000)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "status.error.filledText",
       "exportAlt": {
         "var": "--tecton-color-status-error-filled-text",
@@ -802,7 +802,7 @@
         "value": "#e59306"
       },
       "css": "light-dark(#7a4a00, #e59306)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "status.warning.filledBackground",
       "exportAlt": {
         "var": "--tecton-color-status-warning-filled-bg",
@@ -829,7 +829,7 @@
         "value": "#fbbc3b40"
       },
       "css": "light-dark(#ffb61f40, #fbbc3b40)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "verdict": "wash",
       "notes": "Wash; solid Muted lives on --tecton-color-warning-muted."
     },
@@ -845,7 +845,7 @@
         "value": "#1d0f01"
       },
       "css": "light-dark(#fffbf1, #1d0f01)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "status.warning.filledText",
       "exportAlt": {
         "var": "--tecton-color-status-warning-filled-text",
@@ -872,7 +872,7 @@
         "value": "#342f39"
       },
       "css": "light-dark(#e4dde7, #342f39)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "surface.dividerSubtle",
       "exportAlt": {
         "var": "--tecton-color-divider-subtle",
@@ -886,7 +886,7 @@
         }
       },
       "exportLightDiffers": false,
-      "notes": "Divider subtle - the default Astryx border maps to Tecton's LOW emphasis rule."
+      "notes": "Divider subtle - the default upstream border maps to Tecton's LOW emphasis rule."
     },
     "--color-border-emphasized": {
       "category": "border",
@@ -900,7 +900,7 @@
         "value": "#57515c"
       },
       "css": "light-dark(#b2a1bb, #57515c)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "surface.dividerMedium",
       "exportAlt": {
         "var": "--tecton-color-divider",
@@ -928,7 +928,7 @@
         "value": "#3a343e"
       },
       "css": "light-dark(#d5cddb, #3a343e)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "action.secondary.background",
       "exportAlt": {
         "var": "--tecton-color-action-secondary-bg",
@@ -956,7 +956,7 @@
         "value": "#6e6873"
       },
       "css": "light-dark(#9884a4, #6e6873)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "tectonRole": "component.progress.track",
       "notes": "Progress/slider channel at divider-strong weight."
     },
@@ -972,7 +972,7 @@
         "value": "#00000080"
       },
       "css": "light-dark(#00000026, #00000080)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "verdict": "approximated",
       "notes": "Black 15% light / 50% dark."
     },
@@ -988,7 +988,7 @@
         "value": "#ffffff"
       },
       "css": "light-dark(#000000, #ffffff)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Mixed into surfaces with color-mix() by components for hover."
     },
     "--color-background-blue": {
@@ -1003,7 +1003,7 @@
         "value": "#4874cb40"
       },
       "css": "light-dark(#507bd340, #4874cb40)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "verdict": "wash",
       "notes": "blue 25% wash. "
     },
@@ -1019,7 +1019,7 @@
         "value": "#8ca7de"
       },
       "css": "light-dark(#2850a1, #8ca7de)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "blue accent fill (680)."
     },
     "--color-icon-blue": {
@@ -1034,7 +1034,7 @@
         "value": "#8ca7de"
       },
       "css": "light-dark(#2850a1, #8ca7de)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "blue accent fill (680)."
     },
     "--color-text-blue": {
@@ -1049,7 +1049,7 @@
         "value": "#b7c9eb"
       },
       "css": "light-dark(#1c3a75, #b7c9eb)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "blue accent text (1000)."
     },
     "--color-background-cyan": {
@@ -1064,7 +1064,7 @@
         "value": "#32c9c940"
       },
       "css": "light-dark(#31c4c440, #32c9c940)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "verdict": "wash",
       "notes": "azure 25% wash. cyan and teal both take azure (Tecton has no separate teal)."
     },
@@ -1080,7 +1080,7 @@
         "value": "#29a6a6"
       },
       "css": "light-dark(#1b6b6b, #29a6a6)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "azure accent fill (560)."
     },
     "--color-icon-cyan": {
@@ -1095,7 +1095,7 @@
         "value": "#29a6a6"
       },
       "css": "light-dark(#1b6b6b, #29a6a6)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "azure accent fill (560)."
     },
     "--color-text-cyan": {
@@ -1110,7 +1110,7 @@
         "value": "#68d9d9"
       },
       "css": "light-dark(#114242, #68d9d9)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "azure accent text (1000)."
     },
     "--color-background-teal": {
@@ -1125,7 +1125,7 @@
         "value": "#32c9c940"
       },
       "css": "light-dark(#31c4c440, #32c9c940)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "verdict": "wash",
       "notes": "azure 25% wash. Duplicate of cyan (azure)."
     },
@@ -1141,7 +1141,7 @@
         "value": "#29a6a6"
       },
       "css": "light-dark(#1b6b6b, #29a6a6)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "azure accent fill (560)."
     },
     "--color-icon-teal": {
@@ -1156,7 +1156,7 @@
         "value": "#29a6a6"
       },
       "css": "light-dark(#1b6b6b, #29a6a6)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "azure accent fill (560)."
     },
     "--color-text-teal": {
@@ -1171,7 +1171,7 @@
         "value": "#68d9d9"
       },
       "css": "light-dark(#114242, #68d9d9)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "azure accent text (1000)."
     },
     "--color-background-gray": {
@@ -1186,7 +1186,7 @@
         "value": "#7a747f40"
       },
       "css": "light-dark(#8c769a40, #7a747f40)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "verdict": "wash",
       "notes": "graphite 25% wash. graphite"
     },
@@ -1202,7 +1202,7 @@
         "value": "#98939d"
       },
       "css": "light-dark(#6d5a7d, #98939d)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "graphite accent fill (560)."
     },
     "--color-icon-gray": {
@@ -1217,7 +1217,7 @@
         "value": "#98939d"
       },
       "css": "light-dark(#6d5a7d, #98939d)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "graphite accent fill (560)."
     },
     "--color-text-gray": {
@@ -1232,7 +1232,7 @@
         "value": "#cac6ce"
       },
       "css": "light-dark(#433751, #cac6ce)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "graphite accent text (1000)."
     },
     "--color-background-green": {
@@ -1247,7 +1247,7 @@
         "value": "#61b67f40"
       },
       "css": "light-dark(#10a05540, #61b67f40)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "verdict": "wash",
       "notes": "green 25% wash. "
     },
@@ -1263,7 +1263,7 @@
         "value": "#4fa66f"
       },
       "css": "light-dark(#0c703e, #4fa66f)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "green accent fill (560)."
     },
     "--color-icon-green": {
@@ -1278,7 +1278,7 @@
         "value": "#4fa66f"
       },
       "css": "light-dark(#0c703e, #4fa66f)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "green accent fill (560)."
     },
     "--color-text-green": {
@@ -1293,7 +1293,7 @@
         "value": "#92d6a8"
       },
       "css": "light-dark(#07452a, #92d6a8)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "green accent text (1000)."
     },
     "--color-background-orange": {
@@ -1308,7 +1308,7 @@
         "value": "#dcac8940"
       },
       "css": "light-dark(#e1a57940, #dcac8940)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "verdict": "wash",
       "notes": "saffron 25% wash. saffron"
     },
@@ -1324,7 +1324,7 @@
         "value": "#cb8553"
       },
       "css": "light-dark(#914f20, #cb8553)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "saffron accent fill (560)."
     },
     "--color-icon-orange": {
@@ -1339,7 +1339,7 @@
         "value": "#cb8553"
       },
       "css": "light-dark(#914f20, #cb8553)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "saffron accent fill (560)."
     },
     "--color-text-orange": {
@@ -1354,7 +1354,7 @@
         "value": "#e5c2a9"
       },
       "css": "light-dark(#593114, #e5c2a9)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "saffron accent text (1000)."
     },
     "--color-background-pink": {
@@ -1369,7 +1369,7 @@
         "value": "#d5aca440"
       },
       "css": "light-dark(#d5aaaa40, #d5aca440)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "verdict": "wash",
       "notes": "pink 25% wash. "
     },
@@ -1385,7 +1385,7 @@
         "value": "#c2867a"
       },
       "css": "light-dark(#994c4c, #c2867a)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "pink accent fill (560)."
     },
     "--color-icon-pink": {
@@ -1400,7 +1400,7 @@
         "value": "#c2867a"
       },
       "css": "light-dark(#994c4c, #c2867a)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "pink accent fill (560)."
     },
     "--color-text-pink": {
@@ -1415,7 +1415,7 @@
         "value": "#e1c3bd"
       },
       "css": "light-dark(#5c2e2e, #e1c3bd)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "pink accent text (1000)."
     },
     "--color-background-purple": {
@@ -1430,7 +1430,7 @@
         "value": "#836e9140"
       },
       "css": "light-dark(#9d6ab540, #836e9140)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "verdict": "wash",
       "notes": "lilac 25% wash. lilac - not on the Accents page; the ramp the primary action adornment comes from."
     },
@@ -1446,7 +1446,7 @@
         "value": "#9f8ead"
       },
       "css": "light-dark(#7a4e9b, #9f8ead)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "lilac accent fill (560)."
     },
     "--color-icon-purple": {
@@ -1461,7 +1461,7 @@
         "value": "#9f8ead"
       },
       "css": "light-dark(#7a4e9b, #9f8ead)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "lilac accent fill (560)."
     },
     "--color-text-purple": {
@@ -1476,7 +1476,7 @@
         "value": "#cdc4d8"
       },
       "css": "light-dark(#4a3067, #cdc4d8)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "lilac accent text (1000)."
     },
     "--color-background-red": {
@@ -1491,7 +1491,7 @@
         "value": "#b25d5940"
       },
       "css": "light-dark(#ed371d40, #b25d5940)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "verdict": "wash",
       "notes": "red 25% wash. "
     },
@@ -1507,7 +1507,7 @@
         "value": "#cc7f7d"
       },
       "css": "light-dark(#ba2a0f, #cc7f7d)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "red accent fill (560)."
     },
     "--color-icon-red": {
@@ -1522,7 +1522,7 @@
         "value": "#cc7f7d"
       },
       "css": "light-dark(#ba2a0f, #cc7f7d)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "red accent fill (560)."
     },
     "--color-text-red": {
@@ -1537,7 +1537,7 @@
         "value": "#ecbbbc"
       },
       "css": "light-dark(#751a0a, #ecbbbc)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "red accent text (1000)."
     },
     "--color-background-yellow": {
@@ -1552,7 +1552,7 @@
         "value": "#fcf21e40"
       },
       "css": "light-dark(#ffed2940, #fcf21e40)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "verdict": "wash",
       "notes": "lemon 25% wash. lemon (not the amber \"yellow\" status family)."
     },
@@ -1568,7 +1568,7 @@
         "value": "#9e9813"
       },
       "css": "light-dark(#735e01, #9e9813)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "lemon accent fill (560)."
     },
     "--color-icon-yellow": {
@@ -1583,7 +1583,7 @@
         "value": "#9e9813"
       },
       "css": "light-dark(#735e01, #9e9813)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "lemon accent fill (560)."
     },
     "--color-text-yellow": {
@@ -1598,7 +1598,7 @@
         "value": "#d6ce1a"
       },
       "css": "light-dark(#473a01, #d6ce1a)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "lemon accent text (1000)."
     },
     "--color-data-categorical-blue": {
@@ -2454,8 +2454,8 @@
         "path": "foundational.color.lilac.onDark.830",
         "value": "#beb1c8"
       },
-      "source": "tecton-astryx",
-      "notes": "Not set by tecton-astryx; upstream default is a var() onto a token tecton-astryx sets, so it inherits the Tecton value."
+      "source": "tecton-binding",
+      "notes": "Not set by the Tecton binding; upstream default is a var() onto a token the Tecton binding sets, so it inherits the Tecton value."
     },
     "--color-syntax-string": {
       "category": "syntax",
@@ -2470,8 +2470,8 @@
         "path": "foundational.color.green.onDark.1000",
         "value": "#92d6a8"
       },
-      "source": "tecton-astryx",
-      "notes": "Not set by tecton-astryx; upstream default is a var() onto a token tecton-astryx sets, so it inherits the Tecton value."
+      "source": "tecton-binding",
+      "notes": "Not set by the Tecton binding; upstream default is a var() onto a token the Tecton binding sets, so it inherits the Tecton value."
     },
     "--color-syntax-comment": {
       "category": "syntax",
@@ -2486,8 +2486,8 @@
         "path": "foundational.color.graphite.onDark.680",
         "value": "#a7a2ac"
       },
-      "source": "tecton-astryx",
-      "notes": "Not set by tecton-astryx; upstream default is a var() onto a token tecton-astryx sets, so it inherits the Tecton value."
+      "source": "tecton-binding",
+      "notes": "Not set by the Tecton binding; upstream default is a var() onto a token the Tecton binding sets, so it inherits the Tecton value."
     },
     "--color-syntax-number": {
       "category": "syntax",
@@ -2502,8 +2502,8 @@
         "path": "foundational.color.saffron.onDark.1000",
         "value": "#e5c2a9"
       },
-      "source": "tecton-astryx",
-      "notes": "Not set by tecton-astryx; upstream default is a var() onto a token tecton-astryx sets, so it inherits the Tecton value."
+      "source": "tecton-binding",
+      "notes": "Not set by the Tecton binding; upstream default is a var() onto a token the Tecton binding sets, so it inherits the Tecton value."
     },
     "--color-syntax-function": {
       "category": "syntax",
@@ -2518,8 +2518,8 @@
         "path": "foundational.color.blue.onDark.1000",
         "value": "#b7c9eb"
       },
-      "source": "tecton-astryx",
-      "notes": "Not set by tecton-astryx; upstream default is a var() onto a token tecton-astryx sets, so it inherits the Tecton value."
+      "source": "tecton-binding",
+      "notes": "Not set by the Tecton binding; upstream default is a var() onto a token the Tecton binding sets, so it inherits the Tecton value."
     },
     "--color-syntax-type": {
       "category": "syntax",
@@ -2534,8 +2534,8 @@
         "path": "foundational.color.lilac.onDark.1000",
         "value": "#cdc4d8"
       },
-      "source": "tecton-astryx",
-      "notes": "Not set by tecton-astryx; upstream default is a var() onto a token tecton-astryx sets, so it inherits the Tecton value."
+      "source": "tecton-binding",
+      "notes": "Not set by the Tecton binding; upstream default is a var() onto a token the Tecton binding sets, so it inherits the Tecton value."
     },
     "--color-syntax-variable": {
       "category": "syntax",
@@ -2550,8 +2550,8 @@
         "path": "foundational.color.gray.onDark.contrasts.1570",
         "value": "#f6f5f8"
       },
-      "source": "tecton-astryx",
-      "notes": "Not set by tecton-astryx; upstream default is a var() onto a token tecton-astryx sets, so it inherits the Tecton value."
+      "source": "tecton-binding",
+      "notes": "Not set by the Tecton binding; upstream default is a var() onto a token the Tecton binding sets, so it inherits the Tecton value."
     },
     "--color-syntax-operator": {
       "category": "syntax",
@@ -2566,8 +2566,8 @@
         "path": "foundational.color.azure.onDark.1000",
         "value": "#68d9d9"
       },
-      "source": "tecton-astryx",
-      "notes": "Not set by tecton-astryx; upstream default is a var() onto a token tecton-astryx sets, so it inherits the Tecton value. operator/property/attribute all resolve to azure 1000 (cyan=teal=azure)."
+      "source": "tecton-binding",
+      "notes": "Not set by the Tecton binding; upstream default is a var() onto a token the Tecton binding sets, so it inherits the Tecton value. operator/property/attribute all resolve to azure 1000 (cyan=teal=azure)."
     },
     "--color-syntax-constant": {
       "category": "syntax",
@@ -2582,8 +2582,8 @@
         "path": "foundational.color.saffron.onDark.1000",
         "value": "#e5c2a9"
       },
-      "source": "tecton-astryx",
-      "notes": "Not set by tecton-astryx; upstream default is a var() onto a token tecton-astryx sets, so it inherits the Tecton value."
+      "source": "tecton-binding",
+      "notes": "Not set by the Tecton binding; upstream default is a var() onto a token the Tecton binding sets, so it inherits the Tecton value."
     },
     "--color-syntax-tag": {
       "category": "syntax",
@@ -2598,8 +2598,8 @@
         "path": "foundational.color.red.onDark.1000",
         "value": "#ecbbbc"
       },
-      "source": "tecton-astryx",
-      "notes": "Not set by tecton-astryx; upstream default is a var() onto a token tecton-astryx sets, so it inherits the Tecton value."
+      "source": "tecton-binding",
+      "notes": "Not set by the Tecton binding; upstream default is a var() onto a token the Tecton binding sets, so it inherits the Tecton value."
     },
     "--color-syntax-attribute": {
       "category": "syntax",
@@ -2614,8 +2614,8 @@
         "path": "foundational.color.azure.onDark.1000",
         "value": "#68d9d9"
       },
-      "source": "tecton-astryx",
-      "notes": "Not set by tecton-astryx; upstream default is a var() onto a token tecton-astryx sets, so it inherits the Tecton value. operator/property/attribute all resolve to azure 1000 (cyan=teal=azure)."
+      "source": "tecton-binding",
+      "notes": "Not set by the Tecton binding; upstream default is a var() onto a token the Tecton binding sets, so it inherits the Tecton value. operator/property/attribute all resolve to azure 1000 (cyan=teal=azure)."
     },
     "--color-syntax-property": {
       "category": "syntax",
@@ -2630,8 +2630,8 @@
         "path": "foundational.color.azure.onDark.1000",
         "value": "#68d9d9"
       },
-      "source": "tecton-astryx",
-      "notes": "Not set by tecton-astryx; upstream default is a var() onto a token tecton-astryx sets, so it inherits the Tecton value. operator/property/attribute all resolve to azure 1000 (cyan=teal=azure)."
+      "source": "tecton-binding",
+      "notes": "Not set by the Tecton binding; upstream default is a var() onto a token the Tecton binding sets, so it inherits the Tecton value. operator/property/attribute all resolve to azure 1000 (cyan=teal=azure)."
     },
     "--color-syntax-punctuation": {
       "category": "syntax",
@@ -2646,8 +2646,8 @@
         "path": "foundational.color.graphite.onDark.680",
         "value": "#a7a2ac"
       },
-      "source": "tecton-astryx",
-      "notes": "Not set by tecton-astryx; upstream default is a var() onto a token tecton-astryx sets, so it inherits the Tecton value."
+      "source": "tecton-binding",
+      "notes": "Not set by the Tecton binding; upstream default is a var() onto a token the Tecton binding sets, so it inherits the Tecton value."
     },
     "--color-syntax-background": {
       "category": "syntax",
@@ -2662,13 +2662,13 @@
         "path": "foundational.color.graphite.onDark.110",
         "value": "#28232c"
       },
-      "source": "tecton-astryx",
-      "notes": "Not set by tecton-astryx; upstream default is a var() onto a token tecton-astryx sets, so it inherits the Tecton value."
+      "source": "tecton-binding",
+      "notes": "Not set by the Tecton binding; upstream default is a var() onto a token the Tecton binding sets, so it inherits the Tecton value."
     },
     "--focus-outline-color": {
       "category": "focus",
       "upstreamDefault": "var(--color-accent)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "light": {
         "path": "foundational.color.hotPink.onLight.460 (focus outline)",
         "value": "#ff00aa"
@@ -2696,69 +2696,69 @@
       "category": "focus",
       "upstreamDefault": "2px",
       "value": "2px",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Measured on the button matrix."
     },
     "--focus-outline-style": {
       "category": "focus",
       "upstreamDefault": "solid",
       "value": "solid",
-      "source": "tecton-astryx"
+      "source": "tecton-binding"
     },
     "--focus-outline-offset": {
       "category": "focus",
       "upstreamDefault": "3px",
       "value": "2px",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Upstream 3px. Buttons tighten to 1px via --button-focus-offset (\"~1px outside the edge with ~1px gap\")."
     },
     "--radius-none": {
       "category": "radius",
       "upstreamDefault": "0px",
       "value": "0px",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "radius.0"
     },
     "--radius-inner": {
       "category": "radius",
       "upstreamDefault": "4px",
       "value": "2px",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "radius.25 - dense controls (checkbox, menu row, kbd, select option row)"
     },
     "--radius-element": {
       "category": "radius",
       "upstreamDefault": "8px",
       "value": "4px",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "radius.50 - \"default Tecton corner\" (button, field, chip-like, code block, banner card, menu panel)"
     },
     "--radius-container": {
       "category": "radius",
       "upstreamDefault": "12px",
       "value": "8px",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "radius.100 - panels, cards, dialog, popover"
     },
     "--radius-chat": {
       "category": "radius",
       "upstreamDefault": "28px",
       "value": "12px",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "radius.150 - carried here for want of a slot (name drift)"
     },
     "--radius-page": {
       "category": "radius",
       "upstreamDefault": "28px",
       "value": "16px",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "radius.200 - carried here for want of a slot (name drift)"
     },
     "--radius-full": {
       "category": "radius",
       "upstreamDefault": "9999px",
       "value": "9999px",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "radius.round is 1000px in the source; 9999px equivalent in practice"
     },
     "--spacing-0": {
@@ -2766,132 +2766,132 @@
       "upstreamDefault": "0px",
       "value": "0px",
       "source": "upstream-default",
-      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps Astryx lacks; not needed by components."
+      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps upstream lacks; not needed by components."
     },
     "--spacing-0-5": {
       "category": "spacing",
       "upstreamDefault": "2px",
       "value": "2px",
       "source": "upstream-default",
-      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps Astryx lacks; not needed by components."
+      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps upstream lacks; not needed by components."
     },
     "--spacing-1": {
       "category": "spacing",
       "upstreamDefault": "4px",
       "value": "4px",
       "source": "upstream-default",
-      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps Astryx lacks; not needed by components."
+      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps upstream lacks; not needed by components."
     },
     "--spacing-1-5": {
       "category": "spacing",
       "upstreamDefault": "6px",
       "value": "6px",
       "source": "upstream-default",
-      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps Astryx lacks; not needed by components."
+      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps upstream lacks; not needed by components."
     },
     "--spacing-2": {
       "category": "spacing",
       "upstreamDefault": "8px",
       "value": "8px",
       "source": "upstream-default",
-      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps Astryx lacks; not needed by components."
+      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps upstream lacks; not needed by components."
     },
     "--spacing-3": {
       "category": "spacing",
       "upstreamDefault": "12px",
       "value": "12px",
       "source": "upstream-default",
-      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps Astryx lacks; not needed by components."
+      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps upstream lacks; not needed by components."
     },
     "--spacing-4": {
       "category": "spacing",
       "upstreamDefault": "16px",
       "value": "16px",
       "source": "upstream-default",
-      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps Astryx lacks; not needed by components."
+      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps upstream lacks; not needed by components."
     },
     "--spacing-5": {
       "category": "spacing",
       "upstreamDefault": "20px",
       "value": "20px",
       "source": "upstream-default",
-      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps Astryx lacks; not needed by components."
+      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps upstream lacks; not needed by components."
     },
     "--spacing-6": {
       "category": "spacing",
       "upstreamDefault": "24px",
       "value": "24px",
       "source": "upstream-default",
-      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps Astryx lacks; not needed by components."
+      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps upstream lacks; not needed by components."
     },
     "--spacing-7": {
       "category": "spacing",
       "upstreamDefault": "28px",
       "value": "28px",
       "source": "upstream-default",
-      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps Astryx lacks; not needed by components."
+      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps upstream lacks; not needed by components."
     },
     "--spacing-8": {
       "category": "spacing",
       "upstreamDefault": "32px",
       "value": "32px",
       "source": "upstream-default",
-      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps Astryx lacks; not needed by components."
+      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps upstream lacks; not needed by components."
     },
     "--spacing-9": {
       "category": "spacing",
       "upstreamDefault": "36px",
       "value": "36px",
       "source": "upstream-default",
-      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps Astryx lacks; not needed by components."
+      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps upstream lacks; not needed by components."
     },
     "--spacing-10": {
       "category": "spacing",
       "upstreamDefault": "40px",
       "value": "40px",
       "source": "upstream-default",
-      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps Astryx lacks; not needed by components."
+      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps upstream lacks; not needed by components."
     },
     "--spacing-11": {
       "category": "spacing",
       "upstreamDefault": "44px",
       "value": "44px",
       "source": "upstream-default",
-      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps Astryx lacks; not needed by components."
+      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps upstream lacks; not needed by components."
     },
     "--spacing-12": {
       "category": "spacing",
       "upstreamDefault": "48px",
       "value": "48px",
       "source": "upstream-default",
-      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps Astryx lacks; not needed by components."
+      "notes": "Kept. Tecton space.* is the same 4px grid (space.25=2px -> --spacing-0-5, space.75=6px -> --spacing-1-5). Tecton adds 56-144px steps upstream lacks; not needed by components."
     },
     "--size-element-sm": {
       "category": "size",
       "upstreamDefault": "28px",
       "value": "28px",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton Button/TextField size = upstream value (agreement, not override)."
     },
     "--size-element-md": {
       "category": "size",
       "upstreamDefault": "32px",
       "value": "32px",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton Button/TextField size = upstream value (agreement, not override)."
     },
     "--size-element-lg": {
       "category": "size",
       "upstreamDefault": "36px",
       "value": "36px",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "No Tecton source; upstream 36px kept."
     },
     "--border-width": {
       "category": "border",
       "upstreamDefault": "1px",
       "value": "1px",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Every Tecton border and divider is 1px."
     },
     "--shadow-low": {
@@ -2913,7 +2913,7 @@
           }
         }
       ],
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton is flat - panels use a 1px rule, not a shadow. Soft single-layer drops kept so elevation props do not break."
     },
     "--shadow-med": {
@@ -2935,7 +2935,7 @@
           }
         }
       ],
-      "source": "tecton-astryx"
+      "source": "tecton-binding"
     },
     "--shadow-high": {
       "category": "shadow",
@@ -2956,7 +2956,7 @@
           }
         }
       ],
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Only FAB has a shadow in the design; FAB reads flatter than designed."
     },
     "--shadow-inset-hover": {
@@ -2977,7 +2977,7 @@
           }
         }
       ],
-      "source": "tecton-astryx"
+      "source": "tecton-binding"
     },
     "--shadow-inset-selected": {
       "category": "shadow",
@@ -2997,7 +2997,7 @@
           }
         }
       ],
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Selection is violet 50%, deliberately NOT the focus pink (theme-audit §9)."
     },
     "--shadow-inset-success": {
@@ -3018,7 +3018,7 @@
           }
         }
       ],
-      "source": "tecton-astryx"
+      "source": "tecton-binding"
     },
     "--shadow-inset-warning": {
       "category": "shadow",
@@ -3038,7 +3038,7 @@
           }
         }
       ],
-      "source": "tecton-astryx"
+      "source": "tecton-binding"
     },
     "--shadow-inset-error": {
       "category": "shadow",
@@ -3058,7 +3058,7 @@
           }
         }
       ],
-      "source": "tecton-astryx"
+      "source": "tecton-binding"
     },
     "--duration-fast-min": {
       "category": "motion",
@@ -3134,21 +3134,21 @@
       "category": "font-family",
       "upstreamDefault": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif",
       "value": "Figtree, Helvetica, Arial, sans-serif",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Figtree stack as printed on the Tecton typography page."
     },
     "--font-family-heading": {
       "category": "font-family",
       "upstreamDefault": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif",
       "value": "Figtree, Helvetica, Arial, sans-serif",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Heading family = body family; heading weight 500."
     },
     "--font-family-code": {
       "category": "font-family",
       "upstreamDefault": "\"SF Mono\", Monaco, Consolas, monospace",
       "value": "\"IBM Plex Mono\", Consolas, Monaco, monospace",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Also used for the Tecton data variants (tabular numerals)."
     },
     "--font-size-4xs": {
@@ -3176,383 +3176,383 @@
       "category": "font-size",
       "upstreamDefault": "0.625rem",
       "value": "0.625rem",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "10px tiny"
     },
     "--font-size-sm": {
       "category": "font-size",
       "upstreamDefault": "0.75rem",
       "value": "0.75rem",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "12px small"
     },
     "--font-size-base": {
       "category": "font-size",
       "upstreamDefault": "0.875rem",
       "value": "0.875rem",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "14px medium/body"
     },
     "--font-size-lg": {
       "category": "font-size",
       "upstreamDefault": "1.0625rem",
       "value": "1rem",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "16px large (upstream 17px)"
     },
     "--font-size-xl": {
       "category": "font-size",
       "upstreamDefault": "1.25rem",
       "value": "1.25rem",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "20px heading2"
     },
     "--font-size-2xl": {
       "category": "font-size",
       "upstreamDefault": "1.5rem",
       "value": "1.5rem",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "24px heading1"
     },
     "--font-size-3xl": {
       "category": "font-size",
       "upstreamDefault": "1.8125rem",
       "value": "2rem",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "32px display3 (upstream 29px)"
     },
     "--font-size-4xl": {
       "category": "font-size",
       "upstreamDefault": "2.1875rem",
       "value": "2.5rem",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "40px display2 (upstream 35px)"
     },
     "--font-size-5xl": {
       "category": "font-size",
       "upstreamDefault": "2.625rem",
       "value": "3rem",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "48px display1 (upstream 42px)"
     },
     "--font-weight-normal": {
       "category": "font-weight",
       "upstreamDefault": "400",
       "value": "400",
-      "source": "tecton-astryx"
+      "source": "tecton-binding"
     },
     "--font-weight-medium": {
       "category": "font-weight",
       "upstreamDefault": "500",
       "value": "500",
-      "source": "tecton-astryx"
+      "source": "tecton-binding"
     },
     "--font-weight-semibold": {
       "category": "font-weight",
       "upstreamDefault": "600",
       "value": "500",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton has no 600; semibold collapses to medium (visible: weight=\"semibold\" == \"medium\")."
     },
     "--font-weight-bold": {
       "category": "font-weight",
       "upstreamDefault": "700",
       "value": "600",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Not a Tecton weight; kept at 600 so prose <strong> differs. Needs a 600 face loaded."
     },
     "--text-heading-1-size": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-size-2xl)",
       "value": "var(--font-size-2xl)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"heading1\"."
     },
     "--text-heading-1-weight": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-weight-semibold)",
       "value": "var(--font-weight-medium)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"heading1\"."
     },
     "--text-heading-1-leading": {
       "category": "type-scale",
       "upstreamDefault": "1.3333",
       "value": "1.25",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"heading1\"."
     },
     "--text-heading-2-size": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-size-xl)",
       "value": "var(--font-size-xl)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"heading2\"."
     },
     "--text-heading-2-weight": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-weight-semibold)",
       "value": "var(--font-weight-medium)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"heading2\"."
     },
     "--text-heading-2-leading": {
       "category": "type-scale",
       "upstreamDefault": "1.4",
       "value": "1.2",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"heading2\"."
     },
     "--text-heading-3-size": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-size-lg)",
       "value": "var(--font-size-lg)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"large\". Headings 3-6 are extrapolated (Tecton names 2 heading levels)."
     },
     "--text-heading-3-weight": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-weight-semibold)",
       "value": "var(--font-weight-medium)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"large\". Headings 3-6 are extrapolated (Tecton names 2 heading levels)."
     },
     "--text-heading-3-leading": {
       "category": "type-scale",
       "upstreamDefault": "1.4118",
       "value": "1.25",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"large\". Headings 3-6 are extrapolated (Tecton names 2 heading levels)."
     },
     "--text-heading-4-size": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-size-base)",
       "value": "var(--font-size-base)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"mediumStrong\". Headings 3-6 are extrapolated (Tecton names 2 heading levels)."
     },
     "--text-heading-4-weight": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-weight-semibold)",
       "value": "var(--font-weight-medium)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"mediumStrong\". Headings 3-6 are extrapolated (Tecton names 2 heading levels)."
     },
     "--text-heading-4-leading": {
       "category": "type-scale",
       "upstreamDefault": "1.4286",
       "value": "1.2857142857142858",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"mediumStrong\". Headings 3-6 are extrapolated (Tecton names 2 heading levels)."
     },
     "--text-heading-5-size": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-size-sm)",
       "value": "var(--font-size-sm)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"smallStrong\". Headings 3-6 are extrapolated (Tecton names 2 heading levels)."
     },
     "--text-heading-5-weight": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-weight-semibold)",
       "value": "var(--font-weight-medium)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"smallStrong\". Headings 3-6 are extrapolated (Tecton names 2 heading levels)."
     },
     "--text-heading-5-leading": {
       "category": "type-scale",
       "upstreamDefault": "1.6667",
       "value": "1.3333333333333333",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"smallStrong\". Headings 3-6 are extrapolated (Tecton names 2 heading levels)."
     },
     "--text-heading-6-size": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-size-xs)",
       "value": "var(--font-size-xs)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"tiny\". Headings 3-6 are extrapolated (Tecton names 2 heading levels)."
     },
     "--text-heading-6-weight": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-weight-semibold)",
       "value": "var(--font-weight-medium)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"tiny\". Headings 3-6 are extrapolated (Tecton names 2 heading levels)."
     },
     "--text-heading-6-leading": {
       "category": "type-scale",
       "upstreamDefault": "1.6",
       "value": "1.4",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"tiny\". Headings 3-6 are extrapolated (Tecton names 2 heading levels)."
     },
     "--text-body-size": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-size-base)",
       "value": "var(--font-size-base)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"medium\"."
     },
     "--text-body-weight": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-weight-normal)",
       "value": "var(--font-weight-normal)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"medium\"."
     },
     "--text-body-leading": {
       "category": "type-scale",
       "upstreamDefault": "1.4286",
       "value": "1.2857142857142858",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"medium\"."
     },
     "--text-large-size": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-size-lg)",
       "value": "var(--font-size-lg)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"large\"."
     },
     "--text-large-weight": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-weight-semibold)",
       "value": "var(--font-weight-medium)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"large\"."
     },
     "--text-large-leading": {
       "category": "type-scale",
       "upstreamDefault": "1.4118",
       "value": "1.25",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"large\"."
     },
     "--text-label-size": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-size-base)",
       "value": "var(--font-size-base)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"mediumStrong\"."
     },
     "--text-label-weight": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-weight-medium)",
       "value": "var(--font-weight-medium)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"mediumStrong\"."
     },
     "--text-label-leading": {
       "category": "type-scale",
       "upstreamDefault": "1.4286",
       "value": "1.2857142857142858",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"mediumStrong\"."
     },
     "--text-code-size": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-size-base)",
       "value": "var(--font-size-base)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"mediumData\"."
     },
     "--text-code-weight": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-weight-normal)",
       "value": "var(--font-weight-normal)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"mediumData\"."
     },
     "--text-code-leading": {
       "category": "type-scale",
       "upstreamDefault": "1.4286",
       "value": "1.2857142857142858",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"mediumData\"."
     },
     "--text-supporting-size": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-size-sm)",
       "value": "var(--font-size-sm)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"small\"."
     },
     "--text-supporting-weight": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-weight-normal)",
       "value": "var(--font-weight-normal)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"small\"."
     },
     "--text-supporting-leading": {
       "category": "type-scale",
       "upstreamDefault": "1.6667",
       "value": "1.3333333333333333",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"small\"."
     },
     "--text-display-1-size": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-size-5xl)",
       "value": "var(--font-size-5xl)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"display1\"."
     },
     "--text-display-1-weight": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-weight-normal)",
       "value": "var(--font-weight-medium)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"display1\"."
     },
     "--text-display-1-leading": {
       "category": "type-scale",
       "upstreamDefault": "1.2381",
       "value": "1.2083333333333333",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"display1\"."
     },
     "--text-display-2-size": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-size-4xl)",
       "value": "var(--font-size-4xl)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"display2\"."
     },
     "--text-display-2-weight": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-weight-normal)",
       "value": "var(--font-weight-medium)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"display2\"."
     },
     "--text-display-2-leading": {
       "category": "type-scale",
       "upstreamDefault": "1.2571",
       "value": "1.2",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"display2\"."
     },
     "--text-display-3-size": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-size-3xl)",
       "value": "var(--font-size-3xl)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"display3\"."
     },
     "--text-display-3-weight": {
       "category": "type-scale",
       "upstreamDefault": "var(--font-weight-normal)",
       "value": "var(--font-weight-medium)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"display3\"."
     },
     "--text-display-3-leading": {
       "category": "type-scale",
       "upstreamDefault": "1.2414",
       "value": "1.1875",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Tecton variant \"display3\"."
     }
   },
@@ -3567,7 +3567,7 @@
         "value": "#6a696c"
       },
       "tectonRole": "text.placeholder",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-text-placeholder",
         "light": {
@@ -3591,7 +3591,7 @@
         "value": "#6e6873"
       },
       "tectonRole": "surface.dividerStrong",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-divider-strong",
         "light": {
@@ -3615,7 +3615,7 @@
         "value": "#217846"
       },
       "tectonRole": "status.success.muted",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-status-success-muted",
         "light": {
@@ -3639,7 +3639,7 @@
         "value": "#995b04"
       },
       "tectonRole": "status.warning.muted",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-status-warning-muted",
         "light": {
@@ -3663,7 +3663,7 @@
         "value": "#832d28"
       },
       "tectonRole": "status.error.muted",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-status-error-muted",
         "light": {
@@ -3687,7 +3687,7 @@
         "value": "#8ca7de"
       },
       "tectonRole": "status.info.main",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-status-info",
         "light": {
@@ -3711,7 +3711,7 @@
         "value": "#b7c9eb"
       },
       "tectonRole": "status.info.bright",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-status-info-bright",
         "light": {
@@ -3735,7 +3735,7 @@
         "value": "#3766c4"
       },
       "tectonRole": "status.info.muted",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-status-info-muted",
         "light": {
@@ -3759,7 +3759,7 @@
         "value": "#6086d2"
       },
       "tectonRole": "status.info.filledBackground",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-status-info-filled-bg",
         "light": {
@@ -3783,7 +3783,7 @@
         "value": "#0a1324"
       },
       "tectonRole": "status.info.filledText",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-status-info-filled-text",
         "light": {
@@ -3807,7 +3807,7 @@
         "value": "#1d3566"
       },
       "tectonRole": "status.info.filledAdornment",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-status-info-filled-adornment",
         "light": {
@@ -3831,7 +3831,7 @@
         "value": "#959497"
       },
       "tectonRole": "status.neutral.main",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-status-neutral",
         "light": {
@@ -3855,7 +3855,7 @@
         "value": "#2c2b2e"
       },
       "tectonRole": "status.neutral.filledBackground",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-status-neutral-filled-bg",
         "light": {
@@ -3879,7 +3879,7 @@
         "value": "#c8c7ca"
       },
       "tectonRole": "status.neutral.filledText",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-status-neutral-filled-text",
         "light": {
@@ -3903,7 +3903,7 @@
         "value": "#84a138"
       },
       "tectonRole": "accent.lime.fill",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-accent-lime-fill",
         "light": {
@@ -3927,7 +3927,7 @@
         "value": "#b0d54e"
       },
       "tectonRole": "accent.lime.text",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-accent-lime-text",
         "light": {
@@ -3951,7 +3951,7 @@
         "value": "#000000"
       },
       "tectonRole": "component.topNav.solidBackground",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-component-top-nav-solid-background",
         "light": {
@@ -3964,7 +3964,7 @@
         }
       },
       "exportLightDiffers": true,
-      "notes": "tecton-astryx keeps the band black in light mode, so primary/secondary ink inside it fails (1.21:1 / 2.81:1). The export light block paints it white (#ffffff) with black-50% text, which resolves the gap."
+      "notes": "the Tecton binding keeps the band black in light mode, so primary/secondary ink inside it fails (1.21:1 / 2.81:1). The export light block paints it white (#ffffff) with black-50% text, which resolves the gap."
     },
     "--tecton-color-top-nav-text": {
       "light": {
@@ -3976,7 +3976,7 @@
         "value": "#ffffff80"
       },
       "tectonRole": "component.topNav.contrastText",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-component-top-nav-contrast-text",
         "light": {
@@ -4000,7 +4000,7 @@
         "value": "#90809e"
       },
       "tectonRole": "component.topNav.adornment",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-component-top-nav-adornment",
         "light": {
@@ -4024,7 +4024,7 @@
         "value": "#433d47"
       },
       "tectonRole": "component.table.headerBackground",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-component-table-header-background",
         "light": {
@@ -4048,7 +4048,7 @@
         "value": "#28232c"
       },
       "tectonRole": "component.table.footer",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-component-table-footer",
         "light": {
@@ -4072,7 +4072,7 @@
         "value": "#323134"
       },
       "tectonRole": "component.table.cellBackgroundAlt",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-component-table-cell-background-alt",
         "light": {
@@ -4096,7 +4096,7 @@
         "value": "#3a343e"
       },
       "tectonRole": "component.table.cellHoverBackground",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-component-table-cell-states-hover-background",
         "light": {
@@ -4120,7 +4120,7 @@
         "value": "#4e4853"
       },
       "tectonRole": "component.table.cellActiveBackground",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-component-table-cell-states-active-background",
         "light": {
@@ -4144,7 +4144,7 @@
         "value": "#28232c"
       },
       "tectonRole": "component.input.filled.background",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-component-input-filled-background",
         "light": {
@@ -4168,7 +4168,7 @@
         "value": "#342f39"
       },
       "tectonRole": "component.input.filled.hoverBackground",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-component-input-filled-states-hover-background",
         "light": {
@@ -4192,7 +4192,7 @@
         "value": "#57515c"
       },
       "tectonRole": "component.input.outlined.border",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-component-input-outlined-border",
         "light": {
@@ -4216,7 +4216,7 @@
         "value": "#cac5d2"
       },
       "tectonRole": "component.input.outlined.hoverBorder",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-component-input-outlined-states-hover-border",
         "light": {
@@ -4230,7 +4230,7 @@
       },
       "exportLightDiffers": true,
       "exportDarkDiffers": true,
-      "notes": "DISPUTED: tecton-astryx resolved a truncated \"input / outlined / states / hover-...\" row to #cac5d2; the tecton-webcomponents export says states-hover-border is #a7a2ac and states-hover-contrast-text is #cac5d2."
+      "notes": "DISPUTED: the Tecton binding resolved a truncated \"input / outlined / states / hover-...\" row to #cac5d2; the tecton-webcomponents export says states-hover-border is #a7a2ac and states-hover-contrast-text is #cac5d2."
     },
     "--tecton-color-input-value": {
       "light": {
@@ -4242,7 +4242,7 @@
         "value": "#f7f6f8"
       },
       "tectonRole": "component.input.outlined.valueText",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-component-input-outlined-value-text",
         "light": {
@@ -4266,7 +4266,7 @@
         "value": "#89848e"
       },
       "tectonRole": "component.input.outlined.placeholderText",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-component-input-outlined-placeholder-text",
         "light": {
@@ -4290,7 +4290,7 @@
         "value": "#98939d"
       },
       "tectonRole": "component.input.textOnly.contrastText",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-component-input-text-only-contrast-text",
         "light": {
@@ -4314,7 +4314,7 @@
         "value": "#aaa1b2"
       },
       "tectonRole": "action.outlined.text",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-action-outlined-text",
         "light": {
@@ -4339,7 +4339,7 @@
         "value": "#9a91a2"
       },
       "tectonRole": "action.textOnly.text",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-action-text-only-text",
         "light": {
@@ -4363,7 +4363,7 @@
         "value": "#bab3c0"
       },
       "tectonRole": "action.tertiary.text",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "exportAlt": {
         "var": "--tecton-color-action-tertiary-text",
         "light": {
@@ -8269,7 +8269,7 @@
           }
         }
       },
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Merged over upstream defaults (Tecton values win for the four tokens it sets). Pins the dark side of each pair."
     },
     "onLight": {
@@ -8321,24 +8321,24 @@
           }
         }
       },
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "notes": "Pins the light side of each pair."
     }
   },
   "componentTokens": {
     "--button-focus-offset": {
       "value": "1px",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "target": "button"
     },
     "--_banner-radius": {
       "value": "var(--radius-element)",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "target": "banner[container=card]"
     },
     "--_dropdown-menu-radius": {
       "value": "(emitted by theme compiler for dropdown-menu presentation:popover borderRadius var(--radius-element))",
-      "source": "tecton-astryx",
+      "source": "tecton-binding",
       "target": "dropdown-menu"
     }
   },
@@ -8393,7 +8393,7 @@
     "numerals": {
       "dataVariants": "font-family: var(--font-family-code); font-variant-numeric: tabular-nums",
       "default": "proportional (Figtree default)",
-      "conflict": "Tecton typography page says data uses \"Figtree with tabular numbers\" but prints IBM Plex Mono CSS; tecton-astryx followed the printed CSS."
+      "conflict": "Tecton typography page says data uses \"Figtree with tabular numbers\" but prints IBM Plex Mono CSS; the Tecton binding followed the printed CSS."
     },
     "rootFontSize": "16px assumed (rem values)",
     "variants": {
@@ -8571,7 +8571,7 @@
       "actionMedium",
       "actionSmall"
     ],
-    "letterSpacing": "No Tecton letter-spacing values exist anywhere (foundation, export, tecton-astryx). Use normal."
+    "letterSpacing": "No Tecton letter-spacing values exist anywhere (foundation, export, the Tecton binding). Use normal."
   },
   "radius": {
     "scale": {
@@ -8690,7 +8690,7 @@
     ]
   },
   "spacing": {
-    "policy": "Astryx --spacing-* kept unchanged (identical 4px grid). No spacing-exception records exist in tecton-astryx.",
+    "policy": "Upstream --spacing-* kept unchanged (identical 4px grid). No spacing-exception records exist in the Tecton binding.",
     "astryx": {
       "--spacing-0": "0px",
       "--spacing-0-5": "2px",
@@ -8742,18 +8742,18 @@
     },
     "recordedExceptions": [],
     "designMeasurementsNotApplied": [
-      "List rows: Default 44px / Condensed 36px (Astryx density compact/balanced/spacious)",
+      "List rows: Default 44px / Condensed 36px (upstream density compact/balanced/spacious)",
       "Table rows: Medium ~44px / Small ~34px",
       "MenuItem: Medium ~34px / Small ~28px",
       "Tab: Medium ~32px / Small ~28px",
-      "Switch: ~34x16 md / ~28x14 sm (Astryx 32x20 / 40x24)",
+      "Switch: ~34x16 md / ~28x14 sm (upstream 32x20 / 40x24)",
       "Checkbox: 16px md / 12px sm; Radio ~16 / ~13px",
       "Slider: md 6px track + 20px thumb; sm ~2px track + 12px thumb (no size prop)",
       "Chip: lg 24 / md 20 / sm 18px",
-      "Avatar: 40/32/24/18px (Astryx 20/24/36/48)",
+      "Avatar: 40/32/24/18px (upstream 20/24/36/48)",
       "ToggleButton: ~57/46/34/28px (4 sizes vs 3)",
       "Progress linear track 3px; circular 32/16px",
-      "Panel padding 16px (= Astryx card default)"
+      "Panel padding 16px (= upstream card default)"
     ]
   },
   "sizing": {
@@ -8777,7 +8777,7 @@
         "md": "1.25rem",
         "lg": "1.5rem"
       },
-      "notes": "Tecton icon sizes from the export (tecton-tokens.css); Astryx Icon sizes 12/16/20/24 already coincide."
+      "notes": "Tecton icon sizes from the export (tecton-tokens.css); upstream Icon sizes 12/16/20/24 already coincide."
     },
     "borderWidthsExport": {
       "0": "0px",
@@ -8825,6 +8825,6 @@
   "zIndex": {
     "source": "upstream-default",
     "tokens": null,
-    "notes": "Astryx defines no z-index tokens; overlays use the top layer (popover/dialog). Hard-coded: Toast viewport 500, BottomSheet 1000, AppShell 9999 (skip link)."
+    "notes": "Upstream defines no z-index tokens; overlays use the top layer (popover/dialog). Hard-coded: Toast viewport 500, BottomSheet 1000, AppShell 9999 (skip link)."
   }
 }

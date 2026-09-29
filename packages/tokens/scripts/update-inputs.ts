@@ -7,13 +7,13 @@
  *
  *   tecton.tokens.json, tecton-tokens.css   <- owner's tecton-webcomponents (D-001 export)
  *   semantic-map.json                        <- docs/research/tecton-semantic-map.json
- *   astryx-tokens.json                       <- upstream Astryx @ ca632c6: names checked against
+ *   upstream-tokens.json                       <- the upstream design system @ ca632c6: names checked against
  *                                               tokens.stylex.ts, dataTokens.ts, syntax/tokens.ts;
  *                                               defaults come from the semantic map
  *   tailwind-v4-theme-names.json             <- tailwindcss@4 `theme.css` (path via --tailwind=<file>;
  *                                               kept as is when the flag is absent)
  *
- * Environment overrides: TCT_TECTON_WC_TOKENS, TCT_ASTRYX_REF.
+ * Environment overrides: TCT_TECTON_WC_TOKENS, TCT_UPSTREAM_REF.
  * `--check` recomputes every hash and reports drift without writing.
  */
 import {createHash} from 'node:crypto';
@@ -27,8 +27,8 @@ const REPO = resolve(PKG, '../..');
 
 const WC_TOKENS =
   process.env.TCT_TECTON_WC_TOKENS ?? '/home/user/rpkapps/tecton-webcomponents/packages/wc/tokens';
-const ASTRYX = process.env.TCT_ASTRYX_REF ?? '/home/user/refs/astryx';
-const ASTRYX_COMMIT = 'ca632c6594b03aa3933ce9b35d1f6128fbad7a47';
+const UPSTREAM = process.env.TCT_UPSTREAM_REF ?? '/home/user/refs/astryx';
+const UPSTREAM_COMMIT = 'ca632c6594b03aa3933ce9b35d1f6128fbad7a47';
 
 interface LockEntry {
   sha256: string;
@@ -46,7 +46,7 @@ function main(): number {
     'tecton.tokens.json': 'tecton-webcomponents/packages/wc/tokens/tecton.tokens.json',
     'tecton-tokens.css': 'tecton-webcomponents/packages/wc/tokens/tecton-tokens.css',
     'semantic-map.json': 'docs/research/tecton-semantic-map.json',
-    'astryx-tokens.json': `astryx@${ASTRYX_COMMIT.slice(0, 7)} theme/tokens.stylex.ts + domainTokens/dataTokens.ts + syntax/tokens.ts (names), semantic map (defaults)`,
+    'upstream-tokens.json': `upstream@${UPSTREAM_COMMIT.slice(0, 7)} theme/tokens.stylex.ts + domainTokens/dataTokens.ts + syntax/tokens.ts (names), semantic map (defaults)`,
     'tailwind-v4-theme-names.json':
       'tailwindcss@4.3.3 theme.css (sha256 of the source in `source`)',
   };
@@ -58,7 +58,7 @@ function main(): number {
       join(REPO, 'docs/research/tecton-semantic-map.json'),
       join(INPUTS, 'semantic-map.json'),
     );
-    writeFileSync(join(INPUTS, 'astryx-tokens.json'), buildAstryxTokens());
+    writeFileSync(join(INPUTS, 'upstream-tokens.json'), buildUpstreamTokens());
     if (tailwindFlag)
       writeFileSync(join(INPUTS, 'tailwind-v4-theme-names.json'), buildTailwind(tailwindFlag));
   }
@@ -89,11 +89,11 @@ function main(): number {
 
 /** Names found as quoted custom-property keys in an upstream token source file. */
 function upstreamNames(relPath: string): string[] {
-  const text = readFileSync(join(ASTRYX, 'packages/core/src', relPath), 'utf8');
+  const text = readFileSync(join(UPSTREAM, 'packages/core/src', relPath), 'utf8');
   return [...text.matchAll(/^\s*'(--[a-z0-9-]+)'\s*:/gm)].map((match) => match[1]!);
 }
 
-function buildAstryxTokens(): string {
+function buildUpstreamTokens(): string {
   const map = JSON.parse(readFileSync(join(INPUTS, 'semantic-map.json'), 'utf8')) as {
     tokens: Record<string, {category: string; upstreamDefault: string}>;
   };
@@ -119,8 +119,8 @@ function buildAstryxTokens(): string {
   return `${JSON.stringify(
     {
       source: {
-        repository: 'astryx (upstream, read-only reference)',
-        commit: ASTRYX_COMMIT,
+        repository: 'upstream design system (read-only reference)',
+        commit: UPSTREAM_COMMIT,
         files: files.map((file) => `packages/core/src/${file}`),
         note: 'Names are extracted from the upstream sources; defaults are the upstream values recorded in the semantic map.',
       },

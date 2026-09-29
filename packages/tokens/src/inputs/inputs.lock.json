@@ -1,14 +1,9 @@
 {
   "version": 1,
   "files": {
-    "astryx-tokens.json": {
-      "sha256": "a6e7de11b0b0c89f44451f7b0f597d4e313ccd37ae1ee9736f092ea6e3ff1942",
-      "bytes": 28393,
-      "origin": "astryx@ca632c6 theme/tokens.stylex.ts + domainTokens/dataTokens.ts + syntax/tokens.ts (names), semantic map (defaults)"
-    },
     "semantic-map.json": {
-      "sha256": "9157de82bf5811372cdfdc94d64b57af33ae633abcdaecf9d2a90c67a20434da",
-      "bytes": 271917,
+      "sha256": "431b6ca7d7b15faf1cec8281aef6eda76e3a629a2b27a77c74d48ce8765c3cfe",
+      "bytes": 272356,
       "origin": "docs/research/tecton-semantic-map.json"
     },
     "tailwind-v4-theme-names.json": {
@@ -25,6 +20,11 @@
       "sha256": "4731ddd0b9f362261c77fbd4531dfc4cc0d924406eeb5636a8442d4a951367f3",
       "bytes": 532503,
       "origin": "tecton-webcomponents/packages/wc/tokens/tecton.tokens.json"
+    },
+    "upstream-tokens.json": {
+      "sha256": "d14448c712904780124344ef7dc3ecd9762ad5431a61eec1d22ae92e0fc1b69a",
+      "bytes": 28399,
+      "origin": "upstream@ca632c6 theme/tokens.stylex.ts + domainTokens/dataTokens.ts + syntax/tokens.ts (names), semantic map (defaults)"
     }
   }
 }

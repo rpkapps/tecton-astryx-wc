@@ -1,7 +1,7 @@
 /**
  * Black-box tests of the locales generator: they read what `pnpm generate` wrote to `dist/` and the
  * verbatim upstream inputs. ICU validity of the pseudo locale (does every message parse and format)
- * is asserted in `@tecton-astryx/core` where `format.ts` owns the formatter.
+ * is asserted in `@tecton-wc/core` where `format.ts` owns the formatter.
  */
 import {createHash} from 'node:crypto';
 import {readdirSync, readFileSync} from 'node:fs';
@@ -14,6 +14,15 @@ const catalogDir = fileURLToPath(new URL('./catalogs/', import.meta.url));
 const lock = JSON.parse(
   readFileSync(fileURLToPath(new URL('./catalogs.lock.json', import.meta.url)), 'utf8'),
 ) as Record<string, string>;
+
+/** The upstream catalogs keep their own id prefix; everything shipped is `@tct.*` (D-015). */
+const UPSTREAM_PREFIX = '@astryx.';
+const shipped = (id: string): string =>
+  id.startsWith(UPSTREAM_PREFIX) ? `@tct.${id.slice(UPSTREAM_PREFIX.length)}` : id;
+const upstreamEnglish = JSON.parse(readFileSync(`${catalogDir}en.json`, 'utf8')) as Record<
+  string,
+  {defaultMessage: string}
+>;
 
 const load = async (tag: string): Promise<Record<string, string>> => {
   const loader = loaders[tag];
@@ -102,6 +111,18 @@ describe('upstream catalogs', () => {
     // Imports 30 generated modules; the default 5 s is too tight when the whole suite runs in parallel.
   }, 30_000);
 
+  it('ships every upstream id as @tct.* and the source catalogs stay verbatim', async () => {
+    const expected = Object.keys(upstreamEnglish).map(shipped).sort();
+    expect(expected.every((id) => id.startsWith('@tct.'))).toBe(true);
+    for (const tag of [...tags, pseudoTag]) {
+      const messages = await load(tag);
+      expect(Object.keys(messages).sort(), tag).toEqual(expected);
+      expect(JSON.stringify(messages).toLowerCase(), tag).not.toContain('astryx');
+    }
+    // The upstream files keep the upstream prefix (byte-identical, hash-locked).
+    expect(Object.keys(upstreamEnglish).every((id) => id.startsWith(UPSTREAM_PREFIX))).toBe(true);
+  }, 30_000);
+
   it('keeps every ICU argument of the English message in each translation', async () => {
     const english = await load('en');
     for (const tag of tags) {
@@ -130,23 +151,21 @@ describe('English namespace modules', () => {
       };
       const namespace = name.replace(/\.js$/, '');
       for (const [id, message] of Object.entries(module.default)) {
-        expect(
-          id.startsWith(`@astryx.${namespace}.`) || id.startsWith(`@tct.${namespace}.`),
-          id,
-        ).toBe(true);
+        expect(id.startsWith(`@tct.${namespace}.`), id).toBe(true);
         merged[id] = message;
       }
     }
-    // Upstream ids partition en.json exactly. New `@tct.<folder>.*` ids come from the component
-    // folders' `<folder>.messages.json` and exist only in the namespace modules (components pass them
-    // as `defaults`), so each must match its folder file.
+    // The mapped upstream ids partition en.json exactly. New `@tct.<folder>.*` ids come from the
+    // component folders' `<folder>.messages.json` and exist only in the namespace modules (components
+    // pass them as `defaults`), so each must match its folder file.
+    const upstreamIds = new Set(Object.keys(upstreamEnglish).map(shipped));
     const upstream = Object.fromEntries(
-      Object.entries(merged).filter(([id]) => !id.startsWith('@tct.')),
+      Object.entries(merged).filter(([id]) => upstreamIds.has(id)),
     );
     expect(upstream).toEqual(english);
     const componentsSrc = fileURLToPath(new URL('../../components/src/', import.meta.url));
     for (const [id, message] of Object.entries(merged)) {
-      if (!id.startsWith('@tct.')) continue;
+      if (upstreamIds.has(id)) continue;
       const folder = id.split('.')[1]!;
       const source = JSON.parse(
         readFileSync(`${componentsSrc}${folder}/${folder}.messages.json`, 'utf8'),
@@ -162,7 +181,7 @@ describe('pseudo locale', () => {
     const english = await load('en');
     const pseudo = await load(pseudoTag);
     expect(Object.keys(pseudo).sort()).toEqual(Object.keys(english).sort());
-    const message = pseudo['@astryx.pagination.previousBy']!;
+    const message = pseudo['@tct.pagination.previousBy']!;
     // "Go back {step, number} {step, plural, one {page} other {pages}}"
     expect(message).toMatch(
       /^\[.*\{step, number\}.*\{step, plural, one \{.*\} other \{.*\}\}.*\]$/,

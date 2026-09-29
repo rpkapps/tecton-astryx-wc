@@ -72,15 +72,30 @@ export const PSEUDO_TAG = 'pseudo';
 
 // ------------------------------------------------------------------------------------------ ids
 
-/** `@astryx.pagination.next` -> `pagination`; other id shapes have no namespace. */
+/**
+ * The upstream catalogs are kept byte-identical, so their ids carry the upstream namespace. Every id the
+ * package ships is `@tct.<namespace>.<key>`: the generator maps the upstream prefix (D-015).
+ */
+export const UPSTREAM_ID_PREFIX = '@astryx.';
+export const SHIPPED_ID_PREFIX = '@tct.';
+
+/** The shipped form of an upstream catalog id (`<upstream prefix>pagination.next` -> `@tct.pagination.next`). */
+export function shippedId(upstreamId: string): string {
+  return upstreamId.startsWith(UPSTREAM_ID_PREFIX)
+    ? SHIPPED_ID_PREFIX + upstreamId.slice(UPSTREAM_ID_PREFIX.length)
+    : upstreamId;
+}
+
+/** `@tct.pagination.next` -> `pagination`; other id shapes have no namespace. */
 export function namespaceOf(id: string): string | undefined {
-  const match = /^@astryx\.([^.]+)\./.exec(id);
+  const match = /^@tct\.([^.]+)\./.exec(id);
   return match?.[1];
 }
 
+/** Flattens an upstream catalog to `{shipped id: message}`, sorted by shipped id. */
 export function flatten(catalog: UpstreamCatalog): FlatMessages {
   const out: FlatMessages = {};
-  for (const id of Object.keys(catalog).sort()) out[id] = catalog[id]!.defaultMessage;
+  for (const id of Object.keys(catalog).sort()) out[shippedId(id)] = catalog[id]!.defaultMessage;
   return out;
 }
 

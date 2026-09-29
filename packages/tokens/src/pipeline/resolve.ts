@@ -5,12 +5,12 @@
  *  1. `bindings.overrides.json` entry -> that palette path (D-001 rebinds, with a reason);
  *  2. else the semantic-map row has `exportAlt` -> the **Tecton export** value (asserted equal to the
  *     palette path the map states);
- *  3. else the map's `light` / `dark` path (tecton-astryx derivation or upstream default);
+ *  3. else the map's `light` / `dark` path (Tecton binding derivation or upstream default);
  *  4. every colour must resolve to a palette path, else it is an error unless allowlisted.
  *
- * Token groups: the 258 Astryx names (map.tokens), every `--tecton-color-*` role of the export
- * (verbatim names), the tecton-astryx theme-local names as aliases of export roles, the
- * tecton-astryx-only component roles, the export's non-colour tokens, and pipeline-defined extras.
+ * Token groups: the 258 upstream names (map.tokens), every `--tecton-color-*` role of the export
+ * (verbatim names), the Tecton binding theme-local names as aliases of export roles, the
+ * binding-only component roles, the export's non-colour tokens, and pipeline-defined extras.
  */
 import type {Palette, PaletteEntry} from './palette.ts';
 import {shortPath} from './palette.ts';
@@ -150,14 +150,14 @@ export function resolveTokens(inputs: Inputs, palette: Palette, exp: TectonExpor
     return value;
   };
 
-  // ---- Group A: the Astryx names (semantic map) -------------------------------------------------
+  // ---- Group A: the upstream names (semantic map) -------------------------------------------------
   for (const [name, row] of Object.entries(map.tokens)) {
     const base = {
       name,
       category: row.category,
       description: `${row.notes ?? `${row.category} token`}${
         row.exportAlt && row.exportLightDiffers
-          ? ' Light value: Tecton export (D-001); any light-mode figure quoted above describes the superseded tecton-astryx derivation.'
+          ? ' Light value: Tecton export (D-001); any light-mode figure quoted above describes the superseded Tecton binding derivation.'
           : ''
       }`,
     };
@@ -283,7 +283,7 @@ export function resolveTokens(inputs: Inputs, palette: Palette, exp: TectonExpor
     });
   }
 
-  // ---- Group C: tecton-astryx theme-local names: aliases of the export roles --------------------
+  // ---- Group C: Tecton binding theme-local names: aliases of the export roles --------------------
   for (const [name, role] of Object.entries(map.themeLocal)) {
     if (byName.has(name)) continue; // the export already carries this exact name
     if (!exp.light.has(role.exportAlt.var))
@@ -293,13 +293,13 @@ export function resolveTokens(inputs: Inputs, palette: Palette, exp: TectonExpor
       category: 'tecton-role',
       value: {kind: 'ref', name: role.exportAlt.var},
       status: 'tecton-export',
-      source: `alias of ${role.exportAlt.var} (theme-local name from tecton-astryx, role ${role.tectonRole ?? '?'})`,
+      source: `alias of ${role.exportAlt.var} (theme-local binding name, role ${role.tectonRole ?? '?'})`,
       description:
-        `Tecton role ${role.tectonRole ?? ''} (tecton-astryx name); same value as ${role.exportAlt.var}`.trim(),
+        `Tecton role ${role.tectonRole ?? ''} (binding name); same value as ${role.exportAlt.var}`.trim(),
     });
   }
 
-  // ---- Group D: tecton-astryx-only component roles (no export counterpart) ----------------------
+  // ---- Group D: binding-only component roles (no export counterpart) ----------------------
   for (const [key, role] of Object.entries<MapRole>(map.roles)) {
     if (role.exportAlt) continue;
     const name = roleTokenName(key);
@@ -315,9 +315,9 @@ export function resolveTokens(inputs: Inputs, palette: Palette, exp: TectonExpor
         lightPath: light.path,
         darkPath: dark.path,
       },
-      status: 'tecton-astryx',
-      source: `semantic map role ${key} (tecton-astryx; the export has no such role)`,
-      description: `Tecton role ${key} (not in the export; tecton-astryx derivation)`,
+      status: 'tecton-binding',
+      source: `semantic map role ${key} (Tecton binding; the export has no such role)`,
+      description: `Tecton role ${key} (not in the export; Tecton binding derivation)`,
     });
   }
 
@@ -351,7 +351,7 @@ export function resolveTokens(inputs: Inputs, palette: Palette, exp: TectonExpor
       name,
       category: 'component',
       value: {kind: 'literal', value: row.value},
-      status: 'tecton-astryx',
+      status: 'tecton-binding',
       source: `semantic map componentTokens (${row.source}, ${row.target ?? 'component'})`,
       description: `Documented upstream component property (${row.target ?? ''}) with the Tecton default`,
     });
@@ -425,7 +425,7 @@ function applyOverrides(overrides: OverrideEntry[], byName: Map<string, Token>, 
       const ref = isFullVar(override.value);
       token.value = ref ? {kind: 'ref', name: ref[1]!} : {kind: 'literal', value: override.value};
     }
-    token.status = override.status ?? 'tecton-astryx';
+    token.status = override.status ?? 'tecton-binding';
     token.override = {reason: override.reason, modes};
     token.source = `${token.source} [override: ${override.reason}]`;
   }
@@ -433,7 +433,7 @@ function applyOverrides(overrides: OverrideEntry[], byName: Map<string, Token>, 
 
 /**
  * Applies `provisional.json` (D-002, D-013). Every token falls into at most one group: an explicit
- * `tectonDerived` entry (never provisional), `astryx-retained` names/categories, or provisional
+ * `tectonDerived` entry (never provisional), `retained-default` names/categories, or provisional
  * names/categories (plus the pipeline extras, which carry their own reason). Overlaps are an error.
  */
 function applyProvisional(inputs: Inputs, tokens: Token[]) {
@@ -441,10 +441,10 @@ function applyProvisional(inputs: Inputs, tokens: Token[]) {
   const categories = new Map(provisional.categories.map((entry) => [entry.category, entry.reason]));
   const names = new Map(provisional.names.map((entry) => [entry.name, entry.reason]));
   const retainedCategories = new Map(
-    provisional.astryxRetained.categories.map((entry) => [entry.category, entry.reason]),
+    provisional.retainedDefault.categories.map((entry) => [entry.category, entry.reason]),
   );
   const retainedNames = new Map(
-    provisional.astryxRetained.names.map((entry) => [entry.name, entry.reason]),
+    provisional.retainedDefault.names.map((entry) => [entry.name, entry.reason]),
   );
   const derived = new Map(
     provisional.tectonDerived.names.map((entry) => [entry.name, entry.reason]),
@@ -457,7 +457,7 @@ function applyProvisional(inputs: Inputs, tokens: Token[]) {
       token.provisional !== undefined || names.has(token.name) || categories.has(token.category);
     if (Number(isDerived) + Number(isRetained) + Number(isProvisional) > 1)
       throw new Error(
-        `provisional.json: ${token.name} is listed in more than one of provisional, astryxRetained and tectonDerived`,
+        `provisional.json: ${token.name} is listed in more than one of provisional, retainedDefault and tectonDerived`,
       );
 
     if (isDerived) {
@@ -467,7 +467,7 @@ function applyProvisional(inputs: Inputs, tokens: Token[]) {
         );
       token.derived = derived.get(token.name)!;
     } else if (isRetained) {
-      token.status = 'astryx-retained';
+      token.status = 'retained-default';
       token.retained = retainedNames.get(token.name) ?? retainedCategories.get(token.category)!;
     } else {
       const reason =
