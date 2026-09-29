@@ -1,0 +1,12 @@
+<!-- title: Async changes; description: changeAction runs after a toggle. The thumb shows a spinner and the switch cannot be toggled until the promise settles; if it rejects, the switch returns to its previous state. -->
+<!-- layout: pending tct-stack -->
+<tct-switch id="async-switch-example" label="Sync automatically" description="Each change is saved to the server."></tct-switch>
+<tct-switch id="async-switch-fail" label="This one fails to save" description="It turns back after a moment."></tct-switch>
+<script type="module">
+  const save = (fail) => () =>
+    new Promise((resolve, reject) => {
+      setTimeout(() => (fail ? reject(new Error('Could not save')) : resolve()), 1200);
+    });
+  document.getElementById('async-switch-example').changeAction = save(false);
+  document.getElementById('async-switch-fail').changeAction = save(true);
+</script>

@@ -1,0 +1,183 @@
+/*
+ * tct-switch: the track and its thumb over the native `role="switch"` input. The row, the label block and
+ * the focus ring are in tct-toggle-control.styles.css. Tecton (design/components/switch.md,
+ * tecton-astryx components.ts `switch`): the off track is an outline round a transparent pill (an inset
+ * ring, so it costs no layout), the on track is the violet, the disabled states have their own roles, and
+ * the off and on thumbs are two roles. Hover reaches the track through `.indicator-scope` on the row
+ * (inherited `--_indicator-hover`); a press paints the pressed overlay over the track and the thumb.
+ * [mwg:brand-consistent-forms] [mwg:styling-web-components]
+ */
+@layer component {
+  .control {
+    border-radius: var(--radius-full);
+  }
+
+  .control[data-size='md'] {
+    /* design: the switch track is 40x24 (md) */
+    inline-size: 2.5rem;
+    block-size: 1.5rem;
+  }
+
+  .control[data-size='sm'] {
+    /* design: the switch track is 32x20 (sm) */
+    inline-size: 2rem;
+    block-size: 1.25rem;
+  }
+
+  .track {
+    --_hover: var(--_indicator-hover, 0);
+    --_track: transparent;
+    --_ring: var(--tecton-color-switch-off-border);
+    --_thumb: var(--tecton-color-switch-off-thumb);
+    --_dir: 1;
+
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    inline-size: 100%;
+    block-size: 100%;
+    background-color: color-mix(
+      in srgb,
+      var(--_track),
+      var(--color-tint-hover) calc(var(--_hover) * 5%)
+    );
+    border-radius: var(--radius-full);
+    box-shadow: inset 0 0 0 var(--border-width) var(--_ring);
+  }
+
+  .track[data-size='md'] {
+    /* design: 4px inset, a 16px thumb that grows to 20px and travels 14px */
+    --_travel: 0.875rem;
+
+    padding: 0.25rem;
+  }
+
+  .track[data-size='sm'] {
+    /* design: 2px inset, a 14px thumb that grows to 16px and travels 12px */
+    --_travel: 0.75rem;
+
+    padding: 0.125rem;
+  }
+
+  :host(:dir(rtl)) .track {
+    --_dir: -1;
+  }
+
+  .track[data-checked] {
+    --_track: var(--tecton-color-switch-on-track);
+    --_thumb: var(--tecton-color-switch-on-thumb);
+
+    background-color: color-mix(
+      in srgb,
+      var(--_track),
+      var(--color-tint-hover) calc(var(--_hover) * 15%)
+    );
+    box-shadow: none;
+  }
+
+  .thumb {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    color: var(--color-background-body);
+    background-color: var(--_thumb);
+    border-radius: var(--radius-full);
+  }
+
+  .track[data-size='md'] .thumb {
+    inline-size: 1rem;
+    block-size: 1rem;
+  }
+
+  .track[data-size='sm'] .thumb {
+    inline-size: 0.875rem;
+    block-size: 0.875rem;
+  }
+
+  .track[data-size='md'] .thumb[data-checked] {
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+    translate: calc(var(--_travel) * var(--_dir)) 0;
+  }
+
+  .track[data-size='sm'] .thumb[data-checked] {
+    inline-size: 1rem;
+    block-size: 1rem;
+    translate: calc(var(--_travel) * var(--_dir)) 0;
+  }
+
+  /* The pressed overlay is a gradient layer over the fills, so it composes with the on/off colour and the hover tint. */
+  .track,
+  .thumb {
+    background-image: none;
+  }
+}
+
+@layer state {
+  .track[data-disabled] {
+    --_ring: var(--tecton-color-switch-disabled-border);
+
+    opacity: 0.5;
+  }
+
+  .track[data-disabled][data-checked] {
+    --_track: var(--tecton-color-switch-disabled-track);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .track {
+      transition: background-color var(--duration-fast) var(--ease-standard);
+    }
+
+    .thumb {
+      transition:
+        translate var(--duration-fast) var(--ease-standard),
+        inline-size var(--duration-fast) var(--ease-standard),
+        block-size var(--duration-fast) var(--ease-standard);
+    }
+  }
+
+  .row:not([data-disabled]):active .track,
+  .row:not([data-disabled]):active .thumb {
+    background-image: linear-gradient(var(--color-overlay-pressed), var(--color-overlay-pressed));
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    /* Forced colours strips fills: a system border keeps the control's bounds, and the two states stay apart. */
+    .track {
+      background-color: Canvas;
+      background-image: none;
+      border: var(--border-width) solid CanvasText;
+      box-shadow: none;
+    }
+
+    .track[data-checked] {
+      background-color: Highlight;
+      border-color: Highlight;
+    }
+
+    .thumb {
+      color: Canvas;
+      background-color: CanvasText;
+      background-image: none;
+    }
+
+    .thumb[data-checked] {
+      color: Highlight;
+      background-color: HighlightText;
+    }
+
+    .track[data-disabled] {
+      border-color: GrayText;
+      opacity: 1;
+    }
+
+    .track[data-disabled] .thumb {
+      background-color: GrayText;
+    }
+  }
+}

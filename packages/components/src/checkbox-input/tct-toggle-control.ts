@@ -112,7 +112,7 @@ export abstract class TctToggleControl extends TctFieldControl {
   }
 
   /** Which side of the control the label sits on. */
-  protected get labelPosition(): 'start' | 'end' {
+  protected get labelSide(): 'start' | 'end' {
     return 'end';
   }
 
@@ -193,7 +193,7 @@ export abstract class TctToggleControl extends TctFieldControl {
   override render() {
     const disabled = this.isDisabled;
     const size = oneOf(this.size, TOGGLE_SIZES, 'md');
-    const position = this.labelPosition;
+    const position = this.labelSide;
     const label = this.#renderLabelBlock();
     const control = html`<div class="control focus-within-ring" part="control" data-size=${size}>
       <input

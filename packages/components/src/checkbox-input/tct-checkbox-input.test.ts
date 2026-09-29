@@ -342,9 +342,9 @@ describe('tct-checkbox-input: label, description and naming', () => {
     const required = await make('label="Terms" required');
     expect(part(required, 'label-indicator')!.textContent).toContain('Required');
     expect(inner(required).required).toBe(true);
-    const optional = await make('label="Terms" optional label-icon="star" label-tooltip="Why?"');
+    const optional = await make('label="Terms" optional label-icon="info" label-tooltip="Why?"');
     expect(part(optional, 'label-indicator')!.textContent).toContain('Optional');
-    expect(optional.shadowRoot!.querySelector('.label-icon')!.getAttribute('name')).toBe('star');
+    expect(optional.shadowRoot!.querySelector('.label-icon')!.getAttribute('name')).toBe('info');
     expect(part(optional, 'label-tip')).not.toBeNull();
   });
 });
