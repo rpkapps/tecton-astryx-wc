@@ -129,6 +129,7 @@
     --_mark-color: var(--color-text-primary);
 
     position: absolute;
+    display: block;
     inset-block-start: 50%;
     inset-inline-start: var(--_mark-position);
     inline-size: 2px; /* design: mark tick width (upstream); restyle with ::part(mark) */
@@ -168,15 +169,6 @@
 
   .mark[data-placement='fill'][data-variant='disabled'] {
     --_mark-color: var(--color-text-secondary);
-  }
-}
-
-@layer state {
-  .mark:focus-visible {
-    outline-width: var(--focus-outline-width);
-    outline-style: var(--focus-outline-style);
-    outline-color: var(--focus-outline-color);
-    outline-offset: var(--focus-outline-offset);
   }
 }
 

@@ -1,0 +1,19 @@
+/*
+ * tct-progress-bar-mark. The host is the tick the bar positions and paints (see tct-progress-bar.styles.css);
+ * this shadow root only adds a focusable, hoverable target around it: wider than the 2px tick so a pointer
+ * can find it, drawn over the host and transparent. [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .target {
+    position: absolute;
+    inset-block: -4px; /* design: hit area beyond the 2px x 8px tick */
+    inset-inline: -6px;
+    display: block;
+    border-radius: var(--radius-inner);
+    cursor: default;
+  }
+}

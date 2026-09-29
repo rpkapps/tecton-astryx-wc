@@ -6,7 +6,6 @@ import {TctElement} from '@tecton-astryx/core/tct-element.js';
 import {devWarn} from '@tecton-astryx/core/utils/dev.js';
 import {IdController} from '@tecton-astryx/core/utils/id.js';
 import base from '../styles/base.styles.css';
-import focusRing from '../styles/focus-ring.styles.css';
 import motion from '../styles/motion.styles.css';
 import visuallyHidden from '../styles/visually-hidden.styles.css';
 import {
@@ -16,6 +15,7 @@ import {
   type ProgressBarVariant,
 } from './progress-bar.types.js';
 import styles from './tct-progress-bar.styles.css';
+import {TctProgressBarMark} from './tct-progress-bar-mark.js';
 
 /**
  * A horizontal bar for the progress of a task: determinate when the amount of work is known,
@@ -46,7 +46,8 @@ import styles from './tct-progress-bar.styles.css';
  */
 export class TctProgressBar extends TctElement {
   static override readonly tagName = 'tct-progress-bar';
-  static override styles: CSSResultGroup = [base, focusRing, motion, visuallyHidden, styles];
+  static override readonly dependencies = [TctProgressBarMark];
+  static override styles: CSSResultGroup = [base, motion, visuallyHidden, styles];
 
   /** Current value; ignored when `indeterminate`. Clamped to `0..max`; a non-finite value counts as 0. */
   @property({type: Number}) value = 0;
@@ -177,16 +178,14 @@ export class TctProgressBar extends TctElement {
       // A mark exactly at the fill's leading edge is on the fill ("reached the target"), except at zero
       // progress, where there is no fill for it to sit on.
       const onFill = percentage > 0 && pct <= percentage;
-      return html`<span
+      return html`<tct-progress-bar-mark
         class="mark"
         part="mark"
-        role="img"
-        tabindex="0"
-        aria-label=${mark.label}
+        label=${mark.label}
         data-placement=${onFill ? 'fill' : 'track'}
         data-variant=${fillVariant}
         style=${styleMap({'--_mark-position': `${pct}%`})}
-      ></span>`;
+      ></tct-progress-bar-mark>`;
     });
   }
 }

@@ -1,8 +1,10 @@
 import {html} from 'lit';
-import {describe, expect, it} from 'vitest';
+import {userEvent} from 'vitest/browser';
+import {beforeEach, describe, expect, it} from 'vitest';
 import {axNode, expectAccessible} from '@tecton-astryx/testing/a11y.js';
 import {emulateMedia} from '@tecton-astryx/testing/emulate.js';
 import {fixture} from '@tecton-astryx/testing/fixture.js';
+import {pressKeys} from '@tecton-astryx/testing/keyboard.js';
 import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
 import {isChromium} from '@tecton-astryx/testing/tier.js';
 import {waitUntil} from '@tecton-astryx/testing/timing.js';
@@ -223,6 +225,9 @@ describe('tct-progress-bar: target marks', () => {
     ...bar.shadowRoot!.querySelectorAll<HTMLElement>('.mark'),
   ];
 
+  const targetOf = (mark: HTMLElement): HTMLElement =>
+    mark.shadowRoot!.querySelector<HTMLElement>('.target')!;
+
   it('renders no marks when omitted or empty', async () => {
     expect(markEls(await make('value="50" label="A"'))).toHaveLength(0);
     expect(markEls(await make('value="50" label="A"', marks([])))).toHaveLength(0);
@@ -330,14 +335,14 @@ describe('tct-progress-bar: target marks', () => {
     const bar = await make('value="50" label="A"', marks([{value: 20, label: 'Goal'}]));
     expect(track(bar).querySelector('.mark')).toBeNull();
     expect(track(bar).querySelector('[tabindex]')).toBeNull();
-    for (const mark of markEls(bar)) expect(mark.getAttribute('tabindex')).toBe('0');
+    for (const mark of markEls(bar)) expect(targetOf(mark).getAttribute('tabindex')).toBe('0');
   });
 
   it('names every mark with its label (never decorative)', async () => {
     const bar = await make('value="50" label="A"', marks([{value: 20, label: 'Q1 target: 20%'}]));
     if (isChromium) {
-      const node = await axNode(markEls(bar)[0]!);
-      expect(node.name).toBe('Q1 target: 20%');
+      const node = await axNode(targetOf(markEls(bar)[0]!));
+      expect([node.role, node.name]).toEqual(['image', 'Q1 target: 20%']);
     }
   });
 
@@ -463,4 +468,102 @@ describe('tct-progress-bar: localisation, accessibility and forced colours', () 
       expect(getComputedStyle($(bar, '.fill')!).backgroundColor).not.toBe('rgba(0, 0, 0, 0)');
     },
   );
+});
+
+describe('tct-progress-bar: mark tooltips', () => {
+  const markOf = (bar: TctProgressBar, index = 0): HTMLElement =>
+    bar.shadowRoot!.querySelectorAll<HTMLElement>('.mark')[index]!;
+  const targetOf = (mark: HTMLElement): HTMLElement =>
+    mark.shadowRoot!.querySelector<HTMLElement>('.target')!;
+  const surfaceOf = (mark: HTMLElement): HTMLElement | null =>
+    mark.shadowRoot!.querySelector<HTMLElement>('.tooltip-surface');
+  const isOpen = (mark: HTMLElement): boolean => surfaceOf(mark)?.matches(':popover-open') ?? false;
+
+  /** The real mouse pointer stays where the last test left it; park it in an empty corner. */
+  beforeEach(async () => {
+    const corner = document.createElement('div');
+    corner.style.cssText =
+      'position:fixed;inset-block-end:0;inset-inline-end:0;inline-size:4px;block-size:4px';
+    document.body.append(corner);
+    await userEvent.hover(corner);
+    corner.remove();
+  });
+
+  async function withMarks(): Promise<TctProgressBar> {
+    const wrapper = await fixture<HTMLElement>(
+      html`<div style="inline-size: 300px; padding: 80px 40px">
+        <button>before</button>
+        <tct-progress-bar
+          value="40"
+          label="Sales"
+          .marks=${[
+            {value: 25, label: 'Milestone: 25%'},
+            {value: 75, label: 'Goal: 75%'},
+          ]}
+        ></tct-progress-bar>
+      </div>`,
+    );
+    const bar = wrapper.querySelector<TctProgressBar>('tct-progress-bar')!;
+    await bar.updateComplete;
+    return bar;
+  }
+
+  it('describes each mark with its own tooltip surface holding the label', async () => {
+    const bar = await withMarks();
+    for (const [index, label] of ['Milestone: 25%', 'Goal: 75%'].entries()) {
+      const mark = markOf(bar, index);
+      await (mark as unknown as {updateComplete: Promise<boolean>}).updateComplete;
+      expect(surfaceOf(mark)!.textContent.trim()).toBe(label);
+      expect(surfaceOf(mark)!.getAttribute('role')).toBe('tooltip');
+      expect(targetOf(mark).getAttribute('aria-describedby')).toBe(surfaceOf(mark)!.id);
+      expect(targetOf(mark).getAttribute('aria-label')).toBe(label);
+    }
+  });
+
+  it('shows the tooltip on hover, above the mark, and hides it on leave', async () => {
+    const bar = await withMarks();
+    const mark = markOf(bar, 1);
+    await userEvent.hover(targetOf(mark));
+    await waitUntil(() => isOpen(mark), 'tooltip open');
+    expect(surfaceOf(mark)!.getBoundingClientRect().bottom).toBeLessThanOrEqual(
+      targetOf(mark).getBoundingClientRect().top + 1,
+    );
+    const corner = document.createElement('div');
+    corner.style.cssText =
+      'position:fixed;inset-block-end:0;inset-inline-end:0;inline-size:4px;block-size:4px';
+    document.body.append(corner);
+    await userEvent.hover(corner);
+    await waitUntil(() => !isOpen(mark), 'tooltip closed');
+    corner.remove();
+  });
+
+  it('shows the tooltip on keyboard focus, and Escape closes it', async () => {
+    const bar = await withMarks();
+    const before = bar.parentElement!.querySelector('button')!;
+    before.focus();
+    await pressKeys('Tab');
+    const mark = markOf(bar, 0);
+    expect(mark.shadowRoot!.activeElement).toBe(targetOf(mark));
+    await waitUntil(() => isOpen(mark), 'tooltip open on focus');
+    await pressKeys('Escape');
+    await waitUntil(() => !isOpen(mark), 'tooltip closed by Escape');
+  });
+
+  it('draws a focus ring on the focused mark', async () => {
+    const bar = await withMarks();
+    const before = bar.parentElement!.querySelector('button')!;
+    before.focus();
+    await pressKeys('Tab');
+    const target = targetOf(markOf(bar, 0));
+    expect(getComputedStyle(target).outlineStyle).not.toBe('none');
+    expect(parseFloat(getComputedStyle(target).outlineWidth)).toBeGreaterThan(0);
+  });
+
+  it('passes axe with a mark tooltip open', async () => {
+    const bar = await withMarks();
+    const mark = markOf(bar, 0);
+    await userEvent.hover(targetOf(mark));
+    await waitUntil(() => isOpen(mark), 'tooltip open');
+    await expectAccessible(bar.parentElement!);
+  });
 });

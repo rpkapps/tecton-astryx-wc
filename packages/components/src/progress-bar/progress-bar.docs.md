@@ -56,7 +56,8 @@ that. A goal line or threshold on a determinate bar is a `mark`.
 - **Track** (`part="track"`): the rail that carries the progressbar semantics.
 - **Fill** (`part="fill"`): the painted segment; carries `data-variant`.
 - **Mark** (`part="mark"`): an optional labelled target tick positioned by value; carries
-  `data-placement` (`fill` when it sits on the fill, `track` on the bare rail) and `data-variant`.
+  `data-placement` (`fill` when it sits on the fill, `track` on the bare rail) and `data-variant`. Hovering
+  or focusing it reveals its label in a tooltip (`part="tooltip"` inside the mark).
 
 ## Variants and states
 
