@@ -1,0 +1,11 @@
+<!-- title: Nested layouts; description: A horizontal layout nested in a vertical one puts related fields on one row. The inner layout overrides the outer one for its own fields. -->
+<form id="nested" onsubmit="return false" style="max-inline-size: 480px">
+  <tct-form-layout>
+    <div style="display: grid; gap: var(--spacing-1)"><label for="nested-name">Project name</label><input id="nested-name" name="project" /></div>
+    <tct-form-layout direction="horizontal">
+      <div style="display: grid; gap: var(--spacing-1)"><label for="nested-city">City</label><input id="nested-city" name="city" autocomplete="address-level2" /></div>
+      <div style="display: grid; gap: var(--spacing-1)"><label for="nested-state">State</label><input id="nested-state" name="state" autocomplete="address-level1" /></div>
+      <div style="display: grid; gap: var(--spacing-1)"><label for="nested-zip">ZIP</label><input id="nested-zip" name="zip" autocomplete="postal-code" /></div>
+    </tct-form-layout>
+  </tct-form-layout>
+</form>

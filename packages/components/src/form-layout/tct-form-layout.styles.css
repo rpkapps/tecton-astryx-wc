@@ -1,0 +1,38 @@
+/*
+ * tct-form-layout. The inner `.base` (part "base") is the flex or grid container the slotted fields
+ * live in. `horizontal-labels` is a two-column grid; tct-field renders with `display: contents` inside
+ * it, so its label and control become the grid items, and it collapses to a column at 480px viewport
+ * width or narrower (upstream breakpoint). [mwg:css-layout] grid, flexbox, gap
+ */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .base {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-4);
+  }
+
+  .base[data-direction='horizontal'] {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 1fr;
+  }
+
+  .base[data-direction='horizontal-labels'] {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--spacing-3) var(--spacing-4);
+    align-items: start;
+  }
+
+  @media (max-width: 480px) {
+    .base[data-direction='horizontal-labels'] {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-4);
+    }
+  }
+}

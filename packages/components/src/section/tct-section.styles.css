@@ -1,0 +1,152 @@
+/*
+ * tct-section. The host carries the sizes and is a one-item column flex box. Inside it, `.escape`
+ * cancels the padding of an enclosing padded container with negative margins (it reads the
+ * `--container-padding-*` properties that container publishes, so it must be an ancestor of the
+ * element that publishes this section's own), and `.base` (part "base") is the painted box.
+ * [mwg:styling-web-components] host rules, part=base; [mwg:css] logical properties, custom properties
+ */
+@layer component {
+  :host {
+    display: flex;
+    flex-direction: column;
+    inline-size: var(--_box-width, auto);
+    block-size: var(--_box-height, auto);
+    max-inline-size: var(--_box-max-width, none);
+    min-block-size: var(--_box-min-height, 0);
+
+    /* Custom properties inherit through the flat tree; a nested box must not read its parent's. */
+    --_box-padding-inline-start: initial;
+    --_box-padding-inline-end: initial;
+    --_box-padding-block-start: initial;
+    --_box-padding-block-end: initial;
+    --_box-width: initial;
+    --_box-height: initial;
+    --_box-max-width: initial;
+    --_box-min-height: initial;
+  }
+
+  .escape {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-inline-size: 0;
+    min-block-size: 0;
+    margin-inline-start: calc(-1 * var(--container-padding-inline-start, 0px));
+    margin-inline-end: calc(-1 * var(--container-padding-inline-end, 0px));
+  }
+
+  /* Only the first child escapes the block-start padding, only the last child the block-end. */
+  :host(:first-child) .escape {
+    margin-block-start: calc(-1 * var(--container-padding-block-start, 0px));
+  }
+
+  :host(:last-child) .escape {
+    margin-block-end: calc(-1 * var(--container-padding-block-end, 0px));
+  }
+
+  .base {
+    /*
+     * Effective padding per edge: explicit attribute, then the theme's custom properties, then the
+     * step an enclosing section propagated, then step 4. The propagated value sits ahead of the
+     * theme's --section-padding, and an overlay can drop it with `--_section-padding-propagated: initial`.
+     */
+    --_pis: var(
+      --_box-padding-inline-start,
+      var(
+        --section-padding-inline-start,
+        var(
+          --section-padding-inline,
+          var(--_section-padding-propagated, var(--section-padding, var(--spacing-4)))
+        )
+      )
+    );
+    --_pie: var(
+      --_box-padding-inline-end,
+      var(
+        --section-padding-inline-end,
+        var(
+          --section-padding-inline,
+          var(--_section-padding-propagated, var(--section-padding, var(--spacing-4)))
+        )
+      )
+    );
+    --_pbs: var(
+      --_box-padding-block-start,
+      var(
+        --section-padding-block-start,
+        var(--_section-padding-propagated, var(--section-padding, var(--spacing-4)))
+      )
+    );
+    --_pbe: var(
+      --_box-padding-block-end,
+      var(
+        --section-padding-block-end,
+        var(--_section-padding-propagated, var(--section-padding, var(--spacing-4)))
+      )
+    );
+
+    /* Published for descendants that bleed to the edge or align to the padding. */
+    --container-padding-inline-start: var(--_pis);
+    --container-padding-inline-end: var(--_pie);
+    --container-padding-block-start: var(--_pbs);
+    --container-padding-block-end: var(--_pbe);
+    --layout-padding-outer-x: var(--_pis);
+    --layout-padding-outer-y: var(--_pbs);
+    --layout-padding-inner-x: var(--_pis);
+    --layout-padding-inner-y: var(--_pbs);
+
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    min-block-size: 0;
+    padding-inline-start: var(--_pis);
+    padding-inline-end: var(--_pie);
+    padding-block-start: var(--_pbs);
+    padding-block-end: var(--_pbe);
+    background-color: var(--color-background-surface);
+  }
+
+  .base[data-variant='transparent'] {
+    background-color: transparent;
+  }
+
+  .base[data-variant='muted'] {
+    background-color: var(--color-background-muted);
+  }
+
+  .base[data-dividers~='top'] {
+    border-block-start: var(--border-width) solid var(--color-border);
+  }
+
+  .base[data-dividers~='bottom'] {
+    border-block-end: var(--border-width) solid var(--color-border);
+  }
+
+  .base[data-dividers~='start'] {
+    border-inline-start: var(--border-width) solid var(--color-border);
+  }
+
+  .base[data-dividers~='end'] {
+    border-inline-end: var(--border-width) solid var(--color-border);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    /* Dividers are borders and survive forced colours; recolour them with the system border colour. */
+    .base[data-dividers~='top'] {
+      border-block-start-color: ButtonBorder;
+    }
+
+    .base[data-dividers~='bottom'] {
+      border-block-end-color: ButtonBorder;
+    }
+
+    .base[data-dividers~='start'] {
+      border-inline-start-color: ButtonBorder;
+    }
+
+    .base[data-dividers~='end'] {
+      border-inline-end-color: ButtonBorder;
+    }
+  }
+}

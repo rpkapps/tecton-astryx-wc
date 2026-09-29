@@ -1,0 +1,7 @@
+<!-- title: Default optionality; description: default-optionality tells the fields which state is the norm, so only the exception is marked. The layout only shares the setting; tct-field and the form controls read it. -->
+<form id="default-optionality" onsubmit="return false" style="max-inline-size: 320px">
+  <tct-form-layout default-optionality="required">
+    <div style="display: grid; gap: var(--spacing-1)"><label for="opt-name">Name</label><input id="opt-name" name="name" required /></div>
+    <div style="display: grid; gap: var(--spacing-1)"><label for="opt-phone">Phone (optional)</label><input id="opt-phone" name="phone" type="tel" autocomplete="tel" /></div>
+  </tct-form-layout>
+</form>
