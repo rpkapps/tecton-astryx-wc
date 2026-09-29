@@ -5,20 +5,25 @@
 import {html, LitElement} from 'lit';
 import {page} from 'vitest/browser';
 import {afterEach, beforeAll, describe, expect, it} from 'vitest';
-import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
-import {formLayoutContext} from '@tecton-astryx/core/context/keys.js';
-import {expectAccessible} from '@tecton-astryx/testing/a11y.js';
-import {emulateMedia} from '@tecton-astryx/testing/emulate.js';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
-import {isChromium} from '@tecton-astryx/testing/tier.js';
+import {ContextConsumer} from '@tecton-wc/core/context/protocol.js';
+import {formLayoutContext} from '@tecton-wc/core/context/keys.js';
+import {expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {emulateMedia} from '@tecton-wc/testing/emulate.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
+import {isChromium} from '@tecton-wc/testing/tier.js';
 import '../text-input/define.js';
 import './define.js';
 import type {TctFormLayout} from './tct-form-layout.js';
 
 /** A stand-in for tct-field and the form controls: reads the layout context and renders it. */
 class TestLayoutReader extends LitElement {
-  readonly consumer = new ContextConsumer(this, {context: formLayoutContext, subscribe: true});
+  readonly consumer: ContextConsumer<typeof formLayoutContext> = new ContextConsumer<
+    typeof formLayoutContext
+  >(this, {
+    context: formLayoutContext,
+    subscribe: true,
+  });
   renders = 0;
   protected override render() {
     this.renders++;

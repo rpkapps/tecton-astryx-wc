@@ -1,21 +1,21 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import {ContextConsumer, ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {TctAfterOpenChangeEvent} from '@tecton-astryx/core/events/tct-after-open-change.js';
-import {TctOpenChangeEvent} from '@tecton-astryx/core/events/tct-open-change.js';
-import type {ChangeReason} from '@tecton-astryx/core/events/tct-event.js';
-import {TctSnapChangeEvent} from '@tecton-astryx/core/events/tct-snap-change.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
+import {ContextConsumer, ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {TctAfterOpenChangeEvent} from '@tecton-wc/core/events/tct-after-open-change.js';
+import {TctOpenChangeEvent} from '@tecton-wc/core/events/tct-open-change.js';
+import type {ChangeReason} from '@tecton-wc/core/events/tct-event.js';
+import {TctSnapChangeEvent} from '@tecton-wc/core/events/tct-snap-change.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
 import {
   LayerController,
   type EscapeBehavior,
   type LayerOptions,
-} from '@tecton-astryx/core/layer/layer-controller.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
-import {deepActiveElement, getTabbables, isFocusDetached} from '@tecton-astryx/core/utils/focus.js';
-import defaultMessages from '@tecton-astryx/locales/en/resizable.js';
+} from '@tecton-wc/core/layer/layer-controller.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
+import {deepActiveElement, getTabbables, isFocusDetached} from '@tecton-wc/core/utils/focus.js';
+import defaultMessages from '@tecton-wc/locales/en/resizable.js';
 import base from '../styles/base.styles.css';
 import focusRing from '../styles/focus-ring.styles.css';
 import motion from '../styles/motion.styles.css';
@@ -179,11 +179,13 @@ export class TctBottomSheet extends TctElement implements SwitcherSheet {
 
   // -------------------------------------------------------------------------------- internals
 
-  readonly #locale = new LocaleController(this, {
+  readonly #locale: LocaleController = new LocaleController(this, {
     namespace: 'resizable',
     defaults: defaultMessages,
   });
-  readonly #switcherContext = new ContextConsumer(this, {
+  readonly #switcherContext: ContextConsumer<typeof sheetSwitcherContext> = new ContextConsumer<
+    typeof sheetSwitcherContext
+  >(this, {
     context: sheetSwitcherContext,
     subscribe: true,
   });

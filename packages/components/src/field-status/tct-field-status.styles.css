@@ -1,6 +1,6 @@
 /*
  * tct-field-status. The Tecton field draws validation as coloured ink on the page, with no message
- * box behind it (tecton-astryx components.ts `field-status`, design/components/textfield.md: "Helper
+ * box behind it (the Tecton React theme's components.ts `field-status`, design/components/textfield.md: "Helper
  * text ... replaced by 'Validation failed' in red"). So neither variant paints a background; the
  * `attached` variant keeps the text position upstream gives it (directly under the control) and the
  * `detached` variant adds the leading icon and the gap above it. [mwg:accessible-error-announcement]

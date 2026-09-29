@@ -4,16 +4,16 @@
  */
 import {html} from 'lit';
 import {afterEach, describe, expect, it, vi} from 'vitest';
-import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
-import {themeContext} from '@tecton-astryx/core/context/keys.js';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {expectAccessible} from '@tecton-astryx/testing/a11y.js';
-import {emulateMedia} from '@tecton-astryx/testing/emulate.js';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
-import {isChromium} from '@tecton-astryx/testing/tier.js';
-import {waitUntil} from '@tecton-astryx/testing/timing.js';
+import {ContextConsumer} from '@tecton-wc/core/context/protocol.js';
+import {themeContext} from '@tecton-wc/core/context/keys.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {emulateMedia} from '@tecton-wc/testing/emulate.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
+import {isChromium} from '@tecton-wc/testing/tier.js';
+import {waitUntil} from '@tecton-wc/testing/timing.js';
 import '../button/define.js';
 import './define.js';
 import type {TctTheme} from './tct-theme.js';
@@ -22,7 +22,12 @@ import {themeName} from './theme.types.js';
 /** A consumer written the way any family reads the context. */
 class TestThemeProbe extends TctElement {
   static override readonly tagName = 'tct-test-theme-probe';
-  readonly consumer = new ContextConsumer(this, {context: themeContext, subscribe: true});
+  readonly consumer: ContextConsumer<typeof themeContext> = new ContextConsumer<
+    typeof themeContext
+  >(this, {
+    context: themeContext,
+    subscribe: true,
+  });
   get theme() {
     return this.consumer.value;
   }

@@ -1,14 +1,14 @@
 /**
  * Translation registry (A§9.15): what is registered by the application, what has been loaded from
- * `@tecton-astryx/locales`, how a requested locale maps onto a shipped catalog, and change
+ * `@tecton-wc/locales`, how a requested locale maps onto a shipped catalog, and change
  * notification so `LocaleController` hosts re-render when a lazy catalog arrives.
  *
  * Resolution of a requested locale to catalogs: the canonical tag, then its base-language parents,
  * each expanded through the alias table (`fr` -> `fr-FR`, `zh-Hant` -> `zh-TW`, `nb` -> `no-NO`).
  * English is always the final fallback and is supplied by the component (`defaults`), never loaded.
  */
-import {aliases, pseudoTag, tags} from '@tecton-astryx/locales/aliases.js';
-import {loaders} from '@tecton-astryx/locales/loaders.js';
+import {aliases, pseudoTag, tags} from '@tecton-wc/locales/aliases.js';
+import {loaders} from '@tecton-wc/locales/loaders.js';
 import {devWarn} from '../utils/dev.js';
 
 export type MessageRecord = Readonly<Record<string, string>>;

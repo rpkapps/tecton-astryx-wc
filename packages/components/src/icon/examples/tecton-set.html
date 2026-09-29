@@ -1,15 +1,19 @@
 <!-- title: Tecton domain glyphs; description: The subsurface glyphs ship in the default set, outlined and as name-filled. strata carries its own colours. -->
-<div style="display: grid; grid-template-columns: repeat(6, max-content); align-items: center; gap: var(--spacing-3) var(--spacing-5)">
-  <tct-icon name="well" size="lg"></tct-icon>
-  <tct-icon name="fault" size="lg"></tct-icon>
-  <tct-icon name="seismic" size="lg"></tct-icon>
-  <tct-icon name="horizon" size="lg"></tct-icon>
-  <tct-icon name="drill-bit" size="lg"></tct-icon>
-  <tct-icon name="strata" size="lg"></tct-icon>
-  <tct-icon name="well-filled" size="lg"></tct-icon>
-  <tct-icon name="fault-filled" size="lg"></tct-icon>
-  <tct-icon name="seismic-filled" size="lg"></tct-icon>
-  <tct-icon name="horizon-filled" size="lg"></tct-icon>
-  <tct-icon name="drill-bit-filled" size="lg"></tct-icon>
-  <tct-icon name="strata-filled" size="lg"></tct-icon>
-</div>
+<tct-vstack gap="3">
+  <tct-hstack gap="5" v-align="center">
+    <tct-icon name="well" size="lg"></tct-icon>
+    <tct-icon name="fault" size="lg"></tct-icon>
+    <tct-icon name="seismic" size="lg"></tct-icon>
+    <tct-icon name="horizon" size="lg"></tct-icon>
+    <tct-icon name="drill-bit" size="lg"></tct-icon>
+    <tct-icon name="strata" size="lg"></tct-icon>
+  </tct-hstack>
+  <tct-hstack gap="5" v-align="center">
+    <tct-icon name="well-filled" size="lg"></tct-icon>
+    <tct-icon name="fault-filled" size="lg"></tct-icon>
+    <tct-icon name="seismic-filled" size="lg"></tct-icon>
+    <tct-icon name="horizon-filled" size="lg"></tct-icon>
+    <tct-icon name="drill-bit-filled" size="lg"></tct-icon>
+    <tct-icon name="strata-filled" size="lg"></tct-icon>
+  </tct-hstack>
+</tct-vstack>

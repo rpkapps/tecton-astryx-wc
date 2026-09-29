@@ -1,5 +1,5 @@
 import {html, type CSSResultGroup} from 'lit';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import base from '../styles/base.styles.css';
 import motion from '../styles/motion.styles.css';
 import styles from './tct-tooltip-surface.styles.css';
@@ -15,7 +15,7 @@ import styles from './tct-tooltip-surface.styles.css';
  * @summary Popup surface of a tooltip.
  * @tag tct-tooltip-surface
  * @slot - The tooltip text.
- * @csspart surface - The painted box (Astryx target `astryx-tooltip`).
+ * @csspart surface - The painted box.
  */
 export class TctTooltipSurface extends TctElement {
   static override readonly tagName = 'tct-tooltip-surface';

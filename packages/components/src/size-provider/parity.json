@@ -32,7 +32,7 @@
           "upstream": "SizeContext",
           "target": "sizeContext",
           "as": "context",
-          "notes": "@tecton-astryx/core/context/keys.js; provided by tct-size-provider and by containers such as tct-button-group."
+          "notes": "@tecton-wc/core/context/keys.js; provided by tct-size-provider and by containers such as tct-button-group."
         },
         {
           "upstream": "useSize",

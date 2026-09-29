@@ -1,9 +1,9 @@
 import {html, nothing, type CSSResultGroup, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
-import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {ContextConsumer} from '@tecton-wc/core/context/protocol.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import {TctItem} from '../item/tct-item.js';
 import type {ItemTarget} from '../item/item.types.js';
 import base from '../styles/base.styles.css';
@@ -34,7 +34,7 @@ const DEFAULT_CONTEXT: ListContextValue = {
  * @slot description - Rich description; overrides the `description` attribute.
  * @slot start - Leading content: an icon, avatar or checkbox.
  * @slot end - Trailing content: a badge, an action button or a chevron.
- * @csspart list-item - The painted row (Astryx target `astryx-list-item`, on the same element as the item's `item`).
+ * @csspart list-item - The painted row (on the same element as the item's `item`).
  * @csspart item - The painted row.
  * @cloakDisplay block
  */
@@ -77,8 +77,20 @@ export class TctListItem extends TctElement {
   /** Selected state, exposed as `aria-current`. */
   @property({type: Boolean, reflect: true}) selected = false;
 
-  readonly #list = new ContextConsumer(this, {context: listContext, subscribe: true});
-  readonly #slots = new SlotController(this, 'label', 'description', 'start', 'end');
+  readonly #list: ContextConsumer<typeof listContext> = new ContextConsumer<typeof listContext>(
+    this,
+    {
+      context: listContext,
+      subscribe: true,
+    },
+  );
+  readonly #slots: SlotController = new SlotController(
+    this,
+    'label',
+    'description',
+    'start',
+    'end',
+  );
   #delegate: HTMLElement | null = null;
 
   protected override willUpdate(): void {

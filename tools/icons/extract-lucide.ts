@@ -5,7 +5,7 @@
  *   packages/icons/src/lucide.ts          `lucideIcons` lazy loaders + `lucideIconNames`
  *
  * Both are generated, gitignored build output (`pnpm generate` runs this file first-class). The
- * default set (`packages/icons/src/default.ts`) is authored: it maps the Astryx role names onto these
+ * default set (`packages/icons/src/default.ts`) is authored: it maps the upstream role names onto these
  * modules. `lucide` is never a runtime dependency; the generated modules contain plain data.
  */
 import {existsSync, mkdirSync, readdirSync, readFileSync, rmSync} from 'node:fs';

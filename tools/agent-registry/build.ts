@@ -9,7 +9,7 @@
 import {cemElements, type CemPackage} from '../lib/cem.ts';
 import {loadComponentDocs, type DocsFrontmatter} from '../lib/docs-model.ts';
 import {elementDoc, type ElementDoc} from '../lib/element-api.ts';
-import {publicText, tokenStatusLabel} from '../lib/public-text.ts';
+import {publicData, tokenStatusLabel} from '../lib/public-text.ts';
 import type {Manifest} from '../lib/parity.ts';
 import {CATEGORIES, componentUrl} from '../lib/site.ts';
 import type {TokenData, TokenMeta} from '../lib/tokens.ts';
@@ -249,17 +249,6 @@ export interface PublicRegistry extends Omit<AgentRegistry, 'upstream' | 'hooks'
   components: Omit<RegistryComponent, 'entries'>[];
 }
 
-function scrubStrings<T>(value: T): T {
-  if (typeof value === 'string') return publicText(value) as T;
-  if (Array.isArray(value)) return value.map((item) => scrubStrings(item as unknown)) as T;
-  if (value && typeof value === 'object') {
-    return Object.fromEntries(
-      Object.entries(value).map(([key, inner]) => [key, scrubStrings(inner)]),
-    ) as T;
-  }
-  return value;
-}
-
 /**
  * Public copy of the registry (apps/docs/public, llms.txt): no `upstream`, no upstream mapping tables or
  * hook lists (they stay in the internal registry and in the reports), token statuses use their public
@@ -267,7 +256,7 @@ function scrubStrings<T>(value: T): T {
  */
 export function toPublicRegistry(registry: AgentRegistry): PublicRegistry {
   const {upstream: _upstream, hooks: _hooks, components, tokens, ...rest} = registry;
-  return scrubStrings({
+  return publicData({
     ...rest,
     components: components.map(({entries: _entries, ...component}) => component),
     tokens: tokens.map((token) => ({...token, status: tokenStatusLabel(token.status) as never})),

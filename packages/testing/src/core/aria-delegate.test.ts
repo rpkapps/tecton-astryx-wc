@@ -11,9 +11,9 @@ import {
   accessibleText,
   resolveIdRefs,
   setAriaElements,
-} from '@tecton-astryx/core/controllers/aria-delegate.js';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+} from '@tecton-wc/core/controllers/aria-delegate.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import {axNode} from '../a11y.js';
 import {fixture} from '../fixture.js';
 import {isChromium, isTier2, withFeature} from '../tier.js';

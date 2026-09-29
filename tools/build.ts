@@ -36,7 +36,7 @@ function step(message: string): void {
 function tsc(name: string): void {
   const project = join(pkgDir(name), 'tsconfig.build.json');
   const result = run(TSC, ['-p', project, '--emitDeclarationOnly']);
-  if (result.status !== 0) throw new Error(`tsc failed for @tecton-astryx/${name}`);
+  if (result.status !== 0) throw new Error(`tsc failed for @tecton-wc/${name}`);
 }
 
 /** Removes everything in `dist` except the generated files named in `keep` (top-level names). */
@@ -62,7 +62,7 @@ function pruneStale(name: string): void {
 async function library(name: string, options: {skip?: readonly string[]} = {}): Promise<void> {
   const src = join(pkgDir(name), 'src');
   const files = sourceModules(src, options.skip ?? []);
-  step(`@tecton-astryx/${name}: ${files.length} module(s)`);
+  step(`@tecton-wc/${name}: ${files.length} module(s)`);
   await build(
     libraryConfig({
       entry: entryRecord(src, files),
@@ -105,8 +105,8 @@ async function main(): Promise<number> {
   try {
     pruneStale('tokens');
     pruneStale('locales');
-    step('@tecton-astryx/tokens: generated (pruned stale output)');
-    step('@tecton-astryx/locales: generated catalogs + types');
+    step('@tecton-wc/tokens: generated (pruned stale output)');
+    step('@tecton-wc/locales: generated catalogs + types');
     tsc('locales');
 
     clean('icons');

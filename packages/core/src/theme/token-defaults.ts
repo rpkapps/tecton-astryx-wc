@@ -1,13 +1,13 @@
 /**
  * The token defaults a theme resolves against (upstream `tokens.stylex.ts` defaults merged into
  * `tokenDefaults`). The upstream system ships its defaults as TypeScript constants; here the values live in one
- * place, the token pipeline (`@tecton-astryx/tokens`, `tokens.css`), and this module is the seam that
+ * place, the token pipeline (`@tecton-wc/tokens`, `tokens.css`), and this module is the seam that
  * lets the runtime theme code see them without `core` depending on the tokens package.
  *
  * `tokenDefaults` starts empty. Register the pipeline's metadata once, before resolving tokens:
  *
  * ```ts
- * import {tokens} from '@tecton-astryx/tokens/tokens.js';
+ * import {tokens} from '@tecton-wc/tokens/tokens.js';
  * registerTokenDefaults(tokenDefaultsFromMetadata(tokens));
  * ```
  *

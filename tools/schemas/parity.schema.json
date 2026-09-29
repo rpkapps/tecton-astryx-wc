@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://tecton-astryx-wc.invalid/schemas/parity.schema.json",
+  "$id": "https://tecton-wc.invalid/schemas/parity.schema.json",
   "title": "Component folder parity record",
   "description": "One parity.json per component folder (ARCHITECTURE §4.1, CONVENTIONS §8). tools/check-parity.ts adds the rules a schema cannot express (manifest coverage, CEM targets, status vs test/docs presence).",
   "type": "object",

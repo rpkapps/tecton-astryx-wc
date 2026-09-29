@@ -1,10 +1,10 @@
 {
-  "name": "@tecton-astryx/locales",
+  "name": "@tecton-wc/locales",
   "private": true,
   "license": "UNLICENSED",
   "version": "0.0.0",
   "type": "module",
-  "description": "The 30 upstream Astryx message catalogs (+ generated pseudo locale) as lazy ES modules.",
+  "description": "The 30 upstream message catalogs (+ generated pseudo locale) as lazy ES modules.",
   "sideEffects": false,
   "exports": {
     "./*.js": {

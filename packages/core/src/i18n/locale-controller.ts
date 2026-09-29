@@ -13,7 +13,7 @@
  *  5. the id itself, with a dev warning
  *
  * ```ts
- * import defaults from '@tecton-astryx/locales/en/dialog.js';
+ * import defaults from '@tecton-wc/locales/en/dialog.js';
  * #locale = new LocaleController(this, {namespace: 'dialog', defaults});
  * render() { return html`<button aria-label=${this.#locale.t('close', undefined, 'close-label')}>`; }
  * ```
@@ -29,11 +29,11 @@ import {canonicalLocale, loadLocale, localeChain, lookupMessage, onLocaleData} f
 
 export interface LocaleControllerOptions {
   /**
-   * Message namespace: `t('next')` resolves `@astryx.<namespace>.next`, then `@tct.<namespace>.next`
-   * (kebab-case folder names and upstream camelCase namespaces are both accepted).
+   * Message namespace: `t('next')` resolves `@tct.<namespace>.next` (a kebab-case folder name and the camelCase form
+   * of the namespace are both accepted).
    */
   namespace?: string;
-  /** English messages by full id (`@tecton-astryx/locales/en/<namespace>.js`); the last catalog step. */
+  /** English messages by full id (`@tecton-wc/locales/en/<namespace>.js`); the last catalog step. */
   defaults?: Readonly<Record<string, string>>;
 }
 
@@ -174,7 +174,7 @@ export class LocaleController implements ReactiveController {
 
   /**
    * Formats a message. `key` is a short key resolved in this controller's namespace, or a full id
-   * (`@astryx.pagination.next`). `overrideAttribute` names a host attribute whose non-empty value
+   * (`@tct.pagination.next`). `overrideAttribute` names a host attribute whose non-empty value
    * wins over every catalog.
    */
   t(key: string, args?: Record<string, unknown>, overrideAttribute?: string): string {
@@ -285,12 +285,7 @@ export class LocaleController implements ReactiveController {
     const camel = camelCase(namespace);
     const kebab = kebabCase(namespace);
     return [
-      ...new Set([
-        `@astryx.${camel}.${key}`,
-        `@tct.${kebab}.${key}`,
-        `@tct.${camel}.${key}`,
-        `@astryx.${namespace}.${key}`,
-      ]),
+      ...new Set([`@tct.${camel}.${key}`, `@tct.${kebab}.${key}`, `@tct.${namespace}.${key}`]),
     ];
   }
 }

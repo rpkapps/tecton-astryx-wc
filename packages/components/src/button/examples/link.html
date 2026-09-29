@@ -1,6 +1,6 @@
 <!-- title: Link; description: href renders an anchor with button styling, so open in new tab and copy link work. A disabled button is never a link. -->
-<div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-3)">
+<tct-hstack wrap="wrap" gap="3" v-align="center">
   <tct-button variant="primary" label="Visit the site" href="https://example.com"></tct-button>
   <tct-button label="Open in a new tab" href="https://example.com" target="_blank" rel="noopener noreferrer" icon="externalLink"></tct-button>
   <tct-button variant="outlined" label="Disabled link" href="https://example.com" disabled></tct-button>
-</div>
+</tct-hstack>

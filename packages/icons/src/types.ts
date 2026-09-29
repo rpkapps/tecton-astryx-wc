@@ -1,7 +1,7 @@
 /**
  * Icon data shapes, exactly as ARCHITECTURE §12 specifies them.
  *
- * `IconDefinition` is owned by core (`@tecton-astryx/core/icons/registry.js`). The icons package has
+ * `IconDefinition` is owned by core (`@tecton-wc/core/icons/registry.js`). The icons package has
  * no dependency on core (A§2.2: icons depends on nothing), so this is a structurally identical local
  * copy; the two must stay in sync, and TypeScript's structural typing lets a registry accept either.
  * Reconcile when core's registry lands: replace this file's `IconDefinition` by an `import type`

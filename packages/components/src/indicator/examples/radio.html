@@ -1,18 +1,18 @@
 <!-- title: Radio indicator; description: The radio circle unchecked and checked, in both sizes, enabled and disabled. -->
-<div style="display: grid; gap: var(--spacing-3)">
-  <div style="display: flex; align-items: center; gap: var(--spacing-4)">
+<tct-vstack gap="3">
+  <tct-hstack gap="4" v-align="center">
     <tct-radio-indicator state="unchecked"></tct-radio-indicator>
     <tct-radio-indicator state="checked"></tct-radio-indicator>
-    <span style="color: var(--color-text-secondary)">md (24px)</span>
-  </div>
-  <div style="display: flex; align-items: center; gap: var(--spacing-4)">
+    <tct-text type="inherit" color="secondary">md (24px)</tct-text>
+  </tct-hstack>
+  <tct-hstack gap="4" v-align="center">
     <tct-radio-indicator size="sm" state="unchecked"></tct-radio-indicator>
     <tct-radio-indicator size="sm" state="checked"></tct-radio-indicator>
-    <span style="color: var(--color-text-secondary)">sm (20px)</span>
-  </div>
-  <div style="display: flex; align-items: center; gap: var(--spacing-4)">
+    <tct-text type="inherit" color="secondary">sm (20px)</tct-text>
+  </tct-hstack>
+  <tct-hstack gap="4" v-align="center">
     <tct-radio-indicator disabled state="unchecked"></tct-radio-indicator>
     <tct-radio-indicator disabled state="checked"></tct-radio-indicator>
-    <span style="color: var(--color-text-secondary)">disabled</span>
-  </div>
-</div>
+    <tct-text type="inherit" color="secondary">disabled</tct-text>
+  </tct-hstack>
+</tct-vstack>

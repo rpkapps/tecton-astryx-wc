@@ -54,7 +54,7 @@
           "upstream": "useAnnounce",
           "target": "announce",
           "as": "module-function",
-          "notes": "@tecton-astryx/core/a11y/announcer.js: an error is announced assertively, every other type politely; skipped for the satellite a field or text input owns, which announces itself once."
+          "notes": "@tecton-wc/core/a11y/announcer.js: an error is announced assertively, every other type politely; skipped for the satellite a field or text input owns, which announces itself once."
         },
         {
           "upstream": "useEntryAnimation",

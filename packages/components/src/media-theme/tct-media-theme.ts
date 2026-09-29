@@ -1,15 +1,15 @@
 import {ReactiveElement, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
-import {themeContext, type ThemeContextValue} from '@tecton-astryx/core/context/keys.js';
-import {ContextConsumer, ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {adoptLightDomStyles} from '@tecton-astryx/core/styles/light-dom.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {themeContext, type ThemeContextValue} from '@tecton-wc/core/context/keys.js';
+import {ContextConsumer, ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {adoptLightDomStyles} from '@tecton-wc/core/styles/light-dom.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import {
   flatTreeParent,
   measureMediaMode,
   type DetectedMediaMode,
-} from '@tecton-astryx/core/theme/auto-media-mode.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+} from '@tecton-wc/core/theme/auto-media-mode.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import {mediaThemeLightStyles} from './media-theme.light.js';
 import {
   MEDIA_THEME_ATTRIBUTE,
@@ -62,11 +62,15 @@ export class TctMediaTheme extends TctElement {
    */
   @property({reflect: true}) fallback: MediaThemeFallback = 'dark';
 
-  readonly #context = new ContextProvider(this, {
+  readonly #context: ContextProvider<typeof themeContext> = new ContextProvider<
+    typeof themeContext
+  >(this, {
     context: themeContext,
     initialValue: {name: 'tecton', mode: 'light'},
   });
-  readonly #parentTheme = new ContextConsumer(this, {
+  readonly #parentTheme: ContextConsumer<typeof themeContext> = new ContextConsumer<
+    typeof themeContext
+  >(this, {
     context: themeContext,
     subscribe: true,
     callback: () => this.#apply(),

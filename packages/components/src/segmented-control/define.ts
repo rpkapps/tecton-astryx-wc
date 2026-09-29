@@ -1,4 +1,4 @@
-import {defineElement} from '@tecton-astryx/core/define.js';
+import {defineElement} from '@tecton-wc/core/define.js';
 import {TctSegmentedControlItem} from './tct-segmented-control-item.js';
 import {TctSegmentedControl} from './tct-segmented-control.js';
 

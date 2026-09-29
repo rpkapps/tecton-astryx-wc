@@ -1,5 +1,5 @@
 import type {TemplateResult} from 'lit';
-import type {OverflowItem} from '@tecton-astryx/core/events/tct-overflow-change.js';
+import type {OverflowItem} from '@tecton-wc/core/events/tct-overflow-change.js';
 
 export type {OverflowItem};
 

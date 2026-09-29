@@ -11,7 +11,7 @@ import {
   getTabbables,
   isFocusDetached,
   isTabbable,
-} from '@tecton-astryx/core/utils/focus.js';
+} from '@tecton-wc/core/utils/focus.js';
 import {fixture} from '../fixture.js';
 
 /** `<x-host>` with a shadow root that renders `inner` around a default slot. */

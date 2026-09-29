@@ -1,6 +1,6 @@
 /*
  * tct-dialog. The host is layout only (`display: contents`): the surface is the native <dialog>, which
- * lives in the top layer. Tecton draws the dialog with a rule around it (tecton-astryx components.ts
+ * lives in the top layer. Tecton draws the dialog with a rule around it (the Tecton React theme's components.ts
  * `dialog`) and keeps the elevation shadow; radius is `--radius-container` (8px).
  *
  * A closed <dialog> is `display: none` from the UA sheet, so `display: flex` is only ever set on

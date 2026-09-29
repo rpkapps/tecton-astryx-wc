@@ -47,7 +47,7 @@
           "upstream": "InternationalizationContext",
           "target": "localeContext",
           "as": "context",
-          "notes": "@tecton-astryx/core/context/keys.js: {locale, dir, messages, overrides}; the LocaleController is its only consumer."
+          "notes": "@tecton-wc/core/context/keys.js: {locale, dir, messages, overrides}; the LocaleController is its only consumer."
         },
         {
           "upstream": "useTranslator",
@@ -77,7 +77,7 @@
           "upstream": "getLocaleDirection",
           "target": "getLocaleDirection",
           "as": "module-function",
-          "notes": "@tecton-astryx/core/i18n/direction.js; same contract (Intl.Locale text info, then script and language lists)."
+          "notes": "@tecton-wc/core/i18n/direction.js; same contract (Intl.Locale text info, then script and language lists)."
         }
       ],
       "differences": [

@@ -5,7 +5,7 @@
  */
 import {beforeEach, describe, expect, it} from 'vitest';
 import {userEvent} from 'vitest/browser';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import {
   aTimeout,
   animationsFinished,
@@ -21,7 +21,7 @@ import {
   runKeyboardSuite,
   runOverlaySuite,
   waitUntil,
-} from '@tecton-astryx/testing/index.js';
+} from '@tecton-wc/testing/index.js';
 import './define.js';
 import type {TctHoverCard} from './tct-hover-card.js';
 

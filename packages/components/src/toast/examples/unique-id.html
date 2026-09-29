@@ -3,7 +3,7 @@
   <button type="button" id="toast-unique-replace">Save (replaces)</button>
   <button type="button" id="toast-unique-ignore">Sync (ignored while showing)</button>
   <script type="module">
-    import {toast} from '@tecton-astryx/components/toast/toast.api.js';
+    import {toast} from '@tecton-wc/components/toast/toast.api.js';
     let saves = 0;
     const root = document.getElementById('toast-unique-root');
     root.querySelector('#toast-unique-replace').addEventListener('click', () => toast({body: `Saved ${++saves} times`, uniqueId: 'save'}));

@@ -3,7 +3,7 @@
  * and a promotion are judged by, and the transition-settled helper the layout swap waits for.
  */
 import {describe, expect, it} from 'vitest';
-import {fixture, nextFrame} from '@tecton-astryx/testing/index.js';
+import {fixture, nextFrame} from '@tecton-wc/testing/index.js';
 import {
   CONTENT_END_HANDOFF_SLOP,
   DISMISS_OVERSHOOT_RATIO,

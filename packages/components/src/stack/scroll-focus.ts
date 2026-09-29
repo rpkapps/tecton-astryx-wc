@@ -1,6 +1,6 @@
 import type {ReactiveController, ReactiveControllerHost} from 'lit';
-import {observeResize} from '@tecton-astryx/core/controllers/resize.js';
-import {getTabbables} from '@tecton-astryx/core/utils/focus.js';
+import {observeResize} from '@tecton-wc/core/controllers/resize.js';
+import {getTabbables} from '@tecton-wc/core/utils/focus.js';
 
 /**
  * Keeps a scrolling box reachable from the keyboard (WCAG 2.1.1). A scroll container whose content

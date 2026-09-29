@@ -4,8 +4,8 @@
  * (A§9.15). `LocaleController` (the host-facing part) is tested in `packages/testing`.
  */
 import {afterEach, describe, expect, it, vi} from 'vitest';
-import enMessages from '@tecton-astryx/locales/en.js';
-import pseudoMessages from '@tecton-astryx/locales/pseudo.js';
+import enMessages from '@tecton-wc/locales/en.js';
+import pseudoMessages from '@tecton-wc/locales/pseudo.js';
 import {devWarn, resetDevWarnings} from '../utils/dev.js';
 import {getLocaleDirection} from './direction.js';
 import {formatMessage, resetFormatCache} from './format.js';
@@ -152,12 +152,21 @@ describe('locale resolution', () => {
 
 describe('registration and lookup', () => {
   it('registered translations are available at once and win over shipped ones', async () => {
-    registerTranslation('de', {'@astryx.alertDialog.cancel': 'Abbrechen (App)'});
-    expect(lookupMessage('@astryx.alertDialog.cancel', 'de-DE')).toBe('Abbrechen (App)');
+    registerTranslation('de', {'@tct.alertDialog.cancel': 'Abbrechen (App)'});
+    expect(lookupMessage('@tct.alertDialog.cancel', 'de-DE')).toBe('Abbrechen (App)');
     await loadLocale('de-DE');
-    expect(lookupMessage('@astryx.alertDialog.cancel', 'de-DE')).toBe('Abbrechen (App)');
+    expect(lookupMessage('@tct.alertDialog.cancel', 'de-DE')).toBe('Abbrechen (App)');
     // A different id still comes from the shipped catalog.
-    expect(lookupMessage('@astryx.appShell.skipToContent', 'de-DE')).toMatch(/\S/);
+    expect(lookupMessage('@tct.appShell.skipToContent', 'de-DE')).toMatch(/\S/);
+  });
+
+  it('shipped ids are @tct.*; the upstream id form is not an accepted alias (D-015)', async () => {
+    await loadLocale('de-DE');
+    const upstreamForm = ['@', 'astryx.alertDialog.cancel'].join('');
+    expect(lookupMessage('@tct.alertDialog.cancel', 'de-DE')).toBe('Abbrechen');
+    expect(lookupMessage(upstreamForm, 'de-DE')).toBeUndefined();
+    registerTranslation('de', {[upstreamForm]: 'ignored'});
+    expect(lookupMessage('@tct.alertDialog.cancel', 'de-DE')).toBe('Abbrechen');
   });
 
   it('a regional registration outranks the language one', () => {
@@ -190,14 +199,14 @@ describe('lazy loading', () => {
     const listener = vi.fn();
     onLocaleData(listener);
     expect(isLocaleLoaded('de-DE')).toBe(false);
-    expect(lookupMessage('@astryx.alertDialog.cancel', 'de-DE')).toBeUndefined();
+    expect(lookupMessage('@tct.alertDialog.cancel', 'de-DE')).toBeUndefined();
 
     const first = loadLocale('de-AT');
     const second = loadLocale('de-DE');
     expect(second).toBe(first);
     await first;
     expect(isLocaleLoaded('de')).toBe(true);
-    expect(lookupMessage('@astryx.alertDialog.cancel', 'de-AT')).toBe('Abbrechen');
+    expect(lookupMessage('@tct.alertDialog.cancel', 'de-AT')).toBe('Abbrechen');
     expect(listener).toHaveBeenCalledTimes(1);
 
     await loadLocale('de-DE');
@@ -212,15 +221,15 @@ describe('lazy loading', () => {
 
   it('loads the pseudo locale', async () => {
     await loadLocale('en-XA');
-    expect(lookupMessage('@astryx.alertDialog.cancel', 'en-XA')).toBe('[Çàñçéļ ~~]');
+    expect(lookupMessage('@tct.alertDialog.cancel', 'en-XA')).toBe('[Çàñçéļ ~~]');
   });
 
   it('a custom loader receives the resolved shipped tag', async () => {
-    const loader = vi.fn(() => Promise.resolve({'@astryx.alertDialog.cancel': 'Custom'}));
+    const loader = vi.fn(() => Promise.resolve({'@tct.alertDialog.cancel': 'Custom'}));
     setLocaleLoader(loader);
     await loadLocale('fr-CA');
     expect(loader).toHaveBeenCalledWith('fr-FR');
-    expect(lookupMessage('@astryx.alertDialog.cancel', 'fr-CA')).toBe('Custom');
+    expect(lookupMessage('@tct.alertDialog.cancel', 'fr-CA')).toBe('Custom');
   });
 
   it('a failing loader warns and resolves, leaving English in place', async () => {
@@ -230,11 +239,11 @@ describe('lazy loading', () => {
       setLocaleLoader(() => Promise.reject(new Error('offline')));
       await expect(loadLocale('de-DE')).resolves.toBeUndefined();
       expect(warn).toHaveBeenCalled();
-      expect(lookupMessage('@astryx.alertDialog.cancel', 'de-DE')).toBeUndefined();
+      expect(lookupMessage('@tct.alertDialog.cancel', 'de-DE')).toBeUndefined();
       // Not cached as loaded: a later attempt can succeed.
       setLocaleLoader(null);
       await loadLocale('de-DE');
-      expect(lookupMessage('@astryx.alertDialog.cancel', 'de-DE')).toBe('Abbrechen');
+      expect(lookupMessage('@tct.alertDialog.cancel', 'de-DE')).toBe('Abbrechen');
     } finally {
       globalThis.tctDevMode = undefined;
     }

@@ -130,7 +130,7 @@ A component is done only when **every** box holds:
 - TS 6, `strict`, legacy decorators (`@property`, `@state`, `@query`), `useDefineForClassFields: false`,
   no `accessor` keyword.
 - Relative imports end in `.js`; cross-package imports use package subpaths
-  (`@tecton-astryx/core/controllers/layer.js`), never `../../../core/src`.
+  (`@tecton-wc/core/controllers/layer.js`), never `../../../core/src`.
 - One element class per file, named `Tct<Name>`, file `tct-<name>.ts`; `declare global` tag map at the
   bottom; `static override readonly tagName`; `static override readonly dependencies` for tags
   rendered in the shadow root; `static override styles: CSSResultGroup = [...]` typed explicitly.

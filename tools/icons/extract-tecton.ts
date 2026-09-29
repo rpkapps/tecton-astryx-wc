@@ -91,7 +91,7 @@ import type {IconLoader} from './types.js';
  *
  *   registerIcons(tectonIcons, {namespace: 'tecton'});   // <tct-icon name="tecton:well">
  *
- * Per-icon modules (\`@tecton-astryx/icons/tecton/<name>.js\`) export \`outlined\`, \`filled\` and a default
+ * Per-icon modules (\`@tecton-wc/icons/tecton/<name>.js\`) export \`outlined\`, \`filled\` and a default
  * (outlined) for tree-shakeable direct imports.
  */
 export const tectonIcons = {

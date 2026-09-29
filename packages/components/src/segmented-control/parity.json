@@ -153,7 +153,7 @@
       "tokenRequests": [],
       "requests": [],
       "sizeBudgetKb": null,
-      "notes": "Guides: [mwg:accessibility] (radio group keyboard model, roving tabindex) [mwg:accessible-web-components] (role element and its aria-* in one shadow tree) [mwg:interest-triggered-tooltips] (reason tooltip: hover, focus, hoverable, dismissible). The keyboard hint text is the upstream `@astryx.keyboardHint.toNavigate` message (30 locales)."
+      "notes": "Guides: [mwg:accessibility] (radio group keyboard model, roving tabindex) [mwg:accessible-web-components] (role element and its aria-* in one shadow tree) [mwg:interest-triggered-tooltips] (reason tooltip: hover, focus, hoverable, dismissible). The keyboard hint text is the upstream `@tct.keyboardHint.toNavigate` message (30 locales)."
     },
     "core.segmented-control-item": {
       "tag": "tct-segmented-control-item",

@@ -139,7 +139,7 @@ MIT (Cole Bemis), and both licences are on the allowlist. `@material-symbols/svg
 approved.
 
 - `lucide` is a **dev/build-time source only**. `tools/icons/extract-lucide.ts` generates
-  `IconDefinition` data modules (`@tecton-astryx/icons/lucide/<name>.js`, one per icon,
+  `IconDefinition` data modules (`@tecton-wc/icons/lucide/<name>.js`, one per icon,
   tree-shakeable, gitignored build output).
 - The **default set** keeps Astryx's role names (close, check, chevrons, status icons, calendar,
   clock, externalLink, menu, moreHorizontal, search, arrows, funnel, eyeSlash, viewColumns, copy,
@@ -170,7 +170,7 @@ The owner requires **all** of Astryx's AI coding-agent support. This supersedes 
    - a dense doc: a one-line description, dense usage, best practices as do/don't, and one-line
      property descriptions (upstream `docsDense`);
    - compound/related awareness (e.g. Table → its plugins).
-2. **CLI** (`tct` bin in a new private `@tecton-astryx/cli` package). Commands:
+2. **CLI** (`tct` bin in a new private `@tecton-wc/cli` package). Commands:
    - `component` (list / detail / props / examples / source), `docs <topic>` (list / section), `discover`,
      `search`, and the equivalent of `hook` (controllers and utilities);
    - `doctor`, `gap-report`, and `layout` (grammar / check / expand);
@@ -219,7 +219,7 @@ CLI read the same generated registry as the docs site.
   outlined and filled variants, from `rpkapps/tecton-webcomponents` branch
   `claude/busy-johnson-0wz57h`, `packages/wc/src/icons`. A copy is at `/home/user/refs/tecton-icons` with
   the source commit recorded. Provenance: supplied by the owner as part of Tecton.
-  - Ship the set as `@tecton-astryx/icons/tecton/<name>.js`, registered by default under its kebab names
+  - Ship the set as `@tecton-wc/icons/tecton/<name>.js`, registered by default under its kebab names
     (outlined) and `<name>-filled`.
   - Lucide stays the general-purpose set and the source for Astryx role names (D-009).
   - The larger 131-glyph tecton-astryx set is **not** used.
@@ -246,7 +246,7 @@ CLI read the same generated registry as the docs site.
   - **Rule:** every colour a component paints resolves to a Tecton token. No hex, rgb or hsl literals and
     no palette variables in component CSS (Stylelint), and the token build has no unresolved colours.
 - **Q-07, MCP:** approved. Use `@modelcontextprotocol/sdk` 1.31.0 (MIT; tree of 91 packages, all
-  MIT/ISC/BSD, checked 2026-09-29) as a dependency of the private `@tecton-astryx/cli` package only. It
+  MIT/ISC/BSD, checked 2026-09-29) as a dependency of the private `@tecton-wc/cli` package only. It
   is never a dependency of the component packages.
 
 ## D-014 — Correction: CSS anchor positioning is not native in Safari 26 (2026-09-29)
@@ -300,3 +300,15 @@ Owner decision: nothing named `tecton-astryx`, and the name "Astryx" appears now
   - This is not legal advice; confirm before a public release.
 - Supersedes the `@tecton-astryx/*` naming in D-005, ARCHITECTURE and CONVENTIONS. The `tct-` tag and
   event prefix is unchanged.
+- **Implementation notes (2026-09-29).**
+  - Token status ids: `tecton-astryx` became `tecton-binding` (public label "Tecton (bound)") and
+    `astryx-retained` became `retained-default`; the semantic-map `source` ids follow.
+  - Message ids: the locales generator maps the upstream `@astryx.*` ids to `@tct.*` (`shippedId()` in
+    `packages/locales/scripts/lib.ts`); the runtime looks up `@tct.*` only. Consumer overrides registered
+    under the old `@astryx.*` form are **not** accepted: nothing is published, so no compatibility alias.
+  - The packaged `agent-registry.json` (and the docs-site copy) is the public registry; the full registry
+    with the upstream mapping is `reports/agent-registry.internal.json`. The Custom Elements Manifest
+    passes `parity.json` prose through `publicText()`.
+  - `pnpm docs:public-check` is absolute (no transitional identifiers) and also scans the manifest, the
+    registry, every `package.json` and `dist/`. Authored guides stay report-only until their prose pass.
+  - Branches that predate the rename run `node tools/codemods/d015-rename.ts` after merging it.

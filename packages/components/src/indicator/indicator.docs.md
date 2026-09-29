@@ -8,7 +8,7 @@ examples: [checkbox, radio, check, pending, owner-hover]
 keywords: [indicator, checkbox, radio, control, selection, mark, tick, themeable, swap, check, indeterminate]
 dense:
   description: decorative selection visuals - mark on a chosen option (tct-check-indicator), checkbox box (tct-checkbox-indicator), radio circle (tct-radio-indicator). Rendered by selectors, checkbox and radio lists, menu rows. Replace one by name via defineIndicators() and every component drawing it follows.
-  usage: Componentized selection visuals shared by checkbox, radio and menu rows. Decorative and aria-hidden; the owning control keeps the input, role, accessible name, focus and keyboard behaviour. Render them through getIndicator() / IndicatorController (from @tecton-astryx/core/indicators/registry.js) so a theme can replace one by name.
+  usage: Componentized selection visuals shared by checkbox, radio and menu rows. Decorative and aria-hidden; the owning control keeps the input, role, accessible name, focus and keyboard behaviour. Render them through getIndicator() / IndicatorController (from @tecton-wc/core/indicators/registry.js) so a theme can replace one by name.
   bestPractices:
     - {do: true, text: 'Restyle with ::part() and tokens first; replacing the element (defineIndicators) is the heavier path, for when the shape itself is wrong.'}
     - {do: true, text: 'A replacement element accepts state, size and disabled and draws default-slot content instead of its state mark; the owner passes its pending spinner through the slot.'}
@@ -93,7 +93,7 @@ Not applicable: no strings. The glyphs are symmetric and are not mirrored in rig
 - Render indicators inside a control that provides the role, the accessible name and the keyboard
   behaviour.
 - Publish hover with the `indicator-scope` class (`indicatorScope` from
-  `@tecton-astryx/core/indicators/registry.js`) on the element whose hover should tint the indicator, and
+  `@tecton-wc/core/indicators/registry.js`) on the element whose hover should tint the indicator, and
   add it only while enabled. Skip it for indicators that should not tint (decorative menu marks).
 - Draw the focus ring on the indicator element with `::part(checkbox-indicator)` (or
   `radio-indicator`) when the real input is visually hidden; an indicator never draws its own ring.

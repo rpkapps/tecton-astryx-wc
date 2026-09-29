@@ -1,5 +1,5 @@
 import {html, render, type TemplateResult} from 'lit';
-import {defineElement} from '@tecton-astryx/core/define.js';
+import {defineElement} from '@tecton-wc/core/define.js';
 import type {DialogPadding, DialogPosition, DialogPurpose, DialogVariant} from './dialog.types.js';
 import {TctDialog} from './tct-dialog.js';
 

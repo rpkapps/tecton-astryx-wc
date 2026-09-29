@@ -1,15 +1,15 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
-import {MediaQueryController} from '@tecton-astryx/core/controllers/media-query.js';
-import {TctActionEvent} from '@tecton-astryx/core/events/tct-action.js';
-import type {TctAfterOpenChangeEvent} from '@tecton-astryx/core/events/tct-after-open-change.js';
-import type {ChangeReason} from '@tecton-astryx/core/events/tct-event.js';
-import {TctOpenChangeEvent} from '@tecton-astryx/core/events/tct-open-change.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
-import {uniqueId} from '@tecton-astryx/core/utils/id.js';
-import defaultMessages from '@tecton-astryx/locales/en/alertDialog.js';
+import {MediaQueryController} from '@tecton-wc/core/controllers/media-query.js';
+import {TctActionEvent} from '@tecton-wc/core/events/tct-action.js';
+import type {TctAfterOpenChangeEvent} from '@tecton-wc/core/events/tct-after-open-change.js';
+import type {ChangeReason} from '@tecton-wc/core/events/tct-event.js';
+import {TctOpenChangeEvent} from '@tecton-wc/core/events/tct-open-change.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
+import {uniqueId} from '@tecton-wc/core/utils/id.js';
+import defaultMessages from '@tecton-wc/locales/en/alertDialog.js';
 import {BUTTON_VARIANTS, type ButtonVariant} from '../button/button.types.js';
 import {TctButton} from '../button/tct-button.js';
 import {TctDialog} from '../dialog/tct-dialog.js';
@@ -33,7 +33,7 @@ const SMALL_SCREEN_QUERY = '(max-width: 640px)';
  * Above 640px the actions sit side by side; at 640px and below the destructive action is above Cancel
  * (visually and in the tab order) and both fill the width. Give the action a specific label ("Delete
  * project"), and say in the description what will happen. For a non-destructive question use `tct-dialog`.
- * Without markup, use `openAlertDialog()` from `@tecton-astryx/components/alert-dialog/alert-dialog.api.js`.
+ * Without markup, use `openAlertDialog()` from `@tecton-wc/components/alert-dialog/alert-dialog.api.js`.
  *
  * It is a `tct-dialog` (`purpose="form"` with `alert`: Escape asks to close, a press on the backdrop never
  * does, and the role is `alertdialog`) with the content and the footer of a confirmation. Escape and
@@ -118,7 +118,7 @@ export class TctAlertDialog extends TctElement {
     namespace: 'alertDialog',
     defaults: defaultMessages,
   });
-  readonly #compact = new MediaQueryController(this, SMALL_SCREEN_QUERY);
+  readonly #compact: MediaQueryController = new MediaQueryController(this, SMALL_SCREEN_QUERY);
 
   get #dialog(): TctDialog | null {
     return this.renderRoot.querySelector<TctDialog>('tct-dialog');

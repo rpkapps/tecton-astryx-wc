@@ -4,10 +4,10 @@
  * toolbar's own contract is tested in `tct-toolbar.test.ts`.
  */
 import {describe, expect, it} from 'vitest';
-import {axNode, expectAccessible} from '@tecton-astryx/testing/a11y.js';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {deepActiveElement, pressKeys, tabSequence} from '@tecton-astryx/testing/keyboard.js';
-import {nextFrame} from '@tecton-astryx/testing/timing.js';
+import {axNode, expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {deepActiveElement, pressKeys, tabSequence} from '@tecton-wc/testing/keyboard.js';
+import {nextFrame} from '@tecton-wc/testing/timing.js';
 import '../button/define.js';
 import '../icon-button/define.js';
 import '../toggle-button/define.js';

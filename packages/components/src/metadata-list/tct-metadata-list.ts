@@ -1,14 +1,14 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
 // Aliased: `tct/no-create-tct-element` flags every `new Tct*()`, event classes included (see requests).
-import {TctOpenChangeEvent as OpenChangeEvent} from '@tecton-astryx/core/events/tct-open-change.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
-import {IdController} from '@tecton-astryx/core/utils/id.js';
-import defaults from '@tecton-astryx/locales/en/metadataList.js';
+import {TctOpenChangeEvent as OpenChangeEvent} from '@tecton-wc/core/events/tct-open-change.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
+import {IdController} from '@tecton-wc/core/utils/id.js';
+import defaults from '@tecton-wc/locales/en/metadataList.js';
 import base from '../styles/base.styles.css';
 import focusRing from '../styles/focus-ring.styles.css';
 import {
@@ -37,7 +37,7 @@ import styles from './tct-metadata-list.styles.css';
  * @upstream MetadataList
  * @slot - The `tct-metadata-list-item` children.
  * @slot heading - Rich heading content; overrides the `heading` attribute.
- * @csspart metadata-list - The painted wrapper (Astryx target `astryx-metadata-list`).
+ * @csspart metadata-list - The painted wrapper.
  * @csspart heading - The heading wrapper.
  * @csspart list - The grid of pairs.
  * @csspart toggle - The "Show more" / "Show less" button.
@@ -94,9 +94,12 @@ export class TctMetadataList extends TctElement {
   /** Overrides the "Show less" label. */
   @property({attribute: 'show-less-label'}) showLessLabel = '';
 
-  readonly #slots = new SlotController(this, 'heading');
-  readonly #ids = new IdController(this, 'tct-metadata-list');
-  readonly #locale = new LocaleController(this, {namespace: 'metadataList', defaults});
+  readonly #slots: SlotController = new SlotController(this, 'heading');
+  readonly #ids: IdController = new IdController(this, 'tct-metadata-list');
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'metadataList',
+    defaults,
+  });
 
   /** The light-DOM pairs, in order (everything except the heading slot). */
   #items(): HTMLElement[] {

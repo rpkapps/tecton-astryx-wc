@@ -37,7 +37,7 @@ the same way everywhere and cannot be overridden by accident.
 
 - Icon-only buttons: `tct-button` with `icon-only` and `label` names the control and shows a tooltip.
 - Content that everyone should read: plain text.
-- Announcements from code: the shared announcer in `@tecton-astryx/core/a11y/announcer.js`.
+- Announcements from code: the shared announcer in `@tecton-wc/core/a11y/announcer.js`.
 
 ## Anatomy
 

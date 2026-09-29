@@ -6,7 +6,7 @@
  */
 import {afterEach, beforeEach, describe, expect, it, vi} from 'vitest';
 import {userEvent} from 'vitest/browser';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import {
   aTimeout,
   animationsFinished,
@@ -23,7 +23,7 @@ import {
   runKeyboardSuite,
   runOverlaySuite,
   waitUntil,
-} from '@tecton-astryx/testing/index.js';
+} from '@tecton-wc/testing/index.js';
 import '../popover/define.js';
 import './define.js';
 import type {TctButton} from '../button/tct-button.js';

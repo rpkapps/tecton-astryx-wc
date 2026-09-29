@@ -13,8 +13,8 @@
 import type {TemplateResult} from 'lit';
 import type {RunOptions} from 'axe-core';
 import {describe, expect, it, vi} from 'vitest';
-import {features} from '@tecton-astryx/core/features.js';
-import {deepActiveElement, getTabbables} from '@tecton-astryx/core/utils/focus.js';
+import {features} from '@tecton-wc/core/features.js';
+import {deepActiveElement, getTabbables} from '@tecton-wc/core/utils/focus.js';
 import {expectAccessible} from '../a11y.js';
 import {fixture} from '../fixture.js';
 
@@ -79,7 +79,7 @@ export function runElementSuite(options: ElementSuiteOptions): void {
       expect(ctor, `<${tag}> is not defined; call defineElement() in the test file`).toBeDefined();
       const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
       try {
-        const {defineElement} = await import('@tecton-astryx/core/define.js');
+        const {defineElement} = await import('@tecton-wc/core/define.js');
         defineElement(ctor as Parameters<typeof defineElement>[0]);
         expect(warn).not.toHaveBeenCalled();
         expect(customElements.get(tag)).toBe(ctor);

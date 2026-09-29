@@ -6,9 +6,9 @@
  */
 import {afterEach, beforeAll, describe, expect, it, vi} from 'vitest';
 import {userEvent} from 'vitest/browser';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {resetDevWarnings} from '@tecton-astryx/core/utils/dev.js';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {resetDevWarnings} from '@tecton-wc/core/utils/dev.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import {
   aTimeout,
   axNode,
@@ -21,8 +21,8 @@ import {
   runElementSuite,
   runOverlaySuite,
   waitUntil,
-} from '@tecton-astryx/testing/index.js';
-import {TctTestLayer} from '@tecton-astryx/testing/fixtures/test-layer.js';
+} from '@tecton-wc/testing/index.js';
+import {TctTestLayer} from '@tecton-wc/testing/fixtures/test-layer.js';
 import './define.js';
 import type {TctBottomSheet} from './tct-bottom-sheet.js';
 import {

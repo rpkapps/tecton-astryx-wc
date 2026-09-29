@@ -130,7 +130,7 @@
           "upstream": "useClickableContainer",
           "target": "ClickableContainerController",
           "as": "controller",
-          "notes": "@tecton-astryx/core/controllers/clickable-container.js: forwards surface clicks to the real action, skipping nested interactive elements."
+          "notes": "@tecton-wc/core/controllers/clickable-container.js: forwards surface clicks to the real action, skipping nested interactive elements."
         },
         {
           "upstream": "ItemDescriptionContext",

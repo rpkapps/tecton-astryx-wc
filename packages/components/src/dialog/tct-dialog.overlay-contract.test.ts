@@ -9,13 +9,13 @@
  */
 import {userEvent} from 'vitest/browser';
 import {describe, expect, it} from 'vitest';
-import {announce, getAnnouncerRegions} from '@tecton-astryx/core/a11y/announcer.js';
-import {overrideFeature} from '@tecton-astryx/core/features.js';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {pressKeys} from '@tecton-astryx/testing/keyboard.js';
-import {layerStack} from '@tecton-astryx/testing/layers.js';
-import {animationsFinished, nextFrame, waitUntil} from '@tecton-astryx/testing/timing.js';
+import {announce, getAnnouncerRegions} from '@tecton-wc/core/a11y/announcer.js';
+import {overrideFeature} from '@tecton-wc/core/features.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {pressKeys} from '@tecton-wc/testing/keyboard.js';
+import {layerStack} from '@tecton-wc/testing/layers.js';
+import {animationsFinished, nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
 import '../field/define.js';
 import '../text-input/define.js';
 import '../tooltip/define.js';

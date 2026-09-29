@@ -19,8 +19,8 @@
  */
 import {userEvent} from 'vitest/browser';
 import {describe, expect, it, vi} from 'vitest';
-import {registerTopLayerPersistent} from '@tecton-astryx/core/layer/top-layer-host.js';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
+import {registerTopLayerPersistent} from '@tecton-wc/core/layer/top-layer-host.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import {fixture} from '../fixture.js';
 import {recordEvents} from '../events.js';
 import {pressKeys} from '../keyboard.js';
