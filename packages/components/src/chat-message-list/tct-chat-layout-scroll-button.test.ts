@@ -8,7 +8,7 @@ import {fixture} from '@tecton-wc/testing/fixture.js';
 import {deepActiveElement, pressKeys} from '@tecton-wc/testing/keyboard.js';
 import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
 import {isChromium} from '@tecton-wc/testing/tier.js';
-import {aTimeout, waitUntil} from '@tecton-wc/testing/timing.js';
+import {waitUntil} from '@tecton-wc/testing/timing.js';
 import '../chat-message/define.js';
 import './define.js';
 import type {TctChatLayoutScrollButton} from './tct-chat-layout-scroll-button.js';
