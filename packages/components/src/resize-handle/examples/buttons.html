@@ -1,0 +1,25 @@
+<!-- title: Buttons as an alternative to dragging; description: A drag must never be the only way to resize (WCAG 2.5.7). The handle is operable from the keyboard, and its stepBy, stepToMin and stepToMax methods let you offer plain buttons for a single pointer. -->
+<tct-card id="buttons-root" padding="0" height="260">
+  <tct-layout padding="4">
+    <tct-layout-panel slot="start" resizable default-size="200" min-size="120" max-size="320" landmark="complementary" label="Sidebar">
+      <tct-text>Sidebar</tct-text>
+    </tct-layout-panel>
+    <tct-resize-handle slot="start" id="buttons-handle" has-divider label="Resize sidebar"></tct-resize-handle>
+    <tct-layout-content>
+      <tct-hstack wrap="wrap" gap="2" v-align="center">
+        <tct-button id="buttons-narrower" label="Narrower"></tct-button>
+        <tct-button id="buttons-wider" label="Wider"></tct-button>
+        <tct-button id="buttons-smallest" label="Smallest"></tct-button>
+        <tct-button id="buttons-largest" label="Largest"></tct-button>
+      </tct-hstack>
+    </tct-layout-content>
+  </tct-layout>
+</tct-card>
+<script type="module">
+  const root = document.getElementById('buttons-root');
+  const handle = root.querySelector('#buttons-handle');
+  root.querySelector('#buttons-narrower').addEventListener('click', () => handle.stepBy(-20));
+  root.querySelector('#buttons-wider').addEventListener('click', () => handle.stepBy(20));
+  root.querySelector('#buttons-smallest').addEventListener('click', () => handle.stepToMin());
+  root.querySelector('#buttons-largest').addEventListener('click', () => handle.stepToMax());
+</script>

@@ -1,0 +1,35 @@
+<!-- title: Collapsible panel; description: collapsible lets the panel collapse: Enter on the handle or a double click toggles it, and dragging below collapsed-size (default 40 px) collapses it. A collapsed panel takes no space and its content leaves the tab order. tct-collapse-change is a cancelable request: prevent it to keep the state yourself. -->
+<tct-card id="collapsible-panel-root" padding="0" height="240">
+  <tct-layout padding="4">
+    <tct-layout-panel slot="start" id="collapsible-panel-sidebar" resizable collapsible default-size="200" min-size="140" max-size="320" landmark="complementary" label="Sidebar">
+      <tct-vstack gap="2">
+        <tct-text>Press Enter on the handle to collapse.</tct-text>
+        <tct-button label="Inside the panel"></tct-button>
+      </tct-vstack>
+    </tct-layout-panel>
+    <tct-resize-handle slot="start" has-divider label="Resize sidebar"></tct-resize-handle>
+    <tct-layout-content>
+      <tct-vstack gap="3">
+        <tct-text id="collapsible-panel-state" as="p">The sidebar is expanded.</tct-text>
+        <tct-hstack><tct-button id="collapsible-panel-toggle" label="Collapse sidebar"></tct-button></tct-hstack>
+      </tct-vstack>
+    </tct-layout-content>
+  </tct-layout>
+</tct-card>
+<script type="module">
+  const root = document.getElementById('collapsible-panel-root');
+  const panel = root.querySelector('#collapsible-panel-sidebar');
+  const state = root.querySelector('#collapsible-panel-state');
+  const toggle = root.querySelector('#collapsible-panel-toggle');
+  const show = () => {
+    state.textContent = panel.collapsed ? 'The sidebar is collapsed.' : 'The sidebar is expanded.';
+    toggle.setAttribute('label', panel.collapsed ? 'Expand sidebar' : 'Collapse sidebar');
+  };
+  panel.addEventListener('tct-collapse-change', () => {
+    queueMicrotask(show);
+  });
+  toggle.addEventListener('click', () => {
+    panel.collapsed = !panel.collapsed;
+    show();
+  });
+</script>

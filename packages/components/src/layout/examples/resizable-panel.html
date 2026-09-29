@@ -1,0 +1,17 @@
+<!-- title: Resizable panel; description: resizable makes a panel resizable within min-size and max-size, and a tct-resize-handle right after it in the same slot operates it with the pointer or the keyboard. tct-size-change reports the size; it does not fire for changes you make from code. -->
+<tct-card id="resizable-panel-root" padding="0" height="240">
+  <tct-layout padding="4">
+    <tct-layout-panel slot="start" id="resizable-panel-sidebar" resizable default-size="200" min-size="120" max-size="320" landmark="complementary" label="Sidebar">
+      <tct-text>Drag the handle, or focus it and press the arrow keys.</tct-text>
+    </tct-layout-panel>
+    <tct-resize-handle slot="start" has-divider label="Resize sidebar"></tct-resize-handle>
+    <tct-layout-content><tct-text id="resizable-panel-size" as="p">Width: 200 px</tct-text></tct-layout-content>
+  </tct-layout>
+</tct-card>
+<script type="module">
+  const root = document.getElementById('resizable-panel-root');
+  const size = root.querySelector('#resizable-panel-size');
+  root.querySelector('#resizable-panel-sidebar').addEventListener('tct-size-change', (event) => {
+    size.textContent = `Width: ${Math.round(event.size)} px`;
+  });
+</script>

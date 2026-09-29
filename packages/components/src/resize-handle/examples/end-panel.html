@@ -1,0 +1,10 @@
+<!-- title: End panel; description: For a panel at the end, put the handle before it and set reversed, so that dragging towards the panel makes it wider. The arrow keys follow the direction of the text. -->
+<tct-card padding="0" height="220">
+  <tct-layout padding="4">
+    <tct-layout-content><tct-text>Content</tct-text></tct-layout-content>
+    <tct-resize-handle slot="end" reversed has-divider label="Resize inspector"></tct-resize-handle>
+    <tct-layout-panel slot="end" resizable default-size="200" min-size="120" max-size="320" landmark="complementary" label="Inspector">
+      <tct-text>Inspector</tct-text>
+    </tct-layout-panel>
+  </tct-layout>
+</tct-card>

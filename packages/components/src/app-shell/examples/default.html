@@ -1,0 +1,19 @@
+<!-- title: Default; description: The page shell: a top navigation, a side navigation and the main content. The default variant is elevated: the content sits on an elevated surface with a rounded corner. no-landmarks and --app-shell-height only fit this preview into the page: a real app leaves the landmarks on and the shell fills the viewport. -->
+<tct-app-shell no-landmarks style="--app-shell-height: 340px">
+  <tct-hstack slot="top-nav" padding="2" gap="2" v-align="center">
+    <tct-mobile-nav-toggle></tct-mobile-nav-toggle>
+    <tct-text type="medium-strong">Acme</tct-text>
+  </tct-hstack>
+  <nav slot="side-nav" aria-label="Sections">
+    <tct-vstack gap="1" padding="2">
+      <a href="#overview">Overview</a>
+      <a href="#projects">Projects</a>
+      <a href="#reports">Reports</a>
+      <a href="#settings">Settings</a>
+    </tct-vstack>
+  </nav>
+  <tct-vstack padding="4" gap="2">
+    <tct-text type="medium-strong">Overview</tct-text>
+    <tct-text as="p">The main content. The skip link in front of the page moves focus here.</tct-text>
+  </tct-vstack>
+</tct-app-shell>

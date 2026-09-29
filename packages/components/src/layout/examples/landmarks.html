@@ -1,0 +1,9 @@
+<!-- title: Landmarks and names; description: A region is a plain box until you give it a landmark. landmark takes the ARIA role and label names it; use both together, and name a landmark when several of one kind exist. The names here are read by screen readers. -->
+<tct-card padding="0" height="240">
+  <tct-layout padding="4">
+    <tct-layout-header slot="header" has-divider landmark="banner" label="Project header"><tct-text type="medium-strong">Project</tct-text></tct-layout-header>
+    <tct-layout-panel slot="start" has-divider width="160" landmark="navigation" label="Project sections"><tct-text>Sections</tct-text></tct-layout-panel>
+    <tct-layout-content landmark="main" label="Project details"><tct-text>Details</tct-text></tct-layout-content>
+    <tct-layout-footer slot="footer" has-divider landmark="contentinfo" label="Project footer"><tct-text>Footer</tct-text></tct-layout-footer>
+  </tct-layout>
+</tct-card>

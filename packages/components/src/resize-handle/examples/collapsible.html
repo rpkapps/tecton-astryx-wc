@@ -1,0 +1,10 @@
+<!-- title: Collapsible; description: With a collapsible panel, Enter on the handle or a double click collapses and expands it again, the value text reads "Collapsed", and dragging below collapsed-size (default 40 px) collapses it. -->
+<tct-card padding="0" height="220">
+  <tct-layout padding="4">
+    <tct-layout-panel slot="start" resizable collapsible default-size="200" min-size="140" max-size="320" landmark="complementary" label="Sidebar">
+      <tct-text>Sidebar</tct-text>
+    </tct-layout-panel>
+    <tct-resize-handle slot="start" has-divider label="Resize sidebar"></tct-resize-handle>
+    <tct-layout-content><tct-text>Content</tct-text></tct-layout-content>
+  </tct-layout>
+</tct-card>

@@ -1,0 +1,14 @@
+<!-- title: Toggle in an app shell; description: tct-mobile-nav-toggle is the hamburger button. It renders only below the shell breakpoint, when the shell has mobile navigation, and reports the drawer with aria-expanded. Here the breakpoint is raised to 2xl so the toggle shows on most screens; without it, the toggle appears below 768 px. -->
+<tct-app-shell mobile-nav-breakpoint="2xl" no-landmarks style="--app-shell-height: 260px">
+  <tct-hstack slot="top-nav" padding="2" gap="2" v-align="center">
+    <tct-mobile-nav-toggle></tct-mobile-nav-toggle>
+    <tct-text type="medium-strong">Acme</tct-text>
+  </tct-hstack>
+  <nav slot="side-nav" aria-label="Sections">
+    <tct-vstack gap="1" padding="2">
+      <a href="#overview">Overview</a>
+      <a href="#projects">Projects</a>
+    </tct-vstack>
+  </nav>
+  <tct-vstack padding="4"><tct-text as="p">Below the breakpoint the toggle opens the side navigation as a drawer.</tct-text></tct-vstack>
+</tct-app-shell>
