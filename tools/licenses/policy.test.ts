@@ -1,5 +1,5 @@
 import {describe, expect, it} from 'vitest';
-import {evaluateLicenses, isExpressionAllowed} from './policy.ts';
+import {DEV_ONLY_EXCEPTIONS, evaluateLicenses, isExpressionAllowed} from './policy.ts';
 
 describe('isExpressionAllowed', () => {
   it('accepts allowlisted ids', () => {
@@ -74,13 +74,50 @@ describe('evaluateLicenses', () => {
     expect(leaked[0]).toMatchObject({level: 'error'});
   });
 
-  it('requires an exception to match the recorded licence exactly and warns for pending reviews', () => {
+  it('requires an exception to match the recorded licence exactly', () => {
     expect(
       evaluateLicenses({all: [pkg('axe-core', 'GPL-3.0')], shippedNames: none})[0],
     ).toMatchObject({level: 'error'});
-    const pending = evaluateLicenses({all: [pkg('sax', 'BlueOak-1.0.0')], shippedNames: none});
-    expect(pending).toHaveLength(1);
-    expect(pending[0]).toMatchObject({level: 'warning'});
-    expect(pending[0]!.message).toContain('PENDING OWNER REVIEW');
+    expect(evaluateLicenses({all: [pkg('sax', 'GPL-3.0')], shippedNames: none})[0]).toMatchObject({
+      level: 'error',
+    });
+  });
+
+  it('accepts the D-013 dev-only exceptions silently (no pending-review warning)', () => {
+    for (const [name, license] of [
+      ['sax', 'BlueOak-1.0.0'],
+      ['lightningcss', 'MPL-2.0'],
+      ['argparse', 'Python-2.0'],
+      ['mdn-data', 'CC0-1.0'],
+      ['@csstools/selector-specificity', 'MIT-0'],
+    ] as const) {
+      expect(evaluateLicenses({all: [pkg(name, license)], shippedNames: none})).toEqual([]);
+    }
+  });
+
+  it('never lets an approved dev-only exception reach the shipped tree', () => {
+    for (const name of ['sax', 'lightningcss', 'argparse', 'mdn-data', 'axe-core']) {
+      const license = DEV_ONLY_EXCEPTIONS[name]!.license;
+      const findings = evaluateLicenses({
+        all: [pkg(name, license)],
+        shippedNames: new Set([name]),
+      });
+      expect(findings).toHaveLength(1);
+      expect(findings[0]).toMatchObject({level: 'error'});
+    }
+  });
+
+  it('fails a new unknown licence, even on a package with a different recorded exception', () => {
+    const findings = evaluateLicenses({
+      all: [pkg('brand-new', 'CC-BY-SA-4.0'), pkg('minimatch', 'AGPL-3.0')],
+      shippedNames: none,
+    });
+    expect(findings.map((f) => f.level)).toEqual(['error', 'error']);
+  });
+
+  it('records every exception as approved by D-007a or D-013', () => {
+    for (const exception of Object.values(DEV_ONLY_EXCEPTIONS)) {
+      expect(['D-007a', 'D-013']).toContain(exception.approval);
+    }
   });
 });

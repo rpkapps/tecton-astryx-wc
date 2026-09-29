@@ -34,16 +34,21 @@ export const ELECTIONS: Readonly<Record<string, Election>> = {
 
 export interface DevOnlyException {
   license: string;
-  /** `D-007a`: owner-approved. `pending-owner-review`: found in a transitive dev tree after D-007a. */
-  approval: 'D-007a' | 'pending-owner-review';
+  /**
+   * The decision that approved the exception: `D-007a` (direct dev dependencies) or `D-013` (the
+   * transitive dev-only licences found after D-007a and tolerated in D-012, approved by the owner
+   * under D-013 Q-01: royalty-free, commercial use allowed, never shipped).
+   */
+  approval: 'D-007a' | 'D-013';
   reason: string;
 }
 
 /**
  * Packages whose licence is not on the allowlist but which are tolerated because they are dev/build
  * tooling that never reaches the shipped packages. They must not appear in the closure of a shipped
- * package (`SHIPPED_PACKAGES`). Entries marked `pending-owner-review` were not covered by the D-007a
- * audit (which listed direct dev dependencies only); the owner decides whether to keep them.
+ * package (`SHIPPED_PACKAGES`). Entries approved by `D-013` were not covered by the D-007a audit
+ * (which listed direct dev dependencies only); the owner approved them on 2026-09-29. A licence that is
+ * not listed here, or that differs from the recorded one, still fails: new licences need review.
  */
 export const DEV_ONLY_EXCEPTIONS: Readonly<Record<string, DevOnlyException>> = {
   'axe-core': {
@@ -53,59 +58,59 @@ export const DEV_ONLY_EXCEPTIONS: Readonly<Record<string, DevOnlyException>> = {
   },
   lightningcss: {
     license: 'MPL-2.0',
-    approval: 'pending-owner-review',
+    approval: 'D-013',
     reason:
       'Transitive of the docs/build tooling (Astro/Vite CSS); not imported by our code, never shipped',
   },
   'lightningcss-linux-x64-gnu': {
     license: 'MPL-2.0',
-    approval: 'pending-owner-review',
+    approval: 'D-013',
     reason: 'Platform binary of lightningcss',
   },
   argparse: {
     license: 'Python-2.0',
-    approval: 'pending-owner-review',
+    approval: 'D-013',
     reason: 'Transitive of js-yaml (docs build); permissive PSF-style licence, not shipped',
   },
   'common-ancestor-path': {
     license: 'BlueOak-1.0.0',
-    approval: 'pending-owner-review',
+    approval: 'D-013',
     reason: 'Transitive of Astro tooling; permissive (Blue Oak Model License), not shipped',
   },
   'lru-cache': {
     license: 'BlueOak-1.0.0',
-    approval: 'pending-owner-review',
+    approval: 'D-013',
     reason: 'Transitive dev tooling; permissive (Blue Oak Model License), not shipped',
   },
   minimatch: {
     license: 'BlueOak-1.0.0',
-    approval: 'pending-owner-review',
+    approval: 'D-013',
     reason:
       'Transitive dev tooling (ESLint, size-limit); permissive (Blue Oak Model License), not shipped',
   },
   sax: {
     license: 'BlueOak-1.0.0',
-    approval: 'pending-owner-review',
+    approval: 'D-013',
     reason: 'Transitive of svgo (docs build); permissive (Blue Oak Model License), not shipped',
   },
   '@csstools/css-syntax-patches-for-csstree': {
     license: 'MIT-0',
-    approval: 'pending-owner-review',
+    approval: 'D-013',
     reason: 'Transitive of Stylelint; MIT-0 is MIT without the attribution condition, not shipped',
   },
   '@csstools/selector-resolve-nested': {
     license: 'MIT-0',
-    approval: 'pending-owner-review',
+    approval: 'D-013',
     reason: 'Transitive of Stylelint; MIT-0, not shipped',
   },
   '@csstools/selector-specificity': {
     license: 'MIT-0',
-    approval: 'pending-owner-review',
+    approval: 'D-013',
     reason: 'Transitive of Stylelint; MIT-0, not shipped',
   },
   'mdn-data': {
     license: 'CC0-1.0',
-    approval: 'pending-owner-review',
+    approval: 'D-013',
     reason:
       'Transitive data package of css-tree (Stylelint, SVGO); public-domain dedication, not shipped',
   },
@@ -239,11 +244,6 @@ export function evaluateLicenses({all, shippedNames}: EvaluateInput): Finding[] 
         findings.push({
           level: 'error',
           message: `${label(pkg)} (${license}) is only allowed as a dev-only tool but is in the shipped runtime tree`,
-        });
-      } else if (exception.approval === 'pending-owner-review') {
-        findings.push({
-          level: 'warning',
-          message: `${label(pkg)} (${license}) tolerated as dev-only; PENDING OWNER REVIEW: ${exception.reason}`,
         });
       }
       continue;
