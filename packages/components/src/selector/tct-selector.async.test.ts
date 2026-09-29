@@ -20,7 +20,7 @@ import {
   optionsOf,
   recordAnnouncements,
   trigger,
-} from './selector-test-helpers.js';
+} from './fixtures/selector-test-helpers.js';
 
 let recorder: ReturnType<typeof recordAnnouncements> | undefined;
 afterEach(() => {

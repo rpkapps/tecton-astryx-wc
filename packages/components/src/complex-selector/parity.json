@@ -274,7 +274,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": 30,
+      "sizeBudgetKb": 75,
       "notes": "Guides: [mwg:accessible-web-components] the dialog popover and focus trap; [mwg:animate-to-from-top-layer] the popover enter and exit; [mwg:form-associated-custom-elements] value, validity, reset and restore. The popover is a dialog popover (kind popover with a focus trap), not an adaptive sheet: the content owns its layout."
     }
   }

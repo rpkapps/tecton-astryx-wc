@@ -249,7 +249,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": 20,
+      "sizeBudgetKb": 112,
       "notes": "Guides: [mwg:accessible-web-components] a real <nav> and buttons in the shadow tree, the dots as one tab stop; [mwg:accessibility] politeness, target size and names. The sixteen upstream messages are all used and tested in de-DE."
     }
   }

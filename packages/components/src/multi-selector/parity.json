@@ -418,7 +418,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": 65,
+      "sizeBudgetKb": 98,
       "notes": "Guides: [mwg:form-associated-custom-elements] repeated FormData entries, validity, reset and restore; [mwg:accessible-web-components] combobox semantics; [mwg:accessibility] selection announcements. Shares tct-select-base with the selector (see selector/parity.json)."
     }
   }

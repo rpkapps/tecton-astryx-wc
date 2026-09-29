@@ -21,7 +21,7 @@ import {
   optionTexts,
   recordAnnouncements,
   type SelectLike,
-} from '../selector/selector-test-helpers.js';
+} from '../selector/fixtures/selector-test-helpers.js';
 import './define.js';
 import type {TctPagination} from './tct-pagination.js';
 

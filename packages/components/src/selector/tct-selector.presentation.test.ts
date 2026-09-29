@@ -29,7 +29,7 @@ import {
   optionsOf,
   searchOf,
   trigger,
-} from './selector-test-helpers.js';
+} from './fixtures/selector-test-helpers.js';
 
 let stub: ReturnType<typeof stubCompactTouch> | undefined;
 afterEach(() => {

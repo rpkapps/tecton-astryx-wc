@@ -36,7 +36,7 @@ import {
   recordAnnouncements,
   searchOf,
   trigger,
-} from '../selector/selector-test-helpers.js';
+} from '../selector/fixtures/selector-test-helpers.js';
 import type {TctMultiSelector} from './tct-multi-selector.js';
 
 const make = (attributes = 'label="Columns"', options: SelectorOptionType[] = FRUIT) =>

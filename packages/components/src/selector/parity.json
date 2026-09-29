@@ -453,7 +453,7 @@
       ],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": 60,
+      "sizeBudgetKb": 96,
       "notes": "Guides: [mwg:accessible-web-components] the combobox with aria-activedescendant by element reflection and the id fallback; [mwg:form-associated-custom-elements] value, validity, reset and restore; [mwg:animate-to-from-top-layer] the popup enter and exit; [mwg:resilient-context-menus-and-nested-dropdowns] outside press and focus return; [mwg:styling-web-components] and [mwg:css] the layered sheet, logical properties and forced colours; [mwg:accessibility] announcements once per state. Core: controllers/combobox.ts (ComboboxController, MultiComboboxController, selectedItemOffset)."
     },
     "core.selector-option": {

@@ -38,7 +38,7 @@ import {
   optionTexts,
   optionsOf,
   trigger,
-} from './selector-test-helpers.js';
+} from './fixtures/selector-test-helpers.js';
 
 const make = (attributes = 'label="Fruit"', options: SelectorOptionType[] = FRUIT) =>
   mountSelect<TctSelector>('tct-selector', attributes, options);

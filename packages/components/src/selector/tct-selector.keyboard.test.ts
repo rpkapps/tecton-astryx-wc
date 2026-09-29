@@ -27,7 +27,7 @@ import {
   optionsOf,
   searchOf,
   trigger,
-} from './selector-test-helpers.js';
+} from './fixtures/selector-test-helpers.js';
 
 const parity = Object.values(
   import.meta.glob<{

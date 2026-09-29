@@ -8,8 +8,8 @@ import {userEvent} from 'vitest/browser';
 import {overrideFeature} from '@tecton-wc/core/features.js';
 import {fixture} from '@tecton-wc/testing/fixture.js';
 import {animationsFinished, nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
-import type {SelectorOptionType} from './selector.types.js';
-import type {TctSelector} from './tct-selector.js';
+import type {SelectorOptionType} from '../selector.types.js';
+import type {TctSelector} from '../tct-selector.js';
 
 export const FRUIT: SelectorOptionType[] = ['Apple', 'Banana', 'Orange', 'Pear'];
 
