@@ -1,0 +1,41 @@
+{
+  "name": "@tecton-wc/cli",
+  "private": true,
+  "license": "UNLICENSED",
+  "version": "0.0.0",
+  "type": "module",
+  "description": "The tct command: agent-ready element docs, search, layout tools, agent-docs generation and an MCP server, all read from the generated agent registry.",
+  "sideEffects": false,
+  "bin": {
+    "tct": "./bin/tct.js"
+  },
+  "exports": {
+    ".": {
+      "tct-source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./json": {
+      "tct-source": "./src/json.ts",
+      "types": "./dist/json.d.ts",
+      "default": "./dist/json.js"
+    },
+    "./*.js": {
+      "tct-source": "./src/*.ts",
+      "types": "./dist/*.d.ts",
+      "default": "./dist/*.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "bin",
+    "dist"
+  ],
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.31.0",
+    "@tecton-wc/components": "workspace:*"
+  }
+}

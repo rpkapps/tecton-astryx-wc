@@ -19,6 +19,7 @@ import {PATHS, rel} from '../lib/paths.ts';
 import {DOCS_PUBLIC, GUIDES_DIR} from '../lib/site.ts';
 import {loadTokens} from '../lib/tokens.ts';
 import {buildRegistry, toPublicRegistry, type GuideInput} from './build.ts';
+import {extractControllers} from './controllers.ts';
 import {renderLlmsFull, renderLlmsTxt} from './llms.ts';
 
 const cem = loadCem(join(PATHS.components, 'custom-elements.json'));
@@ -52,10 +53,16 @@ function readGuides(): GuideInput[] {
   return guides;
 }
 
+const folders = componentFolderNames(PATHS.componentsSrc);
 const registry = buildRegistry({
   cem,
   componentsSrc: PATHS.componentsSrc,
-  folders: componentFolderNames(PATHS.componentsSrc),
+  folders,
+  controllers: extractControllers({
+    coreSrc: PATHS.coreSrc,
+    componentsSrc: PATHS.componentsSrc,
+    folders,
+  }),
   manifest: loadManifest(PATHS.manifest),
   ...(loadTokens() ? {tokens: loadTokens()!} : {}),
   guides: readGuides(),
@@ -73,6 +80,6 @@ const outputs: [string, string][] = [
 ];
 for (const [path, content] of outputs) writeIfChanged(path, content);
 console.log(
-  `  registry: ${registry.components.length} component(s), ${registry.topics.length} topic(s), ` +
+  `  registry: ${registry.components.length} component(s), ${registry.controllers.length} controller(s) and utilities, ${registry.topics.length} topic(s), ` +
     `${registry.tokens.length} token(s) -> ${outputs.map(([path]) => rel(path)).join(', ')}`,
 );
