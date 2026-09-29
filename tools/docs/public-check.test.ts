@@ -83,15 +83,23 @@ describe('what the gate scans', () => {
 });
 
 describe('scanPublicOutputs and the CLI', () => {
-  it('passes clean output and reports guides without failing on them', () => {
+  it('passes clean output and clean guides', () => {
     const page = join(root, 'clean.mdx');
     writeFileSync(page, '# Button\n\nUses `@tecton-wc/components/button`.\n');
-    const guides = join(root, 'guides');
+    const guides = join(root, 'clean-guides');
     mkdirSync(guides, {recursive: true});
-    writeFileSync(join(guides, 'g.mdx'), 'Astryx for React\n');
+    writeFileSync(join(guides, 'g.mdx'), 'Import `@tecton-wc/core/features.js`.\n');
     const scan = scanPublicOutputs([page], guides);
     expect(scan.leaks).toEqual([]);
-    expect(scan.guides).toEqual([{file: join(guides, 'g.mdx'), count: 1}]);
+    expect(scan.guidesScanned).toBe(1);
+  });
+
+  it('fails on an authored guide that names the upstream system', () => {
+    const guides = join(root, 'dirty-guides');
+    mkdirSync(guides, {recursive: true});
+    writeFileSync(join(guides, 'g.mdx'), 'Astryx for React\n');
+    const scan = scanPublicOutputs([], guides);
+    expect(scan.leaks.map((leak) => leak.file)).toEqual([join(guides, 'g.mdx')]);
   });
 
   it('fails on a generated page, llms file or registry that names the upstream system', () => {

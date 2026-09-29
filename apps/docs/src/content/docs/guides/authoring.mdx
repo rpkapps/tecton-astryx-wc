@@ -8,13 +8,13 @@ sidebar:
     variant: caution
 ---
 
-:::caution[Reference generation is planned]
-The formats below are specified now and are what the generators consume. Publishing them as a machine-readable reference through `tct docs authoring` and as JSON schemas is part of WP-AI and the docs generator (milestone M6). Until then this page is the human-readable summary.
+:::caution[Machine-readable reference is planned]
+The formats below are what the generators consume today. Publishing them as a machine-readable reference through `tct docs authoring` and as JSON schemas is _planned_. Until then this page is the human-readable summary.
 :::
 
 ## Overview
 
-Upstream Astryx builds an "authoring" topic from the CLI's own self-docs: one section per document schema, generated so it cannot drift from the schemas it describes. The equivalent here is the reference for how an element is documented. It keeps the capability the upstream topic provides (a machine-readable description of the doc formats) and replaces the CLI authoring schemas with the ones this project uses. It is written for anyone adding or reading element documentation, not for building an integration package (see [CLI Integrations](../cli-integrations/)).
+This page is the reference for how an element is documented: the formats that the docs site, the CLI, the MCP server and `llms.txt` are generated from. It is written for anyone adding or reading element documentation, not for building an integration package (see [CLI Integrations](../cli-integrations/)).
 
 Element documentation has four sources, and the docs site, the CLI, the MCP server and `llms.txt` are all generated from them:
 
@@ -23,17 +23,17 @@ Element documentation has four sources, and the docs site, the CLI, the MCP serv
 | The element class and its JSDoc       | The API: attributes, properties, methods, slots, events, parts, custom states and custom properties               | Authored, read by the analyzer |
 | `<folder>.docs.md`                    | Prose sections, examples list, and agent metadata (`keywords`, `dense`, `related`)                                 | Authored              |
 | `examples/<id>.html`                  | Runnable examples: rendered as previews and shown as source                                                        | Authored              |
-| `parity.json`                         | The mapping to upstream, keyboard table, form semantics, differences, provisional values and requests              | Authored              |
+| `parity.json`                         | The mapping to the React original, keyboard table, form semantics, differences, provisional values and requests              | Authored              |
 | The Custom Elements Manifest          | The API as data, with each event's flags and the parity record attached                                            | Generated             |
 
 ## The doc file: frontmatter
 
 ```yaml
 ---
-title: Button                        # display name (the upstream display name)
+title: Button                        # display name
 folder: button
-category: Action                     # one of the 11 upstream categories
-entries: [Button]                    # upstream names documented on this page, subcomponents included
+category: Action                     # one of the 11 categories
+entries: [Button]                    # component names documented on this page, subcomponents included
 summary: Triggers an action when activated.
 examples: [variants, sizes, icons, loading, disabled-with-reason, in-form]   # order on the page
 keywords: [button, btn, cta, submit, action, loading, primary, secondary, ghost, destructive, danger]
@@ -52,7 +52,7 @@ related: [icon-button, button-group, link]
 
 | Field       | Purpose                                                                                                                                                                                       |
 | ----------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `keywords`  | The search index. Start from upstream's keywords for the component. The CLI's `search` and the MCP `search` tool resolve natural-language queries to elements through them                        |
+| `keywords`  | The search index. The CLI's `search` and the MCP `search` tool resolve natural-language queries to elements through them                                                                            |
 | `dense`     | The agent-facing doc: a one-line description, dense usage, best practices as do and don't, and one line per public attribute, property, slot and event. The build fails when it omits a public member |
 | `related`   | Compound and related awareness, for example a table pointing to its plugins, used in `get` results                                                                                            |
 
@@ -64,14 +64,14 @@ Every element page has these authored sections as second-level headings, in this
 
 `Purpose` · `When to use` · `Alternatives` · `Anatomy` · `Variants and states` · `Responsive behaviour` · `Form semantics` · `Screen-reader expectations` · `Localisation` · `Consumer responsibilities`
 
-The generated sections around them are: installation, examples, the attribute and property table, methods, slots, events (with their `bubbles`, `composed` and `cancelable` flags), styling hooks (parts, custom states and custom properties), the tokens the element uses, keyboard interactions, differences from Astryx, and the upstream mapping table.
+The generated sections around them are: installation, examples, the attribute and property table, methods, slots, events (with their `bubbles`, `composed` and `cancelable` flags), styling hooks (parts, custom states and custom properties), the tokens the element uses and keyboard interactions. The mapping to the React original and the recorded differences are generated too, but they are internal reports, not public pages.
 
 ## Examples
 
-`examples/<id>.html` is an HTML fragment (no `<html>` or `<body>`). Its first line is a comment with a title and description, and it may contain at most one `<script type="module">`, scoped to a root element whose `id` starts with the example id. The same file is the rendered preview and the displayed source.
+`examples/<id>.html` is an HTML fragment (no `<html>` or `<body>`). Its first line is a comment with a title and description, and it may contain at most one `<script type="module">`, scoped to a root element whose `id` starts with the example id. The same file is the rendered preview and the displayed source. Lay examples out with the library's layout elements, never with inline layout CSS. The header may carry `; a11y-exempt: color-contrast | <reason>` for a demonstration that WCAG itself exempts (disabled text shown outside a control); the docs accessibility check lists every exemption with its reason.
 
 ```html
-<!-- title: Variants; description: The four visual variants. -->
+<!-- title: Variants; description: The primary and secondary variants. -->
 <div id="button-variants-root">
   <tct-button variant="primary">Primary</tct-button>
   <tct-button variant="secondary">Secondary</tct-button>
@@ -80,24 +80,23 @@ The generated sections around them are: installation, examples, the attribute an
 
 ## The parity record
 
-`parity.json` (one per element folder, validated against `tools/schemas/parity.schema.json`) has one entry per upstream component that the folder implements. Its main parts:
+`parity.json` (one per element folder, validated against `tools/schemas/parity.schema.json`) has one entry per React component that the folder implements. It is an engineering record: it stays in the repository and feeds internal reports. Its main parts:
 
-- `api`: one row for every upstream prop, callback, slot and ref, each mapped to a target (as an attribute, property, slot, native event, event, method, context, controller, module function or CSS) or waived with a reason;
-- `hooks`: upstream hooks and contexts mapped to controllers, context keys or functions;
+- `api`: one row for every prop, callback, slot and ref of the React component, each mapped to a target (as an attribute, property, slot, native event, event, method, context, controller, module function or CSS) or waived with a reason;
+- `hooks`: React hooks and contexts mapped to controllers, context keys or functions;
 - `keyboard`: the keys, the action and the condition, read by both the docs and the tests;
 - `form`: whether the element is form-associated, with notes;
 - `differences`: recorded differences, typed (`approved-api-difference`, `a11y-improvement`, `tecton-visual`, `waiver`);
 - `tests`: which test categories apply and are present;
 - `provisional`, `tokenRequests` and `requests`: provisional values used, tokens needed, and changes needed in shared files.
 
-The check fails when an upstream prop is neither mapped nor waived, when a target does not exist in the manifest, or when a status claims more than the tests and docs support.
+The check fails when a React prop is neither mapped nor waived, when a target does not exist in the manifest, or when a status claims more than the tests and docs support.
 
 ## The Custom Elements Manifest
 
-The manifest is generated from the element classes with the Custom Elements Manifest analyzer and a small set of in-house plugins. It drops private and internal members and static plumbing, resolves `@fires` to each event's class (with its `@eventName`, `@bubbles`, `@composed` and `@cancelable` tags and its fields), and attaches the parity record, so tools see the mapping, the keyboard table and the differences with the API. It is the input to the docs tables, the API snapshots, the autoloader map, framework type generators, the agent registry and `llms.txt`. A drift test checks that every public member is documented, that every documented member exists, and that every upstream prop is mapped or waived.
+The manifest is generated from the element classes with the Custom Elements Manifest analyzer and a small set of in-house plugins. It drops private and internal members and static plumbing, resolves `@fires` to each event's class (with its `@eventName`, `@bubbles`, `@composed` and `@cancelable` tags and its fields), and attaches the parity record, so tools see the mapping, the keyboard table and the differences with the API. It is the input to the docs tables, the API snapshots, the autoloader map, framework type generators, the agent registry and `llms.txt`. A drift test checks that every public member is documented, that every documented member exists, and that every React prop is mapped or waived.
 
 {/*
-Adapted (not ported) from Astryx docs topic `authoring` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md): upstream generates it from the CLI's authoring self-docs (buildAuthoringTopic). Inventory 9.1: "publish our CEM + doc JSON schema instead of the CLI authoring schemas; keep the machine-readable reference capability".
-Sources: docs/CONVENTIONS.md sections 7-8, docs/ARCHITECTURE.md sections 4, 16.2-16.3, 17; docs/plan/DECISIONS.md D-011. Publishing as JSON schemas and `tct docs authoring` is planned.
+Sources: docs/CONVENTIONS.md sections 7-8, docs/ARCHITECTURE.md sections 4, 16.2-16.3, 17; docs/plan/DECISIONS.md D-011, D-015. Publishing as JSON schemas and `tct docs authoring` is planned.
 Guides: [mwg:web-components] [mwg:custom-elements]
 */}

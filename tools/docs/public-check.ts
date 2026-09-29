@@ -6,8 +6,8 @@
  * paths and class names count like any other mention: the gate is absolute. `pnpm docs:build` runs it
  * first, so a leak fails the build.
  *
- * Authored guides (`guides/`) are not generated. They are scanned and *reported*, never silently
- * ignored, but do not fail the gate until the content pass that D-015 requires of them has happened.
+ * Authored guides (`guides/`) are held to the same rule: a mention fails the gate like any other leak
+ * (they were only reported until the D-015 content pass rewrote them).
  */
 import {existsSync, readdirSync, readFileSync} from 'node:fs';
 import {join} from 'node:path';
@@ -28,11 +28,12 @@ export interface Leak {
 }
 
 export interface PublicScan {
-  /** Failures: the name in generated public output. */
+  /** Failures: the name in public output or an authored guide. */
   leaks: Leak[];
-  /** Authored guides that still name the upstream system: count per file. Reported, not failed. */
-  guides: {file: string; count: number}[];
+  /** Public output files scanned (guides not included). */
   scanned: number;
+  /** Authored guide pages scanned. */
+  guidesScanned: number;
 }
 
 const PAGE = /\.mdx?$/;
@@ -102,7 +103,8 @@ export function generatedPublicFiles(
 
 export function scanPublicOutputs(
   files: readonly string[],
-  guidesDir: string | undefined = GUIDES_DIR,
+  /** `null` skips the guides (the CLI with explicit files). */
+  guidesDir: string | null = GUIDES_DIR,
 ): PublicScan {
   const leaks: Leak[] = [];
   for (const file of files) {
@@ -110,29 +112,20 @@ export function scanPublicOutputs(
     for (const snippet of upstreamLeaks(text)) leaks.push({file, snippet});
   }
   const guides =
-    guidesDir && existsSync(guidesDir)
-      ? walkFiles(guidesDir)
-          .filter((file) => PAGE.test(file))
-          .map((file) => ({file, count: upstreamLeaks(readFileSync(file, 'utf8')).length}))
-          .filter((guide) => guide.count > 0)
-      : [];
-  return {leaks, guides, scanned: files.length};
+    guidesDir && existsSync(guidesDir) ? walkFiles(guidesDir).filter((file) => PAGE.test(file)) : [];
+  for (const file of guides) {
+    for (const snippet of upstreamLeaks(readFileSync(file, 'utf8'))) leaks.push({file, snippet});
+  }
+  return {leaks, scanned: files.length, guidesScanned: guides.length};
 }
 
 /** With file arguments the script scans exactly those files (used by the tests); otherwise the site's own output. */
 function main(): void {
   const given = process.argv.slice(2);
-  const scan = given.length > 0 ? scanPublicOutputs(given, undefined) : scanPublicOutputs(publicOutputFiles());
+  const scan = given.length > 0 ? scanPublicOutputs(given, null) : scanPublicOutputs(publicOutputFiles());
   if (scan.scanned === 0) {
     console.error('docs public check: no public output found; run pnpm generate first.');
     process.exit(1);
-  }
-  if (scan.guides.length > 0) {
-    const total = scan.guides.reduce((sum, guide) => sum + guide.count, 0);
-    console.warn(
-      `  docs public check: WARNING ${total} mention(s) of the upstream name in ${scan.guides.length} authored guide(s) ` +
-        `(WP-D content pass pending): ${scan.guides.map((g) => `${rel(g.file)}: ${g.count}`).join(', ')}`,
-    );
   }
   if (scan.leaks.length > 0) {
     for (const leak of scan.leaks.slice(0, 40)) console.error(`  ${rel(leak.file)}: ...${leak.snippet}...`);
@@ -141,7 +134,9 @@ function main(): void {
     );
     process.exit(1);
   }
-  console.log(`docs public check OK: ${scan.scanned} public file(s) never name the upstream system.`);
+  console.log(
+    `docs public check OK: ${scan.scanned} public file(s) and ${scan.guidesScanned} authored guide(s) never name the upstream system.`,
+  );
 }
 
 if (process.argv[1] && import.meta.filename === process.argv[1]) main();

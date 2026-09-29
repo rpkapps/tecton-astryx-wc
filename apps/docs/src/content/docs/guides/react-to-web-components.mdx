@@ -1,43 +1,45 @@
 ---
 title: React to Web Components
-description: Translate Astryx for React code and habits to the tct-* elements - names, props, events, slots, hooks, providers and styling.
+description: Translate the React components' code and habits to the tct-* elements - names, props, events, slots, hooks, providers and styling.
 sidebar:
   order: 13
 ---
 
-This library implements the same components as Astryx for React, with the same anatomy, variants, states and terminology, but the API is expressed the way the platform expresses things: attributes, properties, slots, methods, events and controllers. This page is the translation table. It explains every renamed API and the reason for it, so that knowledge of the React components transfers directly.
+import Example from '@/components/Example.astro';
+
+This library implements the same components as the React design system it is based on, with the same anatomy, variants, states and terminology, but the API is expressed the way the platform expresses things: attributes, properties, slots, methods, events and controllers. This page is the translation table. It explains every renamed API and the reason for it, so that knowledge of the React components transfers directly.
 
 :::note[Where the per-component detail lives]
-The rules below are normative (they are the architecture's mapping rules). Each element's page carries its own generated _Upstream mapping_ table: every upstream prop, callback, slot, ref and hook of that component, with the target in this library, or a waiver with a reason. A site-wide table built from the same records is planned. The elements themselves are delivered folder by folder, so check an element's page for its status.
+The rules below are normative (they are the architecture's mapping rules). Every prop, callback, slot, ref and hook of every React component is mapped to its target in this library, or waived with a reason, in the repository's parity records. A site-wide translation table built from the same records is _planned_. The elements themselves are delivered folder by folder, so check an element's page for its status.
 :::
 
 ## What carries over
 
-- **Components and terminology.** The catalogue, the 11 categories, variants, sizes, states and anatomy are the same. If Astryx has a `TextInput` with a `hasClear` prop, you will find a `tct-text-input` with a `has-clear` attribute.
-- **Design tokens.** The 188 core token names (`--color-text-primary`, `--spacing-4`, `--radius-container` and so on) are used verbatim, with Tecton values. Tecton-only roles are `--tecton-*`. A page can even mix Astryx for React and these elements, themed from one `tokens.css`, because `data-theme` is shared.
-- **Behaviour.** Keyboard contracts, dismissal rules, IME safety, layer stacking and announcements are ported, with upstream's tests as the specification. Where upstream has a known accessibility defect it is not copied.
-- **Message ids and locales.** The 30 catalogs are the same, with ids of the form `@tct.<namespace>.<key>`.
+- **Components and terminology.** The catalogue, the 11 categories, variants, sizes, states and anatomy are the same. If the React components have a `TextInput` with a `hasClear` prop, you will find a `tct-text-input` with a `has-clear` attribute.
+- **Design tokens.** The 188 core token names (`--color-text-primary`, `--spacing-4`, `--radius-container` and so on) are used verbatim, with Tecton values. Tecton-only roles are `--tecton-*`. A page can even mix the React components and these elements, themed from one `tokens.css`, because `data-theme` is shared.
+- **Behaviour.** Keyboard contracts, dismissal rules, IME safety, layer stacking and announcements are ported, with the React components' tests as the specification. Where the React original has a known accessibility defect it is not copied.
+- **Message ids and locales.** The 30 catalogs and the `@tct.<namespace>.<key>` ids are the same.
 
 ## Names
 
-| Astryx for React                                   | Here                                                                                                                       |
+| React components                                   | Here                                                                                                                       |
 | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | Component `PascalCase`                             | Tag `tct-` plus kebab-case: `DropdownMenuCheckboxItem` becomes `tct-dropdown-menu-checkbox-item`                          |
 | `HStack` and `VStack`                              | `tct-hstack` and `tct-vstack` (the two exceptions to the rule, so they do not become `tct-h-stack`)                       |
 | Aliases (`ContextMenuItem`, `BreadcrumbMenuItem`)  | No alias tags. The dropdown-menu item elements serve every menu, so a `tct-context-menu` contains `tct-dropdown-menu-item`s |
 | Component class                                    | `Tct` plus PascalCase: `TctDateRangeInput`                                                                                 |
-| `@astryxdesign/core/Button`                        | `@tecton-wc/components/button` registers `tct-button`; the class is `@tecton-wc/components/button/tct-button.js`    |
-| `@astryxdesign/core` (barrel)                      | `@tecton-wc/components` (classes and types, no registration), `@tecton-wc/components/define.js` (register all)     |
-| Hooks and utilities from `@astryxdesign/core/...`  | `@tecton-wc/core/...`, see [Hooks](#hooks-become-controllers-and-functions)                                            |
-| `@astryxdesign/lab`, charts, richtext, vega        | `tct-lab-*` for the lab package; `tct-*` for the others. They are experimental and scheduled after core                     |
+| A component's module in the React package (`…/Button`) | `@tecton-wc/components/button` registers `tct-button`; the class is `@tecton-wc/components/button/tct-button.js`   |
+| The React package's barrel                         | `@tecton-wc/components` (classes and types, no registration), `@tecton-wc/components/define.js` (register all)     |
+| Hooks and utilities from the React package         | `@tecton-wc/core/...`, see [Hooks](#hooks-become-controllers-and-functions)                                            |
+| The React lab, charts, richtext and vega packages  | `tct-lab-*` for the lab package; `tct-*` for the others. They are experimental and scheduled after core                     |
 
 ## Props become attributes, properties and slots
 
-| Upstream (React)                                                       | Web component                                                                                                                             |
+| React                                                                  | Web component                                                                                                                             |
 | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
 | `isX` boolean                                                          | `x` boolean attribute (drop the `is`): `isDisabled` becomes `disabled`, `isLoading` `loading`, `isIconOnly` `icon-only`, `isOpen` `open`, `isLabelHidden` `label-hidden` |
 | `hasX` boolean                                                         | `has-x`: `hasHover` becomes `has-hover`. `hasAutoFocus` becomes the native `autofocus`                                                    |
-| A boolean that defaults to `true` upstream                             | The inverted name, defaulting to false: `no-x` or `hide-x` (`hasDividers` defaulting to true becomes `no-dividers`)                      |
+| A boolean that defaults to `true` in React                               | The inverted name, defaulting to false: `no-x` or `hide-x` (`hasDividers` defaulting to true becomes `no-dividers`)                      |
 | `defaultX` (uncontrolled)                                              | The `x` attribute is the default                                                                                                          |
 | `x` plus `onXChange` (controlled)                                      | The `x` property is the current value, and a cancelable `tct-x-change` event announces user-initiated changes                              |
 | `value` plus `onChange` on value controls                              | `value` property and attribute (native model) with native `input` (each edit) and `change` (commit) events                                |
@@ -67,27 +69,27 @@ Rules that follow from these:
 - **Names never shadow global attributes.** `title`, `hidden`, `id`, `lang`, `dir`, `slot`, `part`, `style`, `class`, `role`, `tabindex`, `inert`, `popover` and their peers keep their platform meaning.
 - **No property starts with `on`.** React 19 treats function-valued `on*` props on custom elements as event listeners, so the library never names a property that way.
 
-A worked example, described rather than pasted: the React `Button` takes a `label`, a `variant`, `isDisabled`, `isLoading`, an `onClick` callback and an `icon` node. The element is:
+A worked example: the React `Button` takes a `label`, a `variant`, `isDisabled`, `isLoading`, an `onClick` callback and an `icon` node. The element takes the visible text as its default slot (or the `label` attribute) and the icon in the `icon` slot:
 
-```html
-<tct-button variant="primary" loading>
-  <tct-icon slot="icon" name="check"></tct-icon>
-  Save
-</tct-button>
+<Example
+  title="A button with an icon"
+  description="variant and the icon slot, as in the React Button. An icon-only button always needs a label, which becomes its accessible name and its built-in tooltip."
+  source={`<tct-hstack gap="2">
+  <tct-button variant="primary">
+    <tct-icon slot="icon" name="check"></tct-icon>
+    Save
+  </tct-button>
+  <tct-button icon-only label="Close">
+    <tct-icon slot="icon" name="close"></tct-icon>
+  </tct-button>
+</tct-hstack>`}
+/>
 
-<script type="module">
-  const button = document.querySelector('tct-button');
-  button.addEventListener('click', save); // native click, retargeted from the inner button
-  button.disabled = true; // property or attribute, whichever suits your code
-</script>
-```
-
-An icon-only button always needs a `label`, which becomes its accessible name and its built-in tooltip:
-
-```html
-<tct-button icon-only label="Close">
-  <tct-icon slot="icon" name="close"></tct-icon>
-</tct-button>
+```js
+const button = document.querySelector('tct-button');
+button.addEventListener('click', save); // native click, retargeted from the inner button
+button.disabled = true; // property or attribute, whichever suits your code
+button.loading = true; // isLoading
 ```
 
 ## Events
@@ -114,11 +116,11 @@ dialog.addEventListener('tct-open-change', (event) => {
 
 ## Controlled and uncontrolled
 
-Most upstream inputs are controlled: a `value` is required, and `onChange` must set it. Here every input works both ways (an approved API difference). Use the `value` attribute as the default and read the result, or run it controlled by setting the property from your handler. A component that upstream calls "controlled only" simply also works uncontrolled. See [Forms](../forms/).
+Most React inputs are controlled: a `value` is required, and `onChange` must set it. Here every input works both ways (an approved API difference). Use the `value` attribute as the default and read the result, or run it controlled by setting the property from your handler. A component that the React version treats as controlled only simply also works uncontrolled. See [Forms](../forms/).
 
 ## Async actions
 
-Upstream's `clickAction` and `changeAction` props (functions that return a promise, with a built-in pending state) are properties here. The element sets a busy state while the promise is pending and ignores re-entry:
+The React components' `clickAction` and `changeAction` props (functions that return a promise, with a built-in pending state) are properties here (`tct-button` and `tct-text-input` have them). The element sets a busy state while the promise is pending and ignores re-entry:
 
 ```js
 button.clickAction = async (event) => {
@@ -128,31 +130,31 @@ button.clickAction = async (event) => {
 
 ## Refs and imperative APIs
 
-There are no `ref` props, because the element is the DOM node. Methods mirror native names: `focus(options)`, `blur()`, `click()`, `select()`, `show()`, `hide()`, `toggle(force?)`, `requestClose(reason?)`, `checkValidity()`, `reportValidity()`, `setCustomValidity()`, `showPicker()` where upstream exposes it.
+There are no `ref` props, because the element is the DOM node. Methods mirror native names: `focus(options)`, `blur()`, `click()`, `select()`, `show()`, `hide()`, `toggle(force?)`, `requestClose(reason?)`, `checkValidity()`, `reportValidity()`, `setCustomValidity()`, `showPicker()` where the React component exposes it.
 
-`show()`, `hide()` and `toggle()` are programmatic and do not fire the intent event (the commit event still fires). `requestClose()` is the user-equivalent: it fires the intent event, and it can be prevented. The imperative helpers that upstream exposes as hooks (`useImperativeDialog`, toast APIs) are module functions such as `openDialog()` and `toast()`.
+`show()`, `hide()` and `toggle()` are programmatic and do not fire the intent event (the commit event still fires). `requestClose()` is the user-equivalent: it fires the intent event, and it can be prevented. The imperative helpers that the React version exposes as hooks (`useImperativeDialog`, toast APIs) are module functions such as `openDialog()`, `openAlertDialog()` and `toast()`.
 
 ## Providers and context
 
-| Upstream                                  | Here                                                                                                    |
+| React                                     | Here                                                                                                    |
 | ----------------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | `Theme`                                   | `tct-theme` (`mode`, and a `theme` property). See [Theming](../theme/)                                   |
-| `MediaTheme`, `SyntaxTheme`               | `tct-media-theme`, `tct-syntax-theme`                                                                    |
+| `MediaTheme`, `SyntaxTheme`               | `tct-media-theme`, `tct-syntax-theme` (`tct-syntax-theme` is _planned_)                                                   |
 | `SizeProvider`                            | `tct-size-provider`                                                                                     |
 | `InternationalizationProvider`            | `tct-internationalization-provider` (`locale`, `dir`, `messages`, `overrides`). See [Internationalization](../internationalization/) |
 | `LinkProvider`                            | `tct-link-provider`, exposing a `navigate(href, event)` hook to your router                             |
-| `LayerProvider`                           | `tct-layer-provider`                                                                                    |
+| `LayerProvider`                           | `tct-layer-provider` (toast placement and limits, and the toast viewport)                               |
 
-Providers render nothing of their own and use `display: contents`, with one exception: `tct-theme` and `tct-media-theme` are blocks that paint a background, because a scheme island has to. Internally they use the Context Community Protocol, an interoperable event-based mechanism, so a provider and its consumers can be defined in any order.
+Providers have no shadow root and use `display: contents`, with one exception: `tct-theme` and `tct-media-theme` are blocks that paint a background, because a scheme island has to. Internally they use the Context Community Protocol, an interoperable event-based mechanism, so a provider and its consumers can be defined in any order.
 
 ## Hooks become controllers and functions
 
-| Upstream hook or utility                              | Here                                                                                                                     |
+| React hook or utility                                 | Here                                                                                                                     |
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
 | `useLayer`, layer dismissal, `LayerDepthProvider`      | `LayerController` (`@tecton-wc/core/layer/layer-controller.js`) and the layer stack; positioning in `PositionController` |
 | `useFocusTrap`                                        | `FocusTrapController`, for non-dialog containers only. Native `<dialog>` needs no trap                                    |
 | `useAnnounce`                                         | `announce()` from `@tecton-wc/core/a11y/announcer.js`                                                                |
-| `useListFocus`, `useGridFocus`, `useTreeFocus`        | `RovingTabindexController` and, for grids and trees, dedicated grid and tree focus controllers (_planned_)                                   |
+| `useListFocus`, `useGridFocus`, `useTreeFocus`        | `RovingTabindexController` and `TreeFocusController`; a grid focus controller is _planned_                               |
 | `useTypeahead`                                        | `TypeaheadController`                                                                                                    |
 | `useMediaQuery`                                       | `MediaQueryController` inside elements; `matchMedia()` in application code                                                |
 | `useClickableContainer`, `INTERACTIVE_SELECTORS`      | `ClickableContainerController`, `INTERACTIVE_SELECTORS`                                                                   |
@@ -164,43 +166,43 @@ Providers render nothing of their own and use `display: contents`, with one exce
 | `isImeKeyEvent`                                       | `isImeKeyEvent` (`@tecton-wc/core/utils/ime.js`) and `ImeGuard`                                                       |
 | `useTooltip`                                          | `TooltipController`                                                                                                      |
 | `useDevWarning`                                       | `devWarn()`                                                                                                              |
-| `useTheme`, `ThemeContext`                            | `themeContext`; token values through `@tecton-wc/tokens/tokens.js` (see [Theming](../theme/#reading-the-theme-from-javascript)) |
+| `useTheme`, `ThemeContext`                            | `themeContext`; token values through `resolveThemeTokens` in `@tecton-wc/core`, or `@tecton-wc/tokens/tokens.js` (see [Theming](../theme/#reading-the-theme-from-javascript)) |
 | `useMergedRefs`                                       | Not needed. There are no refs to merge                                                                                    |
 
 Controllers are for authors of custom elements and for advanced composition. As an application developer you will rarely import one.
 
 ## Slots, compound components and structure
 
-Compound components become light-DOM children. A `tct-dropdown-menu` contains `tct-dropdown-menu-item` elements, a `tct-tab-list` contains `tct-tab` elements, and parents discover their children with `slotchange`. Anchored overlays take their trigger as the first element of the default slot when upstream wrapped its children (`tct-tooltip`, `tct-hover-card`, `tct-popover`, `tct-dropdown-menu`), or as `slot="trigger"` where upstream has a separate trigger prop.
+Compound components become light-DOM children. A `tct-list` contains `tct-list-item` elements, a `tct-segmented-control` contains `tct-segmented-control-item` elements (and, once they ship, a `tct-dropdown-menu` contains `tct-dropdown-menu-item` elements and a `tct-tab-list` contains `tct-tab` elements), and parents discover their children with `slotchange`. Anchored overlays take their trigger as the first element of the default slot when the React component wrapped its children (`tct-tooltip`, `tct-hover-card`, `tct-popover`, and the planned `tct-dropdown-menu`), or as `slot="trigger"` where the React component has a separate trigger prop (`tct-collapsible`).
 
 Two structural changes are worth knowing before you port a page:
 
-- **Tables are light DOM.** `tct-table` renders a native `<table>` into its own light DOM from `columns` and `data`, because a custom element cannot live inside `<table>` markup (the parser foster-parents it).
+- **Tables are light DOM.** `tct-table` (_planned_) renders a native `<table>` into its own light DOM from `columns` and `data`, because a custom element cannot live inside `<table>` markup (the parser foster-parents it).
 - **Labels and descriptions stay in the same root as their control.** Field chrome (label, description, status) is rendered next to the native input inside the element, and `tct-field` creates owned elements in your tree when it wraps arbitrary content, so accessible-name relationships never cross a shadow boundary.
 
-## Deprecated upstream APIs
+## Deprecated APIs
 
-Deprecated upstream APIs are not ported; use the current one:
+Deprecated APIs of the React components are not ported; use the current one:
 
 - `nativePicker` on the date and time inputs is replaced by `presentation`.
 - The side navigation's collapse context and the collapse button's props are replaced by the controlled `collapsible` configuration.
-- The bare prop and state classes Astryx still emits (`.primary`, `.sm`, `.checked`) do not exist. Select on the tag and the reflected attribute instead.
+- The bare prop and state classes that the React components still emit (`.primary`, `.sm`, `.checked`) do not exist. Select on the tag and the reflected attribute instead.
 
 ## Using the elements inside React
 
 The elements work in a React 19 app, and in any framework, because they are DOM nodes. Three practical notes:
 
-- **Properties.** Structured values (`columns`, `data`, `items`) and callbacks (`clickAction`, `renderX`) are properties. Set them through a ref, or use the typed JSX bindings generated for the elements (_planned_, WP-I) that make them ordinary props.
-- **Events.** JSX cannot spell a kebab-case event name such as `tct-open-change` in an `on*` prop, so attach `tct-*` listeners with a ref and `addEventListener`, or use the generated bindings. Native events (`click`, `input`, `change`) can be bound the usual way.
-- **Server rendering.** Elements are SSR-safe (they import in Node and do no DOM work in constructors), but are not yet server-rendered to declarative shadow DOM. Framework hydration with owned elements (tooltips, fields) is checked in WP-I.
+- **Properties.** Structured values (`columns`, `data`, `items`) and callbacks (`clickAction`, `renderX`) are properties. Set them through a ref, or use the typed JSX bindings generated for the elements (_planned_) that make them ordinary props.
+- **Events.** JSX cannot spell a kebab-case event name such as `tct-open-change` in an `on*` prop, so attach `tct-*` listeners with a ref and `addEventListener`, or use the generated bindings once they exist. Native events (`click`, `input`, `change`) can be bound the usual way.
+- **Server rendering.** Elements are SSR-safe (they import in Node and do no DOM work in constructors), but are not yet server-rendered to declarative shadow DOM. Framework hydration with owned elements (tooltips, fields) will be checked by the framework integration harnesses (_planned_).
 
 ## Testing
 
 Your tests change with the DOM: queries go through roles, labels and text rather than component displayNames, and open shadow roots are pierced by real-browser locators (Playwright and the browser mode of Vitest). Testing Library style queries in jsdom cannot see inside shadow roots, and jsdom also lacks the `<dialog>` and Popover behaviour that overlays depend on, so run overlay and form tests in a real browser. `data-testid` still works, as an attribute on the host.
 
 {/*
-Not a port of a single Astryx topic: the "React -> WC" translation is the inventory's second migration (section 9.1, migration row) and WORK-BREAKDOWN WP-D. Normative source: docs/ARCHITECTURE.md sections 7.1-7.7, 8, 9; docs/plan/DECISIONS.md D-006.
-Controller and function names verified against packages/core/src (controllers/, layer/, utils/, a11y/announcer.ts, icons/registry.ts, i18n/). Provider element names from docs/plan/WORK-BREAKDOWN.md (tct-layer-provider, tct-link-provider, tct-syntax-theme).
+The React -> WC translation is the inventory's second migration (section 9.1) and WORK-BREAKDOWN WP-D. Normative source: docs/ARCHITECTURE.md sections 7.1-7.7, 8, 9; docs/plan/DECISIONS.md D-006.
+Controller and function names verified against packages/core/src (controllers/, layer/, utils/, a11y/announcer.ts, icons/registry.ts, i18n/) and packages/core/src/generated/index.ts.
 Deprecated aliases: inventory finding D16. The generated site-wide translation table (from all parity.json) is planned.
 Guides: [mwg:web-components] [mwg:custom-elements] [mwg:shadow-dom] [mwg:accessible-web-components] [mwg:form-associated-custom-elements] [mwg:styling-web-components]
 */}
