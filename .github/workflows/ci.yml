@@ -20,7 +20,8 @@ env:
 
 jobs:
   # 1. Everything, in order, with Chromium: generate, format, lint, typecheck, tokens, api, parity,
-  #    licences, tests, build, size, docs build (steps for later milestones skip until they exist).
+  #    licences, tests, build (incl. exports, server-import and CDN smoke checks), size, docs build and
+  #    the docs accessibility crawl.
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -106,10 +107,13 @@ jobs:
       - run: pnpm docs:build
       - run: pnpm docs:a11y
       - uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: docs-site
           if-no-files-found: ignore
-          path: apps/docs/dist/
+          path: |
+            apps/docs/dist/
+            reports/docs-a11y.json
 
   # 5. Licence allowlist (also part of `pnpm check`; kept separate so it is visible on its own).
   licenses:

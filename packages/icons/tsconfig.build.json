@@ -1,0 +1,21 @@
+{
+  "//": "Declarations for `pnpm build` (tools/build.ts): shipped sources only. The authored glyph sources under src/tecton/glyphs feed the generated modules and are not shipped.",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": false,
+    "incremental": false,
+    "declarationMap": false,
+    "customConditions": [],
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src"],
+  "exclude": [
+    "dist",
+    "src/**/__snapshots__",
+    "src/**/*.test.ts",
+    "src/**/*.node.test.ts",
+    "src/tecton/glyphs"
+  ],
+  "references": []
+}

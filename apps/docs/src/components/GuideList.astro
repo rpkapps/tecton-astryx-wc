@@ -1,0 +1,28 @@
+---
+/** Lists the pages under `guides/` (authored by WP-D) so the home page never links to a missing page. */
+import {getCollection} from 'astro:content';
+
+const guides = (await getCollection('docs'))
+  .filter((entry) => entry.id.startsWith('guides/'))
+  .sort(
+    (a, b) =>
+      (a.data.sidebar.order ?? 1000) - (b.data.sidebar.order ?? 1000) ||
+      a.data.title.localeCompare(b.data.title),
+  );
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+
+{
+  guides.length > 0 ? (
+    <ul class="tct-guide-list">
+      {guides.map((guide) => (
+        <li>
+          <a href={`${base}/${guide.id}/`}>{guide.data.title}</a>
+          {guide.data.description ? ` – ${guide.data.description}` : ''}
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <p>The foundation and guide pages are being written.</p>
+  )
+}

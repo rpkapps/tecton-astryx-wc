@@ -41,19 +41,19 @@ export const EXTERNAL_STEPS_BEFORE_BARRELS: readonly ExternalStep[] = [
 ];
 
 export const EXTERNAL_STEPS_AFTER_BARRELS: readonly ExternalStep[] = [
-  // TODO(M6): Custom Elements Manifest (analyzer + tools/cem plugins, A§17) -> components/custom-elements.json
+  // Custom Elements Manifest (A§17) and the CEM-derived autoloader map. Everything below reads it.
   {name: 'custom-elements manifest', script: 'tools/cem/generate.ts', milestone: 'M6'},
-  // TODO(M6): cloak.css (CEM tags + @cloakDisplay) and light-dom.css (glob *.light.css)
+  // cloak.css (CEM tags + @cloakDisplay), light-dom.css (glob *.light.css), tecton.css bundle.
   {name: 'cloak + light-dom css', script: 'tools/css/generate-shared.ts', milestone: 'M6'},
-  // TODO(M6): docs component pages, sidebar data, llms.txt (A§16.2)
-  {name: 'docs pages', script: 'tools/docs/generate.ts', milestone: 'M6'},
-  // TODO(WP-AI, D-011): the agent registry (CEM + docs frontmatter keywords/dense/related + examples +
-  // tokens + docs topics) read by the CLI, the MCP server and the docs site. tools/lib/frontmatter.ts
-  // already parses the frontmatter subset; WP-AI adds the script and its package under orchestrator
-  // supervision (packages/cli is not created by WP-F).
-  {name: 'agent registry', script: 'tools/agent-registry/generate.ts', milestone: 'WP-AI'},
-  // TODO(M6): reports/parity.{json,md} beyond the M1 report, i18n-missing report
+  // reports/parity.{json,md} (A§15.5); the docs "Parity status" page reads it.
+  {name: 'parity report', script: 'tools/parity-report.ts', milestone: 'M6'},
   {name: 'i18n missing report', script: 'tools/i18n/report-missing.ts', milestone: 'M6'},
+  // The agent registry (D-011): CEM + docs frontmatter keywords/dense/related + examples + tokens +
+  // docs topics, read by the docs site and later by the `tct` CLI and MCP server (WP-AI). Also writes
+  // llms.txt / llms-full.txt into apps/docs/public.
+  {name: 'agent registry', script: 'tools/agent-registry/generate.ts', milestone: 'M6'},
+  // Docs component pages, the parity / differences / tokens pages (A§16.2).
+  {name: 'docs pages', script: 'tools/docs/generate.ts', milestone: 'M6'},
 ];
 
 function runExternal(step: ExternalStep): boolean {
