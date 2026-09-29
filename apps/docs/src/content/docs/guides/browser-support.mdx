@@ -9,7 +9,7 @@ sidebar:
 
 The elements are built on modern web platform features: custom elements with Shadow DOM and `ElementInternals`, the [`Popover`](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API) API, native `<dialog>`, CSS anchor positioning, `light-dark()` and `:state()`. These let elements stay small, accessible and free of runtime dependencies on their main code paths, but they also set a floor on which browsers render everything correctly.
 
-A design system does not own its traffic; the products built on it do. Their audiences range from evergreen-Chrome-only internal tools to public sites with a meaningful share of older Safari. So the library defines tiers that describe what works at each level. Pick the tier that matches your audience. Unlike Astryx for React, the floor is a recorded project decision with fixed versions (D-010), not a rolling window.
+A design system does not own its traffic; the products built on it do. Their audiences range from evergreen-Chrome-only internal tools to public sites with a meaningful share of older Safari. So the library defines tiers that describe what works at each level. Pick the tier that matches your audience. The floor is a fixed set of engine versions, not a rolling window.
 
 ## Support tiers
 
@@ -19,12 +19,12 @@ A design system does not own its traffic; the products built on it do. Their aud
 | Tier 2: Degraded    | Chrome and Edge 116+, Firefox 125+, Safari 17+                                             | Elements render, submit, and are operable by keyboard, and they never throw. Layered surfaces are positioned by a lazily loaded measurement fallback instead of CSS. Some accessibility relationships fall back to copied text, and `:state()` styling hooks may not match. | An emulated run in CI that forces the newer features off                                              |
 | Below Tier 2        | Anything older                                                                             | Unsupported. No polyfills are shipped. Modules still import without throwing (for server rendering), but nothing else is promised.                                                                                              | An import-only test                                                                                   |
 
-Tier 1 is the first set of engine versions in which Popover, `showPopover({source})` (implicit anchoring), ARIA element reflection, `:state()`, `dialog.requestClose()` and `light-dark()` are all native, and in which every layered surface is positioned correctly. CSS anchor positioning is native in the Chrome, Edge and Firefox Tier-1 versions; Safari 26 positions with the measurement fallback. It is upstream Astryx's Tier 1 raised from Chrome 125 to Chrome 137 because of implicit anchors.
+Tier 1 is the first set of engine versions in which Popover, `showPopover({source})` (implicit anchoring), ARIA element reflection, `:state()`, `dialog.requestClose()` and `light-dark()` are all native, and in which every layered surface is positioned correctly. CSS anchor positioning is native in the Chrome, Edge and Firefox Tier-1 versions; Safari 26 positions with the measurement fallback.
 
-Two differences from upstream are worth knowing before you plan around Tier 2:
+Two things are worth knowing before you plan around Tier 2:
 
-- In upstream, a Tier 2 browser loses positioning: layered surfaces open but are not placed next to their trigger. Here, Tier 2 positions layers with a measurement fallback, so surfaces still land beside their trigger.
-- Upstream calls everything older "Tier 3, best effort". Here, below Tier 2 is unsupported; the only guarantee is that importing the modules does not throw.
+- A Tier 2 browser still places layered surfaces beside their trigger: a measurement fallback does the positioning that CSS anchor positioning does in Tier 1.
+- Below Tier 2 is unsupported. The only guarantee there is that importing the modules does not throw.
 
 ## Which features set the floor
 
@@ -62,15 +62,10 @@ Some features are missing from at least one Tier 1 engine. The elements use them
 
 The browser requirement is concentrated in the layered-surface elements: anything that renders content in an overlay positioned against a trigger.
 
-- `tct-tooltip`, `tct-hover-card`, `tct-popover`
-- `tct-dropdown-menu` (including sub-menus), `tct-context-menu`, `tct-more-menu`
-- `tct-selector`, `tct-multi-selector`, `tct-complex-selector` (dropdown surfaces)
-- `tct-typeahead` and `tct-tokenizer` (suggestion menus)
-- `tct-carousel` (anchored controls) and `tct-outline` (the moving indicator)
-- Menus inside other elements: `tct-breadcrumbs` overflow, `tct-tab-list` menus, `tct-top-nav` menus and mega menus
-- `tct-date-input` and `tct-date-range-input` (calendar popovers), and the `tct-power-search` filter editor
+- Available now: `tct-tooltip`, `tct-hover-card` and `tct-popover`, and the elements that show a tooltip of their own (`tct-button` with a `tooltip`, `tct-icon-button`, `tct-avatar`, `tct-status-dot`, and the truncation tooltip of `tct-text` and `tct-heading`).
+- _Planned_, with the same requirement: the menu elements (`tct-dropdown-menu` with its sub-menus, `tct-context-menu`, `tct-more-menu`), the selectors (`tct-selector`, `tct-multi-selector`, `tct-complex-selector`), `tct-typeahead` and `tct-tokenizer` (suggestion menus), `tct-carousel` (anchored controls), `tct-outline` (the moving indicator), the menus inside `tct-breadcrumbs`, `tct-tab-list` and `tct-top-nav`, the calendar popovers of `tct-date-input` and `tct-date-range-input`, and the `tct-power-search` filter editor.
 
-This list is longer than the one in upstream's guide, which is incomplete: upstream's own source anchors these elements too, and the port anchors every popover consumer the same way. If your product uses none of these, it has no anchor-positioning requirement at all, and it needs `light-dark()` only for exact theme colours. Page layout, typography, forms, buttons, cards, tables and navigation all work down to Tier 2 with no special handling. Native `<dialog>` surfaces (`tct-dialog`, `tct-alert-dialog`, `tct-bottom-sheet`, `tct-lightbox`, `tct-command-palette`) do not depend on anchoring.
+If your product uses none of these, it has no anchor-positioning requirement at all, and it needs `light-dark()` only for exact theme colours. Page layout, typography, forms, buttons, cards, tables and navigation all work down to Tier 2 with no special handling. Native `<dialog>` surfaces (`tct-dialog`, `tct-alert-dialog`, `tct-bottom-sheet`, and the planned `tct-lightbox` and `tct-command-palette`) do not depend on anchoring.
 
 ## What the library guarantees
 
@@ -93,7 +88,7 @@ If your audience includes browsers below Tier 2, you have these options, cheapes
 
 1. **Accept Tier 2 behaviour.** If your audience is on Chrome 116 and later, Firefox 125 and later or Safari 17 and later, you already have a working, fully operable experience with no extra work.
 2. **Gate the elements.** Detect the Popover API and show a static message, or a server-rendered fallback, to browsers without it. The library never ships a polyfill, and a polyfill for Popover or anchor positioning is not tested against these elements.
-3. **Server-render meaning first.** Write the content so that it is understandable without the elements (headings, lists, links, forms). Undefined tags are inert inline elements, so the content stays readable. The optional cloak stylesheet (_planned_) hides undefined tags briefly, and it fails open so content is never lost when a script does not load.
+3. **Server-render meaning first.** Write the content so that it is understandable without the elements (headings, lists, links, forms). Undefined tags are inert inline elements, so the content stays readable. The optional cloak stylesheet (`@tecton-astryx/components/cloak.css`, also part of `tecton.css`) hides undefined tags briefly, and it fails open after `--tct-cloak-timeout` (2 seconds by default) so content is never lost when a script does not load.
 
 Feature-detect at run time rather than sniffing user agents. Use the library's own detection, which is what the elements use:
 
@@ -133,7 +128,7 @@ restore();
 
 ## How the floors move
 
-The version floors above are the project's recorded browser policy. They are not a rolling window: they change only through a new decision, and the change appears on this page.
+The version floors above are the library's browser policy. They are not a rolling window: they change only deliberately, and the change appears on this page.
 
 The policy behind them is fixed and simple:
 
@@ -145,12 +140,8 @@ The policy behind them is fixed and simple:
 Always feature-detect rather than hard-coding version numbers, so your app adapts as the platform moves.
 
 {/*
-Adapted from Astryx docs topic `browser-support` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md), rewritten for D-010 / ARCHITECTURE section 1.
-Section map: Overview -> Overview; Support Tiers -> Support tiers; Which Features Set the Floor -> Which features set the floor (+ progressive enhancement);
-Which Components Are Affected -> Which elements are affected (full list per inventory finding D11); What Astryx Guarantees -> What the library guarantees;
-Supporting Older Browsers -> Supporting older browsers; How These Tiers Move Over Time -> How the floors move.
-Availability figures come from modern-web-guidance (skill 2026_09_04-7de96777). NOTE for the orchestrator: the guide data lists "anchor positioning" as limited
-availability (Safari 27 only), which disagrees with A-01/D-010; this page follows D-010 and tells readers to feature-detect. See the hand-off open questions.
+Sources: docs/ARCHITECTURE.md section 1 (D-010, D-014); packages/core/src/features.ts; tools/css/shared.ts (cloak.css).
+Availability figures come from modern-web-guidance (skill 2026_09_04-7de96777).
 Guides: [mwg:web-components] [mwg:custom-elements] [mwg:form-associated-custom-elements] [mwg:position-aware-tooltips]
 [mwg:resilient-context-menus-and-nested-dropdowns] [mwg:animate-to-from-top-layer] [mwg:persistent-top-layer-ui] [mwg:light-dismiss-a-dialog]
 [mwg:declarative-dialog-popover-control] [mwg:move-dom-element-without-losing-state] [mwg:dark-mode] [mwg:sanitize-untrusted-html] [mwg:css-layout]

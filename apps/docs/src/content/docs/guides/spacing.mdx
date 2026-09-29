@@ -9,7 +9,7 @@ sidebar:
 
 The design system uses a 4 px base-unit spacing scale. Element `gap` and `padding` attributes accept step values that map to these tokens. The scale gives fine-grained control at the small end (2, 4 and 6 px) and a consistent rhythm at larger sizes (multiples of 4 px).
 
-Tecton's own spacing scale is the same 4 px grid. Its `space.25` (2 px) and `space.75` (6 px) are Astryx's `--spacing-0-5` and `--spacing-1-5`, and Tecton adds larger steps (56 to 144 px) that no element uses. So spacing is **Astryx's scale, kept**: the tokens are labelled _Astryx default_, not Tecton, and no spacing exceptions have been approved.
+Tecton's own spacing scale is the same 4 px grid. Its `space.25` (2 px) and `space.75` (6 px) are `--spacing-0-5` and `--spacing-1-5` here, and Tecton adds larger steps (56 to 144 px) that no element uses. So spacing is **the original scale, kept**: the tokens are labelled _default_, not Tecton, and no spacing exceptions have been approved.
 
 ## Scale
 
@@ -31,7 +31,7 @@ Tecton's own spacing scale is the same 4 px grid. Its `space.25` (2 px) and `spa
 | 11   | `--spacing-11`     | 44 px |
 | 12   | `--spacing-12`     | 48 px |
 
-The same values, without the Astryx naming, are available from the Tecton export as `--tecton-space-*` (see [All tokens](../tokens/#tecton-export-scales)).
+The same values are available under the Tecton export's own names as `--tecton-space-*` (see [All tokens](../tokens/#tecton-export-scales)).
 
 ## Usage
 
@@ -56,9 +56,9 @@ Use logical properties for padding and margin (`padding-inline`, `margin-block-s
 
 ## Adopting Tecton spacing
 
-The plan for spacing is deliberately conservative, because a spacing change moves every layout. The library keeps Astryx's structural baseline, and would apply a Tecton value only where it has been checked against real content, all required states, long and localised labels, narrow containers, zoom and font loading, with no new clipping, overlap, inaccessible overflow or unusable interaction.
+The plan for spacing is deliberately conservative, because a spacing change moves every layout. The library keeps the original structural baseline, and would apply a Tecton value only where it has been checked against real content, all required states, long and localised labels, narrow containers, zoom and font loading, with no new clipping, overlap, inaccessible overflow or unusable interaction.
 
-Tecton's design measures some geometry that differs from Astryx (list rows of 44 and 36 px, table rows of about 44 and 34 px, a smaller switch, chip heights of 24, 20 and 18 px, and others). None of it is applied yet. It is a candidate list for the spacing-exceptions review in the hardening package (WP-H), and any accepted exception will be recorded with the original value, the attempted Tecton value, the retained value and the reason, and will use a named token rather than a one-off literal.
+Tecton's design measures some geometry that differs from the values the elements use (list rows of 44 and 36 px, table rows of about 44 and 34 px, a smaller switch, chip heights of 24, 20 and 18 px, and others). None of it is applied yet. It is a candidate list for a spacing-exceptions review, and any accepted exception will be recorded with the original value, the attempted Tecton value, the retained value and the reason, and will use a named token rather than a one-off literal.
 
 ## Best practices
 
@@ -75,6 +75,6 @@ Tecton's design measures some geometry that differs from Astryx (list rows of 44
 - Mix spacing tokens with raw `px` or `rem` values in the same element.
 
 {/*
-Adapted from Astryx docs topic `spacing` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md). Section map: Overview; Scale; Usage; Best Practices. Added "Adopting Tecton spacing" (IMPLEMENTATION-PLAN section 6, tecton-theme.md section 6, D-002).
-Values from packages/tokens/dist/tokens.json (all upstream-default). Guides: [mwg:css] [mwg:css-layout] [mwg:accessibility]
+Added "Adopting Tecton spacing" (docs/research/tecton-theme.md section 6, D-002). Values from packages/tokens/dist/tokens.json (all status `default`).
+Guides: [mwg:css] [mwg:css-layout] [mwg:accessibility]
 */}

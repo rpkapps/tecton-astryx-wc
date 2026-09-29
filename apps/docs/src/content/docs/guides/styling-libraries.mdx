@@ -67,7 +67,7 @@ const value = tokenVar(surface); // 'var(--color-background-surface)'
 
 ## Tailwind
 
-Tailwind v4 maps a theme variable to a CSS variable with `@theme inline`, so utility classes stay in sync with the active tokens. There is no bridge stylesheet in the first release (unlike upstream's `tailwind-theme.css`); the mapping below is the whole of it, and you choose the utility names.
+Tailwind v4 maps a theme variable to a CSS variable with `@theme inline`, so utility classes stay in sync with the active tokens. There is no bridge stylesheet in the first release; the mapping below is the whole of it, and you choose the utility names.
 
 ```css title="global.css"
 @layer theme, base, tecton.reset, tecton.tokens, tecton.light-dom, components, utilities;
@@ -245,7 +245,7 @@ const chartOptions = {
 
 The module is a snapshot of the shipped Tecton values. It does not reflect your overrides, a nested `data-theme` island or a `data-media-theme` surface. To get the value in force at a place in the page, paint the token onto an element and read the computed style; see [Reading the theme from JavaScript](../theme/#reading-the-theme-from-javascript).
 
-_Planned:_ `resolveThemeTokens`, `registerTheme` and a token-reading controller for the theme element, ported from upstream's `useTheme` family.
+_Planned:_ `resolveThemeTokens`, `registerTheme` and a token-reading controller for the theme element.
 
 ### Non-CSS processing best practices
 
@@ -270,9 +270,8 @@ _Planned:_ `resolveThemeTokens`, `registerTheme` and a token-reading controller 
 6. Declare the layer order once, before any import, and assign every stylesheet to a layer on purpose.
 
 {/*
-Adapted from Astryx docs topic `styling-libraries` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md).
-Section map: Core Principle; Choose an Integration Path; Best Practices; Plain CSS and CSS Modules; StyleX -> StyleX and typed names; Tailwind; Panda, Chakra...; MUI...; Emotion...;
-UnoCSS...; Non-CSS Processing (+ Best Practices, as a subsection); Interop Checklist. Tailwind bridge: upstream's tailwind-theme.css is not part of the architecture; the page shows the equivalent @theme inline mapping.
+Tailwind bridge: a bridge stylesheet is not part of the architecture; the page shows the equivalent @theme inline mapping.
 Tailwind v4 collision list is exactly the four --font-weight-* names (packages/tokens/src/pipeline/checks.ts DOCUMENTED_TAILWIND_COLLISIONS).
+Section map: Core principle; Choose an integration path; Best practices; Plain CSS and CSS Modules; StyleX and typed names; Tailwind; Panda, Chakra; MUI; Emotion; UnoCSS; Non-CSS processing; Interop checklist.
 Guides: [mwg:css] [mwg:styling-web-components] [mwg:design-token-reactivity] [mwg:dark-mode] [mwg:component-specific-light-dark-theme]
 */}

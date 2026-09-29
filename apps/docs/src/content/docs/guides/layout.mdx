@@ -6,7 +6,7 @@ sidebar:
 ---
 
 :::caution[Planned elements]
-The layout elements (`tct-app-shell`, `tct-layout`, `tct-section`, `tct-card`, `tct-stack` and friends) are delivered in the layout work packages. The examples below show the target API from the architecture's mapping rules (`hasX` becomes `has-x`, `isX` becomes `x`, ReactNode content props become named slots). Attribute and slot names on the generated element pages are authoritative; in particular, how a region attaches to `tct-layout` (a named slot, as shown here, or a child element) is fixed on that page.
+The layout elements (`tct-app-shell`, `tct-layout`, `tct-section`, `tct-card`, `tct-stack`, `tct-hstack`, `tct-vstack`, `tct-grid` and friends) are not available yet, and neither are the navigation elements and `tct-table`. The examples below show the target API from the architecture's mapping rules (`hasX` becomes `has-x`, `isX` becomes `x`, ReactNode content props become named slots). Attribute and slot names on the element pages are authoritative once the elements ship; in particular, how a region attaches to `tct-layout` (a named slot, as shown here, or a child element) is fixed on that page. Elements that exist today (`tct-text`, `tct-heading`, `tct-list`, `tct-toolbar`, `tct-status-dot`, `tct-empty-state`, `tct-size-provider`) are used as documented.
 :::
 
 ## Overview
@@ -18,7 +18,7 @@ Build a layout outside-in. Settle the shell and its region budgets before any co
 3. **Spacing:** hold one content line per region, then tune gaps and density.
 4. **Breakpoints:** decide what each region does as width changes.
 
-This guide decides layout, not element APIs. Read an element's generated page (or run `tct component <tag>`, _planned_) for its attributes, slots and events. The `tct layout` command (_planned_, WP-AI) generates and checks layouts from a compressed expression and outputs `tct-*` markup.
+This guide decides layout, not element APIs. Read an element's page (or run `tct component <tag>`, _planned_) for its attributes, slots and events. The `tct layout` command (_planned_) will generate and check layouts from a compressed expression and output `tct-*` markup.
 
 ## Scaffold
 
@@ -254,7 +254,7 @@ Grouping comes from contrast between tight and generous gaps, not one repeated v
 
 **Verify:** with every border removed, you can still name the groups from spacing alone. If you cannot, the intervals are too uniform. Form fields are the exception: `tct-form-layout` owns their spacing.
 
-The spacing steps are the Astryx 4 px scale, unchanged by Tecton (`--spacing-1` is 4 px, `--spacing-4` is 16 px). See [Spacing](../spacing/).
+The spacing steps are the 4 px scale, unchanged by Tecton (`--spacing-1` is 4 px, `--spacing-4` is 16 px). See [Spacing](../spacing/).
 
 ### Density and size
 
@@ -303,7 +303,7 @@ Lock what each region does as width changes, and pair every line of the contract
 - **Resize:** content flexes while fixed regions hold their budgets, and text stays capped by `content-width` so line length holds.
 - **Swap:** navigation becomes the mobile navigation at the shell's mobile breakpoint; the side panel becomes a dialog or bottom sheet, driven by a media query.
 
-The named breakpoints are the Astryx defaults, retained on purpose because Tecton has none (_Astryx-retained_): `sm` 640, `md` 768, `lg` 1024, `xl` 1280 and `2xl` 1536 CSS pixels. They are theme metadata, exported from `@tecton-astryx/tokens/tokens.json` as `breakpoints`, and they are not custom properties, because custom properties cannot be used in a media query.
+The named breakpoints are retained defaults, kept on purpose because Tecton has none: `sm` 640, `md` 768, `lg` 1024, `xl` 1280 and `2xl` 1536 CSS pixels. They are theme metadata, exported from `@tecton-astryx/tokens/tokens.json` as `breakpoints`, and they are not custom properties, because custom properties cannot be used in a media query.
 
 ```html title="Contract wired to a query"
 <!-- Recommended thresholds: 3 regions above 1024, 2 from 768, 1 below.
@@ -360,9 +360,9 @@ For responsiveness inside a component or a region, prefer container queries over
 - Wire a breakpoint in CSS that the contract comment never mentions.
 
 {/*
-Adapted from Astryx docs topic `layout` (+ `layout.doc.dense`) (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md).
 Section map (1:1): Overview; Scaffold (Shell, Navigation, Best practices); Structure (Type hierarchy, Containers, Headers and footers, Side panels, Best practices);
-Spacing (Alignment, Rhythm, Density and size, Best practices); Breakpoints (Responsive contract, Best practices). Upstream `astryx build`/template steps are deferred (templates library out of scope);
+Spacing (Alignment, Rhythm, Density and size, Best practices); Breakpoints (Responsive contract, Best practices). The template steps are deferred (templates library out of scope);
 `useMediaQuery` becomes a plain matchMedia listener in app code (core also has MediaQueryController for element authors).
+Samples that use the planned layout elements (tct-app-shell, tct-layout*, tct-section, tct-card, tct-stack, tct-hstack, tct-vstack, tct-grid, tct-form-layout) await their merge: see the hand-off report.
 Guides: [mwg:css-layout] [mwg:size-aware-styling] [mwg:css] [mwg:accessibility]
 */}

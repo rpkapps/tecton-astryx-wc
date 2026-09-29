@@ -5,6 +5,8 @@ sidebar:
   order: 28
 ---
 
+import Example from '@/components/Example.astro';
+
 ## When to use
 
 Consistent illustration usage reinforces brand identity and helps users understand context at a glance. Use illustrations in these contexts:
@@ -51,6 +53,16 @@ Place illustrations inside `tct-center` with supporting text stacked below. Typi
 
 For the common case of an empty region, `tct-empty-state` composes the heading, description, an icon and its actions for you; reach for the manual composition above when you need a larger illustration.
 
+<Example
+  title="An empty state with an icon and actions"
+  description="tct-empty-state composes the icon, heading, description and next-step actions. Put your own illustration in the icon slot when you need one."
+  source={`<tct-empty-state heading="No results found" description="Try adjusting your search or filters.">
+  <tct-icon slot="icon" name="search" size="lg"></tct-icon>
+  <tct-button slot="actions" variant="secondary" label="Go back"></tct-button>
+  <tct-button slot="actions" variant="primary" label="Clear filters"></tct-button>
+</tct-empty-state>`}
+/>
+
 ## Delivering illustrations
 
 Prefer SVG for flat illustrations: it is small and sharp at every density, and an inline SVG (unlike one loaded through `<img>`) can use the colour tokens. Give every `<img>` its `width` and `height` so that the page does not shift when it loads. If a large illustration is the largest element on first paint (a full-page onboarding hero), mark it `fetchpriority="high"`, never `loading="lazy"`, and use an `<img>` or `<picture>` rather than a CSS background, because images referenced only from CSS are not found by the browser's preload scanner. Illustrations further down the page take `loading="lazy"`.
@@ -68,7 +80,7 @@ Illustrations sit on the page surface, so they must work on both `--color-backgr
 - **Ship two versions** and choose with `prefers-color-scheme` (`<picture>` with a `media` source). If your page lets people pin a mode with `data-theme`, this will disagree with the pinned mode, so prefer the first two options.
 
 {/*
-Adapted from Astryx docs topic `illustrations` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md). Section map (1:1): When to Use; Guidelines; Placement. Added: Light and dark. The library ships no illustration set (inventory 9.1: port guidance as-is).
-Attribute names on tct-center and tct-vstack (h-align) follow the ARCHITECTURE 7.2 mapping (hAlign -> h-align) and are planned; see each element page.
+Section map (1:1): When to use; Guidelines; Placement. Added: Light and dark. The library ships no illustration set.
+Attribute names on tct-center and tct-vstack (h-align) follow the ARCHITECTURE 7.2 mapping (hAlign -> h-align); the layout elements are planned, so the manual composition sample awaits their merge. tct-empty-state is available.
 Guides: [mwg:accessibility] [mwg:dark-mode] [mwg:deliver-optimized-decorative-images] [mwg:optimize-image-priority]
 */}

@@ -5,6 +5,8 @@ sidebar:
   order: 7
 ---
 
+import Example from '@/components/Example.astro';
+
 Shadow DOM is a style boundary. Page rules do not reach into an element, and an element's own rules do not leak out. Only inherited properties cross it, and that includes CSS custom properties. Everything on this page is a deliberate way across the boundary, in the order you should reach for it.
 
 ## Overview
@@ -18,8 +20,8 @@ There are several ways to style things. Here is when to use each:
 | `::part()`                     | One anatomy element of one element type, with any property                     | `tct-button::part(button) { text-transform: uppercase; }`      |
 | `:state()`                     | Styling on a runtime state the element owns (read-only)                        | `tct-button:state(loading) { … }`                              |
 | Component custom properties    | The few knobs an element documents                                             | `tct-button { --button-focus-offset: 3px; }`                   |
-| `::slotted()`                  | Small touch-ups to content you slot in                                         | `tct-card ::slotted(img) { … }`                                |
-| `class` and `style` on the host | The element's own box in your layout: margin, grid area, flex sizing, width   | `<tct-card class="span-2">`                                    |
+| `::slotted()`                  | Small touch-ups to content you slot in                                         | `tct-dialog ::slotted(img) { … }`                              |
+| `class` and `style` on the host | The element's own box in your layout: margin, grid area, flex sizing, width   | `<tct-button class="push-end">`                                |
 | Tailwind utilities             | Page layout and wrappers                                                       | `<div class="flex gap-3 p-4">`                                 |
 | Styling-library token aliases  | Keeping Tailwind, Panda, MUI or CSS-in-JS in sync with the tokens              | See [Styling library interop](../styling-libraries/)           |
 
@@ -27,15 +29,15 @@ Every approach resolves to the same design tokens, so theming and dark mode work
 
 ## Where `xstyle` and `className` went
 
-Astryx for React gives every component an `xstyle` prop (StyleX styles), a `className` and a `style`. None of those is an API here, and this is a recorded, approved difference. There is no build-time styling library to feed, and a `class` on a custom element only reaches its host box, not the parts inside its shadow root. The replacements are:
+The React components give every component an `xstyle` prop (StyleX styles), a `className` and a `style`. None of those is an API here. There is no build-time styling library to feed, and a `class` on a custom element only reaches its host box, not the parts inside its shadow root. The replacements are:
 
-| Astryx for React                          | Here                                                                                     |
+| React components                          | Here                                                                                     |
 | ----------------------------------------- | ---------------------------------------------------------------------------------------- |
 | `xstyle` (StyleX overrides)               | A rule in your stylesheet that targets the element: `tct-button::part(button)`, a custom property, or a token |
 | `className`                               | The standard `class` attribute on the host. It styles the host box, so use it for layout |
 | `style`                                   | The standard `style` attribute on the host, with the same scope as `class`               |
 | `data-*`, `aria-*`, `id`, event handlers  | The same attributes and events, on the host                                              |
-| `ref`                                     | The element itself is the DOM node; some elements also expose getters such as `control` |
+| `ref`                                     | The element itself is the DOM node; some elements also expose getters such as `control`  |
 
 ## Design tokens first
 
@@ -65,29 +67,31 @@ Do not write colour literals (`#fff`, `rgb(…)`) in code that sits next to the 
 
 An element's visual axes are ordinary attributes. Boolean attributes follow the platform: presence means true, and the value `"false"` is not a thing. The generated element page lists every attribute, its type and its default.
 
-```html
-<tct-button variant="primary" size="sm">Save</tct-button>
-<tct-card elevation="low">A raised card</tct-card>
-<tct-heading level="1" type="display-1">Hero title</tct-heading>
-```
+<Example
+  title="Visual axes as attributes"
+  description="A small primary button, a raised icon button and a level 2 heading in the display type."
+  source={`<tct-button variant="primary" size="sm" label="Save"></tct-button>
+<tct-icon-button label="Search" icon="search" elevation="low"></tct-icon-button>
+<tct-heading level="2" type="display-3">Hero title</tct-heading>`}
+/>
 
 Enumerated attributes are validated. An unknown value falls back to the default, and in development (`globalThis.tctDevMode = true`) the element warns once.
 
 ## `::part()`: one anatomy element
 
-Elements expose their painted anatomy as parts, one per Astryx theming target (kebab-case, without the component prefix): a button exposes `button`, and a selector exposes parts such as `popup`, `option`, `search` and `clear-icon`. Each element's page lists its parts. Parts accept any CSS property, and rules that you write in the page win over the element's internal layers.
+Elements expose their painted anatomy as parts, one per styled element (kebab-case, without the component prefix): a button exposes `button`, a dialog exposes `dialog` and `content`, and a text input exposes parts such as `field`, `control`, `label` and `status`. Each element's page lists its parts. Parts accept any CSS property, and rules that you write in the page win over the element's internal layers.
 
 ```css
 tct-button::part(button) {
   letter-spacing: 0.02em;
 }
 
-tct-selector::part(popup) {
+tct-dialog::part(content) {
   max-block-size: 24rem;
 }
 ```
 
-A composite that embeds another element re-exports that element's parts under qualified names, so the upstream target names survive: for example, the selector's `popup` becomes `selector-popup` on a composite that contains it.
+A composite that embeds another element re-exports that element's parts under qualified names, so they stay reachable: for example, `tct-list-item` embeds `tct-item` and exposes its `item` part as `list-item` (and `item`). The element's page says which names it re-exports.
 
 Parts are versioned API. Adding one is a minor change, and removing or renaming one is a major change. Elements only expose a part when the anatomy paints something, so there is no part on a wrapper that paints nothing.
 
@@ -107,14 +111,14 @@ tct-text-input:state(user-invalid) {
 }
 ```
 
-Common states are `loading`, `open`, `checked`, `user-invalid` and `highlighted`, and slot-presence states such as `has-description`. They are documented per element. A custom state can be styled but not set from outside, which keeps the element the only writer. Two things to remember:
+Common states are `loading`, `open`, `pressed`, `selected`, `disabled`, `busy`, `user-invalid` and `invalid`, and slot-presence states such as `has-start` and `has-end`. They are documented per element. A custom state can be styled but not set from outside, which keeps the element the only writer. Two things to remember:
 
 - Custom states are not serialised, so anything needed for first paint on a server-rendered page must be an attribute, not a state.
 - `:state()` is present in every Tier 1 engine but may not match in Tier 2. Nothing inside the library depends on it, but your own styles that do will not apply there. See [Browser support](../browser-support/).
 
 ## Component custom properties
 
-A small number of properties are documented per element, for the cases where no token or part covers the need. They are named `--<component>-<css-property>` and never per size. `--button-focus-offset` (default 1 px in Tecton) is one.
+A small number of properties are documented per element, for the cases where no token or part covers the need. They are named `--<component>-<css-property>` and never per size. `--button-focus-offset` (default 1 px in Tecton), `--dialog-padding`, `--spinner-diameter` and `--icon-stroke-width` are examples.
 
 ```css
 tct-button {
@@ -128,28 +132,22 @@ Elements do not seed these properties on `:host`. They read them through a priva
 
 Content you place in a slot belongs to you, so your own CSS styles it, and it inherits `color` and `font` through the host. `::slotted()` can only reach the top-level slotted nodes and loses to your own rules, which is what you want: use it for light touch-ups only. Never use `!important` to force aesthetics through it.
 
-Rich content that an element renders into the light DOM (tables, Markdown) is styled by a low-priority stylesheet in `@layer tecton.light-dom`. Your ordinary CSS overrides it without extra specificity. To opt a subtree out of those styles, mark it with `data-tct-unstyled`.
+Rich content that an element renders into the light DOM (tables, Markdown; both _planned_) is styled by a low-priority stylesheet in `@layer tecton.light-dom`. Your ordinary CSS overrides it without extra specificity. The providers already use that layer: `tct-theme`, `tct-size-provider`, `tct-internationalization-provider` and `tct-link-provider` have no shadow root, and their few styles come from `light-dom.css`.
 
 ## `class`, `style` and the host
 
 The host is a layout box. Use `class` or `style` for the things that place it in your layout: `margin`, `grid-area`, `flex`, `width`, `display`, `align-self`. The painted surface (background, border, padding, radius, shadow, focus ring) lives on an inner part, so style those with `::part()` instead of on the host. A rule on the host paints around the part and can put the radius and the focus ring out of step.
 
-```html
-<div class="toolbar">
-  <tct-button class="push-end" variant="ghost">Cancel</tct-button>
-  <tct-button variant="primary">Save</tct-button>
-</div>
-```
+For a bar of actions, prefer `tct-toolbar`: it puts actions in its `start`, `center` and `end` slots and gives them one tab stop and arrow-key navigation, with no CSS from you.
 
-```css
-.toolbar {
-  display: flex;
-  gap: var(--spacing-2);
-}
-.push-end {
-  margin-inline-start: auto;
-}
-```
+<Example
+  title="A toolbar places actions without CSS"
+  description="Cancel is at the start, Save at the end."
+  source={`<tct-toolbar label="Form actions">
+  <tct-button slot="start" variant="ghost" label="Cancel"></tct-button>
+  <tct-button slot="end" variant="primary" label="Save"></tct-button>
+</tct-toolbar>`}
+/>
 
 Use logical properties (`margin-inline-start`, `padding-block`, `inset-inline-end`) in your own CSS so that layouts mirror in right-to-left.
 
@@ -159,23 +157,29 @@ Attributes you put on the host stay on the host. `data-*` attributes, `id`, `cla
 
 Native events are not renamed. `click`, `input`, `change`, `focus` and `blur` come from the inner control and retarget to the host. Only notifications with no native equivalent are `tct-`prefixed events. Do not add a `role` attribute to an element that already has one; it overrides the role the element sets through `ElementInternals`.
 
-```html
-<tct-card data-testid="user-card" data-user-id="42" aria-label="User profile card">…</tct-card>
-<script type="module">
-  document.querySelector('[data-testid="user-card"]').addEventListener('mouseenter', handleHover);
-</script>
+<Example
+  title="ARIA references and data attributes on the host"
+  description="The description is in your tree, and the text input's inner control is described by it."
+  source={`<tct-text-input label="Email" name="email" data-testid="email" aria-describedby="email-hint"></tct-text-input>
+<tct-text id="email-hint" type="supporting" display="block">We never share your address.</tct-text>`}
+/>
+
+```js
+document.querySelector('[data-testid="email"]').addEventListener('input', handleInput);
 ```
 
 ## Compound elements
 
 Complex elements are composed from smaller ones. Each child is its own element with its own attributes and parts, so you style the pieces individually; there is no single "drill into a sub-part" attribute.
 
-```html
-<tct-dialog id="edit-profile" heading="Edit profile" width="500">
+<Example
+  title="A dialog and its children"
+  description="The dialog owns structure and behaviour; each child styles itself. inline shows the dialog in place, for previews."
+  source={`<tct-dialog id="edit-profile" inline open heading="Edit profile" width="500">
   <tct-text-input label="Name" name="name"></tct-text-input>
-  <tct-button variant="primary">Save</tct-button>
-</tct-dialog>
-```
+  <tct-button variant="primary" label="Save"></tct-button>
+</tct-dialog>`}
+/>
 
 ```css
 /* the dialog owns structure and behaviour; each child styles itself */
@@ -191,10 +195,10 @@ The pattern: the parent element (the dialog) controls structure and behaviour; c
 
 ## Selector surface
 
-When external CSS needs to target an element by property or state, combine the tag name with the reflected attribute. The tag replaces Astryx's stable component class (`.astryx-button`), and the reflected attribute replaces its data attributes:
+When external CSS needs to target an element by property or state, combine the tag name with the reflected attribute. The tag replaces the React components' stable component classes, and the reflected attribute replaces their data attributes:
 
 ```css
-/* Astryx for React: .my-app .astryx-button[data-variant="primary"][data-size="sm"] */
+/* React components: a component class plus [data-variant='primary'][data-size='sm'] */
 .my-app tct-button[variant='primary'][size='sm'] {
   /* small primary buttons in this app context */
 }
@@ -204,9 +208,9 @@ When external CSS needs to target an element by property or state, combine the t
 }
 ```
 
-Only the attributes an element reflects are selectable. Reflection is deliberate and limited: `variant`, `size`, `open`, `disabled`, `readonly`, `required`, `orientation`, and `selected` or `checked` only on non-form items such as tabs and options. Anything the element derives at run time is a custom state.
+Only the attributes an element reflects are selectable. Reflection is deliberate and limited: `variant`, `size`, `open`, `disabled`, `type`, `level`, `orientation` and the like, and `selected` or `checked` only on non-form items. Each element's page says which attributes it reflects. Anything the element derives at run time is a custom state.
 
-Astryx for React also emits deprecated bare prop and state classes (`.primary`, `.sm`, `.level-2`, `.checked`) during a removal window. They are not emitted here, and there is no rewrite step to run. If you are migrating selectors, use the table above and the [React to Web Components](../react-to-web-components/) guide.
+The React components also emit deprecated bare prop and state classes (`.primary`, `.sm`, `.level-2`, `.checked`) during a removal window. They are not emitted here, and there is no rewrite step to run. If you are migrating selectors, use the table above and the [React to Web Components](../react-to-web-components/) guide.
 
 ## Cascade layers
 
@@ -227,7 +231,7 @@ See [Styling library interop](../styling-libraries/) for mapping token names to 
 
 **Don't:**
 
-- Put `style="…"` on raw `<div>` wrappers just to add margin. Put `class` or `style` on the element itself.
+- Put `style="…"` on raw `<div>` wrappers just to add margin. Put `class` or `style` on the element itself, or use a layout element.
 - Hardcode colours (`#fff`, `rgb(…)`). Use `var(--color-*)` tokens.
 - Hardcode spacing (`16px`, `1rem`). Use `var(--spacing-*)` tokens or the element's `gap` and `padding` attributes.
 - Use `!important`. If styles are not applying, check whether you are styling the host instead of a part; parts win by design.
@@ -237,13 +241,10 @@ See [Styling library interop](../styling-libraries/) for mapping token names to 
 
 ## No swizzling, no build step
 
-Astryx's `swizzle` command copies component source into your app, which then needs a build-time StyleX compiler to render. There is nothing to compile here: elements ship as ES modules with their CSS inside, and you need no styling toolchain. The `swizzle` command has no equivalent in the first release. It is tracked with the other non-agent CLI commands as a follow-up.
+The React design system's `swizzle` command copies component source into your app, which then needs a build-time StyleX compiler to render. There is nothing to compile here: elements ship as ES modules with their CSS inside, and you need no styling toolchain. The `swizzle` command has no equivalent in the first release. It is tracked with the other commands beyond agent support as a follow-up.
 
 {/*
-Adapted from Astryx docs topic `styling` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md), with the approved difference A-xstyle (ARCHITECTURE 7.2).
-Section map: Overview -> Overview; xstyle Prop -> Where xstyle and className went; Tailwind Integration -> Tailwind; className and style Props -> class, style and the host;
-Rest Props (Prop Drilling) -> Rest props: attributes and events; Compound Components -> Compound elements; Preferred Selector Surface: Data Attributes -> Selector surface;
-Deprecated: Bare Prop and State Classes -> Selector surface (not emitted); Design Tokens -> Design tokens first; StyleX Build Setup -> No swizzling, no build step; What NOT to Do -> What not to do.
-Added: Attributes, ::part(), :state(), Component custom properties, Slotted content, Cascade layers (ARCHITECTURE 6.1-6.3, 6.7, 7.3).
+Approved difference A-xstyle (ARCHITECTURE 7.2). Section map: Overview; Where xstyle and className went; Design tokens first; Attributes; ::part(); :state(); Component custom properties; Slotted content; class, style and the host; Rest props; Compound elements; Selector surface; Cascade layers; Tailwind; What not to do; No swizzling, no build step.
+Facts verified against packages/components/src (button, dialog, text-input, list, toolbar, icon-button, heading) and custom-elements.json.
 Guides: [mwg:styling-web-components] [mwg:shadow-dom] [mwg:custom-elements] [mwg:accessible-web-components] [mwg:css] [mwg:design-token-reactivity]
 */}

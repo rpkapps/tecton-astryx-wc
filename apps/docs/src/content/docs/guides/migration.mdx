@@ -1,12 +1,18 @@
 ---
 title: Migration Guide
-description: How to migrate an existing Tailwind, shadcn or Radix application to the Tecton Astryx elements incrementally.
+description: How to migrate an existing Tailwind, shadcn or Radix application to the Tecton elements incrementally.
 sidebar:
   order: 12
 ---
 
+import Example from '@/components/Example.astro';
+
 :::note[Two migrations]
-This page is about moving an existing app (Tailwind, shadcn or Radix primitives, or hand-rolled components) onto the elements. If you are moving from Astryx for React, read [React to Web Components](../react-to-web-components/) first: it translates the API, and this page then applies to the rest of the app.
+This page is about moving an existing app (Tailwind, shadcn or Radix primitives, or hand-rolled components) onto the elements. If you are moving from the React components this library is based on, read [React to Web Components](../react-to-web-components/) first: it translates the API, and this page then applies to the rest of the app.
+:::
+
+:::caution[Elements still to come]
+Many elements named on this page (the app shell and navigation, the selectors, the tab list, the command palette, the table, the checkbox, radio and switch controls, the menus) are _planned_. Every element that is not yet available is marked so. The [Components](/components/) section lists what exists; migrate the surfaces that use available elements now, and leave the rest on your current components until they ship.
 :::
 
 ## Overview
@@ -21,24 +27,21 @@ Tailwind can coexist during migration. Use it for legacy wrappers and local layo
 2. Pick the initial colour mode behaviour: follow the system by default, and add a mode switch later if you need one (see [Theming](../theme/#light-and-dark-mode)).
 3. Make the layer order of your CSS explicit before replacing components.
 4. Render the foundation smoke test page and confirm tokens and light-DOM elements keep their styles before migrating any surface.
-5. Move the persistent frame first: `tct-app-shell`, `tct-top-nav`, `tct-side-nav`, page content and mobile navigation.
-6. Replace shared primitives: `tct-button`, `tct-icon-button`, `tct-text-input`, `tct-number-input`, `tct-switch`, `tct-checkbox-input`, `tct-radio-list`, `tct-selector`, `tct-tab-list`, `tct-dialog`, `tct-alert-dialog`, `tct-banner`, toasts, `tct-badge`, `tct-card`, `tct-table` and `tct-list-item`.
+5. Move the persistent frame first: `tct-app-shell`, `tct-top-nav`, `tct-side-nav`, page content and mobile navigation (all _planned_).
+6. Replace shared primitives: `tct-button`, `tct-icon-button`, `tct-text-input`, `tct-dialog`, `tct-alert-dialog`, `tct-banner`, toasts, `tct-badge` and `tct-list-item` are available; `tct-number-input`, `tct-switch`, `tct-checkbox-input`, `tct-radio-list`, `tct-selector`, `tct-tab-list`, `tct-card` and `tct-table` are _planned_.
 7. Replace global workflows: the command palette, the settings popover, the theme toggle, search, filters, create flows and destructive confirmation dialogs.
 8. Remove legacy Tailwind classes from each completed surface, keeping only token-backed layout utilities and local wrappers that still await migration.
 9. Verify both colour modes, keyboard navigation, responsive layout, and empty, error and loading states before moving to the next route.
 
 ## CLI workflow
 
-_Planned (WP-AI)._ Use the CLI as the migration checklist. Read the docs for the pattern you are about to touch, then read the exact element docs before editing.
+_Planned._ Use the CLI as the migration checklist. Read the docs for the pattern you are about to touch, then read the exact element docs before editing.
 
 ```bash
 tct docs migration
 tct docs theme
 tct docs styling
-tct component tct-app-shell
-tct component tct-side-nav
-tct component tct-top-nav
-tct component tct-command-palette
+tct component tct-dialog
 tct component tct-button
 tct component tct-text-input
 ```
@@ -50,17 +53,17 @@ tct docs migration --dense
 tct component tct-button --json
 ```
 
-Templates (`tct template …`) belong to the templates library, which is deferred. The shell and navigation compositions on this page and in [Layout](../layout/) replace them for now.
+Page templates (`tct template …`) belong to the templates library, which is deferred. The compositions on this page and in [Layout](../layout/) replace them for now.
 
 ## Theme and CSS setup
 
-Load the stylesheet once, in the document, so every migrated element reads the same token set. If users can switch between light and dark, keep the choice in application state, apply it to `<html data-theme>` (or a `tct-theme`, _planned_) and persist it.
+Load the stylesheet once, in the document, so every migrated element reads the same token set. If users can switch between light and dark, keep the choice in application state, apply it to `<html data-theme>` (or a `tct-theme`) and persist it.
 
 ```html title="index.html"
 <meta name="color-scheme" content="light dark" />
 <link rel="stylesheet" href="/vendor/tecton-astryx/tecton.css" />
 <script type="module">
-  import '@tecton-astryx/components/app-shell';
+  import '@tecton-astryx/components/button';
 </script>
 ```
 
@@ -95,7 +98,7 @@ In a stylesheet with no layers at all, a zero-specificity reset like `* { paddin
 
 The exposure is smaller for elements than for a library that renders into your DOM. Selectors in your page (including `*`) do not reach inside a shadow root, so a legacy reset cannot flatten the internals of `tct-button`, `tct-text-input` or `tct-dialog`. Three things can still be hit, and they are worth an audit:
 
-- **Light-DOM elements.** Elements that render into your DOM (`tct-table`, `tct-markdown`) are styled by `@layer tecton.light-dom`. An unlayered legacy reset such as `table { border-collapse: collapse }` or `* { padding: 0 }` beats those layered styles silently.
+- **Light-DOM elements.** Elements that render into your DOM are styled by `@layer tecton.light-dom`: the providers (`tct-theme`, `tct-size-provider` and the others) today, and `tct-table` and `tct-markdown` (_planned_) later. An unlayered legacy reset such as `* { padding: 0 }` or `table { border-collapse: collapse }` beats those layered styles silently.
 - **The host boxes.** Rules in your page beat an element's own `:host` rules. A reset that changes `display` or `margin` for arbitrary elements changes the element's layout box.
 - **Token names.** Tokens are unprefixed custom properties on the document. A legacy stylesheet that declares the same names (Tailwind's `--font-weight-*`, or an old shadcn theme) competes with them by layer order.
 
@@ -122,24 +125,14 @@ One more mental model shift: a `class` or utility class you put on an element re
 
 A broken layer order can fail silently and identically on every page, so catch it before feature work instead of after several migrated screens. Render one throwaway page with a few elements as the first migration step.
 
-```html title="Foundation check page"
-<div data-foundation-check>
-  <tct-vstack gap="4">
-    <tct-button variant="primary">Primary action</tct-button>
-    <tct-text-input label="Email" placeholder="you@example.com"></tct-text-input>
-    <tct-card>One card with default padding</tct-card>
-    <tct-table id="check-table"></tct-table>
-  </tct-vstack>
-</div>
+<Example
+  title="Foundation check page"
+  description="A primary button and a text input. The button has visible padding and a filled primary background, and the input has a border and internal spacing, when the foundation is sound."
+  source={`<tct-button variant="primary" label="Primary action"></tct-button>
+<tct-text-input label="Email" placeholder="you@example.com"></tct-text-input>`}
+/>
 
-<script type="module">
-  const table = document.querySelector('#check-table');
-  table.columns = [{key: 'name', header: 'Name'}, {key: 'status', header: 'Status'}];
-  table.data = [{name: 'Foundation', status: 'ok'}];
-</script>
-```
-
-If the button has visible padding and a filled primary background, and the input and card have borders and internal spacing, the foundation is sound. For an assertion that can run in any test runner or a development-only script, check that the tokens are present and that a light-DOM element has kept its padding:
+If the button has visible padding and a filled primary background, and the input has a border and internal spacing, the foundation is sound. Wrap the page in `tct-theme` (a light-DOM element) to check the layered styles too. For an assertion that can run in any test runner or a development-only script, check that the tokens are present and that the light-DOM island has kept its box:
 
 ```js title="Foundation assertion"
 const root = getComputedStyle(document.documentElement);
@@ -147,11 +140,11 @@ if (!root.getPropertyValue('--color-accent').trim()) {
   throw new Error('Foundation broken: tokens.css is not loaded (or is overridden by a later declaration).');
 }
 
-const cell = document.querySelector('[data-foundation-check] td');
-if (!cell) {
-  throw new Error('Foundation check page did not render a table cell.');
+const island = document.querySelector('tct-theme');
+if (!island) {
+  throw new Error('Foundation check page did not render a tct-theme.');
 }
-if (getComputedStyle(cell).paddingInline === '0px') {
+if (getComputedStyle(island).display !== 'block') {
   throw new Error(
     'Foundation broken: an unlayered reset or a later cascade layer is overriding light-DOM ' +
       'element styles. Check that no app reset sits outside the reset layer.',
@@ -159,21 +152,21 @@ if (getComputedStyle(cell).paddingInline === '0px') {
 }
 ```
 
-When this fails, the fix is almost always in the layer order: find the stylesheet that zeroes padding, and move it into the reset layer or delete it.
+When this fails, the fix is almost always in the layer order: find the stylesheet that overrides `display` or zeroes padding, and move it into the reset layer or delete it.
 
 ## Move the app frame first
 
-Start with `tct-app-shell` so page migration happens inside the final navigation, spacing, surface and responsive frame. This also exposes theme and colour issues early, because every route shares the same shell.
+Start with `tct-app-shell` so page migration happens inside the final navigation, spacing, surface and responsive frame. This also exposes theme and colour issues early, because every route shares the same shell. The shell, navigation and layout elements are _planned_; until they ship, keep your current frame and move the content inside it.
 
 | Legacy surface      | Element                                              | Notes                                                                                            |
 | ------------------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
-| Header              | `tct-top-nav`                                        | Product identity, global actions, account entry, and the command or search trigger.              |
-| Sidebar             | `tct-side-nav`                                       | Sections and nested items for route groups. Keep selection state driven by the router.           |
-| Main page wrapper   | `tct-app-shell` and `tct-layout`                     | Let the shell own persistent structure; let route components own page content.                   |
-| Mobile drawer nav   | `tct-mobile-nav`, or the shell's mobile behaviour    | Verify focus, close behaviour and route changes on narrow viewports.                             |
-| Settings menu       | `tct-popover`, `tct-layout` and `tct-switch`         | The home for theme mode and app preferences.                                                     |
+| Header              | `tct-top-nav` (_planned_)                            | Product identity, global actions, account entry, and the command or search trigger.              |
+| Sidebar             | `tct-side-nav` (_planned_)                           | Sections and nested items for route groups. Keep selection state driven by the router.           |
+| Main page wrapper   | `tct-app-shell` and `tct-layout` (_planned_)         | Let the shell own persistent structure; let route components own page content.                   |
+| Mobile drawer nav   | `tct-mobile-nav` (_planned_), or the shell's mobile behaviour | Verify focus, close behaviour and route changes on narrow viewports.                    |
+| Settings menu       | `tct-popover` and a toggle control                   | The home for theme mode and app preferences.                                                     |
 
-Wire routing through `tct-link-provider` (_planned_), so every `tct-link`, navigation item and breadcrumb uses your router instead of doing a full page load.
+Wire routing through `tct-link-provider`, so every `tct-link`, navigation item and breadcrumb uses your router instead of doing a full page load.
 
 ## Map shadcn and Radix primitives
 
@@ -183,15 +176,15 @@ Do not wrap old shadcn components in the new styles. Replace the primitive with 
 | -------------------------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------- |
 | `button` / shadcn Button   | `tct-button` or `tct-icon-button`          | `tct-button` for labelled commands and `tct-icon-button` for icon-only toolbar actions.                  |
 | `input`                    | `tct-text-input`                           | Keep validation state in the element's status and validation, not in ad hoc border classes.              |
-| `textarea`                 | `tct-text-area`                            | When multi-line editing is the primary action.                                                           |
-| `switch`                   | `tct-switch`                               | For persisted boolean settings, including theme mode when it is a binary choice.                         |
-| `checkbox`                 | `tct-checkbox-input` or `tct-checkbox-list` | Use the list for grouped selection.                                                                      |
-| `radio group`              | `tct-radio-list`                           | When exactly one option must be selected from a visible set.                                             |
-| `select` / combobox        | `tct-selector` or `tct-typeahead`          | `tct-selector` for bounded options, `tct-typeahead` for searchable or async options.                     |
-| `tabs` used as page nav    | `tct-tab-list`                             | Use route state or current-page state as the source of truth.                                            |
-| `command` dialog           | `tct-command-palette`                      | Keep app-specific search sources outside the shell and feed searchable items.                            |
-| `dropdown-menu`            | `tct-dropdown-menu` or `tct-more-menu`     | `tct-more-menu` for compact overflow actions.                                                            |
-| `alert` / callout          | `tct-banner` or a toast                    | A banner for page or section messages, a toast (the imperative `toast()` function, _planned_) for transient feedback. |
+| `textarea`                 | `tct-text-area` (_planned_)                | When multi-line editing is the primary action.                                                           |
+| `switch`                   | `tct-switch` (_planned_)                   | For persisted boolean settings, including theme mode when it is a binary choice. `tct-toggle-button` is available for a pressed or released action. |
+| `checkbox`                 | `tct-checkbox-input` or `tct-checkbox-list` (_planned_) | Use the list for grouped selection.                                                         |
+| `radio group`              | `tct-radio-list` (_planned_)               | When exactly one option must be selected from a visible set. `tct-segmented-control` is available for a small set. |
+| `select` / combobox        | `tct-selector` or `tct-typeahead` (_planned_) | `tct-selector` for bounded options, `tct-typeahead` for searchable or async options.                  |
+| `tabs` used as page nav    | `tct-tab-list` (_planned_)                 | Use route state or current-page state as the source of truth.                                            |
+| `command` dialog           | `tct-command-palette` (_planned_)          | Keep app-specific search sources outside the shell and feed searchable items.                            |
+| `dropdown-menu`            | `tct-dropdown-menu` or `tct-more-menu` (_planned_) | `tct-more-menu` for compact overflow actions.                                                    |
+| `alert` / callout          | `tct-banner` or a toast                    | A banner for page or section messages, a toast (the imperative `toast()` function) for transient feedback. |
 | `dialog`                   | `tct-dialog` or `tct-alert-dialog`         | `tct-alert-dialog` for destructive confirmation and `tct-dialog` for task flows.                         |
 | card-like list row         | `tct-list-item`                            | Prefer it for selectable rows instead of styling a button as a row.                                      |
 
@@ -199,29 +192,29 @@ Radix primitives are behaviour without style, and the elements ship the behaviou
 
 ## Command palette, settings and theme
 
-Move global search to `tct-command-palette` once the shell exists. Treat the palette as a view over app commands: routes, contextual actions, create actions, filters, recent items and entity results. Keep data normalisation in app code, so that search sources always return arrays of searchable items.
+Move global search to `tct-command-palette` (_planned_) once the shell exists. Treat the palette as a view over app commands: routes, contextual actions, create actions, filters, recent items and entity results. Keep data normalisation in app code, so that search sources always return arrays of searchable items.
 
-Put light and dark mode controls in the settings popover or the account menu. The switch should set the mode on `<html data-theme>` (or on the `tct-theme`), not toggle isolated body classes.
+Put light and dark mode controls in the settings popover or the account menu. The control should set the mode on `<html data-theme>` (or on the outermost `tct-theme`), not toggle isolated body classes.
 
 ```html title="Settings popover theme control"
-<tct-switch id="dark-mode" label="Dark mode" description="Use the dark colour theme"></tct-switch>
+<tct-toggle-button id="dark-mode" label="Dark mode"></tct-toggle-button>
 
 <script type="module">
   const toggle = document.querySelector('#dark-mode');
-  toggle.checked = document.documentElement.dataset.theme === 'dark';
-  toggle.addEventListener('change', () => {
-    document.documentElement.dataset.theme = toggle.checked ? 'dark' : 'light';
+  toggle.pressed = document.documentElement.dataset.theme === 'dark';
+  toggle.addEventListener('tct-pressed-change', (event) => {
+    document.documentElement.dataset.theme = event.pressed ? 'dark' : 'light';
   });
 </script>
 ```
 
-A binary switch pins a scheme once it has been chosen; the [theming guide](../theme/#light-and-dark-mode) describes the two-state control that keeps "follow the system" as the default.
+A binary control pins a scheme once it has been chosen; the [theming guide](../theme/#light-and-dark-mode) describes the two-state control that keeps "follow the system" as the default.
 
 ## Verification checklist
 
 - Run the app in light and dark mode and check that surfaces, borders, text, icons, hover states, focus rings and status colours flow together.
-- Open the command palette from the shell, type into it, select items by keyboard, and confirm focus returns to the trigger.
-- Check the side navigation collapsed, expanded, active, hovered, nested and on mobile.
+- Open the command palette from the shell, type into it, select items by keyboard, and confirm focus returns to the trigger (once the palette ships).
+- Check the side navigation collapsed, expanded, active, hovered, nested and on mobile (once it ships).
 - Verify settings popovers and dialogs in a real browser. The native `<dialog>` and [`Popover`](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API) APIs may not exist, or may behave differently, in a DOM emulation such as jsdom; run browser-level tests for these.
 - Search for leftover hardcoded Tailwind colours, arbitrary hex values and one-off hover colours after each route migration.
 - Run component tests, the build, and at least one browser screenshot pass for each migrated route.
@@ -231,22 +224,18 @@ A binary switch pins a scheme once it has been chosen; the [theming guide](../th
 When using an AI coding agent, give it an explicit migration loop instead of asking for a full-app rewrite.
 
 ```text title="Paste this into your AI"
-We are migrating this existing Tailwind/shadcn app to the Tecton Astryx Web Components incrementally.
+We are migrating this existing Tailwind/shadcn app to the Tecton Web Components incrementally.
 
-First run:
-- tct docs migration --dense
-- tct docs theme --dense
-- tct docs styling --dense
+First read:
+- /llms.txt on the Tecton docs site, then the Migration, Theming and Styling guides
+- the page of every element you plan to use
 
-Then migrate one route or shell surface at a time. Keep business logic and routing intact. Replace shadcn/Radix/Tailwind primitives with tct-* elements, remove hardcoded colours, verify light and dark mode, and take screenshots before moving to the next surface.
+Then migrate one route or shell surface at a time. Keep business logic and routing intact. Replace shadcn/Radix/Tailwind primitives with the tct-* elements that exist (skip the planned ones), remove hardcoded colours, verify light and dark mode, and take screenshots before moving to the next surface.
 ```
 
-Upstream also has a draft guide for installing Astryx through the shadcn registry. It is excluded from upstream's stable docs, and it does not apply here.
-
 {/*
-Adapted from Astryx docs topic `migration` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md).
-Section map (1:1): Overview; Recommended Order; CLI Workflow; Theme and CSS Setup; Cascade Layer Safety; Foundation Smoke Test; Move the App Frame First; Map shadcn and Radix Primitives;
-Command Palette, Settings, and Theme; Verification Checklist; AI Migration Prompt. `shadcn-compatibility.doc.draft` (canary/draft upstream) is recorded as not applicable at the end.
-Cascade layer safety is rewritten for shadow DOM: selectors in the page do not pierce shadow roots, so the exposure is light-DOM elements, host boxes and token names.
+Section map: Overview; Recommended order; CLI workflow; Theme and CSS setup; Cascade layer safety; Foundation smoke test; Move the app frame first; Map shadcn and Radix primitives; Command palette, settings and theme; Verification checklist; AI migration prompt.
+Cascade layer safety is written for shadow DOM: selectors in the page do not pierce shadow roots, so the exposure is light-DOM elements, host boxes and token names.
+Elements verified against packages/components/custom-elements.json; the prompt uses llms.txt because the tct CLI is planned.
 Guides: [mwg:shadow-dom] [mwg:styling-web-components] [mwg:css] [mwg:dark-mode] [mwg:web-components] [mwg:accessibility]
 */}

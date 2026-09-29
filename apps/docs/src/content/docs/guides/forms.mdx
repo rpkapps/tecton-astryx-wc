@@ -5,10 +5,12 @@ sidebar:
   order: 11
 ---
 
-Upstream Astryx has no single forms guide: form behaviour is described component by component, and its inputs are controlled (a `value` and an `onChange`). Web Components use the platform's form model instead, so this page collects the rules that hold for every form element. The elements in question are `tct-text-input`, `tct-text-area`, `tct-number-input`, `tct-checkbox-input`, `tct-switch`, `tct-radio-list`, `tct-slider`, `tct-selector`, the date and time inputs, `tct-file-input`, `tct-tokenizer` and the rest of the value controls, and `tct-button` as a submitter.
+import Example from '@/components/Example.astro';
 
-:::caution[Planned elements]
-The shared machinery described here (`FormControlMixin`, the submitter and implicit-submission helpers, field chrome) is merged in `@tecton-astryx/core`. The elements that use it are delivered in the form work packages, so examples show the target API. Each element's page lists its own attributes, validation options and keyboard contract.
+The React components describe form behaviour component by component, and their inputs are controlled (a `value` and an `onChange`). Web Components use the platform's form model instead, so this page collects the rules that hold for every form element. Today those are `tct-text-input` and `tct-segmented-control`, plus `tct-button` as a submitter. The rest of the value controls follow the same rules as they arrive: `tct-text-area`, `tct-number-input`, `tct-checkbox-input`, `tct-switch`, `tct-radio-list`, `tct-slider`, `tct-selector`, the date and time inputs, `tct-file-input` and `tct-tokenizer` (all _planned_).
+
+:::caution[Some elements are planned]
+The shared machinery described here (`FormControlMixin`, the submitter and implicit-submission helpers, field chrome) is merged in `@tecton-astryx/core`, and `tct-text-input` and `tct-segmented-control` use it, with `tct-field` and `tct-field-status` for the field chrome. The other elements named above are not merged yet, so examples on this page use only what exists. Each element's page lists its own attributes, validation options and keyboard contract.
 :::
 
 ## Overview
@@ -22,20 +24,27 @@ Every value control is a form-associated custom element (FACE). It behaves like 
 
 Form-associated custom elements are widely available (Chrome 77, Firefox 98, Safari 16.4), well below the library's Tier 2 floor, so there is no hidden-input fallback and no polyfill.
 
-```html
-<form id="signup">
+<Example
+  title="A form of value controls"
+  description="Submit the form to see its FormData. A blocked submit (an empty required field) reports the problem and focuses the field."
+  source={`<form id="signup-form">
   <tct-text-input label="Email" name="email" type="email" autocomplete="email" required></tct-text-input>
-  <tct-checkbox-input label="Send me product updates" name="updates" value="yes"></tct-checkbox-input>
-  <tct-button type="submit" variant="primary">Create account</tct-button>
+  <tct-segmented-control label="Plan" name="plan" value="team">
+    <tct-segmented-control-item value="solo" label="Solo"></tct-segmented-control-item>
+    <tct-segmented-control-item value="team" label="Team"></tct-segmented-control-item>
+  </tct-segmented-control>
+  <tct-button type="submit" variant="primary" label="Create account"></tct-button>
+  <tct-text id="signup-form-result" type="supporting" display="block">Nothing submitted yet.</tct-text>
 </form>
 
 <script type="module">
-  document.querySelector('#signup').addEventListener('submit', (event) => {
+  const form = document.querySelector('#signup-form');
+  form.addEventListener('submit', (event) => {
     event.preventDefault();
-    console.log(Object.fromEntries(new FormData(event.target)));
+    document.querySelector('#signup-form-result').textContent = JSON.stringify(Object.fromEntries(new FormData(form)));
   });
-</script>
-```
+</script>`}
+/>
 
 ## Values
 
@@ -55,7 +64,7 @@ Structured data is set as a property, never as a JSON attribute: options for a s
 
 ### Controlled and uncontrolled
 
-Astryx for React requires most inputs to be controlled. Here every input works both ways, and the difference is only in what you do:
+The React components require most inputs to be controlled. Here every input works both ways, and the difference is only in what you do:
 
 - **Uncontrolled (the default):** set the `value` attribute for the default, and read the value from the element, from `FormData` or from the events. The element owns its state, like a native `<input>`.
 - **Controlled:** write the property, listen for the event, and set the property again in the handler. Where an element also fires a cancelable `tct-<property>-change` intent event, `preventDefault()` refuses the change, and the element keeps its state.
@@ -69,8 +78,8 @@ Writing a property or attribute never fires events. `input` and `change` fire on
 | `input`                            | On every user edit (typing, dragging a slider). It is composed, and it comes from the inner control.                                                    |
 | `change`                           | On commit: for text fields on blur or Enter, for discrete controls (checkboxes, switches, radios) on each toggle, which fires `input` and then `change`. The element re-dispatches it once from the host, because the native `change` event does not cross a shadow boundary. |
 | `invalid`                          | Natively, on the host, when validation fails.                                                                                                            |
-| `tct-value-change`                 | For non-form selection (tabs, segmented controls, accordions). It is not used on value controls.                                                        |
-| `tct-open-change`, `tct-clear`, `tct-remove` | Intent and action events of specific elements. See each element's page.                                                                         |
+| `tct-value-change`                 | For selection that is not a form value: a toggle button group or a collapsible group (accordion). It is not used on value controls, which fire `input` and `change`. |
+| `tct-enter`, `tct-clear`           | Cancelable action events of `tct-text-input`: Enter pressed (not while an IME composes), and the clear button pressed. See each element's page.        |
 
 Native events are never renamed or wrapped: `click`, `focus`, `blur`, `focusin` and `focusout` retarget to the host, and the element does not dispatch a second copy.
 
@@ -118,7 +127,7 @@ Do not disable the submit button to stop people from submitting an invalid form:
 
 `tct-button` is a form participant with the same semantics as a native `<button>`:
 
-- `type="submit"` (the default inside a form) submits; `type="reset"` calls `form.reset()`; `type="button"` does nothing to the form.
+- `type="submit"` submits; `type="reset"` calls `form.reset()`; `type="button"`, the default, does nothing to the form. Set `type="submit"` on the button that should submit.
 - `name`, `value`, `formaction`, `formmethod`, `formenctype`, `formtarget` and `formnovalidate` work as on a native button, and the `FormData` contains the submitter's `name=value`.
 - Calling `form.requestSubmit()` works, with or without a submitter.
 
@@ -128,7 +137,7 @@ A custom element cannot be a native `SubmitEvent.submitter`, so the button inser
 
 Pressing Enter (without modifiers, and not while composing) in a single-line control runs the form's implicit submission, following the HTML rules: the form's default submit button is activated (the first submit button in `form.elements`, native or `tct-button`; a disabled default button submits nothing), or, when the form has no submit button, the form is submitted only if it has exactly one field that blocks implicit submission. The `enterkeyhint` attribute passes through to the inner input so mobile keyboards label the key correctly.
 
-Multi-line controls (`tct-text-area`, the chat composer) do not submit on a bare Enter; they insert a newline, and their own submit shortcuts are documented on their pages.
+Multi-line controls (`tct-text-area` and the chat composer, both _planned_) do not submit on a bare Enter; they insert a newline, and their own submit shortcuts are documented on their pages.
 
 ### IME composition
 
@@ -158,15 +167,20 @@ A control renders its own label, description and status message next to its nati
 
 For arbitrary or native controls that you want the same chrome around, use `tct-field`:
 
-```html
-<tct-field label="Country" description="Where your card is issued" input-id="country">
-  <select id="country" name="country">…</select>
-</tct-field>
-```
+<Example
+  title="Field chrome around a native control"
+  description="tct-field adds the label, description and status, and wires aria-labelledby and aria-describedby on the slotted select."
+  source={`<tct-field label="Country" description="Where your card is issued" input-id="country">
+  <select id="country" name="country">
+    <option>Norway</option>
+    <option>Brazil</option>
+  </select>
+</tct-field>`}
+/>
 
 `tct-field` sets `aria-labelledby` and `aria-describedby` on the slotted control in your tree, honouring `input-id`, `label-id` and `description-id`. For a radio or checkbox group, `group-label` renders a group caption instead of a label. A status message appears as attached text, detached text or a tooltip, and is announced through the announcer, never through a persistent `role="alert"`.
 
-To lay out a whole form, wrap it in `tct-form-layout`. It sets the direction (vertical, or a two-column form with the labels beside the controls) and the default optionality, so fields mark the exception rather than repeating what is true of the whole form.
+To lay out a whole form, wrap it in `tct-form-layout` (_planned_). It will set the direction (vertical, or a two-column form with the labels beside the controls) and the default optionality, so fields mark the exception rather than repeating what is true of the whole form.
 
 ## Autofill and password managers
 
@@ -174,24 +188,26 @@ To lay out a whole form, wrap it in `tct-form-layout`. It sets the direction (ve
 
 Some password managers and autofill heuristics look for a native `<input>` in the light DOM. For fields where that matters (sign-in and sign-up forms), use the slotted-input mode: give the element your own input, and it uses it as the control.
 
-```html
-<tct-text-input label="Email">
+<Example
+  title="Slotted-input mode"
+  description="Your own native input is the form participant; the label, description and status are wired around it."
+  source={`<tct-text-input label="Email">
   <input slot="input" name="email" type="email" autocomplete="email" required />
-</tct-text-input>
-```
+</tct-text-input>`}
+/>
 
 In this mode the input is a real native form control. It submits itself, its validity is the native one, and the label, description and status are rendered around it and wired with IDs in your tree. The default mode (an input inside the shadow root) is uniform and framework-safe, and it is right for almost every field.
 
 ## Frameworks
 
-The elements are ordinary DOM nodes, so any framework can read and write `value` as a property and listen for `input` and `change`. Typed JSX and Vue definitions, Angular `ControlValueAccessor` directives and form-library adapters are generated from the Custom Elements Manifest by the framework integration package (_planned_, WP-I). Until then, bind the property (not the attribute) for values, and listen to the native events.
+The elements are ordinary DOM nodes, so any framework can read and write `value` as a property and listen for `input` and `change`. Typed JSX and Vue definitions, Angular `ControlValueAccessor` directives and form-library adapters will be generated from the Custom Elements Manifest by the framework integration package (_planned_). Until then, bind the property (not the attribute) for values, and listen to the native events.
 
 ## Server-side rendering and no-JavaScript
 
 Before an element is defined, `<tct-text-input>` is an inert tag and does not submit. If a form must work without JavaScript, render native controls and enhance them: the slotted-input mode above is designed for that, because the native input inside the tag is a real, submitting control from the first byte.
 
 {/*
-Not a port of a single Astryx topic: upstream documents form behaviour per component. Sources: docs/ARCHITECTURE.md sections 7.3, 7.4, 7.6, 9.7, 9.8; docs/plan/DECISIONS.md D-006;
-packages/core/src/mixins/form-control.ts, forms/submitter.ts, forms/implicit-submit.ts, utils/ime.ts (verified).
+Sources: docs/ARCHITECTURE.md sections 7.3, 7.4, 7.6, 9.7, 9.8; docs/plan/DECISIONS.md D-006;
+packages/core/src/mixins/form-control.ts, forms/submitter.ts, forms/implicit-submit.ts, utils/ime.ts; packages/components/src/text-input, segmented-control, field, button (verified).
 Guides: [mwg:form-associated-custom-elements] [mwg:validate-input-after-interaction] [mwg:accessible-error-announcement] [mwg:ime-safe-enter-submit] [mwg:forms] [mwg:accessible-web-components]
 */}

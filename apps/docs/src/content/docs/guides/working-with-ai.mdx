@@ -1,47 +1,51 @@
 ---
 title: Working with AI
-description: How to set up AI coding tools to generate correct tct-* code - the tct CLI, dense and JSON output, agent docs, the MCP server and llms.txt.
+description: How to set up AI coding tools to generate correct tct-* code - llms.txt and the agent registry today, and the planned tct CLI, dense and JSON output, agent docs and MCP server.
 sidebar:
   order: 14
   badge:
-    text: Planned
+    text: Partly planned
     variant: caution
 ---
 
-:::caution[This page describes the AI work package (WP-AI)]
-Everything here except the general advice is a deliverable of WP-AI, the agentic AI support work package (decision D-011). The `tct` command, its output modes, the agent docs generator, the MCP server and `llms.txt` do not exist until WP-AI lands, and the commands below are the specified surface, not something you can run yet. The structure follows Astryx's "Working with AI" page, adapted to Web Components. What is already specified are the inputs the tooling will read: every element must carry agent metadata (keywords, a dense summary and related elements) from its first version, and the docs pipeline generates a Custom Elements Manifest from the source.
+:::caution[What exists today]
+Available now: [llms.txt](/llms.txt), [llms-full.txt](/llms-full.txt) and the machine-readable [agent registry](/agent-registry.json) (also exported as `@tecton-astryx/components/agent-registry.json`). Every element carries agent metadata (keywords, a dense summary and related elements), and the docs pipeline generates a Custom Elements Manifest from the source. The `tct` command, its output modes, the agent-docs generator and the MCP server are _planned_: the commands below are the specified surface, not something you can run yet.
 :::
 
 ## Overview
 
-The design system is built to be AI-friendly: consistent naming, predictable attribute patterns (see [React to Web Components](../react-to-web-components/) for the rules), and a CLI that feeds structured documentation directly into AI context windows. But models still need the right context to avoid falling back to generic HTML or React patterns, or inventing attributes.
+The design system is built to be AI-friendly: consistent naming, predictable attribute patterns (see [React to Web Components](../react-to-web-components/) for the rules), and structured documentation that can be fed directly into an AI context window. But models still need the right context to avoid falling back to generic HTML or React patterns, or inventing attributes.
 
-The CLI includes a built-in agent docs system that generates context files for your AI tool of choice. One command sets up everything your AI needs to write correct `tct-*` code.
+The surface is:
 
-Full parity with Astryx's agent support is a requirement (D-011). The surface is:
-
-| Capability                     | What it is                                                                                                                                       |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Agent metadata per element     | `keywords` (the search index), a dense doc (one-line description, dense usage, do and don't best practices, one-line attribute descriptions), and related elements |
-| The `tct` CLI                  | `component`, `docs`, `search`, `discover`, `controllers`, `doctor`, `gap-report`, `layout`, `init --features agents`, `upgrade`                   |
-| Output modes                   | `--dense` (token-efficient) and `--json` (a stable envelope) on every command                                                                    |
-| MCP server                     | `search(query)` and `get(name)`, as `tct mcp` (stdio) and as a docs-site route                                                                    |
-| `llms.txt`                     | An index for language models, plus JSON and Markdown reference output generated from the manifest and the docs                                    |
-| Agent-eval harness             | Fixture prompts that check an agent produces correct `tct-*` code given the agent docs (internal, delivered with the hardening package)          |
+| Capability                     | What it is                                                                                                                                       | Status    |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------ | --------- |
+| Agent metadata per element     | `keywords` (the search index), a dense doc (one-line description, dense usage, do and don't best practices, one-line attribute descriptions), and related elements | Available |
+| `llms.txt`                     | An index for language models, plus `llms-full.txt` (everything in one file) and a JSON registry, all generated from the manifest and the docs      | Available |
+| The `tct` CLI                  | `component`, `docs`, `search`, `discover`, `controllers`, `doctor`, `gap-report`, `layout`, `init --features agents`, `upgrade`                   | Planned   |
+| Output modes                   | `--dense` (token-efficient) and `--json` (a stable envelope) on every command                                                                    | Planned   |
+| MCP server                     | `search(query)` and `get(name)`, as `tct mcp` (stdio) and as a route of a self-hosted docs site                                                   | Planned   |
+| Agent-eval harness             | Fixture prompts that check an agent produces correct `tct-*` code given the agent docs (internal)                                                 | Planned   |
 
 ## Quick start
 
-Tell your AI to install the CLI and set itself up:
+Until the CLI ships, point your AI tool at the files the site already publishes. `llms.txt` is a short index of the guides and elements; `llms-full.txt` holds their full text; the registry has one entry per element with its tag, attributes, slots, events, dense usage, best practices and examples.
 
 ```text title="Paste this into your AI"
-Install @tecton-astryx/cli in this project (it is a private package: use the workspace, tarball or Git source my team uses) and run `tct init --features agents` to set up your Tecton Astryx context. Read the generated file.
+Read /llms.txt from the Tecton Web Components docs site, then read the page of every element before you use it. Use only the attributes, slots and events those pages list.
 ```
 
-That is all. The `init --features agents` command generates everything your AI needs from the installed project: an element index, behavioural rules, and a CLI reference. After a dependency bump, `tct upgrade` reports a stale block and `tct upgrade --apply` refreshes it, and it never overwrites files you have edited outside the generated block.
+When the CLI ships, the setup will be one command. Tell your AI to install it and set itself up:
+
+```text title="Paste this into your AI (planned)"
+Install @tecton-astryx/cli in this project (it is a private package: use the workspace, tarball or Git source my team uses) and run `tct init --features agents` to set up your Tecton context. Read the generated file.
+```
+
+The `init --features agents` command will generate everything your AI needs from the installed project: an element index, behavioural rules and a CLI reference. After a dependency bump, `tct upgrade` will report a stale block and `tct upgrade --apply` will refresh it, without overwriting files you have edited outside the generated block.
 
 By default this creates `AGENTS.md`, the tool-agnostic standard that most agents read. To target a specific tool's file instead:
 
-```bash title="Manual options"
+```bash title="Manual options (planned)"
 tct init --features agents --agent claude    # .claude/CLAUDE.md
 tct init --features agents --agent cursor    # .cursorrules
 tct init --features agents --agent codex     # AGENTS.md (Copilot, Codex and others)
@@ -49,23 +53,23 @@ tct init --features agents --agent codex     # AGENTS.md (Copilot, Codex and oth
 
 ## What gets generated
 
-The generated context teaches your AI a workflow before it writes any UI code:
+The generated context will teach your AI a workflow before it writes any UI code:
 
 1. `tct search "<what you need>"`: find the right element, controller or doc topic.
 2. `tct component <tag>`: read attributes, slots, events and examples for every element you use.
 3. `tct docs <topic>`: read the guide for the pattern you are building (layout, forms, theming, accessibility).
 
-Upstream's workflow also starts with page templates (`template --list`, `template <name> --skeleton`). The templates library is deferred, so those steps are not part of the workflow yet.
+Page templates and their commands are not part of the workflow yet.
 
-The block also includes rules that prevent common mistakes, a CLI quick reference, and an index of every element. The rules are the ones on the [Principles](../principles/) page, stated for agents:
+The block also includes rules that prevent common mistakes, a CLI quick reference, and an index of every element. The rules are the ones on the [Principles](../principles/) page, stated for agents. You can give them to any AI tool today:
 
 - Use `tct-*` elements before raw HTML for what they cover, and register the families you use (`import '@tecton-astryx/components/button'`).
-- No inline `style` on raw wrappers; use tokens, attributes, `::part()` and custom properties.
+- No inline `style` on raw wrappers; use the layout elements, tokens, attributes, `::part()` and custom properties.
 - No hardcoded colours or spacing; use `var(--color-*)` and `var(--spacing-*)`.
 - Never invent attributes, slots or events; read the element's page first.
 - Icon-only buttons need a `label`. Form controls need a `label` and a `name`.
 - Use `tct-link` for navigation, and real `<form>` elements for forms.
-- Read structured data as properties (`columns`, `data`, `options`), never as JSON attributes.
+- Set structured data as properties (`items`, and the like), never as JSON attributes.
 
 After setup, you should not need to correct your AI on these conventions by hand; the agent docs handle it at the system level.
 
@@ -73,30 +77,30 @@ After setup, you should not need to correct your AI on these conventions by hand
 
 Cursor project rules are not always picked up: Cursor chooses which rules to apply by relevance. For reliable inclusion, install the design system context as a user rule instead. User rules live in `~/.cursor/rules/` and apply across all projects.
 
-```bash title="Install as a Cursor user rule"
+```bash title="Install as a Cursor user rule (planned)"
 mkdir -p ~/.cursor/rules
 tct init --features agents --agent-docs-path ~/.cursor/rules/tct.mdc
 ```
 
 ## Checking your setup
 
-Paste this into your AI before it writes any element code. Models tend to answer these three questions confidently and wrongly without the docs. If your AI cannot answer them, it will know to install the agent docs first.
+Paste this into your AI before it writes any element code. Models tend to answer these three questions confidently and wrongly without the docs. If your AI cannot answer them, it will know to read the docs first.
 
 ```text title="Paste this into your AI"
-Before writing any Tecton Astryx code, check your knowledge:
+Before writing any Tecton code, check your knowledge:
 
 1. What import registers the button element?
 2. How do you make a dialog non-dismissible?
-3. Which property does the selector use for its items?
+3. Which property does the tree list use for its items?
 
-If you don't know all three, run `tct init --features agents` to generate agent docs, then read the generated file.
+If you don't know all three, read /llms.txt and the pages it links to before you continue.
 ```
 
-The answers the docs give: `import '@tecton-astryx/components/button'` (which registers `tct-button`); `purpose="required"` on `tct-dialog`, which blocks Escape dismissal; and the `options` property on `tct-selector` (structured data is a property, never an attribute).
+The answers the docs give: `import '@tecton-astryx/components/button'` (which registers `tct-button`); `purpose="required"` on `tct-dialog`, which blocks Escape, backdrop and close-button dismissal; and the `items` property on `tct-tree-list` (structured data is a property, never an attribute).
 
 ## The `tct` pattern
 
-AI agents frequently invoke a CLI with a guessed path or a different package's binary, which fails silently. Give them one stable command by adding an npm script alias:
+_Planned._ AI agents frequently invoke a CLI with a guessed path or a different package's binary, which fails silently. Give them one stable command by adding an npm script alias:
 
 ```json title="package.json"
 "scripts": {
@@ -108,7 +112,7 @@ With this alias, agents run `pnpm tct component tct-dialog --dense` (or `npm run
 
 The package is not on a public registry, so a bare `npx tct` can resolve to an unrelated package until the CLI is installed as a dependency. Prefer the script alias, or `npx --no-install tct` to refuse any download.
 
-```bash title="Reliable CLI invocation"
+```bash title="Reliable CLI invocation (planned)"
 pnpm tct component
 pnpm tct component tct-dialog --dense
 pnpm tct docs styling --dense
@@ -117,9 +121,9 @@ pnpm tct docs tokens --dense
 
 ## The `--dense` flag
 
-Every CLI command supports `--dense`, which prints a token-efficient format designed for AI context windows. Use it when pasting CLI output into a web-based AI tool. Dense output comes from the dense doc that each element authors (a one-line description, dense usage, best practices as do and don't, and one line per attribute, slot and event), so it is short by design, and the build checks it against the element's real API so that it cannot omit a public member.
+_Planned._ Every CLI command will support `--dense`, which prints a token-efficient format designed for AI context windows. Use it when pasting CLI output into a web-based AI tool. Dense output comes from the dense doc that each element authors (a one-line description, dense usage, best practices as do and don't, and one line per attribute, slot and event), so it is short by design, and the build checks it against the element's real API so that it cannot omit a public member. The same dense docs are in the registry today, under each element's `dense` key.
 
-```bash title="Dense output for pasting into AI conversations"
+```bash title="Dense output for pasting into AI conversations (planned)"
 tct component tct-dialog --dense
 tct docs styling --dense
 tct docs tokens --dense
@@ -127,7 +131,7 @@ tct docs tokens --dense
 
 ## The `--json` flag
 
-Every command also supports `--json`, a stable machine-readable envelope, for tools and scripts. It is modelled on upstream's: a response has an `apiVersion`, a `type` (such as `component.detail` or `search`) and `data`; an error has an `apiVersion`, a human-readable `error`, a stable `code` and optional `suggestions`. Branch on `code`, never on the message, because codes are append-only and messages change freely.
+_Planned._ Every command will also support `--json`, a stable machine-readable envelope, for tools and scripts. A response has an `apiVersion`, a `type` (such as `component.detail` or `search`) and `data`; an error has an `apiVersion`, a human-readable `error`, a stable `code` and optional `suggestions`. Branch on `code`, never on the message, because codes are append-only and messages change freely.
 
 ```json
 {"apiVersion": 1, "type": "component.detail", "data": {"name": "tct-button"}}
@@ -142,23 +146,23 @@ Every command also supports `--json`, a stable machine-readable envelope, for to
 }
 ```
 
-A small module in the CLI package (`@tecton-astryx/cli/json`, with `parseResponse`, `isError` and `assertResponse`) parses and narrows responses in TypeScript. The exact envelope and the error-code table are published in the [CLI reference](../cli/) when WP-AI lands; the JSON examples above show the shape to expect, not final identifiers.
+A small module in the CLI package (`@tecton-astryx/cli/json`, with `parseResponse`, `isError` and `assertResponse`) will parse and narrow responses in TypeScript. The exact envelope and the error-code table will be published in the [CLI reference](../cli/); the JSON examples above show the shape to expect, not final identifiers.
 
 ## MCP server
 
-The CLI ships a Model Context Protocol (MCP) server that any MCP-compatible AI tool can connect to. Instead of pasting CLI output, the AI queries the design system directly: searching for elements, reading full documentation and pulling code examples on demand.
+_Planned._ The CLI will ship a Model Context Protocol (MCP) server that any MCP-compatible AI tool can connect to. Instead of pasting CLI output, the AI queries the design system directly: searching for elements, reading full documentation and pulling code examples on demand.
 
-The server exposes two tools:
+The server will expose two tools:
 
-- `search(query)` discovers elements, controllers and doc topics with a ranked, keyword-based index, and returns brief results (about 1.5K tokens each) that are aware of compound and related elements (a table, for instance, points at its plugins).
+- `search(query)` discovers elements, controllers and doc topics with a ranked, keyword-based index, and returns brief results (about 1.5K tokens each) that are aware of compound and related elements.
 - `get(name)` retrieves the full documentation for one element or topic, with attributes, slots, events, usage and showcase examples.
 
-It is available two ways: as `tct mcp` over stdio, and as a route on your self-hosted docs site. The stdio form works with any MCP-compatible tool: Claude Desktop (`claude_desktop_config.json`), Cursor (`.cursor/mcp.json`), Windsurf (`.windsurf/mcp.json`), Cline and others.
+It will be available two ways: as `tct mcp` over stdio, and as a route on your self-hosted docs site. The stdio form works with any MCP-compatible tool: Claude Desktop (`claude_desktop_config.json`), Cursor (`.cursor/mcp.json`), Windsurf (`.windsurf/mcp.json`), Cline and others.
 
-```json title="MCP config (stdio)"
+```json title="MCP config (stdio, planned)"
 {
   "mcpServers": {
-    "tecton-astryx": {
+    "tecton": {
       "command": "npx",
       "args": ["--no-install", "tct", "mcp"]
     }
@@ -166,10 +170,10 @@ It is available two ways: as `tct mcp` over stdio, and as a route on your self-h
 }
 ```
 
-```json title="MCP config (docs-site route)"
+```json title="MCP config (docs-site route, planned)"
 {
   "mcpServers": {
-    "tecton-astryx": {
+    "tecton": {
       "type": "url",
       "url": "https://docs.example.com/mcp"
     }
@@ -177,20 +181,18 @@ It is available two ways: as `tct mcp` over stdio, and as a route on your self-h
 }
 ```
 
-There is no public docs site (the library is unlicensed and unpublished), so the URL is the one where you host the docs build. Once connected, your AI tool can search by natural language ("dropdown menu", "success message", "sortable table") and retrieve full documentation without any manual CLI use. The server reads the same keyword index that the CLI and the docs site use, so search quality improves automatically as element documentation is updated. It is built on `@modelcontextprotocol/sdk`, which is approved for the private CLI package only (D-013 Q-07) and is never a dependency of the component packages.
+There is no public docs site (the library is unlicensed and unpublished), so the URL is the one where you host the docs build. Once connected, your AI tool can search by natural language ("dropdown menu", "success message", "sortable table") and retrieve full documentation without any manual CLI use. The server will read the same keyword index that the CLI and the docs site use, so search quality improves automatically as element documentation is updated.
 
 ## `llms.txt` and reference output
 
-For tools that read the web rather than call a CLI, the docs site publishes `llms.txt` (the [llmstxt.org](https://llmstxt.org) convention) and `llms-full.txt`, plus JSON and Markdown reference output, all generated from the Custom Elements Manifest and the docs so they cannot drift from the API. `llms.txt` is a short index that tells an agent to use the CLI rather than crawl pages, with a few example commands.
+For tools that read the web rather than call a CLI, the docs site publishes [llms.txt](/llms.txt) (the [llmstxt.org](https://llmstxt.org) convention) and [llms-full.txt](/llms-full.txt), plus the JSON [registry](/agent-registry.json), all generated from the Custom Elements Manifest and the docs so they cannot drift from the API. `llms.txt` is a short index of the guides and elements. A Markdown reference output is _planned_.
 
 ## Related browser capabilities
 
 WebMCP, a proposed browser-native API for a page to expose tools to AI agents, is in early preview in Chromium and is not part of this work. It is unrelated to the MCP server above, which runs outside the page.
 
 {/*
-Adapted from Astryx docs topic `working-with-ai` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md), scoped by D-011 and WORK-BREAKDOWN WP-AI. This page describes WP-AI deliverables (planned).
-Section map: Overview; Quick Start; What Gets Generated; Cursor Setup; Checking Your Setup; The astryx Pattern -> The tct pattern; The --dense Flag; MCP Server. Added: The --json flag, llms.txt and reference output.
-Upstream references: packages/cli README (JSON envelope, error codes), apps/docsite/src/app/mcp/route.ts (search + get, ~1.5K tokens per brief result, keyword index), apps/docsite/src/app/llms.txt/route.ts, internal/vibe-tests.
-Template steps of the upstream agent workflow are deferred (D-011). The `tct` npm-script alias is used instead of upstream's bin-path alias to avoid inventing a file path.
+Sources: docs/plan/DECISIONS.md D-011, D-013 Q-07 (MCP SDK approved for the private CLI package only); docs/plan/WORK-BREAKDOWN.md WP-AI; tools/agent-registry/ (registry, llms.txt, llms-full.txt).
+Template steps of the agent workflow are deferred (D-011). The `tct` npm-script alias is used to avoid inventing a file path.
 Guides: [mwg:webmcp] [mwg:web-components] [mwg:accessibility]
 */}

@@ -5,23 +5,25 @@ sidebar:
   order: 27
 ---
 
+import Example from '@/components/Example.astro';
+
 Icons are data, not components. `tct-icon` renders an `IconDefinition` (a viewBox and a list of SVG paths) that it finds by name in a registry. Sets are ES modules of icon data that you import or register, so a page pays only for the glyphs it uses.
 
-```html
-<tct-icon name="close"></tct-icon>
-<tct-icon name="well"></tct-icon>
-<tct-icon name="well-filled"></tct-icon>
-```
+<Example
+  title="Icons by name"
+  description="A role icon, and a Tecton domain icon in its outlined and filled forms."
+  source={`<tct-icon name="close" size="lg"></tct-icon>
+<tct-icon name="well" size="lg"></tct-icon>
+<tct-icon name="well-filled" size="lg"></tct-icon>`}
+/>
 
-:::note[Status]
-The icon data (`@tecton-astryx/icons`) and the registry (`@tecton-astryx/core/icons/registry.js`) exist. `tct-icon` and the elements that render icons are delivered in the first component milestone (WP-F M5), so element usage below is _planned_.
-:::
+The icon data (`@tecton-astryx/icons`), the registry (`@tecton-astryx/core/icons/registry.js`) and the `tct-icon` element all exist. Elements that show an icon (buttons, banners, fields) take a registered name through their `icon` attribute or a `tct-icon` in their `icon` slot.
 
 ## Where the icons come from
 
 | Set                       | What it is                                                                                                                       | Licence                                                    |
 | ------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- |
-| Default set               | Astryx's semantic role names (`close`, `chevronDown`, ...) mapped to [Lucide](https://lucide.dev) glyphs. Registered for you    | Lucide is ISC; the glyphs it derived from Feather are MIT  |
+| Default set               | Semantic role names (`close`, `chevronDown`, ...) mapped to [Lucide](https://lucide.dev) glyphs. Registered for you              | Lucide is ISC; the glyphs it derived from Feather are MIT  |
 | Tecton domain icons       | 18 oil-and-gas and subsurface glyphs, each with an outlined and a filled variant. Registered for you                              | Supplied by the owner as part of Tecton                    |
 | Full Lucide set           | About 1,850 glyphs, opt-in, under a `lucide:` namespace                                                                          | ISC and MIT, as above                                      |
 
@@ -64,9 +66,9 @@ Components that accept an icon use a semantic name resolved through the registry
 | `stop`           | Stop or cancel action                     | `square`            |                |
 | `microphone`     | Voice input, audio recording              | `mic`               |                |
 
-`numberInput:stepperDown` is a namespaced glyph owned by the number input (see below). Directional glyphs mirror in right-to-left contexts by CSS, with one fixed glyph flipped from the ambient direction, so there is no per-direction name swap and no flash on the server.
+`numberInput:stepperDown` is a namespaced glyph owned by the number input, which is _planned_ (see below). Directional glyphs mirror in right-to-left contexts by CSS, with one fixed glyph flipped from the ambient direction, so there is no per-direction name swap and no flash on the server.
 
-The Tecton design has no glyph for six of these roles (`chevronsLeft`, `chevronsRight`, `calendar`, `clock`, `checkDouble` and `stop`), which Lucide covers. Tecton's design also draws `moreHorizontal` as vertical dots; the default here is Lucide's horizontal ellipsis. Both are recorded as open items.
+The Tecton design has no glyph for six of these roles (`chevronsLeft`, `chevronsRight`, `calendar`, `clock`, `checkDouble` and `stop`), which Lucide covers. Tecton's design also draws `moreHorizontal` as vertical dots; the default here is Lucide's horizontal ellipsis. Both are open design questions, so the Lucide glyphs stay for now.
 
 ### Tecton domain icons
 
@@ -78,17 +80,19 @@ Eighteen glyphs for subsurface work, each as `<name>` (outlined) and `<name>-fil
 
 ## Using icons
 
-```html
-<!-- decorative: hidden from assistive technology (the default) -->
+<Example
+  title="Decorative and meaningful icons"
+  description="The first icon is decorative and hidden from assistive technology. The second has a label, so it is an image with an accessible name."
+  source={`<!-- decorative: hidden from assistive technology (the default) -->
 <tct-icon name="search"></tct-icon>
 
 <!-- meaningful: a label gives it role="img" and an accessible name -->
-<tct-icon name="warning" label="Warning"></tct-icon>
-```
+<tct-icon name="warning" label="Warning" color="warning"></tct-icon>`}
+/>
 
-Icons inherit the surrounding text colour. Elements that take an icon (buttons, banners, fields) accept a `tct-icon` in an `icon` slot, or a plain inline `<svg>`. Colour options such as `color="accent"` point at the icon colour tokens (`--color-icon-accent` for accent, because the accent fill itself is too low in contrast to be an icon colour).
+Icons inherit the surrounding text colour. Elements that take an icon (buttons, banners, fields) accept a registered name in their `icon` attribute, a `tct-icon` in an `icon` slot, or a plain inline `<svg>`. Colour options such as `color="accent"` point at the icon colour tokens (`--color-icon-accent` for accent, because the accent fill itself is too low in contrast to be an icon colour).
 
-Sizes are 12, 16, 20 and 24 px, which are the same values as Tecton's icon sizes (`--tecton-icon-size-50` to `-200`).
+The `size` attribute takes `xsm`, `sm`, `md` and `lg`: 12, 16, 20 and 24 px, the same values as Tecton's icon sizes (`--tecton-icon-size-50` to `-200`). Without one, an icon takes the size that the element around it supplies (a button sets it from the button size), and otherwise `md`.
 
 ## Custom icons
 
@@ -108,12 +112,17 @@ registerIcons({
 
 ```html
 <tct-icon name="logo" label="Acme"></tct-icon>
-
-<!-- or slot an SVG directly; it is used as is -->
-<tct-icon label="Acme">
-  <svg viewBox="0 0 24 24"><path d="M12 2 2 22h20L12 2Z" /></svg>
-</tct-icon>
 ```
+
+A slotted SVG needs no registration. It goes in the default slot and is used as is; the slot is also the fallback shown when `name` is not registered:
+
+<Example
+  title="A slotted SVG"
+  description="Your own svg in the default slot is sized and coloured like a registry glyph."
+  source={`<tct-icon size="lg" color="accent" label="Warning triangle">
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 1 21h22L12 2Zm1 15h-2v-2h2v2Zm0-4h-2V9h2v4Z" /></svg>
+</tct-icon>`}
+/>
 
 An `IconDefinition` has a `viewBox`, a list of `paths` (each a `d` and an optional `fillRule`), a `mode` of `fill` or `stroke`, an optional `strokeWidth`, `mirrorInRtl` for directional glyphs, and `colored` for glyphs that carry their own colours. A glyph that a list of paths cannot express (per-shape colours) can supply an `svg` body instead, which is passed through the HTML sanitiser once when it is registered and cloned for each use, never trusted as-is.
 
@@ -138,7 +147,7 @@ registerIcons({close: xMark}); // every close button now uses your glyph
 
 To swap the whole set, register the roles you want (`registerIcons`, or a per-icon import from another set); `resetIcons()` clears both layers. Subscribers (rendered icons) refresh when the registry changes, so registration order relative to rendering does not matter.
 
-A theme-scoped icon override, an `icons` field on `defineTheme` in the way Astryx has it, is _planned_ with the theme utilities. It would not mutate the global registry.
+A theme-scoped icon override, an `icons` field on `defineTheme`, is _planned_ with the theme utilities. It would not mutate the global registry.
 
 ## Tree-shaking and Lucide
 
@@ -152,7 +161,7 @@ import {registerIcons} from '@tecton-astryx/core/icons/registry.js';
 registerIcons({well, 'well-filled': wellFilled, activity});
 ```
 
-To register the whole Lucide set under a namespace, so it never shadows the Astryx role names, use the generated helper. It registers lazy loaders, so nothing is downloaded until an icon renders:
+To register the whole Lucide set under a namespace, so it never shadows the role names, use the generated helper. It registers lazy loaders, so nothing is downloaded until an icon renders:
 
 ```js
 import {lucideIcons} from '@tecton-astryx/icons/lucide.js';
@@ -184,15 +193,14 @@ registerIcons({'numberInput:stepperDown': myCaretDown});
 
 To add a new semantic icon name to the design system, only for a glyph that the whole system shares (a component-owned one takes a namespaced key instead):
 
-1. Add the name and its glyph to the default set in `@tecton-astryx/icons` (`src/default.ts`). Roles keep their Astryx name and map to a Lucide glyph; mark directional roles `mirrorInRtl`.
+1. Add the name and its glyph to the default set in `@tecton-astryx/icons` (`src/default.ts`). Roles keep their semantic name and map to a Lucide glyph; mark directional roles `mirrorInRtl`.
 2. Add a row to the Available names table on this page.
 3. Regenerate (`pnpm generate`) and commit only the source. Generated per-icon modules are build output.
 
 This is a change to a shared package, so contributors working in a component folder propose it through their work package's `requests` rather than editing the package.
 
 {/*
-Adapted from Astryx docs topic `icons` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md), with D-009 (Lucide) and D-013 Q-02 (Tecton domain icons). Section map: Available Names; Custom Icons; Theme Overrides -> Overriding the defaults; Component and Library Icons; Adding New Icons.
-Verified against packages/core/src/icons/registry.ts, packages/icons/src/default.ts, packages/icons/src/tecton.ts, packages/icons/src/tecton/README.md, packages/icons/src/lucide.ts.
-A slotted inline SVG goes in the default slot (ARCHITECTURE 12 says "slot an <svg>" without naming a slot); the tct-icon page is authoritative.
+Sources: D-009 (Lucide), D-013 Q-02 (Tecton domain icons). Verified against packages/core/src/icons/registry.ts, packages/icons/src/default.ts, packages/icons/src/tecton.ts, packages/icons/src/tecton/README.md, packages/icons/src/lucide.ts
+and packages/components/src/icon/ (a slotted inline SVG goes in the default slot).
 Guides: [mwg:accessibility] [mwg:sanitize-untrusted-html] [mwg:trusted-types]
 */}

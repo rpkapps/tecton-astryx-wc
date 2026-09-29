@@ -5,11 +5,9 @@ sidebar:
   order: 9
 ---
 
-The elements ship with 30 message catalogs (370 message ids each) and a generated pseudo-locale. English is built into every element, so nothing needs to be installed to run in English, and the other catalogs load on demand when a page asks for them. Locale catalogs only affect the elements' own strings (button labels for assistive technology, pagination text, date-picker announcements and so on). Your application keeps using whatever i18n system it has for product copy.
+import Example from '@/components/Example.astro';
 
-:::note[Corrections to the upstream guide]
-Upstream's guide says Astryx "ships English today" and imports `locales/fr.json`. Both are wrong for this library: 30 region-tagged catalogs ship (29 translations plus English), and there is no `fr.json`. This page uses the real file names and the base-language aliases that make `fr`, `pt`, `zh` and the others work.
-:::
+The elements ship with 30 message catalogs (370 message ids each) and a generated pseudo-locale. English is built into every element, so nothing needs to be installed to run in English, and the other catalogs load on demand when a page asks for them. Locale catalogs only affect the elements' own strings (button labels for assistive technology, pagination text, date-picker announcements and so on). Your application keeps using whatever i18n system it has for product copy.
 
 ## Quick start
 
@@ -18,24 +16,27 @@ Set the language on the document, the way you would for any page. Elements read 
 ```html
 <html lang="fr" dir="ltr">
   <body>
-    <tct-pagination …></tct-pagination>
+    <tct-text-input label="Nom" optional></tct-text-input>
   </body>
 </html>
 ```
 
 The element finds the catalog for `fr`, loads it, and re-renders. There is nothing else to wire. To scope a language to a region of the page (or to override the document), use the provider element:
 
-```html
-<tct-internationalization-provider locale="fr-FR">
-  <tct-app-shell>…</tct-app-shell>
-</tct-internationalization-provider>
-```
+<Example
+  title="A provider sets the language of a region"
+  description="The optional and required indicators, and the clear button's name, come from the French catalog. The labels are your own text."
+  source={`<tct-internationalization-provider locale="fr-FR">
+  <tct-text-input label="Nom" optional value="Ada" has-clear></tct-text-input>
+  <tct-text-input label="Adresse e-mail" required></tct-text-input>
+</tct-internationalization-provider>`}
+/>
 
-`tct-internationalization-provider` is _planned_ (work package WP-F, milestone M5). It has the properties `locale`, `dir`, `messages` and `overrides`, and it reflects `lang` onto itself, so CSS `:lang()`, the elements and `Intl` agree about the language. The `lang`-based path above does not need it.
+`tct-internationalization-provider` has the properties `locale`, `dir`, `messages` and `overrides`, and it reflects `lang` onto itself, so CSS `:lang()`, the elements and `Intl` agree about the language. It has no shadow root and draws nothing. The nearest provider wins and replaces an outer one wholesale, without merging catalogs. The `lang`-based path above does not need it.
 
 ### The catalogs
 
-Files are region-tagged, and there are base-language aliases so you can pass the short form:
+The 30 catalogs are region-tagged (29 translations plus English), and there are base-language aliases so you can pass the short form:
 
 | Tag | Language | Tag | Language | Tag | Language |
 | --- | --- | --- | --- | --- | --- |
@@ -53,7 +54,7 @@ Files are region-tagged, and there are base-language aliases so you can pass the
 
 A requested locale resolves from the most to the least specific form, and each candidate is expanded through the alias table, so `fr` and `fr-CA` use `fr-FR`; `pt` uses `pt-BR`; `zh`, `zh-Hans` and `zh-SG` use `zh-CN`; `zh-Hant`, `zh-HK` and `zh-MO` use `zh-TW`; `nb` and `nn` use `no-NO`; `iw` uses `he-IL`; `en-XA` uses the pseudo-locale. Missing keys fall back to English, so a partial translation never shows a message id.
 
-Catalogs are loaded lazily by the `@tecton-astryx/locales` package, with one dynamic `import()` per language, so a page that only uses English never downloads another catalog.
+Catalogs are loaded lazily by the `@tecton-astryx/locales` package, with one dynamic `import()` per language, so a page that only uses English never downloads another catalog. There is no `fr.json`: the file for French is `fr-FR`, and `fr` resolves to it.
 
 ## Runtime language swap
 
@@ -101,7 +102,7 @@ getLocaleDirection('fr'); // 'ltr'
 <html lang="ar-SA" dir="rtl"></html>
 ```
 
-To make one part of a left-to-right page right-to-left, for example an Arabic quotation or comment thread, put `dir="rtl"` (and `lang`) on the element around it. Pop-up overlays opened from inside that region mirror too. The `dir` you pass to `tct-internationalization-provider` (_planned_) overrides the computed direction for the elements below it.
+To make one part of a left-to-right page right-to-left, for example an Arabic quotation or comment thread, put `dir="rtl"` (and `lang`) on the element around it. Pop-up overlays opened from inside that region mirror too. The `dir` you pass to `tct-internationalization-provider` overrides the computed direction for the elements below it. The provider does not infer `dir` from `locale`: set both for a right-to-left language.
 
 Fonts matter for right-to-left and for other scripts too. `fonts.css` includes the Latin and Latin Extended subsets of Figtree and IBM Plex Mono only. Text in Cyrillic, Greek, Arabic, Hebrew, CJK and most of Vietnamese renders in the fallback stack (`Helvetica, Arial, sans-serif`) unless you add faces for those scripts. See [Typography](../typography/#loading-fonts).
 
@@ -110,19 +111,21 @@ Fonts matter for right-to-left and for other scripts too. `fonts.css` includes t
 Every element string that a person can see or hear can be overridden without shipping a catalog. Three tools, in order of precedence:
 
 1. **An attribute on the element.** Strings that are commonly customised have an attribute (`close-label`, `previous-label` and similar, listed on each element's page). It wins over everything else.
-2. **`overrides` on the provider** (_planned_). Overrides are keyed by locale and merged on top of the built-in and registered catalogs.
+2. **`overrides` on the provider.** Overrides are keyed by locale and merged on top of the built-in and registered catalogs. It is a property, not an attribute.
 3. **A registered catalog.** `registerTranslation(locale, messages)` merges your messages ahead of the shipped catalog for that locale.
 
 ```html
-<tct-dialog heading="Settings" close-label="Dismiss settings"></tct-dialog>
+<tct-dialog open>
+  <tct-dialog-header heading="Settings" close-label="Dismiss settings"></tct-dialog-header>
+</tct-dialog>
 ```
 
 ```js
 import {registerTranslation} from '@tecton-astryx/core/i18n/registry.js';
 
 // Change one string in English, and register a wording tweak for German.
-registerTranslation('en', {'@astryx.pagination.next': 'Next →'});
-registerTranslation('de-DE', {'@astryx.pagination.next': 'Weiter →'});
+registerTranslation('en', {'@astryx.dialog.close': 'Dismiss'});
+registerTranslation('de-DE', {'@astryx.dialog.close': 'Verwerfen'});
 ```
 
 Registered messages outrank every shipped catalog, whatever their specificity, and they are available immediately. The full order for one message is:
@@ -133,7 +136,7 @@ Registered messages outrank every shipped catalog, whatever their specificity, a
 4. the element's built-in English default;
 5. the message id itself, with a development warning.
 
-Message ids keep the upstream form: `@astryx.<namespace>.<key>` (for example `@astryx.pagination.next`). Strings that this library adds are `@tct.<folder>.<key>`. Messages are ICU MessageFormat, so plural and number placeholders such as `{count, plural, one {page} other {pages}}` work in overrides.
+Message ids have the form `@astryx.<namespace>.<key>` (for example `@astryx.dialog.close`). Strings that this library adds are `@tct.<folder>.<key>`. Messages are ICU MessageFormat, so plural and number placeholders such as `{count, plural, one {page} other {pages}}` work in overrides.
 
 To load catalogs from somewhere other than the package (a CDN, a bundler chunk map), replace the loader:
 
@@ -196,7 +199,7 @@ class MyToolbar extends TctElement {
 
 ## Formatting numbers and dates
 
-Elements format numbers, dates and lists with `Intl` and the resolved locale. Dates, times and time zones are three separate concerns: the value you store (ISO dates), the locale you display it in, and the time zone. Date elements take and return ISO values and never leak a display format into your data. The date family also supports non-Gregorian calendars through `@internationalized/date` (the date elements are _planned_, work package WP-13).
+Elements format numbers, dates and lists with `Intl` and the resolved locale. Dates, times and time zones are three separate concerns: the value you store (ISO dates), the locale you display it in, and the time zone. Date elements take and return ISO values and never leak a display format into your data. The date family will also support non-Gregorian calendars through `@internationalized/date` (the date elements are _planned_).
 
 ## Testing your translations
 
@@ -230,12 +233,10 @@ When you author an element that responds to direction, resolve it from the DOM, 
 3. **Behavioural logic reads the DOM lazily, on the event.** For arrow-key mapping and drag or scroll math, read the direction at interaction time from computed style, never during render. The shared roving and grid focus controllers detect direction from their host, so arrow keys flip for free.
 4. **Do not read direction from context during render.** It is the one path that can mismatch on hydration.
 
-**Translators.** The 30 catalogs are copied from upstream Astryx and are hash-locked in this repository. Corrections to a translation belong upstream, where they are managed through Crowdin; this repository takes them with the next catalog update.
+**Translators.** The 30 catalogs are hash-locked in this repository, so a correction to a translation is made at its source and taken here with the next catalog update.
 
 {/*
-Adapted from Astryx docs topic `internationalization` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md), with upstream discrepancies D3, D4 and D5 fixed (inventory section 11).
-Section map: Quick Start; Runtime language swap; Text direction (RTL); Overriding astryx's default text -> Overriding the default text; Using astryx with your own i18n library -> Using the elements with your own i18n library;
-Using astryx as your i18n library -> Using the elements as your i18n library; Testing your translations; For contributors. Added: Formatting numbers and dates (ARCHITECTURE 11).
-Facts verified against packages/core/src/i18n (registry.ts, locale-controller.ts, direction.ts, format.ts) and packages/locales/dist (aliases.js, pseudo.js); the provider element is planned (WP-F M5).
+Facts verified against packages/core/src/i18n (registry.ts, locale-controller.ts, direction.ts, format.ts) and packages/locales/dist (aliases.js, pseudo.js); the provider element is packages/components/src/internationalization-provider/.
+Section map: Quick start; Runtime language swap; Text direction (RTL); Overriding the default text; Using the elements with your own i18n library; Using the elements as your i18n library; Formatting numbers and dates; Testing your translations; For contributors.
 Guides: [mwg:support-global-calendar-systems] [mwg:capture-location-agnostic-data] [mwg:coordinate-global-events] [mwg:accessible-web-components] [mwg:custom-elements] [mwg:visually-stable-font-fallbacks]
 */}

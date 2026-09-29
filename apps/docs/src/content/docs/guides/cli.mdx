@@ -8,13 +8,13 @@ sidebar:
     variant: caution
 ---
 
-:::caution[Describes WP-AI deliverables]
-The `tct` CLI is delivered by the agentic AI work package (WP-AI, decision D-011). This page documents the specified surface so that other pages can link to it. Command names and the stable parts (the output modes, the envelope shape and the error-code rules) are fixed by the decision; individual flags follow upstream Astryx's CLI and are confirmed by `tct <command> --help` and by the generated reference when WP-AI lands. Upstream generated its CLI reference page from the commands' own documentation, and this page will be replaced by an equivalent generated one.
+:::caution[Planned]
+The `tct` CLI is not available yet. This page documents the specified surface so that other pages can link to it. Command names and the stable parts (the output modes, the envelope shape and the error-code rules) are fixed; individual flags are confirmed by `tct <command> --help` and by a generated reference when the CLI ships, and this page will be replaced by an equivalent generated one.
 :::
 
 ## Overview
 
-`tct` is the primary interface for working with the design system, for people and for machines: element documentation, tokens, docs topics, agent-context generation and an MCP server, all through terminal commands, a typed JSON API or programmatic imports. It lives in the private `@tecton-astryx/cli` package and reads one generated agent registry (the Custom Elements Manifest, the docs frontmatter with `keywords`, `dense` and `related`, the examples, the tokens and the docs topics). The docs site and the MCP route read the same registry, so the three surfaces cannot disagree.
+`tct` will be the primary interface for working with the design system, for people and for machines: element documentation, tokens, docs topics, agent-context generation and an MCP server, all through terminal commands, a typed JSON API or programmatic imports. It will live in the private `@tecton-astryx/cli` package and read one generated agent registry (the Custom Elements Manifest, the docs frontmatter with `keywords`, `dense` and `related`, the examples, the tokens and the docs topics). That registry already exists: it is published as [agent-registry.json](/agent-registry.json). The docs site and the MCP route read the same registry, so the three surfaces cannot disagree.
 
 ```bash
 tct --help
@@ -33,7 +33,7 @@ Add an npm script alias (`"tct": "tct"`) so that scripts and agents use one stab
 | `docs [topic] [section]`     | With no argument, lists the docs topics (every page in these guides). With a topic, prints it; with a section, prints just that section                       |
 | `search <query>`             | Searches elements, controllers and docs in one ranked list, tagged with the follow-up command to run                                                          |
 | `discover`                   | Finds elements and packages that other installed packages contribute                                                                                          |
-| `controllers [name]`         | Lists the runtime controllers and utilities (the equivalent of upstream's `hook` command) or prints one                                                        |
+| `controllers [name]`         | Lists the runtime controllers and utilities (the counterpart of the React hooks) or prints one                                                                |
 | `doctor`                     | Diagnoses a project's setup: packages, stylesheet, registered elements and the freshness of the agent docs                                                    |
 | `gap-report`                 | Routes a design-system gap (a missing element, attribute, token or icon) to the package that owns it                                                          |
 | `layout`                     | Generates and checks layouts from a compressed expression: `layout grammar` prints the grammar, `layout check` validates an expression, `layout expand` produces `tct-*` markup |
@@ -59,7 +59,7 @@ Results for "button":
 
 ### Not in the first release
 
-Upstream commands outside agent support are tracked as a follow-up and are not part of WP-AI: `theme` (building and exporting themes), `build`, `swizzle`, `integration` and `blog`. The templates library is deferred, so `template` and the template steps of the agent workflow are too. See [CLI Integrations](../cli-integrations/).
+Commands beyond agent support (`theme` for building and exporting themes, `build`, `swizzle`, `integration` and `blog`) are tracked as a follow-up. The templates library is deferred, so `template` and the template steps of the agent workflow are too. See [CLI Integrations](../cli-integrations/).
 
 ## Global options
 
@@ -70,11 +70,11 @@ These flags work with every command:
 | `--dense` | Compressed, token-efficient output for AI context windows. Built from each element's authored dense doc, and complete with respect to its public API                       |
 | `--json`  | Output as a stable, typed JSON envelope                                                                                                                                  |
 
-Upstream also has `--detail <brief|compact|full>` for list views and a language switch; whether they are ported is decided in WP-AI and will show in the generated reference.
+A `--detail <brief|compact|full>` option for list views and a language switch are under consideration and will show in the generated reference if they ship.
 
 ## JSON output
 
-Every command supports `--json`. Responses are typed envelopes, modelled on upstream's:
+Every command will support `--json`. Responses are typed envelopes:
 
 ```json
 {"apiVersion": 1, "type": "component.detail", "data": {"name": "tct-button"}}
@@ -110,7 +110,7 @@ if (isError(result)) {
 }
 ```
 
-The error codes shown here (`ERR_UNKNOWN_COMPONENT`) are upstream's names and illustrate the pattern. The tct table is published in the generated reference.
+The error code shown here (`ERR_UNKNOWN_COMPONENT`) illustrates the pattern. The full table will be published in the generated reference.
 
 ## Exit codes
 
@@ -118,10 +118,10 @@ A command exits with `0` on success and non-zero on failure, and every non-zero 
 
 ## Programmatic use
 
-The same logic that powers the commands is meant to be importable as type-safe functions, so build tools and agents can call it without spawning a process. The shape of that module follows upstream (`component`, `docs`, `search` and so on, each returning the same data as the `--json` form); its final export names are defined by WP-AI.
+The same logic that powers the commands is meant to be importable as type-safe functions, so build tools and agents can call it without spawning a process. The module will expose `component`, `docs`, `search` and so on, each returning the same data as the `--json` form; its final export names are not fixed yet.
 
 {/*
-Not a direct port: upstream's `cli.doc.mjs` is generated at import time from the CLI's own command docs (namespace cli/commands, cli/api) and is not routed on the upstream docs site (inventory 9.1). This page documents the D-011 command surface; the generated reference replaces it when WP-AI lands.
-Sources: docs/plan/DECISIONS.md D-011, D-013 Q-07; docs/plan/WORK-BREAKDOWN.md WP-AI; upstream packages/cli/README.md (envelope, error-code rules, manifest, commands table).
+This page documents the D-011 command surface; a generated reference replaces it when the CLI ships.
+Sources: docs/plan/DECISIONS.md D-011, D-013 Q-07; docs/plan/WORK-BREAKDOWN.md WP-AI.
 Guides: [mwg:web-components] [mwg:accessibility]
 */}

@@ -7,27 +7,27 @@ sidebar:
 
 ## Overview
 
-The radius scale uses a semantic naming system: inner, element, container, page. Each level fits a specific context. `--radius-none` and `--radius-full` are fixed anchors. Radii are Tecton's, and Tecton's corners are uniformly tighter than Astryx's.
+The radius scale uses a semantic naming system: inner, element, container, page. Each level fits a specific context. `--radius-none` and `--radius-full` are fixed anchors. Radii are Tecton's.
 
 ## Radius scale
 
-| Token                | Tecton  | Astryx  | Role                                                                                              |
-| -------------------- | ------- | ------- | ------------------------------------------------------------------------------------------------- |
-| `--radius-none`      | 0 px    | 0 px    | Flush seams                                                                                       |
-| `--radius-inner`     | 2 px    | 4 px    | Dense controls: checkbox box, menu items, option rows, keyboard keys                              |
-| `--radius-element`   | 4 px    | 8 px    | Buttons, icon buttons, toggles, fields, code blocks, banner cards, menu panels, segmented controls |
-| `--radius-container` | 8 px    | 12 px   | Cards, sections, dialogs, popovers                                                                |
-| `--radius-chat`      | 12 px   | 28 px   | Chat bubbles and composer                                                                         |
-| `--radius-page`      | 16 px   | 28 px   | Page-level surfaces                                                                               |
-| `--radius-full`      | 9999 px | 9999 px | Pills and circles                                                                                 |
+| Token                | Value   | Role                                                                                               |
+| -------------------- | ------- | -------------------------------------------------------------------------------------------------- |
+| `--radius-none`      | 0 px    | Flush seams                                                                                        |
+| `--radius-inner`     | 2 px    | Dense controls: checkbox box, menu items, option rows, keyboard keys                               |
+| `--radius-element`   | 4 px    | Buttons, icon buttons, toggles, fields, code blocks, banner cards, menu panels, segmented controls |
+| `--radius-container` | 8 px    | Cards, sections, dialogs, popovers                                                                 |
+| `--radius-chat`      | 12 px   | Chat bubbles and composer                                                                          |
+| `--radius-page`      | 16 px   | Page-level surfaces                                                                                |
+| `--radius-full`      | 9999 px | Pills and circles                                                                                  |
 
-`--radius-element` (4 px) is Tecton's default corner. Two names do not match their meaning: `--radius-chat` carries Tecton's 12 px step, and `--radius-page` its 16 px step, because they keep the Astryx names for token compatibility. Astryx lets a theme scale the whole set with a multiplier; here, override the tokens themselves. The Tecton export's own scale is also available (`--tecton-radius-0`, `-25`, `-50`, `-100`, `-150`, `-200` and `-round`).
+`--radius-element` (4 px) is Tecton's default corner. Two names do not match their meaning: `--radius-chat` carries Tecton's 12 px step, and `--radius-page` its 16 px step, because they keep the original token names for compatibility. There is no radius multiplier; override the tokens themselves. The Tecton export's own scale is also available (`--tecton-radius-0`, `-25`, `-50`, `-100`, `-150`, `-200` and `-round`).
 
 The [All tokens](../tokens/#radius-tokens) page has the values and their status.
 
 ## Concentric radius
 
-When a rounded container has padding, inner elements need a smaller radius to appear concentric. Elements such as `tct-card` handle this automatically: the inner radius is computed as `max(0, outerRadius - padding)`. Do the same in your own nested surfaces:
+When a rounded container has padding, inner elements need a smaller radius to appear concentric. Elements such as `tct-card` (_planned_) handle this automatically: the inner radius is computed as `max(0, outerRadius - padding)`. Do the same in your own nested surfaces:
 
 ```css
 .panel {
@@ -48,9 +48,9 @@ Some Tecton shapes are not a single role radius. They are handled inside the ele
 
 - **Buttons and toggle buttons never take a `border-radius` shorthand.** Inside a button group the elements square their interior corners one corner at a time, and the group wrapper itself has no radius. A shorthand on the button part flattens every corner. Use the logical per-corner properties (`border-start-start-radius` and its siblings) if you must override.
 - **Banner cards** are 4 px, and only for the card container; section banners are full-bleed and square.
-- **Dropdown menus** are 4 px only in popover presentation; the bottom-sheet presentation stays square against the viewport edge. **Popover** keeps 8 px, because it underlies mega menus and sheets that square themselves.
+- **Dropdown menus** (_planned_) are 4 px only in popover presentation; the bottom-sheet presentation stays square against the viewport edge. **Popover** keeps 8 px, because it underlies mega menus and sheets that square themselves.
 - Menu items and selector option rows are 2 px, inset inside the panel.
-- **Tokens (chips) and badges** are full pills, so single digits render as circles.
+- **Tokens (chips, _planned_) and badges** are full pills, so single digits render as circles.
 - Checkboxes are 2 px; radios, switches and avatar circles use full.
 
 Tecton design details that are not expressed: a pill-shaped floating action button (it is a button with an elevation, so 4 px), square-cornered list rows (they inherit 4 and 2 px), and a circular versus rounded-square icon button (there is no shape attribute).
@@ -71,7 +71,6 @@ Tecton design details that are not expressed: a pill-shaped floating action butt
 - Set a `border-radius` shorthand on a button part inside a button group.
 
 {/*
-Adapted from Astryx docs topic `shape` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md). Section map: Overview; Radius Scale; Concentric Radius; Best Practices. Added: Special cases (tecton-theme.md section 5, radius.specialCases).
-Tecton and Astryx values verified against packages/tokens/dist/tokens.json (Tecton) and tecton-theme.md section 5 (Astryx upstream 0/4/8/12/28/28/9999). Theme radius multiplier: not ported (tokens are overridden directly).
+Values verified against packages/tokens/dist/tokens.json and docs/research/tecton-theme.md section 5 (radius.specialCases). Theme radius multiplier: not ported (tokens are overridden directly).
 Guides: [mwg:css] [mwg:styling-web-components]
 */}
