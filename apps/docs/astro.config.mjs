@@ -1,5 +1,6 @@
 /**
- * Docs site (A§16): Astro + Starlight, static output, Tecton-skinned.
+ * Docs site (A§16): Astro + Starlight, static output, Tecton-skinned. The Node adapter (D-016) serves only the
+ * `/mcp` route on demand.
  *
  *  - Tokens and fonts: `@tecton-wc/tokens/tecton.css` (tokens + Figtree Variable + IBM Plex Mono),
  *    then `src/styles/docs.css` maps Starlight's `--sl-*` variables onto the tokens (A§16.1).
@@ -11,6 +12,7 @@
  */
 import {spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
+import node from '@astrojs/node';
 import starlight from '@astrojs/starlight';
 import {defineConfig, passthroughImageService} from 'astro/config';
 import {defaultClientConditions, defaultServerConditions} from 'vite';
@@ -80,6 +82,11 @@ const generate = {
 };
 
 export default defineConfig({
+  // D-016: every page stays prerendered (`output: 'static'`); the Node adapter only serves `/mcp` on demand
+  // (`export const prerender = false` in src/pages/mcp.ts). `pnpm docs:build` writes the static site to
+  // `dist/client/` and the server to `dist/server/entry.mjs`.
+  output: 'static',
+  adapter: node({mode: 'standalone'}),
   image: {service: passthroughImageService()},
   vite: {
     plugins: [tctCss({fallbacksFile: '../../packages/tokens/dist/fallbacks.json'})],

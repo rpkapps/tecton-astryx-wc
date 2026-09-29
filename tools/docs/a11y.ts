@@ -1,6 +1,7 @@
 /**
- * `pnpm docs:a11y` (A§16.5): crawls the BUILT docs site (`apps/docs/dist`, from `pnpm docs:build`) in
- * Chromium and fails on any accessibility problem:
+ * `pnpm docs:a11y` (A§16.5): crawls the BUILT docs site (the static pages in `apps/docs/dist/client`, from
+ * `pnpm docs:build`; the on-demand `/mcp` route has its own test) in Chromium and fails on any
+ * accessibility problem:
  *
  *  1. axe-core (WCAG 2.0/2.1/2.2 A and AA plus best practices) on every page, in the light and the
  *     dark colour scheme (the site follows the system scheme by default);
@@ -22,13 +23,13 @@ import {join} from 'node:path';
 import type {BrowserContext, Page} from 'playwright';
 import {walkFiles, writeIfChanged} from '../lib/fs.ts';
 import {PATHS} from '../lib/paths.ts';
-import {DOCS_APP} from '../lib/site.ts';
+import {DOCS_SITE} from '../lib/site.ts';
 import {launchChromium} from './browser.ts';
 import {serve} from './static-server.ts';
 
-const dist = join(DOCS_APP, 'dist');
+const dist = DOCS_SITE;
 if (!existsSync(join(dist, 'index.html'))) {
-  console.error('docs:a11y: apps/docs/dist is missing; run `pnpm docs:build` first.');
+  console.error('docs:a11y: apps/docs/dist/client is missing; run `pnpm docs:build` first.');
   process.exit(1);
 }
 

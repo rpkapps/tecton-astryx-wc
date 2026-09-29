@@ -8,6 +8,8 @@
       "@/*": ["src/*"],
       "@examples/*": ["../../packages/components/src/*"]
     },
+    "customConditions": ["tct-source"],
+    "allowImportingTsExtensions": true,
     "types": ["node"]
   }
 }

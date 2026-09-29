@@ -32,7 +32,7 @@ The CLI needs Node.js 22.18 or later. It finds the registry in this order: `--re
 | `layout`                 | `layout grammar` prints the grammar, `layout check` validates an expression, `layout expand` produces `tct-*` markup                                                            |
 | `init --features agents` | Generates agent context: `--agent claude\|cursor\|codex\|all`, `--agent-docs-path <file>`, `--dry-run` and `--remove-agents`                                                    |
 | `upgrade`                | Detects a stale generated agent-docs block. `--apply` refreshes it without touching your own edits; `--check` is a CI gate                                                      |
-| `mcp`                    | Starts the MCP server over stdio, exposing `search(query)` and `get(name)`                                                                                                       |
+| `mcp`                    | Starts the MCP server over stdio, exposing `search(query)` and `get(name)` (the docs site serves the same tools over HTTP at `/mcp`)                                              |
 | `manifest`               | Prints the whole CLI surface (commands, options, examples, exit codes, response types) as one JSON document                                                                      |
 
 Text output is a set of aligned `key: value` records separated by a blank line, so a field can be grepped (`tct search button | grep "^command:"`). A search result:

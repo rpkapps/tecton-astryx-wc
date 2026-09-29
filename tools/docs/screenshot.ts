@@ -8,13 +8,13 @@
 import {existsSync, mkdirSync} from 'node:fs';
 import {join} from 'node:path';
 import {PATHS} from '../lib/paths.ts';
-import {DOCS_APP} from '../lib/site.ts';
+import {DOCS_SITE} from '../lib/site.ts';
 import {launchChromium} from './browser.ts';
 import {serve} from './static-server.ts';
 
-const dist = join(DOCS_APP, 'dist');
+const dist = DOCS_SITE;
 if (!existsSync(join(dist, 'index.html'))) {
-  console.error('screenshot: apps/docs/dist is missing; run `pnpm docs:build` first.');
+  console.error('screenshot: apps/docs/dist/client is missing; run `pnpm docs:build` first.');
   process.exit(1);
 }
 const args = process.argv.slice(2);
