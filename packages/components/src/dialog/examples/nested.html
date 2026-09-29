@@ -2,7 +2,7 @@
 <div id="nested-example">
   <tct-button variant="primary" data-open="outer">Open outer</tct-button>
   <tct-dialog id="nested-outer" heading="Outer dialog">
-    <p style="margin: 0">Open the inner dialog, focus its clear button, and press Escape three times.</p>
+    <tct-text as="p" display="block">Open the inner dialog, focus its clear button, and press Escape three times.</tct-text>
     <div><tct-button data-open="inner">Open inner</tct-button></div>
     <tct-dialog id="nested-inner" heading="Inner dialog">
       <tct-text-input label="Search" has-clear value="wells"></tct-text-input>

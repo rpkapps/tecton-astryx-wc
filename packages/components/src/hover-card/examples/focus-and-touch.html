@@ -1,5 +1,5 @@
 <!-- title: Focus and touch policy; description: focus-trigger and touch-trigger decide how the card opens without a mouse. The first trigger acts (a button), so a tap is left to it; the second does nothing, so a tap opens the card. -->
-<div style="display: flex; gap: var(--spacing-6); padding-block-start: var(--spacing-12)">
+<tct-hstack gap="6" padding-block-start="10">
   <tct-hover-card label="Action trigger" touch-trigger="auto">
     <button type="button">Button (tap acts)</button>
     <div slot="content">Opens on hover and keyboard focus; a tap belongs to the button.</div>
@@ -12,4 +12,4 @@
     <button type="button">touch-trigger="tap"</button>
     <div slot="content">A tap always opens this card, even on a button.</div>
   </tct-hover-card>
-</div>
+</tct-hstack>
