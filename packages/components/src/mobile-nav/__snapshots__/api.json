@@ -1,0 +1,142 @@
+{
+  "folder": "mobile-nav",
+  "elements": {
+    "tct-mobile-nav": {
+      "class": "TctMobileNav",
+      "attributes": [
+        {
+          "name": "close-label",
+          "property": "closeLabel",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "header",
+          "property": "header",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "open",
+          "property": "open",
+          "type": "boolean | undefined",
+          "reflects": true
+        },
+        {
+          "name": "side",
+          "property": "side",
+          "type": "MobileNavSide",
+          "values": [
+            "start",
+            "end",
+            "auto"
+          ],
+          "default": "'auto'",
+          "reflects": true
+        },
+        {
+          "name": "width",
+          "property": "width",
+          "type": "number",
+          "default": "320",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "isOpen",
+          "type": "boolean",
+          "readonly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "hide",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "requestClose",
+          "signature": "(reason: ChangeReason) => void"
+        },
+        {
+          "name": "show",
+          "signature": "() => Promise<void>"
+        }
+      ],
+      "slots": [
+        "(default)",
+        "header"
+      ],
+      "events": [
+        {
+          "name": "tct-after-open-change",
+          "class": "TctAfterOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "dialog",
+        "drawer"
+      ],
+      "cssStates": [
+        "open"
+      ],
+      "cssProperties": []
+    },
+    "tct-mobile-nav-toggle": {
+      "class": "TctMobileNavToggle",
+      "attributes": [
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "isRendered",
+          "type": "boolean",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "button"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

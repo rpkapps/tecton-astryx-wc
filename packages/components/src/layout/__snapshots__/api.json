@@ -1,0 +1,1108 @@
+{
+  "folder": "layout",
+  "elements": {
+    "tct-layout": {
+      "class": "TctLayout",
+      "attributes": [
+        {
+          "name": "content-width",
+          "property": "contentWidth",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "default-has-dividers",
+          "property": "defaultHasDividers",
+          "type": "boolean | undefined",
+          "reflects": false
+        },
+        {
+          "name": "height",
+          "property": "height",
+          "type": "LayoutHeight",
+          "values": [
+            "fill",
+            "auto"
+          ],
+          "default": "'fill'",
+          "reflects": true
+        },
+        {
+          "name": "padding",
+          "property": "padding",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)",
+        "end",
+        "footer",
+        "header",
+        "start"
+      ],
+      "events": [],
+      "cssParts": [
+        "base"
+      ],
+      "cssStates": [],
+      "cssProperties": [
+        {
+          "name": "--container-max-height"
+        },
+        {
+          "name": "--container-padding-block-end"
+        },
+        {
+          "name": "--container-padding-block-start"
+        },
+        {
+          "name": "--container-padding-inline-end"
+        },
+        {
+          "name": "--container-padding-inline-start"
+        },
+        {
+          "name": "--layout-alignment-width"
+        },
+        {
+          "name": "--layout-content-width"
+        },
+        {
+          "name": "--layout-padding-inner-x"
+        },
+        {
+          "name": "--layout-padding-inner-y"
+        },
+        {
+          "name": "--layout-padding-outer-x"
+        },
+        {
+          "name": "--layout-padding-outer-y"
+        }
+      ]
+    },
+    "tct-layout-content": {
+      "class": "TctLayoutContent",
+      "attributes": [
+        {
+          "name": "focusable",
+          "property": "focusable",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "height",
+          "property": "height",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "landmark",
+          "property": "landmark",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "max-width",
+          "property": "maxWidth",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "min-height",
+          "property": "minHeight",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "no-scroll",
+          "property": "noScroll",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "padding",
+          "property": "padding",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block",
+          "property": "paddingBlock",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block-end",
+          "property": "paddingBlockEnd",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block-start",
+          "property": "paddingBlockStart",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline",
+          "property": "paddingInline",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline-end",
+          "property": "paddingInlineEnd",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline-start",
+          "property": "paddingInlineStart",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "width",
+          "property": "width",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "isScrollable",
+          "type": "boolean",
+          "readonly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "focus",
+          "signature": "(options?: FocusOptions) => void"
+        }
+      ],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "base"
+      ],
+      "cssStates": [],
+      "cssProperties": [
+        {
+          "name": "--container-padding-block-end"
+        },
+        {
+          "name": "--container-padding-block-start"
+        },
+        {
+          "name": "--container-padding-inline-end"
+        },
+        {
+          "name": "--container-padding-inline-start"
+        },
+        {
+          "name": "--layout-alignment-width"
+        },
+        {
+          "name": "--layout-padding-inner-x"
+        },
+        {
+          "name": "--layout-padding-inner-y"
+        },
+        {
+          "name": "--layout-padding-outer-x"
+        },
+        {
+          "name": "--layout-padding-outer-y"
+        }
+      ]
+    },
+    "tct-layout-footer": {
+      "class": "TctLayoutFooter",
+      "attributes": [
+        {
+          "name": "has-divider",
+          "property": "hasDivider",
+          "type": "boolean | undefined",
+          "reflects": false
+        },
+        {
+          "name": "height",
+          "property": "height",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "landmark",
+          "property": "landmark",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "max-width",
+          "property": "maxWidth",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "min-height",
+          "property": "minHeight",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "padding",
+          "property": "padding",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block",
+          "property": "paddingBlock",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block-end",
+          "property": "paddingBlockEnd",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block-start",
+          "property": "paddingBlockStart",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline",
+          "property": "paddingInline",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline-end",
+          "property": "paddingInlineEnd",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline-start",
+          "property": "paddingInlineStart",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "width",
+          "property": "width",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "resolvedHasDivider",
+          "type": "boolean",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "base"
+      ],
+      "cssStates": [],
+      "cssProperties": [
+        {
+          "name": "--container-padding-block-end"
+        },
+        {
+          "name": "--container-padding-block-start"
+        },
+        {
+          "name": "--container-padding-inline-end"
+        },
+        {
+          "name": "--container-padding-inline-start"
+        },
+        {
+          "name": "--layout-content-width"
+        },
+        {
+          "name": "--layout-padding-inner-y"
+        },
+        {
+          "name": "--layout-padding-outer-x"
+        },
+        {
+          "name": "--layout-padding-outer-y"
+        }
+      ]
+    },
+    "tct-layout-header": {
+      "class": "TctLayoutHeader",
+      "attributes": [
+        {
+          "name": "has-divider",
+          "property": "hasDivider",
+          "type": "boolean | undefined",
+          "reflects": false
+        },
+        {
+          "name": "height",
+          "property": "height",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "landmark",
+          "property": "landmark",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "max-width",
+          "property": "maxWidth",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "min-height",
+          "property": "minHeight",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "padding",
+          "property": "padding",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block",
+          "property": "paddingBlock",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block-end",
+          "property": "paddingBlockEnd",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block-start",
+          "property": "paddingBlockStart",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline",
+          "property": "paddingInline",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline-end",
+          "property": "paddingInlineEnd",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline-start",
+          "property": "paddingInlineStart",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "width",
+          "property": "width",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "resolvedHasDivider",
+          "type": "boolean",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "base"
+      ],
+      "cssStates": [],
+      "cssProperties": [
+        {
+          "name": "--container-padding-block-end"
+        },
+        {
+          "name": "--container-padding-block-start"
+        },
+        {
+          "name": "--container-padding-inline-end"
+        },
+        {
+          "name": "--container-padding-inline-start"
+        },
+        {
+          "name": "--layout-content-width"
+        },
+        {
+          "name": "--layout-padding-inner-y"
+        },
+        {
+          "name": "--layout-padding-outer-x"
+        },
+        {
+          "name": "--layout-padding-outer-y"
+        }
+      ]
+    },
+    "tct-layout-panel": {
+      "class": "TctLayoutPanel",
+      "attributes": [
+        {
+          "name": "auto-save-id",
+          "property": "autoSaveId",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "collapsed",
+          "property": "collapsed",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "collapsed-size",
+          "property": "collapsedSize",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "collapsible",
+          "property": "collapsible",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "container",
+          "property": "container",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "default-size",
+          "property": "defaultSize",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "has-divider",
+          "property": "hasDivider",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "height",
+          "property": "height",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "landmark",
+          "property": "landmark",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "max-size",
+          "property": "maxSize",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "max-width",
+          "property": "maxWidth",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "min-height",
+          "property": "minHeight",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "min-size",
+          "property": "minSize",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "no-scroll",
+          "property": "noScroll",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "padding",
+          "property": "padding",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block",
+          "property": "paddingBlock",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block-end",
+          "property": "paddingBlockEnd",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block-start",
+          "property": "paddingBlockStart",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline",
+          "property": "paddingInline",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline-end",
+          "property": "paddingInlineEnd",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline-start",
+          "property": "paddingInlineStart",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "resizable",
+          "property": "resizable",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "snaps",
+          "property": "snaps",
+          "type": "number[] | undefined",
+          "reflects": false
+        },
+        {
+          "name": "width",
+          "property": "width",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "activeRegion",
+          "type": "ResizableProps | undefined",
+          "readonly": true
+        },
+        {
+          "name": "isScrollable",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "region",
+          "type": "ResizableProps | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "resize",
+          "signature": "(size: number) => void"
+        }
+      ],
+      "slots": [
+        "(default)"
+      ],
+      "events": [
+        {
+          "name": "tct-collapse-change",
+          "class": "TctCollapseChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        },
+        {
+          "name": "tct-size-change",
+          "class": "TctSizeChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        }
+      ],
+      "cssParts": [
+        "base"
+      ],
+      "cssStates": [
+        "collapsed"
+      ],
+      "cssProperties": [
+        {
+          "name": "--container-padding-block-end"
+        },
+        {
+          "name": "--container-padding-block-start"
+        },
+        {
+          "name": "--container-padding-inline-end"
+        },
+        {
+          "name": "--container-padding-inline-start"
+        },
+        {
+          "name": "--layout-padding-inner-x"
+        },
+        {
+          "name": "--layout-padding-inner-y"
+        },
+        {
+          "name": "--layout-padding-outer-x"
+        },
+        {
+          "name": "--layout-padding-outer-y"
+        }
+      ]
+    }
+  }
+}
