@@ -3,12 +3,12 @@
  * the public: generated component and reference pages, `llms.txt`, `llms-full.txt` and the public agent
  * registry. `pnpm docs:build` runs this first, so a leak fails the build.
  *
- * Authored guides (`guides/`, WP-D) are not generated. They are scanned and *reported*, never silently
- * ignored, but do not fail the gate until the content pass that D-015 requires of them has happened; the
- * transitional identifiers in `tools/lib/public-text.ts` are reported the same way.
+ * Authored guides (`guides/`, WP-D) are not generated, but the same rule holds for them: they are scanned
+ * and a mention fails the gate like any other leak. (Until the D-015 content pass they were only reported.)
+ * The transitional identifiers in `tools/lib/public-text.ts` are tolerated and counted the same way.
  */
 import {existsSync, readFileSync} from 'node:fs';
-import {join} from 'node:path';
+import {dirname, join} from 'node:path';
 import {walkFiles} from '../lib/fs.ts';
 import {rel} from '../lib/paths.ts';
 import {countTransitional, upstreamLeaks} from '../lib/public-text.ts';
@@ -20,13 +20,14 @@ export interface Leak {
 }
 
 export interface PublicScan {
-  /** Failures: the name in generated public output. */
+  /** Failures: the name in generated public output or in an authored guide. */
   leaks: Leak[];
-  /** Occurrences of the transitional identifiers (package scope, message-id namespace) in generated output. */
+  /** Occurrences of the transitional identifiers (package scope, message-id namespace) in scanned output. */
   transitional: number;
-  /** Authored guides that still name the upstream system: count per file. Reported, not failed. */
-  guides: {file: string; count: number}[];
+  /** Generated public files scanned. */
   scanned: number;
+  /** Authored pages scanned: the guides and the home page (they fail the gate like generated output). */
+  guidesScanned: number;
 }
 
 const PAGE = /\.mdx?$/;
@@ -44,9 +45,13 @@ export function generatedPublicFiles(
   return files;
 }
 
+/**
+ * Scans the given generated files, and (unless `guidesDir` is `null`) the authored guides and the home page
+ * beside them. Pass `null` to scan only `files`.
+ */
 export function scanPublicOutputs(
   files: readonly string[],
-  guidesDir: string | undefined = GUIDES_DIR,
+  guidesDir: string | null = GUIDES_DIR,
 ): PublicScan {
   const leaks: Leak[] = [];
   let transitional = 0;
@@ -56,19 +61,23 @@ export function scanPublicOutputs(
     for (const snippet of upstreamLeaks(text)) leaks.push({file, snippet});
   }
   const guides =
-    guidesDir && existsSync(guidesDir)
-      ? walkFiles(guidesDir)
-          .filter((file) => PAGE.test(file))
-          .map((file) => ({file, count: upstreamLeaks(readFileSync(file, 'utf8')).length}))
-          .filter((guide) => guide.count > 0)
+    guidesDir !== null && existsSync(guidesDir)
+      ? walkFiles(guidesDir).filter((file) => PAGE.test(file))
       : [];
-  return {leaks, transitional, guides, scanned: files.length};
+  const home = guidesDir === null ? undefined : join(dirname(guidesDir), 'index.mdx');
+  if (home && existsSync(home)) guides.push(home);
+  for (const file of guides) {
+    const text = readFileSync(file, 'utf8');
+    transitional += countTransitional(text);
+    for (const snippet of upstreamLeaks(text)) leaks.push({file, snippet});
+  }
+  return {leaks, transitional, scanned: files.length, guidesScanned: guides.length};
 }
 
 /** With file arguments the script scans exactly those files (used by the tests); otherwise the site's own output. */
 function main(): void {
   const given = process.argv.slice(2);
-  const scan = given.length > 0 ? scanPublicOutputs(given, undefined) : scanPublicOutputs(generatedPublicFiles());
+  const scan = given.length > 0 ? scanPublicOutputs(given, null) : scanPublicOutputs(generatedPublicFiles());
   if (scan.scanned === 0) {
     console.error('docs public check: no generated public output found; run pnpm generate first.');
     process.exit(1);
@@ -79,21 +88,16 @@ function main(): void {
         'in generated output; they go with their scheduled renames (D-015).',
     );
   }
-  if (scan.guides.length > 0) {
-    const total = scan.guides.reduce((sum, guide) => sum + guide.count, 0);
-    console.warn(
-      `  docs public check: WARNING ${total} mention(s) of the upstream name in ${scan.guides.length} authored guide(s) ` +
-        `(WP-D content pass pending): ${scan.guides.map((g) => `${rel(g.file)}: ${g.count}`).join(', ')}`,
-    );
-  }
   if (scan.leaks.length > 0) {
     for (const leak of scan.leaks.slice(0, 40)) console.error(`  ${rel(leak.file)}: ...${leak.snippet}...`);
     console.error(
-      `docs public check FAILED: the upstream design system's name appears ${scan.leaks.length} time(s) in generated public output (D-015).`,
+      `docs public check FAILED: the upstream design system's name appears ${scan.leaks.length} time(s) in generated public output or authored guides (D-015).`,
     );
     process.exit(1);
   }
-  console.log(`docs public check OK: ${scan.scanned} generated public file(s) never name the upstream system.`);
+  console.log(
+    `docs public check OK: ${scan.scanned} generated public file(s) and ${scan.guidesScanned} authored guide(s) never name the upstream system.`,
+  );
 }
 
 if (process.argv[1] && import.meta.filename === process.argv[1]) main();

@@ -49,16 +49,28 @@ describe('publicText on authored guide prose', () => {
 });
 
 describe('scanPublicOutputs and the CLI', () => {
-  it('passes clean output and reports guides without failing on them', () => {
+  it('passes clean output and clean authored pages, counting the tolerated identifiers', () => {
     const page = join(root, 'clean.mdx');
     writeFileSync(page, '# Button\n\nUses `@tecton-astryx/components/button`.\n');
-    const guides = join(root, 'guides');
+    const cleanRoot = join(root, 'clean-site');
+    const cleanGuides = join(cleanRoot, 'guides');
+    mkdirSync(cleanGuides, {recursive: true});
+    writeFileSync(join(cleanGuides, 'g.mdx'), 'Import `@tecton-astryx/core/features.js`; id `@astryx.dialog.close`.\n');
+    writeFileSync(join(cleanRoot, 'index.mdx'), '# Home\n');
+    const scan = scanPublicOutputs([page], cleanGuides);
+    expect(scan.leaks).toEqual([]);
+    expect(scan.transitional).toBe(3);
+    expect(scan.guidesScanned).toBe(2);
+  });
+
+  it('fails on an authored guide or the home page that names the upstream system', () => {
+    const site = join(root, 'dirty-site');
+    const guides = join(site, 'guides');
     mkdirSync(guides, {recursive: true});
     writeFileSync(join(guides, 'g.mdx'), 'Astryx for React\n');
-    const scan = scanPublicOutputs([page], guides);
-    expect(scan.leaks).toEqual([]);
-    expect(scan.transitional).toBe(1);
-    expect(scan.guides).toEqual([{file: join(guides, 'g.mdx'), count: 1}]);
+    writeFileSync(join(site, 'index.mdx'), 'Built on Astryx.\n');
+    const scan = scanPublicOutputs([], guides);
+    expect(scan.leaks.map((leak) => leak.file)).toEqual([join(guides, 'g.mdx'), join(site, 'index.mdx')]);
   });
 
   it('fails on a generated page, llms file or registry that names the upstream system', () => {
@@ -66,7 +78,7 @@ describe('scanPublicOutputs and the CLI', () => {
     const registry = join(root, 'agent-registry.json');
     writeFileSync(llms, '# Library\n\nAn implementation of Astryx.\n');
     writeFileSync(registry, JSON.stringify({library: {name: 'Tecton astryx'}}));
-    const scan = scanPublicOutputs([llms, registry], undefined);
+    const scan = scanPublicOutputs([llms, registry], null);
     expect(scan.leaks.map((leak) => leak.file)).toEqual([llms, registry]);
   });
 
