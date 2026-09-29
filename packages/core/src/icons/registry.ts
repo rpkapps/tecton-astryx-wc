@@ -67,6 +67,14 @@ export function hasIcon(name: string): boolean {
   return getIcon(name) !== undefined;
 }
 
+/**
+ * Whether the lowest-priority (default) layer holds anything. `tct-icon` registers the built-in set
+ * only when this is false, so the set is registered once per document and again after `resetIcons()`.
+ */
+export function hasDefaultIcons(): boolean {
+  return layers.default.size > 0;
+}
+
 /** Every registered name (both layers, deduplicated, sorted). */
 export function getIconNames(): string[] {
   return [...new Set([...layers.default.keys(), ...layers.normal.keys()])].sort();

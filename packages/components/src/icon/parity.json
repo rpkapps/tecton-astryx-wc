@@ -1,0 +1,136 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "icon",
+  "workPackage": "WP-F",
+  "entries": {
+    "core.icon": {
+      "tag": "tct-icon",
+      "status": "implemented",
+      "upstream": {"name": "Icon", "path": "packages/core/src/Icon/Icon.tsx", "commit": "ca632c6"},
+      "api": [
+        {
+          "upstream": "icon",
+          "kind": "prop",
+          "target": "name",
+          "as": "attribute",
+          "notes": "Semantic name or namespaced key from the registry (attribute `name`, A§12). The upstream 'SVG component' form is the default slot: slot an <svg>."
+        },
+        {
+          "upstream": "color",
+          "kind": "prop",
+          "target": "color",
+          "as": "attribute",
+          "reflect": true,
+          "default": "inherit"
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "contextual, else md"
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Non-empty: role=img + name via ElementInternals; empty: decorative (host aria-hidden)."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(icon), the size and colour attributes, or --icon-stroke-width."
+        },
+        {
+          "upstream": "icon",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "Custom SVG (upstream component mode) and fallback for an unregistered name."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useIcon",
+          "target": "getIcon",
+          "as": "module-function",
+          "notes": "@tecton-astryx/core/icons/registry.js returns the IconDefinition or lazy loader."
+        },
+        {
+          "upstream": "registerIcons",
+          "target": "registerIcons",
+          "as": "module-function",
+          "notes": "Same name; layers (`priority: 'default'`), namespaces and lazy loaders; notifies rendered icons."
+        },
+        {"upstream": "getIcon", "target": "getIcon", "as": "module-function"},
+        {
+          "upstream": "getIconRegistry",
+          "target": "getIconNames",
+          "as": "module-function",
+          "notes": "Names snapshot; definitions through getIcon()."
+        },
+        {
+          "upstream": "getExtendedIcon",
+          "target": "registerIcons",
+          "as": "module-function",
+          "notes": "The library-default-plus-override seam is registerIcons(..., {priority: 'default'}); a per-call fallback is the tct-icon default slot."
+        },
+        {"upstream": "resetIcons", "target": "resetIcons", "as": "module-function"},
+        {
+          "upstream": "renderIconSlot",
+          "as": "waived",
+          "reason": "Render-prop helper for React children. Owners render <tct-icon name> in a template or slot; there is nothing to port."
+        },
+        {
+          "upstream": "IconDefaultSizeProvider",
+          "target": "--_icon-size",
+          "as": "css",
+          "notes": "Owning components set the private --_icon-size on the element that owns the icon slot; it inherits through the slot and an explicit size still wins."
+        }
+      ],
+      "differences": [
+        {
+          "id": "ICON-01",
+          "type": "tecton-visual",
+          "text": "Sizes come from the Tecton icon size tokens (--tecton-icon-size-50/100/150/200 = 12/16/20/24 px) instead of 0.75/1/1.25/1.5 rem, so they no longer scale with the root font size."
+        },
+        {
+          "id": "ICON-02",
+          "type": "approved-api-difference",
+          "text": "`icon` is the `name` attribute (A§12); the SVG-component form of `icon` is the default slot, which is also the fallback when `name` is not registered (upstream renders nothing)."
+        },
+        {
+          "id": "ICON-03",
+          "type": "approved-api-difference",
+          "text": "Decorative or labelled semantics are default ElementInternals state on the host (aria-hidden, or role=img and name), so host attributes override them exactly as the upstream prop spread lets an explicit aria-* win. The inner <svg> is always aria-hidden."
+        },
+        {
+          "id": "ICON-04",
+          "type": "tecton-visual",
+          "text": "color=\"accent\" paints --color-icon-accent (the Tecton adornment ink) because --color-accent is a fill in Tecton (tecton-astryx components.ts `icon` override)."
+        },
+        {
+          "id": "ICON-05",
+          "type": "approved-api-difference",
+          "text": "The built-in set is registered lazily by the first tct-icon that connects (lowest priority, A§12), not at module load."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components] ARIA defaults via ElementInternals; [mwg:sanitize-untrusted-html] and [mwg:trusted-types] raw SVG bodies go through sanitizeHtml once and are cloned; [mwg:custom-elements] observed attributes, upgrade order; [mwg:styling-web-components] ::slotted sizing and part; [mwg:css] logical properties and layers."
+    }
+  }
+}
