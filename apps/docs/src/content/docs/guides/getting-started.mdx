@@ -1,0 +1,139 @@
+---
+title: Getting Started
+description: Add the Tecton Astryx Web Components to a project, load the theme, register an element and start building.
+sidebar:
+  order: 1
+---
+
+Tecton Astryx Web Components is a framework-independent implementation of the Astryx design system, built with Lit and TypeScript and skinned with the Tecton visual system. Every element is a standard custom element with the `tct-` prefix, so it works in plain HTML, React, Vue, Svelte, Angular or a server-rendered page. There is no runtime dependency on React or StyleX.
+
+:::note[Status of the element APIs]
+The design tokens, fonts, icon sets, locale catalogs and the core runtime (`@tecton-astryx/tokens`, `@tecton-astryx/icons`, `@tecton-astryx/locales`, `@tecton-astryx/core`) exist today. The elements are delivered folder by folder. Examples on this page show the target API from the binding architecture; anything that is not merged yet is marked _planned_, and each generated component page states its own status.
+:::
+
+## Quick Start with AI
+
+Paste this into your AI coding tool and let it handle the setup:
+
+```text title="Set up the design system"
+Add @tecton-astryx/components and @tecton-astryx/tokens to this project (they are private packages: install them from the workspace, tarball or Git source my team uses). Load the Tecton stylesheet once in the document, register the elements I use, then run `tct init --features agents` to set up agent docs. Read the generated file to learn the conventions.
+```
+
+The `tct` CLI is a deliverable of the AI work package (WP-AI) and is _planned_. See [Working with AI](../working-with-ai/) for what it will generate.
+
+Every app gets a look whether or not anyone chooses one, so it is worth one question at setup rather than revisiting screens that were built around the wrong look. In this project the look is fixed: it is Tecton. The remaining choices are the colour mode (follow the system by default) and which fonts you load:
+
+```text title="Give it a look"
+This app uses the Tecton theme. Follow the operating system's light/dark preference by default. Load Figtree and IBM Plex Mono through @tecton-astryx/tokens/fonts.css unless the app already supplies its own fonts. Show me the result before moving on.
+```
+
+## Install
+
+The elements have no framework requirement. They need an evergreen browser (see [Browser support](../browser-support/)) and a way to load ES modules. Node 22 is only needed for tooling.
+
+The packages are private and unlicensed for now: nothing is published to a public registry. [Installation](../installation/) explains the workspace, tarball and self-hosted CDN routes. Once the packages resolve, add them like any other dependency:
+
+| Package                        | What it gives you                                                                                |
+| ------------------------------ | ------------------------------------------------------------------------------------------------ |
+| `@tecton-astryx/components`    | Every public `tct-*` element, the autoloader, `define.js` and the assembled `tecton.css` (planned) |
+| `@tecton-astryx/tokens`        | `tokens.css`, `fonts.css`, `palette.css`, `tecton.css` (tokens plus fonts) and token metadata    |
+| `@tecton-astryx/core`          | The `TctElement` base class, `defineElement`, events, context, controllers, i18n, icon registry  |
+| `@tecton-astryx/icons`         | Icon sets as data modules: the default set (Lucide glyphs) and the Tecton domain icons           |
+| `@tecton-astryx/locales`       | The 30 message catalogs and a generated pseudo-locale, loaded lazily                            |
+
+`lit` is a dependency of the packages and comes with them.
+
+## Add the theme CSS
+
+Load the stylesheet once, in the document. It carries the design tokens (colours, spacing, radius, typography, shadows) as CSS custom properties, the light and dark values, and, in the one-link bundle, the Figtree and IBM Plex Mono font faces.
+
+```css title="global.css"
+@import '@tecton-astryx/tokens/tecton.css';
+```
+
+If you use a bundler, import it from JavaScript instead:
+
+```js title="main.js"
+import '@tecton-astryx/tokens/tecton.css';
+```
+
+Or link it from HTML:
+
+```html title="index.html"
+<link rel="stylesheet" href="/vendor/tecton-astryx/tecton.css" />
+```
+
+Two forms of the bundle exist:
+
+- `@tecton-astryx/tokens/tecton.css` is available now and contains `tokens.css` plus `fonts.css`.
+- `@tecton-astryx/components/tecton.css` (_planned_) adds the light-DOM styles that some elements need (`light-dom.css`) and the optional flash-of-undefined-elements cloak (`cloak.css`). Prefer it once it exists.
+
+The stylesheet is cascade-layered. It declares `@layer tecton.reset, tecton.tokens, tecton.light-dom;` first, so load order never changes layer order, and it declares tokens on `:where(:root)` so any of your own rules override a token without `!important`. If your project has existing global CSS, a legacy reset, or Tailwind, declare the layer order explicitly and assign every stylesheet to a layer deliberately. See [Cascade layer safety](../migration/#cascade-layer-safety) before building screens.
+
+By default the page follows the operating system: the stylesheet sets `color-scheme: light dark`. To pin a mode, set `data-theme="light"` or `data-theme="dark"` on `<html>`. The [theming guide](../theme/) covers modes, nested themes and the `tct-theme` element.
+
+Fonts are opt-in and load from the document, never from inside a shadow root. `tecton.css` includes them; if you take `tokens.css` alone, load `fonts.css` yourself or supply your own faces. See [Typography](../typography/#loading-fonts).
+
+## Add your first element
+
+Elements are registered per family. Import a family's define entry and its tags (and the tags it renders internally) are registered:
+
+```html title="index.html"
+<script type="module">
+  import '@tecton-astryx/components/button';
+</script>
+
+<tct-button variant="primary">Hello Tecton</tct-button>
+```
+
+Every element is a real DOM node, so the usual platform tools work: `addEventListener('click', …)`, `element.disabled = true`, `element.focus()`, `:disabled`, `form.elements`. Native events such as `click`, `input` and `change` are not renamed. Notifications that have no native equivalent are `tct-`-prefixed events (`tct-open-change`, `tct-value-change`).
+
+If you would rather not list imports, the autoloader (_planned_) registers each `tct-*` tag the first time it appears in the document:
+
+```html
+<script type="module" src="/vendor/tecton-astryx/autoloader.js"></script>
+```
+
+The [installation guide](../installation/) has every route: named family entries, `define.js` for everything, the autoloader, scoped registries, and the CDN build.
+
+## Customize your components
+
+Elements are styled through, in order of preference: design tokens, attributes, `::part()`, `:state()`, documented component custom properties and, for small adjustments, `::slotted()`. There is no `xstyle` prop, because there is no build-time styling library to feed. See [Styling components](../styling/) for the whole surface, and [React to Web Components](../react-to-web-components/) if you are coming from Astryx for React.
+
+```css
+/* a token: every element below this rule follows */
+.settings-page {
+  --color-background-surface: var(--color-background-muted);
+}
+
+/* an anatomy part: one element, any property */
+tct-button::part(button) {
+  text-transform: uppercase;
+}
+```
+
+## Example apps
+
+Framework integration harnesses (vanilla, React 19, Vue 3, Angular, Svelte 5) live in `apps/integration` and are delivered with the integration work package (WP-I, _planned_). They show controlled usage through events, form submission and server rendering with each framework. Until then, the docs site itself is the reference for plain HTML usage.
+
+## Explore the CLI
+
+The `tct` CLI (_planned_, WP-AI) is the reference for elements, tokens and docs from the terminal, for people and for AI tools:
+
+```bash
+tct component              # list all elements
+tct component tct-button   # attributes, slots, events and usage for one element
+tct docs                   # list all doc topics
+tct docs tokens            # spacing, colour and radius reference
+```
+
+See [Working with AI](../working-with-ai/) and the [CLI reference](../cli/).
+
+{/*
+Adapted from Astryx docs topic `getting-started` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md).
+Section map: Quick Start with AI -> Quick Start with AI; Install -> Install; Add the theme CSS -> Add the theme CSS;
+Add your first component -> Add your first element; Customize with StyleX -> Customize your components;
+Example Apps -> Example apps; Explore the CLI -> Explore the CLI.
+Guides (modern-web-guidance, skill 2026_09_04-7de96777): [mwg:web-components] [mwg:custom-elements] [mwg:dark-mode]
+[mwg:component-specific-light-dark-theme] [mwg:styling-web-components] [mwg:visually-stable-font-fallbacks]
+*/}
