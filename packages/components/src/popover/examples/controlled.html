@@ -1,0 +1,19 @@
+<!-- title: Controlled; description: Listen to tct-open-change and set open yourself, or preventDefault() to veto the change. Property writes never emit events. -->
+<div id="controlled-root" style="display: flex; align-items: center; gap: var(--spacing-3)">
+  <tct-popover label="Controlled popover">
+    <button type="button">Toggle</button>
+    <div slot="content">Open state: <output id="controlled-state">closed</output></div>
+  </tct-popover>
+  <button type="button" id="controlled-open">Open from outside</button>
+  <script type="module">
+    const root = document.getElementById('controlled-root');
+    const popover = root.querySelector('tct-popover');
+    const state = root.querySelector('#controlled-state');
+    popover.addEventListener('tct-after-open-change', (event) => {
+      state.textContent = event.open ? 'open' : 'closed';
+    });
+    root.querySelector('#controlled-open').addEventListener('click', () => {
+      popover.open = true;
+    });
+  </script>
+</div>

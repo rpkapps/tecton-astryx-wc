@@ -1,0 +1,9 @@
+<!-- title: Neutral wrapper for menus; description: popup-role="none" leaves the role to the slotted content, for a menu or listbox that owns its semantics. -->
+<tct-popover label="Actions" popup-role="none" no-close-button>
+  <button type="button">Actions</button>
+  <div slot="content" role="menu" aria-label="Actions" style="display: grid; min-inline-size: 160px">
+    <button role="menuitem" type="button">Rename</button>
+    <button role="menuitem" type="button">Duplicate</button>
+    <button role="menuitem" type="button">Delete</button>
+  </div>
+</tct-popover>
