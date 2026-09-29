@@ -1,0 +1,9 @@
+<!-- title: Bottom sheet; description: presentation="adaptive" (the default) opens a popover on pointer layouts and a bottom sheet on a narrow touch viewport; presentation="sheet" always uses the sheet. -->
+<div id="bottom-sheet-root">
+  <tct-vstack max-width="360">
+    <tct-selector label="Always a sheet" presentation="sheet" value="b"></tct-selector>
+  </tct-vstack>
+  <script type="module">
+    document.querySelector('#bottom-sheet-root tct-selector').options = [{value: 'a', label: 'First'}, {value: 'b', label: 'Second'}, {value: 'c', label: 'Third'}];
+  </script>
+</div>

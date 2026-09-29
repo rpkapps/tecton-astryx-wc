@@ -1,0 +1,18 @@
+<!-- title: Custom rows and value; description: renderOption draws each row with your template; tct-selector-option gives the standard row content (icon, label, description, end content). renderValue draws the chosen value in the trigger. -->
+<div id="custom-rows-root">
+  <tct-vstack max-width="360">
+    <tct-selector label="Assign to" value="avery"></tct-selector>
+  </tct-vstack>
+  <script type="module">
+    import {html} from 'lit';
+    const selector = document.querySelector('#custom-rows-root tct-selector');
+    const roles = {avery: 'Design', noah: 'Engineering', mia: 'Research'};
+    selector.options = [
+      {value: 'avery', label: 'Avery Stone'},
+      {value: 'noah', label: 'Noah Patel'},
+      {value: 'mia', label: 'Mia Chen'},
+    ];
+    selector.renderOption = (option) => html`<tct-selector-option label=${option.label} description=${roles[option.value]} icon="info"></tct-selector-option>`;
+    selector.renderValue = (option) => html`<tct-text type="label">${option.label} <tct-text color="secondary">(${roles[option.value]})</tct-text></tct-text>`;
+  </script>
+</div>

@@ -1,0 +1,32 @@
+<!-- title: Basic; description: A table of contents that follows the scroll position of the container it tracks. Scroll the article: the item of the section you are reading is active (aria-current="location"), on the way down and on the way up. -->
+<div id="basic-root">
+  <tct-hstack gap="6" v-align="start">
+    <tct-stack-item size="fill">
+      <div id="basic-pane" style="block-size: 260px; overflow: auto" tabindex="0" aria-label="Article">
+        <tct-vstack gap="3" padding="2">
+          <tct-heading level="2" id="basic-intro">Introduction</tct-heading>
+          <tct-text>Every section here is tall enough to scroll through, so the outline has something to follow.</tct-text>
+          <tct-aspect-ratio ratio="16/6"><tct-card variant="muted" padding="0" height="100%"></tct-card></tct-aspect-ratio>
+          <tct-heading level="2" id="basic-install">Installation</tct-heading>
+          <tct-text>Install the package, then register the elements you use.</tct-text>
+          <tct-aspect-ratio ratio="16/6"><tct-card variant="muted" padding="0" height="100%"></tct-card></tct-aspect-ratio>
+          <tct-heading level="2" id="basic-usage">Usage</tct-heading>
+          <tct-text>Put an element on the page and give it attributes.</tct-text>
+          <tct-aspect-ratio ratio="16/6"><tct-card variant="muted" padding="0" height="100%"></tct-card></tct-aspect-ratio>
+          <tct-heading level="2" id="basic-faq">FAQ</tct-heading>
+          <tct-text>A short last section still becomes active at the bottom.</tct-text>
+        </tct-vstack>
+      </div>
+    </tct-stack-item>
+    <tct-outline label="Basic contents" scroll-container="#basic-pane"></tct-outline>
+  </tct-hstack>
+  <script type="module">
+    const root = document.querySelector('#basic-root');
+    root.querySelector('tct-outline').items = [
+      {id: 'basic-intro', label: 'Introduction', level: 1},
+      {id: 'basic-install', label: 'Installation', level: 2},
+      {id: 'basic-usage', label: 'Usage', level: 2},
+      {id: 'basic-faq', label: 'FAQ', level: 1},
+    ];
+  </script>
+</div>

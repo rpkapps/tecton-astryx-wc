@@ -1,0 +1,23 @@
+<!-- title: Async options; description: options-state describes an option source that loads or fails: an empty panel says which, and is announced exactly once when the state arrives. Options you already have stay selectable while more load. -->
+<div id="async-options-root">
+  <tct-vstack max-width="360" gap="4">
+    <tct-selector label="Assignee" placeholder="Choose a person" options-state="loading"></tct-selector>
+    <tct-hstack gap="2">
+      <tct-button variant="secondary" size="sm" data-action="load">Load people</tct-button>
+      <tct-button variant="secondary" size="sm" data-action="fail">Fail to load</tct-button>
+    </tct-hstack>
+  </tct-vstack>
+  <script type="module">
+    const root = document.getElementById('async-options-root');
+    const assignee = root.querySelector('tct-selector');
+    assignee.errorText = 'People could not be loaded';
+    root.querySelector('[data-action="load"]').addEventListener('click', () => {
+      assignee.options = ['Avery Stone', 'Noah Patel', 'Mia Chen'];
+      assignee.optionsState = 'ready';
+    });
+    root.querySelector('[data-action="fail"]').addEventListener('click', () => {
+      assignee.options = [];
+      assignee.optionsState = 'error';
+    });
+  </script>
+</div>

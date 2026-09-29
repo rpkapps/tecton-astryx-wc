@@ -1,0 +1,172 @@
+/*
+ * tct-tab. The native control is `.tab`; the strip's roving tabindex focuses it, so the ring is drawn on it
+ * (D-005). Tecton paints tabs as text with an underline indicator: rest text is the tab role, hover, press
+ * and keyboard focus use the tertiary action fills each paired with their own text role (a state fill
+ * measured against its resting ink can fail in dark mode), and the selected tab is the selected-text role
+ * with a 2px indicator in the same ink. Sizes are the element-size tokens of Button. [mwg:css]
+ * [mwg:accessible-web-components] [mwg:anchor-positioning-tab-underline]
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+
+  .tab {
+    /* Defaults are the md size; `data-size` re-points them. */
+    --_height: var(--size-element-md);
+    --_icon-size: var(--tecton-icon-size-100);
+    --_bg: transparent;
+    --_fg: var(--tecton-color-tab-rest-text);
+    --_bg-hover: var(--tecton-color-action-tertiary-bg-hover);
+    --_fg-hover: var(--tecton-color-action-tertiary-text-hover);
+    --_bg-press: var(--tecton-color-action-tertiary-bg-press);
+    --_fg-press: var(--tecton-color-action-tertiary-text-press);
+    --_bg-focus: var(--tecton-color-action-tertiary-bg-focus);
+    --_fg-focus: var(--tecton-color-action-tertiary-text-focus);
+
+    position: relative;
+    box-sizing: border-box;
+    display: inline-flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-1);
+    min-inline-size: 0;
+    block-size: var(--_height);
+    padding-block: 0;
+    padding-inline: var(--spacing-3);
+    border: 0;
+    border-radius: var(--radius-element);
+    background-color: var(--_bg);
+    color: var(--_fg);
+    font-family: inherit;
+    font-size: var(--text-label-size);
+    line-height: var(--text-label-leading);
+    font-weight: var(--font-weight-normal);
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      color var(--duration-fast) var(--ease-standard),
+      background-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .tab[data-size='sm'] {
+    --_height: var(--size-element-sm);
+    --_icon-size: var(--tecton-icon-size-50);
+  }
+
+  .tab[data-size='lg'] {
+    --_height: var(--size-element-lg);
+    --_icon-size: var(--tecton-icon-size-150);
+  }
+
+  /* Reserves the width of the selected (heavier) label so selecting never nudges the neighbours. */
+  .label-box {
+    display: inline-grid;
+    min-inline-size: 0;
+  }
+
+  .label,
+  .label-sizer {
+    grid-row: 1;
+    grid-column: 1;
+  }
+
+  .label-sizer {
+    visibility: hidden;
+    pointer-events: none;
+    font-weight: var(--font-weight-medium);
+  }
+
+  .end {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  /* The selected-tab bar. `--_tab-indicator-bottom` lets a divided strip drop it onto the rail. */
+  .indicator {
+    position: absolute;
+    inset-block-end: var(--_tab-indicator-bottom, -1px);
+    inset-inline: var(--spacing-3);
+    block-size: 2px;
+    border-radius: var(--radius-full);
+    background-color: var(--tecton-color-tab-selected-text);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+  }
+}
+
+@layer state {
+  .tab[data-selected] {
+    --_fg: var(--tecton-color-tab-selected-text);
+    --_fg-hover: var(--tecton-color-tab-selected-text);
+    --_fg-press: var(--tecton-color-tab-selected-text);
+    --_fg-focus: var(--tecton-color-tab-selected-text);
+
+    font-weight: var(--font-weight-medium);
+  }
+
+  .tab[data-selected] .indicator {
+    opacity: 1;
+  }
+
+  @media (hover: hover) {
+    .tab:hover:not([data-disabled]) {
+      background-color: var(--_bg-hover);
+      color: var(--_fg-hover);
+    }
+  }
+
+  .tab:focus-visible:not([data-disabled]) {
+    background-color: var(--_bg-focus);
+    color: var(--_fg-focus);
+  }
+
+  .tab:active:not([data-disabled]) {
+    background-color: var(--_bg-press);
+    color: var(--_fg-press);
+  }
+
+  .tab[data-disabled] {
+    color: var(--color-text-disabled);
+    cursor: default;
+  }
+
+  /* The ring, on the focusable control (the strip's roving tabindex focuses it). */
+  .tab:focus-visible {
+    outline-width: var(--focus-outline-width);
+    outline-style: var(--focus-outline-style);
+    outline-color: var(--focus-outline-color);
+    outline-offset: var(--focus-outline-offset);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .tab {
+      color: ButtonText;
+    }
+
+    .tab[data-selected] {
+      color: LinkText;
+    }
+
+    .tab[data-disabled] {
+      color: GrayText;
+    }
+
+    .indicator {
+      /* Colour is the meaning here: keep the system colour instead of the forced Canvas. */
+      forced-color-adjust: none;
+      background-color: Highlight;
+    }
+
+    .tab:focus-visible {
+      outline-color: Highlight;
+    }
+  }
+}

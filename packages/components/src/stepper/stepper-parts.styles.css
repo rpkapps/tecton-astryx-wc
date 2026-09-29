@@ -1,0 +1,189 @@
+/*
+ * Painted parts shared by tct-step and the compact summary of tct-stepper (both render them from the same
+ * classes: step-parts.ts). Tecton: the accent is the adornment lilac (`--color-icon-accent`, the owner's
+ * step-indicator override: the plain accent is 2.2:1 as ink); a number badge on it takes the surface colour
+ * (8.8:1); status badges pair each filled status fill with its own filled text role; status glyphs take the
+ * status adornment. [mwg:accessibility] [mwg:css]
+ */
+@layer component {
+  .row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    min-inline-size: 0;
+  }
+
+  .indicator {
+    /* design: every indicator (number, check, ring, custom icon) shares one 16px box so `auto` never nudges the label */
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    inline-size: var(--spacing-4);
+    block-size: var(--spacing-4);
+    color: var(--color-icon-secondary);
+  }
+
+  .indicator svg,
+  .indicator ::slotted(*) {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .indicator .check {
+    stroke: var(--color-background-surface);
+  }
+
+  .indicator[data-kind='number'] {
+    display: grid;
+    place-items: center;
+    border-radius: var(--radius-full);
+    background-color: var(--color-background-muted);
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-semibold);
+    line-height: 1;
+    text-align: center;
+  }
+
+  /* Progress: the completed check and the current ring are accent ink; a number badge is an accent fill. */
+  .indicator[data-progress='completed'],
+  .indicator[data-progress='in-progress'] {
+    color: var(--color-icon-accent);
+  }
+
+  .indicator[data-kind='number'][data-progress='completed'],
+  .indicator[data-kind='number'][data-progress='in-progress'] {
+    background-color: var(--color-icon-accent);
+    color: var(--color-background-surface);
+  }
+
+  /* Status: a glyph is the status adornment; a badge is the status's filled fill with its own text. */
+  .indicator[data-status='success'] {
+    color: var(--tecton-color-status-success-outline-adornment);
+  }
+
+  .indicator[data-status='warning'] {
+    color: var(--tecton-color-status-warning-outline-adornment);
+  }
+
+  .indicator[data-status='error'] {
+    color: var(--tecton-color-status-error-outline-adornment);
+  }
+
+  .indicator[data-kind='number'][data-status='success'] {
+    background-color: var(--tecton-color-status-success-filled-bg);
+    color: var(--tecton-color-status-success-filled-text);
+  }
+
+  .indicator[data-kind='number'][data-status='warning'] {
+    background-color: var(--tecton-color-status-warning-filled-bg);
+    color: var(--tecton-color-status-warning-filled-text);
+  }
+
+  .indicator[data-kind='number'][data-status='error'] {
+    background-color: var(--tecton-color-status-error-filled-bg);
+    color: var(--tecton-color-status-error-filled-text);
+  }
+
+  .indicator[data-kind='number'][data-status='accent'] {
+    background-color: var(--color-icon-accent);
+    color: var(--color-background-surface);
+  }
+
+  .indicator[data-disabled] {
+    color: var(--color-text-disabled);
+  }
+
+  .indicator[data-kind='number'][data-disabled] {
+    background-color: var(--color-background-muted);
+    color: var(--color-text-disabled);
+  }
+
+  .label {
+    min-inline-size: 0;
+    overflow: hidden;
+    color: var(--color-text-primary);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+    font-weight: var(--font-weight-normal);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .label[data-progress='in-progress'] {
+    font-weight: var(--font-weight-medium);
+  }
+
+  .label[data-progress='not-started'] {
+    color: var(--color-text-secondary);
+  }
+
+  .label[data-disabled] {
+    color: var(--color-text-disabled);
+  }
+
+  .optional-dot,
+  .optional {
+    color: var(--color-text-secondary);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+    white-space: nowrap;
+  }
+
+  .description {
+    display: block;
+    color: var(--color-text-secondary);
+    font-size: var(--text-supporting-size);
+    line-height: var(--spacing-4);
+  }
+
+  .end {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .indicator {
+      color: ButtonText;
+    }
+
+    .indicator[data-kind='number'] {
+      forced-color-adjust: none;
+      background-color: ButtonFace;
+      color: ButtonText;
+      border: var(--border-width) solid ButtonText;
+    }
+
+    .indicator[data-kind='number'][data-progress='completed'],
+    .indicator[data-kind='number'][data-progress='in-progress'] {
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .indicator[data-progress='completed'],
+    .indicator[data-progress='in-progress'] {
+      color: Highlight;
+    }
+
+    .indicator .check {
+      stroke: Canvas;
+    }
+
+    .label,
+    .optional,
+    .optional-dot,
+    .description {
+      color: CanvasText;
+    }
+
+    .label[data-disabled] {
+      color: GrayText;
+    }
+  }
+}

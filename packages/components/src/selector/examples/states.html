@@ -1,0 +1,17 @@
+<!-- title: States; description: Required and optional indicators, a description, statuses (attached, detached and tooltip), a disabled selector that explains itself, read-only and busy. -->
+<div id="states-root">
+  <tct-vstack max-width="360" gap="4">
+    <tct-selector label="Required" required description="Pick one to continue."></tct-selector>
+    <tct-selector label="Optional" optional></tct-selector>
+    <tct-selector label="With an error" status-type="error" status-message="This size is out of stock." value="b"></tct-selector>
+    <tct-selector label="Warning in a tooltip" status-type="warning" status-message="Ships in two weeks." status-variant="tooltip" value="c"></tct-selector>
+    <tct-selector label="Disabled" disabled disabled-message="Ask an admin to change this." value="a"></tct-selector>
+    <tct-selector label="Read-only" readonly value="a"></tct-selector>
+    <tct-selector label="Saving" loading value="a"></tct-selector>
+  </tct-vstack>
+  <script type="module">
+    for (const selector of document.querySelectorAll('#states-root tct-selector')) {
+      selector.options = [{value: 'a', label: 'Small'}, {value: 'b', label: 'Medium'}, {value: 'c', label: 'Large'}];
+    }
+  </script>
+</div>

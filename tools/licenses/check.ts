@@ -14,6 +14,7 @@ import {
   REQUIRED_NOTICE_TEXT,
   SHIPPED_ASSET_PACKAGES,
   SHIPPED_PACKAGES,
+  TOOLING_RUNTIME_PACKAGES,
   type Finding,
   type PackageLicense,
 } from './policy.ts';
@@ -82,6 +83,19 @@ function checkOwnLicence(): Finding[] {
   return findings;
 }
 
+/** Names of the external runtime dependencies a workspace package declares directly (workspace links excluded). */
+function directRuntimeDependencies(packageName: string): string[] {
+  const dir = packageName.replace('@tecton-wc/', '');
+  const manifest = JSON.parse(
+    readFileSync(join(ROOT, 'packages', dir, 'package.json'), 'utf8'),
+  ) as {
+    dependencies?: Record<string, string>;
+  };
+  return Object.entries(manifest.dependencies ?? {})
+    .filter(([, range]) => !range.startsWith('workspace:'))
+    .map(([name]) => name);
+}
+
 function checkNotices(shippedNames: ReadonlySet<string>): Finding[] {
   const path = join(ROOT, 'THIRD-PARTY-NOTICES.md');
   if (!existsSync(path))
@@ -106,11 +120,21 @@ function main(): number {
   for (const pkg of SHIPPED_PACKAGES) {
     for (const entry of pnpmLicenses(['--filter', pkg, '--prod'])) shippedNames.add(entry.name);
   }
+  // The CLI (D-013 Q-07): its whole production closure is checked as strictly as the shipped runtime, but
+  // the notices file names only its direct dependencies (the transitive tree is one licence-checked unit).
+  const toolingNames = new Set<string>();
+  for (const pkg of TOOLING_RUNTIME_PACKAGES) {
+    for (const entry of pnpmLicenses(['--filter', pkg, '--prod'])) toolingNames.add(entry.name);
+  }
+  const noticed = new Set([
+    ...shippedNames,
+    ...TOOLING_RUNTIME_PACKAGES.flatMap((pkg) => directRuntimeDependencies(pkg)),
+  ]);
 
   const findings = [
-    ...evaluateLicenses({all, shippedNames}),
+    ...evaluateLicenses({all, shippedNames: new Set([...shippedNames, ...toolingNames])}),
     ...checkOwnLicence(),
-    ...checkNotices(shippedNames),
+    ...checkNotices(noticed),
   ];
 
   for (const finding of findings.filter((f) => f.level === 'warning'))
@@ -123,7 +147,7 @@ function main(): number {
     return 1;
   }
   console.log(
-    `licenses:check OK: ${all.length} installed packages checked, ${shippedNames.size} in the shipped runtime tree, ` +
+    `licenses:check OK: ${all.length} installed packages checked, ${shippedNames.size} in the shipped runtime tree, ${toolingNames.size} in the CLI runtime tree, ` +
       `${findings.length} warning(s).`,
   );
   return 0;

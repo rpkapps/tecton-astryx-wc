@@ -1,0 +1,10 @@
+{
+  "@tct.selector.loading": {
+    "defaultMessage": "Loading options",
+    "description": "Shown in a Selector's or MultiSelector's dropdown panel when the options are still being fetched and none have arrived, and announced in a polite live region once. Short; neutral tone."
+  },
+  "@tct.selector.error": {
+    "defaultMessage": "Options could not be loaded",
+    "description": "Shown in a Selector's or MultiSelector's dropdown panel when fetching the options failed and none are available, and announced in a polite live region once. Short; neutral, not blaming."
+  }
+}

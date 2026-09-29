@@ -1,0 +1,48 @@
+<!-- title: Sticking to the bottom; description: While you are at the bottom the layout follows the reply as it streams in. Scroll up and it lets go and shows the scroll button; press the button (or send a message) to return to the newest message. Enter in the composer sends a message and starts a reply. -->
+<tct-vstack id="follow-root" height="420" max-width="560">
+  <tct-chat-layout id="follow-layout">
+    <tct-chat-message-list id="follow-list"></tct-chat-message-list>
+    <tct-chat-composer id="follow-composer" slot="composer" placeholder="Send a message to start a reply"></tct-chat-composer>
+  </tct-chat-layout>
+</tct-vstack>
+<script type="module">
+  const layout = document.getElementById('follow-layout');
+  const list = document.getElementById('follow-list');
+  const composer = document.getElementById('follow-composer');
+  const words = 'The forecast model was retrained on the last twelve months of production data. Wells A-12 and B-04 are within tolerance, while C-19 has been below forecast since the compressor fault on Tuesday. A work order has been drafted and is waiting for approval.'.split(' ');
+
+  const message = (sender, text) => {
+    const row = document.createElement('tct-chat-message');
+    row.setAttribute('sender', sender);
+    const bubble = document.createElement('tct-chat-message-bubble');
+    bubble.textContent = text;
+    row.append(bubble);
+    list.append(row);
+    return bubble;
+  };
+
+  for (let n = 1; n <= 6; n++) {
+    message(n % 2 ? 'user' : 'assistant', `Earlier message ${n}: the conversation is already long enough to scroll.`);
+  }
+
+  composer.addEventListener('tct-chat-submit', (event) => {
+    message('user', event.value);
+    layout.scrollToBottom();
+    list.streaming = true;
+    composer.stopShown = true;
+    const bubble = message('assistant', '');
+    let index = 0;
+    const finish = () => {
+      clearInterval(timer);
+      list.streaming = false;
+      composer.stopShown = false;
+      composer.removeEventListener('tct-chat-stop', finish);
+    };
+    const timer = setInterval(() => {
+      bubble.append(`${words[index]} `);
+      index += 1;
+      if (index === words.length) finish();
+    }, 120);
+    composer.addEventListener('tct-chat-stop', finish);
+  });
+</script>

@@ -1,0 +1,482 @@
+/*
+ * The selectors (tct-selector, tct-multi-selector): the trigger inside the shared outlined field box,
+ * the popover and bottom-sheet panel with its search row, listbox, option rows and empty message.
+ *
+ * The box, the label chrome, the sizes and the status glyph are the shared field and box modules; this
+ * sheet turns the box's fixed height into a minimum (a two-line value grows it) and adds the trigger,
+ * the chevron and the panel. Focus is drawn on the box (`:has(:focus-visible)`). The popover panel is a
+ * 1px rule on the recessed popover fill with no drop shadow, like every Tecton menu (D-013); option rows
+ * hover through the Tecton table-row fills (theme components.ts `selector-option-row`).
+ * [mwg:css] [mwg:styling-web-components] [mwg:animate-to-from-top-layer] [mwg:resilient-context-menus-and-nested-dropdowns]
+ */
+@layer component {
+  /* --------------------------------------------------------------------------- trigger box */
+
+  /* The trigger is sized by its content: the size token is the minimum, and each extra line of a custom value adds one. */
+  .input-wrapper[data-size='sm'] {
+    block-size: auto;
+    min-block-size: var(--size-element-sm);
+  }
+
+  .input-wrapper[data-size='md'] {
+    block-size: auto;
+    min-block-size: var(--size-element-md);
+  }
+
+  .input-wrapper[data-size='lg'] {
+    block-size: auto;
+    min-block-size: var(--size-element-lg);
+  }
+
+  .input-wrapper {
+    cursor: pointer;
+  }
+
+  /* Inside an input group the group's row is the height: the box fills it and the value is clamped to it. */
+  .input-wrapper[data-in-group] {
+    block-size: 100%;
+    min-block-size: 0;
+    padding-block: 0;
+  }
+
+  /* The ghost trigger is borderless and quiet, like a ghost button: it only speaks on hover, focus and press. */
+  :host([variant='ghost']) .input-wrapper {
+    --_field-border-color: transparent;
+
+    inline-size: max-content;
+    max-inline-size: 100%;
+    font-weight: var(--font-weight-medium);
+    background-color: var(--tecton-color-action-tertiary-bg);
+    color: var(--tecton-color-action-tertiary-text);
+  }
+
+  .trigger {
+    display: flex;
+    flex: 1 1 0;
+    align-items: center;
+    gap: var(--spacing-2);
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-size);
+    font-weight: inherit;
+    line-height: var(--text-body-leading);
+    text-align: start;
+    cursor: inherit;
+
+    /* The box draws the ring: the button must not draw a second one inside it. */
+    outline: none;
+  }
+
+  .value,
+  .placeholder {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    overflow: hidden;
+    text-align: start;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .placeholder {
+    color: var(--tecton-color-input-outlined-text-placeholder);
+  }
+
+  .value-icon,
+  .start-icon,
+  .chevron {
+    flex-shrink: 0;
+  }
+
+  .chevron {
+    cursor: pointer;
+  }
+
+  /* --------------------------------------------------------------------------- popover panel */
+
+  /* Without the Popover API (Tier 2) the attribute is inert: hidden until LayerController shows it. */
+  @supports not selector(:popover-open) {
+    .layer {
+      position: fixed;
+      display: none;
+    }
+  }
+
+  /*
+   * PositionController clamps the layer to the `position-area` cell; in a small cell that would shrink the
+   * layer instead of letting the browser flip it, so the surface carries the viewport clamps itself.
+   */
+  .layer {
+    max-inline-size: none !important;
+    max-block-size: none !important;
+  }
+
+  .surface {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    max-inline-size: calc(100vi - var(--spacing-8));
+    max-block-size: min(
+      340px /* design: upstream list height cap (300px) plus the search row */,
+      calc(100dvb - var(--spacing-8))
+    );
+    overflow: hidden;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-element);
+    background: var(--color-background-popover);
+    color: var(--color-text-primary);
+    font-family: var(--font-family-body);
+    font-size: var(--text-label-size);
+    line-height: var(--text-label-leading);
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  .search {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: var(--spacing-2);
+    margin: var(--spacing-1);
+    padding-block: var(--spacing-1);
+    padding-inline: var(--spacing-2);
+    border-radius: var(--radius-inner);
+
+    /* The ring sits inside the row: the panel clips overflow. */
+    --_focus-offset: calc(-1 * var(--focus-outline-width));
+  }
+
+  .search-icon {
+    flex-shrink: 0;
+  }
+
+  .search-input {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--tecton-color-input-outlined-text-value);
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+    outline: none;
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
+  .search-input::placeholder {
+    color: var(--tecton-color-input-outlined-text-placeholder);
+    opacity: 1;
+  }
+
+  .listbox {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: var(--spacing-0-5);
+    box-sizing: border-box;
+    min-block-size: 0;
+    padding: var(--spacing-1);
+    /* physical: overflow-block and overflow-inline are not available in every Tier-2 engine */
+    overflow-x: hidden;
+
+    /* physical: as above */
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    /* The sheet's listbox takes focus itself; the ring is drawn on it by the state layer. */
+    outline: none;
+  }
+
+  .listbox[hidden] {
+    display: none;
+  }
+
+  /* Overlay placement measures the rows before the popup moves: hidden until it has. */
+  .listbox[data-overlay] {
+    opacity: 0;
+  }
+
+  .option-divider {
+    margin-block: var(--spacing-1);
+  }
+
+  .group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-0-5);
+  }
+
+  .group-heading {
+    padding-block: var(--spacing-1);
+    padding-inline: var(--spacing-2);
+    color: var(--color-text-secondary);
+    font-size: var(--text-supporting-size);
+    line-height: var(--text-supporting-leading);
+  }
+
+  /* --------------------------------------------------------------------------- option rows */
+
+  .option {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    box-sizing: border-box;
+    padding-block: var(--spacing-1-5);
+    padding-inline: var(--spacing-2);
+    border-radius: var(--radius-inner);
+    color: var(--color-text-primary);
+    cursor: pointer;
+  }
+
+  .option[data-size='sm'] {
+    padding-block: var(--spacing-1);
+  }
+
+  .option[data-size='lg'] {
+    padding-block: var(--spacing-2);
+  }
+
+  .option-content {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+  }
+
+  .option-label {
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* An empty mark draws nothing and takes no room; a drawn one stays at its edge of the row. */
+  .mark-column {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .option[data-selected] {
+    font-weight: var(--font-weight-medium);
+  }
+
+  .option[data-select-all] {
+    font-weight: var(--font-weight-medium);
+  }
+
+  .option[data-disabled] {
+    cursor: default;
+    opacity: 0.5;
+  }
+
+  .message {
+    padding: var(--spacing-3);
+    color: var(--color-text-secondary);
+    font-size: var(--text-label-size);
+    line-height: var(--text-label-leading);
+    text-align: center;
+  }
+
+  /* --------------------------------------------------------------------------- bottom sheet */
+
+  tct-bottom-sheet:not(:defined) {
+    display: none;
+  }
+
+  .sheet-content {
+    box-sizing: border-box;
+    inline-size: 100%;
+    padding-block-start: var(--spacing-4);
+    padding-inline: var(--spacing-1);
+  }
+
+  .sheet-heading {
+    margin-block-end: var(--spacing-2);
+    margin-inline: var(--spacing-3);
+  }
+
+  /* Inside the sheet the panel is not a floating surface: no frame, no clamp, and the touch row height. */
+  .sheet-content .listbox {
+    padding-block-end: var(--spacing-4);
+  }
+
+  .sheet-content .option {
+    padding-block: var(--spacing-2);
+    padding-inline: var(--spacing-3);
+  }
+
+  .sheet-content .search {
+    margin-inline: var(--spacing-3);
+  }
+
+  /* --------------------------------------------------------------------------- entry motion */
+
+  .layer:popover-open {
+    opacity: 1;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+}
+
+@layer state {
+  @media (prefers-reduced-motion: no-preference) {
+    .chevron {
+      transition: rotate var(--duration-fast) var(--ease-standard);
+    }
+
+    .layer:popover-open {
+      translate: 0 0;
+      transition:
+        opacity var(--duration-fast) var(--ease-standard),
+        translate var(--duration-fast) var(--ease-standard);
+
+      @starting-style {
+        translate: 0 var(--spacing-1);
+      }
+    }
+
+    .layer[data-placement='below']:popover-open {
+      @starting-style {
+        translate: 0 calc(-1 * var(--spacing-1));
+      }
+    }
+
+    .layer[data-placement='start']:popover-open {
+      @starting-style {
+        translate: var(--spacing-1) 0;
+      }
+    }
+
+    .layer[data-placement='end']:popover-open {
+      @starting-style {
+        translate: calc(-1 * var(--spacing-1)) 0;
+      }
+    }
+
+    :host(:dir(rtl)) .layer[data-placement='start']:popover-open {
+      @starting-style {
+        translate: calc(-1 * var(--spacing-1)) 0;
+      }
+    }
+
+    :host(:dir(rtl)) .layer[data-placement='end']:popover-open {
+      @starting-style {
+        translate: var(--spacing-1) 0;
+      }
+    }
+  }
+
+  .chevron[data-open] {
+    rotate: 180deg;
+  }
+
+  .input-wrapper[data-disabled] .trigger,
+  .input-wrapper[data-disabled] .chevron {
+    cursor: default;
+  }
+
+  .input-wrapper[data-readonly]:not([data-disabled]) .trigger {
+    cursor: default;
+  }
+
+  @media (hover: hover) {
+    :host([variant='ghost']) .input-wrapper:hover:not(:has(:focus-visible), [data-disabled]) {
+      background-color: var(--tecton-color-action-tertiary-bg-hover);
+      color: var(--tecton-color-action-tertiary-text-hover);
+    }
+  }
+
+  :host([variant='ghost']) .input-wrapper:active:not([data-disabled]) {
+    background-color: var(--tecton-color-action-tertiary-bg-press);
+    color: var(--tecton-color-action-tertiary-text-press);
+  }
+
+  :host([variant='ghost']) .input-wrapper[data-disabled] {
+    background-color: transparent;
+  }
+
+  /* The highlight (pointer or keyboard) and the chosen row. Chosen wins the fill; both add the ring. */
+  .option[data-highlighted] {
+    background-color: var(--tecton-color-table-row-hover);
+  }
+
+  .option[data-selected] {
+    background-color: var(--tecton-color-table-row-selected);
+  }
+
+  /* The secondary description colour fails 4.5:1 on the darker chosen and hovered fills, so it steps up to the primary text. */
+  .option[data-highlighted] tct-selector-option::part(description),
+  .option[data-selected] tct-selector-option::part(description) {
+    color: var(--color-text-primary);
+  }
+
+  .option[data-selected][data-highlighted] {
+    outline-width: var(--focus-outline-width);
+    outline-style: var(--focus-outline-style);
+    outline-color: var(--focus-outline-color);
+    outline-offset: calc(-1 * var(--focus-outline-width));
+  }
+
+  .option[data-disabled][data-highlighted] {
+    background-color: transparent;
+  }
+
+  .listbox:focus-visible {
+    outline-width: var(--focus-outline-width);
+    outline-style: var(--focus-outline-style);
+    outline-color: var(--focus-outline-color);
+    outline-offset: calc(-1 * var(--focus-outline-width));
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .surface {
+      border-color: CanvasText;
+      background: Canvas;
+      color: CanvasText;
+    }
+
+    .option[data-highlighted] {
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .option[data-selected] {
+      background-color: Canvas;
+      border: 1px solid CanvasText;
+    }
+
+    .option[data-selected][data-highlighted] {
+      background-color: Highlight;
+      outline-color: HighlightText;
+    }
+
+    .option[data-disabled] {
+      color: GrayText;
+      opacity: 1;
+    }
+
+    .placeholder {
+      color: GrayText;
+    }
+
+    :host([variant='ghost']) .input-wrapper {
+      border-color: ButtonBorder;
+    }
+
+    .listbox:focus-visible {
+      outline-color: Highlight;
+    }
+  }
+}

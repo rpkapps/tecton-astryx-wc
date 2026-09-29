@@ -1,0 +1,151 @@
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-4);
+  }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--spacing-1);
+  }
+
+  /* The selector sizes itself from `width`; keep it from stretching in the flex row. */
+  .page-size {
+    flex: none;
+  }
+
+  /* Omitted page numbers: as wide and tall as a page button so the row does not jump. */
+  .ellipsis {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: var(--size-element-md);
+    block-size: var(--size-element-md);
+    color: var(--color-text-secondary);
+    font-size: var(--text-label-size);
+    user-select: none;
+  }
+
+  :host([size='sm']) .ellipsis {
+    min-inline-size: var(--size-element-sm);
+    block-size: var(--size-element-sm);
+    font-size: var(--text-supporting-size);
+  }
+
+  .readout {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+  }
+
+  /* "Page [ n ] / N". */
+  .input-group {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    white-space: nowrap;
+  }
+
+  .input-label,
+  .input-total {
+    color: var(--color-text-secondary);
+    font-size: var(--text-label-size);
+    user-select: none;
+  }
+
+  :host([size='sm']) .input-label,
+  :host([size='sm']) .input-total {
+    font-size: var(--text-supporting-size);
+  }
+
+  .dots {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  /*
+   * A dot is a 24px target (WCAG 2.5.8) that paints an 8px disc, so the row stays readable and hittable.
+   * The current page's dot is the accent colour.
+   */
+  .dot {
+    --_dot-size: var(--spacing-2);
+
+    display: inline-grid;
+    place-items: center;
+    min-inline-size: 24px; /* design: WCAG 2.5.8 target size */
+    min-block-size: 24px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-full);
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .dot::before {
+    content: '';
+    inline-size: var(--_dot-size);
+    block-size: var(--_dot-size);
+    border-radius: 50%;
+    background-color: var(--color-neutral);
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+
+  :host([size='sm']) .dot {
+    --_dot-size: var(--spacing-1-5);
+  }
+}
+
+@layer state {
+  .dot[aria-current='page']::before {
+    background-color: var(--color-accent);
+  }
+
+  .dot:disabled {
+    cursor: default;
+    opacity: 0.5;
+  }
+
+  /* The current page number: a neutral fill and a medium weight, painted on the button's part. */
+  .page[aria-current='page']::part(button) {
+    background-color: var(--color-neutral);
+    font-weight: var(--font-weight-medium);
+  }
+
+  :host([disabled]) .nav {
+    pointer-events: none;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .dot::before {
+      forced-color-adjust: none;
+      background-color: ButtonText;
+    }
+
+    .dot[aria-current='page']::before {
+      background-color: Highlight;
+    }
+
+    .dot:disabled::before {
+      background-color: GrayText;
+    }
+
+    .page[aria-current='page']::part(button) {
+      forced-color-adjust: none;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+  }
+}

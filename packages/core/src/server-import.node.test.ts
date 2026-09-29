@@ -24,9 +24,10 @@ describe('server import safety', () => {
   });
 
   for (const [path, load] of Object.entries(modules)) {
+    // A cold module graph transformed on a loaded machine: seconds, not the unit-test default.
     it(`imports ${path}`, async () => {
       await expect(load()).resolves.toBeDefined();
-    });
+    }, 30_000);
   }
 
   it('the feature probes are all false, not throwing, without a DOM', async () => {

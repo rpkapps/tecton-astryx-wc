@@ -1,0 +1,192 @@
+/*
+ * tct-chat-composer-input. The host is layout only. `.root` holds the editable surface, the placeholder
+ * (an absolutely placed overlay, hidden from assistive technology; the field carries `aria-placeholder`) and
+ * the suggestion popup. The editable is a `white-space: pre-wrap` block that grows with its text up to
+ * `--_max-rows` lines (`lh` is its own line height) and then scrolls; inline token chips sit on the text
+ * baseline. Inside a composer the shell draws the focus ring and the dimming; standalone the field draws
+ * its own. [mwg:css] [mwg:soft-edge-content-fade] [mwg:shadow-dom]
+ */
+@layer component {
+  :host {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  .root {
+    --_pad: var(--spacing-1);
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+
+  .editable,
+  .placeholder {
+    padding: var(--_pad);
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+  }
+
+  .editable {
+    box-sizing: border-box;
+    min-block-size: calc(1lh + 2 * var(--_pad));
+    max-block-size: calc(var(--_max-rows, 8) * 1lh + 2 * var(--_pad));
+    /* physical: overflow-block is not available in every Tier-2 engine */
+    overflow-y: auto;
+    border-radius: var(--radius-element);
+    color: var(--color-text-primary);
+    caret-color: var(--color-accent);
+    outline: none;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  /* iOS Safari zooms the page when a focused control is under 16px: the floor is keyed to iOS WebKit alone. */
+  @media (pointer: coarse) {
+    @supports (-webkit-touch-callout: none) {
+      .editable,
+      .placeholder {
+        font-size: max(1rem, var(--text-body-size));
+      }
+    }
+  }
+
+  .placeholder {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    color: var(--color-text-secondary);
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .interim {
+    color: var(--color-text-secondary);
+    font-style: italic;
+    pointer-events: none;
+  }
+
+  /* ----------------------------------------------------------------------- suggestion popup */
+  .trigger-menu:popover-open {
+    opacity: 1;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+
+  @supports not selector(:popover-open) {
+    .trigger-menu {
+      position: fixed;
+      display: none;
+    }
+  }
+
+  .menu {
+    box-sizing: border-box;
+    min-inline-size: 11.25rem; /* design: the menu is 180px wide at least */
+    max-inline-size: calc(100vi - var(--spacing-8));
+    max-block-size: 15rem; /* design: the menu scrolls past 240px */
+    /* physical: overflow-block is not available in every Tier-2 engine */
+    overflow-y: auto;
+    padding: var(--spacing-1);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-container);
+    background-color: var(--color-background-popover);
+    color: var(--color-text-primary);
+  }
+
+  .option {
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    inline-size: 100%;
+    padding: var(--spacing-2);
+    border-radius: var(--radius-element);
+    cursor: pointer;
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+    text-align: start;
+  }
+
+  .label {
+    flex: 1;
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .status {
+    padding: var(--spacing-3);
+    color: var(--color-text-secondary);
+    font-size: var(--text-supporting-size);
+    text-align: center;
+  }
+
+  .group-heading {
+    padding-block: var(--spacing-2) var(--spacing-1);
+    padding-inline: var(--spacing-2);
+    color: var(--color-text-secondary);
+    font-size: var(--text-supporting-size);
+    line-height: var(--text-supporting-leading);
+    user-select: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .trigger-menu:popover-open {
+      translate: 0 0;
+      transition:
+        opacity var(--duration-fast) var(--ease-standard),
+        translate var(--duration-fast) var(--ease-standard);
+
+      @starting-style {
+        translate: 0 var(--spacing-1);
+      }
+    }
+  }
+}
+
+@layer state {
+  .option.highlighted {
+    background-color: var(--color-overlay-hover);
+  }
+
+  /* Dimmed on its own only when standalone; a composer dims its whole body once. */
+  .root[data-disabled]:not([data-composer]) {
+    opacity: 0.5;
+  }
+
+  .root[data-disabled] .editable {
+    cursor: default;
+  }
+
+  /* The composer's shell draws the keyboard ring around the whole body. */
+  .root[data-composer] .editable:focus-visible {
+    outline: none;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .menu {
+      border-color: CanvasText;
+      background-color: Canvas;
+      color: CanvasText;
+    }
+
+    .option.highlighted {
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .interim,
+    .placeholder {
+      color: GrayText;
+    }
+  }
+}

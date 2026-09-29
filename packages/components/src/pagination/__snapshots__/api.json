@@ -1,0 +1,164 @@
+{
+  "folder": "pagination",
+  "elements": {
+    "tct-pagination": {
+      "class": "TctPagination",
+      "attributes": [
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "has-more",
+          "property": "hasMore",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "no-first-last",
+          "property": "noFirstLast",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "page",
+          "property": "page",
+          "type": "number",
+          "default": "1",
+          "reflects": false
+        },
+        {
+          "name": "page-label",
+          "property": "pageLabel",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "page-size",
+          "property": "pageSize",
+          "type": "unknown",
+          "default": "DEFAULT_PAGE_SIZE",
+          "reflects": false
+        },
+        {
+          "name": "page-size-options",
+          "property": "pageSizeOptions",
+          "type": "number[] | undefined",
+          "reflects": false
+        },
+        {
+          "name": "sibling-count",
+          "property": "siblingCount",
+          "type": "number",
+          "default": "1",
+          "reflects": false
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "PaginationSize | undefined",
+          "values": [
+            "sm",
+            "md"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "step",
+          "property": "step",
+          "type": "number",
+          "default": "1",
+          "reflects": false
+        },
+        {
+          "name": "total-items",
+          "property": "totalItems",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "total-pages",
+          "property": "totalPages",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "variant",
+          "property": "variant",
+          "type": "PaginationVariant",
+          "values": [
+            "pages",
+            "count",
+            "compact",
+            "dots",
+            "input",
+            "none"
+          ],
+          "default": "'pages'",
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "changeAction",
+          "type": "PaginationChangeAction | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [],
+      "slots": [],
+      "events": [
+        {
+          "name": "tct-page-change",
+          "class": "TctPageChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        },
+        {
+          "name": "tct-page-size-change",
+          "class": "TctPageSizeChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "controls",
+        "dot",
+        "dots",
+        "ellipsis",
+        "first",
+        "input-group",
+        "input-label",
+        "input-total",
+        "last",
+        "nav",
+        "next",
+        "page",
+        "page-input",
+        "page-size",
+        "previous",
+        "readout"
+      ],
+      "cssStates": [
+        "busy",
+        "disabled"
+      ],
+      "cssProperties": []
+    }
+  }
+}

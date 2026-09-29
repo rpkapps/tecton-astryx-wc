@@ -1,0 +1,31 @@
+<!-- title: Long pastes become chips; description: Text longer than the threshold (200 characters by default, 60 here) is inserted as one chip that says how long it is, instead of flooding the draft. Hover the chip to preview the text and expand it back into editable text; with the keyboard, select the chip and press Enter. The button does what pasting the snippet does. -->
+<tct-vstack id="paste-root" gap="3" max-width="520">
+  <tct-hstack gap="2">
+    <tct-button id="paste-snippet" variant="secondary" label="Paste a log snippet"></tct-button>
+  </tct-hstack>
+  <tct-chat-composer id="paste-composer">
+    <tct-chat-composer-input id="paste-input" slot="input" placeholder="Paste more than 60 characters"></tct-chat-composer-input>
+  </tct-chat-composer>
+  <tct-text id="paste-output" type="supporting" color="secondary">Nothing sent yet.</tct-text>
+</tct-vstack>
+<script type="module">
+  import {ChatPasteAsTokenController} from '@tecton-wc/components/chat-composer/chat-paste-as-token.js';
+
+  const input = document.getElementById('paste-input');
+  const paste = new ChatPasteAsTokenController({input: () => input, threshold: 60});
+  input.pasteAsToken = paste;
+
+  const snippet = [
+    '2026-09-29 08:14:02 WARN  C-19 compressor discharge pressure 412 psi (limit 400)',
+    '2026-09-29 08:14:32 WARN  C-19 compressor discharge pressure 431 psi (limit 400)',
+    '2026-09-29 08:15:02 ERROR C-19 compressor trip: high discharge pressure',
+  ].join('\n');
+
+  document.getElementById('paste-snippet').addEventListener('click', () => {
+    input.focus();
+    paste.handlePaste(snippet);
+  });
+  document.getElementById('paste-composer').addEventListener('tct-chat-submit', (event) => {
+    document.getElementById('paste-output').textContent = `Sent ${event.value.length} characters.`;
+  });
+</script>
