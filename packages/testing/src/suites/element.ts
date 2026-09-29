@@ -12,7 +12,7 @@
  */
 import type {TemplateResult} from 'lit';
 import type {RunOptions} from 'axe-core';
-import {describe, expect, it, vi} from 'vitest';
+import {describe, expect, it, onTestFinished, vi} from 'vitest';
 import {features} from '@tecton-astryx/core/features.js';
 import {deepActiveElement, getTabbables} from '@tecton-astryx/core/utils/focus.js';
 import {expectAccessible} from '../a11y.js';
@@ -128,6 +128,11 @@ export function runElementSuite(options: ElementSuiteOptions): void {
         await (element as unknown as {updateComplete: Promise<unknown>}).updateComplete;
         const target = document.createElement('div');
         element.parentElement!.after(target);
+        // The target sits outside the fixture container, so remove it (and the moved element)
+        // after the test; otherwise it leaks into later tests' Tab order.
+        onTestFinished(() => {
+          target.remove();
+        });
         const focusable = getTabbables(element)[0];
         focusable?.focus();
         const focused = deepActiveElement();

@@ -1,0 +1,80 @@
+---
+title: Spacing
+description: The 4 px spacing scale tokens for padding, gap and margin - the rhythmic foundation of layouts - and the policy for adopting Tecton spacing.
+sidebar:
+  order: 23
+---
+
+## Overview
+
+The design system uses a 4 px base-unit spacing scale. Element `gap` and `padding` attributes accept step values that map to these tokens. The scale gives fine-grained control at the small end (2, 4 and 6 px) and a consistent rhythm at larger sizes (multiples of 4 px).
+
+Tecton's own spacing scale is the same 4 px grid. Its `space.25` (2 px) and `space.75` (6 px) are Astryx's `--spacing-0-5` and `--spacing-1-5`, and Tecton adds larger steps (56 to 144 px) that no element uses. So spacing is **Astryx's scale, kept**: the tokens are labelled _Astryx default_, not Tecton, and no spacing exceptions have been approved.
+
+## Scale
+
+| Step | Token              | Value |
+| ---- | ------------------ | ----- |
+| 0    | `--spacing-0`      | 0 px  |
+| 0.5  | `--spacing-0-5`    | 2 px  |
+| 1    | `--spacing-1`      | 4 px  |
+| 1.5  | `--spacing-1-5`    | 6 px  |
+| 2    | `--spacing-2`      | 8 px  |
+| 3    | `--spacing-3`      | 12 px |
+| 4    | `--spacing-4`      | 16 px |
+| 5    | `--spacing-5`      | 20 px |
+| 6    | `--spacing-6`      | 24 px |
+| 7    | `--spacing-7`      | 28 px |
+| 8    | `--spacing-8`      | 32 px |
+| 9    | `--spacing-9`      | 36 px |
+| 10   | `--spacing-10`     | 40 px |
+| 11   | `--spacing-11`     | 44 px |
+| 12   | `--spacing-12`     | 48 px |
+
+The same values, without the Astryx naming, are available from the Tecton export as `--tecton-space-*` (see [All tokens](../tokens/#tecton-export-scales)).
+
+## Usage
+
+Most elements take a `gap` attribute using step values. For custom layouts, use the spacing tokens directly in CSS:
+
+```html title="Spacing through element attributes (preferred)"
+<!-- gap 4 is 16 px -->
+<tct-vstack gap="4">
+  <tct-text>First</tct-text>
+  <tct-text>Second</tct-text>
+</tct-vstack>
+```
+
+```css title="Spacing through tokens (custom layouts)"
+.custom-layout {
+  padding: var(--spacing-4);
+  gap: var(--spacing-3);
+}
+```
+
+Use logical properties for padding and margin (`padding-inline`, `margin-block-start`) so that layouts mirror correctly in right-to-left.
+
+## Adopting Tecton spacing
+
+The plan for spacing is deliberately conservative, because a spacing change moves every layout. The library keeps Astryx's structural baseline, and would apply a Tecton value only where it has been checked against real content, all required states, long and localised labels, narrow containers, zoom and font loading, with no new clipping, overlap, inaccessible overflow or unusable interaction.
+
+Tecton's design measures some geometry that differs from Astryx (list rows of 44 and 36 px, table rows of about 44 and 34 px, a smaller switch, chip heights of 24, 20 and 18 px, and others). None of it is applied yet. It is a candidate list for the spacing-exceptions review in the hardening package (WP-H), and any accepted exception will be recorded with the original value, the attempted Tecton value, the retained value and the reason, and will use a named token rather than a one-off literal.
+
+## Best practices
+
+**Do:**
+
+- Use element `gap` attributes when available; they handle spacing compensation.
+- Stay on the scale for consistency. If a value is not on the scale, reconsider the design.
+- Use smaller steps (0.5 to 2) for tight internal spacing and larger steps (4 to 8) for section gaps.
+- Keep touch targets at least 24 by 24 px; the spacing of adjacent targets counts toward that.
+
+**Don't:**
+
+- Use arbitrary pixel values outside the scale.
+- Mix spacing tokens with raw `px` or `rem` values in the same element.
+
+{/*
+Adapted from Astryx docs topic `spacing` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md). Section map: Overview; Scale; Usage; Best Practices. Added "Adopting Tecton spacing" (IMPLEMENTATION-PLAN section 6, tecton-theme.md section 6, D-002).
+Values from packages/tokens/dist/tokens.json (all upstream-default). Guides: [mwg:css] [mwg:css-layout] [mwg:accessibility]
+*/}
