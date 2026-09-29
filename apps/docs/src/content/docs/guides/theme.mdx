@@ -1,0 +1,293 @@
+---
+title: Theming
+description: Load the Tecton theme, switch and nest light and dark modes, override tokens, and read token values from JavaScript.
+sidebar:
+  order: 6
+---
+
+Theming here is a stylesheet, not a runtime. The Tecton theme ships as `tokens.css`: every design token is a CSS custom property, declared once on the document, with light and dark values. Elements read those properties through the cascade, so a change to a token on any ancestor reaches every element below it, and the browser resolves light and dark natively.
+
+:::caution[What exists today]
+The token stylesheet, its light, dark and inverted-surface blocks, and the token metadata (`tokens.js`, `tokens.json`) exist. The `tct-theme` and `tct-media-theme` elements and the `defineTheme` family of utilities are delivered in the theme work packages (WP-F and WP-1) and are marked _planned_ below. The attribute-based mechanism (`data-theme`, `data-media-theme`) works with the stylesheet alone.
+:::
+
+## Quick start
+
+Load the stylesheet once, in the document, and you have the Tecton theme:
+
+```css title="global.css"
+@import '@tecton-astryx/tokens/tecton.css';
+```
+
+That is the whole setup. The page follows the operating system's light or dark preference by default, because the stylesheet sets `color-scheme: light dark` on the root. The same file is valid for a server-rendered page, a static page and a single-page app, and the tokens are present at first paint.
+
+To scope a theme to part of a page, use an element that switches the scheme (see [Nesting themes](#nesting-themes)).
+
+## Available themes
+
+Tecton is the theme this library ships. It has a designed light and a designed dark mode. Its values come from the Tecton design-system export, with the owner's Tecton theme bindings used for the roles the export does not define (see [Color](../color/)). The upstream Astryx theme packages (neutral, butter, chocolate, gothic, matcha, stone and y2k) are not part of this library.
+
+Each token in the metadata carries a status, so you know where a value came from:
+
+| Status             | Meaning                                                                                                |
+| ------------------ | ------------------------------------------------------------------------------------------------------ |
+| `tecton-export`    | From the Tecton export. Authoritative for role values in both modes.                                    |
+| `tecton-astryx`    | From the owner's Tecton theme bindings, for roles the export does not define.                          |
+| `upstream-default` | An Astryx default that Tecton deliberately keeps (spacing, three tiny font sizes).                     |
+| `astryx-retained`  | Kept from Astryx on purpose because Tecton has no value (the ten motion tokens).                       |
+| `provisional`      | No Tecton decision yet: a proposal (56 data-visualisation colours, `--size-element-lg`, some extras).  |
+
+## The theme element
+
+_Planned._ `tct-theme` is a provider element that scopes a colour mode and, optionally, a set of token overrides to its subtree.
+
+| Attribute or property | Type                              | Default    | Description                                                                                       |
+| --------------------- | --------------------------------- | ---------- | ------------------------------------------------------------------------------------------------- |
+| `mode`                | `system`, `light` or `dark`       | `system`   | Colour mode. `system` follows the operating system.                                               |
+| `theme` (property)    | A defined theme object            | Tecton     | Token overrides, produced by `defineTheme` (planned)                                              |
+
+Its children are the default slot. Unlike most providers, it is not `display: contents`: the host is a block that sets `color-scheme`, `color`, `background-color` and `accent-color`, which is what makes a scheme island render correctly (see [Nesting themes](#nesting-themes)).
+
+```html
+<tct-theme mode="dark">
+  <tct-card>Always dark, whatever the page does</tct-card>
+</tct-theme>
+```
+
+## Creating a custom theme
+
+There are two routes. Use the first for a handful of overrides, the second when you want a reusable, generated theme.
+
+### Override tokens in CSS
+
+Tokens are unregistered custom properties declared with zero specificity (`:where(:root)`) inside `@layer tecton.tokens`. Any of your own rules, layered or not, override a token without `!important`. Override the semantic token, not the component:
+
+```css title="brand.css"
+:root {
+  /* a non-colour token: one value for both modes */
+  --radius-container: 12px;
+
+  /* a colour token re-pointed at another Tecton token; the target still switches with the mode */
+  --color-border: var(--tecton-color-divider-strong);
+}
+```
+
+Use Tecton tokens for colour values, not literals. When you need a colour that no token expresses, use the opt-in palette (`@tecton-astryx/tokens/palette.css`, which defines `--tecton-palette-<hue>-<surface>-<stop>`, for example `--tecton-palette-mauve-on-light-680`) rather than a hex value, so your override stays inside the Tecton system.
+
+Two rules keep overrides predictable:
+
+- **Token names are global.** There is one `tokens.css` per page, supplied by the host application. Do not load two copies.
+- **Do not register token properties as `<color>`.** Tokens hold a `light-dark()` expression that must stay live so that descendants re-resolve under their own `color-scheme`. A registered `<color>` custom property resolves at computed-value time and freezes the ancestor's choice.
+
+### `defineTheme`
+
+_Planned (WP-1)._ `defineTheme` is ported from upstream. It creates a theme from token overrides and optional scale configurations, and a generator (`generateThemeCSS`) turns it into a stylesheet that uses this library's token names. Explicit token overrides always take precedence over scale-generated values, token by token.
+
+```js
+import {defineTheme} from '@tecton-astryx/core'; // planned: the module and its exact export path are fixed in WP-1
+
+const brandTheme = defineTheme({
+  name: 'brand',
+  tokens: {
+    // [light, dark] tuples for colour tokens, one value otherwise
+    '--radius-element': '6px',
+  },
+});
+```
+
+The upstream configuration axes map onto this library as follows:
+
+| Config             | Generates                                                                | In this library                                                                                                                  |
+| ------------------ | ------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| `color`            | `--color-accent`, `--color-background-*`, `--color-text-*`, `--color-border` and so on | Tecton's colours are explicit role values from the export, not derived from a seed accent, so overriding tokens is the normal path |
+| `typography.scale` | `--text-*-size`, `--text-*-weight`, `--text-*-leading`                    | Tecton's scale is a fixed ladder (10, 12, 14, 16, 20, 24, 32, 40, 48 px), not geometric, so it is written as explicit tokens      |
+| `typography.*`     | `--font-family-body`, `--font-family-heading`, `--font-family-code`       | Figtree and IBM Plex Mono; changing the family is an override of these tokens                                                    |
+| `radius`           | `--radius-inner`, `--radius-element`, `--radius-container`, `--radius-page`, `--radius-chat` | Tecton values 2, 4, 8, 16 and 12 px                                                                                       |
+| `motion`           | `--duration-*`, `--ease-standard`                                         | Astryx values retained                                                                                                           |
+
+## Extending a theme
+
+_Planned._ `extends` derives a new theme from an existing one, inheriting its tokens, adaptations and metadata. Only specify what you want to change. Tokens are copied first and the child's tokens override on top. Inheritance is resolved when the theme is defined, so an extended theme is flat: the generated stylesheet is self-contained and the base theme's CSS does not need to be loaded next to it.
+
+## Theme adaptations
+
+_Planned._ Adaptations are opt-in token changes under a viewport width, primary-pointer precision, contrast preference or motion preference. Conditions in one rule are combined with AND, rules apply in order, and later matching rules win.
+
+| Condition                    | Values                                |
+| ---------------------------- | ------------------------------------- |
+| `width.from` and `width.below` | `sm`, `md`, `lg`, `xl`, `2xl`       |
+| `pointer`                    | `coarse` or `fine`                    |
+| `contrast`                   | `more`, `less` or `no-preference`     |
+| `motion`                     | `reduce` or `no-preference`           |
+
+The named widths are the Astryx defaults, retained on purpose (_Astryx-retained_): `sm` 640, `md` 768, `lg` 1024, `xl` 1280, `2xl` 1536 CSS pixels; `from` includes its point and `below` excludes it. Adaptations compile to CSS media queries, so there is no resize listener and no re-render. You can write the same thing by hand today:
+
+```css
+/* coarse pointers get larger controls */
+@media (pointer: coarse) {
+  :root {
+    --size-element-sm: 36px;
+    --size-element-md: 40px;
+    --size-element-lg: 44px;
+  }
+}
+```
+
+`prefers-contrast: more` is not handled by the elements in version 1. Forced-colours mode is required and handled: the stylesheet maps roles to system colours (`Canvas`, `CanvasText`, `ButtonBorder`, `Highlight`, `LinkText`, `GrayText`) under `@media (forced-colors: active)`.
+
+## Component style overrides
+
+Astryx's `defineTheme` has a `components` field with semantic keys (`base`, `variant:value`, state names) and lets the pipeline choose the selector. Here the same intent is served by the public styling surface, in order of preference: tokens, attributes, `::part()`, `:state()`, documented component custom properties, and `::slotted()`. See [Styling components](../styling/).
+
+```css
+/* an override through a documented component custom property */
+tct-button {
+  --button-focus-offset: 3px;
+}
+
+/* an override through an anatomy part */
+tct-button[variant='ghost']::part(button) {
+  border-width: 2px;
+  border-style: solid;
+}
+```
+
+Prefer re-pointing the token an element already reads over setting a property on it. Setting the property directly bypasses the state and hover mixing that the element does from tokens, and it can defeat forced-colours handling. The names of the public custom properties and parts are listed on each element's page, and private properties (those that start with `--_`) are not an API.
+
+Whether `defineTheme` will accept a `components` map that compiles to part and custom-property rules is decided in WP-1 and is _planned_. Upstream's theme-family build (one keyed bundle holding several themes) has no equivalent here, because a page loads one stylesheet.
+
+## Custom variants
+
+Astryx lets a theme add a new value to an enumerated prop (a new button variant, a new banner status) and generates type augmentation for it. Elements here validate an enumerated attribute against its documented list: an unknown value falls back to the default and warns once in development. A theme therefore cannot add a value to an element it does not own. The values Tecton adds beyond Astryx's list are part of the elements and documented on their pages, and any further values are requested through the element's parity record. How a theme could extend an element is _planned_.
+
+## Loading themes for production
+
+Load the stylesheet, not a script. A static stylesheet is present at first paint, before any JavaScript runs, so there is no flash of unthemed content, and it works for server rendering. For a custom theme, generate its CSS at build time (`generateThemeCSS`, _planned_) and load it after `tokens.css`, or write the overrides by hand in your own stylesheet.
+
+| Concern                        | Static stylesheet (recommended)                | JavaScript-injected styles                        |
+| ------------------------------ | ---------------------------------------------- | ------------------------------------------------- |
+| First paint                    | Tokens present                                 | Tokens arrive after script                        |
+| Server rendering               | Fully supported                                | Flash on hydration                                |
+| Best for                       | Production                                     | Prototyping only                                  |
+
+If you cannot avoid a script, you can still adopt a stylesheet you generated in the document with `document.adoptedStyleSheets`, but the first-paint caveat stays.
+
+## Light and dark mode
+
+By default the page follows the operating system. `color-scheme: light dark` is set on the root, so native controls, scrollbars and the canvas follow too, and every colour token resolves through `light-dark()`. Where a browser lacks `light-dark()` (Chrome 116 to 122, Safari 17.0 to 17.4), the stylesheet falls back to a `prefers-color-scheme` media query for the same values.
+
+To let people choose a mode, set `data-theme` on `<html>`. `data-theme="light"` and `data-theme="dark"` pin a mode, and removing the attribute returns to the system preference. The attribute is shared with Astryx for React, so one switch drives both libraries on a page.
+
+The default must stay the system preference, and the page should still work if your script fails. Offer a two-state control: the system setting, and the opposite of it. Selecting the opposite pins that exact scheme, so it does not flip if the system setting changes later. Persist the choice in `localStorage`, and apply it before first paint with a classic inline script in the head (not `type="module"`, not `defer`), so a pinned preference does not flash:
+
+```html
+<meta name="color-scheme" content="light dark" />
+<script>
+  {
+    const scheme = localStorage.getItem('color-scheme'); // 'light' | 'dark' | null
+    if (scheme) {
+      document.documentElement.dataset.theme = scheme;
+      document.querySelector('meta[name="color-scheme"]').content = scheme;
+    }
+  }
+</script>
+```
+
+```js title="the toggle"
+const root = document.documentElement;
+const systemDark = matchMedia('(prefers-color-scheme: dark)');
+
+function pin(scheme) {
+  root.dataset.theme = scheme;
+  document.querySelector('meta[name="color-scheme"]').content = scheme;
+  try {
+    localStorage.setItem('color-scheme', scheme);
+  } catch {
+    // Private windows can refuse storage; the pin then lasts for this page load only.
+  }
+}
+
+// "the opposite of the system setting" is chosen once, when the user clicks
+button.addEventListener('click', () => pin(systemDark.matches ? 'light' : 'dark'));
+```
+
+`tct-theme` (_planned_) offers `system`, `light` and `dark` as its API so that a design tool or a settings page can express all three, but the recommended interface for end users is the two-state control above.
+
+## Nesting themes
+
+An element that switches the colour scheme (`data-theme`, or `tct-theme`) creates a scheme island. Because tokens use `light-dark()` and are unregistered, a dark island inside a light page inside a dark page resolves correctly: `color-scheme` inherits and each token re-resolves where it is used.
+
+The stylesheet gives every `[data-theme]` element what an island needs, following the rule that an element which switches scheme must also set its own background and re-specify inherited colours:
+
+```css
+/* from tokens.css, abbreviated */
+:where([data-theme='dark']) {
+  color-scheme: dark;
+  background-color: var(--color-background-body);
+  color: var(--color-text-primary);
+  accent-color: var(--color-accent);
+}
+```
+
+Without that, text would keep the ancestor's already-resolved colour on a background of the wrong scheme. In browsers without `light-dark()` only one level of `[data-theme]` island is reliable in the fallback path, which is an acceptable degradation.
+
+```html title="A dark sidebar beside light content"
+<div data-theme="light">
+  <tct-layout>
+    <div slot="start" data-theme="dark"><!-- dark sidebar --></div>
+    <tct-layout-content slot="content"><!-- light content --></tct-layout-content>
+  </tct-layout>
+</div>
+```
+
+### Content over media
+
+`data-media-theme="dark"` and `data-media-theme="light"` (and the planned `tct-media-theme` element) pin the dark or light side of each colour pair for content that sits on an image or a coloured surface. They set the primary and secondary text colours, the surface and border colours, and recolour the focus ring so it stays visible.
+
+Focus ring: the ring is Tecton hot pink everywhere, and pink fails the 3:1 non-text contrast on inverted surfaces. On those surfaces the ring gains a second, inner ring (`--tecton-color-focus-inner`) in the surface's contrast colour. `--tecton-color-focus-inner` is _provisional_: it is a proposal, not a Tecton value.
+
+### Overlays
+
+Menus, popovers, dialogs and toasts stay in their place in the DOM and use the top layer, so they inherit tokens, `dir` and `lang` from where they were opened. A dialog opened from inside a dark island is dark.
+
+## Reading the theme from JavaScript
+
+Prefer CSS variables for ordinary styling. When JavaScript needs a value (a canvas, a chart library, a map style), use the metadata module or read the computed style.
+
+```js title="Token metadata (available now)"
+import {tokens, tokenVar, breakpoints} from '@tecton-astryx/tokens/tokens.js';
+
+tokens['--color-text-primary'].light; // '#21172a'
+tokens['--color-text-primary'].dark; // '#f6f5f8'
+tokens['--color-text-primary'].status; // 'tecton-export'
+
+tokenVar('--spacing-4'); // 'var(--spacing-4)'
+breakpoints.values.md; // 768
+```
+
+The module is metadata for docs and tools. It does not track your overrides or a nested island; runtime styling always uses `tokens.css`.
+
+To get the value at a specific place in the page, let the browser resolve it. A custom property that holds `light-dark()` is returned as text, not as a colour, so paint it onto a property and read that:
+
+```js
+function resolvedColor(element, token) {
+  const probe = document.createElement('span');
+  probe.style.color = `var(${token})`;
+  element.append(probe);
+  const value = getComputedStyle(probe).color;
+  probe.remove();
+  return value; // 'rgb(33, 23, 42)' in light mode
+}
+```
+
+_Planned:_ the theme utilities ported from upstream (`resolveThemeTokens`, `registerTheme`, `getRegisteredTheme`) and a token-reading controller on `tct-theme` for element authors.
+
+{/*
+Adapted from Astryx docs topic `theme` (+ `theme.doc.dense`) (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md).
+Section map: Quick Start -> Quick start; Available Themes -> Available themes; Theme Props -> The theme element; Using a Theme from an Integration -> deferred, see cli-integrations;
+Creating a Custom Theme -> Creating a custom theme; defineTheme -> defineTheme (planned, WP-1); Extending a Theme -> Extending a theme; Theme Adaptations -> Theme adaptations;
+Component Style Overrides -> Component style overrides; Custom Variants -> Custom variants; Building Themes for Production + Runtime vs Built Themes -> Loading themes for production;
+Building a Theme Family -> not applicable (noted under Component style overrides); Light/Dark Mode -> Light and dark mode; Nesting Themes -> Nesting themes;
+Token Utilities + useTheme Hook -> Reading the theme from JavaScript.
+Guides: [mwg:dark-mode] [mwg:component-specific-light-dark-theme] [mwg:design-token-reactivity] [mwg:styling-web-components] [mwg:custom-elements] [mwg:accessible-web-components]
+*/}
