@@ -1,0 +1,170 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "heading",
+  "workPackage": "WP-F",
+  "entries": {
+    "core.heading": {
+      "tag": "tct-heading",
+      "status": "implemented",
+      "upstream": {
+        "name": "Heading",
+        "path": "packages/core/src/Heading/Heading.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "level",
+          "kind": "prop",
+          "target": "level",
+          "as": "attribute",
+          "reflect": true,
+          "default": "2",
+          "notes": "Required upstream; HTML cannot require an attribute, so it defaults to 2 and an invalid value falls back to 2."
+        },
+        {"upstream": "type", "kind": "prop", "target": "type", "as": "attribute", "reflect": true},
+        {
+          "upstream": "weight",
+          "kind": "prop",
+          "target": "weight",
+          "as": "attribute",
+          "reflect": true
+        },
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "accessibilityLevel",
+          "kind": "prop",
+          "target": "accessibilityLevel",
+          "as": "attribute",
+          "notes": "Attribute `accessibility-level`; sets the ElementInternals aria-level."
+        },
+        {
+          "upstream": "color",
+          "kind": "prop",
+          "target": "color",
+          "as": "attribute",
+          "reflect": true,
+          "default": "primary"
+        },
+        {
+          "upstream": "display",
+          "kind": "prop",
+          "target": "display",
+          "as": "attribute",
+          "reflect": true,
+          "default": "block"
+        },
+        {
+          "upstream": "maxLines",
+          "kind": "prop",
+          "target": "maxLines",
+          "as": "attribute",
+          "reflect": true,
+          "default": "0",
+          "notes": "Attribute `max-lines`."
+        },
+        {
+          "upstream": "hasTruncateTooltip",
+          "kind": "prop",
+          "target": "noTruncateTooltip",
+          "as": "attribute",
+          "default": "false",
+          "notes": "`boolean | placement` becomes `no-truncate-tooltip` plus `truncate-tooltip-placement`."
+        },
+        {
+          "upstream": "hasTruncateTooltip",
+          "kind": "prop",
+          "target": "truncateTooltipPlacement",
+          "as": "attribute",
+          "default": "above"
+        },
+        {
+          "upstream": "wordBreak",
+          "kind": "prop",
+          "target": "wordBreak",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "textWrap",
+          "kind": "prop",
+          "target": "textWrap",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "justify",
+          "kind": "prop",
+          "target": "justify",
+          "as": "attribute",
+          "reflect": true,
+          "default": "start"
+        },
+        {
+          "upstream": "hasCapsize",
+          "kind": "prop",
+          "target": "hasCapsize",
+          "as": "attribute",
+          "reflect": true,
+          "default": "false"
+        },
+        {
+          "upstream": "hasStrikethrough",
+          "kind": "prop",
+          "target": "hasStrikethrough",
+          "as": "attribute",
+          "reflect": true,
+          "default": "false"
+        },
+        {
+          "upstream": "id",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "The global `id` attribute on the host is native; it is not component API."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useTruncation",
+          "target": "TruncationController",
+          "as": "controller",
+          "notes": "Shared with tct-text (@tecton-astryx/core/controllers/truncation.js)."
+        }
+      ],
+      "differences": [
+        {
+          "id": "HEADING-01",
+          "type": "approved-api-difference",
+          "text": "The host carries the heading role and level through ElementInternals instead of rendering h1-h6; `aria-level` is always set (from `accessibility-level` or `level`), not only when they differ."
+        },
+        {
+          "id": "HEADING-02",
+          "type": "approved-api-difference",
+          "text": "`hasTruncateTooltip` (boolean or placement) is `no-truncate-tooltip` plus `truncate-tooltip-placement` (A§7.2)."
+        },
+        {
+          "id": "HEADING-03",
+          "type": "tecton-visual",
+          "text": "Levels 3-6 are Tecton's own scale (large 16, medium 14, small 12, tiny 10 px; D-013 Q-06), not provisional."
+        },
+        {
+          "id": "HEADING-04",
+          "type": "approved-api-difference",
+          "text": "A custom `type` is a string styled through `tct-heading[type=\"x\"]::part(text)`; no HeadingTypeMap module augmentation."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components] heading role and aria-level through ElementInternals; [mwg:improve-text-layout-and-legibility] text-wrap balance; [mwg:precise-text-alignment] text-box trim; [mwg:css] layers and logical properties."
+    }
+  }
+}
