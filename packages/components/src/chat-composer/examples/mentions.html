@@ -1,0 +1,44 @@
+<!-- title: Mentions and commands; description: A trigger character opens a suggestion menu. @ inserts a token (a chip that is deleted as one unit and read as its name), / inserts plain text. The value sent carries each token's serialized value. -->
+<tct-vstack id="mentions-root" gap="3" max-width="520">
+  <tct-chat-composer id="mentions-composer">
+    <tct-chat-composer-input id="mentions-input" slot="input" placeholder="Type @ to mention a well, / for a command"></tct-chat-composer-input>
+  </tct-chat-composer>
+  <tct-text id="mentions-output" type="supporting" color="secondary">Nothing sent yet.</tct-text>
+</tct-vstack>
+<script type="module">
+  const wells = [
+    {id: 'a-12', label: 'A-12', auxiliaryData: {group: 'Producing'}},
+    {id: 'b-04', label: 'B-04', auxiliaryData: {group: 'Producing'}},
+    {id: 'c-19', label: 'C-19 (compressor fault)', auxiliaryData: {group: 'Needs attention'}},
+  ];
+  const commands = [
+    {id: 'forecast', label: 'forecast'},
+    {id: 'workorder', label: 'workorder'},
+  ];
+  const source = (items) => ({
+    search: (query) => items.filter((item) => item.label.toLowerCase().includes(query.toLowerCase())),
+  });
+
+  document.getElementById('mentions-input').triggers = [
+    {
+      character: '@',
+      searchSource: source(wells),
+      menuLabel: 'Wells',
+      onSelect: (item) => ({value: `@${item.id}`, label: item.label, variant: 'blue'}),
+      deserialize: (value) => {
+        const well = wells.find((item) => `@${item.id}` === value);
+        return well ? {value, label: well.label, variant: 'blue'} : null;
+      },
+    },
+    {
+      character: '/',
+      searchSource: source(commands),
+      menuLabel: 'Commands',
+      onSelect: (item) => `/${item.id} `,
+    },
+  ];
+
+  document.getElementById('mentions-composer').addEventListener('tct-chat-submit', (event) => {
+    document.getElementById('mentions-output').textContent = `Sent: ${event.value}`;
+  });
+</script>

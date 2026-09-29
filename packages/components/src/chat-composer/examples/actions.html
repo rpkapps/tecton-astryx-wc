@@ -1,0 +1,10 @@
+<!-- title: Header, footer and send actions; description: header-actions and header-context sit above the input, footer-actions below it at the start, and send-actions beside the send button. Buttons in the footer are size md so they line up with the send button. -->
+<tct-vstack max-width="520">
+  <tct-chat-composer placeholder="Ask about your wells…">
+    <tct-icon-button slot="header-actions" size="sm" variant="ghost" icon="search" label="Search the web"></tct-icon-button>
+    <tct-icon-button slot="header-actions" size="sm" variant="ghost" icon="wrench" label="Choose tools"></tct-icon-button>
+    <tct-text slot="header-context" type="supporting" color="secondary">12k of 128k tokens</tct-text>
+    <tct-button slot="footer-actions" size="md" variant="ghost" icon="funnel" label="Filters"></tct-button>
+    <tct-icon-button slot="send-actions" size="md" variant="ghost" icon="copy" label="Copy the draft"></tct-icon-button>
+  </tct-chat-composer>
+</tct-vstack>
