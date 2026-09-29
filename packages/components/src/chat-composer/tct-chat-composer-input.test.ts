@@ -546,14 +546,14 @@ describe('tct-chat-composer-input: paste, files and drops', () => {
     const file = new File(['data'], 'notes.txt', {type: 'text/plain'});
     const pasted = paste(editableOf(input), {files: [file]});
     expect(pasted.defaultPrevented).toBe(true);
-    expect(files.events[0]!.source).toBe('paste');
+    expect((files.events[0] as unknown as {source: string}).source).toBe('paste');
     expect((files.events[0] as unknown as {files: File[]}).files).toEqual([file]);
     const over = drop(editableOf(input), [file], 'dragover');
     expect(over.defaultPrevented).toBe(true);
     const dropped = drop(editableOf(input), [file]);
     expect(dropped.defaultPrevented).toBe(true);
     expect(files.events).toHaveLength(2);
-    expect(files.events[1]!.source).toBe('drop');
+    expect((files.events[1] as unknown as {source: string}).source).toBe('drop');
     expect(input.value).toBe('');
   });
 

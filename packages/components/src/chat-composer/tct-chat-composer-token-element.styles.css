@@ -16,6 +16,12 @@
     min-inline-size: 0;
   }
 
+  .chip {
+    display: inline-flex;
+    max-inline-size: 100%;
+    min-inline-size: 0;
+  }
+
   .card {
     display: flex;
     flex-direction: column;

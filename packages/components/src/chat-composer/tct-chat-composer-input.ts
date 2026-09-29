@@ -8,6 +8,7 @@ import chatTriggerMenu from '@tecton-wc/locales/en/chatTriggerMenu.js';
 import {ContextConsumer} from '@tecton-wc/core/context/protocol.js';
 import {TctChatFilesEvent} from '@tecton-wc/core/events/tct-chat-files.js';
 import {TctChatPasteEvent} from '@tecton-wc/core/events/tct-chat-paste.js';
+import {TctChatTokenExpandEvent} from '@tecton-wc/core/events/tct-chat-token-expand.js';
 import {TctChatSubmitEvent} from '@tecton-wc/core/events/tct-chat-submit.js';
 import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
 import {TctElement} from '@tecton-wc/core/tct-element.js';
@@ -66,7 +67,7 @@ const NBSP = / /g;
  * submits or recalls history. The key hint of a soft keyboard is `send` (`enterkeyhint`, overridable on
  * the host). ArrowUp at the very start of the draft recalls the previous sent draft, ArrowDown at the
  * very end steps forward and finally restores what you were typing. Backspace and Delete next to a token
- * remove it as a unit. With a menu open ArrowUp/ArrowDown move, Enter or Tab choose, Escape closes.
+ * remove it as a unit; with an expandable (pasted-text) chip selected, Enter expands it. With a menu open ArrowUp/ArrowDown move, Enter or Tab choose, Escape closes.
  *
  * **Taking a key over.** The input skips a key an ancestor already claimed: listen for `keydown` on the
  * composer (or an ancestor) in the capture phase and call `preventDefault()` (upstream `onKeyDown`).
@@ -480,6 +481,14 @@ export class TctChatComposerInput extends TctElement implements ChatComposerInpu
   };
 
   #onEnter(event: KeyboardEvent): void {
+    // A selected expandable chip is "activated" by Enter (the keyboard route to Expand, which the hover card
+    // offers the pointer): select it with Shift+Arrow, press Enter.
+    const selected = this.#selectedExpandableToken();
+    if (selected) {
+      event.preventDefault();
+      selected.dispatchEvent(new TctChatTokenExpandEvent(selected.getAttribute('data-tct-token-value') ?? ''));
+      return;
+    }
     const text = this.#draft().trim();
     if (text === '') {
       // Enter in a blank field neither submits nor makes a blank line.
@@ -491,6 +500,18 @@ export class TctChatComposerInput extends TctElement implements ChatComposerInpu
       this.#afterSubmit(text);
     }
     // Refused (a prevented `tct-chat-submit`): the key is left to the editor and inserts a newline.
+  }
+
+  /** The expandable token that is the whole of the current range selection (nothing else but spaces), else `null`. */
+  #selectedExpandableToken(): HTMLElement | null {
+    const editable = this.#editable;
+    const range = editable ? getSelectionRange(editable) : null;
+    if (!editable || !range || range.collapsed) return null;
+    const covered = [...editable.querySelectorAll<HTMLElement>(`[${TOKEN_ATTRIBUTE}]`)].filter(
+      (token) => range.intersectsNode(token),
+    );
+    if (covered.length !== 1 || !covered[0]!.hasAttribute('expandable')) return null;
+    return range.toString().replace(/[\s\u00A0]/g, '') === '' ? covered[0]! : null;
   }
 
   /**

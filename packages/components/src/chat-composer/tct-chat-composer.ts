@@ -131,7 +131,13 @@ export class TctChatComposer extends TctElement {
   @state() private keyboardFocus = false;
 
   readonly #locale: LocaleController = new LocaleController(this, {defaults: chat});
-  readonly #slots: SlotController = new SlotController(this, 'header-actions', 'header-context');
+  readonly #slots: SlotController = new SlotController(
+    this,
+    'header-actions',
+    'header-context',
+    'input',
+    'send-button',
+  );
   #inputControl: ChatComposerInputControl | null = null;
   #lastAnnounced = '';
   #context: ChatComposerContextValue = {
@@ -261,13 +267,17 @@ export class TctChatComposer extends TctElement {
             : nothing
         }
         <div class="input-area" part="input">
-          <slot name="input"><tct-chat-composer-input></tct-chat-composer-input></slot>
+          <slot name="input"
+            >${this.#slots.has('input') ? nothing : html`<tct-chat-composer-input></tct-chat-composer-input>`}</slot
+          >
         </div>
         <div class="footer" part="footer">
           <div class="footer-start"><slot name="footer-actions"></slot></div>
           <div class="footer-end">
             <slot name="send-actions"></slot>
-            <slot name="send-button"><tct-chat-send-button></tct-chat-send-button></slot>
+            <slot name="send-button"
+              >${this.#slots.has('send-button') ? nothing : html`<tct-chat-send-button></tct-chat-send-button>`}</slot
+            >
           </div>
         </div>
       </div>

@@ -31,6 +31,25 @@ async function type(input: TctChatComposerInput, text: string): Promise<void> {
   await userEvent.keyboard(text);
 }
 
+/** Extends the selection leftwards, one key press at a time, until it covers the chip (the engine needs a press per caret stop). */
+async function selectChipBackwards(input: Element): Promise<void> {
+  const [token] = tokensOf(input);
+  for (let press = 0; press < 5; press++) {
+    await userEvent.keyboard('{Shift>}{ArrowLeft}{/Shift}');
+    const [range] = document.getSelection()!.getComposedRanges({shadowRoots: [input.shadowRoot!]});
+    if (range && !range.collapsed) {
+      const probe = document.createRange();
+      probe.setStart(range.startContainer, range.startOffset);
+      probe.setEnd(range.endContainer, range.endOffset);
+      if (probe.intersectsNode(token!)) return;
+    }
+  }
+  throw new Error('the chip was never selected');
+}
+
+/** The chip inside a token element: the image that carries the name. */
+const chip = (token: Element): Element => token.shadowRoot!.querySelector('.chip')!;
+
 const ada: ChatComposerToken = {value: '@ada', label: 'Ada Lovelace', variant: 'info'};
 
 /** The caret as `[node, offset]`, read the way the input reads it (composed ranges). */
@@ -218,7 +237,7 @@ describe('inline tokens: named for screen readers', () => {
     await input.updateComplete;
     const token = tokensOf(input)[0]!;
     expect(token.accessibleName).toBe('Ada Lovelace');
-    expect(await axNode(token)).toMatchObject({role: 'image', name: 'Ada Lovelace'});
+    expect(await axNode(chip(token))).toMatchObject({role: 'image', name: 'Ada Lovelace'});
   });
 
   it.skipIf(!isChromium)('a token without a label is named by its value; a custom token too', async () => {
@@ -227,8 +246,8 @@ describe('inline tokens: named for screen readers', () => {
     input.insertToken({value: '/command', render: () => 'run'});
     await input.updateComplete;
     const [structured, custom] = tokensOf(input);
-    expect(await axNode(structured!)).toMatchObject({role: 'image', name: '#topic'});
-    expect(await axNode(custom!)).toMatchObject({role: 'image', name: '/command'});
+    expect(await axNode(chip(structured!))).toMatchObject({role: 'image', name: '#topic'});
+    expect(await axNode(chip(custom!))).toMatchObject({role: 'image', name: '/command'});
   });
 
   it('an expandable pasted token is named by its counts (localised)', async () => {
@@ -290,6 +309,30 @@ describe('inline tokens: expanding a pasted text', () => {
     expect(expands.events).toHaveLength(1);
     expect(expands.events[0]!.value).toBe('m'.repeat(260));
     expect(input.value).toBe('m'.repeat(260));
+  });
+
+  it('a keyboard user selects the chip with Shift+Arrow and presses Enter to expand it, without sending', async () => {
+    const input = await make();
+    const submits = recordEvents(input, ['tct-chat-submit']);
+    const long = 'p'.repeat(240);
+    input.insertToken({value: long});
+    input.focus();
+    await selectChipBackwards(input);
+    await userEvent.keyboard('{Enter}');
+    await waitUntil(() => tokensOf(input).length === 0, 'the chip expanded');
+    expect(submits.events).toHaveLength(0);
+    expect(input.value).toBe(long);
+  });
+
+  it('Enter with a chip that cannot expand selected still sends', async () => {
+    const input = await make();
+    const submits = recordEvents(input, ['tct-chat-submit']);
+    input.insertToken(ada);
+    input.focus();
+    await selectChipBackwards(input);
+    await userEvent.keyboard('{Enter}');
+    expect(submits.events).toHaveLength(1);
+    expect(submits.events[0]!.value).toBe('@ada');
   });
 
   it('a page that prevents tct-chat-token-expand keeps the token', async () => {
