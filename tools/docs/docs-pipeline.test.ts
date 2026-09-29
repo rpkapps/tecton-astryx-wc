@@ -12,6 +12,7 @@ import {analyzeComponents} from '../cem/analyze.ts';
 import {createFixtureTree, type FixtureTree} from '../cem/testing.ts';
 import {cloakCss, lightDomCss} from '../css/shared.ts';
 import {cemElements, type CemPackage} from '../lib/cem.ts';
+import {elementDoc} from '../lib/element-api.ts';
 import {
   REQUIRED_SECTIONS,
   componentFolderNames,
@@ -25,7 +26,11 @@ import {loadManifest} from '../lib/parity.ts';
 import {PATHS} from '../lib/paths.ts';
 import {COMPONENT_SECTION_ORDER, renderComponentPage} from './component-page.ts';
 import {escapeMdx} from './mdx.ts';
-import {parseOpenQuestions} from './site-pages.ts';
+import {exemptionProblems, parseExampleHeader} from '../lib/example-header.ts';
+import {publicText, tokenStatusLabel} from '../lib/public-text.ts';
+import {toPublicRegistry} from '../agent-registry/build.ts';
+import {categoryPage, componentsOverviewPage, tokensPage} from './site-pages.ts';
+import {parseOpenQuestions} from './internal-reports.ts';
 
 let tree: FixtureTree;
 let cem: CemPackage;
@@ -137,7 +142,9 @@ describe('component page', () => {
     expect(headings).toEqual([...COMPONENT_SECTION_ORDER]);
     expect(page).toContain("import example0 from '@examples/sample-badge/examples/variants.html?raw';");
     expect(page).toContain('<Example source={example1} />');
-    expect(page).toContain('SAMPLEBADGE-01');
+    // the public page names neither the upstream system nor its mapping/differences sections
+    expect(page).not.toMatch(/Astryx|Upstream mapping|Differences from/);
+    expect(page).not.toContain('SAMPLEBADGE-01');
     expect(page).toContain('Enter, Space');
     expect(page).toContain("import '@tecton-astryx/components/sample-badge';");
     // authored text with an unclosed tag must not reach MDX raw
@@ -176,7 +183,7 @@ describe('agent registry and llms.txt', () => {
     expect(registry.topics[0]!.sections.find((s) => s.heading === 'Install')?.body).toBe('Run it.');
 
     const index = renderLlmsTxt(registry);
-    expect(index).toMatch(/^# Tecton Astryx Web Components/);
+    expect(index).toMatch(/^# Tecton Web Components/);
     expect(index).toContain('- [Getting started](/guides/getting-started/): Begin.');
     expect(index).toContain('- [Badge](/components/feedback-and-status/sample-badge/): `<tct-sample-badge>`: Highlights');
     const full = renderLlmsFull(registry);
@@ -207,5 +214,94 @@ describe('open questions', () => {
       {id: 'Q-01', question: 'Old?', context: 'ctx', resolved: true},
       {id: 'Q-03', question: 'New?', context: 'more', resolved: false},
     ]);
+  });
+});
+
+describe('public site never names the upstream design system', () => {
+  it('publicText drops target and upstream pointers and neutralises the rest', () => {
+    expect(publicText('The pill (Astryx target `astryx-badge`).')).toBe('The pill.');
+    expect(publicText('The native button. Astryx target `astryx-button`.')).toBe('The native button.');
+    expect(publicText('Registered icon name (upstream `icon`): an Astryx role such as `close`')).toBe(
+      'Registered icon name: a role such as `close`',
+    );
+    expect(publicText('muted (tecton-astryx name)')).toBe('muted');
+    expect(publicText('the default Astryx border maps to Tecton')).toBe('the default border maps to Tecton');
+    // package names and message ids are technical identifiers, not prose
+    expect(publicText('import x from "@tecton-astryx/core/x.js"; id `@astryx.button.loading`')).toContain(
+      '@tecton-astryx/core',
+    );
+    expect(tokenStatusLabel('astryx-retained')).toBe('retained default');
+    expect(tokenStatusLabel('tecton-astryx')).not.toMatch(/astryx/i);
+  });
+
+  it('scrubs element API text', () => {
+    const doc = elementDoc(cemElements(cem)[0]!);
+    expect(JSON.stringify(doc)).not.toMatch(/astryx/i);
+    expect(doc.cssParts[0]?.description).toBe('The visible pill.');
+  });
+
+  it('overview, category and token pages print no upstream name and list only documented components', () => {
+    const pages = new Map([
+      ['sample-badge', {category: 'Feedback & Status', title: 'Badge', summary: 'A pill.', tags: ['tct-sample-badge']}],
+    ]);
+    const overview = componentsOverviewPage(pages);
+    const category = categoryPage('Feedback & Status', pages);
+    const empty = categoryPage('Action', pages);
+    const tokens = tokensPage({
+      counts: {tokens: 1, palette: 1, byStatus: {'astryx-retained': 1}},
+      provisionalNonTokens: [],
+      astryxRetainedNonTokens: [],
+      tectonDerivedNonTokens: [],
+      tokens: [
+        {name: '--x', category: 'motion', light: '1s', dark: '1s', source: 's', status: 'astryx-retained', description: 'Kept (tecton-astryx name)'},
+      ],
+    });
+    for (const page of [overview, category, empty, tokens]) expect(page).not.toMatch(/astryx/i);
+    expect(category).toContain('/components/feedback-and-status/sample-badge/');
+    expect(empty).toContain('No components in this category are documented yet.');
+    expect(tokens).toContain('retained default');
+  });
+
+  it('the public registry omits upstream, mapping, hooks and status names', () => {
+    const registry = buildRegistry({
+      cem,
+      componentsSrc: tree.componentsSrc,
+      folders: componentFolderNames(tree.componentsSrc),
+      manifest: loadManifest(PATHS.manifest),
+      guides: [],
+    });
+    expect(JSON.stringify(registry)).toMatch(/astryx/i); // the internal registry keeps the mapping
+    const publicRegistry = toPublicRegistry(registry);
+    expect(JSON.stringify(publicRegistry)).not.toMatch(/astryx/i);
+    expect('upstream' in publicRegistry).toBe(false);
+    expect('entries' in publicRegistry.components[0]!).toBe(false);
+    expect(renderLlmsTxt(publicRegistry)).not.toMatch(/astryx|parity|upstream/i);
+    expect(renderLlmsFull(publicRegistry)).not.toMatch(/astryx/i);
+  });
+});
+
+describe('example header and a11y exemptions', () => {
+  it('parses title, description and an exemption with its reason', () => {
+    const header = parseExampleHeader(
+      '<!-- title: Colours; description: Roles; and more.; a11y-exempt: color-contrast | Disabled text is exempt outside a control, see WCAG. -->\n<p>x</p>',
+    );
+    expect(header).toMatchObject({
+      title: 'Colours',
+      description: 'Roles; and more.',
+      a11yExempt: {rules: ['color-contrast'], reason: 'Disabled text is exempt outside a control, see WCAG.'},
+    });
+    expect(header!.length).toBeGreaterThan(20);
+    expect(parseExampleHeader('<p>no header</p>')).toBeUndefined();
+    expect(parseExampleHeader('<!-- title: T -->')?.a11yExempt).toBeUndefined();
+  });
+
+  it('rejects exemptions without a reason or for rules that may not be exempted', () => {
+    expect(exemptionProblems(undefined)).toEqual([]);
+    expect(exemptionProblems({rules: ['color-contrast'], reason: 'Why it holds, in a sentence.'})).toEqual([]);
+    expect(exemptionProblems({rules: ['color-contrast'], reason: ''}).join()).toMatch(/needs a reason/);
+    expect(exemptionProblems({rules: ['image-alt'], reason: 'Because reasons, long enough.'}).join()).toMatch(
+      /cannot be exempted/,
+    );
+    expect(exemptionProblems({rules: [], reason: 'Because reasons, long enough.'}).join()).toMatch(/no rule/);
   });
 });

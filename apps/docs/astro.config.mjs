@@ -45,6 +45,26 @@ const SPECULATION_RULES = JSON.stringify({
 });
 
 /**
+ * Expressive Code turns a scrollable code block into `<pre tabindex="0" role="region">` at runtime, with no
+ * name; several of them on one page collide (axe `landmark-unique`). Each one is named "<title or
+ * language> code (example N)", unique by its number. A focusable scroll region stays keyboard reachable.
+ * [mwg:accessibility]
+ */
+const NAME_CODE_REGIONS = `(() => {
+  const name = () => {
+    let n = 0;
+    for (const pre of document.querySelectorAll('.expressive-code pre')) {
+      n += 1;
+      if (pre.getAttribute('role') !== 'region' || pre.hasAttribute('aria-label') || pre.hasAttribute('aria-labelledby')) continue;
+      const title = pre.closest('figure')?.querySelector('figcaption .title')?.textContent?.trim();
+      pre.setAttribute('aria-label', (title || (pre.dataset.language || 'code') + ' code') + ' (example ' + n + ')');
+    }
+  };
+  new MutationObserver(name).observe(document.documentElement, {subtree: true, childList: true, attributes: true, attributeFilter: ['role']});
+  addEventListener('DOMContentLoaded', name);
+})();`;
+
+/**
  * `pnpm generate` runs first in every docs command (A§3): the component pages, reference pages, llms.txt
  * and the registry are generated files. `pnpm check` has generated already and sets TCT_GENERATED=1.
  */
@@ -81,9 +101,9 @@ export default defineConfig({
   integrations: [
     generate,
     starlight({
-      title: 'Tecton Astryx',
+      title: 'Tecton Web Components',
       description:
-        'Framework-independent Web Components implementing the Astryx design system with the Tecton visual system.',
+        'Framework-independent Web Components in the Tecton visual system.',
       favicon: '/favicon.svg',
       customCss: ['@tecton-astryx/tokens/tecton.css', './src/styles/docs.css'],
       components: {
@@ -100,6 +120,7 @@ export default defineConfig({
         // Cross-document view transitions wait for the content of the new page. [mwg:consistent-cross-document-transitions]
         {tag: 'link', attrs: {rel: 'expect', href: '#_top', blocking: 'render'}},
         {tag: 'script', attrs: {type: 'speculationrules'}, content: SPECULATION_RULES},
+        {tag: 'script', content: NAME_CODE_REGIONS},
       ],
       sidebar: [
         {label: 'Home', link: '/'},

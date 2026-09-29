@@ -5,6 +5,7 @@
  */
 import {existsSync, readFileSync} from 'node:fs';
 import {join} from 'node:path';
+import {exemptionProblems, parseExampleHeader, type A11yExemption} from './example-header.ts';
 import {readFrontmatter} from './frontmatter.ts';
 import {isFile, listDirs, walkFiles} from './fs.ts';
 import type {ParityFile} from './parity.ts';
@@ -53,6 +54,8 @@ export interface ExampleFile {
   file: string;
   title: string;
   description: string;
+  /** Axe rules the docs accessibility crawl skips inside this example's preview, with the reason. */
+  a11yExempt: A11yExemption | undefined;
   /** The fragment without its metadata comment. */
   source: string;
 }
@@ -97,16 +100,16 @@ export function missingSections(sections: readonly DocSection[]): string[] {
   return REQUIRED_SECTIONS.filter((name) => !present.has(name));
 }
 
-/** `<!-- title: Variants; description: Every variant. -->` on the first line. */
+/** The metadata comment on the first line (see tools/lib/example-header.ts) and the fragment after it. */
 export function parseExample(id: string, file: string, text: string): ExampleFile {
-  const match =
-    /^\s*<!--\s*title:\s*([^;]*?)\s*(?:;\s*description:\s*([\s\S]*?))?\s*-->\s*\n?/.exec(text);
+  const header = parseExampleHeader(text);
   return {
     id,
     file,
-    title: match?.[1] || id,
-    description: match?.[2]?.trim() ?? '',
-    source: (match ? text.slice(match[0].length) : text).trimEnd(),
+    title: header?.title || id,
+    description: header?.description ?? '',
+    a11yExempt: header?.a11yExempt,
+    source: (header ? text.slice(header.length) : text).trimEnd(),
   };
 }
 
@@ -148,7 +151,11 @@ export function loadComponentDocs(componentsSrc: string, folder: string): Compon
       problems.push(`${folder}.docs.md: example "${id}" has no examples/${id}.html`);
       continue;
     }
-    examples.push(parseExample(id, file, readFileSync(file, 'utf8')));
+    const example = parseExample(id, file, readFileSync(file, 'utf8'));
+    for (const problem of exemptionProblems(example.a11yExempt)) {
+      problems.push(`examples/${id}.html: ${problem}`);
+    }
+    examples.push(example);
   }
 
   const parityFile = join(dir, 'parity.json');
