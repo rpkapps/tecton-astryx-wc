@@ -1,0 +1,521 @@
+{
+  "folder": "chat-composer",
+  "elements": {
+    "tct-chat-composer": {
+      "class": "TctChatComposer",
+      "attributes": [
+        {
+          "name": "density",
+          "property": "density",
+          "type": "ChatComposerDensity",
+          "values": [
+            "compact",
+            "balanced",
+            "spacious"
+          ],
+          "default": "'balanced'",
+          "reflects": true
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "elevation",
+          "property": "elevation",
+          "type": "ChatComposerElevation",
+          "values": [
+            "none",
+            "low"
+          ],
+          "default": "'low'",
+          "reflects": true
+        },
+        {
+          "name": "placeholder",
+          "property": "placeholder",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "status-message",
+          "property": "statusMessage",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "status-position",
+          "property": "statusPosition",
+          "type": "ChatComposerStatusPosition",
+          "values": [
+            "top",
+            "bottom"
+          ],
+          "default": "'bottom'",
+          "reflects": true
+        },
+        {
+          "name": "status-type",
+          "property": "statusType",
+          "type": "ChatComposerStatusType | undefined",
+          "values": [
+            "error",
+            "warning"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "stop-shown",
+          "property": "stopShown",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "value",
+          "property": "value",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "drawer",
+        "footer-actions",
+        "header-actions",
+        "header-context",
+        "input",
+        "send-actions",
+        "send-button"
+      ],
+      "events": [
+        {
+          "name": "input",
+          "native": true
+        },
+        {
+          "name": "tct-chat-stop",
+          "class": "TctChatStopEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-chat-submit",
+          "class": "TctChatSubmitEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "base",
+        "body",
+        "footer",
+        "header",
+        "input",
+        "status"
+      ],
+      "cssStates": [],
+      "cssProperties": [
+        {
+          "name": "--chat-composer-padding"
+        },
+        {
+          "name": "--chat-composer-radius"
+        }
+      ]
+    },
+    "tct-chat-composer-drawer": {
+      "class": "TctChatComposerDrawer",
+      "attributes": [
+        {
+          "name": "collapsed",
+          "property": "collapsed",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "count",
+          "property": "count",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)",
+        "collapsed-summary"
+      ],
+      "events": [
+        {
+          "name": "tct-collapse-change",
+          "class": "TctCollapseChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "base",
+        "content",
+        "handle",
+        "summary",
+        "toggle"
+      ],
+      "cssStates": [
+        "collapsed"
+      ],
+      "cssProperties": []
+    },
+    "tct-chat-composer-input": {
+      "class": "TctChatComposerInput",
+      "attributes": [
+        {
+          "name": "debounce-ms",
+          "property": "debounceMs",
+          "type": "number",
+          "default": "150",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "enterkeyhint",
+          "property": "enterkeyhint",
+          "type": "unknown",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "max-rows",
+          "property": "maxRows",
+          "type": "number",
+          "default": "8",
+          "reflects": false
+        },
+        {
+          "name": "no-history",
+          "property": "noHistory",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "no-paste-as-token",
+          "property": "noPasteAsToken",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "placeholder",
+          "property": "placeholder",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "value",
+          "property": "value",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "pasteAsToken",
+          "type": "ChatPasteAsTokenController | false | undefined",
+          "readonly": false
+        },
+        {
+          "name": "triggers",
+          "type": "readonly ChatComposerTrigger[] | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "clearInterimText",
+          "signature": "() => void"
+        },
+        {
+          "name": "expandToken",
+          "signature": "(id: string) => void"
+        },
+        {
+          "name": "focus",
+          "signature": "(options?: FocusOptions) => void"
+        },
+        {
+          "name": "getValue",
+          "signature": "() => string"
+        },
+        {
+          "name": "insertText",
+          "signature": "(text: string) => void"
+        },
+        {
+          "name": "insertToken",
+          "signature": "(token: ChatComposerToken) => string | undefined"
+        },
+        {
+          "name": "setInterimText",
+          "signature": "(text: string) => void"
+        },
+        {
+          "name": "submit",
+          "signature": "() => boolean"
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "input",
+          "native": true
+        },
+        {
+          "name": "tct-chat-files",
+          "class": "TctChatFilesEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-chat-paste",
+          "class": "TctChatPasteEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        },
+        {
+          "name": "tct-chat-submit",
+          "class": "TctChatSubmitEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "base",
+        "editable",
+        "placeholder",
+        "trigger-menu"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-chat-composer-token-element": {
+      "class": "TctChatComposerTokenElement",
+      "attributes": [
+        {
+          "name": "expandable",
+          "property": "expandable",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "icon",
+          "property": "icon",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "value",
+          "property": "value",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "variant",
+          "property": "variant",
+          "type": "BadgeVariant | undefined",
+          "values": [
+            "neutral",
+            "info",
+            "success",
+            "warning",
+            "error",
+            "blue",
+            "cyan",
+            "green",
+            "orange",
+            "pink",
+            "purple",
+            "red",
+            "teal",
+            "yellow"
+          ],
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "accessibleName",
+          "type": "string",
+          "readonly": true
+        },
+        {
+          "name": "token",
+          "type": "ChatComposerToken | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [],
+      "slots": [],
+      "events": [
+        {
+          "name": "tct-chat-token-expand",
+          "class": "TctChatTokenExpandEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "base",
+        "chip",
+        "preview"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-chat-dictation-button": {
+      "class": "TctChatDictationButton",
+      "attributes": [
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "show-unsupported",
+          "property": "showUnsupported",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "ChatComposerButtonSize",
+          "values": [
+            "sm",
+            "md"
+          ],
+          "default": "'md'",
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "dictation",
+          "type": "ChatDictationSource | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [],
+      "slots": [],
+      "events": [],
+      "cssParts": [
+        "bar",
+        "bars",
+        "base",
+        "button"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-chat-send-button": {
+      "class": "TctChatSendButton",
+      "attributes": [
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean | undefined",
+          "reflects": false
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "ChatComposerButtonSize",
+          "values": [
+            "sm",
+            "md"
+          ],
+          "default": "'md'",
+          "reflects": true
+        },
+        {
+          "name": "stop-shown",
+          "property": "stopShown",
+          "type": "boolean | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "send-icon",
+        "stop-icon"
+      ],
+      "events": [
+        {
+          "name": "click",
+          "native": true
+        },
+        {
+          "name": "tct-chat-send",
+          "class": "TctChatSendEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        },
+        {
+          "name": "tct-chat-stop",
+          "class": "TctChatStopEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        }
+      ],
+      "cssParts": [
+        "button"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}
