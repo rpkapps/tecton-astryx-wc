@@ -114,3 +114,11 @@ Requirements for the foundation work package:
 - Add a CI licence check. The allowlist is MIT, BSD-2/3-Clause, Apache-2.0, ISC, 0BSD and OFL-1.1 (fonts), plus the
   explicit exceptions dompurify (Apache-2.0 election) and axe-core (dev-only). Any other licence fails the build.
 - Ship a `THIRD-PARTY-NOTICES.md` with the runtime licences and the OFL font notices.
+
+## D-008 — This library's own licence (owner, 2026-09-29)
+
+For now the library is **unlicensed** (all rights reserved). Do not add a LICENSE file. Every
+workspace `package.json` sets `"license": "UNLICENSED"` and `"private": true`, and nothing is published
+to a registry. `THIRD-PARTY-NOTICES.md` is still required, because third-party licences still apply to what we
+bundle. The upstream Astryx licence must be honoured wherever we adapt its code or docs. Record
+the upstream licence and attribution in THIRD-PARTY-NOTICES.md.
