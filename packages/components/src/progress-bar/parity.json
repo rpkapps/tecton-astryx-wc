@@ -1,0 +1,146 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "progress-bar",
+  "workPackage": "WP-2",
+  "entries": {
+    "core.progress-bar": {
+      "tag": "tct-progress-bar",
+      "status": "in-progress",
+      "upstream": {
+        "name": "ProgressBar",
+        "path": "packages/core/src/ProgressBar/ProgressBar.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "attribute",
+          "default": 0,
+          "notes": "Number attribute; clamped to 0..max, non-finite counts as 0."
+        },
+        {"upstream": "max", "kind": "prop", "target": "max", "as": "attribute", "default": 100},
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Required for accessibility; names the progressbar via aria-labelledby."
+        },
+        {
+          "upstream": "isLabelHidden",
+          "kind": "prop",
+          "target": "label-hidden",
+          "as": "attribute",
+          "default": false
+        },
+        {
+          "upstream": "hasValueLabel",
+          "kind": "prop",
+          "target": "has-value-label",
+          "as": "attribute",
+          "default": false
+        },
+        {
+          "upstream": "formatValueLabel",
+          "kind": "prop",
+          "target": "formatValueLabel",
+          "as": "property",
+          "notes": "Function; property only."
+        },
+        {
+          "upstream": "variant",
+          "kind": "prop",
+          "target": "variant",
+          "as": "attribute",
+          "reflect": true,
+          "default": "accent"
+        },
+        {
+          "upstream": "isIndeterminate",
+          "kind": "prop",
+          "target": "indeterminate",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "marks",
+          "kind": "prop",
+          "target": "marks",
+          "as": "property",
+          "notes": "Array of {value, label}; property only. Values outside 0..max clamp to the track edges."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Visual only, as upstream; the progressbar keeps its semantics and is not aria-disabled."
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "A-ref: the element itself is the ref; the track is reachable as part=\"track\"."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle family: data-* attributes are set on the host directly; nothing to map."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base|label|value-label|track|fill|mark) or the tokens."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Moves focus to each target mark in order; the mark label is its accessible name.",
+          "when": "marks is set"
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "PROGRESS-BAR-01",
+          "type": "tecton-visual",
+          "text": "Fills are Tecton roles: accent uses --tecton-color-progress-primary on --color-track; success, warning and error use the filled status roles; neutral uses the neutral status role. Disabled greys fill and text."
+        },
+        {
+          "id": "PROGRESS-BAR-02",
+          "type": "a11y-improvement",
+          "text": "Marks are rendered beside the progressbar, not inside it, as focusable role=img elements named by their label, so the progressbar's children stay presentational and axe accepts the tree."
+        },
+        {
+          "id": "PROGRESS-BAR-03",
+          "type": "approved-api-difference",
+          "text": "The default value text is the percentage formatted with Intl.NumberFormat for the element's language (via LocaleController) instead of a fixed string."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [
+        "Mark tooltips: the mark label is the accessible name today, and the hover/focus tooltip (upstream placement above, focusTrigger always) is added with tct-tooltip when it lands."
+      ],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:progress-ring] native <progress> not used (cannot carry marks or custom value text); [mwg:spinner] reduced-motion slowdown; [mwg:css] --_animation-reduced and forced colours; [mwg:accessible-web-components] ids in one root."
+    }
+  }
+}
