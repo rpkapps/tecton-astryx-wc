@@ -1,0 +1,104 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "kbd",
+  "workPackage": "WP-1",
+  "entries": {
+    "core.kbd": {
+      "tag": "tct-kbd",
+      "status": "implemented",
+      "upstream": {
+        "name": "Kbd",
+        "path": "packages/core/src/Kbd/Kbd.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "keys",
+          "kind": "prop",
+          "target": "keys",
+          "as": "attribute",
+          "notes": "Keys joined with `+`; `mod` resolves by platform; aliases esc and return; `plus` for a literal +."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use the host (class, style), ::part(base) and ::part(key)."
+        },
+        {
+          "upstream": "className",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: `class` on the host."
+        },
+        {
+          "upstream": "style",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: `style` on the host."
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "The element itself is the handle; the group is reachable as part \"base\"."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "isApplePlatform",
+          "as": "module-function",
+          "target": "isApplePlatform",
+          "notes": "kbd/kbd.keys.ts (folder-private): client hints first, then navigator.platform, false on the server."
+        }
+      ],
+      "keyboard": [],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "KBD-01",
+          "type": "approved-api-difference",
+          "text": "The role=\"img\" and computed aria-label live on the inner part=\"base\" group, not the host: a host role or aria-label cannot replace the computed name (upstream lets neither win either, by spreading them before the computed props). The host itself has no role."
+        },
+        {
+          "id": "KBD-02",
+          "type": "approved-api-difference",
+          "text": "Apple platform detection runs when the element connects (client only), so a server-rendered or not yet upgraded shortcut shows the non-Apple form first, like upstream's useSyncExternalStore server snapshot."
+        },
+        {
+          "id": "KBD-03",
+          "type": "tecton-visual",
+          "text": "The badge surface is --color-background-muted (tecton-astryx components.ts `kbd`) instead of --color-neutral; the 2px bottom edge stays --color-border-emphasized as decorative depth (D-013 Q-05)."
+        },
+        {
+          "id": "KBD-04",
+          "type": "a11y-improvement",
+          "text": "Forced colours give each key a ButtonBorder edge (backgrounds are dropped there)."
+        },
+        {
+          "id": "KBD-05",
+          "type": "waiver",
+          "text": "The spoken key names (Control, Shift, Up arrow, Command) are English constants, as upstream; an i18n catalog for them is not part of the upstream message set, so they are not localised yet."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components] role=img and spoken name on an inner element in the same root; [mwg:styling-web-components] parts base and key; [mwg:custom-elements] client-only detection in connectedCallback."
+    }
+  }
+}
