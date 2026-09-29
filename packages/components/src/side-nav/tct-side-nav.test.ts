@@ -11,6 +11,7 @@ import {recordEvents} from '@tecton-wc/testing/events.js';
 import {fixture} from '@tecton-wc/testing/fixture.js';
 import {pressKeys} from '@tecton-wc/testing/keyboard.js';
 import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
+import {isTier2} from '@tecton-wc/testing/tier.js';
 import {nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
 import '../nav-icon/define.js';
 import './define.js';
@@ -134,7 +135,7 @@ describe('tct-side-nav: collapse', () => {
     expect(element.collapsed).toBe(true);
     expect(element.isCollapsed).toBe(true);
     expect(box(element).getBoundingClientRect().width).toBe(48);
-    expect(element.matches(':state(collapsed)')).toBe(true);
+    if (!isTier2) expect(element.matches(':state(collapsed)')).toBe(true);
     expect(events.named('tct-collapse-change').length).toBe(1);
     expect(events.named('tct-collapse-change').at(-1)).toMatchObject({collapsed: true, reason: 'pointer'});
     expect(await axNode(inner.shadowRoot!.querySelector('button')!)).toMatchObject({

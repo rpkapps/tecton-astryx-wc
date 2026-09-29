@@ -1,0 +1,178 @@
+/*
+ * The disclosure of the top navigation (menu and mega menu): a pill button on the band with a chevron, and a
+ * panel in the top layer. The button rests on the secondary text role (the export's top-nav text role is 4.0:1
+ * on the light band, see tct-top-nav-item.styles.css) with the chevron on the top-nav adornment role; hover,
+ * keyboard focus and the open state add a fill and switch to the primary text role, so no state pairs a fill
+ * with the resting ink. The panel is Tecton's
+ * "rule plus recessed surface": a 1px border on the popover fill, no drop shadow (D-013).
+ * In the mobile drawer the item is a collapsible section of navigation rows.
+ * [mwg:css] [mwg:resilient-context-menus-and-nested-dropdowns] [mwg:animate-to-from-top-layer] [mwg:navigation-drawer]
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+  }
+
+  :host([hidden]) {
+    display: none;
+  }
+
+  .trigger {
+    --_trigger-fg: var(--color-text-secondary);
+    --_trigger-bg: transparent;
+    --_trigger-icon: var(--tecton-color-top-nav-adornment);
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    margin: 0;
+    padding-block: var(--spacing-1-5);
+    padding-inline: var(--spacing-3);
+    border: 0;
+    border-radius: var(--radius-element);
+    background: var(--_trigger-bg);
+    color: var(--_trigger-fg);
+    font-family: inherit;
+    font-size: var(--text-label-size);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--text-label-leading);
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .chevron {
+    flex-shrink: 0;
+    inline-size: 1em;
+    block-size: 1em;
+    color: var(--_trigger-icon, currentcolor);
+    font-size: inherit;
+  }
+
+  /*
+   * The panel: the positioned layer paints nothing; `.panel` is the painted box. The layer is a flex column
+   * clamped to the space the positioning leaves (its max-block-size is written inline), so the panel shrinks and
+   * scrolls inside it instead of running off the screen. Only while open: a closed popover stays display: none.
+   */
+  .layer:popover-open {
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+
+  .panel {
+    box-sizing: border-box;
+    flex: 0 1 auto;
+    min-block-size: 0;
+    max-inline-size: calc(100vi - var(--spacing-4));
+    padding: var(--spacing-1);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-container);
+    background: var(--color-background-popover);
+    color: var(--color-text-primary);
+    font-size: var(--text-label-size);
+    line-height: var(--text-label-leading);
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+
+  .panel:focus-visible {
+    outline: none;
+  }
+
+  /* The drawer section: a header row that expands the links under it. */
+  .drawer-section {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .drawer-header {
+    justify-content: space-between;
+    background: transparent;
+  }
+
+  .drawer-items {
+    display: grid;
+    grid-template-rows: 0fr;
+  }
+
+  .drawer-items[data-expanded] {
+    grid-template-rows: 1fr;
+  }
+
+  .drawer-inner {
+    min-block-size: 0;
+    overflow: hidden;
+  }
+}
+
+@layer state {
+  @supports not selector(:popover-open) {
+    .layer {
+      position: fixed;
+      display: none;
+    }
+  }
+
+  .trigger[data-open],
+  .trigger:focus-visible,
+  .trigger:active {
+    --_trigger-fg: var(--color-text-primary);
+    --_trigger-bg: var(--color-overlay-hover);
+    --_trigger-icon: currentcolor;
+  }
+
+  .trigger:active {
+    --_trigger-bg: var(--color-overlay-pressed);
+  }
+
+  @media (hover: hover) {
+    .trigger:hover {
+      --_trigger-fg: var(--color-text-primary);
+      --_trigger-bg: var(--color-overlay-hover);
+      --_trigger-icon: currentcolor;
+    }
+  }
+
+  .chevron[data-open] {
+    rotate: 180deg;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .trigger {
+      transition:
+        background-color var(--duration-fast) var(--ease-standard),
+        color var(--duration-fast) var(--ease-standard);
+    }
+
+    .chevron {
+      transition: rotate var(--duration-fast) var(--ease-standard);
+    }
+
+    .drawer-items {
+      transition: grid-template-rows var(--duration-medium) var(--ease-standard);
+    }
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .panel {
+      border-color: CanvasText;
+      background: Canvas;
+      color: CanvasText;
+    }
+
+    .trigger {
+      border: 1px solid transparent;
+    }
+
+    .trigger[data-open] {
+      border-color: CanvasText;
+    }
+  }
+}

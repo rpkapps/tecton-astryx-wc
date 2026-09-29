@@ -129,13 +129,25 @@
     color: inherit;
   }
 
-  /* The menu panel: the slotted menu on the popover surface, in the top layer. */
-  .menu-layer {
-    max-block-size: calc(100dvb - var(--spacing-4));
+  /*
+   * The menu panel: the slotted menu on the popover surface, in the top layer. The layer is a flex column clamped
+   * to the space the positioning leaves (max-block-size is written inline), so the menu scrolls inside it.
+   */
+  .menu-layer:popover-open {
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+
+    @starting-style {
+      opacity: 0;
+    }
   }
 
   .menu {
     box-sizing: border-box;
+    flex: 0 1 auto;
+    min-block-size: 0;
     min-inline-size: 180px; /* design: upstream menu minimum width (180px) */
     max-inline-size: calc(100vi - var(--spacing-8));
     padding: var(--spacing-1);
@@ -146,15 +158,6 @@
     font-size: var(--text-label-size);
     line-height: var(--text-label-leading);
     overflow: auto;
-  }
-
-  .menu-layer:popover-open {
-    opacity: 1;
-    transition: opacity var(--duration-fast) var(--ease-standard);
-
-    @starting-style {
-      opacity: 0;
-    }
   }
 }
 

@@ -117,14 +117,26 @@
     padding-inline: 0;
   }
 
-  /* The flyout: the sub-items in full, beside the rail. The positioned layer paints nothing. */
-  .flyout-layer {
-    /* The layer carries the clearance margins, written by PositionController. */
-    max-block-size: calc(100dvb - var(--spacing-4));
+  /*
+   * The flyout: the sub-items in full, beside the rail. The positioned layer paints nothing; it is a flex
+   * column clamped to the space the positioning leaves (max-block-size is written inline), so the flyout
+   * shrinks and scrolls inside it. Only while open: a closed popover stays display: none.
+   */
+  .flyout-layer:popover-open {
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+
+    @starting-style {
+      opacity: 0;
+    }
   }
 
   .flyout {
     box-sizing: border-box;
+    flex: 0 1 auto;
+    min-block-size: 0;
     inline-size: max-content;
     min-inline-size: 180px; /* design: upstream flyout minimum width (180px) */
     max-inline-size: calc(100vi - var(--spacing-8));
@@ -145,15 +157,6 @@
     font-size: var(--text-supporting-size);
     font-weight: var(--font-weight-semibold);
     line-height: var(--text-supporting-leading);
-  }
-
-  .flyout-layer:popover-open {
-    opacity: 1;
-    transition: opacity var(--duration-fast) var(--ease-standard);
-
-    @starting-style {
-      opacity: 0;
-    }
   }
 }
 

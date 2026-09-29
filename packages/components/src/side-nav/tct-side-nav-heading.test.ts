@@ -148,8 +148,18 @@ describe('tct-side-nav-heading: the menu disclosure', () => {
     const {element} = await heading('heading="Product" heading-href="#home" subheading="Team" subheading-href="#team"', MENU);
     expect(root(element).querySelector('.trigger-root')).toBeNull();
     const button = q(element, '.chevron-btn');
-    await userEvent.click(q(element, 'a.heading'));
-    expect(isOpen(element)).toBe(false);
+    // A press on a link is the link's: it navigates and never toggles the menu (hover may still open it).
+    const link = q(element, 'a.heading');
+    let navigated = 0;
+    link.addEventListener('click', (event) => {
+      navigated += 1;
+      event.preventDefault();
+    });
+    await userEvent.hover(document.body, {position: {x: 900, y: 650}});
+    await userEvent.click(link);
+    expect(navigated).toBe(1);
+    await userEvent.hover(document.body, {position: {x: 900, y: 650}});
+    await waitUntil(() => !isOpen(element), 'leaving closes a hover-open');
     await userEvent.click(button);
     await waitUntil(() => isOpen(element), 'the chevron opens it');
   });

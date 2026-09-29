@@ -71,8 +71,8 @@ async function nav(content: string, attributes = '', theme?: 'light' | 'dark') {
 
 const item = (root: ParentNode, selector: string): TctSideNavItem =>
   root.querySelector<TctSideNavItem>(selector)!;
-const inner = (element: Element, selector: string): HTMLElement =>
-  element.shadowRoot!.querySelector<HTMLElement>(selector)!;
+const inner = <T extends HTMLElement = HTMLElement>(element: Element, selector: string): T =>
+  element.shadowRoot!.querySelector<T>(selector)!;
 const primary = (element: Element): HTMLElement => inner(element, '.primary');
 
 describe('tct-side-nav-item: the row', () => {
@@ -138,8 +138,8 @@ describe('tct-side-nav-item: the row', () => {
         <span slot="end" id="count">3</span>
       </tct-side-nav-item>`);
     const one = item(root, '#a');
-    expect(inner(one, 'slot[name="icon"]').assignedElements()[0]!.id).toBe('glyph');
-    expect(inner(one, 'slot[name="end"]').assignedElements()[0]!.id).toBe('count');
+    expect(inner<HTMLSlotElement>(one, 'slot[name="icon"]').assignedElements()[0]!.id).toBe('glyph');
+    expect(inner<HTMLSlotElement>(one, 'slot[name="end"]').assignedElements()[0]!.id).toBe('count');
     expect(primary(one).contains(inner(one, 'slot[name="end"]'))).toBe(true);
   });
 
@@ -344,7 +344,7 @@ describe('tct-side-nav-item: actions', () => {
     const row = item(root, '#a');
     const action = root.querySelector<HTMLElement>('#more')!;
     expect(primary(row).contains(inner(row, 'slot[name="actions"]'))).toBe(false);
-    expect(inner(row, 'slot[name="actions"]').assignedElements()[0]).toBe(action);
+    expect(inner<HTMLSlotElement>(row, 'slot[name="actions"]').assignedElements()[0]).toBe(action);
     await waitUntil(() => action.shadowRoot!.querySelector('.button')!.getAttribute('data-size') === 'sm', 'compact size');
   });
 

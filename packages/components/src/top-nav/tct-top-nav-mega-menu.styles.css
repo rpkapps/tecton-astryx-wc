@@ -1,0 +1,45 @@
+/*
+ * tct-top-nav-mega-menu. The panel is a flex row that wraps: the grid of destinations (two columns, growing
+ * twice as fast) beside the featured area (a muted card). It is at most 960px wide and never wider than the
+ * screen minus a gutter, and scrolls inside when it is taller than the space below the bar (the layer is
+ * clamped to that space by the positioning, and the panel inherits the clamp). [mwg:css-layout]
+ * [mwg:resilient-context-menus-and-nested-dropdowns]
+ */
+@layer component {
+  .panel.mega {
+    max-inline-size: min(960px, calc(100vi - var(--spacing-4))); /* design: upstream mega menu width cap (960px) */
+  }
+
+  .content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-6);
+    padding: var(--spacing-2);
+  }
+
+  .items {
+    display: grid;
+    flex: 2 1 300px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--spacing-2);
+    min-inline-size: 0;
+    align-content: start;
+  }
+
+  .featured {
+    display: flex;
+    flex: 1 1 200px;
+    flex-direction: column;
+    border-radius: var(--radius-container);
+    background: var(--color-background-muted);
+    overflow: hidden;
+  }
+
+  .drawer-featured {
+    margin-block-start: var(--spacing-2);
+    margin-inline-start: var(--spacing-6);
+    border-radius: var(--radius-container);
+    background: var(--color-background-muted);
+    overflow: hidden;
+  }
+}
