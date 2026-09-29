@@ -1,11 +1,11 @@
 <!-- title: Loading and clickAction; description: loading shows the busy state; a clickAction that returns a promise keeps the button busy until it settles and ignores a second click. -->
-<div id="loading-demo" style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-3)">
+<tct-hstack id="loading-demo" wrap="wrap" gap="3" v-align="center">
   <tct-button variant="primary" label="Loading" loading></tct-button>
   <tct-button label="Loading" loading></tct-button>
   <tct-button variant="destructive" label="Loading" loading></tct-button>
   <tct-button variant="outlined" label="Loading" loading></tct-button>
   <tct-button id="loading-demo-save" variant="primary" label="Save (2 s action)"></tct-button>
-</div>
+</tct-hstack>
 <script type="module">
   const button = document.querySelector('#loading-demo-save');
   button.clickAction = () => new Promise((resolve) => setTimeout(resolve, 2000));
