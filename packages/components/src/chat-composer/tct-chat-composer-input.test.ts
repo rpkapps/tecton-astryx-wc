@@ -4,6 +4,7 @@ import {afterEach, describe, expect, it} from 'vitest';
 import {cdp, userEvent} from 'vitest/browser';
 import {axNode, expectAccessible} from '@tecton-wc/testing/a11y.js';
 import {expectEventCounts, expectEventFlags, recordEvents} from '@tecton-wc/testing/events.js';
+import {emulateMedia} from '@tecton-wc/testing/emulate.js';
 import {fixture} from '@tecton-wc/testing/fixture.js';
 import {deepActiveElement} from '@tecton-wc/testing/keyboard.js';
 import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
@@ -674,5 +675,62 @@ describe('tct-chat-composer-input: composer context', () => {
     const template = html`<tct-chat-composer-input></tct-chat-composer-input>`;
     const input = await fixture<TctChatComposerInput>(template);
     expect(input.shadowRoot!.querySelector('.root')!.hasAttribute('data-composer')).toBe(false);
+  });
+});
+
+describe('tct-chat-composer-input: right to left, forced colours and localisation', () => {
+  it('lays text, placeholder and tokens out from the right in right-to-left', async () => {
+    const root = await fixture<HTMLElement>(
+      `<div style="inline-size: 420px"><tct-chat-composer-input></tct-chat-composer-input></div>`,
+      {dir: 'rtl'},
+    );
+    const input = root.querySelector<TctChatComposerInput>('tct-chat-composer-input')!;
+    const box = input.getBoundingClientRect();
+    const placeholder = input.shadowRoot!.querySelector('.placeholder')!;
+    const range = document.createRange();
+    range.selectNodeContents(placeholder);
+    // The placeholder text starts at the inline start: the right edge in right-to-left.
+    expect(box.right - range.getBoundingClientRect().right).toBeLessThan(
+      range.getBoundingClientRect().left - box.left,
+    );
+    input.insertToken({value: '@ada', label: 'Ada Lovelace'});
+    await input.updateComplete;
+    const chip = editableOf(input).querySelector('[data-tct-token]')!;
+    expect(box.right - chip.getBoundingClientRect().right).toBeLessThan(
+      chip.getBoundingClientRect().left - box.left,
+    );
+    expect(input.getValue()).toBe('@ada ');
+    await expectAccessible(root);
+  });
+
+  it('keeps the text visible in forced colours', async () => {
+    if (!isChromium) return;
+    const restore = await emulateMedia({forcedColors: 'active'});
+    try {
+      const input = await make();
+      input.insertToken({value: '@ada', label: 'Ada Lovelace'});
+      await input.updateComplete;
+      const chip = editableOf(input).querySelector<HTMLElement>('[data-tct-token]')!;
+      expect(chip.getBoundingClientRect().width).toBeGreaterThan(0);
+      // The system palette colours the text: it must not be forced to transparent.
+      expect(getComputedStyle(editableOf(input)).color).not.toBe('rgba(0, 0, 0, 0)');
+    } finally {
+      await restore();
+    }
+  });
+
+  it('translates the default label and placeholder, and attributes override them', async () => {
+    const root = await fixture<HTMLElement>(
+      `<div lang="de-DE"><tct-chat-composer-input></tct-chat-composer-input></div>`,
+    );
+    const input = root.querySelector<TctChatComposerInput>('tct-chat-composer-input')!;
+    await waitUntil(
+      () => editableOf(input).getAttribute('aria-label') !== 'Message input',
+      'the German catalog loads',
+    );
+    expect(input.shadowRoot!.querySelector('.placeholder')!.textContent).not.toContain('Type a message');
+    input.label = 'Eigener Name';
+    await input.updateComplete;
+    expect(editableOf(input).getAttribute('aria-label')).toBe('Eigener Name');
   });
 });

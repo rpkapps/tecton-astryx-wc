@@ -204,6 +204,22 @@ describe('tct-chat-dictation-button: the equalizer', () => {
     );
   });
 
+  it('paints the bars in the button text colour in forced colours, even while clipping', async () => {
+    if (!isChromium) return;
+    const restore = await emulateMedia({forcedColors: 'active'});
+    try {
+      const source = new FakeDictation();
+      source.isListening = true;
+      source.volume = 0.3;
+      source.bands = [0.2, 0.2, 0.2, 0.2, 0.2];
+      const button = await make(source);
+      const paint = getComputedStyle(bars(button)[0]!).backgroundColor;
+      expect(paint).toBe(getComputedStyle(inner(button)).color);
+    } finally {
+      await restore();
+    }
+  });
+
   it('does not animate the bars under reduced motion', async () => {
     const restore = await emulateMedia({reducedMotion: 'reduce'});
     try {

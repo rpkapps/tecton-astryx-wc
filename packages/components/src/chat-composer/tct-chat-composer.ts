@@ -90,6 +90,8 @@ const isStatusType = (value: unknown): value is ChatComposerStatusType =>
  * @cssprop --chat-composer-radius - Outer corner radius of the body; inner buttons derive theirs concentrically. Default `--radius-chat`.
  * @cssprop --chat-composer-padding - Padding of the body, used in the concentric radius. Default `--spacing-3`.
  * @fires {TctChatSubmitEvent} tct-chat-submit - The user submitted a non-blank draft; cancelable (keeps the draft).
+ * @fires {TctChatStopEvent} tct-chat-stop - Stop was activated on the send button while `stop-shown` is set (bubbles up from the send button).
+ * @fires input - Native `input` from the input, retargeted: after every edit of the draft (bubbles up from the input).
  * @cloakDisplay block
  */
 export class TctChatComposer extends TctElement {

@@ -3,6 +3,7 @@ import {html} from 'lit';
 import {describe, expect, it} from 'vitest';
 import {userEvent} from 'vitest/browser';
 import {axNode, expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {emulateMedia} from '@tecton-wc/testing/emulate.js';
 import {expectEventCounts, expectEventFlags, recordEvents} from '@tecton-wc/testing/events.js';
 import {fixture} from '@tecton-wc/testing/fixture.js';
 import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
@@ -122,6 +123,35 @@ describe('tct-chat-composer-token-element: named for assistive technology', () =
     // English defaults follow English plural rules; a translated catalog (when one ships the id) would replace them.
     await waitUntil(() => token.accessibleName.length > 0, 'a name');
     expect(token.accessibleName).toContain('300');
+  });
+});
+
+describe('tct-chat-composer-token-element: right to left and forced colours', () => {
+  it('flows in the text direction and passes axe in right-to-left', async () => {
+    const root = await fixture<HTMLElement>(
+      `<div style="inline-size: 300px; padding-block-start: 140px"><span>שלום <tct-chat-composer-token-element value="@ada" label="Ada"></tct-chat-composer-token-element></span></div>`,
+      {dir: 'rtl'},
+    );
+    const token = root.querySelector<TctChatComposerTokenElement>('tct-chat-composer-token-element')!;
+    const word = root.querySelector('span')!.getBoundingClientRect();
+    // The word comes first at the inline start (right), the chip after it toward the left.
+    expect(token.getBoundingClientRect().right).toBeLessThanOrEqual(word.right);
+    expect(token.getBoundingClientRect().left).toBeGreaterThanOrEqual(word.left);
+    await expectAccessible(root);
+  });
+
+  it('keeps an edge or a fill on the chip in forced colours', async () => {
+    if (!isChromium) return;
+    const restore = await emulateMedia({forcedColors: 'active'});
+    try {
+      const token = await make('value="@ada" label="Ada"');
+      const style = getComputedStyle(badgeOf(token));
+      expect(token.getBoundingClientRect().width).toBeGreaterThan(0);
+      expect(style.visibility).toBe('visible');
+      await expectAccessible(token);
+    } finally {
+      await restore();
+    }
   });
 });
 

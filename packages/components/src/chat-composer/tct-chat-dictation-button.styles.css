@@ -46,3 +46,14 @@
     }
   }
 }
+
+@layer a11y {
+  @media (forced-colors: active) {
+    /* A plain background would be forced to the page colour and the bars would vanish: paint them in the
+       button's text colour (important: it must beat the clipping tint set inline while the voice is loud). */
+    .bar {
+      forced-color-adjust: none;
+      background-color: ButtonText !important;
+    }
+  }
+}

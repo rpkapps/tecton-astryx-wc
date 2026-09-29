@@ -2,6 +2,7 @@
 import {describe, expect, it} from 'vitest';
 import {userEvent} from 'vitest/browser';
 import {axNode, expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {emulateMedia} from '@tecton-wc/testing/emulate.js';
 import {expectEventCounts, expectEventFlags, recordEvents} from '@tecton-wc/testing/events.js';
 import {fixture} from '@tecton-wc/testing/fixture.js';
 import {pressKeys} from '@tecton-wc/testing/keyboard.js';
@@ -155,6 +156,22 @@ describe('tct-chat-send-button: text contrast, states and locales', () => {
       await expectAccessible(root);
     });
   }
+
+  it('keeps a visible edge and passes axe in forced colours, in both states', async () => {
+    if (!isChromium) return;
+    const restore = await emulateMedia({forcedColors: 'active'});
+    try {
+      const root = await fixture<HTMLElement>(
+        `<div><tct-chat-send-button></tct-chat-send-button><tct-chat-send-button stop-shown></tct-chat-send-button></div>`,
+      );
+      for (const button of root.querySelectorAll<TctChatSendButton>('tct-chat-send-button')) {
+        expect(getComputedStyle(native(button)).borderTopStyle).toBe('solid');
+      }
+      await expectAccessible(root);
+    } finally {
+      await restore();
+    }
+  });
 
   it('is named in German and Arabic, and the label follows the state', async () => {
     const german = await fixture<HTMLElement>(
