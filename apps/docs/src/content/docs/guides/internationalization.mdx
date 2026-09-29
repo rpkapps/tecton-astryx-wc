@@ -67,7 +67,8 @@ import {getLocaleDirection} from '@tecton-astryx/core/i18n/direction.js';
 
 function setLanguage(locale) {
   document.documentElement.lang = locale;
-  document.documentElement.dir = getLocaleDirection(locale); // see Text direction below
+  // see Text direction below
+  document.documentElement.dir = getLocaleDirection(locale);
 }
 
 languageButton.addEventListener('click', () => {
@@ -118,7 +119,10 @@ Every element string that a person can see or hear can be overridden without shi
 
 ```html
 <tct-dialog open>
-  <tct-dialog-header heading="Settings" close-label="Dismiss settings"></tct-dialog-header>
+  <tct-dialog-header
+    heading="Settings"
+    close-label="Dismiss settings"
+  ></tct-dialog-header>
 </tct-dialog>
 ```
 
@@ -180,10 +184,14 @@ For a small app, or when you do not want another runtime, you can resolve your o
 import {registerTranslation} from '@tecton-astryx/core/i18n/registry.js';
 import {formatMessage} from '@tecton-astryx/core/i18n/format.js';
 
-registerTranslation('en', {'@myapp.actions.save': 'Save', '@myapp.items': '{count, plural, one {# item} other {# items}}'});
-registerTranslation('fr-FR', {'@myapp.actions.save': 'Enregistrer', '@myapp.items': '{count, plural, one {# élément} other {# éléments}}'});
+const items = '{count, plural, one {# item} other {# items}}';
+registerTranslation('en', {'@myapp.actions.save': 'Save', '@myapp.items': items});
+registerTranslation('fr-FR', {
+  '@myapp.actions.save': 'Enregistrer',
+  '@myapp.items': '{count, plural, one {# élément} other {# éléments}}',
+});
 
-formatMessage('{count, plural, one {# item} other {# items}}', {count: 3}, 'en'); // '3 items'
+formatMessage(items, {count: 3}, 'en'); // '3 items'
 ```
 
 Inside your own elements, extend `TctElement` and use the `LocaleController`, which resolves through the same chain and re-renders when a catalog arrives:
