@@ -14,8 +14,6 @@
 import {CalendarDate} from '@internationalized/date';
 import type {ISODateString, PlainDate} from './date-types.js';
 
-export type {PlainDate} from './date-types.js';
-
 const ISO_DATE = /^(\d{4,})-(\d{1,2})-(\d{1,2})$/;
 
 /** Number of days in a Gregorian month. */

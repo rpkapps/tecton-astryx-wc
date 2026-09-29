@@ -13,8 +13,6 @@
 import type {ISOTimeString} from './date-types.js';
 import {normalizeDateText} from './date-parser.js';
 
-export type {ISOTimeString} from './date-types.js';
-
 /** A parsed time. */
 export interface ParsedTime {
   /** 0-23. */

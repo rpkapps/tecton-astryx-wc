@@ -15,8 +15,6 @@
 import type {PlainDate} from './date-types.js';
 import {plainDateCreate, plainDateFromDate} from './plain-date.js';
 
-export {plainDateFromISO as parseISO, plainDateToISO as dateToISO} from './plain-date.js';
-
 /** Whether the locale writes the day before the month (`DD/MM/YYYY`). */
 export function isLocaleDayFirst(locale = 'en'): boolean {
   const parts = new Intl.DateTimeFormat(locale, {calendar: 'gregory'}).formatToParts(
