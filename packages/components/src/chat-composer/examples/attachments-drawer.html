@@ -1,0 +1,12 @@
+<!-- title: Attachments drawer; description: A drawer above the composer holds attachments or context. With a count it collapses to a badge and a label; the toggle is a real button named "Collapse Attachments" or "Expand Attachments", and collapsed content leaves the tab order. -->
+<tct-vstack max-width="520">
+  <tct-chat-composer>
+    <tct-chat-composer-drawer slot="drawer" count="3" label="Attachments">
+      <tct-hstack wrap="wrap" gap="2" padding="3">
+        <tct-badge label="forecast-q3.xlsx" variant="blue"></tct-badge>
+        <tct-badge label="c-19-fault-log.txt" variant="neutral"></tct-badge>
+        <tct-badge label="well-map.png" variant="neutral"></tct-badge>
+      </tct-hstack>
+    </tct-chat-composer-drawer>
+  </tct-chat-composer>
+</tct-vstack>
