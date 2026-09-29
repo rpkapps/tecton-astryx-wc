@@ -1,0 +1,197 @@
+---
+title: Forms
+description: How the form-associated elements take part in native forms - values, validation, reset, disabled state, submit, autofill and IME-safe Enter.
+sidebar:
+  order: 11
+---
+
+Upstream Astryx has no single forms guide: form behaviour is described component by component, and its inputs are controlled (a `value` and an `onChange`). Web Components use the platform's form model instead, so this page collects the rules that hold for every form element. The elements in question are `tct-text-input`, `tct-text-area`, `tct-number-input`, `tct-checkbox-input`, `tct-switch`, `tct-radio-list`, `tct-slider`, `tct-selector`, the date and time inputs, `tct-file-input`, `tct-tokenizer` and the rest of the value controls, and `tct-button` as a submitter.
+
+:::caution[Planned elements]
+The shared machinery described here (`FormControlMixin`, the submitter and implicit-submission helpers, field chrome) is merged in `@tecton-astryx/core`. The elements that use it are delivered in the form work packages, so examples show the target API. Each element's page lists its own attributes, validation options and keyboard contract.
+:::
+
+## Overview
+
+Every value control is a form-associated custom element (FACE). It behaves like a native control:
+
+- it submits `name=value` with its `<form>`, and appears in `FormData` and in `form.elements`;
+- it takes part in constraint validation, so a form does not submit while it is invalid;
+- it resets with the form, is disabled by a disabled `<fieldset>`, is labelled by `<label for>` and by the `form` attribute, and restores its value on back and forward navigation and on browser autofill;
+- it submits on Enter when it is a single-line control.
+
+Form-associated custom elements are widely available (Chrome 77, Firefox 98, Safari 16.4), well below the library's Tier 2 floor, so there is no hidden-input fallback and no polyfill.
+
+```html
+<form id="signup">
+  <tct-text-input label="Email" name="email" type="email" autocomplete="email" required></tct-text-input>
+  <tct-checkbox-input label="Send me product updates" name="updates" value="yes"></tct-checkbox-input>
+  <tct-button type="submit" variant="primary">Create account</tct-button>
+</form>
+
+<script type="module">
+  document.querySelector('#signup').addEventListener('submit', (event) => {
+    event.preventDefault();
+    console.log(Object.fromEntries(new FormData(event.target)));
+  });
+</script>
+```
+
+## Values
+
+The `value` attribute is the default value (`defaultValue` in JavaScript). The `value` property is the current value: it follows the attribute until something sets it, and reset returns to the attribute. This is the native model, and it is why `value` and `checked` are not reflected to attributes.
+
+```js
+const input = document.querySelector('tct-text-input');
+
+input.value = 'ada@example.com'; // the current value; the attribute is untouched
+input.defaultValue; // whatever the `value` attribute says
+input.form.reset(); // back to the attribute's value
+```
+
+Controls that hold several values submit repeated entries under the same `name` (`FormData` with the name appended once per value). File controls submit `File` objects. A control with no value submits nothing.
+
+Structured data is set as a property, never as a JSON attribute: options for a selector, columns and data for a table.
+
+### Controlled and uncontrolled
+
+Astryx for React requires most inputs to be controlled. Here every input works both ways, and the difference is only in what you do:
+
+- **Uncontrolled (the default):** set the `value` attribute for the default, and read the value from the element, from `FormData` or from the events. The element owns its state, like a native `<input>`.
+- **Controlled:** write the property, listen for the event, and set the property again in the handler. Where an element also fires a cancelable `tct-<property>-change` intent event, `preventDefault()` refuses the change, and the element keeps its state.
+
+Writing a property or attribute never fires events. `input` and `change` fire only for user actions, so setting `value` from your own code cannot cause a feedback loop.
+
+## Events
+
+| Event                              | When                                                                                                                                                    |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `input`                            | On every user edit (typing, dragging a slider). It is composed, and it comes from the inner control.                                                    |
+| `change`                           | On commit: for text fields on blur or Enter, for discrete controls (checkboxes, switches, radios) on each toggle, which fires `input` and then `change`. The element re-dispatches it once from the host, because the native `change` event does not cross a shadow boundary. |
+| `invalid`                          | Natively, on the host, when validation fails.                                                                                                            |
+| `tct-value-change`                 | For non-form selection (tabs, segmented controls, accordions). It is not used on value controls.                                                        |
+| `tct-open-change`, `tct-clear`, `tct-remove` | Intent and action events of specific elements. See each element's page.                                                                         |
+
+Native events are never renamed or wrapped: `click`, `focus`, `blur`, `focusin` and `focusout` retarget to the host, and the element does not dispatch a second copy.
+
+## Validation
+
+Constraint validation works as it does for native controls. Use the element's attributes (`required`, and the constraints listed on its page) and read the state through the standard properties and methods:
+
+```js
+input.validity.valueMissing; // ValidityState, mirrored from the inner control when there is one
+input.validationMessage; // the message the browser would show
+input.willValidate; // false when disabled or read-only
+
+input.checkValidity(); // true or false; does not change what is displayed
+input.reportValidity(); // shows the message and focuses the control
+input.setCustomValidity('That address is already registered'); // your own error; '' clears it
+```
+
+The `invalid` attribute is a custom error state on the element: set it, and the control displays as invalid without failing the browser's own checks, which is how server-side errors are usually shown.
+
+### When invalidity is shown
+
+Showing "invalid" the moment a field receives focus is hostile to keyboard and screen-reader users, so the displayed state follows interaction. `:state(user-invalid)` and `aria-invalid` on the inner control flip at the same moment, and only:
+
+- after the user commits a value (`change`, or blur after an edit);
+- after a real submission attempt;
+- after `reportValidity()`.
+
+They do not flip on `checkValidity()` or `form.checkValidity()`, so a script that merely probes validity does not put errors on the page. While the control has focus, the displayed message is frozen, because the browser's own message changes on every keystroke, and the message is announced once, politely, when it first appears. Style it with the state:
+
+```css
+tct-text-input:state(user-invalid) {
+  margin-block-end: var(--spacing-2);
+}
+```
+
+`:state()` needs a Tier 1 engine; the accessible `aria-invalid` state and the message do not depend on it. Elements do not rely on `:user-invalid`, because the guide's data notes it is not consistently wired for form-associated custom elements.
+
+### Blocked submission
+
+When a form is invalid, the browser reports the first invalid control and focuses it. The value controls always supply the element to focus (the active or first enabled item for groups such as a radio list), so a blocked submit lands on a real focusable target instead of doing nothing.
+
+Do not disable the submit button to stop people from submitting an invalid form: let them submit, and show what is wrong. Do disable it (or use the button's loading state) after a valid submission starts, so it cannot be posted twice. Client-side validation is for usability; validate on the server as well, because browser constraints are not a defence for data integrity.
+
+## Submitting
+
+`tct-button` is a form participant with the same semantics as a native `<button>`:
+
+- `type="submit"` (the default inside a form) submits; `type="reset"` calls `form.reset()`; `type="button"` does nothing to the form.
+- `name`, `value`, `formaction`, `formmethod`, `formenctype`, `formtarget` and `formnovalidate` work as on a native button, and the `FormData` contains the submitter's `name=value`.
+- Calling `form.requestSubmit()` works, with or without a submitter.
+
+A custom element cannot be a native `SubmitEvent.submitter`, so the button inserts a temporary hidden native submit button that carries those attributes, submits with it, and removes it. The consequence is one documented difference: `event.submitter` in a `submit` handler is that temporary native button, not the `tct-button` host. If you need to know which button submitted, read `event.submitter.name` and `event.submitter.value`, or give each button its own `name`.
+
+### Enter
+
+Pressing Enter (without modifiers, and not while composing) in a single-line control runs the form's implicit submission, following the HTML rules: the form's default submit button is activated (the first submit button in `form.elements`, native or `tct-button`; a disabled default button submits nothing), or, when the form has no submit button, the form is submitted only if it has exactly one field that blocks implicit submission. The `enterkeyhint` attribute passes through to the inner input so mobile keyboards label the key correctly.
+
+Multi-line controls (`tct-text-area`, the chat composer) do not submit on a bare Enter; they insert a newline, and their own submit shortcuts are documented on their pages.
+
+### IME composition
+
+Every Enter, Escape, arrow and Tab command handler checks for IME composition first, so confirming a character conversion in Japanese, Chinese or Korean never triggers a command or sends a message. The check is `event.isComposing` together with `event.keyCode === 229`, which covers a WebKit event-ordering issue where the confirming Enter arrives after composition has ended. If you add your own Enter handler to a text area, do the same, and keep an explicit submit button as well: a shortcut must not be the only way to submit.
+
+```js
+import {isImeKeyEvent} from '@tecton-astryx/core/utils/ime.js';
+
+textArea.addEventListener('keydown', (event) => {
+  if (event.key !== 'Enter' || event.shiftKey || isImeKeyEvent(event)) return;
+  event.preventDefault();
+  form.requestSubmit();
+});
+```
+
+## Disabled, read-only and reset
+
+- `disabled` (and a disabled `<fieldset>`) removes the control from submission and from validation. The element also exposes `:disabled`.
+- `readonly` keeps the value in the submission but bars the control from validation.
+- Controls that are only unavailable for a moment, or "disabled with a reason", use `aria-disabled` and stay focusable, so focus is never lost. They do not fall out of the tab order.
+- `form.reset()` restores the attribute default and clears the interaction state (so an error message goes away).
+- On back and forward navigation and on browser autofill, the element restores its value through the form-state-restore hook, as a native control would.
+
+## Labels, descriptions and fields
+
+A control renders its own label, description and status message next to its native input, in the same shadow root, so the accessible relationships work with no wiring from you. An external `<label for="…">` that points at the host also names the inner control, and clicking it focuses or activates the control.
+
+For arbitrary or native controls that you want the same chrome around, use `tct-field`:
+
+```html
+<tct-field label="Country" description="Where your card is issued" input-id="country">
+  <select id="country" name="country">…</select>
+</tct-field>
+```
+
+`tct-field` sets `aria-labelledby` and `aria-describedby` on the slotted control in your tree, honouring `input-id`, `label-id` and `description-id`. For a radio or checkbox group, `group-label` renders a group caption instead of a label. A status message appears as attached text, detached text or a tooltip, and is announced through the announcer, never through a persistent `role="alert"`.
+
+To lay out a whole form, wrap it in `tct-form-layout`. It sets the direction (vertical, or a two-column form with the labels beside the controls) and the default optionality, so fields mark the exception rather than repeating what is true of the whole form.
+
+## Autofill and password managers
+
+`name`, `autocomplete`, `inputmode` and `enterkeyhint` are forwarded to the inner native input, so browsers autofill fields correctly when `autocomplete` carries a valid standard token (`email`, `given-name`, `current-password`, `new-password` and the rest).
+
+Some password managers and autofill heuristics look for a native `<input>` in the light DOM. For fields where that matters (sign-in and sign-up forms), use the slotted-input mode: give the element your own input, and it uses it as the control.
+
+```html
+<tct-text-input label="Email">
+  <input slot="input" name="email" type="email" autocomplete="email" required />
+</tct-text-input>
+```
+
+In this mode the input is a real native form control. It submits itself, its validity is the native one, and the label, description and status are rendered around it and wired with IDs in your tree. The default mode (an input inside the shadow root) is uniform and framework-safe, and it is right for almost every field.
+
+## Frameworks
+
+The elements are ordinary DOM nodes, so any framework can read and write `value` as a property and listen for `input` and `change`. Typed JSX and Vue definitions, Angular `ControlValueAccessor` directives and form-library adapters are generated from the Custom Elements Manifest by the framework integration package (_planned_, WP-I). Until then, bind the property (not the attribute) for values, and listen to the native events.
+
+## Server-side rendering and no-JavaScript
+
+Before an element is defined, `<tct-text-input>` is an inert tag and does not submit. If a form must work without JavaScript, render native controls and enhance them: the slotted-input mode above is designed for that, because the native input inside the tag is a real, submitting control from the first byte.
+
+{/*
+Not a port of a single Astryx topic: upstream documents form behaviour per component. Sources: docs/ARCHITECTURE.md sections 7.3, 7.4, 7.6, 9.7, 9.8; docs/plan/DECISIONS.md D-006;
+packages/core/src/mixins/form-control.ts, forms/submitter.ts, forms/implicit-submit.ts, utils/ime.ts (verified).
+Guides: [mwg:form-associated-custom-elements] [mwg:validate-input-after-interaction] [mwg:accessible-error-announcement] [mwg:ime-safe-enter-submit] [mwg:forms] [mwg:accessible-web-components]
+*/}

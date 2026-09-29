@@ -1,0 +1,15 @@
+<!-- title: Layout helpers; description: justify, text-wrap, strikethrough, tabular numbers and capsize (optical alignment). -->
+<div style="display: flex; flex-direction: column; gap: var(--spacing-3); inline-size: 320px">
+  <tct-text display="block" justify="center">Centred with justify</tct-text>
+  <tct-text display="block" justify="end">End aligned (logical, follows the direction)</tct-text>
+  <tct-text display="block" text-wrap="balance" type="large">Balanced wrapping spreads the words evenly across the lines it needs</tct-text>
+  <tct-text has-strikethrough>Strikethrough</tct-text>
+  <div>
+    <tct-text has-tabular-numbers display="block">1,111.11</tct-text>
+    <tct-text has-tabular-numbers display="block">9,999.99</tct-text>
+  </div>
+  <div style="display: flex; align-items: center; gap: var(--spacing-2)">
+    <tct-icon name="search"></tct-icon>
+    <tct-text has-capsize>Capsize trims the leading so text centres against the icon</tct-text>
+  </div>
+</div>

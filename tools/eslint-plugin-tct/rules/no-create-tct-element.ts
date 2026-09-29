@@ -34,7 +34,12 @@ export const noCreateTctElement: Rule.RuleModule = {
         }
       },
       NewExpression(node) {
-        if (node.callee.type === 'Identifier' && /^Tct[A-Z]/.test(node.callee.name)) {
+        // Event classes (`new TctOpenChangeEvent(…)`) are constructed by design; only elements are not.
+        if (
+          node.callee.type === 'Identifier' &&
+          /^Tct[A-Z]/.test(node.callee.name) &&
+          !node.callee.name.endsWith('Event')
+        ) {
           context.report({node, messageId: 'construct', data: {name: node.callee.name}});
         }
       },
