@@ -79,7 +79,10 @@ export class TctButtonGroup extends TctElement {
     this.internals.role = 'group';
   }
 
-  /** The group-level value handed to members through `buttonGroupContext` (`position` is added per member). */
+  /**
+   * The group-level value handed to members through `buttonGroupContext` (`position` is added per member).
+   * @internal
+   */
   groupContext(): Omit<ButtonGroupContextValue, 'position'> {
     return {
       size: this.#size.value,

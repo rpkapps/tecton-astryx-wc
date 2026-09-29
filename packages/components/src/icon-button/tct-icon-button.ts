@@ -14,14 +14,13 @@ import {TctButton} from '../button/tct-button.js';
  * @tag tct-icon-button
  * @upstream IconButton
  * @slot icon - The icon (or use the `icon` attribute for a registered icon name).
- * @hideInherited iconOnly - Always on for an icon button.
+ * @hideInherited iconOnly, default, end - Always icon-only: no visible text, so the default and `end`
+ *   slots are never rendered; the `label` is the name.
  * @cloakDisplay inline-flex
  * @cloakMinBlockSize var(--size-element-md)
  */
 export class TctIconButton extends TctButton {
-  // TctButton declares its `tagName` as the literal type 'tct-button'; the cast keeps this subclass
-  // assignable (a request to widen it to `string` is in parity.json).
-  static override readonly tagName = 'tct-icon-button' as unknown as 'tct-button';
+  static override readonly tagName: string = 'tct-icon-button';
 
   constructor() {
     super();

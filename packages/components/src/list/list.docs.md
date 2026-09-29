@@ -33,6 +33,7 @@ dense:
     rel: link relationship tokens
     disabled: disabled row; aria-disabled, no input
     selected: selected row; exposed as aria-current
+    aria-current: an author aria-current on a row wins over (and hands back to) the value from selected
     default: slot for the tct-list-item rows
     end: trailing row content (badge, action, chevron)
 related: [item, tree-list, metadata-list]

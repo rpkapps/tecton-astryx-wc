@@ -1,0 +1,20 @@
+{
+  "folder": "visually-hidden",
+  "elements": {
+    "tct-visually-hidden": {
+      "class": "TctVisuallyHidden",
+      "attributes": [],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "base"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

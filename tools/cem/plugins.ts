@@ -299,6 +299,14 @@ export function tctPublicApi(): Plugin {
           declaration.events = (declaration.events ?? []).filter(
             (event) => !(event.inheritedFrom && hidden.has(event.name)),
           );
+
+          // Slots named in @hideInherited (`default` is the unnamed slot). The analyzer copies a
+          // superclass's slots without marking them inherited, so the name alone decides.
+          if (hidden.size > 0) {
+            declaration.slots = (declaration.slots ?? []).filter(
+              (slot) => !hidden.has(slot.name === '' ? 'default' : slot.name),
+            );
+          }
         }
       }
     },

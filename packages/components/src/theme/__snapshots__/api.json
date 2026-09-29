@@ -1,0 +1,38 @@
+{
+  "folder": "theme",
+  "elements": {
+    "tct-theme": {
+      "class": "TctTheme",
+      "attributes": [
+        {
+          "name": "mode",
+          "property": "mode",
+          "type": "ThemeMode",
+          "values": [
+            "light",
+            "dark",
+            "system"
+          ],
+          "default": "'system'",
+          "reflects": true
+        },
+        {
+          "name": "theme",
+          "property": "theme",
+          "type": "ThemeInput",
+          "default": "DEFAULT_THEME",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

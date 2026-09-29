@@ -1,0 +1,68 @@
+{
+  "folder": "button-group",
+  "elements": {
+    "tct-button-group": {
+      "class": "TctButtonGroup",
+      "attributes": [
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "elevation",
+          "property": "elevation",
+          "type": "ButtonGroupElevation",
+          "values": [
+            "none",
+            "low",
+            "med",
+            "high"
+          ],
+          "default": "'none'",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": true
+        },
+        {
+          "name": "orientation",
+          "property": "orientation",
+          "type": "ButtonGroupOrientation",
+          "default": "'horizontal'",
+          "reflects": true
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "ElementSize | undefined",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "group"
+      ],
+      "cssStates": [
+        "disabled"
+      ],
+      "cssProperties": []
+    }
+  }
+}
