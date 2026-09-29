@@ -8,7 +8,7 @@ import {fixture} from '@tecton-wc/testing/fixture.js';
 import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
 import '../icon/define.js';
 import './define.js';
-import {textOf} from './typeahead-test-helpers.js';
+import {textOf} from './fixtures/typeahead-test-helpers.js';
 import type {TctTypeaheadItem} from './tct-typeahead-item.js';
 
 runElementSuite({

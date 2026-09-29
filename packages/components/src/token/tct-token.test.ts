@@ -22,7 +22,7 @@ import '../popover/define.js';
 import '../button/define.js';
 import '../size-provider/define.js';
 import './define.js';
-import {textOf} from '../typeahead/typeahead-test-helpers.js';
+import {textOf} from '../typeahead/fixtures/typeahead-test-helpers.js';
 import {TOKEN_COLORS} from './token.types.js';
 import type {TctToken} from './tct-token.js';
 

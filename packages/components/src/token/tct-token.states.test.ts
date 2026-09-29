@@ -13,7 +13,7 @@ import {pressKeys} from '@tecton-wc/testing/keyboard.js';
 import {isChromium} from '@tecton-wc/testing/tier.js';
 import '../icon/define.js';
 import './define.js';
-import {forcePseudoState, motionDone} from '../typeahead/typeahead-test-helpers.js';
+import {forcePseudoState, motionDone} from '../typeahead/fixtures/typeahead-test-helpers.js';
 import {TOKEN_COLORS} from './token.types.js';
 import type {TctToken} from './tct-token.js';
 

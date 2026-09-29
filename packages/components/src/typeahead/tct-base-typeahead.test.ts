@@ -34,7 +34,7 @@ import {
   textOf,
   typeInto,
   whenOpen,
-} from './typeahead-test-helpers.js';
+} from './fixtures/typeahead-test-helpers.js';
 import type {SearchableItem} from './typeahead.types.js';
 
 async function make(attributes = 'aria-label="Fruit" debounce-ms="0"'): Promise<TctBaseTypeahead> {

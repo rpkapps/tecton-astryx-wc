@@ -27,7 +27,7 @@ import {
   optionsOf,
   typeInto,
   whenOpen,
-} from './typeahead-test-helpers.js';
+} from './fixtures/typeahead-test-helpers.js';
 
 const contrastOnly = {runOnly: {type: 'rule' as const, values: ['color-contrast']}};
 

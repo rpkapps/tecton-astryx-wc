@@ -37,7 +37,7 @@ import {
   textOf,
   typeInto,
   whenOpen,
-} from './typeahead-test-helpers.js';
+} from './fixtures/typeahead-test-helpers.js';
 
 const part = (element: TctTypeahead, name: string): HTMLElement | null =>
   element.shadowRoot!.querySelector<HTMLElement>(`[part="${name}"]`);

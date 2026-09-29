@@ -18,7 +18,7 @@ import {
   optionsOf,
   typeInto,
   whenOpen,
-} from './typeahead-test-helpers.js';
+} from './fixtures/typeahead-test-helpers.js';
 
 // `import.meta.glob` keeps parity.json (not part of the TypeScript project) out of the program.
 const parity = Object.values(

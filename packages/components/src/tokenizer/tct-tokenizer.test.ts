@@ -37,7 +37,7 @@ import {
   textOf,
   typeInto,
   whenOpen,
-} from '../typeahead/typeahead-test-helpers.js';
+} from '../typeahead/fixtures/typeahead-test-helpers.js';
 import type {SearchableItem} from '../typeahead/typeahead.types.js';
 import type {TctTokenizer} from './tct-tokenizer.js';
 

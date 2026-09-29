@@ -7,7 +7,7 @@ import {vi} from 'vitest';
 import {overrideFeature} from '@tecton-wc/core/features.js';
 import {deepQueryAll} from '@tecton-wc/testing/fixture.js';
 import {nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
-import type {SearchableItem, SearchSource} from './typeahead.types.js';
+import type {SearchableItem, SearchSource} from '../typeahead.types.js';
 
 export const FRUITS: SearchableItem[] = [
   {id: 'apple', label: 'Apple'},
