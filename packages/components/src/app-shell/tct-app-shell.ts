@@ -154,17 +154,22 @@ export class TctAppShell extends TctElement {
     'drawer',
     'mobile-bar',
   );
-  readonly #provider: ContextProvider<typeof appShellMobileContext> = new ContextProvider(this, {
+  readonly #provider: ContextProvider<typeof appShellMobileContext> = new ContextProvider<
+    typeof appShellMobileContext
+  >(this, {
     context: appShellMobileContext,
     initialValue: INERT_APP_SHELL_MOBILE,
   });
-  readonly #theme: ContextConsumer<typeof themeContext> = new ContextConsumer(this, {
-    context: themeContext,
-    subscribe: true,
-    callback: () => {
-      this.#watchViewport();
+  readonly #theme: ContextConsumer<typeof themeContext> = new ContextConsumer<typeof themeContext>(
+    this,
+    {
+      context: themeContext,
+      subscribe: true,
+      callback: () => {
+        this.#watchViewport();
+      },
     },
-  });
+  );
   readonly #locale: LocaleController = new LocaleController(this, {
     namespace: 'appShell',
     defaults: appShellMessages,

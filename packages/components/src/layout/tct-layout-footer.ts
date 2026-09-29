@@ -57,7 +57,9 @@ export class TctLayoutFooter extends BoxPropsMixin(TctElement) {
    */
   @property() landmark: string | undefined;
 
-  readonly #dividers: ContextConsumer<typeof layoutDividerContext> = new ContextConsumer(this, {
+  readonly #dividers: ContextConsumer<typeof layoutDividerContext> = new ContextConsumer<
+    typeof layoutDividerContext
+  >(this, {
     context: layoutDividerContext,
     subscribe: true,
   });

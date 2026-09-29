@@ -67,7 +67,9 @@ export class TctLayoutContent extends BoxPropsMixin(TctElement) {
    */
   @property({type: Boolean, reflect: true}) focusable = false;
 
-  readonly #slots: ContextConsumer<typeof layoutSlotsContext> = new ContextConsumer(this, {
+  readonly #slots: ContextConsumer<typeof layoutSlotsContext> = new ContextConsumer<
+    typeof layoutSlotsContext
+  >(this, {
     context: layoutSlotsContext,
     subscribe: true,
   });
