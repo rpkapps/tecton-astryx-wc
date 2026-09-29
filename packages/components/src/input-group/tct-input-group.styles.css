@@ -1,0 +1,119 @@
+/*
+ * tct-input-group: the connected box around an input and its addons, and the field chrome (label,
+ * description, status) from the shared field module. The group draws ONE focus ring around everything;
+ * the controls inside drop their own (see tct-input-group.light.css) and square their inner corners.
+ *
+ * Coupling to the children goes through inherited private properties, the one channel that crosses a
+ * shadow boundary: `--_group-border-color` (status) and `--_group-radius-*` (the group's outer corners),
+ * read by `tct-input-group-text`. Controls with a painted `part="input"` are shaped by the light sheet.
+ * [mwg:styling-web-components] [mwg:css]
+ */
+@layer component {
+  :host {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  /* In a horizontal-labels form the host disappears so the parent grid places label and group. */
+  :host([data-horizontal-labels]) {
+    display: contents;
+  }
+
+  .group {
+    --_group-border-color: var(--tecton-color-input-outlined-border);
+    --_focus-offset: 1px;
+
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: stretch;
+    box-sizing: border-box;
+    min-inline-size: 0;
+
+    /* Follows the outer corners, so the one ring hugs the group. */
+    border-radius: var(--radius-element);
+  }
+
+  .group[data-size='sm'] {
+    block-size: var(--size-element-sm);
+  }
+
+  .group[data-size='md'] {
+    block-size: var(--size-element-md);
+  }
+
+  .group[data-size='lg'] {
+    block-size: var(--size-element-lg);
+  }
+
+  .group[data-status='error'] {
+    --_group-border-color: var(--tecton-color-status-error-outline-border-strong);
+  }
+
+  .group[data-status='warning'] {
+    --_group-border-color: var(--tecton-color-status-warning-outline-border-strong);
+  }
+
+  .group[data-status='success'] {
+    --_group-border-color: var(--tecton-color-status-success-outline-border-strong);
+  }
+
+  .group[data-status='info'] {
+    --_group-border-color: var(--tecton-color-status-info-outline-border-strong);
+  }
+
+  /*
+   * Members share one edge: borders overlap by one border width. The overlap is a margin on each member's
+   * own painted box, never on the slotted host: an application reset such as `* { margin: 0 }` beats
+   * `::slotted()` (the light tree owns its own styles), but it cannot reach inside a shadow root, and
+   * the private properties below are not something a reset touches.
+   */
+  ::slotted(*) {
+    flex: 1 1 auto;
+    min-inline-size: 0;
+    --_group-margin-start: calc(-1 * var(--border-width));
+  }
+
+  ::slotted(tct-input-group-text) {
+    flex: 0 0 auto;
+  }
+
+  ::slotted(:first-child) {
+    --_group-margin-start: 0;
+    --_group-radius-start-start: var(--radius-element);
+    --_group-radius-end-start: var(--radius-element);
+  }
+
+  ::slotted(:last-child) {
+    --_group-radius-start-end: var(--radius-element);
+    --_group-radius-end-end: var(--radius-element);
+  }
+
+  /* The focused member's border sits on top of its neighbours'. */
+  ::slotted(:focus-within) {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+@layer state {
+  .group[data-focus-visible] {
+    outline-width: var(--focus-outline-width);
+    outline-style: var(--focus-outline-style);
+    outline-color: var(--focus-outline-color);
+    outline-offset: var(--_focus-offset);
+  }
+
+  .group[data-disabled] {
+    cursor: default;
+    opacity: 0.5;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .group[data-focus-visible] {
+      outline-color: Highlight;
+    }
+  }
+}

@@ -1,0 +1,14 @@
+<!-- title: Status; description: A status colours the addon borders and shows a message with an icon below the group. A control that displays invalidity colours them as well. -->
+<!-- layout: pending tct-stack -->
+<tct-input-group label="Price" status-type="error" status-message="The price must be greater than zero.">
+  <tct-input-group-text>$</tct-input-group-text>
+  <tct-text-input label="Amount" label-hidden value="0" status-type="error"></tct-text-input>
+</tct-input-group>
+<tct-input-group label="Discount" status-type="warning" status-message="Discounts above 50% need approval.">
+  <tct-text-input label="Discount value" label-hidden value="60"></tct-text-input>
+  <tct-input-group-text>%</tct-input-group-text>
+</tct-input-group>
+<tct-input-group label="Quantity" status-type="success" status-message="In stock.">
+  <tct-text-input label="Quantity value" label-hidden value="3"></tct-text-input>
+  <tct-input-group-text>pcs</tct-input-group-text>
+</tct-input-group>
