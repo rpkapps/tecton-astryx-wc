@@ -63,8 +63,18 @@
           "as": "attribute",
           "notes": "Default: the localised @astryx.link.newTab message."
         },
-        {"upstream": "target", "kind": "prop", "target": "target", "as": "attribute"},
-        {"upstream": "rel", "kind": "prop", "target": "rel", "as": "attribute"},
+        {
+          "upstream": "target",
+          "kind": "prop",
+          "target": "target",
+          "as": "attribute"
+        },
+        {
+          "upstream": "rel",
+          "kind": "prop",
+          "target": "rel",
+          "as": "attribute"
+        },
         {
           "upstream": "download",
           "kind": "prop",
@@ -140,7 +150,12 @@
           "default": 0,
           "notes": "Forwarded to the wrapping tct-text (truncation with a tooltip of the full text)."
         },
-        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
         {
           "upstream": "type",
           "kind": "prop",
@@ -184,15 +199,25 @@
           "action": "Moves focus to the link",
           "when": "a live link or the button form"
         },
-        {"keys": "Enter", "action": "Follows the link (Enter)", "when": "href"},
+        {
+          "keys": "Enter",
+          "action": "Follows the link (Enter)",
+          "when": "href"
+        },
         {
           "keys": "Enter, Space",
           "action": "Activates the button form (Enter, Space)",
           "when": "no href"
         },
-        {"keys": "Tab", "action": "Skips a disabled link", "when": "disabled"}
+        {
+          "keys": "Tab",
+          "action": "Skips a disabled link",
+          "when": "disabled"
+        }
       ],
-      "form": {"formAssociated": false},
+      "form": {
+        "formAssociated": false
+      },
       "differences": [
         {
           "id": "LINK-01",
@@ -230,6 +255,63 @@
       "requests": [],
       "sizeBudgetKb": null,
       "notes": "Guides: [mwg:accessible-web-components] native a/button in the shadow root with delegatesFocus; [mwg:security] URL policy and noopener; [mwg:interest-triggered-tooltips] and [mwg:position-aware-tooltips] via TooltipController; [mwg:css] forced colours, hover only under (hover: hover). Utilities: useLinkify is the module function linkify() (linkify.ts); useLinkComponent is replaced by linkContext (tct-link-provider)."
+    },
+    "core.link-provider": {
+      "tag": "tct-link-provider",
+      "status": "implemented",
+      "upstream": {
+        "name": "LinkProvider",
+        "path": "packages/core/src/Link/LinkProvider.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "component",
+          "kind": "prop",
+          "target": "navigate",
+          "as": "property",
+          "notes": "A React component cannot be a prop of an element. The provider offers a navigation hook instead: navigate(href, event) => boolean, provided to every tct-link, link-form tct-button and tct-avatar link below it through linkContext. Read at click time."
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        }
+      ],
+      "keyboard": [],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "LINK-PROVIDER-01",
+          "type": "approved-api-difference",
+          "text": "component (a React link component) is replaced by navigate (a click hook). Links stay native <a href>: plain primary clicks on same-origin destinations are offered to navigate, modified and middle clicks, new-tab links, downloads and cross-origin destinations stay native, and destinations refused by the URL policy never reach the router (they render without href), which covers upstream's useLinkComponent destination checks."
+        },
+        {
+          "id": "LINK-PROVIDER-02",
+          "type": "approved-api-difference",
+          "text": "useLinkComponent has no equivalent hook: consumers of the router are the link elements themselves, through linkContext (core). Providers nest and the nearest wins."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "events": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/testing/src/suites/element.ts",
+          "reason": "runElementSuite's 'keeps its state across disconnect and reconnect' asserts element.shadowRoot is not null, which a light-DOM provider (ARCHITECTURE section 8: providers render nothing, no shadow root) can never satisfy. tct-link-provider repeats the suite's lifecycle checks itself. Proposed: a `shadow?: boolean` option (default true) that skips that one assertion.",
+          "diff": "-      expect(element.shadowRoot).not.toBeNull();\n+      if (options.shadow !== false) expect(element.shadowRoot).not.toBeNull();"
+        }
+      ],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:custom-elements] provider element without a shadow root; [mwg:security] URL policy stays in the link. Styling: tct-link-provider.light.css (display: contents in @layer tecton.light-dom) is delivered by the shared light-dom.css and cloak.css (@cloakDisplay contents) once those generators exist (M6); until then the element is a plain inline element in tests."
     }
   }
 }

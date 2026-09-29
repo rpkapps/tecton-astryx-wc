@@ -1,8 +1,9 @@
 <!-- title: Operation that started before mount; description: Pass the start as Unix milliseconds so the readout shows the whole wait. -->
-<div id="job" style="display: flex; align-items: center; gap: var(--spacing-2)">
-  Import running for <tct-timer id="import-timer" type="body" color="primary" weight="semibold"></tct-timer>
+<div id="start-time-example" style="display: flex; align-items: center; gap: var(--spacing-2)">
+  Import running for <tct-timer type="body" color="primary" weight="semibold"></tct-timer>
 </div>
-<script>
+<script type="module">
   // The job began 47 seconds before this page rendered.
-  document.getElementById('import-timer').startTime = Date.now() - 47_000;
+  document.getElementById('start-time-example').querySelector('tct-timer').startTime =
+    Date.now() - 47_000;
 </script>

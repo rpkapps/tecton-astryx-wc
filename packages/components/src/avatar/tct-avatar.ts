@@ -400,7 +400,15 @@ export class TctAvatar extends TctElement {
     if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey)
       return;
     if (this.target !== undefined && this.target !== '' && this.target !== '_self') return;
-    if (link.navigate(this.href, event)) event.preventDefault();
+    // Only internal destinations are the router's: a cross-origin one stays a native navigation.
+    const href = safeUrl(this.href, {allowData: true});
+    if (href === null) return;
+    try {
+      if (new URL(href, location.href).origin !== location.origin) return;
+    } catch {
+      return;
+    }
+    if (link.navigate(href, event)) event.preventDefault();
   };
 }
 

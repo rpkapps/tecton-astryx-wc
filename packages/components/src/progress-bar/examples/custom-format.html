@@ -1,5 +1,8 @@
 <!-- title: Custom value text; description: formatValueLabel replaces the percentage in both the visible text and aria-valuetext. Set it as a property. -->
-<tct-progress-bar id="bar" label="Files processed" value="3" max="12" has-value-label style="max-inline-size: 360px"></tct-progress-bar>
-<script>
-  document.getElementById('bar').formatValueLabel = (value, max) => `${value} of ${max}`;
+<div id="custom-format-example" style="max-inline-size: 360px">
+  <tct-progress-bar label="Files processed" value="3" max="12" has-value-label></tct-progress-bar>
+</div>
+<script type="module">
+  const root = document.getElementById('custom-format-example');
+  root.querySelector('tct-progress-bar').formatValueLabel = (value, max) => `${value} of ${max}`;
 </script>

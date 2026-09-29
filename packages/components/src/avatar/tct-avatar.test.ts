@@ -565,6 +565,22 @@ describe('tct-avatar: interactivity (Button trichotomy)', () => {
     );
     expect(router.calls).toHaveLength(1);
   });
+
+  it('leaves cross-origin and unsafe destinations to the browser', async () => {
+    for (const href of ['https://elsewhere.example/ada', 'javascript:alert(1)']) {
+      const router = await fixture<TctTestRouter>(
+        html`<tct-test-router><tct-avatar name="Ada" href=${href}></tct-avatar></tct-test-router>`,
+      );
+      const avatar = router.querySelector<TctAvatar>('tct-avatar')!;
+      await avatar.updateComplete;
+      const link = rootOf(avatar);
+      link.addEventListener('click', (event) => event.preventDefault());
+      link.dispatchEvent(
+        new MouseEvent('click', {bubbles: true, composed: true, cancelable: true}),
+      );
+      expect(router.calls, href).toHaveLength(0);
+    }
+  });
 });
 
 describe('tct-avatar: accessibility, forced colours, right-to-left', () => {
