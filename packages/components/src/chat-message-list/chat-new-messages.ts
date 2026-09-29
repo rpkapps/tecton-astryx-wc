@@ -21,7 +21,7 @@
  * Guides: [mwg:defer-work-until-scroll-ends] (work happens off the scroll path, in the observer).
  */
 import type {ReactiveController, ReactiveControllerHost} from 'lit';
-import {observeResize} from '@tecton-astryx/core/controllers/resize.js';
+import {observeResize} from '@tecton-wc/core/controllers/resize.js';
 import {findLastMessage} from './chat-messages.js';
 
 export interface ChatNewMessagesOptions {

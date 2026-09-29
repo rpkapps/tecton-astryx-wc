@@ -1,6 +1,6 @@
 import {html, nothing, type CSSResultGroup, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import base from '../styles/base.styles.css';
 import {TctBadge} from '../badge/tct-badge.js';
 import {TctIcon} from '../icon/tct-icon.js';

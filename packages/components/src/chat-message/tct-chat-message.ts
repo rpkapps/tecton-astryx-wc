@@ -1,10 +1,10 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
-import english from '@tecton-astryx/locales/en/chatMessage.js';
-import {ContextConsumer, ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import english from '@tecton-wc/locales/en/chatMessage.js';
+import {ContextConsumer, ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import base from '../styles/base.styles.css';
 import {warnInvalidValue} from '../text/text.types.js';
 import {

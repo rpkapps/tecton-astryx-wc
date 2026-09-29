@@ -1,4 +1,4 @@
-import {createContext} from '@tecton-astryx/core/context/protocol.js';
+import {createContext} from '@tecton-wc/core/context/protocol.js';
 
 /**
  * What the chat layout (`tct-chat-layout`) provides to the message list inside it (upstream

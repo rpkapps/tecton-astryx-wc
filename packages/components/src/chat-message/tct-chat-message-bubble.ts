@@ -1,8 +1,8 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
-import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {ContextConsumer} from '@tecton-wc/core/context/protocol.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import base from '../styles/base.styles.css';
 import {warnInvalidValue} from '../text/text.types.js';
 import {chatMessageContext, type ChatMessageContextValue} from './chat-message.context.js';

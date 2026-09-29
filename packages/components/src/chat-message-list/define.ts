@@ -1,4 +1,4 @@
-import {defineElement} from '@tecton-astryx/core/define.js';
+import {defineElement} from '@tecton-wc/core/define.js';
 import {TctChatLayoutScrollButton} from './tct-chat-layout-scroll-button.js';
 import {TctChatMessageList} from './tct-chat-message-list.js';
 

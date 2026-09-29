@@ -1,12 +1,12 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property, state} from 'lit/decorators.js';
 import {repeat} from 'lit/directives/repeat.js';
-import english from '@tecton-astryx/locales/en/chatToolCalls.js';
-import {announce} from '@tecton-astryx/core/a11y/announcer.js';
-import {TctExpandedChangeEvent} from '@tecton-astryx/core/events/tct-expanded-change.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {IdController} from '@tecton-astryx/core/utils/id.js';
+import english from '@tecton-wc/locales/en/chatToolCalls.js';
+import {announce} from '@tecton-wc/core/a11y/announcer.js';
+import {TctExpandedChangeEvent} from '@tecton-wc/core/events/tct-expanded-change.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {IdController} from '@tecton-wc/core/utils/id.js';
 import base from '../styles/base.styles.css';
 import focusRing from '../styles/focus-ring.styles.css';
 import {TctBadge} from '../badge/tct-badge.js';

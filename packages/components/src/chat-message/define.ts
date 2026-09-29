@@ -1,4 +1,4 @@
-import {defineElement} from '@tecton-astryx/core/define.js';
+import {defineElement} from '@tecton-wc/core/define.js';
 import {TctChatMessage} from './tct-chat-message.js';
 import {TctChatMessageBubble} from './tct-chat-message-bubble.js';
 import {TctChatMessageMetadata} from './tct-chat-message-metadata.js';

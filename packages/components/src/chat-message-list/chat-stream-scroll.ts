@@ -27,8 +27,8 @@
  * (scroll-state container queries are Chrome-only, so the button state is JS), [mwg:scroll-target-on-load].
  */
 import type {ReactiveController, ReactiveControllerHost} from 'lit';
-import {prefersReducedMotion} from '@tecton-astryx/core/features.js';
-import {adoptLightDomStyles} from '@tecton-astryx/core/styles/light-dom.js';
+import {prefersReducedMotion} from '@tecton-wc/core/features.js';
+import {adoptLightDomStyles} from '@tecton-wc/core/styles/light-dom.js';
 import type {ChatScrollToBottomOptions} from './chat-message-list.types.js';
 import {findLastMessage} from './chat-messages.js';
 

@@ -1,11 +1,11 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property, state} from 'lit/decorators.js';
-import {announce} from '@tecton-astryx/core/a11y/announcer.js';
-import {ContextConsumer, ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {SPACING_STEPS, type SpacingStep} from '@tecton-astryx/core/mixins/box-props.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {announce} from '@tecton-wc/core/a11y/announcer.js';
+import {ContextConsumer, ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {SPACING_STEPS, type SpacingStep} from '@tecton-wc/core/mixins/box-props.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import base from '../styles/base.styles.css';
 import {chatListContext} from '../chat-message/chat-message.context.js';
 import {chatPlainText} from '../chat-message/chat-message.text.js';

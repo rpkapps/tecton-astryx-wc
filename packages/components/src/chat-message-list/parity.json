@@ -115,7 +115,7 @@
       "requests": [
         {
           "file": "packages/components/src/chat-layout (WP-16)",
-          "reason": "tct-chat-layout provides chatLayoutContext (chat-message-list/chat-layout.context.ts) and wires ChatStreamScrollController and ChatNewMessagesController: scroller = its scroll container; ChatNewMessagesController.contentRef = the context's contentRef; onResize = follow.scrollIfLocked(). Its message area must not shrink below its content (flex: 1 0 auto), or the list stops growing with its messages and the resize observer never fires. The scroll button takes visible = follow.isScrolledUp || news.hasNewMessages and label = \"New messages\" (@astryx.chatLayout.newMessages) while news.hasNewMessages; its click calls news.dismiss() and follow.scrollToBottom(). chat-stream.test.ts holds a working harness."
+          "reason": "tct-chat-layout provides chatLayoutContext (chat-message-list/chat-layout.context.ts) and wires ChatStreamScrollController and ChatNewMessagesController: scroller = its scroll container; ChatNewMessagesController.contentRef = the context's contentRef; onResize = follow.scrollIfLocked(). Its message area must not shrink below its content (flex: 1 0 auto), or the list stops growing with its messages and the resize observer never fires. The scroll button takes visible = follow.isScrolledUp || news.hasNewMessages and label = \"New messages\" (@tct.chatLayout.newMessages) while news.hasNewMessages; its click calls news.dismiss() and follow.scrollToBottom(). chat-stream.test.ts holds a working harness."
         },
         {
           "file": "packages/components/src/chat-composer (WP-16)",
