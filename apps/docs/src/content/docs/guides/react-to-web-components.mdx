@@ -16,7 +16,7 @@ The rules below are normative (they are the architecture's mapping rules). Each 
 - **Components and terminology.** The catalogue, the 11 categories, variants, sizes, states and anatomy are the same. If Astryx has a `TextInput` with a `hasClear` prop, you will find a `tct-text-input` with a `has-clear` attribute.
 - **Design tokens.** The 188 core token names (`--color-text-primary`, `--spacing-4`, `--radius-container` and so on) are used verbatim, with Tecton values. Tecton-only roles are `--tecton-*`. A page can even mix Astryx for React and these elements, themed from one `tokens.css`, because `data-theme` is shared.
 - **Behaviour.** Keyboard contracts, dismissal rules, IME safety, layer stacking and announcements are ported, with upstream's tests as the specification. Where upstream has a known accessibility defect it is not copied.
-- **Message ids and locales.** The 30 catalogs and the `@astryx.<namespace>.<key>` ids are the same.
+- **Message ids and locales.** The 30 catalogs and the `@tct.<namespace>.<key>` ids are the same.
 
 ## Names
 
@@ -26,9 +26,9 @@ The rules below are normative (they are the architecture's mapping rules). Each 
 | `HStack` and `VStack`                              | `tct-hstack` and `tct-vstack` (the two exceptions to the rule, so they do not become `tct-h-stack`)                       |
 | Aliases (`ContextMenuItem`, `BreadcrumbMenuItem`)  | No alias tags. The dropdown-menu item elements serve every menu, so a `tct-context-menu` contains `tct-dropdown-menu-item`s |
 | Component class                                    | `Tct` plus PascalCase: `TctDateRangeInput`                                                                                 |
-| `@astryxdesign/core/Button`                        | `@tecton-astryx/components/button` registers `tct-button`; the class is `@tecton-astryx/components/button/tct-button.js`    |
-| `@astryxdesign/core` (barrel)                      | `@tecton-astryx/components` (classes and types, no registration), `@tecton-astryx/components/define.js` (register all)     |
-| Hooks and utilities from `@astryxdesign/core/...`  | `@tecton-astryx/core/...`, see [Hooks](#hooks-become-controllers-and-functions)                                            |
+| `@astryxdesign/core/Button`                        | `@tecton-wc/components/button` registers `tct-button`; the class is `@tecton-wc/components/button/tct-button.js`    |
+| `@astryxdesign/core` (barrel)                      | `@tecton-wc/components` (classes and types, no registration), `@tecton-wc/components/define.js` (register all)     |
+| Hooks and utilities from `@astryxdesign/core/...`  | `@tecton-wc/core/...`, see [Hooks](#hooks-become-controllers-and-functions)                                            |
 | `@astryxdesign/lab`, charts, richtext, vega        | `tct-lab-*` for the lab package; `tct-*` for the others. They are experimental and scheduled after core                     |
 
 ## Props become attributes, properties and slots
@@ -149,9 +149,9 @@ Providers render nothing of their own and use `display: contents`, with one exce
 
 | Upstream hook or utility                              | Here                                                                                                                     |
 | ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
-| `useLayer`, layer dismissal, `LayerDepthProvider`      | `LayerController` (`@tecton-astryx/core/layer/layer-controller.js`) and the layer stack; positioning in `PositionController` |
+| `useLayer`, layer dismissal, `LayerDepthProvider`      | `LayerController` (`@tecton-wc/core/layer/layer-controller.js`) and the layer stack; positioning in `PositionController` |
 | `useFocusTrap`                                        | `FocusTrapController`, for non-dialog containers only. Native `<dialog>` needs no trap                                    |
-| `useAnnounce`                                         | `announce()` from `@tecton-astryx/core/a11y/announcer.js`                                                                |
+| `useAnnounce`                                         | `announce()` from `@tecton-wc/core/a11y/announcer.js`                                                                |
 | `useListFocus`, `useGridFocus`, `useTreeFocus`        | `RovingTabindexController` and, for grids and trees, dedicated grid and tree focus controllers (_planned_)                                   |
 | `useTypeahead`                                        | `TypeaheadController`                                                                                                    |
 | `useMediaQuery`                                       | `MediaQueryController` inside elements; `matchMedia()` in application code                                                |
@@ -159,12 +159,12 @@ Providers render nothing of their own and use `display: contents`, with one exce
 | `useScrollLock`                                       | `lockScroll()`, which returns the unlock function and is reference-counted                                                |
 | `useSize`, `SizeContext`                              | `SizeController`, `sizeContext`                                                                                          |
 | `useTranslator`, `useLocale`, `useCollator`, `useDirection` | `LocaleController`: `t()`, `locale`, `collator()`, `dir`                                                           |
-| `getLocaleDirection`                                  | `getLocaleDirection` (`@tecton-astryx/core/i18n/direction.js`)                                                           |
-| `registerIcons`, `getIcon`, `resetIcons`              | The same names in `@tecton-astryx/core/icons/registry.js`                                                                 |
-| `isImeKeyEvent`                                       | `isImeKeyEvent` (`@tecton-astryx/core/utils/ime.js`) and `ImeGuard`                                                       |
+| `getLocaleDirection`                                  | `getLocaleDirection` (`@tecton-wc/core/i18n/direction.js`)                                                           |
+| `registerIcons`, `getIcon`, `resetIcons`              | The same names in `@tecton-wc/core/icons/registry.js`                                                                 |
+| `isImeKeyEvent`                                       | `isImeKeyEvent` (`@tecton-wc/core/utils/ime.js`) and `ImeGuard`                                                       |
 | `useTooltip`                                          | `TooltipController`                                                                                                      |
 | `useDevWarning`                                       | `devWarn()`                                                                                                              |
-| `useTheme`, `ThemeContext`                            | `themeContext`; token values through `@tecton-astryx/tokens/tokens.js` (see [Theming](../theme/#reading-the-theme-from-javascript)) |
+| `useTheme`, `ThemeContext`                            | `themeContext`; token values through `@tecton-wc/tokens/tokens.js` (see [Theming](../theme/#reading-the-theme-from-javascript)) |
 | `useMergedRefs`                                       | Not needed. There are no refs to merge                                                                                    |
 
 Controllers are for authors of custom elements and for advanced composition. As an application developer you will rarely import one.

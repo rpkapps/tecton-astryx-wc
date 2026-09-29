@@ -5,15 +5,15 @@ sidebar:
   order: 20
 ---
 
-Design tokens are CSS custom properties, declared once on the document by `tokens.css`. Elements read them through the cascade, so a token set on any ancestor reaches every element below it. This page is the authored reference for the tokens that you will use in your own CSS. A complete generated reference (every token, with its palette path and source) is planned as a generated page, built from `@tecton-astryx/tokens/tokens.json`.
+Design tokens are CSS custom properties, declared once on the document by `tokens.css`. Elements read them through the cascade, so a token set on any ancestor reaches every element below it. This page is the authored reference for the tokens that you will use in your own CSS. A complete generated reference (every token, with its palette path and source) is planned as a generated page, built from `@tecton-wc/tokens/tokens.json`.
 
 The token build emits 786 custom properties plus 1,820 opt-in palette colours. Each token has a status that says where its value comes from:
 
 | Status shown here  | Metadata status                    | Count | Meaning                                                                                                     |
 | ------------------ | ---------------------------------- | ----- | ----------------------------------------------------------------------------------------------------------- |
-| Tecton             | `tecton-export`, `tecton-astryx`   | 695 | From the Tecton design system: its export (authoritative for role values in both modes), or the owner's Tecton theme bindings where the export has no role |
+| Tecton             | `tecton-export`, `tecton-binding`   | 695 | From the Tecton design system: its export (authoritative for role values in both modes), or the owner's Tecton theme bindings where the export has no role |
 | Astryx default     | `upstream-default`                 | 18 | An Astryx value that Tecton deliberately keeps (the spacing scale, three tiny font sizes)                    |
-| Astryx-retained    | `astryx-retained`                  | 10 | No Tecton value exists, so the Astryx value is kept on purpose (motion)                                      |
+| Astryx-retained    | `retained-default`                  | 10 | No Tecton value exists, so the Astryx value is kept on purpose (motion)                                      |
 | Provisional        | `provisional`                      | 63 | No Tecton decision yet. A proposal (56 data-visualisation colours, `--size-element-lg`, and a few extras)   |
 
 Breakpoints and z-index are Astryx-retained too, but they are not custom properties; see [Values that are not tokens](#values-that-are-not-tokens).
@@ -260,10 +260,10 @@ The Tecton export defines scales that no Astryx token maps to. They are availabl
 
 | Value           | Where it lives                                     | Status          | Note                                                                                                                                  |
 | --------------- | -------------------------------------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
-| Breakpoints     | `breakpoints` in `@tecton-astryx/tokens/tokens.js` | Astryx-retained | `sm` 640, `md` 768, `lg` 1024, `xl` 1280, `2xl` 1536. Custom properties cannot be used in media queries, so these are data only        |
+| Breakpoints     | `breakpoints` in `@tecton-wc/tokens/tokens.js` | Astryx-retained | `sm` 640, `md` 768, `lg` 1024, `xl` 1280, `2xl` 1536. Custom properties cannot be used in media queries, so these are data only        |
 | z-index         | none                                               | Astryx-retained | Astryx defines no z-index tokens. Overlays use the top layer. A few upstream layers are kept on purpose (toast 500, bottom sheet 1000, skip link 9999) |
 | Letter-spacing  | none                                               | Tecton          | Tecton specifies none anywhere, so text uses `normal`                                                                                |
-| Icons           | `@tecton-astryx/icons`                             | Provisional     | Six role icons (`chevronsLeft`, `chevronsRight`, `calendar`, `clock`, `checkDouble`, `stop`) have no Tecton glyph and use Lucide      |
+| Icons           | `@tecton-wc/icons`                             | Provisional     | Six role icons (`chevronsLeft`, `chevronsRight`, `calendar`, `clock`, `checkDouble`, `stop`) have no Tecton glyph and use Lucide      |
 
 ## Usage
 
@@ -281,7 +281,7 @@ Use tokens through `var()` in any CSS, and reference names from JavaScript throu
 ```
 
 ```js
-import {tokens, tokenVar, breakpoints} from '@tecton-astryx/tokens/tokens.js';
+import {tokens, tokenVar, breakpoints} from '@tecton-wc/tokens/tokens.js';
 
 tokens['--radius-element'].light; // '4px'
 tokenVar('--color-accent'); // 'var(--color-accent)'

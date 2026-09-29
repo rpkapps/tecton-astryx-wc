@@ -14,7 +14,7 @@ Icons are data, not components. `tct-icon` renders an `IconDefinition` (a viewBo
 ```
 
 :::note[Status]
-The icon data (`@tecton-astryx/icons`) and the registry (`@tecton-astryx/core/icons/registry.js`) exist. `tct-icon` and the elements that render icons are delivered in the first component milestone (WP-F M5), so element usage below is _planned_.
+The icon data (`@tecton-wc/icons`) and the registry (`@tecton-wc/core/icons/registry.js`) exist. `tct-icon` and the elements that render icons are delivered in the first component milestone (WP-F M5), so element usage below is _planned_.
 :::
 
 ## Where the icons come from
@@ -95,7 +95,7 @@ Sizes are 12, 16, 20 and 24 px, which are the same values as Tecton's icon sizes
 For icons that are not in the set, register data, slot an SVG, or import a module.
 
 ```js title="Register an icon by name"
-import {registerIcons} from '@tecton-astryx/core/icons/registry.js';
+import {registerIcons} from '@tecton-wc/core/icons/registry.js';
 
 registerIcons({
   logo: {
@@ -120,7 +120,7 @@ An `IconDefinition` has a `viewBox`, a list of `paths` (each a `d` and an option
 Registered names can also be lazy loaders, `() => import('./my-icon.js')`, so a large set costs nothing until an icon is used:
 
 ```js
-import {registerIcons} from '@tecton-astryx/core/icons/registry.js';
+import {registerIcons} from '@tecton-wc/core/icons/registry.js';
 
 registerIcons({logo: () => import('./icons/logo.js').then((m) => m.default)});
 ```
@@ -130,7 +130,7 @@ registerIcons({logo: () => import('./icons/logo.js').then((m) => m.default)});
 Icons are looked up by name through two layers. The default set lives in the lower layer, and anything you register goes in the upper layer, so registering a name replaces the default for that name only. To swap one role's glyph, register the same name:
 
 ```js
-import {registerIcons} from '@tecton-astryx/core/icons/registry.js';
+import {registerIcons} from '@tecton-wc/core/icons/registry.js';
 import xMark from './my-icons/x-mark.js';
 
 registerIcons({close: xMark}); // every close button now uses your glyph
@@ -145,9 +145,9 @@ A theme-scoped icon override, an `icons` field on `defineTheme` in the way Astry
 Every glyph is a module, so you import only what you use:
 
 ```js
-import well, {filled as wellFilled} from '@tecton-astryx/icons/tecton/well.js';
-import activity from '@tecton-astryx/icons/lucide/activity.js';
-import {registerIcons} from '@tecton-astryx/core/icons/registry.js';
+import well, {filled as wellFilled} from '@tecton-wc/icons/tecton/well.js';
+import activity from '@tecton-wc/icons/lucide/activity.js';
+import {registerIcons} from '@tecton-wc/core/icons/registry.js';
 
 registerIcons({well, 'well-filled': wellFilled, activity});
 ```
@@ -155,8 +155,8 @@ registerIcons({well, 'well-filled': wellFilled, activity});
 To register the whole Lucide set under a namespace, so it never shadows the Astryx role names, use the generated helper. It registers lazy loaders, so nothing is downloaded until an icon renders:
 
 ```js
-import {lucideIcons} from '@tecton-astryx/icons/lucide.js';
-import {registerIcons} from '@tecton-astryx/core/icons/registry.js';
+import {lucideIcons} from '@tecton-wc/icons/lucide.js';
+import {registerIcons} from '@tecton-wc/core/icons/registry.js';
 
 registerIcons(lucideIcons, {namespace: 'lucide'});
 ```
@@ -165,14 +165,14 @@ registerIcons(lucideIcons, {namespace: 'lucide'});
 <tct-icon name="lucide:activity"></tct-icon>
 ```
 
-Deprecated Lucide aliases (for example `more-horizontal`) resolve to the same module as the canonical name. The Tecton domain set is also available as `tectonIcons` (lazy loaders), `tectonIconNames` and `tectonIconMeta` (a label, a description and a `colored` flag per glyph) from `@tecton-astryx/icons/tecton.js`.
+Deprecated Lucide aliases (for example `more-horizontal`) resolve to the same module as the canonical name. The Tecton domain set is also available as `tectonIcons` (lazy loaders), `tectonIconNames` and `tectonIconMeta` (a label, a description and a `colored` flag per glyph) from `@tecton-wc/icons/tecton.js`.
 
 ## Component and library icons
 
 A glyph that belongs to one component or library gets a namespaced key (`numberInput:stepperDown`, `richtext:bold`) instead of a new semantic name. It resolves through the same registry, and you override it in the same way, but the shared list of role names stays reserved for glyphs that the whole system uses, so adding a component glyph does not make every downstream registry grow a key.
 
 ```js
-import {registerIcons} from '@tecton-astryx/core/icons/registry.js';
+import {registerIcons} from '@tecton-wc/core/icons/registry.js';
 
 // The number input renders `numberInput:stepperDown`; override it independently of `chevronDown`.
 registerIcons({'numberInput:stepperDown': myCaretDown});
@@ -184,7 +184,7 @@ registerIcons({'numberInput:stepperDown': myCaretDown});
 
 To add a new semantic icon name to the design system, only for a glyph that the whole system shares (a component-owned one takes a namespaced key instead):
 
-1. Add the name and its glyph to the default set in `@tecton-astryx/icons` (`src/default.ts`). Roles keep their Astryx name and map to a Lucide glyph; mark directional roles `mirrorInRtl`.
+1. Add the name and its glyph to the default set in `@tecton-wc/icons` (`src/default.ts`). Roles keep their Astryx name and map to a Lucide glyph; mark directional roles `mirrorInRtl`.
 2. Add a row to the Available names table on this page.
 3. Regenerate (`pnpm generate`) and commit only the source. Generated per-icon modules are build output.
 

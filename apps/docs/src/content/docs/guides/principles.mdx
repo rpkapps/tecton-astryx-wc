@@ -12,7 +12,7 @@ A design system that prioritises consistency, adaptability and developer experie
 - **Elements over primitives.** Use `tct-*` elements for everything they cover before reaching for raw HTML. Where no element exists, plain semantic HTML is the right tool: headings, lists, paragraphs and links in prose need no wrapper.
 - **Semantic tokens over hardcoded values.** Colours, spacing and radii are named by purpose, not appearance (`--color-text-secondary`, `--spacing-4`, `--radius-container`).
 - **Theme-agnostic code.** Your app code never references specific colours or measurements, so themes and dark mode work automatically.
-- **Open internals.** Every element class, controller and event is exported and composable, so you can build on top of them without fighting them. The runtime that the elements share lives in `@tecton-astryx/core`.
+- **Open internals.** Every element class, controller and event is exported and composable, so you can build on top of them without fighting them. The runtime that the elements share lives in `@tecton-wc/core`.
 - **The platform first.** Native elements inside the shadow root when the element _is_ a native control (a real `<button>`, `<input>`, `<dialog>`), native events, native form participation, native popovers. You inherit the platform's accessibility and behaviour instead of a re-implementation.
 
 ## Rules

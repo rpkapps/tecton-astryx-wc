@@ -53,14 +53,14 @@ Files are region-tagged, and there are base-language aliases so you can pass the
 
 A requested locale resolves from the most to the least specific form, and each candidate is expanded through the alias table, so `fr` and `fr-CA` use `fr-FR`; `pt` uses `pt-BR`; `zh`, `zh-Hans` and `zh-SG` use `zh-CN`; `zh-Hant`, `zh-HK` and `zh-MO` use `zh-TW`; `nb` and `nn` use `no-NO`; `iw` uses `he-IL`; `en-XA` uses the pseudo-locale. Missing keys fall back to English, so a partial translation never shows a message id.
 
-Catalogs are loaded lazily by the `@tecton-astryx/locales` package, with one dynamic `import()` per language, so a page that only uses English never downloads another catalog.
+Catalogs are loaded lazily by the `@tecton-wc/locales` package, with one dynamic `import()` per language, so a page that only uses English never downloads another catalog.
 
 ## Runtime language swap
 
 Change the language and every element string updates live: no reload and no separate call. Setting `lang` on `<html>` (or on the provider) is enough, because elements watch it.
 
 ```js
-import {getLocaleDirection} from '@tecton-astryx/core/i18n/direction.js';
+import {getLocaleDirection} from '@tecton-wc/core/i18n/direction.js';
 
 function setLanguage(locale) {
   document.documentElement.lang = locale;
@@ -90,7 +90,7 @@ You do not wire anything per element. Once the direction is set, the elements mi
 Setting the attribute is your job, because the browser needs it too: it decides which side text aligns to and how punctuation and mixed-language text flow. `getLocaleDirection()` computes the direction for a locale (with a table fallback for engines without `Intl.Locale#getTextInfo`) and returns `'ltr'` for anything it does not recognise:
 
 ```js
-import {getLocaleDirection} from '@tecton-astryx/core/i18n/direction.js';
+import {getLocaleDirection} from '@tecton-wc/core/i18n/direction.js';
 
 getLocaleDirection('ar-SA'); // 'rtl'
 getLocaleDirection('fr'); // 'ltr'
@@ -118,11 +118,11 @@ Every element string that a person can see or hear can be overridden without shi
 ```
 
 ```js
-import {registerTranslation} from '@tecton-astryx/core/i18n/registry.js';
+import {registerTranslation} from '@tecton-wc/core/i18n/registry.js';
 
 // Change one string in English, and register a wording tweak for German.
-registerTranslation('en', {'@astryx.pagination.next': 'Next →'});
-registerTranslation('de-DE', {'@astryx.pagination.next': 'Weiter →'});
+registerTranslation('en', {'@tct.pagination.next': 'Next →'});
+registerTranslation('de-DE', {'@tct.pagination.next': 'Weiter →'});
 ```
 
 Registered messages outrank every shipped catalog, whatever their specificity, and they are available immediately. The full order for one message is:
@@ -133,12 +133,12 @@ Registered messages outrank every shipped catalog, whatever their specificity, a
 4. the element's built-in English default;
 5. the message id itself, with a development warning.
 
-Message ids keep the upstream form: `@astryx.<namespace>.<key>` (for example `@astryx.pagination.next`). Strings that this library adds are `@tct.<folder>.<key>`. Messages are ICU MessageFormat, so plural and number placeholders such as `{count, plural, one {page} other {pages}}` work in overrides.
+Message ids keep the upstream form: `@tct.<namespace>.<key>` (for example `@tct.pagination.next`). Strings that this library adds are `@tct.<folder>.<key>`. Messages are ICU MessageFormat, so plural and number placeholders such as `{count, plural, one {page} other {pages}}` work in overrides.
 
 To load catalogs from somewhere other than the package (a CDN, a bundler chunk map), replace the loader:
 
 ```js
-import {setLocaleLoader} from '@tecton-astryx/core/i18n/registry.js';
+import {setLocaleLoader} from '@tecton-wc/core/i18n/registry.js';
 
 setLocaleLoader(async (tag) => (await fetch(`/i18n/${tag}.json`)).json());
 ```
@@ -169,11 +169,11 @@ Single-catalog usage, where your library resolves the elements' strings too, is 
 
 ## Using the elements as your i18n library
 
-For a small app, or when you do not want another runtime, you can resolve your own strings through the same mechanism. Keep your ids in a separate namespace from `@astryx.*` and `@tct.*`, and register an `en` catalog, because the built-in English defaults contain only the elements' strings:
+For a small app, or when you do not want another runtime, you can resolve your own strings through the same mechanism. Keep your ids in a separate namespace from `@tct.*` and `@tct.*`, and register an `en` catalog, because the built-in English defaults contain only the elements' strings:
 
 ```js
-import {registerTranslation} from '@tecton-astryx/core/i18n/registry.js';
-import {formatMessage} from '@tecton-astryx/core/i18n/format.js';
+import {registerTranslation} from '@tecton-wc/core/i18n/registry.js';
+import {formatMessage} from '@tecton-wc/core/i18n/format.js';
 
 registerTranslation('en', {'@myapp.actions.save': 'Save', '@myapp.items': '{count, plural, one {# item} other {# items}}'});
 registerTranslation('fr-FR', {'@myapp.actions.save': 'Enregistrer', '@myapp.items': '{count, plural, one {# élément} other {# éléments}}'});
@@ -184,7 +184,7 @@ formatMessage('{count, plural, one {# item} other {# items}}', {count: 3}, 'en')
 Inside your own elements, extend `TctElement` and use the `LocaleController`, which resolves through the same chain and re-renders when a catalog arrives:
 
 ```ts
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
 
 class MyToolbar extends TctElement {
   #locale = new LocaleController(this);
@@ -214,10 +214,10 @@ A localised string looks like `[Ṁôƀîļé ñàṽîĝàţîôñ ~~~~~]`; any
 
 ## For contributors
 
-**Developers.** Element authors read strings through `LocaleController` rather than hardcoding user-facing text, and take the English text from the generated `@tecton-astryx/locales/en/<namespace>.js` module as the default. New strings go in `<folder>.messages.json` with ids `@tct.<folder>.<key>` and are merged into the English namespaces. Untranslated ids fall back to English and show up in a generated missing-translations report.
+**Developers.** Element authors read strings through `LocaleController` rather than hardcoding user-facing text, and take the English text from the generated `@tecton-wc/locales/en/<namespace>.js` module as the default. New strings go in `<folder>.messages.json` with ids `@tct.<folder>.<key>` and are merged into the English namespaces. Untranslated ids fall back to English and show up in a generated missing-translations report.
 
 ```ts
-import defaults from '@tecton-astryx/locales/en/dialog.js';
+import defaults from '@tecton-wc/locales/en/dialog.js';
 
 #locale = new LocaleController(this, {namespace: 'dialog', defaults});
 // this.#locale.t('close', undefined, 'close-label')

@@ -14,7 +14,7 @@ The `tct` CLI is delivered by the agentic AI work package (WP-AI, decision D-011
 
 ## Overview
 
-`tct` is the primary interface for working with the design system, for people and for machines: element documentation, tokens, docs topics, agent-context generation and an MCP server, all through terminal commands, a typed JSON API or programmatic imports. It lives in the private `@tecton-astryx/cli` package and reads one generated agent registry (the Custom Elements Manifest, the docs frontmatter with `keywords`, `dense` and `related`, the examples, the tokens and the docs topics). The docs site and the MCP route read the same registry, so the three surfaces cannot disagree.
+`tct` is the primary interface for working with the design system, for people and for machines: element documentation, tokens, docs topics, agent-context generation and an MCP server, all through terminal commands, a typed JSON API or programmatic imports. It lives in the private `@tecton-wc/cli` package and reads one generated agent registry (the Custom Elements Manifest, the docs frontmatter with `keywords`, `dense` and `related`, the examples, the tokens and the docs topics). The docs site and the MCP route read the same registry, so the three surfaces cannot disagree.
 
 ```bash
 tct --help
@@ -96,7 +96,7 @@ The `code` is a stable identifier. Branch on it, never on the human-readable `er
 The CLI package exports a small module for consuming responses in TypeScript:
 
 ```ts
-import {parseResponse, isError, assertResponse} from '@tecton-astryx/cli/json';
+import {parseResponse, isError, assertResponse} from '@tecton-wc/cli/json';
 
 const result = parseResponse(raw);
 if (isError(result)) {

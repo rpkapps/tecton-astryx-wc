@@ -16,7 +16,7 @@ The token stylesheet, its light, dark and inverted-surface blocks, and the token
 Load the stylesheet once, in the document, and you have the Tecton theme:
 
 ```css title="global.css"
-@import '@tecton-astryx/tokens/tecton.css';
+@import '@tecton-wc/tokens/tecton.css';
 ```
 
 That is the whole setup. The page follows the operating system's light or dark preference by default, because the stylesheet sets `color-scheme: light dark` on the root. The same file is valid for a server-rendered page, a static page and a single-page app, and the tokens are present at first paint.
@@ -32,9 +32,9 @@ Each token in the metadata carries a status, so you know where a value came from
 | Status             | Meaning                                                                                                |
 | ------------------ | ------------------------------------------------------------------------------------------------------ |
 | `tecton-export`    | From the Tecton export. Authoritative for role values in both modes.                                    |
-| `tecton-astryx`    | From the owner's Tecton theme bindings, for roles the export does not define.                          |
+| `tecton-binding`    | From the owner's Tecton theme bindings, for roles the export does not define.                          |
 | `upstream-default` | An Astryx default that Tecton deliberately keeps (spacing, three tiny font sizes).                     |
-| `astryx-retained`  | Kept from Astryx on purpose because Tecton has no value (the ten motion tokens).                       |
+| `retained-default`  | Kept from Astryx on purpose because Tecton has no value (the ten motion tokens).                       |
 | `provisional`      | No Tecton decision yet: a proposal (56 data-visualisation colours, `--size-element-lg`, some extras).  |
 
 ## The theme element
@@ -72,7 +72,7 @@ Tokens are unregistered custom properties declared with zero specificity (`:wher
 }
 ```
 
-Use Tecton tokens for colour values, not literals. When you need a colour that no token expresses, use the opt-in palette (`@tecton-astryx/tokens/palette.css`, which defines `--tecton-palette-<hue>-<surface>-<stop>`, for example `--tecton-palette-mauve-on-light-680`) rather than a hex value, so your override stays inside the Tecton system.
+Use Tecton tokens for colour values, not literals. When you need a colour that no token expresses, use the opt-in palette (`@tecton-wc/tokens/palette.css`, which defines `--tecton-palette-<hue>-<surface>-<stop>`, for example `--tecton-palette-mauve-on-light-680`) rather than a hex value, so your override stays inside the Tecton system.
 
 Two rules keep overrides predictable:
 
@@ -84,7 +84,7 @@ Two rules keep overrides predictable:
 _Planned (WP-1)._ `defineTheme` is ported from upstream. It creates a theme from token overrides and optional scale configurations, and a generator (`generateThemeCSS`) turns it into a stylesheet that uses this library's token names. Explicit token overrides always take precedence over scale-generated values, token by token.
 
 ```js
-import {defineTheme} from '@tecton-astryx/core'; // planned: the module and its exact export path are fixed in WP-1
+import {defineTheme} from '@tecton-wc/core'; // planned: the module and its exact export path are fixed in WP-1
 
 const brandTheme = defineTheme({
   name: 'brand',
@@ -255,7 +255,7 @@ Menus, popovers, dialogs and toasts stay in their place in the DOM and use the t
 Prefer CSS variables for ordinary styling. When JavaScript needs a value (a canvas, a chart library, a map style), use the metadata module or read the computed style.
 
 ```js title="Token metadata (available now)"
-import {tokens, tokenVar, breakpoints} from '@tecton-astryx/tokens/tokens.js';
+import {tokens, tokenVar, breakpoints} from '@tecton-wc/tokens/tokens.js';
 
 tokens['--color-text-primary'].light; // '#21172a'
 tokens['--color-text-primary'].dark; // '#f6f5f8'

@@ -8,7 +8,7 @@ sidebar:
 Upstream Astryx has no single forms guide: form behaviour is described component by component, and its inputs are controlled (a `value` and an `onChange`). Web Components use the platform's form model instead, so this page collects the rules that hold for every form element. The elements in question are `tct-text-input`, `tct-text-area`, `tct-number-input`, `tct-checkbox-input`, `tct-switch`, `tct-radio-list`, `tct-slider`, `tct-selector`, the date and time inputs, `tct-file-input`, `tct-tokenizer` and the rest of the value controls, and `tct-button` as a submitter.
 
 :::caution[Planned elements]
-The shared machinery described here (`FormControlMixin`, the submitter and implicit-submission helpers, field chrome) is merged in `@tecton-astryx/core`. The elements that use it are delivered in the form work packages, so examples show the target API. Each element's page lists its own attributes, validation options and keyboard contract.
+The shared machinery described here (`FormControlMixin`, the submitter and implicit-submission helpers, field chrome) is merged in `@tecton-wc/core`. The elements that use it are delivered in the form work packages, so examples show the target API. Each element's page lists its own attributes, validation options and keyboard contract.
 :::
 
 ## Overview
@@ -135,7 +135,7 @@ Multi-line controls (`tct-text-area`, the chat composer) do not submit on a bare
 Every Enter, Escape, arrow and Tab command handler checks for IME composition first, so confirming a character conversion in Japanese, Chinese or Korean never triggers a command or sends a message. The check is `event.isComposing` together with `event.keyCode === 229`, which covers a WebKit event-ordering issue where the confirming Enter arrives after composition has ended. If you add your own Enter handler to a text area, do the same, and keep an explicit submit button as well: a shortcut must not be the only way to submit.
 
 ```js
-import {isImeKeyEvent} from '@tecton-astryx/core/utils/ime.js';
+import {isImeKeyEvent} from '@tecton-wc/core/utils/ime.js';
 
 textArea.addEventListener('keydown', (event) => {
   if (event.key !== 'Enter' || event.shiftKey || isImeKeyEvent(event)) return;
