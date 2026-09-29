@@ -1,0 +1,9 @@
+<!-- title: Rich heading, description and icon; description: Slots replace the text attributes and the status icon. A long unbroken string wraps instead of forcing horizontal scroll. -->
+<div style="display: flex; flex-direction: column; gap: var(--spacing-3); max-inline-size: 24rem">
+  <tct-banner status="info">
+    <tct-icon slot="icon" name="well"></tct-icon>
+    <span slot="heading">Well <strong>A-14</strong> is ready</span>
+    <span slot="description">Open the <a href="#">production summary</a>.</span>
+  </tct-banner>
+  <tct-banner status="warning" heading="ReallyLongUnbrokenIdentifierThatWouldNormallyForceTheBannerWiderThanTheViewport_0123456789"></tct-banner>
+</div>

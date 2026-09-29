@@ -1,0 +1,211 @@
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .frame {
+    --_radius: var(--radius-element);
+    --_shadow: none;
+
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-background-card);
+    box-shadow: var(--_shadow);
+  }
+
+  .frame[data-container='section'] {
+    --_radius: 0;
+  }
+
+  /* A raised card rounds its frame so the shadow follows the silhouette. */
+  .frame[data-container='card'][data-elevation='low'],
+  .frame[data-container='card'][data-elevation='med'],
+  .frame[data-container='card'][data-elevation='high'] {
+    border-radius: var(--_radius);
+  }
+
+  .frame[data-elevation='low'] {
+    --_shadow: var(--shadow-low);
+  }
+
+  .frame[data-elevation='med'] {
+    --_shadow: var(--shadow-med);
+  }
+
+  .frame[data-elevation='high'] {
+    --_shadow: var(--shadow-high);
+  }
+
+  .header {
+    /* Status colours: fill, the ink on it, and the glyph. Re-pointed per status below. */
+    --_fill: var(--color-accent-muted);
+    --_ink: var(--color-text-primary);
+    --_glyph: var(--color-icon-primary);
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    column-gap: var(--spacing-2);
+
+    /* The end area carries a negative block margin, so a wrapped row reads as one step of spacing. */
+    row-gap: var(--spacing-3);
+    padding-block: var(--spacing-3);
+    padding-inline: var(--spacing-4);
+    background-color: var(--_fill);
+    color: var(--_ink);
+
+    /* Everything on the fill reads in its ink, including the ghost buttons and the focus ring. */
+    --color-text-primary: var(--_ink);
+    --color-text-secondary: var(--_ink);
+    --color-icon-primary: var(--_glyph);
+    --color-icon-secondary: var(--_glyph);
+    --tecton-color-action-tertiary-text: var(--_glyph);
+    --focus-outline-color: var(--_ink);
+  }
+
+  .header[data-status='info'] {
+    --_fill: var(--tecton-color-status-info-filled-bg);
+    --_ink: var(--tecton-color-status-info-filled-text);
+    --_glyph: var(--tecton-color-status-info-filled-adornment);
+  }
+
+  .header[data-status='success'] {
+    --_fill: var(--tecton-color-status-success-filled-bg);
+    --_ink: var(--tecton-color-status-success-filled-text);
+    --_glyph: var(--tecton-color-status-success-filled-adornment);
+  }
+
+  .header[data-status='warning'] {
+    --_fill: var(--tecton-color-status-warning-filled-bg);
+    --_ink: var(--tecton-color-status-warning-filled-text);
+    --_glyph: var(--tecton-color-status-warning-filled-adornment);
+  }
+
+  .header[data-status='error'] {
+    --_fill: var(--tecton-color-status-error-filled-bg);
+    --_ink: var(--tecton-color-status-error-filled-text);
+    --_glyph: var(--tecton-color-status-error-filled-adornment);
+  }
+
+  .header[data-status='neutral'] {
+    --_fill: var(--tecton-color-status-neutral-filled-bg);
+    --_ink: var(--tecton-color-status-neutral-filled-text);
+    --_glyph: var(--tecton-color-status-neutral-filled-adornment);
+  }
+
+  /* Rounded: all corners alone, only the top while the content area shows below (they meet flush). */
+  .header[data-container='card'] {
+    border-radius: var(--_radius);
+  }
+
+  .header[data-container='card'][data-with-content] {
+    border-end-start-radius: 0;
+    border-end-end-radius: 0;
+  }
+
+  .header[data-centered] {
+    align-items: center;
+  }
+
+  .icon-wrapper {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    color: var(--_glyph);
+  }
+
+  .status-icon {
+    color: var(--_glyph);
+  }
+
+  .text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+
+  /* The wrap threshold, only with end content: the whole end area drops to its own row instead of squeezing
+     the message to one word per line. In rem so it tracks the user's font size. */
+  .text[data-with-end] {
+    flex-basis: 8rem;
+  }
+
+  .heading {
+    margin: 0;
+    color: var(--_ink);
+    font-size: var(--text-label-size);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--text-label-leading);
+
+    /* One unbroken token (a URL, an id, a compound) must not force horizontal scrolling at 320px (WCAG 1.4.10). */
+    overflow-wrap: anywhere;
+  }
+
+  .description {
+    margin: 0;
+    color: var(--_ink);
+    font-size: var(--text-supporting-size);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--text-supporting-leading);
+    overflow-wrap: anywhere;
+  }
+
+  .end {
+    display: flex;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--spacing-2);
+    max-inline-size: 100%;
+    margin-inline-start: auto;
+    margin-block: calc(-1 * (var(--spacing-3) - var(--spacing-2)));
+  }
+
+  .content {
+    padding-block: var(--spacing-3);
+    padding-inline: var(--spacing-4);
+    border-inline: var(--border-width) solid var(--color-border);
+    border-block-end: var(--border-width) solid var(--color-border);
+    background-color: var(--color-background-card);
+    color: var(--color-text-primary);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+  }
+
+  .content[data-container='card'] {
+    border-end-start-radius: var(--_radius);
+    border-end-end-radius: var(--_radius);
+  }
+
+  .content[data-container='section'] {
+    border-inline: 0;
+  }
+}
+
+@layer state {
+  @media (prefers-reduced-motion: no-preference) {
+    .toggle::part(button) {
+      transition: rotate var(--duration-fast) var(--ease-standard);
+    }
+  }
+
+  .toggle[data-expanded]::part(button) {
+    rotate: 180deg;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .header {
+      /* A filled status band loses its fill; keep the structure with a real edge. */
+      border: 1px solid CanvasText;
+      forced-color-adjust: auto;
+    }
+
+    .status-icon {
+      color: CanvasText;
+    }
+  }
+}
