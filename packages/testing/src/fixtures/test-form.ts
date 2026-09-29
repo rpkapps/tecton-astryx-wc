@@ -7,7 +7,7 @@
  *  - `tct-test-group`    no native inner control: validators + a `validationAnchor` (the first enabled item)
  *  - `tct-test-submit`   a submitter that is not a native button (what `tct-button type=submit` is)
  */
-import {html, css} from 'lit';
+import {html, css, nothing} from 'lit';
 import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
 import {live} from 'lit/directives/live.js';
@@ -27,6 +27,9 @@ export class TctTestInput extends FormControlMixin(TctElement) {
   static override styles = css`
     :host {
       display: inline-block;
+    }
+    :host([hidden]) {
+      display: none;
     }
   `;
 
@@ -116,6 +119,9 @@ export class TctTestGroup extends FormControlMixin(TctElement) {
       display: inline-flex;
       gap: 4px;
     }
+    :host([hidden]) {
+      display: none;
+    }
   `;
 
   #items(): HTMLButtonElement[] {
@@ -130,23 +136,25 @@ export class TctTestGroup extends FormControlMixin(TctElement) {
   }
 
   override render() {
-    return html`${['a', 'b', 'c'].map(
-      (item) =>
-        html`<button
-          type="button"
-          role="radio"
-          aria-checked=${String(this.value === item)}
-          ?disabled=${this.isDisabled}
-          @click=${() => {
-            this.value = item;
-            this.dispatchEvent(new Event('input', {bubbles: true, composed: true}));
-            this.markInteracted();
-            this.dispatchEvent(new Event('change', {bubbles: true, composed: true}));
-          }}
-        >
-          ${item}
-        </button>`,
-    )}`;
+    return html`<div role="radiogroup" aria-label="group" aria-invalid=${this.showInvalid ? 'true' : nothing}>
+      ${['a', 'b', 'c'].map(
+        (item) =>
+          html`<button
+            type="button"
+            role="radio"
+            aria-checked=${String(this.value === item)}
+            ?disabled=${this.isDisabled}
+            @click=${() => {
+              this.value = item;
+              this.dispatchEvent(new Event('input', {bubbles: true, composed: true}));
+              this.markInteracted();
+              this.dispatchEvent(new Event('change', {bubbles: true, composed: true}));
+            }}
+          >
+            ${item}
+          </button>`,
+      )}
+    </div>`;
   }
 }
 

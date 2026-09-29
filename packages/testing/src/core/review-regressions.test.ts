@@ -288,17 +288,15 @@ describe('M5: IME Enter/Escape (isComposing and keyCode 229)', () => {
       html`<tct-test-layer open><input aria-label="f" /></tct-test-layer>`,
     );
     await waitUntil(() => shown(layer), 'open');
-    layer
-      .querySelector('input')!
-      .dispatchEvent(
-        new KeyboardEvent('keydown', {
-          key: 'Escape',
-          bubbles: true,
-          composed: true,
-          cancelable: true,
-          keyCode: 229,
-        }),
-      );
+    layer.querySelector('input')!.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'Escape',
+        bubbles: true,
+        composed: true,
+        cancelable: true,
+        keyCode: 229,
+      }),
+    );
     await aTimeout(50);
     expect(shown(layer)).toBe(true);
   });

@@ -32,6 +32,9 @@ export class TctTestLayer extends TctElement {
     :host {
       display: inline-block;
     }
+    :host([hidden]) {
+      display: none;
+    }
     [popover] {
       box-sizing: border-box;
       inset: auto;
