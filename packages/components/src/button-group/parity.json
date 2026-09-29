@@ -1,0 +1,155 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "button-group",
+  "workPackage": "WP-3",
+  "entries": {
+    "core.button-group": {
+      "tag": "tct-button-group",
+      "status": "implemented",
+      "upstream": {
+        "name": "ButtonGroup",
+        "path": "packages/core/src/ButtonGroup/ButtonGroup.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Accessible name of the group, applied through ElementInternals (aria-label). A host aria-label attribute wins."
+        },
+        {
+          "upstream": "orientation",
+          "kind": "prop",
+          "target": "orientation",
+          "as": "attribute",
+          "reflect": true,
+          "default": "horizontal"
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Cascade: explicit, then an enclosing size provider, then md. The resolved size is provided to every member through sizeContext and buttonGroupContext."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "elevation",
+          "kind": "prop",
+          "target": "elevation",
+          "as": "attribute",
+          "reflect": true,
+          "default": "none"
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "A-ref: the host element is the reference; the layout box is exposed as ::part(group)."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(group) and custom properties."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: attributes on the host element pass through natively."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useButtonGroup",
+          "target": "buttonGroupContext",
+          "as": "context",
+          "notes": "The group answers each requesting member with that member's own position (first, middle, last, only), orientation, resolved size and the group's disabled state."
+        },
+        {"upstream": "ButtonGroupContext", "target": "buttonGroupContext", "as": "context"},
+        {"upstream": "useListFocus", "target": "RovingTabindexController", "as": "controller"}
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Enters the group at the member that last had focus (the first enabled member at first); the next Tab leaves the group",
+          "when": "the group is one tab stop"
+        },
+        {
+          "keys": "ArrowRight",
+          "action": "Moves focus to the next enabled member, wrapping after the last",
+          "when": "horizontal; ArrowLeft in RTL"
+        },
+        {
+          "keys": "ArrowLeft",
+          "action": "Moves focus to the previous enabled member, wrapping before the first",
+          "when": "horizontal; ArrowRight in RTL"
+        },
+        {
+          "keys": "ArrowDown",
+          "action": "Moves focus to the next enabled member of a vertical group",
+          "when": "vertical"
+        },
+        {
+          "keys": "ArrowUp",
+          "action": "Moves focus to the previous enabled member of a vertical group",
+          "when": "vertical"
+        },
+        {"keys": "Home", "action": "Moves focus to the first enabled member"},
+        {"keys": "End", "action": "Moves focus to the last enabled member"},
+        {
+          "keys": "Arrow keys inside a member's layer",
+          "action": "Stay with that layer (an open menu); the group does not move focus",
+          "when": "a member owns a menu"
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "BUTTONGROUP-01",
+          "type": "approved-api-difference",
+          "text": "Members are light-DOM children. Each member asks for buttonGroupContext and receives its own position, so first, middle and last corners never depend on :last-child (upstream #2508: a tooltip or menu surface rendered beside a member broke the trailing edge). Corner squaring itself is done by the member with per-corner logical radii (RTL and vertical safe)."
+        },
+        {
+          "id": "BUTTONGROUP-02",
+          "type": "approved-api-difference",
+          "text": "The group semantics are set through ElementInternals (role=group, aria-label, aria-disabled) rather than attributes on a wrapper div; a host aria-label attribute overrides the label property. Upstream also exposes data-orientation, which is the reflected orientation attribute here."
+        },
+        {
+          "id": "BUTTONGROUP-03",
+          "type": "tecton-visual",
+          "text": "Tecton draws primary and secondary groups as one continuous fill with a hairline between segments, tertiary as free-standing rules, outlined as one shared border. That is the members' job (they read position and orientation); the group paints nothing except the elevation shadow."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components] (group semantics through ElementInternals, no cross-root IDREFs) [mwg:accessibility] (roving tabindex composite, single tab stop) [mwg:spatial-navigation] (arrow keys only inside the composite, native scrolling untouched)."
+    }
+  }
+}

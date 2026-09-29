@@ -1,0 +1,302 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "toggle-button",
+  "workPackage": "WP-3",
+  "entries": {
+    "core.toggle-button": {
+      "tag": "tct-toggle-button",
+      "status": "implemented",
+      "upstream": {
+        "name": "ToggleButton",
+        "path": "packages/core/src/ToggleButton/ToggleButton.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Visible text unless the default slot has content or icon-only; then the accessible name and tooltip."
+        },
+        {
+          "upstream": "isPressed",
+          "kind": "prop",
+          "target": "pressed",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Current state; the attribute is the initial state (D-006). Ignored for a group member."
+        },
+        {
+          "upstream": "onPressedChange",
+          "kind": "event",
+          "target": "tct-pressed-change",
+          "as": "event",
+          "notes": "Cancelable intent event before a user toggle (reason `trigger`), carrying `pressed`. preventDefault() keeps the state and skips pressedChangeAction, as upstream's preventDefault on the callback skips the action."
+        },
+        {
+          "upstream": "pressedChangeAction",
+          "kind": "prop",
+          "target": "pressedChangeAction",
+          "as": "property",
+          "notes": "Async, API-backed toggle: runs after the change with the requested state; the button shows the busy spinner and stays interruptible; the previous state is restored if it rejects. Ignored for a group member."
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "the group's, else md"
+        },
+        {
+          "upstream": "elevation",
+          "kind": "prop",
+          "target": "elevation",
+          "as": "attribute",
+          "reflect": true,
+          "default": "none"
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "isLoading",
+          "kind": "prop",
+          "target": "loading",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "icon",
+          "kind": "slot",
+          "target": "icon",
+          "as": "slot",
+          "notes": "Or the `icon` attribute (registered name)."
+        },
+        {
+          "upstream": "isIconOnly",
+          "kind": "prop",
+          "target": "iconOnly",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Attribute `icon-only`."
+        },
+        {
+          "upstream": "pressedIcon",
+          "kind": "slot",
+          "target": "pressed-icon",
+          "as": "slot",
+          "notes": "Or the `pressed-icon` attribute (registered name): the outline-to-filled swap. Falls back to `icon`."
+        },
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {"upstream": "tooltip", "kind": "prop", "target": "tooltip", "as": "attribute"},
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "attribute",
+          "notes": "Identifies the button in a tct-toggle-button-group."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: attributes on the host element pass through natively."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(button) and custom properties."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useToggleButtonGroup",
+          "target": "toggleButtonGroupContext (family-private)",
+          "as": "context"
+        }
+      ],
+      "keyboard": [
+        {"keys": "Enter", "action": "Toggles the button", "when": "not disabled or busy"},
+        {
+          "keys": "Space",
+          "action": "Toggles the button, like Enter",
+          "when": "not disabled or busy"
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "TOGGLEBUTTON-01",
+          "type": "approved-api-difference",
+          "text": "Composed of a ghost tct-button in its shadow root (upstream wraps Button): the host takes focus by delegation, aria-pressed is delegated to the inner native button through the button's ARIA delegation, and a toggle inside a tct-button-group asks the group for its corners because the inner button reaches the group's context through the host."
+        },
+        {
+          "id": "TOGGLEBUTTON-02",
+          "type": "approved-api-difference",
+          "text": "Uncontrolled by default (D-006): a user toggle flips `pressed` at once (the optimistic state) after the cancelable tct-pressed-change; a controlled framework binding cancels the event and sets `pressed`. pressedChangeAction rejections restore the previous state, where upstream useOptimistic reverts to the controlled value when the transition ends."
+        },
+        {
+          "id": "TOGGLEBUTTON-03",
+          "type": "tecton-visual",
+          "text": "Tecton's activated toggle is a flat fill with a brighter ink and explicit hover and press fills (component.toggleButton roles). Tecton's semibold weight equals medium, so the pressed label does not change weight and the upstream hidden width-reservation element is not needed."
+        },
+        {
+          "id": "TOGGLEBUTTON-04",
+          "type": "a11y-improvement",
+          "text": "Forced colours paint the pressed state as Highlight and HighlightText on the inner button, with forced-color-adjust: none, so an icon-only toggle keeps a pressed cue."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components] (aria-pressed on the native button through delegation, no host role). Focus ring, tooltip and busy state are tct-button's."
+    },
+    "core.toggle-button-group": {
+      "tag": "tct-toggle-button-group",
+      "status": "implemented",
+      "upstream": {
+        "name": "ToggleButtonGroup",
+        "path": "packages/core/src/ToggleButton/ToggleButtonGroup.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Accessible name of the group, through ElementInternals; a host aria-label wins."
+        },
+        {
+          "upstream": "type",
+          "kind": "prop",
+          "target": "type",
+          "as": "attribute",
+          "reflect": true,
+          "default": "single"
+        },
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "property",
+          "notes": "Current pressed value(s): string or null for single, string[] for multiple. The `value` attribute is the initial state (space separated for multiple)."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "tct-value-change",
+          "as": "event",
+          "notes": "Cancelable intent event before a user toggle; `value` is the requested selection in the same shape as the property."
+        },
+        {
+          "upstream": "orientation",
+          "kind": "prop",
+          "target": "orientation",
+          "as": "attribute",
+          "reflect": true,
+          "default": "horizontal"
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md (explicit, then a size provider, then md)"
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(group) and custom properties."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: attributes on the host element pass through natively."
+        }
+      ],
+      "hooks": [],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Moves between the buttons: every button is a tab stop, the group adds no roving focus"
+        },
+        {"keys": "Enter", "action": "Toggles the focused button", "when": "not disabled"},
+        {
+          "keys": "Space",
+          "action": "Toggles the focused button, like Enter",
+          "when": "not disabled"
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "TOGGLEGROUP-01",
+          "type": "approved-api-difference",
+          "text": "Upstream is controlled-only (value + onChange); the group owns its selection like a native control (D-006): a user toggle fires the cancelable tct-value-change first and applies unless prevented; a controlled framework sets `value` back. Property and attribute writes fire nothing."
+        },
+        {
+          "id": "TOGGLEGROUP-02",
+          "type": "approved-api-difference",
+          "text": "The group is a labelled role=group set through ElementInternals; the members' state flows through a family-private context, so members can be nested in other content. A member cannot re-enable itself inside a disabled group, but may disable itself in an enabled one, as upstream."
+        },
+        {
+          "id": "TOGGLEGROUP-03",
+          "type": "tecton-visual",
+          "text": "Tecton's design draws toggle groups as connected segments; upstream and the owner's React theme keep separate buttons with a gap, and so does this group. Use tct-segmented-control for a connected exclusive choice."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null
+    }
+  }
+}

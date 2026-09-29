@@ -1,0 +1,22 @@
+<!-- title: Icons; description: An icon before the label, or an icon alone with label-hidden (the label stays the accessible name). -->
+<div style="display: flex; flex-direction: column; align-items: flex-start; gap: var(--spacing-3)">
+  <tct-segmented-control label="View with labels" value="list">
+    <tct-segmented-control-item value="list" label="List">
+      <tct-icon slot="icon" name="menu"></tct-icon>
+    </tct-segmented-control-item>
+    <tct-segmented-control-item value="search" label="Search">
+      <tct-icon slot="icon" name="search"></tct-icon>
+    </tct-segmented-control-item>
+  </tct-segmented-control>
+  <tct-segmented-control label="View, icons only" value="list">
+    <tct-segmented-control-item value="list" label="List" label-hidden>
+      <tct-icon slot="icon" name="menu"></tct-icon>
+    </tct-segmented-control-item>
+    <tct-segmented-control-item value="search" label="Search" label-hidden>
+      <tct-icon slot="icon" name="search"></tct-icon>
+    </tct-segmented-control-item>
+    <tct-segmented-control-item value="columns" label="Columns" label-hidden>
+      <tct-icon slot="icon" name="viewColumns"></tct-icon>
+    </tct-segmented-control-item>
+  </tct-segmented-control>
+</div>

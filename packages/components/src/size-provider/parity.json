@@ -1,0 +1,86 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "size-provider",
+  "workPackage": "WP-F",
+  "entries": {
+    "core.size-provider": {
+      "tag": "tct-size-provider",
+      "status": "implemented",
+      "upstream": {
+        "name": "SizeProvider",
+        "path": "packages/core/src/SizeContext/SizeContext.ts",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "SizeContext.Provider's value: sm, md, lg or null. Unset provides null."
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "SizeContext",
+          "target": "sizeContext",
+          "as": "context",
+          "notes": "@tecton-astryx/core/context/keys.js; provided by tct-size-provider and by containers such as tct-button-group."
+        },
+        {
+          "upstream": "useSize",
+          "target": "SizeController",
+          "as": "controller",
+          "notes": "new SizeController(host, {explicit: () => this.size, fallback: 'md'}).value: explicit, then context, then default."
+        },
+        {
+          "upstream": "ElementSize",
+          "target": "ElementSize",
+          "as": "module-function",
+          "notes": "The type 'sm' | 'md' | 'lg', exported from core/context/keys.js."
+        }
+      ],
+      "differences": [
+        {
+          "id": "SIZEPROVIDER-01",
+          "type": "approved-api-difference",
+          "text": "Upstream exposed only the context (SizeContext.Provider, no component page). tct-size-provider is the element form: a size attribute instead of a value prop, display: contents, no shadow root."
+        },
+        {
+          "id": "SIZEPROVIDER-02",
+          "type": "approved-api-difference",
+          "text": "A value outside sm, md, lg provides no size (null) and warns in dev mode, instead of passing the string through to controls."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "events": true,
+        "rtl": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/components/src/env.d.ts",
+          "reason": "Declares '*.light.css?inline' (CSS text for light-DOM sheets). Providers import their .light.css this way; the M6 light-dom.css generator globs the same files.",
+          "diff": "declare module '*.light.css?inline' { const css: string; export default css; }"
+        },
+        {
+          "file": "packages/core/src/provider-element.ts",
+          "reason": "New core base class TctProviderElement for the providers (no shadow root, no render output, adopts lightStyles). The same commit adds the shadow:false option to packages/testing runElementSuite."
+        }
+      ],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:custom-elements] provider without a shadow root and display: contents; [mwg:styling-web-components] light-DOM sheet adopted once per root."
+    }
+  }
+}

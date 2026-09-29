@@ -1,0 +1,105 @@
+{
+  "folder": "overflow-list",
+  "elements": {
+    "tct-overflow-list": {
+      "class": "TctOverflowList",
+      "attributes": [
+        {
+          "name": "behavior",
+          "property": "behavior",
+          "type": "OverflowListBehavior",
+          "values": [
+            "observe-self",
+            "observe-parent"
+          ],
+          "default": "'observe-self'",
+          "reflects": true
+        },
+        {
+          "name": "collapse-from",
+          "property": "collapseFrom",
+          "type": "OverflowListCollapseFrom",
+          "values": [
+            "start",
+            "end"
+          ],
+          "default": "'end'",
+          "reflects": true
+        },
+        {
+          "name": "gap",
+          "property": "gap",
+          "type": "OverflowListGap",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "default": "2",
+          "reflects": false
+        },
+        {
+          "name": "max-rows",
+          "property": "maxRows",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "max-visible-items",
+          "property": "maxVisibleItems",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "min-visible-items",
+          "property": "minVisibleItems",
+          "type": "number",
+          "default": "0",
+          "reflects": false
+        },
+        {
+          "name": "show-count",
+          "property": "showCount",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "overflowRenderer",
+          "type": "OverflowRenderer | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [
+        {
+          "name": "tct-overflow-change",
+          "class": "TctOverflowChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        }
+      ],
+      "cssParts": [
+        "count",
+        "indicator",
+        "overflow-list"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

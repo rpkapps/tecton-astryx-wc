@@ -1,0 +1,18 @@
+<!-- title: Controlled; description: The owner decides. preventDefault() the cancelable tct-open-change and set open yourself, or leave the event alone and the item follows the user. -->
+<div id="controlled" style="max-inline-size: 28rem">
+  <tct-collapsible trigger="Confirm before closing" open>Closing asks first.</tct-collapsible>
+  <p data-log style="margin-block-start: var(--spacing-3); color: var(--color-text-secondary)">Waiting for a toggle.</p>
+</div>
+<script type="module">
+  const root = document.getElementById('controlled');
+  const item = root.querySelector('tct-collapsible');
+  const log = root.querySelector('[data-log]');
+  item.addEventListener('tct-open-change', (event) => {
+    if (!event.open && !window.confirm('Close this section?')) {
+      event.preventDefault();
+      log.textContent = 'Close cancelled.';
+    } else {
+      log.textContent = event.open ? 'Opened.' : 'Closed.';
+    }
+  });
+</script>

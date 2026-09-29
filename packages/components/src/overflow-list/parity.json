@@ -1,0 +1,141 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "overflow-list",
+  "workPackage": "WP-5",
+  "entries": {
+    "core.overflow-list": {
+      "tag": "tct-overflow-list",
+      "status": "implemented",
+      "upstream": {
+        "name": "OverflowList",
+        "path": "packages/core/src/OverflowList/OverflowList.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "overflowRenderer",
+          "kind": "prop",
+          "target": "overflowRenderer",
+          "as": "property",
+          "notes": "Returns a template, a node or text (never HTML). Called for the collapsed items and, hidden, for all items (the widest indicator is measured from that copy)."
+        },
+        {
+          "upstream": "onOverflowChange",
+          "kind": "event",
+          "target": "tct-overflow-change",
+          "as": "event",
+          "notes": "Non-cancelable notification; `items` carries each collapsed element and its original index. Silent while nothing overflows, including on mount (OVERFLOW-03)."
+        },
+        {
+          "upstream": "gap",
+          "kind": "prop",
+          "target": "gap",
+          "as": "attribute",
+          "default": 2,
+          "notes": "The spacing step names the --spacing-* token (0, 0.5, 1, 1.5, 2, 3, 4, 5, 6, 8, 10)."
+        },
+        {
+          "upstream": "minVisibleItems",
+          "kind": "prop",
+          "target": "min-visible-items",
+          "as": "attribute",
+          "default": 0
+        },
+        {
+          "upstream": "maxVisibleItems",
+          "kind": "prop",
+          "target": "max-visible-items",
+          "as": "attribute"
+        },
+        {"upstream": "maxRows", "kind": "prop", "target": "max-rows", "as": "attribute"},
+        {
+          "upstream": "collapseFrom",
+          "kind": "prop",
+          "target": "collapse-from",
+          "as": "attribute",
+          "reflect": true,
+          "default": "end"
+        },
+        {
+          "upstream": "behavior",
+          "kind": "prop",
+          "target": "behavior",
+          "as": "attribute",
+          "reflect": true,
+          "default": "observe-self",
+          "notes": "observeSelf and observeParent are kebab-case: observe-self, observe-parent."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(overflow-list) and the gap attribute."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useOverflow",
+          "target": "OverflowController",
+          "as": "controller",
+          "notes": "@tecton-astryx/core/controllers/overflow.js: the reactive wrapper; `computeOverflow` is the pure fit computation (upstream tests ported to overflow.node.test.ts)."
+        },
+        {"upstream": "computeOverflow", "target": "computeOverflow", "as": "module-function"}
+      ],
+      "keyboard": [],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "OVERFLOW-01",
+          "type": "approved-api-difference",
+          "text": "Items are the host's light-DOM children, measured in place (every item is revealed, read and re-hidden in one synchronous pass, so nothing flickers) instead of a hidden inert clone of all children: light-DOM nodes cannot be rendered in two places. Collapsed children get data-tct-overflow and are hidden with display: none, so they stay in the DOM but leave the tab order and the accessibility tree. Items are natural width (flex: none). Only the indicator is measured from a hidden inert copy, rendered for all items."
+        },
+        {
+          "id": "OVERFLOW-02",
+          "type": "approved-api-difference",
+          "text": "An indicator is drawn only when `overflowRenderer` is set (as upstream), or when the additive `show-count` attribute asks for the built-in \"+N\" chip, named \"N more\" through the new message @tct.overflow-list.overflow. `overflowRenderer` returns a template, a node or text rather than a ReactNode; OverflowItem is {element, index} (upstream {child, index})."
+        },
+        {
+          "id": "OVERFLOW-03",
+          "type": "approved-api-difference",
+          "text": "`onOverflowChange` is the non-cancelable notification event tct-overflow-change. Its reports are keyed on the collapsed items' indices and element identities (upstream: indices and React keys), so a membership or order change with the same count reports and an unrelated re-render does not; there is no separate callback identity to worry about."
+        },
+        {
+          "id": "OVERFLOW-04",
+          "type": "approved-api-difference",
+          "text": "The gap is read from the computed column gap of the row (the spacing token) rather than a px table, so a theme that retunes the spacing scale stays measured correctly. `behavior` values are kebab-case."
+        },
+        {
+          "id": "OVERFLOW-05",
+          "type": "a11y-improvement",
+          "text": "The row clips with `overflow: clip` and a clip margin of one focus-ring width plus offset (falling back to `hidden`), so a focus ring on an edge item is not cut off."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "tools/eslint-plugin-tct/rules/no-create-tct-element.ts",
+          "reason": "The rule flags every `new Tct*()`, including the library event classes (`new TctOverflowChangeEvent(...)`, which A§7.6 requires), so this element imports them under an alias. Exclude class names ending in `Event`.",
+          "diff": "if (node.callee.type === 'Identifier' && /^Tct[A-Z]/.test(node.callee.name) && !node.callee.name.endsWith('Event')) { ... }"
+        },
+        {
+          "file": "packages/locales/src/catalogs.node.test.ts",
+          "reason": "'English namespace modules > partition the English catalog by namespace' compares the merged dist/en modules to the upstream English catalog, so any first-party @tct.* message fails it (@tct.overflow-list.overflow here, and @tct.field.* from WP-F). Compare only the @astryx.* ids, and assert the @tct.* ids sit in the module named after their namespace.",
+          "diff": "expect(merged).toEqual(english) -> expect(Object.fromEntries(Object.entries(merged).filter(([id]) => id.startsWith('@astryx.')))).toEqual(english)"
+        }
+      ],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:size-aware-styling] and [mwg:css-layout] responsive by measuring the space given, not the viewport; [mwg:overflow-clipping-control] clip with a margin so focus rings survive; [mwg:accessible-web-components] hidden items leave the tree; [mwg:shadow-dom] slots and slotchange re-measure. The measurement is a single synchronous reveal-read-restore pass to avoid flicker."
+    }
+  }
+}

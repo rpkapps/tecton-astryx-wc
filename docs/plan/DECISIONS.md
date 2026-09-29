@@ -273,3 +273,30 @@ are confirmed native across the Tier-1 floor: Popover (Chrome 116, Firefox 125, 
 (125 / 126 / 17.4), `requestClose()` (134 / 139 / 18.4), `light-dark()`, and form-associated custom
 elements. CloseWatcher, `closedby`, `moveBefore`, `hidden="until-found"`, Sanitizer, invokers,
 `field-sizing` and `scrollbar-color` were already listed as enhancements.
+
+## D-015 — No upstream name in anything shipped; package scope `@tecton-wc/*` (2026-09-29)
+
+Owner decision: nothing named `tecton-astryx`, and the name "Astryx" appears nowhere in the public docs.
+
+- **Package scope** becomes `@tecton-wc/*`: `@tecton-wc/{tokens,core,icons,locales,components,testing,cli}`.
+  The GitHub repository name (`tecton-astryx-wc`) can only be changed by the owner.
+- **Scope of removal: everything that ships or renders.** This covers the docs site, generated pages,
+  `llms.txt` and `llms-full.txt`, the agent registry, component metadata (CEM) and the JSDoc that
+  feeds it, package names, user-facing strings and public ids. The shipped message ids `@astryx.*`
+  become `@tct.*`; the generator maps them and the upstream catalogs stay byte-identical. CSS part
+  descriptions and token labels are included.
+- **Internal engineering files may keep neutral upstream references:** `docs/plan/`,
+  `docs/ARCHITECTURE.md`, `parity.json`, tests and non-doc code comments. That keeps the parity
+  audit possible. New prose says "upstream".
+- **Parity status and differences pages** leave the public site. They are still generated as
+  internal reports under `reports/`.
+- **Licence notice.** MIT requires the copyright notice to accompany copies or substantial portions,
+  and the docs site adapts upstream documentation. The obligation applies once anything is made
+  public; nothing is public now (D-008).
+  - Default: a small footer-linked "Third-party notices" page. It shows "Portions Copyright (c) 2026
+    Meta Platforms, Inc." and the MIT text, without the project name. The owner asked whether it is
+    needed and may drop it until publication.
+  - `THIRD-PARTY-NOTICES.md` in the repository keeps full provenance.
+  - This is not legal advice; confirm before a public release.
+- Supersedes the `@tecton-astryx/*` naming in D-005, ARCHITECTURE and CONVENTIONS. The `tct-` tag and
+  event prefix is unchanged.

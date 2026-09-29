@@ -1,0 +1,12 @@
+<!-- title: Fill layout; description: layout="fill" stretches the control and shares the width equally; long labels truncate instead of overflowing. -->
+<div style="display: flex; flex-direction: column; gap: var(--spacing-3); max-inline-size: 28rem">
+  <tct-segmented-control label="Layout" layout="fill" value="overview">
+    <tct-segmented-control-item value="overview" label="Overview"></tct-segmented-control-item>
+    <tct-segmented-control-item value="activity" label="Activity"></tct-segmented-control-item>
+    <tct-segmented-control-item value="settings" label="Settings"></tct-segmented-control-item>
+  </tct-segmented-control>
+  <tct-segmented-control label="Truncation" layout="fill" value="a">
+    <tct-segmented-control-item value="a" label="A label that is far too long for its segment"></tct-segmented-control-item>
+    <tct-segmented-control-item value="b" label="Short"></tct-segmented-control-item>
+  </tct-segmented-control>
+</div>

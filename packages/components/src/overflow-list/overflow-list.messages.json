@@ -1,0 +1,6 @@
+{
+  "@tct.overflow-list.overflow": {
+    "defaultMessage": "{count, number} more",
+    "description": "Accessible name of the built-in \"+N\" indicator of an OverflowList: how many items are collapsed. The visible \"+N\" text is unaffected; this is the hidden text. Example: `3 more`."
+  }
+}

@@ -1,0 +1,16 @@
+<!-- title: Button and link rows; description: pressable makes the row a button, href makes it a link. A click anywhere on the row goes to the real button or anchor. -->
+<div id="interactive-root" style="display: grid; gap: var(--spacing-1); max-inline-size: 24rem">
+  <tct-item pressable label="Open the report" description="A button: Enter or Space activates it">
+    <tct-icon slot="start" name="info"></tct-icon>
+  </tct-item>
+  <tct-item
+    href="https://example.com/docs"
+    target="_blank"
+    label="Documentation"
+    description="A link that opens in a new tab (noopener noreferrer added)"
+  ></tct-item>
+  <tct-item pressable label="Row with an action" description="The nested button owns its own clicks">
+    <button slot="end" type="button">Archive</button>
+  </tct-item>
+  <tct-item pressable disabled label="Disabled" description="Takes no pointer or keyboard input"></tct-item>
+</div>

@@ -1,0 +1,8 @@
+<!-- title: Edge compensation; description: edge-compensation="inline" cancels the rows inline inset up to the container padding, so row text lines up with a heading above the list. -->
+<div style="--_container-padding-inline-start: var(--spacing-4); --_container-padding-inline-end: var(--spacing-4); padding: var(--spacing-4); max-inline-size: 24rem; border: var(--border-width) solid var(--color-border); border-radius: var(--radius-container)">
+  <strong style="display: block; margin-block-end: var(--spacing-2)">Section heading</strong>
+  <tct-list edge-compensation="inline">
+    <tct-list-item pressable label="Row text lines up with the heading"></tct-list-item>
+    <tct-list-item pressable label="Hover and selection still reach past the text"></tct-list-item>
+  </tct-list>
+</div>

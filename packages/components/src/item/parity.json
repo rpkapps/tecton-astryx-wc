@@ -1,0 +1,221 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "item",
+  "workPackage": "WP-5",
+  "entries": {
+    "core.item": {
+      "tag": "tct-item",
+      "status": "implemented",
+      "upstream": {"name": "Item", "path": "packages/core/src/Item/Item.tsx", "commit": "ca632c6"},
+      "api": [
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Plain text; rich content goes through slot=\"label\", which overrides the attribute."
+        },
+        {"upstream": "marker", "kind": "slot", "target": "marker", "as": "slot"},
+        {"upstream": "startContent", "kind": "slot", "target": "start", "as": "slot"},
+        {
+          "upstream": "description",
+          "kind": "prop",
+          "target": "description",
+          "as": "attribute",
+          "notes": "Plain text; rich content goes through slot=\"description\"."
+        },
+        {"upstream": "endContent", "kind": "slot", "target": "end", "as": "slot"},
+        {
+          "upstream": "as",
+          "kind": "prop",
+          "target": "as",
+          "as": "attribute",
+          "default": "div",
+          "notes": "li gives the host the listitem role (ElementInternals); div and span are generic."
+        },
+        {
+          "upstream": "align",
+          "kind": "prop",
+          "target": "alignment",
+          "as": "attribute",
+          "reflect": true,
+          "default": "center",
+          "notes": "`align` is never a public name (A§7.1: Chrome maps it to text-align)."
+        },
+        {
+          "upstream": "density",
+          "kind": "prop",
+          "target": "density",
+          "as": "attribute",
+          "reflect": true,
+          "default": "balanced"
+        },
+        {"upstream": "labelLines", "kind": "prop", "target": "label-lines", "as": "attribute"},
+        {
+          "upstream": "descriptionLines",
+          "kind": "prop",
+          "target": "description-lines",
+          "as": "attribute"
+        },
+        {
+          "upstream": "layout",
+          "kind": "prop",
+          "target": "layout",
+          "as": "attribute",
+          "reflect": true,
+          "default": "stacked"
+        },
+        {
+          "upstream": "onClick",
+          "kind": "event",
+          "target": "click",
+          "as": "native-event",
+          "notes": "Presence of a React handler made the row a button; the `pressable` attribute is that opt-in (ITEM-01)."
+        },
+        {
+          "upstream": "interactiveRef",
+          "kind": "prop",
+          "target": "interactiveElement",
+          "as": "property",
+          "notes": "Also declarative through the interactive-selector attribute (ITEM-02)."
+        },
+        {"upstream": "href", "kind": "prop", "target": "href", "as": "attribute"},
+        {"upstream": "target", "kind": "prop", "target": "target", "as": "attribute"},
+        {"upstream": "rel", "kind": "prop", "target": "rel", "as": "attribute"},
+        {
+          "upstream": "isHighlighted",
+          "kind": "prop",
+          "target": "highlighted",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "isSelected",
+          "kind": "prop",
+          "target": "selected",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "The host element is the ref (A§7.2): focus(), getBoundingClientRect() and the like act on the tct-item itself."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(item), --_item-* private hooks for parents, or the tokens."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "Any data-* attribute on the host is kept as authored; there is no dedicated prop."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useClickableContainer",
+          "target": "ClickableContainerController",
+          "as": "controller",
+          "notes": "@tecton-astryx/core/controllers/clickable-container.js: forwards surface clicks to the real action, skipping nested interactive elements."
+        },
+        {
+          "upstream": "ItemDescriptionContext",
+          "target": "itemDescriptionContext",
+          "as": "context",
+          "notes": "item/item.context.ts; carries the description text and, when slotted, the element (ITEM-05)."
+        },
+        {"upstream": "useDevWarning", "target": "devWarn", "as": "module-function"},
+        {
+          "upstream": "useLinkComponent",
+          "target": "linkContext",
+          "as": "context",
+          "notes": "Same-origin unmodified clicks are handed to linkContext.navigate()."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Moves focus to the row's button or link",
+          "when": "pressable or href"
+        },
+        {"keys": "Enter, Space", "action": "Activates the row button", "when": "pressable"},
+        {"keys": "Enter", "action": "Follows the row link", "when": "href"},
+        {
+          "keys": "Tab",
+          "action": "Moves focus to the nested control only, never to a second stop on the row",
+          "when": "delegating"
+        }
+      ],
+      "form": {
+        "formAssociated": false,
+        "notes": "Not a form control; a nested checkbox owns its own form participation."
+      },
+      "differences": [
+        {
+          "id": "ITEM-01",
+          "type": "approved-api-difference",
+          "text": "An element cannot observe whether an author attached a click listener, so `onClick != null` becomes the boolean `pressable` attribute. The native `click` event is emitted; a click on nested interactive content bubbles as its own click (check event.target) instead of being swallowed as in React."
+        },
+        {
+          "id": "ITEM-02",
+          "type": "approved-api-difference",
+          "text": "`interactiveRef` (a React ref) is the `interactiveElement` property, or declaratively the `interactive-selector` attribute resolved in the item's light DOM at click time."
+        },
+        {
+          "id": "ITEM-03",
+          "type": "approved-api-difference",
+          "text": "Upstream's `role` prop (a parent owns the keyboard access) is the host's own `role` attribute: with one, the row renders no inner button or anchor, treats `pressable` as look-only, and picks aria-selected or aria-current from it."
+        },
+        {
+          "id": "ITEM-04",
+          "type": "a11y-improvement",
+          "text": "A click anywhere on a pressable or link row is forwarded to the real button or anchor (ClickableContainerController), so padding, start and end areas navigate a link row, and modifier and middle clicks behave like the link. Upstream forwarded surface clicks to `onClick` only, so the padding of a link row did not navigate."
+        },
+        {
+          "id": "ITEM-05",
+          "type": "approved-api-difference",
+          "text": "ItemDescriptionContext published an element id. An IDREF cannot cross the item's shadow root, so the context publishes the description text and, when the author slotted the description, the element (same tree as a slotted control)."
+        },
+        {
+          "id": "ITEM-06",
+          "type": "tecton-visual",
+          "text": "The hover fill is the Tecton table-row hover role (--tecton-color-table-row-hover), as in tecton-astryx components.ts `item`; the pressed wash keeps --color-overlay-pressed."
+        },
+        {
+          "id": "ITEM-07",
+          "type": "approved-api-difference",
+          "text": "`as` selects semantics only: the host is always one custom element, so `as=\"li\"` is the listitem role through ElementInternals rather than an <li> tag."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components] host semantics through ElementInternals, aria-current vs aria-selected; [mwg:styling-web-components] inherited custom properties (--_item-inset-inline, --_item-label-color) cross the shadow boundary, ::slotted; [mwg:shadow-dom] slots, whitespace, slotchange; [mwg:css-layout] flex row with a min-inline-size chain for ellipsis; [mwg:content-based-styling] slot presence renders optional wrappers."
+    }
+  }
+}

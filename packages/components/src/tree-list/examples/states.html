@@ -1,0 +1,27 @@
+<!-- title: Selected, disabled and described items; description: isSelected marks the item (aria-selected) and seeds the tab stop; disabled items are skipped by the arrow keys; descriptions and end content sit beside the label. -->
+<div id="states-root" style="max-inline-size: 26rem">
+  <tct-tree-list header="Deployments"></tct-tree-list>
+  <script type="module">
+    const badge = (text) => {
+      const node = document.createElement('span');
+      node.textContent = text;
+      node.style.color = 'var(--color-text-secondary)';
+      return node;
+    };
+    document.querySelector('#states-root tct-tree-list').items = [
+      {
+        id: 'prod',
+        label: 'Production',
+        description: '3 services',
+        isExpanded: true,
+        endContent: badge('live'),
+        children: [
+          {id: 'api', label: 'API', description: 'v2.4.1', isSelected: true, endContent: badge('healthy')},
+          {id: 'worker', label: 'Worker', description: 'Paused by an operator', isDisabled: true},
+          {id: 'web', label: 'Web', description: 'v2.4.0'},
+        ],
+      },
+      {id: 'staging', label: 'Staging', description: 'Locked during the release', isDisabled: true, children: [{id: 'staging-api', label: 'API'}]},
+    ];
+  </script>
+</div>

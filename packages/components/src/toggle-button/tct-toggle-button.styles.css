@@ -1,0 +1,44 @@
+@layer component {
+  :host {
+    display: inline-flex;
+  }
+
+  .button {
+    flex: 1;
+  }
+}
+
+@layer state {
+  /*
+   * Tecton's "activated" toggle: a flat fill with a brighter ink. Painted on the inner button's part,
+   * and stated for hover and press too, because the ghost variant's own hover fill (darker than the
+   * activated one) would otherwise win on a pressed toggle and make hovering it look like turning it off.
+   * Outer-tree declarations beat the button's own shadow rules, whatever their layer.
+   */
+  .button[data-pressed]::part(button) {
+    background-color: var(--tecton-color-toggle-button-activated-fill);
+    background-image: none;
+    color: var(--tecton-color-toggle-button-activated-text);
+  }
+
+  @media (hover: hover) {
+    .button[data-pressed]::part(button):hover:not(:disabled, [aria-disabled='true']) {
+      background-color: var(--tecton-color-toggle-button-activated-hover-fill);
+    }
+  }
+
+  .button[data-pressed]::part(button):active:not(:disabled, [aria-disabled='true']) {
+    background-color: var(--tecton-color-toggle-button-activated-press-fill);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    /* Forced colours strips the fill, which would leave an icon-only toggle with no pressed cue at all. */
+    .button[data-pressed]::part(button) {
+      forced-color-adjust: none;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+  }
+}

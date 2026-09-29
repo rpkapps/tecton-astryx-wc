@@ -1,0 +1,139 @@
+/*
+ * tct-radio-indicator: the radio circle. Decorative. design/components/radio.md: "No accent colour is
+ * used for selection": an unchecked ring with a transparent centre; checked is a brighter ring plus a
+ * filled near-white dot (the Tecton checkbox fill role). The ring roles measure >= 3:1 against the
+ * surface in both modes (D-013 Q-05). Hover arrives through the inherited `--_indicator-hover`
+ * published by an owner's `indicator-scope` class (see tct-checkbox-indicator).
+ * [mwg:styling-web-components] [mwg:brand-consistent-forms]
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+
+  .circle {
+    --_surface: var(--tecton-color-component-input-outlined-background);
+    --_border: var(--tecton-color-checkbox-border);
+    --_border-hover: var(--tecton-color-checkbox-hover-border);
+    --_disabled-border: var(--tecton-color-checkbox-disabled-border);
+    --_checked-fill: var(--tecton-color-checkbox-checked-fill);
+    --_hover: var(--_indicator-hover, 0);
+
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+
+    /* design: the control circle is 24px (md) or 20px (sm), as upstream */
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    border: var(--border-width) solid var(--_border);
+    border-radius: var(--radius-full);
+    background-color: var(--_surface);
+  }
+
+  .circle[data-size='sm'] {
+    /* design: the control circle is 20px at sm */
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+  }
+
+  .circle[data-state='unchecked'] {
+    border-color: color-mix(
+      in srgb,
+      var(--_border),
+      var(--_border-hover) calc(var(--_hover) * 100%)
+    );
+    background-color: color-mix(
+      in srgb,
+      var(--_surface),
+      var(--color-tint-hover) calc(var(--_hover) * 5%)
+    );
+  }
+
+  /* Checked: the ring takes the chip colour and brightens from it; the centre stays the surface. */
+  .circle[data-state='checked'] {
+    border-color: color-mix(
+      in srgb,
+      var(--_checked-fill),
+      var(--color-tint-hover) calc(var(--_hover) * 15%)
+    );
+    background-color: var(--_surface);
+  }
+
+  .circle[data-disabled] {
+    border-color: var(--_disabled-border);
+    opacity: 0.5;
+  }
+
+  .circle[data-disabled][data-state='unchecked'] {
+    background-color: var(--color-background-muted);
+  }
+
+  .dot {
+    display: none;
+    border-radius: var(--radius-full);
+    background-color: var(--_checked-fill);
+
+    /* design: the dot is 10px (md) or 8px (sm) */
+    inline-size: 0.625rem;
+    block-size: 0.625rem;
+  }
+
+  .circle[data-size='sm'] .dot {
+    inline-size: 0.5rem;
+    block-size: 0.5rem;
+  }
+
+  .circle[data-state='checked'] .dot {
+    display: block;
+  }
+
+  /* A slotted child (a pending spinner) replaces the dot and keeps the circle. */
+  .circle[data-slotted] .dot {
+    display: none;
+  }
+
+  ::slotted(*) {
+    flex-shrink: 0;
+  }
+}
+
+@layer state {
+  @media (prefers-reduced-motion: no-preference) {
+    .circle {
+      transition:
+        background-color var(--duration-fast) var(--ease-standard),
+        border-color var(--duration-fast) var(--ease-standard);
+    }
+  }
+}
+
+@layer a11y {
+  /*
+   * Forced colours strips painted backgrounds, which would make the selected dot invisible: checked
+   * and unchecked radios would look identical. CanvasText keeps the dot perceivable on the Canvas
+   * circle (WCAG 1.4.11).
+   */
+  @media (forced-colors: active) {
+    .circle {
+      border-color: ButtonBorder;
+      background-color: Canvas;
+    }
+
+    .circle[data-state='checked'] {
+      border-color: Highlight;
+    }
+
+    .dot {
+      background-color: CanvasText;
+    }
+
+    .circle[data-disabled] {
+      border-color: GrayText;
+      opacity: 1;
+    }
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "internationalization-provider",
+  "workPackage": "WP-F",
+  "entries": {
+    "core.internationalization-provider": {
+      "tag": "tct-internationalization-provider",
+      "status": "implemented",
+      "upstream": {
+        "name": "InternationalizationProvider",
+        "path": "packages/core/src/i18n/InternationalizationProvider.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "locale",
+          "kind": "prop",
+          "target": "locale",
+          "as": "attribute",
+          "notes": "BCP 47 tag; reflected onto the provider as lang."
+        },
+        {
+          "upstream": "messages",
+          "kind": "prop",
+          "target": "messages",
+          "as": "property",
+          "notes": "Property only (an object). By locale tag; ICU strings or upstream-style {defaultMessage} entries."
+        },
+        {
+          "upstream": "overrides",
+          "kind": "prop",
+          "target": "overrides",
+          "as": "property",
+          "notes": "Property only (an object). Sparse per-locale overrides applied on top of every catalog."
+        },
+        {
+          "upstream": "dir",
+          "kind": "prop",
+          "target": "dir",
+          "as": "attribute",
+          "notes": "The native dir attribute (documented with @attr); it lays the subtree out and is what components read."
+        },
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"}
+      ],
+      "hooks": [
+        {
+          "upstream": "InternationalizationContext",
+          "target": "localeContext",
+          "as": "context",
+          "notes": "@tecton-astryx/core/context/keys.js: {locale, dir, messages, overrides}; the LocaleController is its only consumer."
+        },
+        {
+          "upstream": "useTranslator",
+          "target": "LocaleController",
+          "as": "controller",
+          "notes": "new LocaleController(host, {namespace, defaults}).t(key, args, overrideAttribute)."
+        },
+        {
+          "upstream": "useLocale",
+          "target": "LocaleController",
+          "as": "controller",
+          "notes": "LocaleController#locale: provider locale, else nearest [lang] across shadow roots, else <html lang>."
+        },
+        {
+          "upstream": "useCollator",
+          "target": "LocaleController",
+          "as": "controller",
+          "notes": "LocaleController#collator(options); cached per locale and options."
+        },
+        {
+          "upstream": "useDirection",
+          "target": "LocaleController",
+          "as": "controller",
+          "notes": "LocaleController#dir: the provider dir, else the host's computed direction."
+        },
+        {
+          "upstream": "getLocaleDirection",
+          "target": "getLocaleDirection",
+          "as": "module-function",
+          "notes": "@tecton-astryx/core/i18n/direction.js; same contract (Intl.Locale text info, then script and language lists)."
+        }
+      ],
+      "differences": [
+        {
+          "id": "I18NPROVIDER-01",
+          "type": "approved-api-difference",
+          "text": "The provider reflects the locale onto itself as lang (CSS :lang(), assistive technology and Intl agree with the components), and dir is the native attribute, which also lays the subtree out. Upstream set neither on the DOM and told authors to set dir on <html> themselves."
+        },
+        {
+          "id": "I18NPROVIDER-02",
+          "type": "approved-api-difference",
+          "text": "The direction components read is the explicit dir attribute, else the computed direction of the host. It is not derived from the locale (upstream: dir ?? getLocaleDirection(locale)), so an RTL locale without dir keeps layout and component logic (arrow keys, popup placement) in agreement; set dir with an RTL locale."
+        },
+        {
+          "id": "I18NPROVIDER-03",
+          "type": "approved-api-difference",
+          "text": "The upstream provider exposed a translate function resolved at render time. Here the LocaleController resolves per component in the order attribute, overrides, provider messages, shipped catalog, English default, and shipped catalogs load on demand."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "events": true,
+        "rtl": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:custom-elements] provider without a shadow root, attributeChangedCallback for the native dir; [mwg:accessible-web-components] lang reflected so pronunciation follows the locale; [mwg:styling-web-components] light-DOM sheet adopted once per root."
+    }
+  }
+}

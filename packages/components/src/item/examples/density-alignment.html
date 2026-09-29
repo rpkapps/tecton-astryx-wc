@@ -1,0 +1,14 @@
+<!-- title: Density and alignment; description: compact, balanced and spacious rows, and start alignment for tall start content. -->
+<div style="display: grid; gap: var(--spacing-3); max-inline-size: 24rem">
+  <tct-item density="compact" label="Compact" description="4px block padding"></tct-item>
+  <tct-item density="balanced" label="Balanced" description="8px block padding (default)"></tct-item>
+  <tct-item density="spacious" label="Spacious" description="12px block and inline padding"></tct-item>
+  <tct-item
+    alignment="start"
+    label="Start aligned"
+    description="The start and end content sit against the first line, not the middle of two lines"
+  >
+    <tct-icon slot="start" name="info"></tct-icon>
+    <span slot="end" style="color: var(--color-text-secondary)">Draft</span>
+  </tct-item>
+</div>

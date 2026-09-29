@@ -1,0 +1,15 @@
+<!-- title: Live region; description: An aria-live host announces changes to its text without painting them. -->
+<div style="position: relative; display: flex; align-items: center; gap: var(--spacing-4)">
+  <button type="button" id="vh-move">Move task to Done</button>
+  <tct-visually-hidden id="vh-live" aria-live="polite" role="status"></tct-visually-hidden>
+  <tct-text type="body" color="secondary">Press the button; only assistive technology announces the result.</tct-text>
+</div>
+<script type="module">
+  const button = document.getElementById('vh-move');
+  const live = document.getElementById('vh-live');
+  let moves = 0;
+  button?.addEventListener('click', () => {
+    moves += 1;
+    if (live) live.textContent = `Moved task to Done (${moves})`;
+  });
+</script>

@@ -1,0 +1,29 @@
+<!-- title: Programmatic control and rich header; description: expand(), collapse(), toggle(), isExpanded() and focusItem() drive the tree without firing tct-tree-toggle; the header slot takes rich content. -->
+<div id="programmatic-root" style="display: grid; gap: var(--spacing-3); max-inline-size: 26rem">
+  <div style="display: flex; gap: var(--spacing-2); flex-wrap: wrap">
+    <button type="button" data-action="expand">Expand all</button>
+    <button type="button" data-action="collapse">Collapse all</button>
+    <button type="button" data-action="focus">Focus Logs</button>
+  </div>
+  <tct-tree-list>
+    <strong slot="header">Build artefacts</strong>
+  </tct-tree-list>
+  <script type="module">
+    const root = document.getElementById('programmatic-root');
+    const tree = root.querySelector('tct-tree-list');
+    const branches = ['dist', 'maps', 'reports'];
+    tree.items = [
+      {id: 'dist', label: 'dist', children: [{id: 'bundle', label: 'bundle.js'}, {id: 'maps', label: 'maps', children: [{id: 'bundle-map', label: 'bundle.js.map'}]}]},
+      {id: 'reports', label: 'reports', children: [{id: 'logs', label: 'Logs'}, {id: 'coverage', label: 'Coverage'}]},
+    ];
+    root.addEventListener('click', (event) => {
+      const action = event.target.closest('[data-action]')?.dataset.action;
+      if (action === 'expand') for (const id of branches) tree.expand(id);
+      if (action === 'collapse') for (const id of branches) tree.collapse(id);
+      if (action === 'focus') {
+        tree.expand('reports');
+        tree.updateComplete.then(() => tree.focusItem('logs'));
+      }
+    });
+  </script>
+</div>
