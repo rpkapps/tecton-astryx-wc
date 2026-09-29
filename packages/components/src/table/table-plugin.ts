@@ -50,12 +50,19 @@ export abstract class TablePluginController<T extends Record<string, unknown>, C
     if (value === this.#config) return;
     this.#config = value;
     this.#subscribe();
-    this.refresh();
+    this.refresh({rows: true});
   }
 
-  /** Re-renders every table this plugin is on, and the Lit host that owns it. */
-  refresh(): void {
-    for (const table of this.#tables) table.requestUpdate();
+  /**
+   * Re-renders every table this plugin is on, and the Lit host that owns it. Rows are rebuilt only when
+   * their item or a `rowSignature` value changed; pass `{rows: true}` when the change affects every
+   * row in a way no signature covers (a different set of pinned columns, an indent step).
+   */
+  refresh(options: {rows?: boolean} = {}): void {
+    for (const table of this.#tables) {
+      if (options.rows) table.invalidateRows();
+      else table.requestUpdate();
+    }
     this.#host?.requestUpdate();
   }
 
@@ -95,5 +102,42 @@ export abstract class TablePluginController<T extends Record<string, unknown>, C
         this.refresh();
       });
     }
+  }
+}
+
+/**
+ * Base of the state controllers (`TableSortableStateController`, `TableSelectionStateController`, ...):
+ * they own state, derive data, implement the config interface of the plugin they feed, and tell that
+ * plugin (through `subscribe`) and their Lit host after every change.
+ */
+export abstract class TableStateController implements TableConfigSource, ReactiveController {
+  readonly #listeners = new Set<() => void>();
+  readonly #host: ReactiveControllerHost | null;
+
+  constructor(host: ReactiveControllerHost | null) {
+    this.#host = host;
+    host?.addController(this);
+  }
+
+  /** Registers a listener called after every state change; returns the unsubscribe function. */
+  subscribe(listener: () => void): () => void {
+    this.#listeners.add(listener);
+    return () => {
+      this.#listeners.delete(listener);
+    };
+  }
+
+  /** Notifies the plugins fed by this state and the Lit host. */
+  protected notify(): void {
+    for (const listener of [...this.#listeners]) listener();
+    this.#host?.requestUpdate();
+  }
+
+  hostConnected(): void {
+    // Nothing to set up: state is plain data.
+  }
+
+  hostDisconnected(): void {
+    // Nothing to release.
   }
 }

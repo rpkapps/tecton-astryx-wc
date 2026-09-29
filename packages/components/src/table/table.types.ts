@@ -298,6 +298,8 @@ export interface TablePlugin<T extends Record<string, unknown> = Record<string, 
   rowSignature?: (item: T, index: number) => unknown;
   /** Called when the plugin is put on a table (`plugins` property); returns nothing. */
   attach?: (table: TablePluginHost) => void;
+  /** Called after every table update, once the DOM matches the render (measure, announce, observe). */
+  updated?: (table: TablePluginHost) => void;
   /** Called when the plugin is removed from a table, or the table disconnects. */
   detach?: (table: TablePluginHost) => void;
 }
@@ -308,6 +310,8 @@ export interface TablePluginHost {
   readonly element: HTMLElement;
   /** Re-render the table. */
   requestUpdate(): void;
+  /** Re-render the table and rebuild every row (a change that affects all rows, not just the ones a signature covers). */
+  invalidateRows(): void;
   /** Text direction of the table, from computed style. */
   readonly dir: 'ltr' | 'rtl';
   /** Localised message by full id (`@tct.table.sort.ascending`). */

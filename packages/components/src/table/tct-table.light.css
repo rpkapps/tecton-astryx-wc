@@ -349,12 +349,9 @@
     transform: rotate(90deg);
   }
 
+  /* The chevron icon already mirrors itself in right-to-left; the open state turns it the other way. */
   :where(tct-table) :where(.tct-table-expander[aria-expanded='true'] tct-icon:dir(rtl)) {
-    transform: scaleX(-1) rotate(90deg);
-  }
-
-  :where(tct-table) :where(.tct-table-expander[aria-expanded='false'] tct-icon:dir(rtl)) {
-    transform: scaleX(-1);
+    transform: rotate(-90deg);
   }
 
   /* The header expand-all control reads a downward chevron only when every row is open. */

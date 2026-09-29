@@ -24,3 +24,52 @@ export {
   TctTableHeaderCell,
   TctTableRow,
 };
+
+export {tableContext, TableContext} from './table.context.js';
+export {resolveContextActions, toMenuOptions} from './table.context-menu.js';
+export {BaseTablePlugins, TABLE_PLUGIN_ORDER, applyPlugins} from './table.pipeline.js';
+export {
+  DEFAULT_MIN_COLUMN_WIDTH,
+  capitalize,
+  generateColumns,
+  pixel,
+  proportional,
+  resolveColumnWidths,
+} from './table.utils.js';
+export {tableProps, contextActionsOf} from './table-props.directive.js';
+export {TablePluginController, TableStateController} from './table-plugin.js';
+export {TableSortableController} from './plugins/sortable.js';
+export {TableSortableStateController, sortRows} from './plugins/sortable-state.js';
+export type {
+  TableSortableConfig,
+  TableSortDirection,
+  TableSortEntry,
+  TableSortState,
+} from './plugins/sortable.js';
+export type {TableSortableStateOptions, TableSortComparator} from './plugins/sortable-state.js';
+export type {
+  BodyCellRenderProps,
+  BodyRowRenderProps,
+  ColumnWidth,
+  HeaderCellRenderProps,
+  HeaderRowRenderProps,
+  PixelWidth,
+  ProportionalWidth,
+  ScrollWrapperRenderProps,
+  TableColumn,
+  TableColumnAlign,
+  TableContent,
+  TableContextAction,
+  TableContextActions,
+  TableContextValue,
+  TableDensity,
+  TableDividers,
+  TableHtmlProps,
+  TablePlugin,
+  TablePluginHost,
+  TablePluginRecord,
+  TableRenderProps,
+  TableSortableColumnConfig,
+  TableTextOverflow,
+  TableVerticalAlign,
+} from './table.types.js';

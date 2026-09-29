@@ -6,33 +6,146 @@
     "core.table": {
       "tag": "tct-table",
       "status": "in-progress",
-      "upstream": {"name": "Table", "path": "packages/core/src/Table/Table.tsx", "commit": "ca632c6"},
+      "upstream": {
+        "name": "Table",
+        "path": "packages/core/src/Table/Table.tsx",
+        "commit": "ca632c6"
+      },
       "api": [
-        {"upstream": "data", "kind": "prop", "target": "data", "as": "property", "notes": "Property only; `T` is any object type."},
-        {"upstream": "columns", "kind": "prop", "target": "columns", "as": "property", "notes": "Omitted with `data` set: generated from the first row's keys (`generateColumns`)."},
-        {"upstream": "idKey", "kind": "prop", "target": "idKey", "as": "property", "notes": "Property (name or function); the `id-key` attribute accepts the property-name form."},
-        {"upstream": "density", "kind": "prop", "target": "density", "as": "attribute", "reflect": true, "default": "balanced"},
-        {"upstream": "dividers", "kind": "prop", "target": "dividers", "as": "attribute", "reflect": true, "default": "rows"},
-        {"upstream": "isStriped", "kind": "prop", "target": "striped", "as": "attribute", "reflect": true, "default": false},
-        {"upstream": "hasHover", "kind": "prop", "target": "hasHover", "as": "attribute", "reflect": true, "default": false, "notes": "`has-hover`."},
-        {"upstream": "verticalAlign", "kind": "prop", "target": "verticalAlign", "as": "attribute", "reflect": true, "default": "middle", "notes": "`vertical-align`."},
-        {"upstream": "textOverflow", "kind": "prop", "target": "textOverflow", "as": "attribute", "reflect": true, "default": "wrap", "notes": "`text-overflow`."},
-        {"upstream": "plugins", "kind": "prop", "target": "plugins", "as": "property", "notes": "Record of plugin controllers; only its values are compared, so an inline record is fine."},
-        {"upstream": "rowIndexStart", "kind": "prop", "target": "rowIndexStart", "as": "attribute", "notes": "`row-index-start`."},
-        {"upstream": "rowCount", "kind": "prop", "target": "rowCount", "as": "attribute", "notes": "`row-count`."},
-        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot", "notes": "Children mode: authored light DOM (a native `<table>`, or tct-table-* parts). Light DOM has no slots; the content stays where the author put it."},
-        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style, the table's light-DOM parts (`tct-table th`), custom properties and tokens."}
+        {
+          "upstream": "data",
+          "kind": "prop",
+          "target": "data",
+          "as": "property",
+          "notes": "Property only; `T` is any object type."
+        },
+        {
+          "upstream": "columns",
+          "kind": "prop",
+          "target": "columns",
+          "as": "property",
+          "notes": "Omitted with `data` set: generated from the first row's keys (`generateColumns`)."
+        },
+        {
+          "upstream": "idKey",
+          "kind": "prop",
+          "target": "idKey",
+          "as": "property",
+          "notes": "Property (name or function); the `id-key` attribute accepts the property-name form."
+        },
+        {
+          "upstream": "density",
+          "kind": "prop",
+          "target": "density",
+          "as": "attribute",
+          "reflect": true,
+          "default": "balanced"
+        },
+        {
+          "upstream": "dividers",
+          "kind": "prop",
+          "target": "dividers",
+          "as": "attribute",
+          "reflect": true,
+          "default": "rows"
+        },
+        {
+          "upstream": "isStriped",
+          "kind": "prop",
+          "target": "striped",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "hasHover",
+          "kind": "prop",
+          "target": "hasHover",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "`has-hover`."
+        },
+        {
+          "upstream": "verticalAlign",
+          "kind": "prop",
+          "target": "verticalAlign",
+          "as": "attribute",
+          "reflect": true,
+          "default": "middle",
+          "notes": "`vertical-align`."
+        },
+        {
+          "upstream": "textOverflow",
+          "kind": "prop",
+          "target": "textOverflow",
+          "as": "attribute",
+          "reflect": true,
+          "default": "wrap",
+          "notes": "`text-overflow`."
+        },
+        {
+          "upstream": "plugins",
+          "kind": "prop",
+          "target": "plugins",
+          "as": "property",
+          "notes": "Record of plugin controllers; only its values are compared, so an inline record is fine."
+        },
+        {
+          "upstream": "rowIndexStart",
+          "kind": "prop",
+          "target": "rowIndexStart",
+          "as": "attribute",
+          "notes": "`row-index-start`."
+        },
+        {
+          "upstream": "rowCount",
+          "kind": "prop",
+          "target": "rowCount",
+          "as": "attribute",
+          "notes": "`row-count`."
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "Children mode: authored light DOM (a native `<table>`, or tct-table-* parts). Light DOM has no slots; the content stays where the author put it."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, the table's light-DOM parts (`tct-table th`), custom properties and tokens."
+        }
       ],
       "hooks": [
-        {"upstream": "useScrollableArea", "target": "TctTable#scrollable", "as": "controller", "notes": "Implemented inside the table: a shared ResizeObserver decides whether the scroll region overflows; only then is it focusable and does it contain overscroll."},
+        {
+          "upstream": "useScrollableArea",
+          "target": "TctTable#scrollable",
+          "as": "controller",
+          "notes": "Implemented inside the table: a shared ResizeObserver decides whether the scroll region overflows; only then is it focusable and does it contain overscroll."
+        },
         {"upstream": "TableContext", "target": "tableContext", "as": "context"},
         {"upstream": "useBaseTablePlugins", "target": "BaseTablePlugins", "as": "controller"},
         {"upstream": "proportional", "target": "proportional", "as": "module-function"},
         {"upstream": "pixel", "target": "pixel", "as": "module-function"},
         {"upstream": "generateColumns", "target": "generateColumns", "as": "module-function"},
-        {"upstream": "resolveColumnWidths", "target": "resolveColumnWidths", "as": "module-function"},
-        {"upstream": "DEFAULT_MIN_COLUMN_WIDTH", "target": "DEFAULT_MIN_COLUMN_WIDTH", "as": "module-function"},
-        {"upstream": "resolveContextActions", "target": "resolveContextActions", "as": "module-function"}
+        {
+          "upstream": "resolveColumnWidths",
+          "target": "resolveColumnWidths",
+          "as": "module-function"
+        },
+        {
+          "upstream": "DEFAULT_MIN_COLUMN_WIDTH",
+          "target": "DEFAULT_MIN_COLUMN_WIDTH",
+          "as": "module-function"
+        },
+        {
+          "upstream": "resolveContextActions",
+          "target": "resolveContextActions",
+          "as": "module-function"
+        }
       ],
       "keyboard": [],
       "form": {"formAssociated": false},
@@ -78,7 +191,17 @@
           "text": "An empty table (no `data` and no `columns`) renders nothing instead of an empty <table>; `data=[]` with columns renders the empty state row."
         }
       ],
-      "tests": {"render": true, "a11y": true, "api": true, "keyboard": false, "form": false, "events": false, "rtl": false, "forcedColors": false, "i18n": false},
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": false,
+        "rtl": false,
+        "forcedColors": false,
+        "i18n": false
+      },
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
@@ -92,16 +215,39 @@
     "core.table-header": {
       "tag": "tct-table-header",
       "status": "in-progress",
-      "upstream": {"name": "TableHeader", "path": "packages/core/src/Table/TableHeader.tsx", "commit": "ca632c6"},
+      "upstream": {
+        "name": "TableHeader",
+        "path": "packages/core/src/Table/TableHeader.tsx",
+        "commit": "ca632c6"
+      },
       "api": [
         {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
-        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style and the table's light-DOM parts."}
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style and the table's light-DOM parts."
+        }
       ],
       "keyboard": [],
       "differences": [
-        {"id": "TABLEHEADER-01", "type": "approved-api-difference", "text": "See TABLE-01: an ARIA rowgroup laid out as a table header group for declarative children mode; the data-driven renderer emits a native <thead>."}
+        {
+          "id": "TABLEHEADER-01",
+          "type": "approved-api-difference",
+          "text": "See TABLE-01: an ARIA rowgroup laid out as a table header group for declarative children mode; the data-driven renderer emits a native <thead>."
+        }
       ],
-      "tests": {"render": true, "a11y": true, "api": true, "keyboard": false, "form": false, "events": false, "rtl": false, "forcedColors": false, "i18n": false},
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": false,
+        "rtl": false,
+        "forcedColors": false,
+        "i18n": false
+      },
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
@@ -110,16 +256,39 @@
     "core.table-body": {
       "tag": "tct-table-body",
       "status": "in-progress",
-      "upstream": {"name": "TableBody", "path": "packages/core/src/Table/TableBody.tsx", "commit": "ca632c6"},
+      "upstream": {
+        "name": "TableBody",
+        "path": "packages/core/src/Table/TableBody.tsx",
+        "commit": "ca632c6"
+      },
       "api": [
         {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
-        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style and the table's light-DOM parts."}
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style and the table's light-DOM parts."
+        }
       ],
       "keyboard": [],
       "differences": [
-        {"id": "TABLEBODY-01", "type": "approved-api-difference", "text": "See TABLE-01: an ARIA rowgroup laid out as a table row group for declarative children mode; the data-driven renderer emits a native <tbody>."}
+        {
+          "id": "TABLEBODY-01",
+          "type": "approved-api-difference",
+          "text": "See TABLE-01: an ARIA rowgroup laid out as a table row group for declarative children mode; the data-driven renderer emits a native <tbody>."
+        }
       ],
-      "tests": {"render": true, "a11y": true, "api": true, "keyboard": false, "form": false, "events": false, "rtl": false, "forcedColors": false, "i18n": false},
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": false,
+        "rtl": false,
+        "forcedColors": false,
+        "i18n": false
+      },
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
@@ -128,16 +297,39 @@
     "core.table-footer": {
       "tag": "tct-table-footer",
       "status": "in-progress",
-      "upstream": {"name": "TableFooter", "path": "packages/core/src/Table/TableFooter.tsx", "commit": "ca632c6"},
+      "upstream": {
+        "name": "TableFooter",
+        "path": "packages/core/src/Table/TableFooter.tsx",
+        "commit": "ca632c6"
+      },
       "api": [
         {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
-        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style and the table's light-DOM parts."}
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style and the table's light-DOM parts."
+        }
       ],
       "keyboard": [],
       "differences": [
-        {"id": "TABLEFOOTER-01", "type": "approved-api-difference", "text": "See TABLE-01: an ARIA rowgroup laid out as a table footer group for declarative children mode; native markup uses <tfoot>."}
+        {
+          "id": "TABLEFOOTER-01",
+          "type": "approved-api-difference",
+          "text": "See TABLE-01: an ARIA rowgroup laid out as a table footer group for declarative children mode; native markup uses <tfoot>."
+        }
       ],
-      "tests": {"render": true, "a11y": true, "api": true, "keyboard": false, "form": false, "events": false, "rtl": false, "forcedColors": false, "i18n": false},
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": false,
+        "rtl": false,
+        "forcedColors": false,
+        "i18n": false
+      },
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
@@ -146,17 +338,48 @@
     "core.table-row": {
       "tag": "tct-table-row",
       "status": "in-progress",
-      "upstream": {"name": "TableRow", "path": "packages/core/src/Table/TableRow.tsx", "commit": "ca632c6"},
+      "upstream": {
+        "name": "TableRow",
+        "path": "packages/core/src/Table/TableRow.tsx",
+        "commit": "ca632c6"
+      },
       "api": [
         {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
-        {"upstream": "isHeaderRow", "kind": "prop", "target": "headerRow", "as": "attribute", "reflect": true, "default": false, "notes": "`header-row`."},
-        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style and the table's light-DOM parts."}
+        {
+          "upstream": "isHeaderRow",
+          "kind": "prop",
+          "target": "headerRow",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "`header-row`."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style and the table's light-DOM parts."
+        }
       ],
       "keyboard": [],
       "differences": [
-        {"id": "TABLEROW-01", "type": "approved-api-difference", "text": "See TABLE-01: an ARIA row for declarative children mode; the data-driven renderer emits a native <tr>. `contextMenuActions` (row-level right-click actions) is added, see TABLE-05."}
+        {
+          "id": "TABLEROW-01",
+          "type": "approved-api-difference",
+          "text": "See TABLE-01: an ARIA row for declarative children mode; the data-driven renderer emits a native <tr>. `contextMenuActions` (row-level right-click actions) is added, see TABLE-05."
+        }
       ],
-      "tests": {"render": true, "a11y": true, "api": true, "keyboard": false, "form": false, "events": false, "rtl": false, "forcedColors": false, "i18n": false},
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": false,
+        "rtl": false,
+        "forcedColors": false,
+        "i18n": false
+      },
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
@@ -165,21 +388,74 @@
     "core.table-cell": {
       "tag": "tct-table-cell",
       "status": "in-progress",
-      "upstream": {"name": "TableCell", "path": "packages/core/src/Table/TableCell.tsx", "commit": "ca632c6"},
+      "upstream": {
+        "name": "TableCell",
+        "path": "packages/core/src/Table/TableCell.tsx",
+        "commit": "ca632c6"
+      },
       "api": [
         {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
-        {"upstream": "scope", "kind": "prop", "target": "scope", "as": "attribute", "reflect": true, "notes": "Sets the ARIA role: `row` a rowheader, `col` a columnheader."},
-        {"upstream": "headers", "kind": "prop", "target": "headers", "as": "attribute", "notes": "Kept as an attribute for native-table parity; ARIA has no equivalent of `headers`."},
-        {"upstream": "colSpan", "kind": "prop", "target": "colSpan", "as": "attribute", "notes": "`col-span`: `aria-colspan` only; CSS cannot span table-cell columns, so a visibly spanning cell belongs in native <table> markup."},
-        {"upstream": "rowSpan", "kind": "prop", "target": "rowSpan", "as": "attribute", "notes": "`row-span`: `aria-rowspan` only (see colSpan)."},
-        {"upstream": "contextMenuActions", "kind": "prop", "target": "contextMenuActions", "as": "property"},
-        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style and the table's light-DOM parts."}
+        {
+          "upstream": "scope",
+          "kind": "prop",
+          "target": "scope",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Sets the ARIA role: `row` a rowheader, `col` a columnheader."
+        },
+        {
+          "upstream": "headers",
+          "kind": "prop",
+          "target": "headers",
+          "as": "attribute",
+          "notes": "Kept as an attribute for native-table parity; ARIA has no equivalent of `headers`."
+        },
+        {
+          "upstream": "colSpan",
+          "kind": "prop",
+          "target": "colSpan",
+          "as": "attribute",
+          "notes": "`col-span`: `aria-colspan` only; CSS cannot span table-cell columns, so a visibly spanning cell belongs in native <table> markup."
+        },
+        {
+          "upstream": "rowSpan",
+          "kind": "prop",
+          "target": "rowSpan",
+          "as": "attribute",
+          "notes": "`row-span`: `aria-rowspan` only (see colSpan)."
+        },
+        {
+          "upstream": "contextMenuActions",
+          "kind": "prop",
+          "target": "contextMenuActions",
+          "as": "property"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style and the table's light-DOM parts."
+        }
       ],
       "keyboard": [],
       "differences": [
-        {"id": "TABLECELL-01", "type": "approved-api-difference", "text": "See TABLE-01: an ARIA cell for declarative children mode; the data-driven renderer emits a native <td>. The upstream per-cell ContextMenu wrapper is replaced by the table's shared menu, see TABLE-05."}
+        {
+          "id": "TABLECELL-01",
+          "type": "approved-api-difference",
+          "text": "See TABLE-01: an ARIA cell for declarative children mode; the data-driven renderer emits a native <td>. The upstream per-cell ContextMenu wrapper is replaced by the table's shared menu, see TABLE-05."
+        }
       ],
-      "tests": {"render": true, "a11y": true, "api": true, "keyboard": false, "form": false, "events": false, "rtl": false, "forcedColors": false, "i18n": false},
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": false,
+        "rtl": false,
+        "forcedColors": false,
+        "i18n": false
+      },
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
@@ -188,18 +464,53 @@
     "core.table-header-cell": {
       "tag": "tct-table-header-cell",
       "status": "in-progress",
-      "upstream": {"name": "TableHeaderCell", "path": "packages/core/src/Table/TableHeaderCell.tsx", "commit": "ca632c6"},
+      "upstream": {
+        "name": "TableHeaderCell",
+        "path": "packages/core/src/Table/TableHeaderCell.tsx",
+        "commit": "ca632c6"
+      },
       "api": [
         {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
-        {"upstream": "scope", "kind": "prop", "target": "scope", "as": "attribute", "reflect": true, "notes": "`row` makes it a rowheader; default columnheader."},
-        {"upstream": "contextMenuActions", "kind": "prop", "target": "contextMenuActions", "as": "property"},
-        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style and the table's light-DOM parts."}
+        {
+          "upstream": "scope",
+          "kind": "prop",
+          "target": "scope",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "`row` makes it a rowheader; default columnheader."
+        },
+        {
+          "upstream": "contextMenuActions",
+          "kind": "prop",
+          "target": "contextMenuActions",
+          "as": "property"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style and the table's light-DOM parts."
+        }
       ],
       "keyboard": [],
       "differences": [
-        {"id": "TABLEHEADERCELL-01", "type": "approved-api-difference", "text": "See TABLE-01: an ARIA columnheader for declarative children mode; the data-driven renderer emits a native <th scope=\"col\">."}
+        {
+          "id": "TABLEHEADERCELL-01",
+          "type": "approved-api-difference",
+          "text": "See TABLE-01: an ARIA columnheader for declarative children mode; the data-driven renderer emits a native <th scope=\"col\">."
+        }
       ],
-      "tests": {"render": true, "a11y": true, "api": true, "keyboard": false, "form": false, "events": false, "rtl": false, "forcedColors": false, "i18n": false},
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": false,
+        "rtl": false,
+        "forcedColors": false,
+        "i18n": false
+      },
       "provisional": [],
       "tokenRequests": [],
       "requests": [],

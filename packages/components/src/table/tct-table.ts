@@ -292,6 +292,10 @@ export class TctTable<T extends Row = Row> extends TctElement {
       requestUpdate: () => {
         this.requestUpdate();
       },
+      invalidateRows: () => {
+        this.#rowRevision += 1;
+        this.requestUpdate();
+      },
       get dir() {
         return table.direction;
       },
@@ -396,6 +400,7 @@ export class TctTable<T extends Row = Row> extends TctElement {
     this.#syncHostScrollRegion();
     this.#observeScroll();
     this.#advanceProgress();
+    for (const plugin of this.#resolved) plugin.updated?.(this.#pluginHost);
   }
 
   protected override async getUpdateComplete(): Promise<boolean> {
@@ -435,11 +440,7 @@ export class TctTable<T extends Row = Row> extends TctElement {
     this.#attached = next;
   }
 
-  #revision(): number {
-    let revision = 0;
-    for (const plugin of this.#resolved) revision += (plugin as {revision?: number}).revision ?? 0;
-    return revision;
-  }
+  #rowRevision = 0;
 
   // --------------------------------------------------------------------------- progressive render
 
@@ -802,7 +803,7 @@ export class TctTable<T extends Row = Row> extends TctElement {
     const visible = this.#limit < data.length ? data.slice(0, this.#limit) : data;
     const indexing = this.rowIndexStart != null || this.rowCount != null;
     const first = this.rowIndexStart ?? 1;
-    const revision = this.#revision();
+    const revision = this.#rowRevision;
     const overflow = this.textOverflow;
     const signers = plugins.filter((plugin) => typeof plugin.rowSignature === 'function');
     const pending = data.length - visible.length;
