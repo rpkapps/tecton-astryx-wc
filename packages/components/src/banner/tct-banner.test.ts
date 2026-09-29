@@ -17,6 +17,7 @@ import {isChromium} from '@tecton-astryx/testing/tier.js';
 import {aTimeout, nextFrame} from '@tecton-astryx/testing/timing.js';
 import type {TctButton} from '../button/tct-button.js';
 import {BANNER_STATUSES} from './banner.types.js';
+import '../link/define.js';
 import './define.js';
 import type {TctBanner} from './tct-banner.js';
 
@@ -552,6 +553,51 @@ describe('tct-banner: colour and contrast on the filled statuses', () => {
     expect(
       contrast(getComputedStyle(control(dismiss)).color, header.backgroundColor),
     ).toBeGreaterThanOrEqual(3);
+  });
+});
+
+describe('tct-banner: links in banner content', () => {
+  // A plain <a> in the light DOM takes the UA link colour (#0000ee light, #9e9eff dark: 1.5:1 on the info
+  // fill). ::slotted() reaches only the top-level slotted element, so a light-DOM sheet styles the links.
+  const withLinks = (): string => `
+    <span slot="heading">Read <a href="#h">the heading link</a></span>
+    <span slot="description">Open the <a href="#d">production summary</a> or <a href="#e">docs</a>.</span>
+    <a slot="end" href="#end">Details</a>`;
+
+  it
+    .skipIf(!isChromium)
+    .each(
+      BANNER_STATUSES.flatMap((status) =>
+        (['light', 'dark'] as const).map((scheme) => [status, scheme]),
+      ),
+    )(
+    'a plain link in the %s banner is readable and underlined (%s, axe color-contrast)',
+    async (status, scheme) => {
+      await emulateMedia({colorScheme: scheme as 'light' | 'dark'});
+      const banner = await make(`status="${status}"`, withLinks());
+      const wrapper = banner.parentElement!;
+      wrapper.style.colorScheme = scheme;
+      wrapper.style.backgroundColor = 'var(--color-background-body)';
+      const results = await expectAccessible(wrapper, {
+        runOnly: ['color-contrast', 'link-in-text-block'],
+      });
+      expect(results.passes.some((rule) => rule.id === 'color-contrast')).toBe(true);
+      for (const link of banner.querySelectorAll('a')) {
+        expect(getComputedStyle(link).textDecorationLine).toBe('underline');
+      }
+    },
+  );
+
+  it('a tct-link in the banner content takes the ink colour', async () => {
+    const banner = await make(
+      'status="info"',
+      '<span slot="description">Open <tct-link href="#x">the summary</tct-link></span>',
+    );
+    const link = banner.querySelector('tct-link')!;
+    await (link as HTMLElement & {updateComplete: Promise<boolean>}).updateComplete;
+    const header = getComputedStyle(shadow(banner, '.header')!);
+    const root = link.shadowRoot!.querySelector<HTMLElement>('.root')!;
+    expect(getComputedStyle(root).color).toBe(header.color);
   });
 });
 

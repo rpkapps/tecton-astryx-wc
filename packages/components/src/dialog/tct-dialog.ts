@@ -53,7 +53,8 @@ const cssDuration = (element: Element, token: string, fallback: number): number 
  * a dialog, listen, `preventDefault()` and set `open` yourself.
  *
  * `purpose` says what may dismiss it: `required` nothing (a mandatory flow: `role="alertdialog"`, no
- * Escape, no backdrop press, no close button), `form` Escape only, `info` Escape and the backdrop.
+ * Escape, no backdrop press, no close button), `form` Escape only, `info` Escape and the backdrop. `alert`
+ * gives any purpose the `alertdialog` role (a `form` dialog with `alert` is a confirmation Escape cancels).
  * Nested dialogs close one per Escape press, innermost first, and focus returns to the element that
  * opened each one. The heading names the dialog, and takes focus when it opens, unless an element of
  * yours has `autofocus`.
@@ -109,6 +110,14 @@ export class TctDialog extends TctElement {
 
   /** What may dismiss it: `required` nothing, `form` Escape only, `info` (default) Escape and the backdrop. */
   @property({reflect: true}) purpose: DialogPurpose = 'info';
+
+  /**
+   * Marks the dialog as an alert dialog (WAI-ARIA alertdialog pattern): the surface gets
+   * `role="alertdialog"` while `purpose` keeps deciding what may dismiss it. `purpose="required"` implies the
+   * role already; `purpose="form"` with `alert` is a confirmation that Escape cancels and a backdrop press
+   * does not (what `tct-alert-dialog` is). Ignored inline, where nothing is modal.
+   */
+  @property({type: Boolean, reflect: true}) alert = false;
 
   /** Padding of the content as a step of the spacing scale (0, 0.5, 1, 1.5, 2, 3, 4, 5, 6, 8, 10). */
   @property({type: Number}) padding: DialogPadding | undefined;
@@ -294,7 +303,7 @@ export class TctDialog extends TctElement {
       ?data-positioned=${position !== undefined}
       style=${style}
       aria-modal="true"
-      role=${ifDefined(purpose === 'required' ? 'alertdialog' : undefined)}
+      role=${ifDefined(purpose === 'required' || this.alert ? 'alertdialog' : undefined)}
     >
       ${content}
     </dialog>`;

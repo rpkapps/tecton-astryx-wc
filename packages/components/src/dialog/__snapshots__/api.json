@@ -5,6 +5,13 @@
       "class": "TctDialog",
       "attributes": [
         {
+          "name": "alert",
+          "property": "alert",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
           "name": "heading",
           "property": "heading",
           "type": "string",
