@@ -87,6 +87,14 @@ Environment: Node 22, pnpm 10. Only Chromium is installed locally (`/opt/pw-brow
 Chromium 141, `PLAYWRIGHT_BROWSERS_PATH` set); the test config passes it as `executablePath`.
 **Never run `playwright install` locally.** CI also runs Firefox and WebKit.
 
+**Browser for tests on your own machine (Windows, macOS, Linux):** the browser tests and the docs
+accessibility crawl use `CHROMIUM_PATH` when it is set, so an installed Chrome or Edge (137 or newer)
+works without downloading Playwright's build. Windows PowerShell:
+`$env:CHROMIUM_PATH = "C:\Program Files\Google\Chrome\Application\chrome.exe"` (Edge:
+`C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe`); `setx CHROMIUM_PATH "<path>"` keeps
+it. Clones made before `.gitattributes` existed have CRLF files: run `git rm -r --cached -q .` then
+`git reset --hard` once (discards uncommitted changes) to check everything out with LF.
+
 ## Naming (D-015)
 
 Nothing that ships or renders names the upstream design system. Use `@tecton-wc/*` for packages and
