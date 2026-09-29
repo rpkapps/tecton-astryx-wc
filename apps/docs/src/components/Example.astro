@@ -99,6 +99,36 @@ const preview = fragment.replace(/<(aside|nav)\b([^>]*)>/g, (match, tag: string,
     return false;
   }
 
+  /**
+   * A preview that scrolls sideways (a wide demonstration in a narrow column) must be reachable by
+   * keyboard: while it overflows it becomes a focusable, named region, and it is left alone otherwise so
+   * it adds no tab stop. [mwg:accessibility]
+   */
+  const scrollable = (preview: HTMLElement, name: string) => {
+    const overflows = preview.scrollWidth > preview.clientWidth;
+    if (overflows && !preview.hasAttribute('tabindex')) {
+      preview.tabIndex = 0;
+      preview.setAttribute('role', 'region');
+      preview.setAttribute('aria-label', `${name} (scrollable preview)`);
+    } else if (!overflows && preview.dataset.tctScroll === 'set') {
+      preview.removeAttribute('tabindex');
+      preview.removeAttribute('role');
+      preview.removeAttribute('aria-label');
+    }
+    preview.dataset.tctScroll = overflows ? 'set' : '';
+  };
+  for (const figure of document.querySelectorAll<HTMLElement>('[data-tct-example]')) {
+    const preview = figure.querySelector<HTMLElement>('.tct-example__preview');
+    if (!preview) continue;
+    const name = figure.querySelector('figcaption')?.textContent?.split('. ')[0]?.trim() || 'Example';
+    const update = () => scrollable(preview, name);
+    // The preview's own width changes with the window; its content's width changes as elements upgrade.
+    const resize = new ResizeObserver(update);
+    resize.observe(preview);
+    for (const child of preview.children) resize.observe(child);
+    update();
+  }
+
   status();
   for (const figure of document.querySelectorAll<HTMLElement>('[data-tct-example]')) {
     const button = figure.querySelector<HTMLButtonElement>('[data-tct-copy]');

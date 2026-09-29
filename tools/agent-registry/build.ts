@@ -200,7 +200,7 @@ export function buildRegistry(inputs: RegistryInputs): AgentRegistry {
   return {
     schemaVersion: REGISTRY_SCHEMA_VERSION,
     library: {
-      name: 'Tecton Astryx Web Components',
+      name: 'Tecton Web Components',
       description:
         'Framework-independent Web Components (Lit + TypeScript) in the Tecton visual system. Tags and events use the tct- prefix.',
     },

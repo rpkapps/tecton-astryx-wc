@@ -7,8 +7,6 @@
 import type {LoadedParity} from '../lib/parity.ts';
 import type {TokenData, TokenMeta} from '../lib/tokens.ts';
 
-type Cell = string | string[] | {text: string; href?: string} | undefined;
-
 /** A Markdown table with a bold caption line; cells are escaped for pipes and newlines. */
 function table(
   caption: string,
@@ -18,14 +16,13 @@ function table(
 ): string {
   if (rows.length === 0) return `${caption}: ${empty ?? 'none'}.`;
   const cell = (value: unknown, kind?: string): string => {
-    const raw =
-      Array.isArray(value)
-        ? (value as string[]).join(', ')
-        : typeof value === 'object' && value !== null
-          ? (value as {text: string}).text
-          : value === undefined || value === null
-            ? ''
-            : String(value as Cell);
+    const raw = Array.isArray(value)
+      ? value.join(', ')
+      : typeof value === 'object' && value !== null
+        ? String((value as {text?: string}).text ?? '')
+        : typeof value === 'string'
+          ? value
+          : '';
     const text = raw.replace(/\|/g, '\\|').replace(/\s*\n\s*/g, ' ');
     return kind === 'code' && text !== '' ? `\`${text}\`` : text;
   };

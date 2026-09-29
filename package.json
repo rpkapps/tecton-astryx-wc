@@ -28,7 +28,8 @@
     "size": "node tools/size/run.ts",
     "licenses:check": "node tools/licenses/check.ts",
     "docs:dev": "node tools/run-if-exists.ts apps/docs/astro.config.mjs -- pnpm --filter @tecton-astryx/docs dev",
-    "docs:build": "node tools/run-if-exists.ts apps/docs/astro.config.mjs -- pnpm --filter @tecton-astryx/docs build",
+    "docs:public-check": "node tools/docs/public-check.ts",
+    "docs:build": "pnpm docs:public-check && node tools/run-if-exists.ts apps/docs/astro.config.mjs -- pnpm --filter @tecton-astryx/docs build",
     "docs:a11y": "node tools/run-if-exists.ts tools/docs/a11y.ts -- node tools/docs/a11y.ts",
     "check": "node tools/check.ts",
     "test:tier2": "TCT_TIER2=1 vitest run --project browser-chromium"

@@ -183,7 +183,7 @@ describe('agent registry and llms.txt', () => {
     expect(registry.topics[0]!.sections.find((s) => s.heading === 'Install')?.body).toBe('Run it.');
 
     const index = renderLlmsTxt(registry);
-    expect(index).toMatch(/^# Tecton Astryx Web Components/);
+    expect(index).toMatch(/^# Tecton Web Components/);
     expect(index).toContain('- [Getting started](/guides/getting-started/): Begin.');
     expect(index).toContain('- [Badge](/components/feedback-and-status/sample-badge/): `<tct-sample-badge>`: Highlights');
     const full = renderLlmsFull(registry);

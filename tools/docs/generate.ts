@@ -26,7 +26,6 @@ import {PATHS, ROOT, rel} from '../lib/paths.ts';
 import {
   CATEGORIES,
   COMPONENT_PAGES_DIR,
-  GUIDES_DIR,
   REFERENCE_PAGES_DIR,
   categorySlug,
 } from '../lib/site.ts';
@@ -166,19 +165,6 @@ if (errors.length > 0) {
   process.exit(1);
 }
 
-// Public pages must not name the upstream design system. Generated pages are scrubbed by the templates;
-// this reports what is left (authored guides and docs.md prose), so nothing slips through unseen.
-const PACKAGE_NAME = /@tecton-astryx/g;
-const leaks: string[] = [];
-const scan = (file: string, content: string) => {
-  const count = (content.replace(PACKAGE_NAME, '').match(/astryx/gi) ?? []).length;
-  if (count > 0) leaks.push(`${rel(file)}: ${count}`);
-};
-for (const [file, content] of outputs) scan(file, content);
-for (const file of walkFiles(GUIDES_DIR)) {
-  if (/\.mdx?$/.test(file)) scan(file, readFileSync(file, 'utf8'));
-}
-
 let written = 0;
 mkdirSync(PATHS.reports, {recursive: true});
 if (writeIfChanged(internalReport, `${differencesReport({parity, tokens: tokenData, openQuestions})}\n`)) written++;
@@ -196,12 +182,6 @@ for (const dir of [COMPONENT_PAGES_DIR, REFERENCE_PAGES_DIR]) {
       if (readdirSync(dirname(file)).length === 0) rmSync(dirname(file), {recursive: true});
     }
   }
-}
-if (leaks.length > 0) {
-  console.warn(
-    `  docs: WARNING the public site still names the upstream design system in ${leaks.length} file(s) ` +
-      `(count per file): ${leaks.join(', ')}`,
-  );
 }
 console.log(
   `  docs: ${pages.size} component page(s), ${outputs.size} generated page(s) ` +
