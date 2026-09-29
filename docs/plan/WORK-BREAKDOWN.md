@@ -98,7 +98,7 @@ exists so far.
 - `tools/schemas/parity.schema.json`, `tools/check-parity.ts`, `tools/generate.ts` orchestration.
 - **Licence allowlist check** `tools/licenses/check.ts` (A§18.6: MIT, BSD-2/3-Clause, Apache-2.0,
   ISC, 0BSD, OFL-1.1; exceptions dompurify (Apache-2.0 election) and axe-core (dev only); our
-  `@tecton-astryx/*` UNLICENSED private packages accepted) wired into `pnpm check` and CI.
+  `@tecton-wc/*` UNLICENSED private packages accepted) wired into `pnpm check` and CI.
 - **`THIRD-PARTY-NOTICES.md`**: runtime licences, OFL-1.1 font notices, upstream Astryx MIT licence and
   attribution for adapted code, catalogs and docs text (D-007a, D-008). No LICENSE file (D-008).
 - `.github/workflows/ci.yml` (A§18.5): check, browser matrix, tier2, docs, licences. **No publish or
@@ -743,13 +743,13 @@ Full parity with upstream Astryx's agent tooling (`/home/user/refs/astryx/packag
 `apps/docsite/src/app/mcp/route.ts`, `packages/cli/assets/docs/working-with-ai.doc.mjs`,
 `internal/vibe-tests`).
 
-- New private package `packages/cli` (`@tecton-astryx/cli`, bin `tct`). It reads one generated
+- New private package `packages/cli` (`@tecton-wc/cli`, bin `tct`). It reads one generated
   **agent registry** (`tools/generate` output: CEM + docs frontmatter `keywords`/`dense`/`related` +
   examples + tokens + docs topics). The docs site and the MCP route read the same registry.
 - Commands: `component`, `docs`, `discover`, `search`, `controllers` (upstream `hook`), `doctor`,
   `gap-report`, `layout` (grammar/check/expand, ported to `tct-*` markup), `init --features agents`
   (`--agent claude|cursor|codex`, `--agent-docs-path`), and `upgrade` (stale-block detection + `--apply`).
-  All support `--dense` and `--json`, with a stable JSON envelope API (`@tecton-astryx/cli/json`).
+  All support `--dense` and `--json`, with a stable JSON envelope API (`@tecton-wc/cli/json`).
 - MCP server: `search(query)` + `get(name)`, available as `tct mcp` (stdio) and as a docs-site route.
   Implement in-house JSON-RPC unless the owner approves an SDK.
 - `llms.txt`, `llms-full.txt`, JSON/Markdown reference output; the "Working with AI" guide page.
@@ -760,7 +760,7 @@ Full parity with upstream Astryx's agent tooling (`/home/user/refs/astryx/packag
 
 ## 6. Extension packages (after core; separate set)
 
-Tags: lab → `tct-lab-*`; charts, richtext, vega → `tct-*` (A§7.1). Packages `@tecton-astryx/{lab,charts,richtext,vega}`
+Tags: lab → `tct-lab-*`; charts, richtext, vega → `tct-*` (A§7.1). Packages `@tecton-wc/{lab,charts,richtext,vega}`
 (private, UNLICENSED), created by the first WP that needs them (the orchestrator adds the package
 scaffolding and approved dependencies first). Status in the parity report stays `experimental`
 (D-006); not part of the v1 core release gate.
