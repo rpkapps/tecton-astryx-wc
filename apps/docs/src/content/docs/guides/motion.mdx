@@ -1,0 +1,141 @@
+---
+title: Motion
+description: Duration and easing tokens for animations and transitions, when motion helps and hurts, and how reduced-motion preferences are honoured.
+sidebar:
+  order: 26
+---
+
+## Overview
+
+Motion serves two purposes: it makes interfaces easier to understand, and it makes them more pleasant to use. A panel animating open helps the eye track what changed and where new content sits in the layout. These moments reduce cognitive load and make the interface feel responsive.
+
+At the same time, well-tuned motion gives an application a sense of craft and polish that users notice, even if they cannot name it.
+
+The design system provides duration and easing tokens that keep these moments consistent across your application. Tecton has no motion tokens of its own, so the values are Astryx's, kept on purpose and labelled _Astryx-retained_.
+
+## Duration
+
+Three tiers, each with a minimum, a default and a maximum, so an animation can stretch with the distance it travels.
+
+| Token                   | Value    | Use                                                           |
+| ----------------------- | -------- | ------------------------------------------------------------- |
+| `--duration-fast-min`   | 130 ms   | The smallest, most frequent transitions                       |
+| `--duration-fast`       | 175 ms   | Small state changes, fades, hover and press                   |
+| `--duration-fast-max`   | 230 ms   |                                                               |
+| `--duration-medium-min` | 310 ms   |                                                               |
+| `--duration-medium`     | 410 ms   | Larger transitions that rearrange the layout                  |
+| `--duration-medium-max` | 550 ms   |                                                               |
+| `--duration-slow-min`   | 730 ms   |                                                               |
+| `--duration-slow`       | 975 ms   | Rare, large or decorative motion                              |
+| `--duration-slow-max`   | 1300 ms  |                                                               |
+
+## Easing
+
+| Token             | Value                            |
+| ----------------- | -------------------------------- |
+| `--ease-standard` | `cubic-bezier(0.24, 1, 0.4, 1)`  |
+
+A single standard curve: quick to start and a long, soft settle.
+
+## Where motion helps
+
+Some parts of the interface benefit from animation. Panels, dialogs and collapsible sections are disorienting when they appear instantly, so animation gives the eye something to follow. Toasts and notifications need just enough entrance to be noticed without startling. State changes like a switch flipping or a selection highlighting feel more intentional with a brief transition.
+
+The common thread is that these are moments where the user needs to understand what happened.
+
+## Where motion hurts
+
+Table row hovers. List item highlights. Anything the user does dozens of times per minute. Adding perceptible duration to these interactions makes the interface feel like it is catching up to the cursor. Keep these fast enough that the user never notices a delay.
+
+Animations that block interaction are worse. If a user has to wait for a panel to finish sliding before they can click something inside it, the animation has become an obstacle. Motion should never stand between the user and their next action.
+
+## Movement principles
+
+- Not everything needs an animated exit. Elements the user is moving away from, such as tooltips, hover cards and dropdown menus, can disappear instantly. The user has already shifted their attention. Animate the exit only when it helps orient the user, like a panel closing or a dialog dismissing to reveal what is underneath.
+- When you do animate an exit, match the entrance. A panel that slides in from the right should slide back out to the right.
+- Direction should match the action. Navigating deeper into content should feel like moving forward. Going back should feel like returning. This keeps the user oriented in the structure of the application.
+- Contextual UI should feel connected to its trigger. A dropdown should expand from the button that opened it. A popover should appear near the element it describes. This does not apply to global UI like command palettes or toasts, which have their own fixed positions.
+
+## Respecting user preferences
+
+Some users experience motion sensitivity; animation that feels polished to one person can cause discomfort for another. The elements honour the operating system's reduced-motion setting, and the rules are specific rather than blanket:
+
+- **Movement plays only when motion is welcome.** Slides, scales and press effects are inside `@media (prefers-reduced-motion: no-preference)`. Under `reduce` they simply do not run.
+- **Fades may stay**, shortened.
+- **Spinners and indeterminate progress slow down instead of stopping**, because a frozen spinner reads as a hang.
+- **Durations are never zeroed globally.** A blanket `animation-duration: 0.01ms` makes some animations more jarring, and a zero-length transition never fires `transitionend`, which hangs code that waits for an exit animation.
+- **Exit animations are awaited with the Web Animations API** (`element.getAnimations()`, with a timeout), not with bare `transitionend`, so a skipped or shortened animation never leaves a surface open.
+
+In JavaScript, read the preference from one place, and listen for changes:
+
+```js
+import {prefersReducedMotion} from '@tecton-astryx/core/features.js';
+
+if (!prefersReducedMotion()) {
+  panel.animate([{translate: '0 12px', opacity: 0}, {translate: '0 0', opacity: 1}], {
+    duration: 175,
+    easing: 'cubic-bezier(0.24, 1, 0.4, 1)',
+  });
+}
+```
+
+Auto-playing carousels, banners and other persistent animations should be pausable, and nothing may flash more than three times per second.
+
+## Usage
+
+Use the tokens for your own transitions, and put movement inside a reduced-motion guard:
+
+```css title="Applying motion tokens"
+.fade-in {
+  transition-property: opacity;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-standard);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .slide-up {
+    transition-property: translate, opacity;
+    transition-duration: var(--duration-medium);
+    transition-timing-function: var(--ease-standard);
+  }
+}
+```
+
+For elements that enter and leave the top layer (dialogs and popovers), animate the entry with `@starting-style` and `transition-behavior: allow-discrete`, and animate the exit with the Web Animations API before closing. The `overlay` property is not used, because it is not available in every supported engine.
+
+```css
+dialog[open] {
+  opacity: 1;
+  transition: opacity var(--duration-fast) var(--ease-standard);
+  transition-behavior: allow-discrete; /* write it after the shorthand */
+}
+
+@starting-style {
+  dialog[open] {
+    opacity: 0;
+  }
+}
+```
+
+## Best practices
+
+**Do:**
+
+- Animate transitions that involve spatial change: panels opening, content expanding, elements entering the screen.
+- Use fast tokens for small, frequent interactions, and medium tokens for larger transitions that rearrange the layout.
+- Honour reduced-motion preferences at the operating-system level, and put movement (translate, scale) inside `no-preference`.
+- Await exit animations with `getAnimations()` rather than `transitionend`.
+- Animate `translate`, `rotate` and `scale` as separate properties instead of a single `transform`, so overlapping animations do not overwrite each other, and give the base element the identity value (`translate: 0px; scale: 1`) so a state change does not create a new stacking context.
+
+**Don't:**
+
+- Let hover states or high-frequency interactions feel like they are lagging behind the user.
+- Let animation delay when a user can interact with new content. The transition should complete before, or not block, the next action.
+- Move elements in ways that contradict where they came from or where they are going.
+- Zero durations globally for reduced motion.
+
+{/*
+Adapted from Astryx docs topic `motion` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md). Section map (1:1): Overview; Duration; Easing; Where Motion Helps; Where Motion Hurts; Movement Principles; Respecting User Preferences; Usage; Best Practices.
+Values from packages/tokens/dist/tokens.json (status astryx-retained, D-013 Q-06). Reduced-motion rules: ARCHITECTURE 6.6; prefersReducedMotion verified in packages/core/src/features.ts.
+Guides: [mwg:animate-to-from-top-layer] [mwg:animate-element-entry-exit] [mwg:spinner] [mwg:accessibility] [mwg:physics-based-easing] [mwg:individual-transform-properties]
+*/}
