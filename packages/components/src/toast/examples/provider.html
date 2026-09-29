@@ -1,0 +1,11 @@
+<!-- title: Provider and position; description: tct-layer-provider hosts the toast viewport and its configuration: position, how many toasts are visible, and the inset. Without one, toast() creates a fallback viewport on the page. -->
+<tct-layer-provider id="toast-provider-root" toast-position="top-end" toast-max-visible="3">
+  <div style="display: flex; gap: var(--spacing-3)">
+    <button type="button" id="toast-provider-show">Show toast (top end)</button>
+  </div>
+  <script type="module">
+    import {toast} from '@tecton-astryx/components/toast/toast.api.js';
+    let count = 0;
+    document.getElementById('toast-provider-show').addEventListener('click', () => toast({body: `Notification ${++count}`}));
+  </script>
+</tct-layer-provider>

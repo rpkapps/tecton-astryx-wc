@@ -1,0 +1,15 @@
+<!-- title: With an action; description: endContent puts an action at the trailing end, beside the close button. Keep action labels short. Toasts with actions should not hide too quickly (WCAG 2.2.1), so this one waits 10 seconds. -->
+<div id="toast-action-root">
+  <button type="button" id="toast-action-show">Delete item</button>
+  <script type="module">
+    import {toast} from '@tecton-astryx/components/toast/toast.api.js';
+    import {html} from 'lit';
+    document.getElementById('toast-action-show').addEventListener('click', () => {
+      toast({
+        body: 'Item deleted',
+        autoHideDuration: 10000,
+        endContent: html`<button type="button" style="color: inherit; background: transparent; border: var(--border-width) solid; border-radius: var(--radius-element)">Undo</button>`,
+      });
+    });
+  </script>
+</div>
