@@ -1,15 +1,15 @@
 ---
 title: CLI Integrations
-description: Deferred - the integration-package workflow of the React design system, and the extension points that exist today for elements, themes, icons and translations.
+description: Deferred - the integration-package workflow of the React design system, and the extension points that exist today, including a package-provided agent registry that tct discover lists.
 sidebar:
   order: 17
   badge:
-    text: Deferred
+    text: Partly deferred
     variant: caution
 ---
 
-:::caution[Deferred]
-The React design system has an integration workflow that is specific to its CLI product, and it is not part of the first release here. It is recorded so that nothing is silently dropped, and so that you know which extension points exist now.
+:::caution[Partly deferred]
+The React design system has an integration workflow that is specific to its CLI product, and most of it is not part of the first release here. What exists is a smaller mechanism: a package that ships an agent registry, which `tct discover` finds. This page records what is deferred so that nothing is silently dropped, and which extension points exist now.
 :::
 
 ## What the React design system has
@@ -17,6 +17,28 @@ The React design system has an integration workflow that is specific to its CLI 
 An integration is an npm package that contributes components, templates, source themes, doc topics, agent guidance and upgrade codemods to a consumer's design-system workflow. Consumers install the package and the CLI autolinks it; the authoring CLI scaffolds the manifest (`integration add component`, `integration add doc`, `integration add theme`, `integration add codemod`, `integration add agent-doc`), and a package gate (`integration pack --check`) verifies the packed tarball before publishing. Contributions of each kind use different metadata suffixes, and consumers discover them through `component --list`, `docs`, `template --list` and `theme list`.
 
 That whole workflow (autolinking, the integration file, the scaffolding commands, the pack gate, the run recording and the gap-report handler) belongs to the commands beyond agent support that are tracked separately as a follow-up (see [CLI Reference](../cli/#not-in-the-first-release)). The library is also unpublished, so a publish-oriented gate has nothing to attach to yet.
+
+## What exists: a package-provided registry
+
+A package that ships its own elements can make them discoverable by the CLI without any integration file. Put an agent registry (the same JSON format as [agent-registry.json](/agent-registry.json), schema version 2) in the package and point at it from `package.json`:
+
+```json title="package.json of your package"
+{
+  "name": "@acme/widgets",
+  "tct": {"agentRegistry": "./agent-registry.json"}
+}
+```
+
+`tct discover` scans the packages installed in your project's `node_modules` for that entry and lists them after the library. A registry it cannot read is reported under `meta.invalid` and skipped; it never fails the rest. The registry path must stay inside its package.
+
+```bash
+tct discover                          # the library, then every installed package that ships a registry
+tct discover @acme/widgets            # one package
+tct discover @acme/widgets/acme-card --dense   # one of its elements
+tct discover card                     # search element names across all packages
+```
+
+`tct gap-report <element> --category <category>` routes a missing capability to the package that provides the named element (or to `--package`), and `--output <file>` keeps a local record. The library itself is unpublished, so a report to it is recorded, not filed: the receipt names the `parity.json` `requests` list to add it to.
 
 ## What you can do today
 
@@ -28,10 +50,10 @@ Every kind of contribution has a direct, code-level equivalent that needs no man
 | Source themes         | Override tokens in a stylesheet you own ([Theming](../theme/)). A generated theme (`defineTheme`, `generateThemeCSS` in `@tecton-wc/core`) is available.                                                  |
 | Icons                 | Register a set with `registerIcons`, under a namespace of your own if you like ([Icons](../icons/)). Sets are plain data modules you can ship as a package.                            |
 | Translations          | Register catalogs with `registerTranslation`, or serve them with `setLocaleLoader` ([Internationalization](../internationalization/)).                                                |
-| Doc topics            | Write an authored doc for your element in the same format as ours ([Authoring Reference](../authoring/)); a generated site or registry can consume it.                                |
-| Agent guidance        | The `init --features agents` block is specified to include guidance for your project. Contributing package-labelled agent docs from a dependency is _deferred_ with the integration mechanism. |
-| Codemods              | None. The only upgrade action is refreshing a stale generated agent-docs block (`tct upgrade --apply`, _planned_).                                                                   |
-| Gap reporting         | `tct gap-report` (_planned_) routes a missing capability to the package that owns it. Until then, record it in the folder's parity record `requests`.                                |
+| Doc topics            | Write an authored doc for your element in the same format as ours ([Authoring Reference](../authoring/)); a generated site or registry can consume it, and the registry makes it reachable through `tct discover`. |
+| Agent guidance        | The `tct init --features agents` block covers the library. A dependency's own guidance is reachable through its registry and `tct discover`; merging package-labelled agent docs into the block is _deferred_ with the integration mechanism. |
+| Codemods              | None. The only upgrade action is refreshing a stale generated agent-docs block (`tct upgrade --apply`).                                                                              |
+| Gap reporting         | `tct gap-report` routes a missing capability to the package that owns it, and records it when there is no public tracker.                                                             |
 
 If you build elements that follow the same conventions (the naming and API rules, the tokens-only styling contract, the standard test suites), they will look and behave like the library's own. The conventions are in `docs/CONVENTIONS.md` and `docs/ARCHITECTURE.md` in the repository.
 

@@ -21,7 +21,7 @@ Paste this into your AI coding tool and let it handle the setup:
 Add @tecton-wc/components and @tecton-wc/tokens to this project (they are private packages: install them from the workspace, tarball or Git source my team uses). Load the Tecton stylesheet once in the document, register the elements I use, then read /llms.txt for the element index and conventions.
 ```
 
-The `tct` command-line tool and its `init --features agents` command are _planned_. Until they ship, the site publishes [llms.txt](/llms.txt), [llms-full.txt](/llms-full.txt) and a machine-readable [registry](/agent-registry.json) that an agent can read directly. See [Working with AI](../working-with-ai/).
+Install `@tecton-wc/cli` and run `tct init --features agents` to give an AI tool the workflow, the rules and an element index in `AGENTS.md`, or point it at [llms.txt](/llms.txt), [llms-full.txt](/llms-full.txt) and the machine-readable [registry](/agent-registry.json). See [Working with AI](../working-with-ai/).
 
 Every app gets a look whether or not anyone chooses one, so it is worth one question at setup rather than revisiting screens that were built around the wrong look. In this project the look is fixed: it is Tecton. The remaining choices are the colour mode (follow the system by default) and which fonts you load:
 
@@ -128,13 +128,14 @@ Framework integration harnesses (vanilla, React 19, Vue 3, Angular, Svelte 5) ar
 
 ## Explore the CLI
 
-The `tct` CLI is _planned_. It will be the reference for elements, tokens and docs from the terminal, for people and for AI tools:
+The `tct` CLI (the private `@tecton-wc/cli` package) is the reference for elements, tokens and docs from the terminal, for people and for AI tools:
 
 ```bash
 tct component              # list all elements
 tct component tct-button   # attributes, slots, events and usage for one element
 tct docs                   # list all doc topics
 tct docs tokens            # spacing, colour and radius reference
+tct search "date picker"   # find an element, controller or guide by what it does
 ```
 
 See [Working with AI](../working-with-ai/) and the [CLI reference](../cli/).
