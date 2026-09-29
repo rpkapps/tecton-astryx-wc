@@ -5,7 +5,7 @@
   "entries": {
     "core.progress-bar": {
       "tag": "tct-progress-bar",
-      "status": "in-progress",
+      "status": "implemented",
       "upstream": {
         "name": "ProgressBar",
         "path": "packages/core/src/ProgressBar/ProgressBar.tsx",
