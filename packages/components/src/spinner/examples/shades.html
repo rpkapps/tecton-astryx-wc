@@ -1,11 +1,11 @@
 <!-- title: Shades; description: default, subtle, on-media (for dark or accent backgrounds) and inherit (the surrounding colour). -->
-<div style="display: flex; align-items: center; gap: var(--spacing-5)">
+<tct-hstack gap="5" v-align="center">
   <tct-spinner size="lg" shade="default"></tct-spinner>
   <tct-spinner size="lg" shade="subtle"></tct-spinner>
-  <span style="display: inline-flex; padding: var(--spacing-3); background: var(--color-on-light); color: var(--color-on-dark)">
+  <tct-card padding="3" style="--card-background-color: var(--color-on-light)">
     <tct-spinner size="lg" shade="on-media"></tct-spinner>
-  </span>
-  <span style="display: inline-flex; padding: var(--spacing-3); background: var(--color-accent); color: var(--color-on-accent)">
+  </tct-card>
+  <tct-text color="accent">
     <tct-spinner size="lg" shade="inherit"></tct-spinner>
-  </span>
-</div>
+  </tct-text>
+</tct-hstack>

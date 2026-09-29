@@ -1,8 +1,8 @@
 <!-- title: Icon-only label; description: Text that names a control for assistive technology while the icon is all that is painted. -->
-<div style="position: relative; display: flex; align-items: center; gap: var(--spacing-4)">
-  <button type="button" style="display: inline-flex; align-items: center; gap: var(--spacing-1)">
+<tct-hstack gap="4" v-align="center">
+  <button type="button">
     <tct-icon name="close" size="md"></tct-icon>
     <tct-visually-hidden>Delete incident</tct-visually-hidden>
   </button>
   <tct-text type="body" color="secondary">A screen reader announces this button as "Delete incident".</tct-text>
-</div>
+</tct-hstack>

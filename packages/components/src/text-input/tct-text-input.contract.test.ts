@@ -234,6 +234,18 @@ describe('slotted-input mode (A§9.8)', () => {
     expect(text.value).toBe('ada@example.com');
   });
 
+  it('draws the slotted input without a box of its own: the text input’s wrapper is the box', async () => {
+    const {text, input} = await make();
+    // The test setup's unlayered preflight already zeroes border and padding, so the reset is asserted
+    // through the background paint and the focus outline (the wrapper draws the ring).
+    input.focus();
+    const style = getComputedStyle(input);
+    expect(style.backgroundColor).toBe('rgba(0, 0, 0, 0)');
+    expect(style.outlineStyle).toBe('none');
+    const wrapper = text.shadowRoot!.querySelector<HTMLElement>('.input-wrapper')!;
+    expect(Number.parseFloat(getComputedStyle(wrapper).borderTopWidth)).toBeGreaterThan(0);
+  });
+
   it('the chrome is satellites in the light DOM, wired with aria-labelledby and aria-describedby next to the input', async () => {
     const {text, input} = await make('status-type="error" status-message="Bad address"');
     const label = text.querySelector<HTMLElement>(':scope > [slot="label"]')!;

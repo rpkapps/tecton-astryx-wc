@@ -1,5 +1,5 @@
 <!-- title: Replace or ignore duplicates; description: A toast with a uniqueId replaces the one showing (the default), or is ignored with collisionBehavior "ignore". -->
-<div id="toast-unique-root" style="display: flex; gap: var(--spacing-3)">
+<tct-hstack id="toast-unique-root" gap="3">
   <button type="button" id="toast-unique-replace">Save (replaces)</button>
   <button type="button" id="toast-unique-ignore">Sync (ignored while showing)</button>
   <script type="module">
@@ -9,4 +9,4 @@
     root.querySelector('#toast-unique-replace').addEventListener('click', () => toast({body: `Saved ${++saves} times`, uniqueId: 'save'}));
     root.querySelector('#toast-unique-ignore').addEventListener('click', () => toast({body: 'Sync started', uniqueId: 'sync', collisionBehavior: 'ignore'}));
   </script>
-</div>
+</tct-hstack>

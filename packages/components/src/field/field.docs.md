@@ -87,6 +87,11 @@ description; your control; and the status. Each of label, description and status
 the light DOM (`slot="label"`, `slot="description"`, `slot="status"`, marked `data-tct-owned`).
 `tct-input-clear-button` is the small close button drawn inside inputs, with the tooltip that names it.
 
+The field never restyles your control. A native `<input>`, `<select>` or `<textarea>` keeps the browser's
+own box (border, background, focus ring), so it is visible in light and dark mode without extra work;
+style it yourself when you want a different look. Only `tct-text-input`'s `slot="input"` mode draws the
+input borderless, because that component paints the box around it.
+
 ## Variants and states
 
 - `status-type` error, warning, success or info, with `status-variant` `attached` (under the control) or

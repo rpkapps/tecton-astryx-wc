@@ -2,11 +2,11 @@
 <div id="explicit-dismiss-root">
   <tct-popover label="New: saved views" no-light-dismiss no-escape-dismiss no-auto-focus placement="below">
     <button type="button">Saved views</button>
-    <div slot="content" style="display: grid; gap: var(--spacing-2); max-inline-size: 260px">
+    <tct-vstack slot="content" gap="2" max-width="260">
       <strong>Save your filters</strong>
       <span>Saved views keep your filters and sort order for next time.</span>
       <button type="button" data-close>Got it</button>
-    </div>
+    </tct-vstack>
   </tct-popover>
   <script type="module">
     const root = document.getElementById('explicit-dismiss-root');

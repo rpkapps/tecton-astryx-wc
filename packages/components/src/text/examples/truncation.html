@@ -1,5 +1,5 @@
 <!-- title: Truncation; description: max-lines clips to one line with an ellipsis, or clamps several. Hover a cut-off text to see the full text in a tooltip. -->
-<div style="display: flex; flex-direction: column; gap: var(--spacing-4); inline-size: 260px; padding-block-start: var(--spacing-8)">
+<tct-vstack gap="4" width="260" padding-block-start="8">
   <tct-text max-lines="1">A label far wider than the space it has been given, and then some more words after it</tct-text>
   <tct-text max-lines="2">
     Two lines of this paragraph are shown, then the rest is clamped. A longer text needs more room than this narrow column offers, so the tooltip carries all of it.
@@ -7,4 +7,4 @@
   <tct-text max-lines="1" no-truncate-tooltip>The same text without a tooltip, cut off with an ellipsis</tct-text>
   <tct-text max-lines="1" truncate-tooltip-placement="below">Tooltip placed below: the same long text that cannot fit this column</tct-text>
   <tct-text max-lines="1">Fits, so no tooltip</tct-text>
-</div>
+</tct-vstack>

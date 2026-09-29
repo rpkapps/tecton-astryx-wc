@@ -1,5 +1,5 @@
 <!-- title: Controlled; description: Listen to tct-open-change and set open yourself, or preventDefault() to veto the change. Property writes never emit events. -->
-<div id="controlled-root" style="display: flex; align-items: center; gap: var(--spacing-3)">
+<tct-hstack id="controlled-root" gap="3" v-align="center">
   <tct-popover label="Controlled popover">
     <button type="button">Toggle</button>
     <div slot="content">Open state: <output id="controlled-state">closed</output></div>
@@ -16,4 +16,4 @@
       popover.open = true;
     });
   </script>
-</div>
+</tct-hstack>

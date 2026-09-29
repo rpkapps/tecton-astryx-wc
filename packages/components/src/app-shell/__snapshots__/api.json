@@ -1,0 +1,166 @@
+{
+  "folder": "app-shell",
+  "elements": {
+    "tct-app-shell": {
+      "class": "TctAppShell",
+      "attributes": [
+        {
+          "name": "content-padding",
+          "property": "contentPadding",
+          "type": "SpacingStep",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "default": "0",
+          "reflects": false
+        },
+        {
+          "name": "default-is-mobile",
+          "property": "defaultIsMobile",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "height",
+          "property": "height",
+          "type": "LayoutHeight",
+          "values": [
+            "fill",
+            "auto"
+          ],
+          "default": "'fill'",
+          "reflects": true
+        },
+        {
+          "name": "mobile-nav-breakpoint",
+          "property": "mobileNavBreakpoint",
+          "type": "AppShellBreakpoint",
+          "values": [
+            "sm",
+            "md",
+            "lg",
+            "xl",
+            "2xl",
+            "none"
+          ],
+          "default": "'md'",
+          "reflects": false
+        },
+        {
+          "name": "mobile-nav-open",
+          "property": "mobileNavOpen",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "no-landmarks",
+          "property": "noLandmarks",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "no-mobile-nav",
+          "property": "noMobileNav",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "no-mobile-toggle",
+          "property": "noMobileToggle",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "variant",
+          "property": "variant",
+          "type": "AppShellVariant",
+          "values": [
+            "wash",
+            "surface",
+            "section",
+            "elevated"
+          ],
+          "default": "'elevated'",
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "isMobile",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "mobileBreakpointPx",
+          "type": "number | undefined",
+          "readonly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "closeMobileNav",
+          "signature": "() => void"
+        },
+        {
+          "name": "focusMain",
+          "signature": "(options?: FocusOptions) => void"
+        },
+        {
+          "name": "openMobileNav",
+          "signature": "() => void"
+        }
+      ],
+      "slots": [
+        "(default)",
+        "banner",
+        "drawer",
+        "mobile-bar",
+        "mobile-nav",
+        "side-nav",
+        "top-nav"
+      ],
+      "events": [
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "base",
+        "header",
+        "sidenav",
+        "skip-link"
+      ],
+      "cssStates": [
+        "mobile",
+        "mobile-nav-open"
+      ],
+      "cssProperties": [
+        {
+          "name": "--app-shell-height"
+        },
+        {
+          "name": "--layout-padding-outer-x"
+        }
+      ]
+    }
+  }
+}

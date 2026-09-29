@@ -1,0 +1,20 @@
+<!-- title: Right to left; description: In right-to-left text the drawer slides in from the left when side is end, and from the right when it is start. -->
+<div dir="rtl" id="mobile-nav-rtl-root">
+  <tct-button id="mobile-nav-rtl-open" label="فتح التنقل"></tct-button>
+  <tct-mobile-nav id="mobile-nav-rtl-drawer" header="التنقل" close-label="إغلاق التنقل" side="start">
+    <tct-vstack gap="1" padding="2">
+      <a href="#overview">نظرة عامة</a>
+      <a href="#projects">المشاريع</a>
+    </tct-vstack>
+  </tct-mobile-nav>
+</div>
+<script type="module">
+  const root = document.getElementById('mobile-nav-rtl-root');
+  const drawer = root.querySelector('#mobile-nav-rtl-drawer');
+  root.querySelector('#mobile-nav-rtl-open').addEventListener('click', () => {
+    drawer.open = true;
+  });
+  drawer.addEventListener('tct-open-change', (event) => {
+    drawer.open = event.open;
+  });
+</script>

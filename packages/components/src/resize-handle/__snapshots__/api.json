@@ -1,0 +1,128 @@
+{
+  "folder": "resize-handle",
+  "elements": {
+    "tct-resize-handle": {
+      "class": "TctResizeHandle",
+      "attributes": [
+        {
+          "name": "direction",
+          "property": "direction",
+          "type": "ResizeDirection",
+          "values": [
+            "horizontal",
+            "vertical"
+          ],
+          "default": "'horizontal'",
+          "reflects": true
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "for",
+          "property": "for",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "has-divider",
+          "property": "hasDivider",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "no-always-visible",
+          "property": "noAlwaysVisible",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "pill-placement",
+          "property": "pillPlacement",
+          "type": "ResizePillPlacement",
+          "values": [
+            "start",
+            "end",
+            "center",
+            "auto"
+          ],
+          "default": "'auto'",
+          "reflects": false
+        },
+        {
+          "name": "position",
+          "property": "position",
+          "type": "ResizePosition",
+          "values": [
+            "inline",
+            "overlay"
+          ],
+          "default": "'inline'",
+          "reflects": true
+        },
+        {
+          "name": "reversed",
+          "property": "reversed",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "region",
+          "type": "ResizableProps | undefined",
+          "readonly": true
+        },
+        {
+          "name": "resizable",
+          "type": "ResizableProps | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "stepBy",
+          "signature": "(delta: number) => void"
+        },
+        {
+          "name": "stepToMax",
+          "signature": "() => void"
+        },
+        {
+          "name": "stepToMin",
+          "signature": "() => void"
+        }
+      ],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "base",
+        "pill"
+      ],
+      "cssStates": [
+        "dragging"
+      ],
+      "cssProperties": [
+        {
+          "name": "--resize-handle-hit-area"
+        }
+      ]
+    }
+  }
+}

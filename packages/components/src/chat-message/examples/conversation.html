@@ -1,0 +1,18 @@
+<!-- title: A conversation; description: Messages from the user and the assistant in a message list: the user's at the end, the assistant's at the start with an avatar and a name, and the metadata under the last bubble. -->
+<tct-vstack max-width="520">
+  <tct-chat-message-list align="top">
+    <tct-chat-system-message variant="divider">Today</tct-chat-system-message>
+    <tct-chat-message sender="user">
+      <tct-chat-message-bubble>Which wells dropped below their forecast this week?</tct-chat-message-bubble>
+    </tct-chat-message>
+    <tct-chat-message sender="assistant">
+      <tct-avatar slot="avatar" name="Navi" size="sm"></tct-avatar>
+      <tct-chat-message-bubble name="Navi" group="first">Three wells are under forecast:</tct-chat-message-bubble>
+      <tct-chat-message-bubble group="last">A-12 (-8%), B-04 (-11%) and C-19 (-15%). C-19 has had a compressor fault since Tuesday.</tct-chat-message-bubble>
+      <tct-chat-message-metadata slot="metadata" timestamp="2:31 PM" footer="Forecast model v4"></tct-chat-message-metadata>
+    </tct-chat-message>
+    <tct-chat-message sender="user">
+      <tct-chat-message-bubble metadata="2:32 PM">Thanks, open a work order for C-19.</tct-chat-message-bubble>
+    </tct-chat-message>
+  </tct-chat-message-list>
+</tct-vstack>

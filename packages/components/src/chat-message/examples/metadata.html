@@ -1,0 +1,12 @@
+<!-- title: Metadata; description: tct-chat-message-metadata puts a timestamp, footer content and a delivery status in one row, separated by dots. It goes in the last bubble's metadata slot, or in the message's when the last child is not a bubble. -->
+<tct-vstack max-width="520" gap="4">
+  <tct-chat-message sender="user">
+    <tct-chat-message-bubble>Metadata inside the bubble lines up with its text.
+      <tct-chat-message-metadata slot="metadata" timestamp="2:30 PM" status="read"></tct-chat-message-metadata>
+    </tct-chat-message-bubble>
+  </tct-chat-message>
+  <tct-chat-message sender="assistant">
+    <tct-chat-message-bubble>A footer holds model information or actions.</tct-chat-message-bubble>
+    <tct-chat-message-metadata slot="metadata" timestamp="2:31 PM" footer="Forecast model v4"></tct-chat-message-metadata>
+  </tct-chat-message>
+</tct-vstack>

@@ -1,12 +1,16 @@
 <!-- title: Nested island; description: A dark island inside a light region. Only the outermost theme touches the page; the inner one recolours its own subtree, including the focus ring. -->
-<tct-theme mode="light" style="padding: var(--spacing-4); border-radius: var(--radius-container)">
-  <div style="display: flex; flex-direction: column; gap: var(--spacing-3)">
-    <tct-text type="body">Outside the island (light).</tct-text>
-    <tct-theme mode="dark" style="padding: var(--spacing-4); border-radius: var(--radius-container)">
-      <div style="display: flex; gap: var(--spacing-2); align-items: center">
-        <tct-text type="body">Inside the island (dark).</tct-text>
-        <tct-button>Tab to me</tct-button>
-      </div>
-    </tct-theme>
-  </div>
-</tct-theme>
+<tct-card variant="transparent" padding="0">
+  <tct-theme mode="light">
+    <tct-vstack padding="4" gap="3">
+      <tct-text type="body">Outside the island (light).</tct-text>
+      <tct-card variant="transparent" padding="0">
+        <tct-theme mode="dark">
+          <tct-hstack padding="4" gap="2" v-align="center">
+            <tct-text type="body">Inside the island (dark).</tct-text>
+            <tct-button>Tab to me</tct-button>
+          </tct-hstack>
+        </tct-theme>
+      </tct-card>
+    </tct-vstack>
+  </tct-theme>
+</tct-card>
