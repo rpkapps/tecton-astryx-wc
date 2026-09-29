@@ -2,7 +2,7 @@
  * `pnpm check`: everything, in order, stopping at the first failure (A§18.3).
  *
  *   generate -> format:check -> typecheck -> lint -> lint:css -> tokens:check -> api:check ->
- *   parity:check -> licenses:check -> test -> build -> size -> docs:build -> docs:a11y
+ *   parity:check -> examples:check -> licenses:check -> test -> build -> size -> docs:build -> docs:a11y
  *
  * Steps that belong to later milestones skip themselves (with a message) until their inputs exist,
  * so this stays green from M1 onwards. Generation runs once; later steps see TCT_GENERATED=1.
@@ -21,6 +21,8 @@ const STEPS: readonly string[] = [
   'tokens:check',
   'api:check',
   'parity:check',
+  // Examples lay content out with the library's components, never hand-written CSS (owner rule).
+  'examples:check',
   'licenses:check',
   'test',
   'build',

@@ -1,0 +1,248 @@
+/*
+ * tct-resize-handle. The host is the focusable separator and only the flex item; `.handle` (part
+ * "base") is the line: 1px (the divider) or nothing, full length along the axis it separates, with the
+ * enlarged transparent grab zone and the grip pill positioned over it. The grab zone and the pill share
+ * one construction (anchored at the line's inline start and pushed towards the panel side) so the zone
+ * always sits over the pill; the push is logical, so in RTL the pill and the zone are on the mirrored
+ * side (upstream pushes both on the same physical side).
+ *
+ * Pill colour: `--tecton-color-divider-strong` (3.1:1), because the grip is the only visible cue that the
+ * line can be dragged (WCAG 1.4.11); the decorative divider line keeps `--color-border`.
+ * Overlay mode positions the host inside a parent panel and makes the line transparent.
+ * [mwg:css] logical properties, custom properties; [mwg:accessibility] visible focus;
+ * [mwg:styling-web-components] host rules, parts
+ */
+@layer component {
+  :host {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: row;
+    cursor: col-resize;
+  }
+
+  :host([direction='vertical']) {
+    flex-direction: column;
+    cursor: row-resize;
+  }
+
+  :host([disabled]) {
+    cursor: default;
+  }
+
+  /* Overlay: the host sits on the panel's edge, inside its bounds; the grab zone is the whole host. */
+  :host([position='overlay']) {
+    position: absolute;
+    z-index: 2;
+    inset-block: 0;
+    inset-inline-end: 0;
+    inline-size: var(--resize-handle-hit-area, 16px);
+  }
+
+  :host([position='overlay'][direction='vertical']) {
+    inset-block: auto 0;
+    inset-inline: 0;
+    inline-size: auto;
+    block-size: var(--resize-handle-hit-area, 16px);
+  }
+
+  .handle {
+    --_rtl: 1;
+    --_dir: 0;
+
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    transition-property: background-color;
+    transition-duration: var(--duration-fast);
+    transition-timing-function: var(--ease-standard);
+  }
+
+  :host(:dir(rtl)) .handle {
+    --_rtl: -1;
+  }
+
+  .handle[data-direction='horizontal'] {
+    inline-size: 0;
+  }
+
+  .handle[data-direction='vertical'] {
+    block-size: 0;
+  }
+
+  .handle[data-direction='horizontal'][data-divider] {
+    inline-size: var(--border-width);
+    background-color: var(--color-border);
+  }
+
+  .handle[data-direction='vertical'][data-divider] {
+    block-size: var(--border-width);
+    background-color: var(--color-border);
+  }
+
+  .handle[data-position='overlay'] {
+    inline-size: 100%;
+    block-size: 100%;
+  }
+
+  .handle[data-side='start'] {
+    --_dir: -1;
+  }
+
+  .handle[data-side='end'] {
+    --_dir: 1;
+  }
+
+  /* The grab zone: an enlarged transparent area, centred on the pill (or on the line). */
+  .grab {
+    position: absolute;
+    z-index: 1;
+    touch-action: none;
+    user-select: none;
+    cursor: inherit;
+  }
+
+  .handle[data-direction='horizontal'] .grab {
+    inline-size: var(--spacing-4);
+    inset-block: 0;
+    inset-inline-start: 0;
+
+    /* design: the pill is 3px wide, the zone 16px: shift by half the difference to centre them */
+    translate: calc(var(--_dir) * var(--_rtl) * (3px + var(--spacing-1)) - var(--_rtl) * 6.5px) 0;
+  }
+
+  .handle[data-direction='vertical'] .grab {
+    block-size: var(--spacing-4);
+    inset-inline: 0;
+    inset-block-start: 0;
+    translate: 0 calc(var(--_dir) * (3px + var(--spacing-1)) - 6.5px); /* design: as above */
+  }
+
+  .handle[data-side='center'][data-direction='horizontal'] .grab {
+    inset-inline-start: 50%;
+    translate: calc(-50% * var(--_rtl)) 0;
+  }
+
+  .handle[data-side='center'][data-direction='vertical'] .grab {
+    inset-block-start: 50%;
+    translate: 0 -50%;
+  }
+
+  .handle[data-position='overlay'] .grab {
+    inset: 0;
+    inline-size: auto;
+    block-size: auto;
+    translate: none;
+  }
+
+  /* The grip pill. */
+  .pill {
+    position: absolute;
+    z-index: 2;
+    pointer-events: none;
+    border-radius: var(--radius-full);
+    background-color: var(--tecton-color-divider-strong);
+    opacity: 0;
+    transition-property: opacity, background-color;
+    transition-duration: var(--duration-fast);
+    transition-timing-function: var(--ease-standard);
+  }
+
+  .handle[data-resting-pill] .pill {
+    opacity: 1;
+  }
+
+  .handle[data-direction='horizontal'] .pill {
+    inline-size: 3px; /* design: upstream's 3px grip */
+    block-size: var(--spacing-8);
+    inset-block: 0;
+    margin-block: auto;
+    inset-inline-start: 0;
+    translate: calc(var(--_dir) * var(--_rtl) * (100% + var(--spacing-1))) 0;
+  }
+
+  .handle[data-direction='vertical'] .pill {
+    inline-size: var(--spacing-8);
+    block-size: 3px; /* design: upstream's 3px grip */
+    inset-inline: 0;
+    margin-inline: auto;
+    inset-block-start: 0;
+    translate: 0 calc(var(--_dir) * (100% + var(--spacing-1)));
+  }
+
+  .handle[data-side='center'][data-direction='horizontal'] .pill {
+    inset-inline-start: 50%;
+    translate: calc(-50% * var(--_rtl)) 0;
+  }
+
+  .handle[data-side='center'][data-direction='vertical'] .pill {
+    translate: 0 -50%;
+  }
+
+  .handle[data-position='overlay'] .pill {
+    inset-inline-start: auto;
+  }
+}
+
+@layer state {
+  @media (hover: hover) {
+    .handle:has(.grab:hover) .pill {
+      opacity: 1;
+    }
+  }
+
+  :host(:not([disabled]):focus-visible) .pill,
+  .handle[data-dragging] .pill {
+    opacity: 1;
+  }
+
+  .handle[data-dragging][data-divider] {
+    background-color: var(--color-border-emphasized);
+  }
+
+  /* A drag is easy to lose on the divider itself: the line thickens the cue, never the layout. */
+  :host(:focus-visible) .handle {
+    outline-width: var(--focus-outline-width);
+    outline-style: var(--focus-outline-style);
+    outline-color: var(--focus-outline-color);
+    outline-offset: var(--focus-outline-offset);
+  }
+
+  :host([disabled]) .grab,
+  :host([disabled]) .pill {
+    pointer-events: none;
+  }
+
+  :host([disabled]) .pill {
+    opacity: 0.4;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .handle[data-divider] {
+      background-color: ButtonBorder;
+    }
+
+    .pill {
+      background-color: ButtonText;
+    }
+
+    :host(:focus-visible) .handle {
+      outline-color: Highlight;
+    }
+
+    .handle[data-dragging][data-divider] {
+      background-color: Highlight;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .handle,
+    .pill {
+      transition-duration: 0.01s;
+    }
+  }
+}

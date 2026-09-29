@@ -138,6 +138,8 @@ function walkFilesIn(dir: string, packageDir: string): string[] {
 
 export function workspaceResolveRoot(pkgName: string): string {
   // A directory whose node_modules links the package: dependents in this workspace.
+  // The CLI resolves itself by name (package self-reference); nothing in the workspace depends on it.
+  if (pkgName === '@tecton-wc/cli') return join(ROOT, 'packages/cli');
   return pkgName === '@tecton-wc/components'
     ? join(ROOT, 'apps/docs')
     : join(ROOT, 'packages/components');

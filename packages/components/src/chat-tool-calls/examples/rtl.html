@@ -1,0 +1,10 @@
+<!-- title: Right-to-left; description: The status, name and target follow the reading direction; the count and the chevron sit at the inline end. -->
+<tct-vstack id="tool-rtl-root" dir="rtl" lang="ar" max-width="520">
+  <tct-chat-tool-calls id="tool-rtl"></tct-chat-tool-calls>
+</tct-vstack>
+<script type="module">
+  document.getElementById('tool-rtl').calls = [
+    {name: 'read_file', target: 'التقرير.csv', duration: '120ms'},
+    {name: 'run_tests', status: 'running', target: 'pytest'},
+  ];
+</script>

@@ -1,12 +1,14 @@
 <!-- title: Page root and mode switch; description: The outermost tct-theme keeps data-theme on the page in step. Switch the mode and watch the surface, text and controls follow. -->
-<tct-theme id="theme-root" mode="system" style="padding: var(--spacing-4); border-radius: var(--radius-container)">
-  <div style="display: flex; gap: var(--spacing-2); align-items: center; flex-wrap: wrap">
-    <tct-button id="theme-light">Light</tct-button>
-    <tct-button id="theme-dark">Dark</tct-button>
-    <tct-button id="theme-system" variant="primary">System</tct-button>
-    <tct-text id="theme-status" type="body" color="secondary">mode: system</tct-text>
-  </div>
-</tct-theme>
+<tct-card variant="transparent" padding="0">
+  <tct-theme id="theme-root" mode="system">
+    <tct-hstack wrap="wrap" padding="4" gap="2" v-align="center">
+      <tct-button id="theme-light">Light</tct-button>
+      <tct-button id="theme-dark">Dark</tct-button>
+      <tct-button id="theme-system" variant="primary">System</tct-button>
+      <tct-text id="theme-status" type="body" color="secondary">mode: system</tct-text>
+    </tct-hstack>
+  </tct-theme>
+</tct-card>
 <script type="module">
   const theme = document.getElementById('theme-root');
   const status = document.getElementById('theme-status');

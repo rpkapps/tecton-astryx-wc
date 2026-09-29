@@ -1,0 +1,6 @@
+{
+  "@tct.resize-handle.value": {
+    "defaultMessage": "{size, number} px",
+    "description": "Screen-reader text (aria-valuetext) for the current size of the region a resize handle controls, in CSS pixels. Read after the handle's name when the size changes. Example: `240 px`."
+  }
+}

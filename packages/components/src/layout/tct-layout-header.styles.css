@@ -1,0 +1,65 @@
+/*
+ * tct-layout-header. The host carries the sizes (the height belongs to the box that draws the divider);
+ * `.shell` (part "base") fills it and paints the divider; `.inner` pads and aligns the content to the
+ * layout's content width. Padding: outer edges take `--layout-padding-outer-*`, the edge towards the
+ * content takes the inner block padding; the `padding*` attributes win per edge. The padding is published
+ * as `--container-padding-*` for children that bleed to the edge.
+ * [mwg:css] logical properties, custom properties; [mwg:styling-web-components] host rules, part=base
+ */
+@layer component {
+  :host {
+    display: block;
+    flex: 0 0 auto;
+    inline-size: var(--_box-width, auto);
+    block-size: var(--_box-height, auto);
+    max-inline-size: var(--_box-max-width, none);
+    min-block-size: var(--_box-min-height, 0);
+
+    /* Custom properties inherit through the flat tree; a nested box must not read its parent's. */
+    --_box-padding-inline-start: initial;
+    --_box-padding-inline-end: initial;
+    --_box-padding-block-start: initial;
+    --_box-padding-block-end: initial;
+    --_box-width: initial;
+    --_box-height: initial;
+    --_box-max-width: initial;
+    --_box-min-height: initial;
+  }
+
+  .shell {
+    block-size: 100%;
+  }
+
+  .inner {
+    --_pis: var(--_box-padding-inline-start, var(--layout-padding-outer-x, var(--spacing-4)));
+    --_pie: var(--_box-padding-inline-end, var(--layout-padding-outer-x, var(--spacing-4)));
+    --_pbs: var(--_box-padding-block-start, var(--layout-padding-outer-y, var(--spacing-4)));
+    --_pbe: var(--_box-padding-block-end, var(--layout-padding-inner-y, var(--spacing-4)));
+
+    /* Published for descendants that bleed to the edge or align to the padding. */
+    --container-padding-inline-start: var(--_pis);
+    --container-padding-inline-end: var(--_pie);
+    --container-padding-block-start: var(--_pbs);
+    --container-padding-block-end: var(--_pbe);
+
+    box-sizing: border-box;
+    max-inline-size: var(--layout-content-width, none);
+    margin-inline: auto;
+    padding-inline-start: var(--_pis);
+    padding-inline-end: var(--_pie);
+    padding-block-start: var(--_pbs);
+    padding-block-end: var(--_pbe);
+  }
+
+  .shell[data-divider] {
+    border-block-end: var(--border-width) solid var(--color-border);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .shell[data-divider] {
+      border-block-end-color: ButtonBorder;
+    }
+  }
+}

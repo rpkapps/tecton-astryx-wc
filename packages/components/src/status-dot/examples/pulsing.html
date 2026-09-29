@@ -1,5 +1,7 @@
 <!-- title: Pulsing; description: Pulse only states that need attention, such as a live connection. The pulse stops under reduced motion. -->
-<div style="display: flex; align-items: center; gap: var(--spacing-2)">
-  <tct-status-dot variant="success" label="Live" pulsing></tct-status-dot> Live
-  <tct-status-dot variant="error" label="Recording failed" pulsing></tct-status-dot> Recording failed
-</div>
+<tct-hstack gap="2" v-align="center">
+  <tct-status-dot variant="success" label="Live" pulsing></tct-status-dot>
+  <tct-text>Live</tct-text>
+  <tct-status-dot variant="error" label="Recording failed" pulsing></tct-status-dot>
+  <tct-text>Recording failed</tct-text>
+</tct-hstack>

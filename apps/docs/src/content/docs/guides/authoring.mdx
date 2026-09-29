@@ -4,12 +4,12 @@ description: The machine-readable reference for how elements are documented - th
 sidebar:
   order: 16
   badge:
-    text: Planned
+    text: Partly planned
     variant: caution
 ---
 
-:::caution[Machine-readable reference is planned]
-The formats below are what the generators consume today. Publishing them as a machine-readable reference through `tct docs authoring` and as JSON schemas is _planned_. Until then this page is the human-readable summary.
+:::caution[JSON schemas are planned]
+The formats below are what the generators consume today, and `tct docs authoring` prints this page from the terminal. Publishing them as JSON schemas is _planned_. Until then this page is the human-readable summary.
 :::
 
 ## Overview
@@ -97,6 +97,6 @@ The check fails when a React prop is neither mapped nor waived, when a target do
 The manifest is generated from the element classes with the Custom Elements Manifest analyzer and a small set of in-house plugins. It drops private and internal members and static plumbing, resolves `@fires` to each event's class (with its `@eventName`, `@bubbles`, `@composed` and `@cancelable` tags and its fields), and attaches the parity record, so tools see the mapping, the keyboard table and the differences with the API. It is the input to the docs tables, the API snapshots, the autoloader map, framework type generators, the agent registry and `llms.txt`. A drift test checks that every public member is documented, that every documented member exists, and that every React prop is mapped or waived.
 
 {/*
-Sources: docs/CONVENTIONS.md sections 7-8, docs/ARCHITECTURE.md sections 4, 16.2-16.3, 17; docs/plan/DECISIONS.md D-011, D-015. Publishing as JSON schemas and `tct docs authoring` is planned.
+Sources: docs/CONVENTIONS.md sections 7-8, docs/ARCHITECTURE.md sections 4, 16.2-16.3, 17; docs/plan/DECISIONS.md D-011, D-015. Publishing as JSON schemas is planned; `tct docs authoring` works (WP-AI).
 Guides: [mwg:web-components] [mwg:custom-elements]
 */}

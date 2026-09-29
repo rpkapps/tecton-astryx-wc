@@ -1,0 +1,11 @@
+<!-- title: Density; description: density sets the gaps and the bubble padding. It is inherited from the message list; set it on a message to override. -->
+<tct-vstack max-width="520" gap="6">
+  <tct-chat-message-list density="compact" align="top">
+    <tct-chat-message sender="assistant"><tct-chat-message-bubble>Compact</tct-chat-message-bubble></tct-chat-message>
+    <tct-chat-message sender="user"><tct-chat-message-bubble>Tight rows and padding.</tct-chat-message-bubble></tct-chat-message>
+  </tct-chat-message-list>
+  <tct-chat-message-list density="spacious" align="top">
+    <tct-chat-message sender="assistant"><tct-chat-message-bubble>Spacious</tct-chat-message-bubble></tct-chat-message>
+    <tct-chat-message sender="user"><tct-chat-message-bubble>Roomy rows and padding.</tct-chat-message-bubble></tct-chat-message>
+  </tct-chat-message-list>
+</tct-vstack>

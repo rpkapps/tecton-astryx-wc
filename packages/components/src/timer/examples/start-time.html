@@ -1,7 +1,8 @@
 <!-- title: Operation that started before mount; description: Pass the start as Unix milliseconds so the readout shows the whole wait. -->
-<div id="start-time-example" style="display: flex; align-items: center; gap: var(--spacing-2)">
-  Import running for <tct-timer type="body" color="primary" weight="semibold"></tct-timer>
-</div>
+<tct-hstack id="start-time-example" gap="2" v-align="center">
+  <tct-text>Import running for</tct-text>
+  <tct-timer type="body" color="primary" weight="semibold"></tct-timer>
+</tct-hstack>
 <script type="module">
   // The job began 47 seconds before this page rendered.
   document.getElementById('start-time-example').querySelector('tct-timer').startTime =
