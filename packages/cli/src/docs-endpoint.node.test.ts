@@ -47,7 +47,11 @@ function freePort(): Promise<number> {
 const pause = (ms: number): Promise<void> => new Promise((done) => setTimeout(done, ms));
 
 /** Polls `GET /mcp` until the server answers (its "listening" log line comes before the socket is bound). */
-async function waitUntilServing(url: string, child: ChildProcess, output: () => string): Promise<void> {
+async function waitUntilServing(
+  url: string,
+  child: ChildProcess,
+  output: () => string,
+): Promise<void> {
   const deadline = Date.now() + STARTUP_TIMEOUT_MS;
   for (;;) {
     if (child.exitCode !== null || child.signalCode !== null) {
@@ -60,7 +64,9 @@ async function waitUntilServing(url: string, child: ChildProcess, output: () => 
       // not listening yet
     }
     if (Date.now() > deadline) {
-      throw new Error(`the docs server did not serve ${url} within ${STARTUP_TIMEOUT_MS} ms:\n${output()}`);
+      throw new Error(
+        `the docs server did not serve ${url} within ${STARTUP_TIMEOUT_MS} ms:\n${output()}`,
+      );
     }
     await pause(100);
   }
