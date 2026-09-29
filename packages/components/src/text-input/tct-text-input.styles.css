@@ -1,0 +1,97 @@
+/*
+ * tct-text-input. The box, the label chrome and the sizes are the shared field module; this sheet adds what
+ * only a text field has: adornments, the status glyph and its tooltip button, the busy indicator and the
+ * horizontal-labels host. Focus is drawn on the box (`:has(:focus-visible)`, shared focus-ring module).
+ */
+@layer component {
+  :host {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  /* In a horizontal-labels form the host disappears so the parent grid places label and control. */
+  :host([data-horizontal-labels]) {
+    display: contents;
+  }
+
+  .adornment {
+    --_icon-size: var(--tecton-icon-size-100);
+
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    color: var(--color-icon-secondary);
+  }
+
+  .start-icon {
+    flex-shrink: 0;
+  }
+
+  .description-click {
+    cursor: pointer;
+  }
+
+  /* Status ink: coloured glyphs, per the Tecton `input-status-icon` target. */
+  .status-icon {
+    flex-shrink: 0;
+    color: var(--color-icon-secondary);
+  }
+
+  [data-status-type='error'] {
+    color: var(--tecton-color-status-error-outline-text);
+  }
+
+  [data-status-type='warning'] {
+    color: var(--tecton-color-status-warning-outline-text);
+  }
+
+  [data-status-type='success'] {
+    color: var(--tecton-color-status-success-outline-text);
+  }
+
+  [data-status-type='info'] {
+    color: var(--tecton-color-status-info-outline-text);
+  }
+
+  /* The tooltip-variant status glyph is a real button: bare but for its ring. */
+  .status-button {
+    --_focus-offset: 2px;
+
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    background: none;
+    border: 0;
+    border-radius: var(--radius-full);
+    pointer-events: auto;
+  }
+
+  .busy {
+    --_animation-reduced: tct-spin 6s linear infinite;
+
+    box-sizing: border-box;
+    flex-shrink: 0;
+    inline-size: var(--tecton-icon-size-100);
+    block-size: var(--tecton-icon-size-100);
+    border: 2px solid var(--color-icon-secondary); /* design: the ring stroke of a small spinner */
+    border-block-start-color: transparent;
+    border-radius: var(--radius-full);
+    animation: tct-spin 0.8s linear infinite;
+  }
+
+  /* Adornments the author fills are never taller than the field. */
+  ::slotted([slot='start']),
+  ::slotted([slot='end']) {
+    max-block-size: 100%;
+  }
+}
+
+@layer state {
+  .input-wrapper[data-readonly]:not([data-disabled]) {
+    cursor: default;
+  }
+}

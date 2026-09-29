@@ -1,0 +1,15 @@
+@layer component {
+  :host {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  :host([data-hidden]) {
+    /* Hidden with its label: visually hidden by the field, no place in the layout. */
+    display: contents;
+  }
+
+  [part='description'] {
+    cursor: pointer;
+  }
+}

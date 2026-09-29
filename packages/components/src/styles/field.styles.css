@@ -1,0 +1,281 @@
+/*
+ * Shared field chrome (A§6.1, A§9.8): the label, description, input box and sizes that every value
+ * control with field chrome draws (`tct-text-input` now; text-area, number-input, selector, ... later),
+ * and that the field satellites (`tct-field-label`, `tct-field-description`) reuse inside their own
+ * shadow roots. Include it after `base` and before the component sheet. [mwg:css] [mwg:styling-web-components]
+ *
+ * Tecton is the outlined field (design/components/textfield.md, tecton-astryx components.ts
+ * `text-input`, `field-label`): a transparent surface with a 1px graphite border, near-white value ink,
+ * a placeholder two steps down, coloured ink for validation (no message box behind it) and a 2px hot-pink
+ * ring for focus. Filled and text-only variants are not in the upstream API and are not drawn here.
+ *
+ * Markup contract (all class names are private; the `part`s are the public styling surface):
+ *
+ *   .field                      root of the whole field (label + control + status), `data-layout`
+ *                               `horizontal-labels` makes it `display: contents` for a parent grid
+ *   .label-cell / .control-cell the two cells of the horizontal-labels grid (label column, control column)
+ *   .label-row                  label plus the optional info tip (`.label-tip`, a focus-ring button)
+ *   [part='label']              the label (a real <label>, a group caption <span>, or the satellite's box)
+ *   [part='description']        helper text
+ *   .input-wrapper              the painted box around the control; `data-size`, `data-status`,
+ *                               `data-disabled`, `data-readonly`; add `.focus-within-ring` (focus-ring module)
+ *   .input                      the inner native <input>, or the slotted author <input slot="input">
+ *
+ * Private custom properties the component may set on `.input-wrapper`: `--_field-radius` (concentric
+ * corners inside an input group), `--_field-border-color`. The field width is `--_field-width` on `.field`.
+ */
+@layer component {
+  .field {
+    /* The field owns the local stacking boundary: parts order inside this surface only. */
+    display: flex;
+    flex-direction: column;
+    isolation: isolate;
+    inline-size: var(--_field-width, auto);
+    min-inline-size: 0;
+  }
+
+  .field:not([data-label-hidden]) {
+    gap: var(--spacing-1);
+  }
+
+  /*
+   * Horizontal labels: the field disappears as a box so the parent grid (`auto 1fr` columns) places the
+   * label cell in column one and the control cell in column two. The host is `display: contents` too
+   * (set by the component from the form-layout context).
+   */
+  .field[data-layout='horizontal-labels'] {
+    display: contents;
+  }
+
+  .label-cell {
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+
+  .field[data-layout='horizontal-labels'] .label-cell {
+    /* Align the label text with the value text: the box's border plus its top padding. */
+    padding-block-start: calc(var(--border-width) + var(--spacing-1));
+  }
+
+  .field[data-label-hidden] .label-cell {
+    /* A hidden label group takes no place in the layout (its children are visually hidden). */
+    display: contents;
+  }
+
+  .label-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    min-inline-size: 0;
+  }
+
+  .control-cell {
+    display: flex;
+    flex-direction: column;
+    isolation: isolate;
+    min-inline-size: 0;
+  }
+
+  [part='label'] {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    font-family: var(--font-family-body);
+    font-size: var(--text-label-size);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--text-label-leading);
+    color: var(--tecton-color-input-outlined-text);
+    cursor: pointer;
+  }
+
+  [part='label'][data-disabled] {
+    color: var(--color-text-disabled);
+    cursor: default;
+  }
+
+  [part='label-indicator'] {
+    font-size: var(--text-supporting-size);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--text-supporting-leading);
+    color: var(--color-text-secondary);
+  }
+
+  [part='description'] {
+    font-family: var(--font-family-body);
+    font-size: var(--text-supporting-size);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--text-supporting-leading);
+    color: var(--color-text-secondary);
+    overflow-wrap: anywhere;
+  }
+
+  /* The info tip beside a label: a real button (keyboard and touch reach it), bare but for its ring. */
+  .label-tip {
+    --_focus-offset: 2px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    color: var(--color-icon-secondary);
+    cursor: help;
+    background: none;
+    border: 0;
+    border-radius: var(--radius-full);
+  }
+
+  /* --------------------------------------------------------------------------- the input box */
+
+  .input-wrapper {
+    --_field-border-color: var(--tecton-color-input-outlined-border);
+    --_field-radius: var(--radius-element);
+    --_focus-offset: 1px;
+
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    gap: var(--spacing-2);
+    padding-block: var(--spacing-1);
+    padding-inline: var(--spacing-2);
+    color: var(--tecton-color-input-outlined-text-value);
+    background-color: var(--tecton-color-input-outlined-bg);
+    border: var(--border-width) solid var(--_field-border-color);
+    border-radius: var(--_field-radius);
+    transition:
+      border-color var(--duration-fast) var(--ease-standard),
+      background-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .input-wrapper[data-size='sm'] {
+    block-size: var(--size-element-sm);
+  }
+
+  .input-wrapper[data-size='md'] {
+    block-size: var(--size-element-md);
+  }
+
+  .input-wrapper[data-size='lg'] {
+    block-size: var(--size-element-lg);
+  }
+
+  .input-wrapper[data-status='error'] {
+    --_field-border-color: var(--tecton-color-status-error-outline-border-strong);
+  }
+
+  .input-wrapper[data-status='warning'] {
+    --_field-border-color: var(--tecton-color-status-warning-outline-border-strong);
+  }
+
+  .input-wrapper[data-status='success'] {
+    --_field-border-color: var(--tecton-color-status-success-outline-border-strong);
+  }
+
+  .input-wrapper[data-status='info'] {
+    --_field-border-color: var(--tecton-color-status-info-outline-border-strong);
+  }
+
+  /* The native input and the slotted author input draw nothing of their own: the wrapper is the box. */
+  .input,
+  ::slotted(input) {
+    display: block;
+    flex: 1;
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    color: inherit;
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+    background-color: transparent;
+    border: 0;
+    outline: none;
+  }
+
+  /*
+   * The 16px floor is iOS-only: iOS Safari zooms the page when a focused control sits under 16px, and
+   * only iOS WebKit implements -webkit-touch-callout to key the coarse-pointer floor to it.
+   */
+  @media (pointer: coarse) {
+    @supports (-webkit-touch-callout: none) {
+      .input,
+      ::slotted(input) {
+        font-size: max(1rem, var(--text-body-size));
+      }
+    }
+  }
+
+  .input::placeholder,
+  ::slotted(input)::placeholder {
+    color: var(--tecton-color-input-outlined-text-placeholder);
+    opacity: 1;
+  }
+}
+
+@layer state {
+  @media (hover: hover) {
+    .input-wrapper:hover:not(:has(:focus-visible), [data-disabled]) {
+      --_field-border-color: var(--tecton-color-input-outlined-border-hover);
+    }
+
+    .input-wrapper[data-status]:hover:not(:has(:focus-visible), [data-disabled]) {
+      --_field-border-color: var(--tecton-color-input-outlined-border-hover);
+    }
+
+    .input-wrapper[data-status='error']:hover:not(:has(:focus-visible), [data-disabled]) {
+      --_field-border-color: var(--tecton-color-status-error-outline-border-hover);
+    }
+
+    .input-wrapper[data-status='warning']:hover:not(:has(:focus-visible), [data-disabled]) {
+      --_field-border-color: var(--tecton-color-status-warning-outline-border-hover);
+    }
+
+    .input-wrapper[data-status='success']:hover:not(:has(:focus-visible), [data-disabled]) {
+      --_field-border-color: var(--tecton-color-status-success-outline-border-hover);
+    }
+  }
+
+  .input-wrapper[data-disabled] {
+    --_field-border-color: var(--tecton-color-disabled-outline-border);
+
+    color: var(--tecton-color-disabled-outline-text);
+    cursor: default;
+  }
+
+  .input-wrapper[data-disabled] .input::placeholder,
+  .input-wrapper[data-disabled] ::slotted(input)::placeholder {
+    color: var(--tecton-color-disabled-outline-text);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .input-wrapper {
+      /* Transparent borders survive as system colours; the wrapper is the control boundary. */
+      color: FieldText;
+      background-color: Field;
+      border-color: ButtonBorder;
+    }
+
+    [part='label'],
+    [part='description'],
+    [part='label-indicator'] {
+      color: CanvasText;
+    }
+
+    .input-wrapper[data-disabled],
+    [part='label'][data-disabled] {
+      color: GrayText;
+      border-color: GrayText;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .input-wrapper {
+      transition-duration: 0s;
+    }
+  }
+}
