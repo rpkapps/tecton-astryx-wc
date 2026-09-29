@@ -1,0 +1,64 @@
+{
+  "folder": "citation",
+  "elements": {
+    "tct-citation": {
+      "class": "TctCitation",
+      "attributes": [
+        {
+          "name": "number",
+          "property": "number",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "source-src",
+          "property": "sourceSrc",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "source-title",
+          "property": "sourceTitle",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "source-url",
+          "property": "sourceUrl",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "variant",
+          "property": "variant",
+          "type": "CitationVariant",
+          "values": [
+            "label",
+            "number"
+          ],
+          "default": "'label'",
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "source",
+          "type": "CitationSource | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "icon"
+      ],
+      "events": [],
+      "cssParts": [
+        "base",
+        "icon",
+        "label"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

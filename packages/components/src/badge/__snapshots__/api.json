@@ -1,0 +1,53 @@
+{
+  "folder": "badge",
+  "elements": {
+    "tct-badge": {
+      "class": "TctBadge",
+      "attributes": [
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "variant",
+          "property": "variant",
+          "type": "BadgeVariant",
+          "values": [
+            "neutral",
+            "info",
+            "success",
+            "warning",
+            "error",
+            "blue",
+            "cyan",
+            "green",
+            "orange",
+            "pink",
+            "purple",
+            "red",
+            "teal",
+            "yellow"
+          ],
+          "default": "'neutral'",
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)",
+        "icon"
+      ],
+      "events": [],
+      "cssParts": [
+        "base",
+        "icon",
+        "label"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}
