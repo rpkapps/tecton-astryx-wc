@@ -141,7 +141,7 @@ export class TctDateInput extends TctPickerField {
    */
   @property({
     converter: {
-      fromAttribute: (value: string | null) => (value ?? undefined),
+      fromAttribute: (value: string | null) => value ?? undefined,
     },
   })
   format: DateInputFormat | DateInputFormatter = 'date_long';
@@ -372,7 +372,7 @@ export class TctDateInput extends TctPickerField {
       class="calendar"
       part="calendar"
       mode="single"
-      .value=${(this.value || undefined)}
+      .value=${this.value || undefined}
       min=${ifDefined(this.min)}
       max=${ifDefined(this.max)}
       .dateConstraints=${this.dateConstraints}
