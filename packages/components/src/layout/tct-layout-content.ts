@@ -67,7 +67,10 @@ export class TctLayoutContent extends BoxPropsMixin(TctElement) {
    */
   @property({type: Boolean, reflect: true}) focusable = false;
 
-  readonly #slots = new ContextConsumer(this, {context: layoutSlotsContext, subscribe: true});
+  readonly #slots: ContextConsumer<typeof layoutSlotsContext> = new ContextConsumer(this, {
+    context: layoutSlotsContext,
+    subscribe: true,
+  });
 
   // The scroller is the inner box: its own overflow decides when it becomes a tab stop.
   readonly #scroll: ScrollableAreaController = new ScrollableAreaController(this, {

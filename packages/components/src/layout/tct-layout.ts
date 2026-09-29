@@ -118,21 +118,24 @@ export class TctLayout extends TctElement {
   @property({type: Boolean, attribute: 'default-has-dividers'}) defaultHasDividers:
     boolean | undefined;
 
-  readonly #slots = new ContextProvider(this, {
+  readonly #slots: ContextProvider<typeof layoutSlotsContext> = new ContextProvider(this, {
     context: layoutSlotsContext,
     initialValue: NO_LAYOUT_SLOTS,
   });
-  readonly #dividers = new ContextProvider(this, {
+  readonly #dividers: ContextProvider<typeof layoutDividerContext> = new ContextProvider(this, {
     context: layoutDividerContext,
     initialValue: null,
   });
-  readonly #parentDividers = new ContextConsumer(this, {
-    context: layoutDividerContext,
-    subscribe: true,
-    callback: () => {
-      this.#syncDividers();
+  readonly #parentDividers: ContextConsumer<typeof layoutDividerContext> = new ContextConsumer(
+    this,
+    {
+      context: layoutDividerContext,
+      subscribe: true,
+      callback: () => {
+        this.#syncDividers();
+      },
     },
-  });
+  );
   #children: MutationObserver | undefined;
   #attributes: MutationObserver | undefined;
   #contentRegion = false;

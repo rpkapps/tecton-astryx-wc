@@ -57,7 +57,10 @@ export class TctLayoutFooter extends BoxPropsMixin(TctElement) {
    */
   @property() landmark: string | undefined;
 
-  readonly #dividers = new ContextConsumer(this, {context: layoutDividerContext, subscribe: true});
+  readonly #dividers: ContextConsumer<typeof layoutDividerContext> = new ContextConsumer(this, {
+    context: layoutDividerContext,
+    subscribe: true,
+  });
 
   /** Whether the footer draws a divider: its own value, else the layout's default, else `false`. */
   get resolvedHasDivider(): boolean {

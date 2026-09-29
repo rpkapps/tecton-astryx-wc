@@ -481,7 +481,7 @@ describe('tct-app-shell: mobile navigation', () => {
 
 describe('tct-app-shell: mobile context', () => {
   class Probe extends LitElement {
-    readonly shell = new AppShellMobileController(this);
+    readonly shell: AppShellMobileController = new AppShellMobileController(this);
     override render() {
       return html`${JSON.stringify({
         mobile: this.shell.value.isMobile,

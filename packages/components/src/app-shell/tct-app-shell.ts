@@ -145,7 +145,7 @@ export class TctAppShell extends TctElement {
    */
   @property({type: Boolean, attribute: 'no-landmarks'}) noLandmarks = false;
 
-  readonly #slots = new SlotController(
+  readonly #slots: SlotController = new SlotController(
     this,
     'top-nav',
     'side-nav',
@@ -154,18 +154,18 @@ export class TctAppShell extends TctElement {
     'drawer',
     'mobile-bar',
   );
-  readonly #provider = new ContextProvider(this, {
+  readonly #provider: ContextProvider<typeof appShellMobileContext> = new ContextProvider(this, {
     context: appShellMobileContext,
     initialValue: INERT_APP_SHELL_MOBILE,
   });
-  readonly #theme = new ContextConsumer(this, {
+  readonly #theme: ContextConsumer<typeof themeContext> = new ContextConsumer(this, {
     context: themeContext,
     subscribe: true,
     callback: () => {
       this.#watchViewport();
     },
   });
-  readonly #locale = new LocaleController(this, {
+  readonly #locale: LocaleController = new LocaleController(this, {
     namespace: 'appShell',
     defaults: appShellMessages,
   });

@@ -143,8 +143,14 @@ export class TctLayoutPanel extends BoxPropsMixin(TctElement) {
    */
   @property({attribute: false}) region: ResizableProps | undefined;
 
-  readonly #area = new ContextConsumer(this, {context: layoutAreaContext, subscribe: true});
-  readonly #slots = new ContextConsumer(this, {context: layoutSlotsContext, subscribe: true});
+  readonly #area: ContextConsumer<typeof layoutAreaContext> = new ContextConsumer(this, {
+    context: layoutAreaContext,
+    subscribe: true,
+  });
+  readonly #slots: ContextConsumer<typeof layoutSlotsContext> = new ContextConsumer(this, {
+    context: layoutSlotsContext,
+    subscribe: true,
+  });
   #unsubscribe: (() => void) | undefined;
   #subscribed: ResizableProps | undefined;
 

@@ -98,8 +98,11 @@ export class TctResizeHandle extends TctElement {
   /** A region of your own (a `ResizableController`) instead of a panel's. Property only. */
   @property({attribute: false}) resizable: ResizableProps | undefined;
 
-  readonly #locale = new LocaleController(this, {namespace: 'resize-handle', defaults});
-  readonly #slots = new SlotController(this, 'default');
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'resize-handle',
+    defaults,
+  });
+  readonly #slots: SlotController = new SlotController(this, 'default');
   #target: ResizableProps | undefined;
   #unsubscribe: (() => void) | undefined;
   #siblings: MutationObserver | undefined;

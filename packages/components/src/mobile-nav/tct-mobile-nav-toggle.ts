@@ -37,9 +37,9 @@ export class TctMobileNavToggle extends TctElement {
   /** Accessible name and tooltip of the button. Defaults to "Open navigation" in the language of the page. */
   @property() label = '';
 
-  readonly #shell = new AppShellMobileController(this);
-  readonly #slots = new SlotController(this, 'default');
-  readonly #locale = new LocaleController(this, {
+  readonly #shell: AppShellMobileController = new AppShellMobileController(this);
+  readonly #slots: SlotController = new SlotController(this, 'default');
+  readonly #locale: LocaleController = new LocaleController(this, {
     namespace: 'mobileNav',
     defaults: mobileNavMessages,
   });

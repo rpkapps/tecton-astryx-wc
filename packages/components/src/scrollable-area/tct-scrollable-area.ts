@@ -101,7 +101,7 @@ export class TctScrollableArea extends BoxPropsMixin(TctElement) {
    */
   @property({attribute: 'keyboard-owner'}) keyboardOwner: ScrollableKeyboardOwner = 'viewport';
 
-  readonly #scroll = new ScrollableAreaController(this, {
+  readonly #scroll: ScrollableAreaController = new ScrollableAreaController(this, {
     viewport: () => this.#viewport,
     content: () => this.renderRoot?.querySelector<HTMLElement>('.content'),
     slot: () => this.renderRoot?.querySelector('slot'),

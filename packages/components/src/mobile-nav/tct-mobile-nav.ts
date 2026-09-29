@@ -87,9 +87,9 @@ export class TctMobileNav extends TctElement {
   /** Accessible name and tooltip of the close button. Defaults to "Close navigation". */
   @property({attribute: 'close-label'}) closeLabel = '';
 
-  readonly #slots = new SlotController(this, 'header');
-  readonly #shell = new AppShellMobileController(this);
-  readonly #locale = new LocaleController(this, {
+  readonly #slots: SlotController = new SlotController(this, 'header');
+  readonly #shell: AppShellMobileController = new AppShellMobileController(this);
+  readonly #locale: LocaleController = new LocaleController(this, {
     namespace: 'mobileNav',
     defaults: mobileNavMessages,
   });
