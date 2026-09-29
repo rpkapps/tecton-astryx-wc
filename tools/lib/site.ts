@@ -15,6 +15,12 @@ import {ROOT} from './paths.ts';
 export const DOCS_APP = join(ROOT, 'apps/docs');
 export const DOCS_CONTENT = join(DOCS_APP, 'src/content/docs');
 export const DOCS_PUBLIC = join(DOCS_APP, 'public');
+/**
+ * The built site (D-016): the static pages and assets in `dist/client/` (what a static host serves), the
+ * standalone Node server, whose only on-demand route is `/mcp`, at `dist/server/entry.mjs`.
+ */
+export const DOCS_DIST = join(DOCS_APP, 'dist');
+export const DOCS_SITE = join(DOCS_DIST, 'client');
 export const GUIDES_DIR = join(DOCS_CONTENT, 'guides');
 export const COMPONENT_PAGES_DIR = join(DOCS_CONTENT, 'components');
 export const REFERENCE_PAGES_DIR = join(DOCS_CONTENT, 'reference');

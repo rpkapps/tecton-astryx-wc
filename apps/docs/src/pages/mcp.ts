@@ -1,25 +1,23 @@
 /**
- * The MCP endpoint of the docs site: `GET /mcp` is a server card naming the two tools (`search(query)` and
- * `get(name)`) and how to run the same server locally (`tct mcp`, stdio, offline).
+ * The MCP endpoint of the docs site (D-016), the only route rendered on demand: the rest of the site is
+ * prerendered static files.
  *
- * The site is static (no server adapter, D-007), and a static host cannot answer the POST an HTTP MCP client
- * sends, so the card is prerendered. A deployment that renders on demand serves the same tools over HTTP
- * with the CLI's own handler, over the registry the site already publishes:
+ *  - `GET /mcp` is the server card: which tools it serves (`search(query)` and `get(name)`) and how to
+ *    connect, over HTTP here or over stdio with `tct mcp`.
+ *  - `POST /mcp` is MCP JSON-RPC 2.0 (`initialize`, `tools/list`, `tools/call`), answered by the CLI's own
+ *    stateless handler over the registry the site already publishes, so an agent gets the same answer as from
+ *    `tct mcp`.
  *
- * ```ts
- * // src/pages/mcp.ts of a site with an adapter, `export const prerender = false`
- * import {handleMcpRequest} from '@tecton-wc/cli/mcp/http.js';
- * import registry from '../../public/agent-registry.json';
- * export const ALL = ({request}) => handleMcpRequest(registry, request);
- * ```
+ * Only a Node process (`node dist/server/entry.mjs`, the adapter's standalone server) can answer a POST; a
+ * static host serves the pages and the card is not reachable there. See the "Working with AI" guide.
  *
- * The handler is imported lazily so the static build does not bundle the MCP SDK.
+ * The handler is imported from the CLI package source (the docs app does not depend on the CLI package).
  */
 import type {APIRoute} from 'astro';
+import registry from '../../public/agent-registry.json';
+import {handleMcpRequest} from '../../../../packages/cli/src/mcp/http.ts';
+import type {AgentRegistry} from '../../../../packages/cli/src/registry/types.ts';
 
-export const prerender = true;
+export const prerender = false;
 
-export const GET: APIRoute = async () => {
-  const {mcpServerCard} = await import('../../../../packages/cli/src/mcp/http.ts');
-  return mcpServerCard({remote: false});
-};
+export const ALL: APIRoute = ({request}) => handleMcpRequest(registry as unknown as AgentRegistry, request);
