@@ -1,0 +1,20 @@
+/*
+ * tct-chat-tokenized-text. Inline, so it reads as part of the message text; a token is an inline-flex
+ * box centred on the text line (upstream `token` style). Layout only: badges paint themselves.
+ * [mwg:css-layout]
+ */
+@layer component {
+  :host {
+    display: inline;
+  }
+
+  .base {
+    /* Long unbroken values (an id, a URL) wrap like the bubble text around them. */
+    overflow-wrap: inherit;
+  }
+
+  .token {
+    display: inline-flex;
+    vertical-align: middle;
+  }
+}

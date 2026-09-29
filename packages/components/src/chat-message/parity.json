@@ -1,0 +1,336 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "chat-message",
+  "workPackage": "WP-9",
+  "entries": {
+    "core.chat-message": {
+      "tag": "tct-chat-message",
+      "status": "implemented",
+      "upstream": {
+        "name": "ChatMessage",
+        "path": "packages/core/src/Chat/ChatMessage.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "sender",
+          "kind": "prop",
+          "target": "sender",
+          "as": "attribute",
+          "reflect": true,
+          "default": "assistant",
+          "notes": "Required upstream; an unset sender is an assistant message (the bubble's own fallback). Size: the budget is the measured gzip size + about 10%; it includes the ICU message parser (about 33 kB) that every translating family bundles (see provisional-budgets.json), which the performance work package removes."
+        },
+        {
+          "upstream": "children",
+          "kind": "prop",
+          "target": "default",
+          "as": "slot",
+          "notes": "Free-form body: bubbles, tool calls, images. Non-bubble content is flush with the message edge."
+        },
+        {
+          "upstream": "avatar",
+          "kind": "slot",
+          "target": "avatar",
+          "as": "slot",
+          "notes": "Never shown for a system message."
+        },
+        {
+          "upstream": "name",
+          "kind": "prop",
+          "target": "name",
+          "as": "attribute",
+          "notes": "Plain-text form; the `name` slot takes markup and wins. It also names the article."
+        },
+        {
+          "upstream": "metadata",
+          "kind": "slot",
+          "target": "metadata",
+          "as": "slot",
+          "notes": "Typically a tct-chat-message-metadata. Never shown for a system message."
+        },
+        {
+          "upstream": "density",
+          "kind": "prop",
+          "target": "density",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Unset: inherited from the enclosing tct-chat-message-list through chatListContext; balanced outside a list."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base|avatar|column|name|body|metadata) or the tokens."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useChatMessageContext",
+          "target": "chatMessageContext",
+          "as": "context",
+          "notes": "chat-message.context.ts: {sender, density, reportName}. Provided to bubbles, metadata and any content inside."
+        },
+        {
+          "upstream": "useChatListContext",
+          "target": "chatListContext",
+          "as": "context",
+          "notes": "chat-message.context.ts: {density}. Provided by tct-chat-message-list, consumed here."
+        }
+      ],
+      "keyboard": [],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "CHATMSG-01",
+          "type": "approved-api-difference",
+          "text": "`name` is an attribute and a slot; `avatar`, `metadata` and the body are slots. The article's accessible name is computed as text (the sender name, else \"Message from {sender}\") and set through ElementInternals, because upstream's aria-labelledby to the name element cannot cross the shadow root. `accessibleName` is a read-only getter the message list uses to introduce an announced message."
+        },
+        {
+          "id": "CHATMSG-02",
+          "type": "approved-api-difference",
+          "text": "The avatar offset (one name row down, to line up with the first bubble's text) is driven by the bubble reporting its name row through chatMessageContext.reportName, where upstream uses `:has(~ * [data-chat-name])` across the flat DOM, which does not see through shadow roots."
+        },
+        {
+          "id": "CHATMSG-03",
+          "type": "approved-api-difference",
+          "text": "A system message is named \"Message from system\" and shows no name row, as upstream; the element itself never re-renders for body changes (a streaming body): only the name slot's own subtree is observed, so 200 chunks cost the message nothing."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 40,
+      "notes": "Guides: [mwg:accessible-web-components] (role and name through ElementInternals; ARIA relations stay inside one tree); [mwg:shadow-dom] (slots, whitespace); [mwg:css-layout] (logical flex layout, RTL for free)."
+    },
+    "core.chat-message-bubble": {
+      "tag": "tct-chat-message-bubble",
+      "status": "implemented",
+      "upstream": {
+        "name": "ChatMessageBubble",
+        "path": "packages/core/src/Chat/ChatMessageBubble.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "prop",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "variant",
+          "kind": "prop",
+          "target": "variant",
+          "as": "attribute",
+          "reflect": true,
+          "default": "filled"
+        },
+        {
+          "upstream": "name",
+          "kind": "prop",
+          "target": "name",
+          "as": "attribute",
+          "notes": "Plain-text form; the `name` slot takes markup and wins."
+        },
+        {
+          "upstream": "metadata",
+          "kind": "prop",
+          "target": "metadata",
+          "as": "attribute",
+          "notes": "Plain-text form; the `metadata` slot (a tct-chat-message-metadata, say) takes markup and wins."
+        },
+        {
+          "upstream": "group",
+          "kind": "prop",
+          "target": "group",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "target": "width",
+          "as": "attribute",
+          "notes": "A number is px, a string a CSS length. Not reflected."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(bubble|name|metadata) or the tokens."
+        }
+      ],
+      "keyboard": [],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "CHATBUBBLE-01",
+          "type": "approved-api-difference",
+          "text": "Upstream renders a fragment (name row, bubble, metadata row) into the message's flex column. The element is one host that fills the message column (`inline-size: 100%`) and lines the three rows up by sender inside it, so the bubble's `max(80%, 280px)` cap resolves against the column exactly as upstream's flat items do. Name and metadata rows appear only when there is something to show (non-rendering scalar values map to an absent attribute or empty slot)."
+        },
+        {
+          "id": "CHATBUBBLE-02",
+          "type": "approved-api-difference",
+          "text": "The bubble content box is `display: flow-root`, not a flex column: a flex column makes every text run and inline element (<strong>, links) its own item, which splits a sentence into stacked lines. Block content (a card, an attachment list) stacks and stretches as it did."
+        },
+        {
+          "id": "CHATBUBBLE-03",
+          "type": "tecton-visual",
+          "text": "Filled bubbles are --color-neutral for both senders (upstream's default; the React theme adds no chat-message-bubble override) with --radius-chat (Tecton radius.150, 12px) and --radius-container when compact. A transparent 1px outline draws the bubble's edge in forced colours."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "rtl": true,
+        "forcedColors": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 40,
+      "notes": "Guides: [mwg:css-layout] (logical corner radii follow the reading direction); [mwg:styling-web-components] (private custom properties, parts)."
+    },
+    "core.chat-message-metadata": {
+      "tag": "tct-chat-message-metadata",
+      "status": "implemented",
+      "upstream": {
+        "name": "ChatMessageMetadata",
+        "path": "packages/core/src/Chat/ChatMessageMetadata.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "timestamp",
+          "kind": "prop",
+          "target": "timestamp",
+          "as": "attribute",
+          "notes": "Plain-text form; the `timestamp` slot takes markup (a time element, tct-timer)."
+        },
+        {
+          "upstream": "footer",
+          "kind": "prop",
+          "target": "footer",
+          "as": "attribute",
+          "notes": "Plain-text form; the `footer` slot takes markup (reactions, a copy button)."
+        },
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "target": "status",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base|timestamp|footer|status) or the tokens."
+        }
+      ],
+      "keyboard": [],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "CHATMETA-01",
+          "type": "a11y-improvement",
+          "text": "The status is an image (role=img) with the accessible name \"Message {status}\" and a native title with the status word. Upstream puts aria-label on a plain <span>, which has no role and so no supported name. The dots between the items are aria-hidden, where upstream leaves them in the reading order."
+        },
+        {
+          "id": "CHATMETA-02",
+          "type": "tecton-visual",
+          "text": "A failed status is drawn in --color-text-red (ink), not --color-error (the filled severity colour), to keep 4.5:1 on the page (React theme note for ChatToolCalls applies to every error ink)."
+        },
+        {
+          "id": "CHATMETA-03",
+          "type": "approved-api-difference",
+          "text": "Upstream returns null when there is nothing to show. The element renders nothing and is `display: contents`, so it takes no space and no flex gap in its parent."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "rtl": true,
+        "forcedColors": false,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 40,
+      "notes": "Guides: [mwg:accessible-web-components] (status is an image with a name; separators are decorative); [mwg:css] (pulse only inside prefers-reduced-motion: no-preference)."
+    },
+    "core.chat-tokenized-text": {
+      "tag": "tct-chat-tokenized-text",
+      "status": "implemented",
+      "upstream": {
+        "name": "ChatTokenizedText",
+        "path": "packages/core/src/Chat/ChatTokenizedText.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "prop",
+          "target": "text",
+          "as": "attribute",
+          "notes": "The message text is the `text` attribute, else the element's own text content (observed, so a stream can append to it). Only its text is read: markup inside it is shown as characters."
+        },
+        {
+          "upstream": "tokens",
+          "kind": "prop",
+          "target": "tokens",
+          "as": "property",
+          "notes": "Property only. ChatToken = {value, label?, variant?, icon?} | {value, render}. `icon` is a registered icon name; `render` returns TemplateResult | Node | string (a string is text)."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base|token) or the tokens."
+        }
+      ],
+      "keyboard": [],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "CHATTOKEN-01",
+          "type": "approved-api-difference",
+          "text": "The token types (ChatToken, ChatTokenBadge, ChatTokenCustom) live in chat-message.types.ts and are structurally upstream's ChatComposerToken. The composer (WP-16) imports them from here, so one definition serves input and display."
+        },
+        {
+          "id": "CHATTOKEN-02",
+          "type": "a11y-improvement",
+          "text": "No HTML-string sink: the text, token labels and any string a custom renderer returns are Lit text bindings, never markup. `announcementText` exposes the text as displayed (a mention by its label) so the message list announces what the reader sees."
+        },
+        {
+          "id": "CHATTOKEN-03",
+          "type": "waiver",
+          "text": "Known open item (not this folder's): in the dark theme the orange, pink and yellow hue badges fall under 4.5:1 when they sit on a chat bubble (--color-neutral), because the hue fills are tinted over the surface. Every hue passes on the page background and in light mode. Badge tokens belong to WP-2/tokens; the docs example uses the blue, green and purple variants."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "rtl": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 40,
+      "notes": "Guides: [mwg:trusted-types] (no HTML sinks; Lit templates only); [mwg:shadow-dom] (unassigned light-DOM text is not rendered, so it is the source and never shown twice)."
+    }
+  }
+}

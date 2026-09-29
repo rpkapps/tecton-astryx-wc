@@ -1,0 +1,16 @@
+<!-- title: Right to left; description: The side navigation is on the right in right-to-left text, and the corner of the elevated surface follows. -->
+<div dir="rtl">
+  <tct-app-shell no-landmarks style="--app-shell-height: 300px">
+    <tct-hstack slot="top-nav" padding="2" gap="2" v-align="center">
+      <tct-mobile-nav-toggle></tct-mobile-nav-toggle>
+      <tct-text type="medium-strong">أكمي</tct-text>
+    </tct-hstack>
+    <nav slot="side-nav" aria-label="الأقسام">
+      <tct-vstack gap="1" padding="2">
+        <a href="#overview">نظرة عامة</a>
+        <a href="#projects">المشاريع</a>
+      </tct-vstack>
+    </nav>
+    <tct-vstack padding="4"><tct-text as="p">المحتوى الرئيسي.</tct-text></tct-vstack>
+  </tct-app-shell>
+</div>

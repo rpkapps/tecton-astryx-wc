@@ -1,0 +1,10 @@
+<!-- title: Snap points; description: snaps lists sizes in px, separated by spaces. The panel only rests on them: a drag or a keyboard step lands on the nearest one. -->
+<tct-card padding="0" height="220">
+  <tct-layout padding="4">
+    <tct-layout-panel slot="start" resizable default-size="200" min-size="120" max-size="400" snaps="200 300 400">
+      <tct-text>Snaps to 200, 300 and 400 px.</tct-text>
+    </tct-layout-panel>
+    <tct-resize-handle slot="start" has-divider label="Resize sidebar"></tct-resize-handle>
+    <tct-layout-content><tct-text>Content</tct-text></tct-layout-content>
+  </tct-layout>
+</tct-card>

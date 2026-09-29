@@ -1,9 +1,7 @@
 <!-- title: Info tip; description: touch-trigger="tap" lets a tap on a button whose only job is to reveal the tooltip open it; otherwise a tap performs the trigger's action. -->
-<div style="display: flex; align-items: center; gap: var(--spacing-2)">
-  <span>Retention period</span>
+<tct-hstack gap="2" v-align="center">
+  <tct-text>Retention period</tct-text>
   <tct-tooltip content="How long a well log stays in the active project before it is archived." touch-trigger="tap">
-    <button type="button" aria-label="More about the retention period" style="display: inline-flex; padding: var(--spacing-1); color: var(--color-icon-secondary); cursor: help; background: none; border: 0">
-      <tct-icon name="info" size="sm"></tct-icon>
-    </button>
+    <tct-button variant="text-only" size="sm" icon="info" aria-label="More about the retention period"></tct-button>
   </tct-tooltip>
-</div>
+</tct-hstack>

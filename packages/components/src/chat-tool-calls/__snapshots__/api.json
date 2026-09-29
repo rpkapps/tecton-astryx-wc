@@ -1,0 +1,56 @@
+{
+  "folder": "chat-tool-calls",
+  "elements": {
+    "tct-chat-tool-calls": {
+      "class": "TctChatToolCalls",
+      "attributes": [
+        {
+          "name": "expanded",
+          "property": "expanded",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "calls",
+          "type": "readonly ChatToolCallItem[]",
+          "default": "[]",
+          "readonly": false
+        }
+      ],
+      "methods": [],
+      "slots": [],
+      "events": [
+        {
+          "name": "tct-expanded-change",
+          "class": "TctExpandedChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "base",
+        "call",
+        "detail",
+        "header",
+        "name",
+        "row",
+        "status",
+        "target"
+      ],
+      "cssStates": [
+        "expanded"
+      ],
+      "cssProperties": []
+    }
+  }
+}

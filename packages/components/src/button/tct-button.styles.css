@@ -29,6 +29,7 @@
     --_fg-press: var(--tecton-color-action-secondary-text-press);
     --_border-press: transparent;
     --_bg-focus: var(--tecton-color-action-secondary-bg-focus);
+    --_fg-focus: var(--tecton-color-action-secondary-text-focus);
     --_bg-disabled: var(--tecton-color-disabled-filled-bg);
     --_fg-disabled: var(--tecton-color-disabled-filled-text);
     --_border-disabled: transparent;
@@ -95,10 +96,13 @@
     --_bg: var(--color-accent);
     --_fg: var(--color-on-accent);
     --_bg-hover: var(--tecton-color-action-primary-bg-hover);
-    --_fg-hover: var(--color-on-accent);
+    /* Each state pairs its fill with its own text role (the Tecton export does): the resting ink on the
+       dark-mode hover/focus fill is 4.18:1, the state role 4.5:1 or better. */
+    --_fg-hover: var(--tecton-color-action-primary-text-hover);
     --_bg-press: var(--tecton-color-action-primary-bg-press);
-    --_fg-press: var(--color-on-accent);
+    --_fg-press: var(--tecton-color-action-primary-text-press);
     --_bg-focus: var(--tecton-color-action-primary-bg-focus);
+    --_fg-focus: var(--tecton-color-action-primary-text-focus);
   }
 
   :host([variant='ghost']) .button {
@@ -109,6 +113,7 @@
     --_bg-press: var(--tecton-color-action-tertiary-bg-press);
     --_fg-press: var(--tecton-color-action-tertiary-text-press);
     --_bg-focus: var(--tecton-color-action-tertiary-bg-focus);
+    --_fg-focus: var(--tecton-color-action-tertiary-text-focus);
   }
 
   :host([variant='destructive']) .button {
@@ -119,6 +124,7 @@
     --_bg-press: var(--tecton-color-status-error-filled-bg-press);
     --_fg-press: var(--tecton-color-status-error-filled-text-press);
     --_bg-focus: var(--tecton-color-status-error-filled-bg-focus);
+    --_fg-focus: var(--tecton-color-status-error-filled-text-focus);
   }
 
   :host([variant='outlined']) .button {
@@ -132,6 +138,7 @@
     --_fg-press: var(--tecton-color-action-outlined-text-press);
     --_border-press: var(--tecton-color-action-outlined-border-press);
     --_bg-focus: var(--tecton-color-action-outlined-bg-focus);
+    --_fg-focus: var(--tecton-color-action-outlined-text-focus);
     --_bg-disabled: var(--tecton-color-disabled-outline-bg);
     --_fg-disabled: var(--tecton-color-disabled-outline-text);
     --_border-disabled: var(--tecton-color-disabled-outline-border);
@@ -145,6 +152,7 @@
     --_bg-press: var(--tecton-color-action-outlined-bg);
     --_fg-press: var(--tecton-color-action-text-only-text-press);
     --_bg-focus: var(--tecton-color-action-text-only-bg-focus);
+    --_fg-focus: var(--tecton-color-action-text-only-text-focus);
     --_bg-disabled: var(--tecton-color-disabled-outline-bg);
     --_fg-disabled: var(--tecton-color-disabled-text-only-text);
   }
@@ -308,7 +316,10 @@
 
   /* Tecton draws focus as the hover fill plus the pink ring (design/components/button.md). */
   .button:focus-visible:not(:disabled, [aria-disabled='true']) {
+    --color-icon-secondary: var(--_fg-focus, var(--_fg));
+
     background-color: var(--_bg-focus);
+    color: var(--_fg-focus, var(--_fg));
   }
 
   .button:active:not(:disabled, [aria-disabled='true']) {

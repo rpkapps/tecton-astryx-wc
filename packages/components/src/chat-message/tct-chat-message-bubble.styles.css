@@ -1,0 +1,143 @@
+/*
+ * tct-chat-message-bubble. The host fills the message column so the bubble's own cap
+ * (`max(80%, 280px)`) resolves against the column, as upstream's flat name/bubble/metadata items do;
+ * `.stack` lines the three rows up by sender. The bubble is painted by `.bubble` from two private
+ * properties (`--_bg`, `--_fg`); sender and density arrive as data attributes read from context
+ * (A§6.2). Corners are logical: the "tail" side follows the reading direction. [mwg:css-layout]
+ */
+@layer component {
+  :host {
+    display: block;
+    inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  .stack {
+    --_gap: var(--spacing-1);
+    --_pad-block: var(--spacing-3);
+    --_pad-inline: var(--spacing-4);
+    --_radius: var(--radius-chat);
+    --_align: flex-start;
+
+    display: flex;
+    flex-direction: column;
+    align-items: var(--_align);
+    gap: var(--_gap);
+    min-inline-size: 0;
+  }
+
+  .stack[data-density='compact'] {
+    --_gap: var(--spacing-0-5);
+    --_radius: var(--radius-container);
+  }
+
+  .stack[data-density='spacious'] {
+    --_gap: var(--spacing-1-5);
+    --_pad-block: var(--spacing-4);
+    --_pad-inline: var(--spacing-5);
+  }
+
+  .stack[data-sender='user'] {
+    --_align: flex-end;
+  }
+
+  .stack[data-sender='system'] {
+    --_align: center;
+  }
+
+  .bubble {
+    --_bg: var(--color-neutral);
+    --_fg: var(--color-text-primary);
+
+    /* Not a flex column: inline runs (text, <strong>, links) must stay one paragraph. */
+    display: flow-root;
+    /* design: upstream's width cap, 80% of the message column but never narrower than 280px */
+    max-inline-size: max(80%, 280px);
+    min-inline-size: 0;
+    padding-block: var(--_pad-block);
+    padding-inline: var(--_pad-inline);
+    /* Transparent, not absent: forced colours draw it as the bubble's edge (A§6.6). */
+    outline: var(--border-width) solid transparent;
+    border-radius: var(--_radius);
+    background-color: var(--_bg);
+    color: var(--_fg);
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+    overflow-wrap: break-word;
+  }
+
+  .bubble[data-variant='ghost'] {
+    --_bg: transparent;
+
+    padding-block: 0;
+    outline: none;
+  }
+
+  /* An explicit width replaces the cap: a full-column or fixed-width bubble is not also clamped. */
+  .bubble[style] {
+    inline-size: var(--_width);
+    max-inline-size: none;
+  }
+
+  /* Grouped bubbles: the sender's side is squared where two bubbles meet. */
+  .stack:not([data-sender='user']) .bubble[data-group='first'] {
+    border-end-start-radius: var(--radius-inner);
+  }
+
+  .stack:not([data-sender='user']) .bubble[data-group='middle'] {
+    border-start-start-radius: var(--radius-inner);
+    border-end-start-radius: var(--radius-inner);
+  }
+
+  .stack:not([data-sender='user']) .bubble[data-group='last'] {
+    border-start-start-radius: var(--radius-inner);
+  }
+
+  .stack[data-sender='user'] .bubble[data-group='first'] {
+    border-end-end-radius: var(--radius-inner);
+  }
+
+  .stack[data-sender='user'] .bubble[data-group='middle'] {
+    border-start-end-radius: var(--radius-inner);
+    border-end-end-radius: var(--radius-inner);
+  }
+
+  .stack[data-sender='user'] .bubble[data-group='last'] {
+    border-start-end-radius: var(--radius-inner);
+  }
+
+  /* The name and metadata rows share the bubble's inline padding so their text lines up with it. */
+  .name,
+  .metadata {
+    padding-inline: var(--_pad-inline);
+  }
+
+  .name {
+    display: flex;
+    align-items: center;
+    block-size: var(--spacing-5);
+    margin-block-end: calc(-1 * var(--spacing-1-5));
+    color: var(--color-text-secondary);
+    font-size: var(--text-supporting-size);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--text-supporting-leading);
+  }
+
+  .metadata {
+    margin-block-start: calc(-1 * var(--spacing-1-5));
+  }
+
+  .stack[data-sender='user'] .name,
+  .stack[data-sender='user'] .metadata {
+    text-align: end;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .bubble[data-variant='filled'] {
+      outline-color: ButtonBorder;
+    }
+  }
+}

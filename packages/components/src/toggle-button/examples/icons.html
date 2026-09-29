@@ -1,7 +1,7 @@
 <!-- title: Icons and icon-only; description: pressed-icon swaps an outline icon for a filled one while pressed. icon-only paints just the icon; the label is the name and the tooltip. -->
-<div style="display: flex; align-items: center; gap: var(--spacing-3)">
+<tct-hstack gap="3" v-align="center">
   <tct-toggle-button label="Favourite" icon="well" pressed-icon="well-filled"></tct-toggle-button>
   <tct-toggle-button label="Bookmark" icon="well" pressed-icon="well-filled" pressed></tct-toggle-button>
   <tct-toggle-button label="Star" icon="well" pressed-icon="well-filled" icon-only></tct-toggle-button>
   <tct-toggle-button label="Pinned" icon="well" pressed-icon="well-filled" icon-only pressed></tct-toggle-button>
-</div>
+</tct-hstack>

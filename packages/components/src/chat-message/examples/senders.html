@@ -1,0 +1,12 @@
+<!-- title: Senders; description: sender aligns the message: assistant at the inline start, user at the inline end, system centred. A system message never shows an avatar, a name or metadata. -->
+<tct-vstack max-width="520" gap="4">
+  <tct-chat-message sender="assistant">
+    <tct-chat-message-bubble>An assistant message sits at the start.</tct-chat-message-bubble>
+  </tct-chat-message>
+  <tct-chat-message sender="user">
+    <tct-chat-message-bubble>A user message sits at the end.</tct-chat-message-bubble>
+  </tct-chat-message>
+  <tct-chat-message sender="system">
+    <tct-chat-message-bubble variant="ghost">A system message is centred.</tct-chat-message-bubble>
+  </tct-chat-message>
+</tct-vstack>

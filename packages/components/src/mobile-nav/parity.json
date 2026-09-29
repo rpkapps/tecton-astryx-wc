@@ -1,0 +1,227 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "mobile-nav",
+  "workPackage": "WP-8",
+  "entries": {
+    "core.mobile-nav": {
+      "tag": "tct-mobile-nav",
+      "status": "implemented",
+      "upstream": {
+        "name": "MobileNav",
+        "path": "packages/core/src/MobileNav/MobileNav.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "isOpen",
+          "kind": "prop",
+          "target": "open",
+          "as": "property",
+          "notes": "A boolean that, when set, is the state; unset follows the enclosing app shell. Reflected as the attribute `open`."
+        },
+        {
+          "upstream": "onOpenChange",
+          "kind": "event",
+          "target": "tct-open-change",
+          "as": "event",
+          "notes": "Cancelable intent with `open` and `reason` (escape, outside, close-button, request); `tct-after-open-change` reports the committed state."
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "header",
+          "kind": "slot",
+          "target": "header",
+          "as": "slot"
+        },
+        {
+          "upstream": "header",
+          "kind": "prop",
+          "target": "header",
+          "as": "attribute",
+          "notes": "A text heading; the `header` slot wins."
+        },
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "target": "width",
+          "as": "attribute",
+          "default": 320
+        },
+        {
+          "upstream": "side",
+          "kind": "prop",
+          "target": "side",
+          "as": "attribute",
+          "reflect": true,
+          "default": "auto",
+          "notes": "`start`, `end` or `auto` (from the trigger that opened it)."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute"
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "React test hook; a WC test selects by tag, part or role."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "scrollbarGutter",
+          "as": "waived",
+          "reason": "The scroll lock of the layer controller (core/src/layer/scroll-lock.ts) owns the page scrollbar compensation; the drawer has no hook of its own."
+        },
+        {
+          "upstream": "useLayerDismissal",
+          "target": "LayerController",
+          "as": "controller",
+          "notes": "kind `modal`: Escape, focus return, scroll lock, inert page."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Escape",
+          "action": "Closes the drawer",
+          "when": "open"
+        },
+        {
+          "keys": "Tab, Shift + Tab",
+          "action": "Cycle inside the drawer; focus never reaches the page behind"
+        }
+      ],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "MOBILE-NAV-01",
+          "type": "approved-api-difference",
+          "text": "`open` is a boolean property/attribute and `header` a slot as well as an attribute; `close-label` names the close button. The change is announced as a cancelable `tct-open-change` before it happens (upstream `onOpenChange` after the user action)."
+        },
+        {
+          "id": "MOBILE-NAV-02",
+          "type": "approved-api-difference",
+          "text": "The slide is logical and mirrored in RTL (upstream physical), driven by `translate` with the Web Animations API on exit; `side=auto` resolves from the focused trigger."
+        },
+        {
+          "id": "MOBILE-NAV-03",
+          "type": "a11y-improvement",
+          "text": "Focus returns to the trigger when the drawer closes, the page behind is inert, and the drawer is named by `label`, then the header text, then the localised \"Navigation\"."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": false,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 64,
+      "notes": "Guides: [mwg:navigation-drawer] modal drawer on a native dialog; [mwg:animate-to-from-top-layer] exit animation without `overlay`; [mwg:accessibility] focus return and inert background. Size: the budget (64 kB gzip) covers the bundled dependency closure (base class, controllers, locale catalogs, tct-button, tct-heading and their icons and tooltip), not the folder alone."
+    },
+    "core.mobile-nav-toggle": {
+      "tag": "tct-mobile-nav-toggle",
+      "status": "implemented",
+      "upstream": {
+        "name": "MobileNavToggle",
+        "path": "packages/core/src/MobileNav/MobileNavToggle.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "A custom icon replacing the default hamburger."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "default": "Open navigation",
+          "notes": "Localised default."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "React test hook; a WC test selects by tag, part or role."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: style the host, `::part(base)` or the documented attributes and custom properties."
+        },
+        {
+          "upstream": "className",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "React attribute; a WC uses the `class` attribute and `::part(button)`."
+        },
+        {
+          "upstream": "style",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "React attribute; a WC uses the `style` attribute and `::part(button)`."
+        }
+      ],
+      "hooks": [],
+      "keyboard": [
+        {
+          "keys": "Enter, Space",
+          "action": "Opens or closes the drawer (native button)"
+        }
+      ],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "MOBILE-NAV-TOGGLE-01",
+          "type": "approved-api-difference",
+          "text": "No `aria-controls`: the drawer lives in another shadow tree, where an id reference cannot resolve; `aria-expanded` carries the state."
+        },
+        {
+          "id": "MOBILE-NAV-TOGGLE-02",
+          "type": "approved-api-difference",
+          "text": "It asks before it acts: a cancelable `tct-open-change` (reason `trigger`) precedes the toggle, and it renders nothing above the breakpoint or in a shell without mobile navigation."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessibility] named icon button with aria-expanded."
+    }
+  }
+}

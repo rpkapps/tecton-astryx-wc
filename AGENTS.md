@@ -78,6 +78,7 @@ docs/                plan/, research/, ARCHITECTURE.md, CONVENTIONS.md
 | `pnpm api:update` / `pnpm api:check` | per-folder API snapshots |
 | `pnpm parity` / `pnpm parity:check` | parity report / schema + coverage rules |
 | `pnpm tokens:check`, `pnpm size`, `pnpm licenses:check` | token drift, size budgets, licence allowlist |
+| `pnpm examples:check` | examples use layout components, no hand-written layout/surface CSS (CONVENTIONS §7) |
 | `pnpm docs:dev` / `pnpm docs:build` / `pnpm docs:a11y` | docs site |
 | **`pnpm check`** | everything above in order; must pass before hand-off |
 

@@ -1,0 +1,10 @@
+<!-- title: Expanded, with a label; description: The expanded attribute is the initial state and label replaces the "{count} tool calls" summary. tct-expanded-change fires before the user's toggle applies, and preventDefault() keeps the group as it is. -->
+<tct-vstack id="tool-expanded-root" max-width="520">
+  <tct-chat-tool-calls id="tool-expanded" expanded label="Investigated the C-19 fault"></tct-chat-tool-calls>
+</tct-vstack>
+<script type="module">
+  document.getElementById('tool-expanded').calls = [
+    {name: 'query_alarms', target: 'C-19, last 7 days', duration: '210ms'},
+    {name: 'read_manual', target: 'compressor fault codes', duration: '90ms'},
+  ];
+</script>

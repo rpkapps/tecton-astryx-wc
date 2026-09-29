@@ -4,11 +4,13 @@
   <script type="module">
     import {toast} from '@tecton-wc/components/toast/toast.api.js';
     import {html} from 'lit';
+    // The toast renders this content in its own shadow root, which the autoloader does not watch: register what it uses.
+    import '@tecton-wc/components/link';
     document.getElementById('toast-action-show').addEventListener('click', () => {
       toast({
         body: 'Item deleted',
         autoHideDuration: 10000,
-        endContent: html`<button type="button" style="color: inherit; background: transparent; border: var(--border-width) solid; border-radius: var(--radius-element)">Undo</button>`,
+        endContent: html`<tct-link color="inherit" has-underline>Undo</tct-link>`,
       });
     });
   </script>
