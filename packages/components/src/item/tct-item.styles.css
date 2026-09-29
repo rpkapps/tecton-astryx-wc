@@ -75,7 +75,15 @@
 
   /* -------------------------------------------------------------------------- slots */
 
-  .marker,
+  /*
+   * The marker slot has no wrapper: a slotted marker is a direct flex child of the row, so it can
+   * set its own `align-self` (list bullets align to the first baseline). An empty slot makes no box,
+   * so it adds no gap.
+   */
+  ::slotted([slot='marker']) {
+    flex: 0 0 auto;
+  }
+
   .start,
   .end {
     display: flex;

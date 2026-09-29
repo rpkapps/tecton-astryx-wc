@@ -107,7 +107,7 @@ function lines(value: number | undefined): number | undefined {
  * @slot start - Leading content: an icon, avatar or checkbox.
  * @slot end - Trailing content: a badge, a timestamp or an action button.
  * @csspart item - The painted row (Astryx target `astryx-item`).
- * @csspart marker - The marker wrapper.
+ * @csspart marker - The marker slot (no wrapper: a slotted marker is a direct flex child of the row).
  * @csspart start - The start content wrapper.
  * @csspart label - The label.
  * @csspart description - The description.
@@ -185,7 +185,7 @@ export class TctItem extends TctElement {
   /** Declarative form of `interactiveElement`: a selector resolved against the item's light DOM. */
   @property({attribute: 'interactive-selector'}) interactiveSelector = '';
 
-  readonly #slots = new SlotController(this, 'marker', 'start', 'end', 'label', 'description');
+  readonly #slots = new SlotController(this, 'start', 'end', 'label', 'description');
   readonly #link = new ContextConsumer(this, {context: linkContext, subscribe: true});
   readonly #description = new ContextProvider(this, {
     context: itemDescriptionContext,
@@ -393,11 +393,7 @@ export class TctItem extends TctElement {
       ?data-disabled=${this.disabled}
       ?data-role-managed=${roleManaged}
     >
-      ${
-        this.#slots.has('marker')
-          ? html`<span class="marker" part="marker"><slot name="marker"></slot></span>`
-          : nothing
-      }
+      <slot name="marker" part="marker"></slot>
       ${
         this.#slots.has('start')
           ? html`<span class="start" part="start"><slot name="start"></slot></span>`

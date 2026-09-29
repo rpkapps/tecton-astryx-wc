@@ -1,0 +1,32 @@
+/*
+ * tct-list: a vertical collection. The host is layout only; the inner <ul>/<ol> is the semantic list
+ * (explicit role="list", so Safari keeps list semantics for `list-style: none`). Markers are custom
+ * rendered by the items; the list owns the counter for numbered lists (`counter-reset`), which the
+ * items increment through the flat tree. [mwg:css-layout] [mwg:accessible-web-components]
+ */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .header {
+    margin-block-end: var(--spacing-2);
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-0-5);
+    margin: 0;
+    padding-inline-start: 0;
+    list-style-type: none;
+  }
+
+  .list[data-dividers] {
+    gap: 0;
+  }
+
+  .list[data-markers] {
+    counter-reset: tct-list var(--_counter-start, 0);
+  }
+}
