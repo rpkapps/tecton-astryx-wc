@@ -1,0 +1,145 @@
+/*
+ * tct-text-area: the box, the label chrome and the sizes are the shared field module and the shared box
+ * sheet; this sheet turns the box into a multi-line field. The box paints (border, status, focus ring);
+ * the native textarea inside is bare. Adornments (a start icon, the busy spinner and status glyph, the
+ * counter) are absolutely placed inside the box so the resize grip sits in the true corner, and the text's
+ * padding leaves room for them. [mwg:form-fields-automatically-fit-contents] [mwg:css]
+ *
+ * Private custom properties: `--_rows` and `--_max-rows` (set from the attributes), `--_area-inline` (the
+ * inline inset the adornments align to).
+ */
+@layer component {
+  /* The box grows with the textarea: the fixed control heights of the field module do not apply. */
+  .input-wrapper[data-size] {
+    display: block;
+    padding: 0;
+    block-size: auto;
+    align-items: stretch;
+  }
+
+  .area {
+    --_area-inline: var(--spacing-2);
+    --_area-block: var(--spacing-1);
+
+    position: relative;
+    display: block;
+  }
+
+  .area[data-size='lg'] {
+    --_area-block: var(--spacing-2);
+  }
+
+  .area-control,
+  ::slotted(textarea) {
+    display: block;
+    box-sizing: border-box;
+    inline-size: 100%;
+    min-inline-size: 0;
+    padding-block: var(--_area-block);
+    padding-inline: var(--_area-inline);
+    margin: 0;
+    resize: vertical;
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+    color: inherit;
+    background-color: transparent;
+    border: 0;
+    outline: none;
+  }
+
+  ::slotted(textarea)::placeholder {
+    color: var(--tecton-color-input-outlined-text-placeholder);
+    opacity: 1;
+  }
+
+  .area[data-start-icon] .area-control,
+  .area[data-start-icon] ::slotted(textarea) {
+    padding-inline-start: calc(var(--_area-inline) + var(--spacing-6));
+  }
+
+  .area[data-end-slot] .area-control,
+  .area[data-end-slot] ::slotted(textarea) {
+    padding-inline-end: calc(var(--_area-inline) + var(--spacing-6));
+  }
+
+  .area[data-busy][data-end-slot] .area-control,
+  .area[data-busy][data-end-slot] ::slotted(textarea) {
+    padding-inline-end: calc(var(--_area-inline) + var(--spacing-12));
+  }
+
+  .area[data-counter] .area-control,
+  .area[data-counter] ::slotted(textarea) {
+    padding-block-end: var(--spacing-7);
+  }
+
+  .start-icon {
+    position: absolute;
+    inset-block-start: var(--spacing-2);
+    inset-inline-start: var(--_area-inline);
+    display: flex;
+    pointer-events: none;
+  }
+
+  .end-slot {
+    position: absolute;
+    inset-block-start: var(--spacing-2);
+    inset-inline-end: var(--_area-inline);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+  }
+
+  /* The status button of the tooltip variant is the one interactive thing in the end slot. */
+  .end-slot .status-button {
+    pointer-events: auto;
+  }
+
+  .end-slot > .busy,
+  .end-slot > .status-icon {
+    pointer-events: none;
+  }
+
+  .counter {
+    position: absolute;
+    inset-block-end: var(--spacing-1);
+    inset-inline-end: var(--_area-inline);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    font-family: var(--font-family-body);
+    font-size: var(--text-supporting-size);
+    line-height: var(--text-supporting-leading);
+    color: var(--color-text-secondary);
+    pointer-events: none;
+  }
+
+  .counter[data-over] {
+    color: var(--tecton-color-status-error-outline-text);
+  }
+
+  /* Auto-grow: no grip, and the height follows the text between the row bounds. */
+  .area[data-auto-grow] .area-control,
+  .area[data-auto-grow] ::slotted(textarea) {
+    resize: none;
+    min-block-size: calc(var(--_rows, 3) * 1lh + 2 * var(--_area-block));
+  }
+
+  .area[data-auto-grow][data-max-rows] .area-control,
+  .area[data-auto-grow][data-max-rows] ::slotted(textarea) {
+    max-block-size: calc(var(--_max-rows) * 1lh + 2 * var(--_area-block));
+  }
+
+  @supports (field-sizing: content) {
+    .area[data-auto-grow] .area-control,
+    .area[data-auto-grow] ::slotted(textarea) {
+      field-sizing: content;
+    }
+  }
+}
+
+@layer state {
+  .input-wrapper[data-disabled] .area-control {
+    cursor: default;
+  }
+}

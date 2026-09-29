@@ -1,0 +1,282 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "text-area",
+  "workPackage": "WP-7",
+  "entries": {
+    "core.text-area": {
+      "tag": "tct-text-area",
+      "status": "implemented",
+      "upstream": {
+        "name": "TextArea",
+        "path": "packages/core/src/TextArea/TextArea.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "target": "focus",
+          "as": "method",
+          "notes": "The element is the handle: `focus()` and `select()` reach the inner textarea; `value` and the form API are on the host."
+        },
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "property",
+          "notes": "The `value` attribute is the default (form reset restores it); the property is the current value. In slotted-textarea mode it reads and writes the author's textarea."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "input",
+          "as": "native-event",
+          "notes": "Upstream onChange runs on every edit, which is the native `input` event; the native `change` fires once when the edit is committed (blur). Neither fires on property writes."
+        },
+        {
+          "upstream": "changeAction",
+          "kind": "prop",
+          "target": "changeAction",
+          "as": "property",
+          "notes": "`(value, event) => void | Promise<void>` after each user edit; busy (:state(busy), aria-busy, spinner) while a returned promise is pending."
+        },
+        {
+          "upstream": "isLabelHidden",
+          "kind": "prop",
+          "target": "label-hidden",
+          "as": "attribute",
+          "reflect": true
+        },
+        {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute"},
+        {"upstream": "isOptional", "kind": "prop", "target": "optional", "as": "attribute"},
+        {
+          "upstream": "isRequired",
+          "kind": "prop",
+          "target": "required",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Also a validity constraint (valueMissing) and `aria-required`."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Also through <fieldset disabled>."
+        },
+        {
+          "upstream": "isReadOnly",
+          "kind": "prop",
+          "target": "readonly",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "disabledMessage",
+          "kind": "prop",
+          "target": "disabled-message",
+          "as": "attribute",
+          "notes": "A tooltip on a disabled field that says why; the field stays focusable (aria-disabled)."
+        },
+        {
+          "upstream": "isLoading",
+          "kind": "prop",
+          "target": "loading",
+          "as": "attribute",
+          "reflect": true
+        },
+        {"upstream": "placeholder", "kind": "prop", "target": "placeholder", "as": "attribute"},
+        {
+          "upstream": "rows",
+          "kind": "prop",
+          "target": "rows",
+          "as": "attribute",
+          "default": 3,
+          "notes": "The visible height in lines; with `auto-grow` it is the minimum."
+        },
+        {
+          "upstream": "maxLength",
+          "kind": "prop",
+          "target": "maxlength",
+          "as": "attribute",
+          "notes": "A soft limit: the counter counts user-perceived characters (graphemes), typing is not stopped, and past the limit the field is aria-invalid, does not submit and the overflow is announced once."
+        },
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "target": "status",
+          "as": "property",
+          "notes": "Object `{type, message?}`, or the `status-type` and `status-message` attributes."
+        },
+        {
+          "upstream": "statusVariant",
+          "kind": "prop",
+          "target": "status-variant",
+          "as": "attribute",
+          "default": "attached",
+          "notes": "attached, detached or tooltip (a focusable button in the box that reveals the message)."
+        },
+        {"upstream": "labelTooltip", "kind": "prop", "target": "label-tooltip", "as": "attribute"},
+        {
+          "upstream": "startIcon",
+          "kind": "prop",
+          "target": "start-icon",
+          "as": "attribute",
+          "notes": "An icon name (upstream also accepts a node; use the tct-icon element in your own content instead)."
+        },
+        {
+          "upstream": "hasSpellCheck",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "The global `spellcheck` attribute (and property) on the host is forwarded to the inner textarea; the CEM does not list global attributes as targets (see requests)."
+        },
+        {
+          "upstream": "onPaste",
+          "kind": "event",
+          "target": "paste",
+          "as": "native-event",
+          "notes": "Composed, so it reaches the host from the inner textarea."
+        },
+        {
+          "upstream": "hasAutoFocus",
+          "kind": "prop",
+          "target": "autofocus",
+          "as": "attribute",
+          "notes": "The global `autofocus` attribute; the element focuses its textarea once it has rendered."
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md",
+          "notes": "Unset takes the nearest size provider, else md."
+        },
+        {
+          "upstream": "htmlName",
+          "kind": "prop",
+          "target": "name",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "target": "width",
+          "as": "attribute",
+          "notes": "A number is px, a string a CSS length. Not reflected."
+        },
+        {"upstream": "onFocus", "kind": "event", "target": "focus", "as": "native-event"},
+        {"upstream": "onBlur", "kind": "event", "target": "blur", "as": "native-event"},
+        {"upstream": "autoComplete", "kind": "prop", "target": "autocomplete", "as": "attribute"},
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style/::part/custom properties"
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useInputContainer",
+          "target": "FieldChromeController",
+          "as": "controller",
+          "notes": "Shadow mode for the field's own tree, light mode (satellites) in slotted-textarea mode."
+        },
+        {
+          "upstream": "useInputStatusIcon",
+          "as": "waived",
+          "reason": "Internal render helper; the status glyph and the tooltip button are part of the element's template."
+        },
+        {
+          "upstream": "useAnnounce",
+          "target": "announce",
+          "as": "controller",
+          "notes": "The shared announcer: the counter speaks once when it nears the limit (polite) and once when it is passed (assertive)."
+        },
+        {
+          "upstream": "useResolvedRequired",
+          "target": "formLayoutContext",
+          "as": "context",
+          "notes": "The form layout's optionality default; the indicator follows it."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Enter",
+          "action": "Adds a line break; never submits the form.",
+          "when": "in the field"
+        },
+        {
+          "keys": "Tab from the field",
+          "action": "Reaches the tooltip-variant status button, which is a real focusable button."
+        }
+      ],
+      "form": {
+        "formAssociated": true,
+        "notes": "Form-associated (ElementInternals): submits `name=value`, resets to the `value` attribute, restores on navigation, joins <fieldset disabled>, works with form= and label for. Validation shows after a commit, a blur after an edit or a submit attempt, never on form.checkValidity(); past `maxlength` it shows at once. Slotted-textarea mode submits the author's own <textarea> exactly once and adds no entry of its own."
+      },
+      "differences": [
+        {
+          "id": "TEXTAREA-01",
+          "type": "approved-api-difference",
+          "text": "Uncontrolled by default (D-006): `value` is a property with the `value` attribute as its default, and the native `input`/`change` events report edits, instead of a controlled value plus onChange. Set the property to control it."
+        },
+        {
+          "id": "TEXTAREA-02",
+          "type": "approved-api-difference",
+          "text": "Slotted-textarea mode (`<textarea slot=\"input\">`) lets browser features, autofill and form restoration see a native field; label, description and status are light-DOM satellites wired with ids. The textarea owns name, value, required, disabled, rows and autocomplete there."
+        },
+        {
+          "id": "TEXTAREA-03",
+          "type": "approved-api-difference",
+          "text": "`auto-grow` and `max-rows` are additions: the field grows with its text using CSS `field-sizing: content` where the browser has it (feature-detected) and a measuring fallback otherwise, clamped between `rows` and `max-rows` [mwg:form-fields-automatically-fit-contents]."
+        },
+        {
+          "id": "TEXTAREA-04",
+          "type": "approved-api-difference",
+          "text": "Past `maxlength` the form does not submit (`validity.tooLong`), where upstream only turns the counter red. The limit stays soft: nothing is truncated while typing or pasting, and the message comes from the locale catalog."
+        },
+        {
+          "id": "TEXTAREA-05",
+          "type": "a11y-improvement",
+          "text": "Invalidity shows only after user interaction, on one clock: `:state(user-invalid)` and `aria-invalid` flip together, the browser's message becomes the status (announced once), and a failed submit focuses the field. Being over the limit is the one exception and shows at once, with a warning glyph beside the count."
+        },
+        {
+          "id": "TEXTAREA-06",
+          "type": "a11y-improvement",
+          "text": "The tooltip status variant is a focusable button with a name (\"Error details\", \"Warning details\"...) rather than a hover-only icon."
+        },
+        {
+          "id": "TEXTAREA-07",
+          "type": "tecton-visual",
+          "text": "Outlined field from the Tecton input tokens (border, hover, focus ring through the shared focus-ring module, 4px element radius); the resize grip stays in the true corner because adornments and the counter are overlays."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "tools/lib/parity.ts",
+          "reason": "The parity check should accept the global `spellcheck` attribute as a target (as it does `autofocus`), so hasSpellCheck can point at it instead of being waived."
+        }
+      ],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:form-associated-custom-elements]; [mwg:form-fields-automatically-fit-contents] field-sizing with a measured fallback; [mwg:validate-input-after-interaction]; [mwg:accessible-error-announcement] the counter and the status speak once; [mwg:required-field-feedback]."
+    }
+  }
+}
