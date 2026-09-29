@@ -196,7 +196,8 @@ export interface ContextConsumerOptions<C extends UnknownContext> {
   /** Keep receiving changes. Default `false` (one value, e.g. for values that never change). */
   subscribe?: boolean;
   /** Called with every delivered value, before the host re-renders. */
-  callback?: (value: ContextType<C>) => void;
+  /** Called with each delivered value, and with `undefined` when a reconnect finds no provider. */
+  callback?: (value: ContextType<C> | undefined) => void;
 }
 
 /**
@@ -212,7 +213,7 @@ export class ContextConsumer<C extends UnknownContext> implements ReactiveContro
   readonly #host: ContextHost;
   readonly #context: C;
   readonly #subscribe: boolean;
-  readonly #callback: ((value: ContextType<C>) => void) | undefined;
+  readonly #callback: ((value: ContextType<C> | undefined) => void) | undefined;
   #value: ContextType<C> | undefined;
   #unsubscribe: (() => void) | undefined;
   #answered = false;
@@ -253,6 +254,13 @@ export class ContextConsumer<C extends UnknownContext> implements ReactiveContro
     } else {
       ensureRoot();
       pending.add(this.#request);
+      // No provider answered from the new position: drop the value from the old one, so an
+      // element moved out of a group stops using the group's context.
+      if (this.#value !== undefined) {
+        this.#value = undefined;
+        this.#callback?.(undefined);
+        this.#host.requestUpdate();
+      }
     }
   }
 

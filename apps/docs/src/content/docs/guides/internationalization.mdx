@@ -1,0 +1,241 @@
+---
+title: Internationalization
+description: Set the locale for the elements, load and override catalogs, swap languages at run time, handle right-to-left, and test with the pseudo locale.
+sidebar:
+  order: 9
+---
+
+The elements ship with 30 message catalogs (370 message ids each) and a generated pseudo-locale. English is built into every element, so nothing needs to be installed to run in English, and the other catalogs load on demand when a page asks for them. Locale catalogs only affect the elements' own strings (button labels for assistive technology, pagination text, date-picker announcements and so on). Your application keeps using whatever i18n system it has for product copy.
+
+:::note[Corrections to the upstream guide]
+Upstream's guide says Astryx "ships English today" and imports `locales/fr.json`. Both are wrong for this library: 30 region-tagged catalogs ship (29 translations plus English), and there is no `fr.json`. This page uses the real file names and the base-language aliases that make `fr`, `pt`, `zh` and the others work.
+:::
+
+## Quick start
+
+Set the language on the document, the way you would for any page. Elements read the nearest `lang` attribute (crossing shadow roots), then `<html lang>`, then `navigator.language`:
+
+```html
+<html lang="fr" dir="ltr">
+  <body>
+    <tct-pagination …></tct-pagination>
+  </body>
+</html>
+```
+
+The element finds the catalog for `fr`, loads it, and re-renders. There is nothing else to wire. To scope a language to a region of the page (or to override the document), use the provider element:
+
+```html
+<tct-internationalization-provider locale="fr-FR">
+  <tct-app-shell>…</tct-app-shell>
+</tct-internationalization-provider>
+```
+
+`tct-internationalization-provider` is _planned_ (work package WP-F, milestone M5). It has the properties `locale`, `dir`, `messages` and `overrides`, and it reflects `lang` onto itself, so CSS `:lang()`, the elements and `Intl` agree about the language. The `lang`-based path above does not need it.
+
+### The catalogs
+
+Files are region-tagged, and there are base-language aliases so you can pass the short form:
+
+| Tag | Language | Tag | Language | Tag | Language |
+| --- | --- | --- | --- | --- | --- |
+| `af-ZA` | Afrikaans | `he-IL` | Hebrew | `ru-RU` | Russian |
+| `ar-SA` | Arabic | `hu-HU` | Hungarian | `sr-SP` | Serbian |
+| `ca-ES` | Catalan | `it-IT` | Italian | `sv-SE` | Swedish |
+| `cs-CZ` | Czech | `ja-JP` | Japanese | `tr-TR` | Turkish |
+| `da-DK` | Danish | `ko-KR` | Korean | `uk-UA` | Ukrainian |
+| `de-DE` | German | `nl-NL` | Dutch | `vi-VN` | Vietnamese |
+| `el-GR` | Greek | `no-NO` | Norwegian | `zh-CN` | Chinese (Simplified) |
+| `en` | English | `pl-PL` | Polish | `zh-TW` | Chinese (Traditional) |
+| `es-ES` | Spanish | `pt-BR` | Portuguese (Brazil) | `pseudo` | Generated pseudo-locale |
+| `fi-FI` | Finnish | `pt-PT` | Portuguese (Portugal) |  |  |
+| `fr-FR` | French | `ro-RO` | Romanian |  |  |
+
+A requested locale resolves from the most to the least specific form, and each candidate is expanded through the alias table, so `fr` and `fr-CA` use `fr-FR`; `pt` uses `pt-BR`; `zh`, `zh-Hans` and `zh-SG` use `zh-CN`; `zh-Hant`, `zh-HK` and `zh-MO` use `zh-TW`; `nb` and `nn` use `no-NO`; `iw` uses `he-IL`; `en-XA` uses the pseudo-locale. Missing keys fall back to English, so a partial translation never shows a message id.
+
+Catalogs are loaded lazily by the `@tecton-astryx/locales` package, with one dynamic `import()` per language, so a page that only uses English never downloads another catalog.
+
+## Runtime language swap
+
+Change the language and every element string updates live: no reload and no separate call. Setting `lang` on `<html>` (or on the provider) is enough, because elements watch it.
+
+```js
+import {getLocaleDirection} from '@tecton-astryx/core/i18n/direction.js';
+
+function setLanguage(locale) {
+  document.documentElement.lang = locale;
+  document.documentElement.dir = getLocaleDirection(locale); // see Text direction below
+}
+
+languageButton.addEventListener('click', () => {
+  setLanguage(document.documentElement.lang === 'en' ? 'fr' : 'en');
+});
+```
+
+Changes to `<html lang dir>` and to the provider re-render every element that uses strings. A change to an intermediate ancestor's `lang` is picked up when an element reconnects, or when you call `refresh()` on its locale controller.
+
+Persisting the user's choice (localStorage, a cookie, a URL segment, an account setting) is up to you. The elements read whatever `lang` the page has.
+
+## Text direction (RTL)
+
+The elements track text direction alongside the locale. The direction comes from the computed style of the element itself (`getComputedStyle(element).direction`), so the `dir` attribute on your page is the source of truth. Right-to-left languages such as Arabic (`ar`), Hebrew (`he`), Farsi (`fa`) and Urdu (`ur`) need `dir="rtl"`.
+
+You do not wire anything per element. Once the direction is set, the elements mirror on their own:
+
+- layout and spacing flip through CSS logical properties;
+- directional icons (chevrons, arrows) mirror in place;
+- arrow keys swap left and right in composites such as tabs, toolbars and menus;
+- overlays position on the correct side, using logical placement (`start`, `end`), so a menu opened inside an RTL region lands on the right side and inherits the region's direction.
+
+Setting the attribute is your job, because the browser needs it too: it decides which side text aligns to and how punctuation and mixed-language text flow. `getLocaleDirection()` computes the direction for a locale (with a table fallback for engines without `Intl.Locale#getTextInfo`) and returns `'ltr'` for anything it does not recognise:
+
+```js
+import {getLocaleDirection} from '@tecton-astryx/core/i18n/direction.js';
+
+getLocaleDirection('ar-SA'); // 'rtl'
+getLocaleDirection('fr'); // 'ltr'
+```
+
+```html title="Server-rendered page"
+<!-- set both attributes from the request's locale -->
+<html lang="ar-SA" dir="rtl"></html>
+```
+
+To make one part of a left-to-right page right-to-left, for example an Arabic quotation or comment thread, put `dir="rtl"` (and `lang`) on the element around it. Pop-up overlays opened from inside that region mirror too. The `dir` you pass to `tct-internationalization-provider` (_planned_) overrides the computed direction for the elements below it.
+
+Fonts matter for right-to-left and for other scripts too. `fonts.css` includes the Latin and Latin Extended subsets of Figtree and IBM Plex Mono only. Text in Cyrillic, Greek, Arabic, Hebrew, CJK and most of Vietnamese renders in the fallback stack (`Helvetica, Arial, sans-serif`) unless you add faces for those scripts. See [Typography](../typography/#loading-fonts).
+
+## Overriding the default text
+
+Every element string that a person can see or hear can be overridden without shipping a catalog. Three tools, in order of precedence:
+
+1. **An attribute on the element.** Strings that are commonly customised have an attribute (`close-label`, `previous-label` and similar, listed on each element's page). It wins over everything else.
+2. **`overrides` on the provider** (_planned_). Overrides are keyed by locale and merged on top of the built-in and registered catalogs.
+3. **A registered catalog.** `registerTranslation(locale, messages)` merges your messages ahead of the shipped catalog for that locale.
+
+```html
+<tct-dialog heading="Settings" close-label="Dismiss settings"></tct-dialog>
+```
+
+```js
+import {registerTranslation} from '@tecton-astryx/core/i18n/registry.js';
+
+// Change one string in English, and register a wording tweak for German.
+registerTranslation('en', {'@astryx.pagination.next': 'Next →'});
+registerTranslation('de-DE', {'@astryx.pagination.next': 'Weiter →'});
+```
+
+Registered messages outrank every shipped catalog, whatever their specificity, and they are available immediately. The full order for one message is:
+
+1. the host attribute override;
+2. the provider's `overrides`;
+3. the provider's `messages`, then messages registered with `registerTranslation`, then the loaded shipped catalog, each walking the locale chain (exact tag, then base language or alias);
+4. the element's built-in English default;
+5. the message id itself, with a development warning.
+
+Message ids keep the upstream form: `@astryx.<namespace>.<key>` (for example `@astryx.pagination.next`). Strings that this library adds are `@tct.<folder>.<key>`. Messages are ICU MessageFormat, so plural and number placeholders such as `{count, plural, one {page} other {pages}}` work in overrides.
+
+To load catalogs from somewhere other than the package (a CDN, a bundler chunk map), replace the loader:
+
+```js
+import {setLocaleLoader} from '@tecton-astryx/core/i18n/registry.js';
+
+setLocaleLoader(async (tag) => (await fetch(`/i18n/${tag}.json`)).json());
+```
+
+## Using the elements with your own i18n library
+
+The elements render their own strings through their own resolver. Your components render your strings through whatever library you use: i18next, FormatJS, Lingui, a home-grown `t()`. The two systems coexist, and they only have to agree on the active locale. Make the document the single source of truth:
+
+```js
+async function changeLocale(locale) {
+  await i18next.changeLanguage(locale); // your strings
+  document.documentElement.lang = locale; // the elements' strings
+  document.documentElement.dir = getLocaleDirection(locale);
+}
+```
+
+For product copy that lands in an element, pass it as text or as one of the string attributes; the element never sees your catalogs, and your library never sees the elements' internals:
+
+```html
+<tct-text-input label="…" name="region" required></tct-text-input>
+<script type="module">
+  const input = document.querySelector('tct-text-input');
+  input.label = t('pricing.region.label'); // your library resolves the text
+</script>
+```
+
+Single-catalog usage, where your library resolves the elements' strings too, is possible today by registering the messages you want with `registerTranslation`, or by using `setLocaleLoader` to serve catalogs that you manage.
+
+## Using the elements as your i18n library
+
+For a small app, or when you do not want another runtime, you can resolve your own strings through the same mechanism. Keep your ids in a separate namespace from `@astryx.*` and `@tct.*`, and register an `en` catalog, because the built-in English defaults contain only the elements' strings:
+
+```js
+import {registerTranslation} from '@tecton-astryx/core/i18n/registry.js';
+import {formatMessage} from '@tecton-astryx/core/i18n/format.js';
+
+registerTranslation('en', {'@myapp.actions.save': 'Save', '@myapp.items': '{count, plural, one {# item} other {# items}}'});
+registerTranslation('fr-FR', {'@myapp.actions.save': 'Enregistrer', '@myapp.items': '{count, plural, one {# élément} other {# éléments}}'});
+
+formatMessage('{count, plural, one {# item} other {# items}}', {count: 3}, 'en'); // '3 items'
+```
+
+Inside your own elements, extend `TctElement` and use the `LocaleController`, which resolves through the same chain and re-renders when a catalog arrives:
+
+```ts
+import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
+
+class MyToolbar extends TctElement {
+  #locale = new LocaleController(this);
+  render() {
+    return html`<tct-button>${this.#locale.t('@myapp.actions.save')}</tct-button>`;
+  }
+}
+```
+
+## Formatting numbers and dates
+
+Elements format numbers, dates and lists with `Intl` and the resolved locale. Dates, times and time zones are three separate concerns: the value you store (ISO dates), the locale you display it in, and the time zone. Date elements take and return ISO values and never leak a display format into your data. The date family also supports non-Gregorian calendars through `@internationalized/date` (the date elements are _planned_, work package WP-13).
+
+## Testing your translations
+
+A generated `pseudo` locale wraps every string in square brackets, replaces letters with accented look-alikes, and pads the text with tildes to simulate longer languages. Turn it on in development to catch strings that are not localised and layouts that break with longer text:
+
+```html
+<html lang="en-XA">
+```
+
+```js
+document.documentElement.lang = 'pseudo'; // or 'en-XA'
+```
+
+A localised string looks like `[Ṁôƀîļé ñàṽîĝàţîôñ ~~~~~]`; anything that still reads as plain English is a hardcoded string. Our own test suite checks every element that has strings in `en`, `de-DE` (long strings) and `ar-SA` (right-to-left), and you can use the same three languages in your integration tests.
+
+## For contributors
+
+**Developers.** Element authors read strings through `LocaleController` rather than hardcoding user-facing text, and take the English text from the generated `@tecton-astryx/locales/en/<namespace>.js` module as the default. New strings go in `<folder>.messages.json` with ids `@tct.<folder>.<key>` and are merged into the English namespaces. Untranslated ids fall back to English and show up in a generated missing-translations report.
+
+```ts
+import defaults from '@tecton-astryx/locales/en/dialog.js';
+
+#locale = new LocaleController(this, {namespace: 'dialog', defaults});
+// this.#locale.t('close', undefined, 'close-label')
+```
+
+When you author an element that responds to direction, resolve it from the DOM, and reach for the lightest tool that works, in this order:
+
+1. **CSS logical properties first.** Use `inset-inline-start`, `padding-inline-end` and `margin-inline` instead of physical `left` and `right`. Most mirroring needs nothing more, because the browser flips it from the ambient `dir`. The repository's Stylelint rules enforce logical properties.
+2. **Directional icons mirror with CSS.** Render one fixed glyph and let `:host(:dir(rtl)) .icon { scale: -1 1 }` flip it for icons whose definition says `mirrorInRtl`. Do not choose `chevronLeft` or `chevronRight` in JavaScript.
+3. **Behavioural logic reads the DOM lazily, on the event.** For arrow-key mapping and drag or scroll math, read the direction at interaction time from computed style, never during render. The shared roving and grid focus controllers detect direction from their host, so arrow keys flip for free.
+4. **Do not read direction from context during render.** It is the one path that can mismatch on hydration.
+
+**Translators.** The 30 catalogs are copied from upstream Astryx and are hash-locked in this repository. Corrections to a translation belong upstream, where they are managed through Crowdin; this repository takes them with the next catalog update.
+
+{/*
+Adapted from Astryx docs topic `internationalization` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md), with upstream discrepancies D3, D4 and D5 fixed (inventory section 11).
+Section map: Quick Start; Runtime language swap; Text direction (RTL); Overriding astryx's default text -> Overriding the default text; Using astryx with your own i18n library -> Using the elements with your own i18n library;
+Using astryx as your i18n library -> Using the elements as your i18n library; Testing your translations; For contributors. Added: Formatting numbers and dates (ARCHITECTURE 11).
+Facts verified against packages/core/src/i18n (registry.ts, locale-controller.ts, direction.ts, format.ts) and packages/locales/dist (aliases.js, pseudo.js); the provider element is planned (WP-F M5).
+Guides: [mwg:support-global-calendar-systems] [mwg:capture-location-agnostic-data] [mwg:coordinate-global-events] [mwg:accessible-web-components] [mwg:custom-elements] [mwg:visually-stable-font-fallbacks]
+*/}

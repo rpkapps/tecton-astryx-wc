@@ -1,0 +1,345 @@
+/*
+ * tct-button. Variants set the private paint properties on `.button`; the base rule consumes each once and
+ * the state layer swaps them for hover, press, focus and disabled. Colours are Tecton action roles
+ * (`--tecton-color-action-*`, the owner's theme components.ts); `destructive` is bound to the
+ * `--tecton-color-status-error-*` roles (D-013 Q-06: Tecton has no destructive button). Every edge
+ * carries a transparent border so forced colours can paint it. Corners are per-corner logical radii, so a
+ * button group squares the interior edges from `data-group` + `data-position` (never `:last-child`) and
+ * right-to-left is right for free. The ring is the shared hot-pink ring on the inner control (D-005).
+ * [mwg:css] [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+    vertical-align: middle;
+    inline-size: var(--_button-width, auto);
+  }
+
+  .button {
+    /* Private aliases: the fallback of each token appears once. Defaults are the secondary variant. */
+    --_radius: var(--radius-element);
+    --_height: var(--size-element-md);
+    --_bg: var(--tecton-color-action-secondary-bg);
+    --_fg: var(--tecton-color-action-secondary-text);
+    --_border: transparent;
+    --_bg-hover: var(--tecton-color-action-secondary-bg-hover);
+    --_fg-hover: var(--tecton-color-action-secondary-text-hover);
+    --_border-hover: transparent;
+    --_bg-press: var(--tecton-color-action-secondary-bg-press);
+    --_fg-press: var(--tecton-color-action-secondary-text-press);
+    --_border-press: transparent;
+    --_bg-focus: var(--tecton-color-action-secondary-bg-focus);
+    --_bg-disabled: var(--tecton-color-disabled-filled-bg);
+    --_fg-disabled: var(--tecton-color-disabled-filled-text);
+    --_border-disabled: transparent;
+    --_icon-size: var(--tecton-icon-size-100);
+    --_focus-offset: var(--button-focus-offset, var(--focus-outline-offset));
+    --_r-ss: var(--_radius);
+    --_r-se: var(--_radius);
+    --_r-es: var(--_radius);
+    --_r-ee: var(--_radius);
+
+    position: relative;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    inline-size: 100%;
+    block-size: var(--_height);
+    min-inline-size: 0;
+    padding-block: var(--spacing-2);
+    padding-inline: var(--spacing-3);
+    border: var(--border-width) solid var(--_border);
+    border-start-start-radius: var(--_r-ss);
+    border-start-end-radius: var(--_r-se);
+    border-end-start-radius: var(--_r-es);
+    border-end-end-radius: var(--_r-ee);
+    background-color: var(--_bg);
+    color: var(--_fg);
+    font-family: inherit;
+    font-size: var(--text-label-size);
+    line-height: var(--text-label-leading);
+    font-weight: var(--text-label-weight);
+    white-space: nowrap;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: none;
+    outline-offset: 0;
+    transition:
+      background-color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard),
+      opacity var(--duration-fast) var(--ease-standard);
+  }
+
+  /* ------------------------------------------------------------------------------ sizes */
+  .button[data-size='sm'] {
+    --_height: var(--size-element-sm);
+  }
+
+  .button[data-size='lg'] {
+    --_height: var(--size-element-lg);
+    --_icon-size: var(--tecton-icon-size-150);
+  }
+
+  :host([icon-only]) .button {
+    aspect-ratio: var(--button-icon-only-aspect, 1 / 1);
+    inline-size: auto;
+    padding-block: 0;
+    padding-inline: 0;
+  }
+
+  /* -------------------------------------------------------------------------- variants */
+  :host([variant='primary']) .button {
+    --_bg: var(--color-accent);
+    --_fg: var(--color-on-accent);
+    --_bg-hover: var(--tecton-color-action-primary-bg-hover);
+    --_fg-hover: var(--color-on-accent);
+    --_bg-press: var(--tecton-color-action-primary-bg-press);
+    --_fg-press: var(--color-on-accent);
+    --_bg-focus: var(--tecton-color-action-primary-bg-focus);
+  }
+
+  :host([variant='ghost']) .button {
+    --_bg: var(--tecton-color-action-tertiary-bg);
+    --_fg: var(--tecton-color-action-tertiary-text);
+    --_bg-hover: var(--tecton-color-action-tertiary-bg-hover);
+    --_fg-hover: var(--tecton-color-action-tertiary-text-hover);
+    --_bg-press: var(--tecton-color-action-tertiary-bg-press);
+    --_fg-press: var(--tecton-color-action-tertiary-text-press);
+    --_bg-focus: var(--tecton-color-action-tertiary-bg-focus);
+  }
+
+  :host([variant='destructive']) .button {
+    --_bg: var(--tecton-color-status-error-filled-bg);
+    --_fg: var(--tecton-color-status-error-filled-text);
+    --_bg-hover: var(--tecton-color-status-error-filled-bg-hover);
+    --_fg-hover: var(--tecton-color-status-error-filled-text-hover);
+    --_bg-press: var(--tecton-color-status-error-filled-bg-press);
+    --_fg-press: var(--tecton-color-status-error-filled-text-press);
+    --_bg-focus: var(--tecton-color-status-error-filled-bg-focus);
+  }
+
+  :host([variant='outlined']) .button {
+    --_bg: var(--tecton-color-action-outlined-bg);
+    --_fg: var(--tecton-color-action-outlined-text);
+    --_border: var(--tecton-color-action-outlined-border);
+    --_bg-hover: var(--tecton-color-action-outlined-bg-hover);
+    --_fg-hover: var(--tecton-color-action-outlined-text-hover);
+    --_border-hover: var(--tecton-color-action-outlined-border-hover);
+    --_bg-press: var(--tecton-color-action-outlined-bg-press);
+    --_fg-press: var(--tecton-color-action-outlined-text-press);
+    --_border-press: var(--tecton-color-action-outlined-border-press);
+    --_bg-focus: var(--tecton-color-action-outlined-bg-focus);
+    --_bg-disabled: var(--tecton-color-disabled-outline-bg);
+    --_fg-disabled: var(--tecton-color-disabled-outline-text);
+    --_border-disabled: var(--tecton-color-disabled-outline-border);
+  }
+
+  :host([variant='text-only']) .button {
+    --_bg: var(--tecton-color-action-outlined-bg);
+    --_fg: var(--tecton-color-action-text-only);
+    --_bg-hover: var(--tecton-color-action-outlined-bg);
+    --_fg-hover: var(--tecton-color-action-text-only-text-hover);
+    --_bg-press: var(--tecton-color-action-outlined-bg);
+    --_fg-press: var(--tecton-color-action-text-only-text-press);
+    --_bg-focus: var(--tecton-color-action-text-only-bg-focus);
+    --_bg-disabled: var(--tecton-color-disabled-outline-bg);
+    --_fg-disabled: var(--tecton-color-disabled-text-only-text);
+  }
+
+  /* ------------------------------------------------------------------ elevation (standalone only) */
+  .button[data-elevation='low'] {
+    box-shadow: var(--shadow-low);
+  }
+
+  .button[data-elevation='med'] {
+    box-shadow: var(--shadow-med);
+  }
+
+  .button[data-elevation='high'] {
+    box-shadow: var(--shadow-high);
+  }
+
+  /* --------------------------------------------- button group: corners and separators (per position) */
+  .button[data-group='horizontal'][data-position='first'] {
+    --_r-se: 0;
+    --_r-ee: 0;
+  }
+
+  .button[data-group='horizontal'][data-position='middle'] {
+    --_r-ss: 0;
+    --_r-se: 0;
+    --_r-es: 0;
+    --_r-ee: 0;
+  }
+
+  .button[data-group='horizontal'][data-position='last'] {
+    --_r-ss: 0;
+    --_r-es: 0;
+  }
+
+  .button[data-group='vertical'][data-position='first'] {
+    --_r-es: 0;
+    --_r-ee: 0;
+  }
+
+  .button[data-group='vertical'][data-position='middle'] {
+    --_r-ss: 0;
+    --_r-se: 0;
+    --_r-es: 0;
+    --_r-ee: 0;
+  }
+
+  .button[data-group='vertical'][data-position='last'] {
+    --_r-ss: 0;
+    --_r-se: 0;
+  }
+
+  /* A hairline between neighbours: the transparent edge on the joining side takes a colour. */
+  .button[data-group='horizontal'][data-position='middle'],
+  .button[data-group='horizontal'][data-position='last'] {
+    border-inline-start-color: var(--color-border);
+  }
+
+  .button[data-group='vertical'][data-position='middle'],
+  .button[data-group='vertical'][data-position='last'] {
+    border-block-start-color: var(--color-border);
+  }
+
+  :host([variant='primary'])
+    .button[data-group='horizontal']:is([data-position='middle'], [data-position='last']),
+  :host([variant='destructive'])
+    .button[data-group='horizontal']:is([data-position='middle'], [data-position='last']) {
+    border-inline-start-color: var(--color-on-accent);
+  }
+
+  :host([variant='primary'])
+    .button[data-group='vertical']:is([data-position='middle'], [data-position='last']),
+  :host([variant='destructive'])
+    .button[data-group='vertical']:is([data-position='middle'], [data-position='last']) {
+    border-block-start-color: var(--color-on-accent);
+  }
+
+  /* ------------------------------------------------------------------------------- content */
+  .content {
+    display: contents;
+  }
+
+  .label {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .end {
+    display: inline-flex;
+    align-items: center;
+    color: inherit;
+  }
+
+  /* -------------------------------------------------------------------------------- loading */
+  .spinner-overlay {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+  }
+
+  .spinner-overlay[data-delayed] {
+    /* A fast action never flashes a spinner: reveal and content hide share the same delay. */
+    animation: tct-fade-in var(--duration-fast) var(--ease-standard) var(--duration-medium-min)
+      backwards;
+  }
+
+  .content[data-loading] {
+    color: transparent;
+  }
+
+  .content[data-loading][data-delayed] {
+    color: inherit;
+    animation: tct-hide-content 1ms forwards var(--duration-medium-min);
+    --_animation-reduced: tct-hide-content 1ms forwards;
+  }
+
+  @keyframes tct-hide-content {
+    from {
+      color: inherit;
+    }
+
+    to {
+      color: transparent;
+    }
+  }
+
+  /* An `a` styled as a button carries no underline. */
+  a.button {
+    text-decoration: none;
+  }
+}
+
+@layer state {
+  /* Press feedback is movement: only when motion is welcome, never inside a group or when blocked. */
+  @media (prefers-reduced-motion: no-preference) {
+    .button:not([data-group]) {
+      transition:
+        background-color var(--duration-fast) var(--ease-standard),
+        border-color var(--duration-fast) var(--ease-standard),
+        color var(--duration-fast) var(--ease-standard),
+        opacity var(--duration-fast) var(--ease-standard),
+        scale var(--duration-fast) var(--ease-standard);
+    }
+
+    .button:not([data-group]):active:not(:disabled, [aria-disabled='true']) {
+      scale: 0.98;
+    }
+  }
+
+  @media (hover: hover) {
+    .button:hover:not(:disabled, [aria-disabled='true']) {
+      --color-icon-secondary: var(--_fg-hover);
+
+      background-color: var(--_bg-hover);
+      border-color: var(--_border-hover);
+      color: var(--_fg-hover);
+    }
+  }
+
+  /* Tecton draws focus as the hover fill plus the pink ring (design/components/button.md). */
+  .button:focus-visible:not(:disabled, [aria-disabled='true']) {
+    background-color: var(--_bg-focus);
+  }
+
+  .button:active:not(:disabled, [aria-disabled='true']) {
+    --color-icon-secondary: var(--_fg-press);
+
+    background-color: var(--_bg-press);
+    border-color: var(--_border-press);
+    color: var(--_fg-press);
+  }
+
+  /* Busy and aria-disabled controls are inert but not dimmed; only an explicit disabled dims (recessed fill). */
+  .button:is(:disabled, [aria-disabled='true']) {
+    cursor: default;
+  }
+
+  .button[data-disabled] {
+    background-color: var(--_bg-disabled);
+    border-color: var(--_border-disabled);
+    color: var(--_fg-disabled);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .button[data-disabled] {
+      border-color: GrayText;
+      color: GrayText;
+    }
+
+    .button[data-elevation] {
+      box-shadow: none;
+    }
+  }
+}

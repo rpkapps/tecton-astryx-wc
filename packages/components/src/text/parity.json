@@ -1,0 +1,188 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "text",
+  "workPackage": "WP-F",
+  "entries": {
+    "core.text": {
+      "tag": "tct-text",
+      "status": "implemented",
+      "upstream": {"name": "Text", "path": "packages/core/src/Text/Text.tsx", "commit": "ca632c6"},
+      "api": [
+        {
+          "upstream": "type",
+          "kind": "prop",
+          "target": "type",
+          "as": "attribute",
+          "reflect": true,
+          "default": "body"
+        },
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {"upstream": "size", "kind": "prop", "target": "size", "as": "attribute", "reflect": true},
+        {
+          "upstream": "color",
+          "kind": "prop",
+          "target": "color",
+          "as": "attribute",
+          "reflect": true,
+          "default": "primary (secondary for supporting)"
+        },
+        {
+          "upstream": "weight",
+          "kind": "prop",
+          "target": "weight",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "display",
+          "kind": "prop",
+          "target": "display",
+          "as": "attribute",
+          "reflect": true,
+          "default": "inline"
+        },
+        {
+          "upstream": "as",
+          "kind": "prop",
+          "target": "as",
+          "as": "attribute",
+          "default": "span",
+          "notes": "Host semantics through ElementInternals: p is a paragraph, h1-h3 headings; span/div/label add no role."
+        },
+        {
+          "upstream": "maxLines",
+          "kind": "prop",
+          "target": "maxLines",
+          "as": "attribute",
+          "reflect": true,
+          "default": "0",
+          "notes": "Attribute `max-lines`."
+        },
+        {
+          "upstream": "hasTruncateTooltip",
+          "kind": "prop",
+          "target": "noTruncateTooltip",
+          "as": "attribute",
+          "default": "false",
+          "notes": "`boolean | placement` becomes `no-truncate-tooltip` (true upstream default, A§7.2 inversion) plus `truncate-tooltip-placement`."
+        },
+        {
+          "upstream": "hasTruncateTooltip",
+          "kind": "prop",
+          "target": "truncateTooltipPlacement",
+          "as": "attribute",
+          "default": "above"
+        },
+        {
+          "upstream": "wordBreak",
+          "kind": "prop",
+          "target": "wordBreak",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Attribute `word-break`."
+        },
+        {
+          "upstream": "textWrap",
+          "kind": "prop",
+          "target": "textWrap",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Attribute `text-wrap`."
+        },
+        {
+          "upstream": "justify",
+          "kind": "prop",
+          "target": "justify",
+          "as": "attribute",
+          "reflect": true,
+          "default": "start"
+        },
+        {
+          "upstream": "hasCapsize",
+          "kind": "prop",
+          "target": "hasCapsize",
+          "as": "attribute",
+          "reflect": true,
+          "default": "false",
+          "notes": "Attribute `has-capsize`; text-box trim is a progressive enhancement [mwg:precise-text-alignment]."
+        },
+        {
+          "upstream": "hasStrikethrough",
+          "kind": "prop",
+          "target": "hasStrikethrough",
+          "as": "attribute",
+          "reflect": true,
+          "default": "false"
+        },
+        {
+          "upstream": "hasTabularNumbers",
+          "kind": "prop",
+          "target": "hasTabularNumbers",
+          "as": "attribute",
+          "reflect": true,
+          "default": "false"
+        },
+        {
+          "upstream": "id",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "The global `id` attribute on the host is native; it is not component API."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(text), and the type/size/colour attributes."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useTruncation",
+          "target": "TruncationController",
+          "as": "controller",
+          "notes": "@tecton-astryx/core/controllers/truncation.js; shared with tct-heading through TruncationTooltip."
+        }
+      ],
+      "differences": [
+        {
+          "id": "TEXT-01",
+          "type": "approved-api-difference",
+          "text": "`hasTruncateTooltip` (boolean or placement, default true) is the boolean `no-truncate-tooltip` plus `truncate-tooltip-placement` (A§7.2 inversion of a true default)."
+        },
+        {
+          "id": "TEXT-02",
+          "type": "approved-api-difference",
+          "text": "`as` sets host semantics through ElementInternals (paragraph, heading level 1-3) instead of choosing the rendered element. `label` adds no role and cannot label a control across the shadow boundary; use tct-field."
+        },
+        {
+          "id": "TEXT-03",
+          "type": "tecton-visual",
+          "text": "The Tecton variants without a built-in type are registered as types: medium-strong, small-strong, tiny, large-data, medium-data, small-data, action-medium, action-small (owner's theme customTextTypes), bound to the type-scale tokens. The data types use `--tecton-font-numeric` (provisional)."
+        },
+        {
+          "id": "TEXT-04",
+          "type": "approved-api-difference",
+          "text": "A custom `type` or `color` is a plain string styled through `tct-text[type=\"x\"]::part(text)`; there is no module augmentation or theme build step. Unknown values keep the body/primary baseline."
+        },
+        {
+          "id": "TEXT-05",
+          "type": "a11y-improvement",
+          "text": "The truncation tooltip is described by its trigger inside one shadow root, opens on hover and tap, closes with Escape and never takes focus; the clipped text stays fully readable by assistive technology."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true
+      },
+      "provisional": ["--tecton-font-numeric"],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:improve-text-layout-and-legibility] text-wrap balance/pretty are progressive enhancements; [mwg:precise-text-alignment] text-box trim; [mwg:accessible-web-components] role and level via ElementInternals; [mwg:interest-triggered-tooltips] and [mwg:position-aware-tooltips] the built-in tooltip (popover=manual through TooltipController, no interestfor because Safari lacks it); [mwg:css] cascade layers and logical properties."
+    }
+  }
+}

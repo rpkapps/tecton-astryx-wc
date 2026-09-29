@@ -1,0 +1,74 @@
+---
+title: Illustrations
+description: Guidelines for using illustrations in empty states, onboarding flows and feature highlights.
+sidebar:
+  order: 28
+---
+
+## When to use
+
+Consistent illustration usage reinforces brand identity and helps users understand context at a glance. Use illustrations in these contexts:
+
+| Context              | Examples                                                            |
+| -------------------- | ------------------------------------------------------------------- |
+| Empty states         | No data, first-time experience, search with no results              |
+| Onboarding           | Welcome screens, feature introduction, setup wizards                |
+| Feature highlights   | New feature announcements, upgrade prompts                          |
+| Error states         | Permission denied, not found, service unavailable                   |
+
+The library does not ship an illustration set. The guidance below is for the illustrations that your product supplies.
+
+## Guidelines
+
+**Do:**
+
+- Keep illustrations consistent in style across the product.
+- Use simple, flat illustrations that work in both light and dark mode.
+- Size illustrations proportionally to the container, typically 120 to 240 px.
+- Place illustrations centred, with supporting text below.
+- Give an informative illustration a text alternative, and mark a decorative one with an empty `alt`.
+
+**Don't:**
+
+- Mix illustration styles from different sources.
+- Use illustrations as decoration without purpose.
+
+## Placement
+
+Place illustrations inside `tct-center` with supporting text stacked below. Typical illustration sizes range from 120 px for inline empty states to 240 px for full-page onboarding screens. Always pair the illustration with a heading and optional body text to explain what the user should do next.
+
+```html title="Empty state with illustration"
+<tct-center>
+  <tct-vstack gap="3" h-align="center">
+    <img src="/illustrations/empty-search.svg" alt="No results" width="200" height="200" />
+    <tct-heading level="3">No results found</tct-heading>
+    <tct-text type="body" color="secondary">
+      Try adjusting your search or filters to find what you’re looking for.
+    </tct-text>
+  </tct-vstack>
+</tct-center>
+```
+
+For the common case of an empty region, `tct-empty-state` composes the heading, description, an icon and its actions for you; reach for the manual composition above when you need a larger illustration.
+
+## Delivering illustrations
+
+Prefer SVG for flat illustrations: it is small and sharp at every density, and an inline SVG (unlike one loaded through `<img>`) can use the colour tokens. Give every `<img>` its `width` and `height` so that the page does not shift when it loads. If a large illustration is the largest element on first paint (a full-page onboarding hero), mark it `fetchpriority="high"`, never `loading="lazy"`, and use an `<img>` or `<picture>` rather than a CSS background, because images referenced only from CSS are not found by the browser's preload scanner. Illustrations further down the page take `loading="lazy"`.
+
+```html
+<img src="/illustrations/welcome.svg" alt="" width="240" height="240" fetchpriority="high" />
+```
+
+## Light and dark
+
+Illustrations sit on the page surface, so they must work on both `--color-background-body` and `--color-background-surface` in both colour modes. Three approaches, in order of preference:
+
+- **Draw with the current text colour or token variables.** An inline SVG that uses `currentColor` or `var(--color-icon-secondary)` for its strokes adapts on its own, including inside a dark scheme island.
+- **Ship one version that is neutral in both modes**, with mid-tone colours and no white or black background.
+- **Ship two versions** and choose with `prefers-color-scheme` (`<picture>` with a `media` source). If your page lets people pin a mode with `data-theme`, this will disagree with the pinned mode, so prefer the first two options.
+
+{/*
+Adapted from Astryx docs topic `illustrations` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md). Section map (1:1): When to Use; Guidelines; Placement. Added: Light and dark. The library ships no illustration set (inventory 9.1: port guidance as-is).
+Attribute names on tct-center and tct-vstack (h-align) follow the ARCHITECTURE 7.2 mapping (hAlign -> h-align) and are planned; see each element page.
+Guides: [mwg:accessibility] [mwg:dark-mode] [mwg:deliver-optimized-decorative-images] [mwg:optimize-image-priority]
+*/}
