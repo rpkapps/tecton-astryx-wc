@@ -1,0 +1,330 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "date-input",
+  "workPackage": "WP-13",
+  "entries": {
+    "core.date-input": {
+      "tag": "tct-date-input",
+      "status": "implemented",
+      "upstream": {
+        "name": "DateInput",
+        "path": "packages/core/src/DateInput/DateInput.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute"
+        },
+        {
+          "upstream": "isLabelHidden",
+          "kind": "prop",
+          "target": "label-hidden",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "description",
+          "kind": "prop",
+          "target": "description",
+          "as": "attribute"
+        },
+        {
+          "upstream": "isOptional",
+          "kind": "prop",
+          "target": "optional",
+          "as": "attribute"
+        },
+        {
+          "upstream": "isRequired",
+          "kind": "prop",
+          "target": "required",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Also a validity constraint (valueMissing) and `aria-required`."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Also through <fieldset disabled>."
+        },
+        {
+          "upstream": "disabledMessage",
+          "kind": "prop",
+          "target": "disabled-message",
+          "as": "attribute",
+          "notes": "A tooltip on a disabled field that says why; every part of the field stays focusable (aria-disabled) and read-only."
+        },
+        {
+          "upstream": "isLoading",
+          "kind": "prop",
+          "target": "loading",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Shows a spinner, sets `aria-busy` and refuses edits."
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md",
+          "notes": "Unset takes the nearest size provider, else md."
+        },
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "target": "status",
+          "as": "property",
+          "notes": "Object `{type, message?}`, or the `status-type` and `status-message` attributes."
+        },
+        {
+          "upstream": "statusVariant",
+          "kind": "prop",
+          "target": "status-variant",
+          "as": "attribute",
+          "default": "attached",
+          "notes": "attached, detached or tooltip (a focusable button in the box that reveals the message)."
+        },
+        {
+          "upstream": "labelTooltip",
+          "kind": "prop",
+          "target": "label-tooltip",
+          "as": "attribute"
+        },
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "target": "width",
+          "as": "attribute",
+          "notes": "A number is px, a string a CSS length. Not reflected."
+        },
+        {
+          "upstream": "changeAction",
+          "kind": "prop",
+          "target": "changeAction",
+          "as": "property",
+          "notes": "`(value: string, event: Event) => void | Promise<void>` run after every user change; the field is busy (`:state(busy)`, spinner, `aria-busy`) until the promise settles and refuses further changes. Never runs for a property write."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style/::part/custom properties"
+        },
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "property",
+          "notes": "The date `YYYY-MM-DD`, or `\"\"`; anything that is not a real date reads as `\"\"`. The `value` attribute is the default a form reset restores. Upstream is controlled with `ISODateString | undefined`."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "change",
+          "as": "native-event",
+          "notes": "Uncontrolled (D-006): native `input` and then `change` fire, composed, when the committed date changes: a pick, a clear, or typed text when the entry ends (Enter, leaving the field); read `value`. Neither fires for a property or attribute write."
+        },
+        {
+          "upstream": "min",
+          "kind": "prop",
+          "target": "min",
+          "as": "attribute",
+          "notes": "A native constraint on the value (`rangeUnderflow`) and the first selectable day."
+        },
+        {
+          "upstream": "max",
+          "kind": "prop",
+          "target": "max",
+          "as": "attribute",
+          "notes": "A native constraint on the value (`rangeOverflow`) and the last selectable day."
+        },
+        {
+          "upstream": "dateConstraints",
+          "kind": "prop",
+          "target": "dateConstraints",
+          "as": "property",
+          "notes": "Predicates over a local `Date`; a date is unavailable when any returns `false`. A value they rule out is a custom error."
+        },
+        {
+          "upstream": "placeholder",
+          "kind": "prop",
+          "target": "placeholder",
+          "as": "attribute",
+          "notes": "Default \"Select a date\" from the locale catalog."
+        },
+        {
+          "upstream": "hasClear",
+          "kind": "prop",
+          "target": "has-clear",
+          "as": "attribute",
+          "default": false,
+          "notes": "Shows a clear button while there is a value; it fires the cancelable `tct-clear` and returns focus to the input."
+        },
+        {
+          "upstream": "numberOfMonths",
+          "kind": "prop",
+          "target": "number-of-months",
+          "as": "attribute",
+          "default": 1,
+          "notes": "1 or 2; a bottom sheet always shows one."
+        },
+        {
+          "upstream": "weekStartsOn",
+          "kind": "prop",
+          "target": "week-starts-on",
+          "as": "attribute",
+          "default": 0
+        },
+        {
+          "upstream": "format",
+          "kind": "prop",
+          "target": "format",
+          "as": "property",
+          "notes": "`date_long` (default), `date`, `date_weekday`, `system_date` or a function from the ISO value to text; also an attribute for the named formats. Applies to the committed value only, never to text being typed."
+        },
+        {
+          "upstream": "presentation",
+          "kind": "prop",
+          "target": "presentation",
+          "as": "attribute",
+          "default": "adaptive-native",
+          "notes": "`popover`, `bottom-sheet`, `native`, `adaptive-bottom-sheet` or `adaptive-native`; an unknown value warns and reads as the default. Resolved against the pointer and the viewport live."
+        },
+        {
+          "upstream": "nativePicker",
+          "kind": "prop",
+          "target": "native-picker",
+          "as": "attribute",
+          "notes": "Deprecated, mapped as upstream: `touch` is `adaptive-native`, `always` is `native`, `never` is `adaptive-bottom-sheet`; `presentation` wins when both are set."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useDevWarning",
+          "target": "devWarn",
+          "as": "module-function",
+          "notes": "Dev-mode warnings once per id (`@tecton-wc/core/utils/dev.js`)."
+        },
+        {
+          "upstream": "useInputStatusIcon",
+          "as": "waived",
+          "reason": "Internal render helper; the status glyph and the tooltip button are part of the shared box (`TctBoxControl.renderStatusIcon`)."
+        },
+        {
+          "upstream": "useMediaQuery",
+          "target": "PickerPresentationController",
+          "as": "controller",
+          "notes": "Follows `(pointer: coarse)` and the compact-touch query live (`MediaQueryController`); the surface (popover, sheet, native) re-renders when it changes."
+        },
+        {
+          "upstream": "useResolvedRequired",
+          "target": "formLayoutContext",
+          "as": "context",
+          "notes": "The form layout's optionality default; the indicator follows it."
+        },
+        {
+          "upstream": "useInputGroup",
+          "target": "inputGroupContext",
+          "as": "context",
+          "notes": "Inside a tct-input-group the field drops its own label, description and status and joins the group's single focus ring."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "ArrowDown",
+          "action": "Opens the calendar and keeps focus in the input; with the calendar open it moves focus into it (APG combobox with a dialog popup).",
+          "when": "in the input"
+        },
+        {
+          "keys": "Enter",
+          "action": "Commits the typed text, fires tct-enter, then submits the form once unless prevented; ignored while an IME composes.",
+          "when": "in the input"
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes the calendar (one layer per press) and returns focus to the input.",
+          "when": "calendar open"
+        },
+        {
+          "keys": "Tab",
+          "action": "Commits the typed text and moves on; Tab stays inside the open calendar surface."
+        },
+        {
+          "keys": "Calendar keys",
+          "action": "The calendar's own date-grid keys (arrows, Home/End, PageUp/PageDown, Enter to pick) work inside the picker.",
+          "when": "focus in the calendar"
+        }
+      ],
+      "form": {
+        "formAssociated": true,
+        "notes": "Form-associated (`ElementInternals`): submits `name=YYYY-MM-DD` (an empty string when empty) whatever the language, calendar or time zone, resets to the `value` attribute, restores on navigation, works with `form=` and `label for`, and joins `<fieldset disabled>`. `required` (valueMissing), `min`/`max` (rangeUnderflow / rangeOverflow with the browser's localized message), `dateConstraints` (a custom error) and text that is not an available date (badInput) block the submit; the error shows after the user acted (a pick, leaving the field after an edit) or a submit attempt, and text that is not a date shows once typing pauses (aria-invalid, announced once)."
+      },
+      "differences": [
+        {
+          "id": "DATEINPUT-01",
+          "type": "approved-api-difference",
+          "text": "Uncontrolled by default (D-006): `value` is a plain string with the `value` attribute as its default (a form reset restores it), and native `input`/`change` events report a committed change instead of a controlled `value` plus `onChange`. Nothing fires for a property or attribute write."
+        },
+        {
+          "id": "DATEINPUT-02",
+          "type": "approved-api-difference",
+          "text": "Typed text is a draft that commits when the entry ends (Enter, leaving the field, a pick), not on every keystroke that reads as a date: every prefix of a date (\"3/4\" is this year's March 4) is a date too, so committing as it is typed keeps the wrong one. The calendar follows the date being typed; text that is not an available date is shown invalid and announced once after typing pauses (700 ms)."
+        },
+        {
+          "id": "DATEINPUT-03",
+          "type": "a11y-improvement",
+          "text": "Text that is not a date, or a date the constraints rule out, is `validity.badInput` (it blocks the submit, `aria-invalid`, muted text) and announced once assertively through the shared announcer, instead of an always-mounted `role=alert` node with a hard-coded string; the messages are catalog entries (`@tct.dateInput.invalidDate`, `@tct.date-input.dateUnavailable`)."
+        },
+        {
+          "id": "DATEINPUT-04",
+          "type": "approved-api-difference",
+          "text": "`min`, `max` and `dateConstraints` are also constraints on a programmatic value (rangeUnderflow, rangeOverflow with the browser's localized message, a custom error); upstream only disables days and refuses entries."
+        },
+        {
+          "id": "DATEINPUT-05",
+          "type": "approved-api-difference",
+          "text": "An `open` property and the cancelable `tct-open-change` / `tct-after-open-change` events expose the picker (upstream keeps it internal); `tct-clear` (cancelable) fires before the clear button clears; `format` also takes a function property."
+        },
+        {
+          "id": "DATEINPUT-06",
+          "type": "approved-api-difference",
+          "text": "The bottom sheet of a compact touch device holds the one-month calendar with its own Save button; upstream's swipe-paged month and year wheels and per-month swipe are not reproduced. The native surface is the browser's own `<input type=\"date\">` with the field's formatted text painted over it while it is not focused; a date that `min`, `max` or the constraints rule out is announced and the control snaps back on blur (iOS treats them as validity flags, not clamps)."
+        },
+        {
+          "id": "DATEINPUT-07",
+          "type": "approved-api-difference",
+          "text": "The popover is the library's own picker surface (a manual popover on the shared layer stack, positioned under the box) rather than `tct-popover`: the field's box, input and clear button count as inside for outside presses, focus goes into the calendar only when the toggle opened it, and Escape closes one layer per press."
+        },
+        {
+          "id": "DATEINPUT-08",
+          "type": "tecton-visual",
+          "text": "Outlined field from the Tecton input tokens (border, hover, focus ring through the shared focus-ring module, 4px element radius), a calendar toggle button at the start, and the popover surface on the Tecton popover fill with a 1px rule and no shadow (D-013)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 62,
+      "notes": "Guides: [mwg:capture-location-agnostic-data] the value is a calendar date string; [mwg:support-global-calendar-systems] Gregorian display with the locale's names and digits; [mwg:validate-input-after-interaction] user-invalid timing; [mwg:form-associated-custom-elements] value, validity, reset and restore; [mwg:ime-safe-enter-submit] IME-safe Enter and arrows; [mwg:accessible-error-announcement] the one-time assertive announcement. Shared with the other pickers: `picker-presentation.ts` (surface policy and the deprecated mapping), `picker-surface.ts` (popover), `draft-entry.ts` (typing drafts), `tct-picker-field.ts` (the base of the date and time fields)."
+    }
+  }
+}

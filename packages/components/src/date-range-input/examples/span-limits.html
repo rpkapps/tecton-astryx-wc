@@ -1,0 +1,14 @@
+<!-- title: Span limits; description: max-range-span and min-range-span count both endpoints. Once the start is picked, days that would break the limit are disabled; a preset that breaks it is disabled too. -->
+<tct-vstack id="span-limits-root" gap="4" max-width="420">
+  <tct-date-range-input label="At most a week" max-range-span="7" name="week"></tct-date-range-input>
+  <tct-date-range-input label="At least three days" min-range-span="3" name="stay"></tct-date-range-input>
+</tct-vstack>
+<script type="module">
+  const [week, stay] = document.querySelectorAll('#span-limits-root tct-date-range-input');
+  const presets = [
+    {label: 'Two days', getRange: () => ({start: '2026-03-02', end: '2026-03-03'})},
+    {label: 'Ten days', getRange: () => ({start: '2026-03-02', end: '2026-03-11'})},
+  ];
+  week.presets = presets;
+  stay.presets = presets;
+</script>

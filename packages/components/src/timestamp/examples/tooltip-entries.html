@@ -1,0 +1,18 @@
+<!-- title: Tooltip entries; description: tooltipEntries lists the lines of the card: an instant in the zones and formats you name, each with a label and an optional copy button. Entries also give an absolute reading a card. -->
+<tct-vstack id="tooltip-entries-root" gap="4" h-align="start">
+  <tct-timestamp value="2026-03-21T14:51:53Z" format="relative_short"></tct-timestamp>
+  <tct-timestamp value="2026-03-21T14:51:53Z" format="date_time"></tct-timestamp>
+  <tct-timestamp value="2026-03-21T14:51:53Z" format="date" no-tooltip></tct-timestamp>
+</tct-vstack>
+<script type="module">
+  const [first, second] = document.querySelectorAll('#tooltip-entries-root tct-timestamp');
+  const entries = [
+    {label: 'Your time'},
+    {timezoneID: 'UTC', label: 'UTC'},
+    {timezoneID: 'America/Los_Angeles', label: 'Pacific'},
+    {timezoneID: 'Asia/Tokyo', label: 'Tokyo', format: 'time'},
+    {timezoneID: 'UTC', format: 'system_date_time', label: 'ISO', isCopyable: true},
+  ];
+  first.tooltipEntries = entries;
+  second.tooltipEntries = entries;
+</script>

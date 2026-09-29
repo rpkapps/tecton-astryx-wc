@@ -1,0 +1,20 @@
+<!-- title: In a form; description: The field submits the ISO interval under its name, blocks a submit while a required value is missing (and only then shows the error), and is restored by reset. -->
+<tct-vstack max-width="440">
+  <form id="in-form-root">
+    <tct-form-layout>
+      <tct-date-range-input label="Stay" name="stay" required min="2026-03-01" max-range-span="14"></tct-date-range-input>
+      <tct-hstack gap="2">
+        <tct-button type="submit" variant="primary">Book</tct-button>
+        <tct-button type="reset">Reset</tct-button>
+      </tct-hstack>
+      <output></output>
+    </tct-form-layout>
+  </form>
+</tct-vstack>
+<script type="module">
+  const form = document.getElementById('in-form-root');
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    form.querySelector('output').textContent = JSON.stringify(Object.fromEntries(new FormData(form, event.submitter)));
+  });
+</script>

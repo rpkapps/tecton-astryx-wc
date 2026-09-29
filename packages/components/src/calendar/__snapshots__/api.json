@@ -1,0 +1,151 @@
+{
+  "folder": "calendar",
+  "elements": {
+    "tct-calendar": {
+      "class": "TctCalendar",
+      "attributes": [
+        {
+          "name": "focus-date",
+          "property": "focusDate",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "has-variable-row-count",
+          "property": "hasVariableRowCount",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "has-week-numbers",
+          "property": "hasWeekNumbers",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "max",
+          "property": "max",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "max-range-span",
+          "property": "maxRangeSpan",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "min",
+          "property": "min",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "min-range-span",
+          "property": "minRangeSpan",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "mode",
+          "property": "mode",
+          "type": "CalendarMode",
+          "values": [
+            "single",
+            "range"
+          ],
+          "default": "'single'",
+          "reflects": true
+        },
+        {
+          "name": "no-outside-days",
+          "property": "noOutsideDays",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "number-of-months",
+          "property": "numberOfMonths",
+          "type": "1 | 2",
+          "values": [
+            "1",
+            "2"
+          ],
+          "default": "1",
+          "reflects": false
+        },
+        {
+          "name": "value",
+          "property": "value",
+          "type": "CalendarValue | undefined",
+          "reflects": false
+        },
+        {
+          "name": "week-starts-on",
+          "property": "weekStartsOn",
+          "type": "DayOfWeek | string",
+          "default": "0",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "dateConstraints",
+          "type": "readonly ((date: Date) => boolean)[] | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "focus",
+          "signature": "(options?: FocusOptions) => void"
+        },
+        {
+          "name": "navigateTo",
+          "signature": "(date: string) => void"
+        }
+      ],
+      "slots": [],
+      "events": [
+        {
+          "name": "change",
+          "native": true
+        },
+        {
+          "name": "input",
+          "native": true
+        },
+        {
+          "name": "tct-focus-date-change",
+          "class": "TctFocusDateChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        },
+        {
+          "name": "tct-value-change",
+          "class": "TctValueChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "calendar",
+        "day",
+        "day-name",
+        "grid",
+        "header",
+        "month-year",
+        "months",
+        "nav",
+        "week-number"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

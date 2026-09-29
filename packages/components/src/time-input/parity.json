@@ -1,0 +1,333 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "time-input",
+  "workPackage": "WP-13",
+  "entries": {
+    "core.time-input": {
+      "tag": "tct-time-input",
+      "status": "implemented",
+      "upstream": {
+        "name": "TimeInput",
+        "path": "packages/core/src/TimeInput/TimeInput.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute"
+        },
+        {
+          "upstream": "isLabelHidden",
+          "kind": "prop",
+          "target": "label-hidden",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "description",
+          "kind": "prop",
+          "target": "description",
+          "as": "attribute"
+        },
+        {
+          "upstream": "isOptional",
+          "kind": "prop",
+          "target": "optional",
+          "as": "attribute"
+        },
+        {
+          "upstream": "isRequired",
+          "kind": "prop",
+          "target": "required",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Also a validity constraint (valueMissing) and `aria-required`."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Also through <fieldset disabled>."
+        },
+        {
+          "upstream": "disabledMessage",
+          "kind": "prop",
+          "target": "disabled-message",
+          "as": "attribute",
+          "notes": "A tooltip on a disabled field that says why; every part of the field stays focusable (aria-disabled) and read-only."
+        },
+        {
+          "upstream": "isLoading",
+          "kind": "prop",
+          "target": "loading",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Shows a spinner, sets `aria-busy` and refuses edits."
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md",
+          "notes": "Unset takes the nearest size provider, else md."
+        },
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "target": "status",
+          "as": "property",
+          "notes": "Object `{type, message?}`, or the `status-type` and `status-message` attributes."
+        },
+        {
+          "upstream": "statusVariant",
+          "kind": "prop",
+          "target": "status-variant",
+          "as": "attribute",
+          "default": "attached",
+          "notes": "attached, detached or tooltip (a focusable button in the box that reveals the message)."
+        },
+        {
+          "upstream": "labelTooltip",
+          "kind": "prop",
+          "target": "label-tooltip",
+          "as": "attribute"
+        },
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "target": "width",
+          "as": "attribute",
+          "notes": "A number is px, a string a CSS length. Not reflected."
+        },
+        {
+          "upstream": "changeAction",
+          "kind": "prop",
+          "target": "changeAction",
+          "as": "property",
+          "notes": "`(value: string, event: Event) => void | Promise<void>` run after every user change; the field is busy (`:state(busy)`, spinner, `aria-busy`) until the promise settles and refuses further changes. Never runs for a property write."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style/::part/custom properties"
+        },
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "property",
+          "notes": "The time `HH:MM` (with `:SS`), or `\"\"`: a wall-clock time of day, no zone, whatever the language. The `value` attribute is the default a form reset restores. Upstream is `ISOTimeString | undefined`."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "change",
+          "as": "native-event",
+          "notes": "Uncontrolled (D-006): native `input` and then `change` fire, composed, when the time changes: a step, a pick, a clear, or typed text when the entry ends (Enter, leaving the field); read `value`. Neither fires for a property or attribute write."
+        },
+        {
+          "upstream": "min",
+          "kind": "prop",
+          "target": "min",
+          "as": "attribute",
+          "notes": "A native constraint on the value (`rangeUnderflow`); typed and stepped times before it are refused."
+        },
+        {
+          "upstream": "max",
+          "kind": "prop",
+          "target": "max",
+          "as": "attribute",
+          "notes": "A native constraint on the value (`rangeOverflow`); typed and stepped times after it are refused."
+        },
+        {
+          "upstream": "hasSeconds",
+          "kind": "prop",
+          "target": "has-seconds",
+          "as": "attribute",
+          "default": false
+        },
+        {
+          "upstream": "hasClear",
+          "kind": "prop",
+          "target": "has-clear",
+          "as": "attribute",
+          "default": false,
+          "notes": "Shows a clear button while there is a value; it fires the cancelable `tct-clear`."
+        },
+        {
+          "upstream": "hourFormat",
+          "kind": "prop",
+          "target": "hour-format",
+          "as": "attribute",
+          "default": "12h",
+          "notes": "`12h` (\"2:30 PM\") or `24h` (\"14:30\")."
+        },
+        {
+          "upstream": "increment",
+          "kind": "prop",
+          "target": "increment",
+          "as": "attribute",
+          "default": 1,
+          "notes": "Minutes the arrow keys step by."
+        },
+        {
+          "upstream": "presentation",
+          "kind": "prop",
+          "target": "presentation",
+          "as": "attribute",
+          "default": "adaptive-native",
+          "notes": "`text-input`, `popover` (there is no popover for a time: the typed field), `bottom-sheet`, `native`, `adaptive-bottom-sheet` or `adaptive-native`."
+        },
+        {
+          "upstream": "nativePicker",
+          "kind": "prop",
+          "target": "native-picker",
+          "as": "attribute",
+          "notes": "Deprecated, mapped as upstream: `touch` is `adaptive-native`, `always` is `native`, `never` is `text-input`; `presentation` wins when both are set."
+        },
+        {
+          "upstream": "placeholder",
+          "kind": "prop",
+          "target": "placeholder",
+          "as": "attribute",
+          "notes": "Default \"Select a time\"; a focused, empty typed field shows a format hint."
+        },
+        {
+          "upstream": "hasAutoFocus",
+          "kind": "prop",
+          "target": "autofocus",
+          "as": "attribute",
+          "notes": "The global `autofocus` attribute; the element focuses its input once it has rendered."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useAnnounce",
+          "target": "announce",
+          "as": "module-function",
+          "notes": "The shared polite/assertive announcer (`@tecton-wc/core/a11y/announcer.js`)."
+        },
+        {
+          "upstream": "useDevWarning",
+          "target": "devWarn",
+          "as": "module-function",
+          "notes": "Dev-mode warnings once per id (`@tecton-wc/core/utils/dev.js`)."
+        },
+        {
+          "upstream": "useInputContainer",
+          "target": "FieldChromeController",
+          "as": "controller",
+          "notes": "A press on the box chrome focuses the field (the time box has its own handler)."
+        },
+        {
+          "upstream": "useInputStatusIcon",
+          "as": "waived",
+          "reason": "Internal render helper; the status glyph and the tooltip button are part of the shared box (`TctBoxControl.renderStatusIcon`)."
+        },
+        {
+          "upstream": "useMediaQuery",
+          "target": "PickerPresentationController",
+          "as": "controller",
+          "notes": "Follows `(pointer: coarse)` and the compact-touch query live (`MediaQueryController`); the surface (popover, sheet, native) re-renders when it changes."
+        },
+        {
+          "upstream": "useResolvedRequired",
+          "target": "formLayoutContext",
+          "as": "context",
+          "notes": "The form layout's optionality default; the indicator follows it."
+        },
+        {
+          "upstream": "useInputGroup",
+          "target": "inputGroupContext",
+          "as": "context",
+          "notes": "Inside a tct-input-group the field drops its own label, description and status and joins the group's single focus ring."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "ArrowUp / ArrowDown",
+          "action": "Steps the time by `increment` minutes (wrapping past midnight; from an empty field, from now) and announces it; not past `min`/`max`, not while read-only, disabled or busy, and not with a modifier or during an IME composition.",
+          "when": "in the typed field"
+        },
+        {
+          "keys": "Enter",
+          "action": "Commits the typed text, fires tct-enter, then submits the form once unless prevented; ignored while an IME composes.",
+          "when": "in the typed field"
+        },
+        {
+          "keys": "Enter / Space / ArrowDown",
+          "action": "Opens the bottom sheet.",
+          "when": "in the read-only field of the sheet presentation"
+        },
+        {
+          "keys": "ArrowUp / ArrowDown / Home / End",
+          "action": "Move within a column of the sheet and pick (the pick commits at once).",
+          "when": "focus in a column"
+        },
+        {
+          "keys": "Tab",
+          "action": "Commits the typed text and moves on; in the sheet it moves to the next column."
+        }
+      ],
+      "form": {
+        "formAssociated": true,
+        "notes": "Form-associated (`ElementInternals`): submits `name=14:30` (an empty string when empty) whatever the language, resets to the `value` attribute, restores on navigation, works with `form=` and `label for`, and joins `<fieldset disabled>`. `required` (valueMissing), `min`/`max` (rangeUnderflow / rangeOverflow) and text that is not a time (badInput) block the submit; the error shows after the user acted or a submit attempt, and unreadable text once typing pauses."
+      },
+      "differences": [
+        {
+          "id": "TIMEINPUT-01",
+          "type": "approved-api-difference",
+          "text": "Uncontrolled by default (D-006): `value` is a plain string with the `value` attribute as its default (a form reset restores it), and native `input`/`change` events report a committed change instead of a controlled `value` plus `onChange`. Nothing fires for a property or attribute write."
+        },
+        {
+          "id": "TIMEINPUT-02",
+          "type": "approved-api-difference",
+          "text": "Typed text is a draft that commits when the entry ends (Enter, leaving the field), not on every keystroke that reads as a time (\"2\" is 2:00): see DATEINPUT-02. A step is a discrete commit (`input` then `change`), announced through the shared announcer."
+        },
+        {
+          "id": "TIMEINPUT-03",
+          "type": "a11y-improvement",
+          "text": "Text that is not a time, or a time outside `min`/`max`, is `validity.badInput`, `aria-invalid` and announced once assertively after typing pauses (`@tct.timeInput.invalidTime`), instead of an always-mounted `role=alert` node."
+        },
+        {
+          "id": "TIMEINPUT-04",
+          "type": "approved-api-difference",
+          "text": "Typed text also reads the locale's own digits and AM/PM markers (`٢:٣٠ م`, `下午2:30`) and the closed value shows them; `min`/`max` are constraints on a programmatic value too (rangeUnderflow, rangeOverflow)."
+        },
+        {
+          "id": "TIMEINPUT-05",
+          "type": "approved-api-difference",
+          "text": "The bottom sheet holds hour, minute, second and AM/PM columns (`tct-time-panel`: listboxes with roving focus that commit live, options no time in `min`..`max` can produce disabled) and a Save button that only closes it; upstream's scroll wheels are not reproduced. An `open` property and the cancelable `tct-open-change` / `tct-after-open-change` events expose the sheet; `tct-clear` is cancelable. `hasAutoFocus` is the global `autofocus` attribute."
+        },
+        {
+          "id": "TIMEINPUT-06",
+          "type": "tecton-visual",
+          "text": "Outlined field from the Tecton input tokens with a decorative clock; the sheet columns use the primary action fill for the picked option, the tertiary roles for hover and focus, and the disabled text role for options outside the window."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 46,
+      "notes": "Guides: [mwg:model-partial-time-concepts] a wall-clock time of day, no date and no zone; [mwg:validate-input-after-interaction]; [mwg:form-associated-custom-elements]; [mwg:ime-safe-enter-submit] IME-safe Enter and arrows; [mwg:accessible-error-announcement]. `tct-time-panel` (in `date-input/`) is the internal helper element of the touch sheet."
+    }
+  }
+}

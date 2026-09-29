@@ -1,0 +1,13 @@
+<!-- title: Basic; description: Type a date in your own language or pick it in the calendar. The value is always YYYY-MM-DD. The clear button removes it and fires tct-clear. -->
+<tct-vstack id="basic-root" gap="3" max-width="360">
+  <tct-date-input label="Start date" description="Try 3/4/2026, 4 March 2026 or 2026-03-04." value="2026-03-04" has-clear name="start"></tct-date-input>
+  <tct-text data-output color="secondary">Value: 2026-03-04</tct-text>
+</tct-vstack>
+<script type="module">
+  const root = document.getElementById('basic-root');
+  const field = root.querySelector('tct-date-input');
+  const output = root.querySelector('[data-output]');
+  field.addEventListener('change', () => {
+    output.textContent = `Value: ${field.value || '(empty)'}`;
+  });
+</script>

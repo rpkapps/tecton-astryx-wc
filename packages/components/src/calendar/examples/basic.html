@@ -1,0 +1,13 @@
+<!-- title: Basic; description: A month of days. The value attribute is the selected date; a pick fires the cancelable tct-value-change, then input and change. -->
+<tct-vstack id="basic-root" gap="3" h-align="start">
+  <tct-calendar value="2026-03-18" focus-date="2026-03-01"></tct-calendar>
+  <tct-text data-output color="secondary">Selected: 2026-03-18</tct-text>
+</tct-vstack>
+<script type="module">
+  const root = document.getElementById('basic-root');
+  const calendar = root.querySelector('tct-calendar');
+  const output = root.querySelector('[data-output]');
+  calendar.addEventListener('change', () => {
+    output.textContent = `Selected: ${calendar.value}`;
+  });
+</script>

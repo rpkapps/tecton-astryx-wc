@@ -742,9 +742,9 @@ export class TctDateTimeInput extends TctPickerField {
   readonly #timeList: PickerSurfaceController = new PickerSurfaceController(this, {
     surface: () =>
       this.renderRoot.querySelector<HTMLElement>('.picker:has(> [data-variant="time-options"])'),
-    anchor: () => this.timeBox,
+    anchor: () => this.#timeBox,
     trigger: () => this.#timeControl,
-    inside: () => [this.timeBox],
+    inside: () => [this.#timeBox],
     haspopup: 'listbox',
     trapFocus: false,
     matchAnchorWidth: 'min',
@@ -764,7 +764,7 @@ export class TctDateTimeInput extends TctPickerField {
     },
   });
 
-  get timeBox(): HTMLElement | null {
+  get #timeBox(): HTMLElement | null {
     return this.renderRoot.querySelector<HTMLElement>('.input-wrapper.time-box');
   }
 

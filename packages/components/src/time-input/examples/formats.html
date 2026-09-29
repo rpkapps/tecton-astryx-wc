@@ -1,0 +1,6 @@
+<!-- title: Formats; description: hour-format chooses 12-hour text (2:30 PM) or 24-hour text (14:30); has-seconds adds seconds. The value is HH:MM or HH:MM:SS either way. -->
+<tct-vstack gap="4" max-width="360">
+  <tct-time-input label="12-hour" value="14:30"></tct-time-input>
+  <tct-time-input label="24-hour" hour-format="24h" value="14:30"></tct-time-input>
+  <tct-time-input label="With seconds" has-seconds value="14:30:15"></tct-time-input>
+</tct-vstack>

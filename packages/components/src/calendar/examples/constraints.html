@@ -1,0 +1,15 @@
+<!-- title: Constraints; description: min and max bound the days; dateConstraints rules out more (here weekends); max-range-span limits how long a range can get once its start is picked. Unavailable days stay visible and are aria-disabled. -->
+<tct-hstack id="constraints-root" gap="6" wrap="wrap" v-align="start">
+  <tct-vstack gap="2">
+    <tct-text type="supporting" color="secondary">Weekdays in March only</tct-text>
+    <tct-calendar data-weekdays min="2026-03-02" max="2026-03-27" focus-date="2026-03-02"></tct-calendar>
+  </tct-vstack>
+  <tct-vstack gap="2">
+    <tct-text type="supporting" color="secondary">Ranges of at most 5 days</tct-text>
+    <tct-calendar mode="range" max-range-span="5" focus-date="2026-03-01"></tct-calendar>
+  </tct-vstack>
+</tct-hstack>
+<script type="module">
+  const root = document.getElementById('constraints-root');
+  root.querySelector('[data-weekdays]').dateConstraints = [(date) => date.getDay() !== 0 && date.getDay() !== 6];
+</script>

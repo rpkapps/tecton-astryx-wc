@@ -1,0 +1,13 @@
+<!-- title: Locale; description: The reading follows the language of the nearest lang: wording and word order of relative times, month names, digits. Hebrew and Arabic mirror the card. -->
+<tct-vstack id="locale-root" gap="3" h-align="start">
+  <div lang="en-GB"><tct-timestamp data-ago="7200" format="relative"></tct-timestamp> · <tct-timestamp value="2026-03-21T14:51:53Z" format="date_time"></tct-timestamp></div>
+  <div lang="de-DE"><tct-timestamp data-ago="7200" format="relative"></tct-timestamp> · <tct-timestamp value="2026-03-21T14:51:53Z" format="date_time"></tct-timestamp></div>
+  <div lang="ja-JP"><tct-timestamp data-ago="7200" format="relative"></tct-timestamp> · <tct-timestamp value="2026-03-21T14:51:53Z" format="date_time"></tct-timestamp></div>
+  <div lang="he-IL" dir="rtl"><tct-timestamp data-ago="7200" format="relative"></tct-timestamp> · <tct-timestamp value="2026-03-21T14:51:53Z" format="date_time"></tct-timestamp></div>
+  <div lang="ar-SA" dir="rtl"><tct-timestamp data-ago="7200" format="relative"></tct-timestamp> · <tct-timestamp value="2026-03-21T14:51:53Z" format="date_time"></tct-timestamp></div>
+</tct-vstack>
+<script type="module">
+  for (const timestamp of document.querySelectorAll('#locale-root tct-timestamp[data-ago]')) {
+    timestamp.value = new Date(Date.now() - Number(timestamp.dataset.ago) * 1000).toISOString();
+  }
+</script>

@@ -10,7 +10,6 @@
  */
 import {devWarn} from '../utils/dev.js';
 import {SHARED_DATE_FORMAT_OPTIONS} from './format.js';
-import {getTimeZoneParts, isValidTimeZone} from './zoned.js';
 
 // ---------------------------------------------------------------------------------------- formats
 
@@ -69,6 +68,43 @@ interface Wall {
   hour: number;
   minute: number;
   second: number;
+}
+
+/** Whether the platform knows the IANA zone. Plain `Intl`: a timestamp must not pull in the date library for this. */
+function isValidTimeZone(timeZone: string): boolean {
+  try {
+    new Intl.DateTimeFormat('en-US', {timeZone});
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+const zoneParts = new Map<string, Intl.DateTimeFormat>();
+
+/** The wall clock an instant reads as in a zone: Gregorian, 24-hour, in numbers (stable in every locale). */
+function getTimeZoneParts(instant: number, timeZone: string): Wall {
+  let formatter = zoneParts.get(timeZone);
+  if (!formatter) {
+    formatter = new Intl.DateTimeFormat('en-US', {
+      timeZone,
+      calendar: 'gregory',
+      numberingSystem: 'latn',
+      hourCycle: 'h23',
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric',
+      second: 'numeric',
+    });
+    zoneParts.set(timeZone, formatter);
+  }
+  const wall = {year: 0, month: 0, day: 0, hour: 0, minute: 0, second: 0};
+  for (const part of formatter.formatToParts(instant)) {
+    if (part.type in wall) wall[part.type as keyof Wall] = Number(part.value);
+  }
+  return wall;
 }
 
 /** Wall-clock fields for an instant: in the named zone, or in the viewer's own, read straight off the `Date`. */

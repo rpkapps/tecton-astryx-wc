@@ -3,8 +3,8 @@
  * next buttons, day cells with a round day button, a band behind a selected range and a lighter band for
  * the hover preview. Every state pairs its fill with its own Tecton state text role, as tct-button does:
  * the resting ink on a hover, focus or press fill is what drops below 4.5:1 in dark mode. The Tecton
- * design has no date-picker spec; the values follow the Astryx calendar with Tecton roles (tecton-astryx
- * components.ts leaves the surface to the component). [mwg:css] [mwg:styling-web-components]
+ * design has no date-picker spec; the values follow the upstream calendar with Tecton roles (the React
+ * theme leaves the surface to the component). [mwg:css] [mwg:styling-web-components]
  */
 @layer component {
   :host {

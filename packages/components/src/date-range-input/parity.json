@@ -1,0 +1,297 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "date-range-input",
+  "workPackage": "WP-13",
+  "entries": {
+    "core.date-range-input": {
+      "tag": "tct-date-range-input",
+      "status": "implemented",
+      "upstream": {
+        "name": "DateRangeInput",
+        "path": "packages/core/src/DateRangeInput/DateRangeInput.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute"
+        },
+        {
+          "upstream": "isLabelHidden",
+          "kind": "prop",
+          "target": "label-hidden",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "description",
+          "kind": "prop",
+          "target": "description",
+          "as": "attribute"
+        },
+        {
+          "upstream": "isOptional",
+          "kind": "prop",
+          "target": "optional",
+          "as": "attribute"
+        },
+        {
+          "upstream": "isRequired",
+          "kind": "prop",
+          "target": "required",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Also a validity constraint (valueMissing) and `aria-required`."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Also through <fieldset disabled>."
+        },
+        {
+          "upstream": "disabledMessage",
+          "kind": "prop",
+          "target": "disabled-message",
+          "as": "attribute",
+          "notes": "A tooltip on a disabled field that says why; every part of the field stays focusable (aria-disabled) and read-only."
+        },
+        {
+          "upstream": "isLoading",
+          "kind": "prop",
+          "target": "loading",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Shows a spinner, sets `aria-busy` and refuses edits."
+        },
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "target": "status",
+          "as": "property",
+          "notes": "Object `{type, message?}`, or the `status-type` and `status-message` attributes."
+        },
+        {
+          "upstream": "statusVariant",
+          "kind": "prop",
+          "target": "status-variant",
+          "as": "attribute",
+          "default": "attached",
+          "notes": "attached, detached or tooltip (a focusable button in the box that reveals the message)."
+        },
+        {
+          "upstream": "labelTooltip",
+          "kind": "prop",
+          "target": "label-tooltip",
+          "as": "attribute"
+        },
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "target": "width",
+          "as": "attribute",
+          "notes": "A number is px, a string a CSS length. Not reflected."
+        },
+        {
+          "upstream": "changeAction",
+          "kind": "prop",
+          "target": "changeAction",
+          "as": "property",
+          "notes": "`(value: string, event: Event) => void | Promise<void>` run after every user change; the field is busy (`:state(busy)`, spinner, `aria-busy`) until the promise settles and refuses further changes. Never runs for a property write."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style/::part/custom properties"
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md",
+          "notes": "Unset takes the nearest size provider, else md."
+        },
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "property",
+          "notes": "The range as an ISO 8601 interval `2026-01-05/2026-01-09`, or `\"\"` (both dates real, the earlier first). `range` reads and writes it as `{start, end}` (`DateRange | null`), the shape upstream `value` has. Upstream is controlled with `DateRange | null`."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "change",
+          "as": "native-event",
+          "notes": "Uncontrolled (D-006): native `input` and then `change` fire, composed, when the range changes: two picks in the calendar, a preset, or a clear; read `value`. Neither fires for a property or attribute write."
+        },
+        {
+          "upstream": "min",
+          "kind": "prop",
+          "target": "min",
+          "as": "attribute",
+          "notes": "A range starting earlier is `rangeUnderflow`; earlier days are unavailable."
+        },
+        {
+          "upstream": "max",
+          "kind": "prop",
+          "target": "max",
+          "as": "attribute",
+          "notes": "A range ending later is `rangeOverflow`; later days are unavailable."
+        },
+        {
+          "upstream": "dateConstraints",
+          "kind": "prop",
+          "target": "dateConstraints",
+          "as": "property",
+          "notes": "A day is unavailable when any predicate returns `false`; an endpoint they rule out is a custom error."
+        },
+        {
+          "upstream": "maxRangeSpan",
+          "kind": "prop",
+          "target": "max-range-span",
+          "as": "attribute",
+          "notes": "Both endpoints counted. Limits the pick and disables presets that break it; never rewrites a value already longer."
+        },
+        {
+          "upstream": "minRangeSpan",
+          "kind": "prop",
+          "target": "min-range-span",
+          "as": "attribute",
+          "notes": "Both endpoints counted; the start itself stays selectable. Presets that break it are disabled."
+        },
+        {
+          "upstream": "presets",
+          "kind": "prop",
+          "target": "presets",
+          "as": "property",
+          "notes": "`readonly {label, getRange}[]`; `getRange` runs each time the picker renders. A preset is disabled by an unavailable endpoint or a span outside the limits; the one that matches `value` is `aria-current`."
+        },
+        {
+          "upstream": "hasClear",
+          "kind": "prop",
+          "target": "no-clear",
+          "as": "attribute",
+          "default": false,
+          "notes": "Inverted: the clear button shows by default (upstream default true); `no-clear` removes it."
+        },
+        {
+          "upstream": "placeholder",
+          "kind": "prop",
+          "target": "placeholder",
+          "as": "attribute",
+          "notes": "Default \"Select date range\"."
+        },
+        {
+          "upstream": "numberOfMonths",
+          "kind": "prop",
+          "target": "number-of-months",
+          "as": "attribute",
+          "default": 2,
+          "notes": "1 or 2; a bottom sheet always shows one."
+        },
+        {
+          "upstream": "weekStartsOn",
+          "kind": "prop",
+          "target": "week-starts-on",
+          "as": "attribute",
+          "default": 0
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useInputStatusIcon",
+          "as": "waived",
+          "reason": "Internal render helper; the status glyph and the tooltip button are part of the shared box (`TctBoxControl.renderStatusIcon`)."
+        },
+        {
+          "upstream": "useResolvedRequired",
+          "target": "formLayoutContext",
+          "as": "context",
+          "notes": "The form layout's optionality default; the indicator follows it."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Enter / Space",
+          "action": "Opens the picker (the trigger is a button) with focus in the calendar, or closes it.",
+          "when": "on the trigger"
+        },
+        {
+          "keys": "Calendar keys",
+          "action": "The calendar's date-grid keys work inside the picker: the first Enter picks the start, the second the end.",
+          "when": "focus in the calendar"
+        },
+        {
+          "keys": "Escape",
+          "action": "Cancels a range pick in progress; a second press closes the picker and returns focus to the trigger.",
+          "when": "picker open"
+        },
+        {
+          "keys": "Tab",
+          "action": "Presets are tab stops before the calendar; Tab stays inside the open picker surface.",
+          "when": "picker open"
+        }
+      ],
+      "form": {
+        "formAssociated": true,
+        "notes": "Form-associated (`ElementInternals`): submits `name=2026-01-05/2026-01-09` (an empty string when empty) whatever the language, calendar or time zone, resets to the `value` attribute, restores on navigation, and joins `<fieldset disabled>`. `required` (valueMissing), `min`/`max` (rangeUnderflow / rangeOverflow) and `dateConstraints` (a custom error) block the submit; the error shows after the user acted or a submit attempt."
+      },
+      "differences": [
+        {
+          "id": "DATERANGEINPUT-01",
+          "type": "approved-api-difference",
+          "text": "Uncontrolled (D-006): `value` is the ISO 8601 interval string (the FACE value, submitted as `name=start/end`) with the `value` attribute as its default; `range` is the `{start, end}` property upstream calls `value`. Native `input`/`change` replace `onChange`."
+        },
+        {
+          "id": "DATERANGEINPUT-02",
+          "type": "approved-api-difference",
+          "text": "`hasClear` (default true) is the inverted `no-clear`; an `open` property and the cancelable `tct-open-change` / `tct-after-open-change` events expose the picker; `presentation` (`popover`, `bottom-sheet`, `adaptive-bottom-sheet`, default) is added because a range has no native control; `tct-clear` is cancelable."
+        },
+        {
+          "id": "DATERANGEINPUT-03",
+          "type": "approved-api-difference",
+          "text": "`min`, `max` and `dateConstraints` are also constraints on the value (rangeUnderflow, rangeOverflow, a custom error); the span limits still only constrain the pick and never rewrite or invalidate a value that is already outside them."
+        },
+        {
+          "id": "DATERANGEINPUT-04",
+          "type": "approved-api-difference",
+          "text": "The trigger is one button (upstream adds a second, tab-index -1 calendar button); the icon is decorative and a press on it is a press on the trigger. On a compact touch device the picker is a bottom sheet with one month and the presets as a wrapping row above it."
+        },
+        {
+          "id": "DATERANGEINPUT-05",
+          "type": "a11y-improvement",
+          "text": "The trigger is named \"{label}: {range or placeholder}\" and stays focusable while busy or with a `disabled-message` (`aria-disabled`); the presets are a labelled group of buttons with `aria-current` on the applied one, never a listbox."
+        },
+        {
+          "id": "DATERANGEINPUT-06",
+          "type": "tecton-visual",
+          "text": "Outlined box with the trigger as its text; presets use the tertiary state roles for hover, focus and press, the applied preset the muted accent wash with the primary text and a heavier weight, and a disabled preset the disabled text role."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 60,
+      "notes": "Guides: [mwg:capture-location-agnostic-data] an ISO 8601 interval of calendar dates; [mwg:validate-input-after-interaction]; [mwg:form-associated-custom-elements]; [mwg:support-global-calendar-systems]. The picker surface and the presentation policy are shared with `tct-date-input` (`date-input/`)."
+    }
+  }
+}

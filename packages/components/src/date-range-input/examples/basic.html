@@ -1,0 +1,13 @@
+<!-- title: Basic; description: A button that shows the range and opens a two-month calendar. Pick a start and an end; the value is an ISO interval and range reads it as {start, end}. -->
+<tct-vstack id="basic-root" gap="3" max-width="420">
+  <tct-date-range-input label="Reporting period" value="2026-03-02/2026-03-08" name="period"></tct-date-range-input>
+  <tct-text data-output color="secondary">Value: 2026-03-02/2026-03-08</tct-text>
+</tct-vstack>
+<script type="module">
+  const root = document.getElementById('basic-root');
+  const field = root.querySelector('tct-date-range-input');
+  const output = root.querySelector('[data-output]');
+  field.addEventListener('change', () => {
+    output.textContent = `Value: ${field.value || '(empty)'}`;
+  });
+</script>

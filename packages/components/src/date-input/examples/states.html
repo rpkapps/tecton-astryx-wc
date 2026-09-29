@@ -1,0 +1,12 @@
+<!-- title: States; description: Hidden label, required and optional indicators, disabled (with a reason), read-only, loading and sizes. -->
+<tct-vstack gap="4" max-width="360">
+  <tct-date-input label="Label hidden but named" label-hidden></tct-date-input>
+  <tct-date-input label="Required" required></tct-date-input>
+  <tct-date-input label="Optional" optional label-tooltip="You can add this later."></tct-date-input>
+  <tct-date-input label="Disabled" disabled value="2026-03-21"></tct-date-input>
+  <tct-date-input label="Disabled with a reason" disabled disabled-message="Locked once the order ships." value="2026-03-21"></tct-date-input>
+  <tct-date-input label="Read-only" readonly value="2026-03-21"></tct-date-input>
+  <tct-date-input label="Loading" loading value="2026-03-21"></tct-date-input>
+  <tct-date-input label="Small" size="sm" value="2026-03-21"></tct-date-input>
+  <tct-date-input label="Large" size="lg" value="2026-03-21"></tct-date-input>
+</tct-vstack>

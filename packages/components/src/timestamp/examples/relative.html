@@ -1,0 +1,14 @@
+<!-- title: Relative; description: relative and relative_short read "2 hours ago" and "2h ago"; auto is relative for the last week and date and time after it (auto-threshold changes that); live keeps a relative reading current. Hover or focus a reading for the full date. -->
+<tct-vstack id="relative-root" gap="2" h-align="start">
+  <tct-hstack gap="3"><tct-text type="supporting" color="secondary">relative</tct-text><tct-timestamp data-ago="7200" format="relative"></tct-timestamp></tct-hstack>
+  <tct-hstack gap="3"><tct-text type="supporting" color="secondary">relative_short</tct-text><tct-timestamp data-ago="7200" format="relative_short"></tct-timestamp></tct-hstack>
+  <tct-hstack gap="3"><tct-text type="supporting" color="secondary">auto, 2 days</tct-text><tct-timestamp data-ago="172800"></tct-timestamp></tct-hstack>
+  <tct-hstack gap="3"><tct-text type="supporting" color="secondary">auto, 30 days</tct-text><tct-timestamp data-ago="2592000"></tct-timestamp></tct-hstack>
+  <tct-hstack gap="3"><tct-text type="supporting" color="secondary">live, 5 seconds</tct-text><tct-timestamp data-ago="5" format="relative" live></tct-timestamp></tct-hstack>
+  <tct-hstack gap="3"><tct-text type="supporting" color="secondary">in the future</tct-text><tct-timestamp data-ago="-10800" format="relative"></tct-timestamp></tct-hstack>
+</tct-vstack>
+<script type="module">
+  for (const timestamp of document.querySelectorAll('#relative-root tct-timestamp')) {
+    timestamp.value = new Date(Date.now() - Number(timestamp.dataset.ago) * 1000).toISOString();
+  }
+</script>
