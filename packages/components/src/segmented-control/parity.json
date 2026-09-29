@@ -5,7 +5,7 @@
   "entries": {
     "core.segmented-control": {
       "tag": "tct-segmented-control",
-      "status": "in-progress",
+      "status": "implemented",
       "upstream": {
         "name": "SegmentedControl",
         "path": "packages/core/src/SegmentedControl/SegmentedControl.tsx",
@@ -157,7 +157,7 @@
     },
     "core.segmented-control-item": {
       "tag": "tct-segmented-control-item",
-      "status": "in-progress",
+      "status": "implemented",
       "upstream": {
         "name": "SegmentedControlItem",
         "path": "packages/core/src/SegmentedControl/SegmentedControlItem.tsx",

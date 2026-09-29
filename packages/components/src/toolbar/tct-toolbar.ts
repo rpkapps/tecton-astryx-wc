@@ -47,7 +47,8 @@ const dividersConverter = {
  * @summary A labelled toolbar with start, centre and end areas and roving arrow-key navigation.
  * @tag tct-toolbar
  * @upstream Toolbar
- * @slot start - Content aligned to the inline start. Unslotted children go here too.
+ * @slot start - Content aligned to the inline start.
+ * @slot - Unslotted children: start content too.
  * @slot center - Content centred between start and end.
  * @slot end - Content aligned to the inline end.
  * @csspart toolbar - The bar that lays out the three areas (Astryx target `astryx-toolbar`).

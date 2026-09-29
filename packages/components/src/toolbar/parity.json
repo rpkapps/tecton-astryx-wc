@@ -5,7 +5,7 @@
   "entries": {
     "core.toolbar": {
       "tag": "tct-toolbar",
-      "status": "in-progress",
+      "status": "implemented",
       "upstream": {
         "name": "Toolbar",
         "path": "packages/core/src/Toolbar/Toolbar.tsx",

@@ -1,0 +1,17 @@
+<!-- title: Basic; description: One choice from a few visible options. The value attribute is the initial selection; listen to change for user selections. -->
+<div id="basic">
+  <tct-segmented-control label="View mode" value="grid">
+    <tct-segmented-control-item value="grid" label="Grid"></tct-segmented-control-item>
+    <tct-segmented-control-item value="list" label="List"></tct-segmented-control-item>
+    <tct-segmented-control-item value="table" label="Table"></tct-segmented-control-item>
+  </tct-segmented-control>
+  <p data-output style="margin-block-start: var(--spacing-3); color: var(--color-text-secondary)">Selected: grid</p>
+</div>
+<script type="module">
+  const root = document.getElementById('basic');
+  const control = root.querySelector('tct-segmented-control');
+  const output = root.querySelector('[data-output]');
+  control.addEventListener('change', () => {
+    output.textContent = `Selected: ${control.value}`;
+  });
+</script>

@@ -1,4 +1,3 @@
-/* eslint-disable tct/no-create-tct-element -- the rule matches every `new Tct*`, including the event class constructed here; it is not an element (see requests) */
 import {html, type CSSResultGroup, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
 import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';

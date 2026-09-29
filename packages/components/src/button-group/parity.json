@@ -5,7 +5,7 @@
   "entries": {
     "core.button-group": {
       "tag": "tct-button-group",
-      "status": "in-progress",
+      "status": "implemented",
       "upstream": {
         "name": "ButtonGroup",
         "path": "packages/core/src/ButtonGroup/ButtonGroup.tsx",

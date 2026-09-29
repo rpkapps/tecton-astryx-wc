@@ -5,7 +5,7 @@
   "entries": {
     "core.collapsible": {
       "tag": "tct-collapsible",
-      "status": "in-progress",
+      "status": "implemented",
       "upstream": {
         "name": "Collapsible",
         "path": "packages/core/src/Collapsible/Collapsible.tsx",
@@ -154,11 +154,6 @@
       "tokenRequests": [],
       "requests": [
         {
-          "file": "tools/eslint-plugin-tct/rules/no-create-tct-element.ts",
-          "reason": "The NewExpression check /^Tct[A-Z]/ also flags event classes (`new TctOpenChangeEvent(...)`, `new TctValueChangeEvent(...)`), which every intent-event owner must construct. Exclude names ending in `Event`; until then the files that construct events carry a file-level eslint-disable naming this reason.",
-          "diff": "-        if (node.callee.type === 'Identifier' && /^Tct[A-Z]/.test(node.callee.name)) {\n+        if (node.callee.type === 'Identifier' && /^Tct[A-Z]/.test(node.callee.name) && !node.callee.name.endsWith('Event')) {"
-        },
-        {
           "file": "packages/components/src/styles/base.styles.css",
           "reason": "Let components use hidden=\"until-found\": exclude it from the important display:none rule, then tct-collapsible (and later tab panels, accordions in other families) can adopt base again and drop their reset copy.",
           "diff": "-  :host([hidden]),\n-  [hidden] {\n+  :host([hidden]),\n+  [hidden]:not([hidden='until-found']) {\n     display: none !important;\n   }"
@@ -169,7 +164,7 @@
     },
     "core.collapsible-group": {
       "tag": "tct-collapsible-group",
-      "status": "in-progress",
+      "status": "implemented",
       "upstream": {
         "name": "CollapsibleGroup",
         "path": "packages/core/src/Collapsible/CollapsibleGroup.tsx",
