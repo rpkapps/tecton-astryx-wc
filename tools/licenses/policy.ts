@@ -62,12 +62,6 @@ export const DEV_ONLY_EXCEPTIONS: Readonly<Record<string, DevOnlyException>> = {
     approval: 'pending-owner-review',
     reason: 'Platform binary of lightningcss',
   },
-  '@img/sharp-libvips-linux-x64': {
-    license: 'LGPL-3.0-or-later',
-    approval: 'pending-owner-review',
-    reason:
-      'Dynamically linked libvips of sharp (Astro image service, docs build only); not shipped',
-  },
   argparse: {
     license: 'Python-2.0',
     approval: 'pending-owner-review',

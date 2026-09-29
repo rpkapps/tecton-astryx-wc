@@ -19,3 +19,8 @@ onlyBuiltDependencies: []
 ignoredBuiltDependencies:
   - esbuild
   - rs-module-lexer
+
+# sharp (optional dependency of Astro) carries LGPL-3.0 libvips binaries. It is excluded; the docs
+# site uses Astro's passthrough image service instead (orchestrator decision, D-012).
+ignoredOptionalDependencies:
+  - sharp

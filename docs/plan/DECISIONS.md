@@ -197,3 +197,14 @@ of the agent workflow are deferred) and the playground. Upstream's non-agent CLI
 Consequences: CONVENTIONS §7 frontmatter gains `keywords` and a `dense` block, required for every
 component including WP-F. A new work package, **WP-AI**, is added after WP-F, and the MCP server and
 CLI read the same generated registry as the docs site.
+
+## D-012 — No LGPL in the install tree; transitive dev-licence review (2026-09-29)
+
+- `sharp`, an optional dependency of Astro, brings LGPL-3.0 `libvips` binaries. It is excluded with
+  `ignoredOptionalDependencies` in `pnpm-workspace.yaml`, and the docs site must use Astro's
+  passthrough image service (M6). The licence policy has no LGPL exception.
+- The M1 install surfaced transitive **dev-only** licences not covered by D-007a. They are all
+  permissive or file-level copyleft and never shipped: MIT-0 (@csstools ×3), BlueOak-1.0.0
+  (common-ancestor-path, lru-cache, minimatch, sax), CC0-1.0 (mdn-data), Python-2.0 (argparse),
+  MPL-2.0 (lightningcss + binary). They are tolerated as `pending-owner-review` by exact package and
+  licence, and fail the build if they ever reach the shipped runtime tree.
