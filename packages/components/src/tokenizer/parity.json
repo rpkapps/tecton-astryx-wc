@@ -386,8 +386,8 @@
           "reason": "The three new tokenizer messages (`@tct.tokenizer.createOption`, `overflowMore`, `tokensAdded`) have no upstream translation: the 29 locales fall back to English until the catalogs carry them."
         }
       ],
-      "sizeBudgetKb": null,
-      "notes": "Guides: [mwg:form-associated-custom-elements] repeated FormData entries, reset and restore; [mwg:accessibility] editable combobox with active descendant, announcements; [mwg:ime-safe-enter-submit]; [mwg:resilient-context-menus-and-nested-dropdowns] popup dismissal."
+      "sizeBudgetKb": 88,
+      "notes": "Guides: [mwg:form-associated-custom-elements] repeated FormData entries, reset and restore; [mwg:accessibility] editable combobox with active descendant, announcements; [mwg:ime-safe-enter-submit]; [mwg:resilient-context-menus-and-nested-dropdowns] popup dismissal. Size: about 83 kB gzipped: the typeahead bundle plus tct-overflow-list and tct-text for the inline overflow."
     }
   }
 }

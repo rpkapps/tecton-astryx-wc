@@ -356,8 +356,8 @@
           "reason": "`tct-token` (linked) needs the same URL-policy, target/rel and router hand-off as `tct-link`; a shared click-router helper (link + token + card) would replace the copy in `tct-token.ts`."
         }
       ],
-      "sizeBudgetKb": null,
-      "notes": "Guides: [mwg:form-associated-custom-elements] value, validity, reset and restore; [mwg:accessibility] editable combobox with active descendant; [mwg:ime-safe-enter-submit] Enter never selects while composing; [mwg:resilient-context-menus-and-nested-dropdowns] the result popup is a manual popover anchored to the field, dismissed by focus leaving. Known defect outside this folder: the shared success status ink measures 3.97:1 on the field background (field-status tokens), so the contrast tests exclude the success status."
+      "sizeBudgetKb": 84,
+      "notes": "Guides: [mwg:form-associated-custom-elements] value, validity, reset and restore; [mwg:accessibility] editable combobox with active descendant; [mwg:ime-safe-enter-submit] Enter never selects while composing; [mwg:resilient-context-menus-and-nested-dropdowns] the result popup is a manual popover anchored to the field, dismissed by focus leaving. Known defect outside this folder: the shared success status ink measures 3.97:1 on the field background (field-status tokens), so the contrast tests exclude the success status. Size: about 79 kB gzipped for tct-typeahead.js, 7 kB above tct-text-area (72 kB): the shared box control and field chrome, the popup, the position and layer controllers with the Floating UI fallback, tct-token and the engine."
     },
     "core.typeahead-item": {
       "tag": "tct-typeahead-item",

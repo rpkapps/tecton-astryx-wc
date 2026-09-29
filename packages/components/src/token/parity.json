@@ -178,8 +178,8 @@
           "reason": "The internal-link router hand-off (`linkContext.navigate` on an unmodified primary click) is duplicated in tct-link, tct-token and other link-like elements; a shared helper in core would remove the copies."
         }
       ],
-      "sizeBudgetKb": null,
-      "notes": "Guides: [mwg:accessible-web-components] the remove button and label as separate controls; [mwg:styling-web-components] state styling through private custom properties; [mwg:custom-button-actions] press semantics of the label button."
+      "sizeBudgetKb": 38,
+      "notes": "Guides: [mwg:accessible-web-components] the remove button and label as separate controls; [mwg:styling-web-components] state styling through private custom properties; [mwg:custom-button-actions] press semantics of the label button. Size: 35 kB gzipped, dominated by the shared modules every icon-bearing element pulls in (tct-icon and the default icon registry, locale and context controllers); the budget is set above the measured size because the upstream complexity default (S) does not account for them."
     }
   }
 }
