@@ -138,6 +138,11 @@
           "id": "BANNER-04",
           "type": "a11y-improvement",
           "text": "Dismiss returns focus to the element that had it before focus entered the banner (or the pointer press that started inside it), before the banner hides, so a keyboard user never lands on the body. Collapsed content is not rendered (aria-controls is set only while it is)."
+        },
+        {
+          "id": "BANNER-05",
+          "type": "tecton-visual",
+          "text": "Links in the header content are readable on every status fill. A tct-link reads the text roles the header re-points, so it takes the ink by itself. A plain `<a>` in slot=heading, description or end is light DOM nested below the slotted element, which ::slotted() cannot reach and which otherwise keeps the UA link colour (1.5:1 on the info fill), so tct-banner.light.css (light-dom.css, adopted at runtime through adoptLightDomStyles) gives such links the band ink and an underline, at zero specificity. Upstream ships no rule for this (its links inherit the application's reset)."
         }
       ],
       "tests": {
@@ -155,7 +160,7 @@
       "tokenRequests": [],
       "requests": [],
       "sizeBudgetKb": null,
-      "notes": "Guides: [mwg:accessible-web-components] (roles and state through ElementInternals; aria-controls within one tree) [mwg:accessible-error-announcement] (alert versus status roles) [mwg:accessibility] (focus hand-off on removal). Strings: @astryx.banner.{collapse,expand,dismiss,dismissTitled}."
+      "notes": "Guides: [mwg:accessible-web-components] (roles and state through ElementInternals; aria-controls within one tree) [mwg:accessible-error-announcement] (alert versus status roles) [mwg:accessibility] (focus hand-off on removal). Strings: @tct.banner.{collapse,expand,dismiss,dismissTitled}."
     }
   }
 }

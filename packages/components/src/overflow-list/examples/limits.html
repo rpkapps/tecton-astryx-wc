@@ -1,27 +1,27 @@
 <!-- title: Floor and cap; description: min-visible-items always shows that many; max-visible-items shows at most that many, even when everything fits. -->
-<div style="display: grid; gap: var(--spacing-4)">
-  <div style="resize: horizontal; overflow: auto; min-inline-size: 8rem; max-inline-size: 100%; padding: var(--spacing-2); border: var(--border-width) dashed var(--color-border); inline-size: 9rem">
+<tct-vstack gap="4">
+  <tct-card padding="2" style="resize: horizontal; overflow: auto; inline-size: 9rem; min-inline-size: 8rem; max-inline-size: 100%">
     <tct-overflow-list show-count min-visible-items="2">
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Seismic</span>
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Wells</span>
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Faults</span>
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Horizons</span>
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Strata</span>
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Logs</span>
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Cores</span>
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Pressure</span>
+      <tct-badge>Seismic</tct-badge>
+      <tct-badge>Wells</tct-badge>
+      <tct-badge>Faults</tct-badge>
+      <tct-badge>Horizons</tct-badge>
+      <tct-badge>Strata</tct-badge>
+      <tct-badge>Logs</tct-badge>
+      <tct-badge>Cores</tct-badge>
+      <tct-badge>Pressure</tct-badge>
     </tct-overflow-list>
-  </div>
-  <div style="resize: horizontal; overflow: auto; min-inline-size: 8rem; max-inline-size: 100%; padding: var(--spacing-2); border: var(--border-width) dashed var(--color-border); inline-size: 40rem">
+  </tct-card>
+  <tct-card padding="2" style="resize: horizontal; overflow: auto; inline-size: 40rem; min-inline-size: 8rem; max-inline-size: 100%">
     <tct-overflow-list show-count max-visible-items="3">
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Seismic</span>
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Wells</span>
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Faults</span>
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Horizons</span>
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Strata</span>
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Logs</span>
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Cores</span>
-    <span style="display: inline-block; padding: var(--spacing-1) var(--spacing-3); border: var(--border-width) solid var(--color-border-emphasized); border-radius: var(--radius-full); color: var(--color-text-primary)">Pressure</span>
+      <tct-badge>Seismic</tct-badge>
+      <tct-badge>Wells</tct-badge>
+      <tct-badge>Faults</tct-badge>
+      <tct-badge>Horizons</tct-badge>
+      <tct-badge>Strata</tct-badge>
+      <tct-badge>Logs</tct-badge>
+      <tct-badge>Cores</tct-badge>
+      <tct-badge>Pressure</tct-badge>
     </tct-overflow-list>
-  </div>
-</div>
+  </tct-card>
+</tct-vstack>

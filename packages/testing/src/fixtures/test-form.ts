@@ -11,14 +11,14 @@ import {html, css, nothing} from 'lit';
 import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
 import {live} from 'lit/directives/live.js';
-import {isSubmitAttempt, submitWithSubmitter, SUBMITTER} from '@tecton-astryx/core/forms/submitter.js';
+import {isSubmitAttempt, submitWithSubmitter, SUBMITTER} from '@tecton-wc/core/forms/submitter.js';
 import {
   FormControlMixin,
   type FormValue,
   type Validator,
-} from '@tecton-astryx/core/mixins/form-control.js';
-import {requiredValidator} from '@tecton-astryx/core/forms/validators.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+} from '@tecton-wc/core/mixins/form-control.js';
+import {requiredValidator} from '@tecton-wc/core/forms/validators.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 
 /** Single-line text field. `submitsOnEnter` makes Enter run implicit submission. */
 export class TctTestInput extends FormControlMixin(TctElement) {

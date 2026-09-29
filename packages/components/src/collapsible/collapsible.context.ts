@@ -4,7 +4,7 @@
  * `CollapsibleGroupPresentationContext` (dividers, density, chevron) in one value: the group cannot
  * draw row chrome from outside a collapsible's shadow root, so each collapsible reads how to look.
  */
-import {createContext} from '@tecton-astryx/core/context/protocol.js';
+import {createContext} from '@tecton-wc/core/context/protocol.js';
 import type {CollapsibleChevronPosition, CollapsibleDensity} from './collapsible.types.js';
 
 export interface CollapsibleGroupContextValue {

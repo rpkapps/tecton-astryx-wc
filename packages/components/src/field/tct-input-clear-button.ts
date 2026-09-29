@@ -1,6 +1,6 @@
 import {html, type CSSResultGroup} from 'lit';
 import {property} from 'lit/decorators.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import {TctIcon} from '../icon/tct-icon.js';
 import {TctTooltip} from '../tooltip/tct-tooltip.js';
 import base from '../styles/base.styles.css';
@@ -19,8 +19,8 @@ import styles from './tct-input-clear-button.styles.css';
  * @summary Clear button used inside input chrome.
  * @tag tct-input-clear-button
  * @upstream InputClearButton
- * @csspart button - The button (Astryx target `astryx-input-clear-button`).
- * @csspart icon - The close glyph (Astryx target `astryx-input-clear-icon`).
+ * @csspart button - The button.
+ * @csspart icon - The close glyph.
  * @fires click - Native, retargeted from the inner button.
  * @cloakDisplay inline-flex
  */

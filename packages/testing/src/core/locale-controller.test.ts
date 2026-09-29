@@ -5,20 +5,20 @@
 import {html} from 'lit';
 import {property} from 'lit/decorators.js';
 import {afterEach, beforeAll, describe, expect, it, vi} from 'vitest';
-import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {localeContext, type LocaleContextValue} from '@tecton-astryx/core/context/keys.js';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {registerTranslation, setLocaleLoader} from '@tecton-astryx/core/i18n/registry.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {resetDevWarnings} from '@tecton-astryx/core/utils/dev.js';
+import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {localeContext, type LocaleContextValue} from '@tecton-wc/core/context/keys.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {registerTranslation, setLocaleLoader} from '@tecton-wc/core/i18n/registry.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {resetDevWarnings} from '@tecton-wc/core/utils/dev.js';
 import {fixture} from '../fixture.js';
 import {nextFrame, waitUntil} from '../timing.js';
 
 const DEFAULTS = {
-  '@astryx.pagination.next': 'Go to next page',
-  '@astryx.pagination.count': '{from, number}–{to, number} of {total, number}',
-  '@astryx.pagination.pages': '{count, plural, one {# page} other {# pages}}',
+  '@tct.pagination.next': 'Go to next page',
+  '@tct.pagination.count': '{from, number}–{to, number} of {total, number}',
+  '@tct.pagination.pages': '{count, plural, one {# page} other {# pages}}',
 };
 
 class TctTestLocale extends TctElement {
@@ -37,7 +37,12 @@ class TctTestLocale extends TctElement {
 
 class TctTestLocaleProvider extends TctElement {
   static override readonly tagName = 'tct-test-locale-provider';
-  readonly provider = new ContextProvider(this, {context: localeContext, initialValue: null});
+  readonly provider: ContextProvider<typeof localeContext> = new ContextProvider<
+    typeof localeContext
+  >(this, {
+    context: localeContext,
+    initialValue: null,
+  });
   set value(value: LocaleContextValue | null) {
     this.provider.setValue(value);
   }
@@ -141,7 +146,7 @@ describe('message resolution order', () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     globalThis.tctDevMode = true;
     try {
-      expect(host.locale.t('doesNotExist')).toBe('@astryx.pagination.doesNotExist');
+      expect(host.locale.t('doesNotExist')).toBe('@tct.pagination.doesNotExist');
       expect(warn).toHaveBeenCalledTimes(1);
     } finally {
       globalThis.tctDevMode = undefined;
@@ -151,7 +156,7 @@ describe('message resolution order', () => {
 
   it('accepts full ids and short keys in the namespace', async () => {
     const host = await locale();
-    expect(host.locale.t('@astryx.pagination.next')).toBe('Go to next page');
+    expect(host.locale.t('@tct.pagination.next')).toBe('Go to next page');
     expect(host.locale.t('next')).toBe('Go to next page');
   });
 
@@ -173,7 +178,7 @@ describe('message resolution order', () => {
   });
 
   it('registered translations outrank shipped ones and are available immediately', async () => {
-    registerTranslation('de', {'@astryx.pagination.next': 'Weiter (App)'});
+    registerTranslation('de', {'@tct.pagination.next': 'Weiter (App)'});
     const host = await locale('', 'de-DE');
     expect(host.locale.t('next')).toBe('Weiter (App)');
     await nextFrame();
@@ -183,7 +188,7 @@ describe('message resolution order', () => {
   it('a registration made after render re-renders the host', async () => {
     const host = await locale('', 'sv-SE');
     const before = host.renders;
-    registerTranslation('sv-SE', {'@astryx.pagination.next': 'Nästa'});
+    registerTranslation('sv-SE', {'@tct.pagination.next': 'Nästa'});
     await waitUntil(() => text(host) === 'Nästa', 'late registration rendered');
     expect(host.renders).toBeGreaterThan(before);
   });
@@ -196,14 +201,14 @@ describe('message resolution order', () => {
     await host.updateComplete;
     provider.value = {
       locale: 'de-DE',
-      messages: {'de-DE': {'@astryx.pagination.next': {defaultMessage: 'Provider weiter'}}},
+      messages: {'de-DE': {'@tct.pagination.next': {defaultMessage: 'Provider weiter'}}},
     };
     await waitUntil(() => host.locale.t('next') === 'Provider weiter', 'provider messages');
 
     provider.value = {
       locale: 'de-DE',
-      messages: {'de-DE': {'@astryx.pagination.next': 'Provider weiter'}},
-      overrides: {'de-DE': {'@astryx.pagination.next': 'Override weiter'}},
+      messages: {'de-DE': {'@tct.pagination.next': 'Provider weiter'}},
+      overrides: {'de-DE': {'@tct.pagination.next': 'Override weiter'}},
     };
     await waitUntil(() => host.locale.t('next') === 'Override weiter', 'provider overrides');
   });
@@ -222,7 +227,7 @@ describe('message resolution order', () => {
   });
 
   it('a custom loader replaces how catalogs are fetched', async () => {
-    setLocaleLoader(() => Promise.resolve({'@astryx.pagination.next': 'Loaded elsewhere'}));
+    setLocaleLoader(() => Promise.resolve({'@tct.pagination.next': 'Loaded elsewhere'}));
     const host = await locale('', 'it-IT');
     await waitUntil(() => text(host) === 'Loaded elsewhere', 'custom loader used');
   });

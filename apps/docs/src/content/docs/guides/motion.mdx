@@ -11,7 +11,7 @@ Motion serves two purposes: it makes interfaces easier to understand, and it mak
 
 At the same time, well-tuned motion gives an application a sense of craft and polish that users notice, even if they cannot name it.
 
-The design system provides duration and easing tokens that keep these moments consistent across your application. Tecton has no motion tokens of its own, so the values are Astryx's, kept on purpose and labelled _Astryx-retained_.
+The design system provides duration and easing tokens that keep these moments consistent across your application. Tecton has no motion tokens of its own, so the values are retained defaults, kept on purpose.
 
 ## Duration
 
@@ -69,7 +69,7 @@ Some users experience motion sensitivity; animation that feels polished to one p
 In JavaScript, read the preference from one place, and listen for changes:
 
 ```js
-import {prefersReducedMotion} from '@tecton-astryx/core/features.js';
+import {prefersReducedMotion} from '@tecton-wc/core/features.js';
 
 if (!prefersReducedMotion()) {
   panel.animate([{translate: '0 12px', opacity: 0}, {translate: '0 0', opacity: 1}], {
@@ -135,7 +135,6 @@ dialog[open] {
 - Zero durations globally for reduced motion.
 
 {/*
-Adapted from Astryx docs topic `motion` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md). Section map (1:1): Overview; Duration; Easing; Where Motion Helps; Where Motion Hurts; Movement Principles; Respecting User Preferences; Usage; Best Practices.
-Values from packages/tokens/dist/tokens.json (status astryx-retained, D-013 Q-06). Reduced-motion rules: ARCHITECTURE 6.6; prefersReducedMotion verified in packages/core/src/features.ts.
+Values from packages/tokens/dist/tokens.json (status `retained default`, D-013 Q-06). Reduced-motion rules: ARCHITECTURE 6.6; prefersReducedMotion verified in packages/core/src/features.ts.
 Guides: [mwg:animate-to-from-top-layer] [mwg:animate-element-entry-exit] [mwg:spinner] [mwg:accessibility] [mwg:physics-based-easing] [mwg:individual-transform-properties]
 */}

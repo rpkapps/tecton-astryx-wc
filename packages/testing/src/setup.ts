@@ -10,7 +10,7 @@
  *    announcer regions, scroll lock.
  */
 import {afterEach, beforeEach} from 'vitest';
-import {resetFeatures} from '@tecton-astryx/core/features.js';
+import {resetFeatures} from '@tecton-wc/core/features.js';
 import {cleanupFixtures} from './fixture.js';
 import {clearMediaEmulation} from './emulate.js';
 import {resetCoreGlobals} from './reset.js';

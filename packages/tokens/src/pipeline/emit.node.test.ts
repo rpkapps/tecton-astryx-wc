@@ -179,7 +179,7 @@ describe('metadata', () => {
     >;
     counts: {tokens: number; palette: number};
     breakpoints: {status: string; values: Record<string, number>};
-    astryxRetainedNonTokens: {name: string}[];
+    retainedNonTokens: {name: string}[];
     tectonDerivedNonTokens: {name: string; value?: string; binds?: Record<string, string>}[];
   };
 
@@ -196,16 +196,13 @@ describe('metadata', () => {
     expect(json.breakpoints.values).toEqual({sm: 640, md: 768, lg: 1024, xl: 1280, '2xl': 1536});
   });
 
-  it('records astryx-retained tokens, non-tokens and the Tecton-derived bindings (D-013)', () => {
-    expect(json.breakpoints.status).toBe('astryx-retained');
-    expect(json.tokens['--duration-fast']).toMatchObject({status: 'astryx-retained'});
+  it('records retained-default tokens, non-tokens and the Tecton-derived bindings (D-013)', () => {
+    expect(json.breakpoints.status).toBe('retained-default');
+    expect(json.tokens['--duration-fast']).toMatchObject({status: 'retained-default'});
     expect(json.tokens['--duration-fast']!.retained).toMatch(/D-013/);
     expect(json.tokens['--duration-fast']!.provisional).toBeUndefined();
     expect(json.tokens['--text-heading-3-size']!.derived).toMatch(/large/);
-    expect(json.astryxRetainedNonTokens.map((item) => item.name)).toEqual([
-      'breakpoints',
-      'z-index',
-    ]);
+    expect(json.retainedNonTokens.map((item) => item.name)).toEqual(['breakpoints', 'z-index']);
     const derived = Object.fromEntries(
       json.tectonDerivedNonTokens.map((item) => [item.name, item]),
     );
@@ -214,13 +211,13 @@ describe('metadata', () => {
       '--tecton-color-status-error-filled-bg',
     );
     const js = css('tokens.js');
-    expect(js).toContain('export const astryxRetainedNonTokens');
+    expect(js).toContain('export const retainedNonTokens');
     expect(js).toContain('export const tectonDerivedNonTokens');
-    expect(css('tokens.d.ts')).toContain("| 'astryx-retained'");
+    expect(css('tokens.d.ts')).toContain("| 'retained-default'");
   });
 
   it('marks retained declarations in tokens.css', () => {
-    expect(css('tokens.css')).toMatch(/--duration-fast: 175ms; \/\* astryx-retained \*\//);
+    expect(css('tokens.css')).toMatch(/--duration-fast: 175ms; \/\* retained-default \*\//);
   });
 
   it('exports tokens.js and tokens.d.ts with the same names', () => {

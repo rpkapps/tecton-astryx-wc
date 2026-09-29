@@ -8,7 +8,7 @@ import {
 } from 'lit';
 import {property} from 'lit/decorators.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import {defaultIcons} from '@tecton-astryx/icons/default.js';
+import {defaultIcons} from '@tecton-wc/icons/default.js';
 import {
   getIcon,
   hasDefaultIcons,
@@ -16,14 +16,14 @@ import {
   registerIcons,
   type IconDefinition,
   type IconLoader,
-} from '@tecton-astryx/core/icons/registry.js';
+} from '@tecton-wc/core/icons/registry.js';
 import {
   isSanitizerReady,
   preloadSanitizer,
   sanitizeHtmlSync,
-} from '@tecton-astryx/core/security/sanitize.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+} from '@tecton-wc/core/security/sanitize.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import base from '../styles/base.styles.css';
 import {ICON_COLORS, ICON_SIZES, type IconColor, type IconSize} from './icon.types.js';
 import styles from './tct-icon.styles.css';
@@ -50,16 +50,16 @@ function ensureDefaultIcons(): void {
  * already has a name (button, link): that announces twice.
  *
  * Sizing follows the icon's own `size`; without one it takes the size the owning component supplies
- * for its icon slot (a button sets it from its size), then `md`. `name` values are the Astryx role
+ * for its icon slot (a button sets it from its size), then `md`. `name` values are the semantic role
  * names (`close`, `chevronDown`, `search`, ...) and the Tecton domain glyphs (`well`, `fault`,
  * `seismic`, `strata`, and `<name>-filled`). Register more with `registerIcons()` from
- * `@tecton-astryx/core/icons/registry.js`.
+ * `@tecton-wc/core/icons/registry.js`.
  *
  * @summary A single glyph from the icon registry, or your own slotted SVG.
  * @tag tct-icon
  * @upstream Icon
  * @slot - A custom `<svg>`, or the fallback shown when `name` is not registered.
- * @csspart icon - The rendered `<svg>` (Astryx target `astryx-icon`).
+ * @csspart icon - The rendered `<svg>`.
  * @cssprop --icon-stroke-width - Stroke width of stroke icons (the default set). Default: the definition's own (2).
  * @cloakDisplay inline-flex
  */
@@ -68,7 +68,7 @@ export class TctIcon extends TctElement {
   static override styles: CSSResultGroup = [base, styles];
 
   /**
-   * Registered icon name (upstream `icon`): an Astryx role such as `close` or a Tecton glyph such as
+   * Registered icon name: a semantic role such as `close` or a Tecton glyph such as
    * `well-filled`. Namespaced keys (`richtext:bold`) work the same way. An unregistered name renders
    * the default slot instead (nothing when the slot is empty).
    */

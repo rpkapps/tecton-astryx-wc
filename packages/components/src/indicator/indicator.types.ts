@@ -1,4 +1,4 @@
-import type {IndicatorFamilyMap, IndicatorSize} from '@tecton-astryx/core/indicators/registry.js';
+import type {IndicatorFamilyMap, IndicatorSize} from '@tecton-wc/core/indicators/registry.js';
 
 /** Control size, matching the owning inputs: a 24px (`md`) or 20px (`sm`) box. */
 export const INDICATOR_SIZES = ['sm', 'md'] as const;

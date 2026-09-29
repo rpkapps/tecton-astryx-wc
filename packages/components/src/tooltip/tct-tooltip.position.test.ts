@@ -5,11 +5,11 @@
  * `tct-tooltip.position-js.test.ts`. RTL `start` placement flips the side.
  */
 import {describe, expect, it} from 'vitest';
-import {features} from '@tecton-astryx/core/features.js';
-import {isFloatingLoaded} from '@tecton-astryx/core/layer/floating.js';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {isTier2} from '@tecton-astryx/testing/tier.js';
-import {nextFrame, waitUntil} from '@tecton-astryx/testing/timing.js';
+import {features} from '@tecton-wc/core/features.js';
+import {isFloatingLoaded} from '@tecton-wc/core/layer/floating.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {isTier2} from '@tecton-wc/testing/tier.js';
+import {nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
 import './define.js';
 import type {TctTooltip} from './tct-tooltip.js';
 

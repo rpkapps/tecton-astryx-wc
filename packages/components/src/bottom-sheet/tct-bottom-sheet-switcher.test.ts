@@ -5,8 +5,8 @@
  */
 import {afterEach, describe, expect, it, vi} from 'vitest';
 import {userEvent} from 'vitest/browser';
-import {resetDevWarnings} from '@tecton-astryx/core/utils/dev.js';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
+import {resetDevWarnings} from '@tecton-wc/core/utils/dev.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import {
   aTimeout,
   axNode,
@@ -19,7 +19,7 @@ import {
   runElementSuite,
   runOverlaySuite,
   waitUntil,
-} from '@tecton-astryx/testing/index.js';
+} from '@tecton-wc/testing/index.js';
 import './define.js';
 import {
   IDLE_TRANSITION,

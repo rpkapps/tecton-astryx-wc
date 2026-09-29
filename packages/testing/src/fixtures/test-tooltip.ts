@@ -9,10 +9,10 @@
  */
 import {css, html} from 'lit';
 import {property} from 'lit/decorators.js';
-import {TctAfterOpenChangeEvent} from '@tecton-astryx/core/events/tct-after-open-change.js';
-import {TctOpenChangeEvent} from '@tecton-astryx/core/events/tct-open-change.js';
-import {TooltipController} from '@tecton-astryx/core/controllers/tooltip.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {TctAfterOpenChangeEvent} from '@tecton-wc/core/events/tct-after-open-change.js';
+import {TctOpenChangeEvent} from '@tecton-wc/core/events/tct-open-change.js';
+import {TooltipController} from '@tecton-wc/core/controllers/tooltip.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 
 export class TctTestTooltip extends TctElement {
   static override readonly tagName = 'tct-test-tooltip';
@@ -38,7 +38,7 @@ export class TctTestTooltip extends TctElement {
   @property({type: Boolean}) disabledTip = false;
   @property() strategy: 'auto' | 'css' | 'js' = 'auto';
 
-  readonly tooltip = new TooltipController(this, {
+  readonly tooltip: TooltipController = new TooltipController(this, {
     mode: 'satellite',
     surfaceTag: 'div',
     trigger: () => this.querySelector<HTMLElement>(':scope > :not([data-tct-owned])'),

@@ -55,7 +55,7 @@
           "kind": "prop",
           "target": "cancelLabel",
           "as": "attribute",
-          "notes": "`cancel-label`; default the localized `@astryx.alertDialog.cancel`."
+          "notes": "`cancel-label`; default the localized `@tct.alertDialog.cancel`."
         },
         {
           "upstream": "actionLabel",
@@ -169,7 +169,7 @@
         {
           "id": "ALERTDIALOG-02",
           "type": "approved-api-difference",
-          "text": "Upstream is a Dialog with `purpose=\"form\"` and an explicit `role=\"alertdialog\"`. `tct-dialog` gives the alertdialog role to `purpose=\"required\"` only, which also blocks Escape, so the inner dialog is `required` (no backdrop dismissal, no close button, alertdialog) and Escape is answered by the alert dialog in the capture phase while it is the top-most layer. A browser close request (Android back) does not cancel it."
+          "text": "Upstream is a Dialog with `purpose=\"form\"` and an explicit `role=\"alertdialog\"`. `tct-dialog` has no `role` property (that name is the platform's ARIA reflection), so it takes the boolean `alert` for the role: the inner dialog is `purpose=\"form\" alert`, and Escape, the platform close request (Android back) and the nested-layer order all go through the dialog's own LayerController. The inner tct-open-change bubbles out of the alert dialog (composed), so an owner cancels it there, and the alert dialog's `open` follows once every listener has run."
         },
         {
           "id": "ALERTDIALOG-03",
@@ -189,16 +189,7 @@
       },
       "provisional": [],
       "tokenRequests": [],
-      "requests": [
-        {
-          "file": "packages/components/src/dialog/tct-dialog.ts",
-          "reason": "A `role` (or `alert`) option on tct-dialog would let the alert dialog keep Escape through the dialog's own layer (`purpose=\"form\"` + alertdialog) instead of the capture-phase Escape handler (ALERTDIALOG-02), and would let a browser close request cancel it."
-        },
-        {
-          "file": "packages/core/src/events/events.test.ts",
-          "reason": "New core event classes `tct-action` (alert dialog), `tct-snap-change` (bottom sheet), `tct-toast-dismiss` and `tct-toast-hide` (toast) were added in packages/core/src/events/; their flags and payloads are asserted in the component tests; list them in the shared events test if wanted."
-        }
-      ],
+      "requests": [],
       "sizeBudgetKb": 67,
       "notes": "Guides: [mwg:platform-controls-dismiss-dialog] [mwg:light-dismiss-a-dialog]. Composes tct-dialog, tct-heading, tct-text and tct-button."
     }

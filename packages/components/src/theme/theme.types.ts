@@ -1,4 +1,4 @@
-import type {ThemeMode} from '@tecton-astryx/core/theme/types.js';
+import type {ThemeMode} from '@tecton-wc/core/theme/types.js';
 
 /** Colour modes (upstream `ThemeMode`): `system` follows the operating system preference. */
 export const THEME_MODES = ['light', 'dark', 'system'] as const;

@@ -5,18 +5,18 @@
  */
 import {html, LitElement} from 'lit';
 import {afterEach, beforeAll, describe, expect, it, onTestFinished, vi} from 'vitest';
-import {themeContext} from '@tecton-astryx/core/context/keys.js';
-import {ContextConsumer, ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {features} from '@tecton-astryx/core/features.js';
-import {resetDevWarnings} from '@tecton-astryx/core/utils/dev.js';
-import {expectAccessible} from '@tecton-astryx/testing/a11y.js';
-import {emulateMedia} from '@tecton-astryx/testing/emulate.js';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {waitUntil} from '@tecton-astryx/testing/timing.js';
+import {themeContext} from '@tecton-wc/core/context/keys.js';
+import {ContextConsumer, ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {features} from '@tecton-wc/core/features.js';
+import {resetDevWarnings} from '@tecton-wc/core/utils/dev.js';
+import {expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {emulateMedia} from '@tecton-wc/testing/emulate.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {waitUntil} from '@tecton-wc/testing/timing.js';
 import '../button/define.js';
-import {defineTheme} from '@tecton-astryx/core/theme/define-theme.js';
-import {generateThemeCSS} from '@tecton-astryx/core/theme/generate-theme-rules.js';
+import {defineTheme} from '@tecton-wc/core/theme/define-theme.js';
+import {generateThemeCSS} from '@tecton-wc/core/theme/generate-theme-rules.js';
 import './define.js';
 import type {TctMediaTheme} from './tct-media-theme.js';
 
@@ -26,7 +26,12 @@ const LIGHT_SURFACE = 'rgb(250, 250, 252)';
 
 /** A stand-in for any element that reads the theme: shows the mode it received. */
 class TestThemeReader extends LitElement {
-  readonly consumer = new ContextConsumer(this, {context: themeContext, subscribe: true});
+  readonly consumer: ContextConsumer<typeof themeContext> = new ContextConsumer<
+    typeof themeContext
+  >(this, {
+    context: themeContext,
+    subscribe: true,
+  });
   protected override render() {
     const value = this.consumer.value;
     return html`<span data-name=${value?.name ?? 'none'} data-mode=${value?.mode ?? 'none'}
@@ -37,7 +42,9 @@ class TestThemeReader extends LitElement {
 
 /** A stand-in for tct-theme (WP-F): provides a named theme and a mode. */
 class TestThemeProvider extends LitElement {
-  readonly provider = new ContextProvider(this, {
+  readonly provider: ContextProvider<typeof themeContext> = new ContextProvider<
+    typeof themeContext
+  >(this, {
     context: themeContext,
     initialValue: {name: 'acme', mode: 'dark'},
   });

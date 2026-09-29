@@ -61,7 +61,7 @@ export function loadInputs(): Inputs {
     paletteJson: readJson('tecton.tokens.json'),
     exportCss: readInput('tecton-tokens.css').toString('utf8'),
     semanticMap: readJson('semantic-map.json'),
-    astryxTokens: readJson('astryx-tokens.json'),
+    upstreamTokens: readJson('upstream-tokens.json'),
     tailwindNames: readJson('tailwind-v4-theme-names.json'),
     overrides: readJson('bindings.overrides.json'),
     extraTokens: readJson('extra-tokens.json'),

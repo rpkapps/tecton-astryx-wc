@@ -11,8 +11,8 @@ import {property} from 'lit/decorators.js';
 import {
   ActiveDescendantController,
   type HighlightSource,
-} from '@tecton-astryx/core/controllers/active-descendant.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+} from '@tecton-wc/core/controllers/active-descendant.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 
 export class TctTestCombobox extends TctElement {
   static override readonly tagName = 'tct-test-combobox';

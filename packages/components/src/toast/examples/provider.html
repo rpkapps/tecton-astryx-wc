@@ -4,7 +4,7 @@
     <button type="button" id="toast-provider-show">Show toast (top end)</button>
   </div>
   <script type="module">
-    import {toast} from '@tecton-astryx/components/toast/toast.api.js';
+    import {toast} from '@tecton-wc/components/toast/toast.api.js';
     let count = 0;
     document.getElementById('toast-provider-show').addEventListener('click', () => toast({body: `Notification ${++count}`}));
   </script>

@@ -1,5 +1,5 @@
 {
-  "$comment": "Authored (WP-F). Tokens the pipeline defines that neither the Astryx inventory nor the Tecton export contains. All are provisional (D-002): no Tecton decision exists. Colours name palette paths.",
+  "$comment": "Authored (WP-F). Tokens the pipeline defines that neither the upstream inventory nor the Tecton export contains. All are provisional (D-002): no Tecton decision exists. Colours name palette paths.",
   "tokens": [
     {
       "name": "--tecton-color-focus-inner",
@@ -8,6 +8,14 @@
       "dark": "foundational.color.gray.onDark.contrasts.50",
       "description": "Inner ring of the documented double focus ring (D-005): drawn as box-shadow 0 0 0 1px between the control and the hot-pink outline on inverted surfaces, where pink alone is under 3:1 (dark-mode inverted surface #f6f5f8 is 2.75:1). It is the on-inverted ink: near-white on the light-mode inverted surface, near-black on the dark-mode one.",
       "provisional": "Pipeline-defined for D-005. Tecton defines a single focus colour; the inner ring is a proposal."
+    },
+    {
+      "name": "--tecton-color-table-row-selected-text-secondary",
+      "category": "text",
+      "light": "foundational.color.graphite.onLight.680",
+      "dark": "foundational.color.graphite.onDark.1000",
+      "description": "Secondary text (descriptions, supporting end content) on the selected table-row fill (--tecton-color-table-row-selected). Light is the secondary text role itself (it passes on the light fill); dark steps up to graphite 1000 because --color-text-secondary is 3.5:1 on the dark selected fill (4.5:1 needed). Rows re-point the secondary role to this token while selected.",
+      "provisional": "Pipeline-defined. Tecton defines no text role for the selected row fill; the rows that paint it (tree-list) need a secondary ink that meets 4.5:1 in both modes."
     },
     {
       "name": "--tecton-color-scrollbar-thumb",

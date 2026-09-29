@@ -1,9 +1,9 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import base from '../styles/base.styles.css';
 import slottedIcon from '../styles/slotted-icon.styles.css';
 import {BADGE_VARIANTS, type BadgeVariant} from './badge.types.js';
@@ -44,7 +44,7 @@ export class TctBadge extends TctElement {
   /** Plain-text label. When absent the default slot is the label. */
   @property() label: string | undefined;
 
-  readonly #slots = new SlotController(this, 'icon');
+  readonly #slots: SlotController = new SlotController(this, 'icon');
 
   protected override willUpdate(changed: PropertyValues<this>): void {
     if (changed.has('variant') && !(BADGE_VARIANTS as readonly string[]).includes(this.variant)) {

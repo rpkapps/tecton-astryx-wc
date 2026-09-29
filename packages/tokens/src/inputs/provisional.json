@@ -1,5 +1,5 @@
 {
-  "$comment": "Authored (WP-F; revised for D-013 Q-06). Three disjoint groups, each enforced exactly by `tokens:check` (checkProvisional): (1) `provisional`: no Tecton decision, values are proposals (D-002; data-viz stays a proposed mapping from palette colours, D-013); (2) `astryxRetained`: not brand tokens, Tecton has none, so the Astryx values are kept on purpose (motion, breakpoints, z-index; D-013 Q-06); (3) `tectonDerived`: settled by D-013 Q-06 as Tecton-derived, never provisional (headings 3-6, letter-spacing, the destructive button). `nonTokens` items have no custom property; they are exported from tokens.js / tokens.json and listed on the docs' 'Differences and open items' page. The pipeline-defined extras (extra-tokens.json) are provisional too.",
+  "$comment": "Authored (WP-F; revised for D-013 Q-06). Three disjoint groups, each enforced exactly by `tokens:check` (checkProvisional): (1) `provisional`: no Tecton decision, values are proposals (D-002; data-viz stays a proposed mapping from palette colours, D-013); (2) `retainedDefault`: not brand tokens, Tecton has none, so the upstream values are kept on purpose (motion, breakpoints, z-index; D-013 Q-06); (3) `tectonDerived`: settled by D-013 Q-06 as Tecton-derived, never provisional (headings 3-6, letter-spacing, the destructive button). `nonTokens` items have no custom property; they are exported from tokens.js / tokens.json and listed on the docs' 'Differences and open items' page. The pipeline-defined extras (extra-tokens.json) are provisional too.",
   "categories": [
     {
       "category": "data",
@@ -18,11 +18,11 @@
       "reason": "Six roles without a Tecton glyph; covered by the Lucide default set (D-009, D-013 Q-02)."
     }
   ],
-  "astryxRetained": {
+  "retainedDefault": {
     "categories": [
       {
         "category": "motion",
-        "reason": "Motion is not a brand token and Tecton has none: the upstream Astryx durations and easing are kept on purpose (D-013 Q-06)."
+        "reason": "Motion is not a brand token and Tecton has none: the upstream durations and easing are kept on purpose (D-013 Q-06)."
       }
     ],
     "names": [],
@@ -33,7 +33,7 @@
       },
       {
         "name": "z-index",
-        "reason": "Astryx defines no z-index tokens; overlays use the top layer, and the few hard-coded upstream layers (Toast 500, BottomSheet 1000, skip link 9999) are kept on purpose (D-013 Q-06). Nothing to map."
+        "reason": "Upstream defines no z-index tokens; overlays use the top layer, and the few hard-coded upstream layers (Toast 500, BottomSheet 1000, skip link 9999) are kept on purpose (D-013 Q-06). Nothing to map."
       }
     ]
   },
@@ -92,7 +92,7 @@
       {
         "name": "letter-spacing",
         "value": "normal",
-        "reason": "Tecton specifies no letter-spacing anywhere (design/components/button.md, the export, tecton-astryx), so it resolves to `normal` for every text style; Astryx has no tracking tokens either (D-013 Q-06). tokens:check asserts every typography variant in the semantic map says `normal`."
+        "reason": "Tecton specifies no letter-spacing anywhere (design/components/button.md, the export, the Tecton binding), so it resolves to `normal` for every text style; upstream has no tracking tokens either (D-013 Q-06). tokens:check asserts every typography variant in the semantic map says `normal`."
       },
       {
         "name": "destructive button",
@@ -107,7 +107,7 @@
           "outline-text": "--tecton-color-status-error-outline-text",
           "outline-border": "--tecton-color-status-error-outline-border-strong"
         },
-        "reason": "Tecton has no destructive button. The Astryx `destructive` variant is kept and styled only from Tecton --tecton-color-status-error-* roles (D-013 Q-06): filled roles for the button, outline roles where it sits on a ghost/tertiary surface. The disabled state uses the shared Tecton disabled roles, and the focus ring stays hot pink (D-005). The component layer reads these roles directly; no extra tokens are needed."
+        "reason": "Tecton has no destructive button. The upstream `destructive` variant is kept and styled only from Tecton --tecton-color-status-error-* roles (D-013 Q-06): filled roles for the button, outline roles where it sits on a ghost/tertiary surface. The disabled state uses the shared Tecton disabled roles, and the focus ring stays hot pink (D-005). The component layer reads these roles directly; no extra tokens are needed."
       }
     ]
   }

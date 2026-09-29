@@ -1,10 +1,10 @@
 {
-  "$comment": "Authored (WP-F). D-001 rebinds and deliberate deviations from the Tecton export / tecton-astryx values. Every entry names palette paths (or a literal for non-colour tokens) and carries a reason. `pnpm tokens:check` fails on unknown tokens, unknown palette paths and missing reasons.",
+  "$comment": "Authored (WP-F). D-001 rebinds and deliberate deviations from the Tecton export / the Tecton binding values. Every entry names palette paths (or a literal for non-colour tokens) and carries a reason. `pnpm tokens:check` fails on unknown tokens, unknown palette paths and missing reasons.",
   "overrides": [
     {
       "token": "--color-text-accent",
       "light": "foundational.color.lilac.onLight.830",
-      "reason": "D-001 accent ink. The export binds this role to action.primary.adornment (violet.onLight.140 #dbcae1), the adornment ON the dark primary fill: 1.42:1 as ink on the light page. Rebound to the ink role tecton-astryx used (lilac.onLight.830 #5c3878, 8.4:1). Dark keeps the export value (lilac.onDark.830, identical in tecton-astryx)."
+      "reason": "D-001 accent ink. The export binds this role to action.primary.adornment (violet.onLight.140 #dbcae1), the adornment ON the dark primary fill: 1.42:1 as ink on the light page. Rebound to the ink role the Tecton binding used (lilac.onLight.830 #5c3878, 8.4:1). Dark keeps the export value (lilac.onDark.830, identical in the Tecton binding)."
     },
     {
       "token": "--color-icon-accent",
@@ -19,19 +19,19 @@
     {
       "token": "--font-family-body",
       "value": "\"Figtree Variable\", Figtree, \"Figtree Fallback\", Helvetica, Arial, sans-serif",
-      "status": "tecton-astryx",
+      "status": "tecton-binding",
       "reason": "D-003. Fontsource's variable package registers the family as \"Figtree Variable\"; \"Figtree\" covers a locally installed copy; \"Figtree Fallback\" is the Capsize metric-matched local(Arial) face from fonts.css."
     },
     {
       "token": "--font-family-heading",
       "value": "\"Figtree Variable\", Figtree, \"Figtree Fallback\", Helvetica, Arial, sans-serif",
-      "status": "tecton-astryx",
-      "reason": "D-003. Headings differ from body by weight only (tecton-astryx)."
+      "status": "tecton-binding",
+      "reason": "D-003. Headings differ from body by weight only (the Tecton binding)."
     },
     {
       "token": "--font-family-code",
       "value": "\"IBM Plex Mono\", \"IBM Plex Mono Fallback\", Consolas, Monaco, monospace",
-      "status": "tecton-astryx",
+      "status": "tecton-binding",
       "reason": "D-003. \"IBM Plex Mono Fallback\" is the Capsize metric-matched local(Courier New) face from fonts.css."
     }
   ],

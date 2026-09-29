@@ -1,8 +1,8 @@
 import {html, nothing, type CSSResultGroup} from 'lit';
 import {property} from 'lit/decorators.js';
-import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {ContextConsumer} from '@tecton-wc/core/context/protocol.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import base from '../styles/base.styles.css';
 import slottedIcon from '../styles/slotted-icon.styles.css';
 import styles from './tct-segmented-control-item.styles.css';
@@ -18,7 +18,7 @@ import {segmentedControlContext} from './segmented-control.context.js';
  * @tag tct-segmented-control-item
  * @upstream SegmentedControlItem
  * @slot icon - Icon shown before the label (sized from the control's size).
- * @csspart item - The painted segment (Astryx target `astryx-segmented-control-item`).
+ * @csspart item - The painted segment.
  * @csspart label - The visible label text.
  * @cssstate selected - This segment is the control's value.
  * @cssstate disabled - This segment, or the whole control, is disabled.
@@ -43,11 +43,13 @@ export class TctSegmentedControlItem extends TctElement {
   /** Disables this segment only. It is skipped by arrow keys and cannot be selected. */
   @property({type: Boolean, reflect: true}) disabled = false;
 
-  readonly #context = new ContextConsumer(this, {
+  readonly #context: ContextConsumer<typeof segmentedControlContext> = new ContextConsumer<
+    typeof segmentedControlContext
+  >(this, {
     context: segmentedControlContext,
     subscribe: true,
   });
-  readonly #slots = new SlotController(this, 'icon');
+  readonly #slots: SlotController = new SlotController(this, 'icon');
 
   constructor() {
     super();

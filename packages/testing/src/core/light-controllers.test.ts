@@ -6,22 +6,22 @@ import {css, html, nothing} from 'lit';
 import {property} from 'lit/decorators.js';
 import {userEvent} from 'vitest/browser';
 import {beforeAll, describe, expect, it, vi} from 'vitest';
-import {ClickableContainerController} from '@tecton-astryx/core/controllers/clickable-container.js';
+import {ClickableContainerController} from '@tecton-wc/core/controllers/clickable-container.js';
 import {
   getModality,
   trackInteractionModality,
-} from '@tecton-astryx/core/controllers/interaction-modality.js';
-import {MediaQueryController} from '@tecton-astryx/core/controllers/media-query.js';
-import {OwnedPartsController} from '@tecton-astryx/core/controllers/owned-parts.js';
+} from '@tecton-wc/core/controllers/interaction-modality.js';
+import {MediaQueryController} from '@tecton-wc/core/controllers/media-query.js';
+import {OwnedPartsController} from '@tecton-wc/core/controllers/owned-parts.js';
 import {
   observeResize,
   ResizeController,
   unobserveResize,
-} from '@tecton-astryx/core/controllers/resize.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {adoptLightDomStyles} from '@tecton-astryx/core/styles/light-dom.js';
+} from '@tecton-wc/core/controllers/resize.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {adoptLightDomStyles} from '@tecton-wc/core/styles/light-dom.js';
 import {fixture} from '../fixture.js';
 import {hasCustomState} from '../forms.js';
 import {pressKeys} from '../keyboard.js';
@@ -479,7 +479,7 @@ describe('ClickableContainerController', () => {
 
   it('the selector list covers native controls and interactive roles', async () => {
     const {INTERACTIVE_SELECTORS} =
-      await import('@tecton-astryx/core/controllers/clickable-container.js');
+      await import('@tecton-wc/core/controllers/clickable-container.js');
     const probe = document.createElement('div');
     for (const markup of [
       '<button></button>',

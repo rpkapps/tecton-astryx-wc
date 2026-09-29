@@ -5,11 +5,13 @@ sidebar:
   order: 21
 ---
 
+import Example from '@/components/Example.astro';
+
 ## Overview
 
 Colours are semantic: tokens describe purpose, not appearance. Every colour adapts automatically between light and dark through CSS `light-dark()`, so your code never references raw hex colours, and switching the colour scheme (or nesting a dark island) needs no code at all.
 
-The values are Tecton's. Role values in both modes come from the Tecton design-system export, which has a designed light mode and a designed dark mode. Where the export has no role for an Astryx token, the owner's Tecton theme bindings supply it, and a small number of roles are rebound where the export's value would fail contrast (recorded on the [All tokens](../tokens/) page and in the token build). The palette is graphite, mauve, violet and lilac neutrals with a hot-pink focus ring; status colours are green, red and yellow, plus a blue info ladder.
+The values are Tecton's. Role values in both modes come from the Tecton design-system export, which has a designed light mode and a designed dark mode. Where the export has no role for a semantic token, the owner's Tecton theme bindings supply it, and a small number of roles are rebound where the export's value would fail contrast (recorded on the [All tokens](../tokens/) page and in the token build). The palette is graphite, mauve, violet and lilac neutrals with a hot-pink focus ring; status colours are green, red and yellow, plus a blue info ladder.
 
 [All tokens](../tokens/#colour-tokens) lists every colour token with its light and dark value.
 
@@ -26,7 +28,7 @@ The surface hierarchy is body, surface, card and popover. Each level sits visual
 | `--color-background-muted`     | `#f0eef3`  | `#28232c`  | Code and keyboard backgrounds, table stripes, recessed areas        |
 | `--color-background-inverted`  | `#21172a`  | `#f6f5f8`  | Tooltips and other inverted surfaces (the primary ink colour)       |
 
-Tecton's depth model differs from Astryx's default. In dark mode, elevation runs _darker_: a panel is darker than the page (`#131214` on `#1d1c1f`), not lighter. In light mode the panel is a touch lighter than the page. Surface, card and popover share one value in both modes, so their separation comes from a one-pixel border (`--color-border`) rather than a shade. See [Elevation](../elevation/).
+Tecton's depth model is flat. In dark mode, elevation runs _darker_: a panel is darker than the page (`#131214` on `#1d1c1f`), not lighter. In light mode the panel is a touch lighter than the page. Surface, card and popover share one value in both modes, so their separation comes from a one-pixel border (`--color-border`) rather than a shade. See [Elevation](../elevation/).
 
 ## Text, icons and borders
 
@@ -70,7 +72,7 @@ An accent-coloured **ink** is a different token. Use `--color-text-accent` and `
 
 Status tokens are fills, and the `-muted` tokens are 25 % washes for tinted backgrounds. In light mode the warning fill is a pale yellow (`#ffdd89`) with a dark brown ink; do not use it as text. Use the status colours only for their meaning, and pair them with an icon or text: colour alone is never the signal.
 
-Tecton also has an **info** ladder that Astryx lacks, as `--tecton-color-info`, `--tecton-color-info-muted`, `--tecton-color-info-filled` and `--tecton-color-on-info`, and neutral status roles (`--tecton-color-status-neutral-*`). `--tecton-color-info-bright` is a highlight step (2.2:1 in light mode): use `--tecton-color-info` for text. `--color-background-error-inverted` is the error surface for inverted components such as toasts.
+Tecton also has an **info** ladder that the semantic set lacks, as `--tecton-color-info`, `--tecton-color-info-muted`, `--tecton-color-info-filled` and `--tecton-color-on-info`, and neutral status roles (`--tecton-color-status-neutral-*`). `--tecton-color-info-bright` is a highlight step (2.2:1 in light mode): use `--tecton-color-info` for text. `--color-background-error-inverted` is the error surface for inverted components such as toasts.
 
 ### Hues
 
@@ -82,13 +84,13 @@ The focus ring is one colour everywhere, hot pink (`--focus-outline-color`: `#ff
 
 ## Inverted surfaces and media
 
-A dark region on a light page (or the reverse), and content over an image, need a pair of colours pinned to one side. Set `data-media-theme="dark"` or `data-media-theme="light"` (the `tct-media-theme` element, _planned_, does the same): text, secondary text, surface and border colours are pinned, and the focus ring is re-pointed. Whole scheme islands use `data-theme`. See [Theming](../theme/#nesting-themes).
+A dark region on a light page (or the reverse), and content over an image, need a pair of colours pinned to one side. Set `data-media-theme="dark"` or `data-media-theme="light"` (the `tct-media-theme` element does the same, can decide the side by measuring the painted surface, and also moves the focus ring): text, secondary text, surface, border, icon and accent colours are pinned. Whole scheme islands use `data-theme`. See [Theming](../theme/#nesting-themes).
 
 ## Data visualisation and syntax
 
 Chart series use the data tokens: `--color-data-categorical-<hue>` for categories, and the five-step ramps `--color-data-<hue>-1` to `-5` for sequential values. They are **provisional**: Tecton documents no data-visualisation colours, so the mapping is a proposal built from Tecton accent hues and status roles (the teal, brown and indigo slots borrow lime, yellow and orchid). They may change.
 
-Code highlighting uses 14 `--color-syntax-*` tokens (keyword, string, comment, number, function, type, variable, operator, constant, tag, attribute, property, punctuation and background), set by `tct-syntax-theme` (_planned_) and used by `tct-code-block`.
+Code highlighting uses 14 `--color-syntax-*` tokens (keyword, string, comment, number, function, type, variable, operator, constant, tag, attribute, property, punctuation and background), set by `tct-syntax-theme` and used by `tct-code-block` (both _planned_).
 
 ## Usage
 
@@ -106,10 +108,12 @@ Reference colours through CSS custom properties. In a component's attributes, us
 }
 ```
 
-```html
-<tct-text color="secondary">Logs are kept for 30 days</tct-text>
-<tct-icon name="info" color="accent"></tct-icon>
-```
+<Example
+  title="Colour options on elements"
+  description="A secondary text colour and an accent icon, both resolved from tokens."
+  source={`<tct-text display="block" color="secondary">Logs are kept for 30 days</tct-text>
+<tct-icon name="info" color="accent" label="Information"></tct-icon>`}
+/>
 
 Elements that accept a colour use tokens, not literals, so a `color="accent"` icon follows `--color-icon-accent` and adapts to a theme. Tecton's own tokens are also available as `--tecton-color-*` roles (452 of them) for cases the semantic names do not cover, and the opt-in `palette.css` provides the raw 1,820-colour palette as `--tecton-palette-<hue>-<surface>-<stop>`. The palette is for your own CSS: elements never reference it.
 
@@ -132,8 +136,8 @@ Elements that accept a colour use tokens, not literals, so a `color="accent"` ic
 - Register token properties as `<color>`; they hold `light-dark()` expressions that must stay live for nested schemes.
 
 {/*
-Adapted from Astryx docs topic `color` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md). Section map: Overview; Surface Colors; Usage; Best Practices. Added: text/icon/border roles, accent fill vs ink, status, hues,
-focus and selection, inverted surfaces, data-viz (provisional per D-013 Q-06), syntax. Values verified against packages/tokens/dist/tokens.json and packages/tokens/src/inputs/bindings.overrides.json (D-001 rebinds).
+Added: text/icon/border roles, accent fill vs ink, status, hues, focus and selection, inverted surfaces, data-viz (provisional), syntax.
+Values verified against packages/tokens/dist/tokens.json and packages/tokens/src/inputs/bindings.overrides.json (D-001 rebinds).
 The accent-ink 1.42:1 and 8.4:1 figures are from bindings.overrides.json.
 Guides: [mwg:dark-mode] [mwg:component-specific-light-dark-theme] [mwg:accessibility] [mwg:design-token-reactivity]
 */}

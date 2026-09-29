@@ -1,13 +1,13 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
-import dialogMessages from '@tecton-astryx/locales/en/dialog.js';
-import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
-import {OwnedPartsController} from '@tecton-astryx/core/controllers/owned-parts.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {TctOpenChangeEvent} from '@tecton-astryx/core/events/tct-open-change.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {uniqueId} from '@tecton-astryx/core/utils/id.js';
+import dialogMessages from '@tecton-wc/locales/en/dialog.js';
+import {ContextConsumer} from '@tecton-wc/core/context/protocol.js';
+import {OwnedPartsController} from '@tecton-wc/core/controllers/owned-parts.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {TctOpenChangeEvent} from '@tecton-wc/core/events/tct-open-change.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {uniqueId} from '@tecton-wc/core/utils/id.js';
 import {TctButton} from '../button/tct-button.js';
 import base from '../styles/base.styles.css';
 import {oneOf} from '../field/field-utils.js';
@@ -43,12 +43,12 @@ const HEADING_STYLE =
  * @slot title - Your own heading element (an `<h2>` or similar) instead of the `heading` text.
  * @slot start - Content before the title (a back button).
  * @slot end - Content after the title, before the close button (action buttons).
- * @csspart header - The header row (Astryx target `astryx-dialog-header`).
- * @csspart start - The start content (Astryx target `astryx-dialog-header-start-content`).
- * @csspart title-block - The block holding the title and subtitle (Astryx target `astryx-dialog-header-title-block`).
+ * @csspart header - The header row.
+ * @csspart start - The start content.
+ * @csspart title-block - The block holding the title and subtitle.
  * @csspart subtitle - The subtitle.
- * @csspart end - The end content and close button (Astryx target `astryx-dialog-header-end-content`).
- * @csspart close-button - The close button, a `tct-button` (Astryx target `astryx-dialog-header-close-button`).
+ * @csspart end - The end content and close button.
+ * @csspart close-button - The close button, a `tct-button`.
  * @fires tct-open-change - The close button was pressed outside a `tct-dialog`; cancelable, `open` is `false`, reason `close-button`.
  * @cloakDisplay block
  */
@@ -85,17 +85,22 @@ export class TctDialogHeader extends TctElement implements DialogHeaderLike {
    */
   @property({type: Boolean, reflect: true, attribute: 'has-divider'}) hasDivider = false;
 
-  readonly #dialog = new ContextConsumer(this, {
+  readonly #dialog: ContextConsumer<typeof dialogContext> = new ContextConsumer<
+    typeof dialogContext
+  >(this, {
     context: dialogContext,
     subscribe: true,
     callback: (value) => {
       value?.register(this);
     },
   });
-  readonly #locale = new LocaleController(this, {namespace: 'dialog', defaults: dialogMessages});
-  readonly #slots = new SlotController(this, 'title', 'start', 'end');
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'dialog',
+    defaults: dialogMessages,
+  });
+  readonly #slots: SlotController = new SlotController(this, 'title', 'start', 'end');
   readonly #id = uniqueId('tct-dialog-title');
-  readonly #parts = new OwnedPartsController(this, {
+  readonly #parts: OwnedPartsController = new OwnedPartsController(this, {
     parts: [
       {
         slot: 'title',

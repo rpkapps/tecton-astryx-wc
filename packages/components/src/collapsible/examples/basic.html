@@ -1,9 +1,9 @@
 <!-- title: Basic; description: A trigger and a region. Collapsed by default; write open to start open. Listen to tct-open-change (cancelable) or tct-after-open-change. -->
-<div style="display: flex; flex-direction: column; gap: var(--spacing-4); max-inline-size: 28rem">
+<tct-vstack gap="4" max-width="28rem">
   <tct-collapsible trigger="Details">
     Collapsed content stays findable: browser find in page opens the item where the browser supports it.
   </tct-collapsible>
   <tct-collapsible trigger="Starts open" open>
     Write the open attribute to start open.
   </tct-collapsible>
-</div>
+</tct-vstack>

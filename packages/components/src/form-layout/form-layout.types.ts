@@ -1,4 +1,4 @@
-import type {FormLayoutDirection, FormOptionality} from '@tecton-astryx/core/context/keys.js';
+import type {FormLayoutDirection, FormOptionality} from '@tecton-wc/core/context/keys.js';
 
 export type {FormLayoutDirection, FormOptionality};
 

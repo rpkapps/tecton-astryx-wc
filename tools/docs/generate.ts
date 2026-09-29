@@ -69,7 +69,7 @@ function messageIds(dir: string): string[] {
   const ids = new Set<string>();
   for (const file of walkFiles(dir, {skipDirs: ['examples', '__snapshots__']})) {
     if (!file.endsWith('.ts') || /\.(?:node\.)?test\.ts$/.test(file) || file.endsWith('.d.ts')) continue;
-    for (const match of readFileSync(file, 'utf8').matchAll(/['"`](@(?:astryx|tct)\.[A-Za-z0-9_.-]+)['"`]/g)) {
+    for (const match of readFileSync(file, 'utf8').matchAll(/['"`](@tct\.[A-Za-z0-9_.-]+)['"`]/g)) {
       ids.add(match[1]!);
     }
   }

@@ -3,7 +3,7 @@
 This file records the licences of third-party software and assets that this repository bundles, copies
 or adapts (ARCHITECTURE §18.6, D-007a, D-008, D-009).
 
-The library itself (`@tecton-astryx/*`) is **unlicensed** for now: all rights reserved, every
+The library itself (`@tecton-wc/*`) is **unlicensed** for now: all rights reserved, every
 `package.json` is `"private": true, "license": "UNLICENSED"`, nothing is published to a registry and
 there is no LICENSE file (D-008). The third-party licences below still apply to what we ship.
 
@@ -18,8 +18,8 @@ Large parts of this repository adapt [Astryx](https://github.com/facebook/astryx
 - component behaviour, keyboard contracts, state machines and hook logic re-expressed as Web
   Components and controllers (`packages/core`, `packages/components`);
 - the parser, tokenizer and utility logic ported for the corresponding components;
-- the 30 message catalogs shipped in `@tecton-astryx/locales` (copied from upstream, hash-locked);
-- token names and upstream default values (`@tecton-astryx/tokens`), re-skinned with Tecton values;
+- the 30 message catalogs shipped in `@tecton-wc/locales` (copied from upstream, hash-locked);
+- token names and upstream default values (`@tecton-wc/tokens`), re-skinned with Tecton values;
 - documentation text, guidance and examples adapted for Web Components (`docs/`, `apps/docs`,
   `*.docs.md`, `examples/`);
 - the icon role names of the default icon set (glyphs come from Lucide, see section 4).
@@ -52,7 +52,7 @@ SOFTWARE.
 
 ## 2. Runtime dependencies
 
-Shipped to consumers through `@tecton-astryx/core` and `@tecton-astryx/components` (lit is also bundled
+Shipped to consumers through `@tecton-wc/core` and `@tecton-wc/components` (lit is also bundled
 in the CDN build). Versions are those resolved in `pnpm-lock.yaml` when this file was written.
 
 | Package | Version | Licence | Copyright holder |
@@ -86,7 +86,7 @@ Notes:
 
 ## 3. Fonts (SIL Open Font License 1.1)
 
-Self-hosted through the opt-in `@tecton-astryx/tokens/fonts.css` (D-003). The font files are copied
+Self-hosted through the opt-in `@tecton-wc/tokens/fonts.css` (D-003). The font files are copied
 from the Fontsource packages into `packages/tokens/dist/fonts/` together with their OFL licence.
 `@font-face` rules live in document CSS only. The OFL requires that the copyright notice and licence
 accompany the font files; the notice for each font is the first paragraph of its licence text below.
@@ -100,7 +100,7 @@ accompany the font files; the notice for each font is the first paragraph of its
 
 The default icon set maps the Astryx icon role names to Lucide glyphs (D-009). `lucide` is a
 build-time source: `tools/icons/extract-lucide.ts` generates the icon data modules of
-`@tecton-astryx/icons` from it. Lucide is ISC-licensed; the icons it derived from Feather are MIT
+`@tecton-wc/icons` from it. Lucide is ISC-licensed; the icons it derived from Feather are MIT
 (Copyright (c) 2013-present Cole Bemis). Both notices are reproduced in the `lucide` licence text below.
 
 | Package | Version | Licence |

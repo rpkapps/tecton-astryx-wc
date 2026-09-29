@@ -5,15 +5,15 @@ export type Mode = 'light' | 'dark';
 /**
  * D-002 / D-013 / A§5.2 status per token:
  * - `tecton-export`     value comes from the generated Tecton export (D-001)
- * - `tecton-astryx`     value comes from the owner's tecton-astryx theme (bindings, derivations)
- * - `upstream-default`  Tecton made no change; the Astryx default is kept
- * - `astryx-retained`   not a brand token and Tecton has none (motion, breakpoints, z-index): the Astryx
+ * - `tecton-binding`     value comes from the owner's Tecton binding theme (bindings, derivations)
+ * - `upstream-default`  Tecton made no change; the upstream default is kept
+ * - `retained-default`   not a brand token and Tecton has none (motion, breakpoints, z-index): the upstream
  *                       value is kept on purpose (D-013 Q-06)
  * - `provisional`       proposed here, no Tecton decision (D-002; D-013: data-viz, `--size-element-lg`,
  *                       the pipeline-defined extras)
  */
 export type TokenStatus =
-  'tecton-export' | 'tecton-astryx' | 'upstream-default' | 'astryx-retained' | 'provisional';
+  'tecton-export' | 'tecton-binding' | 'upstream-default' | 'retained-default' | 'provisional';
 
 export interface PathValue {
   path: string;
@@ -39,7 +39,7 @@ export type TokenValue =
 
 export interface Token {
   name: string;
-  /** Astryx category (`core`, `surface`, `data`, …) or `tecton-role`, `tecton-<kind>`, `component`, `pipeline`. */
+  /** Upstream category (`core`, `surface`, `data`, …) or `tecton-role`, `tecton-<kind>`, `component`, `pipeline`. */
   category: string;
   value: TokenValue;
   status: TokenStatus;
@@ -48,7 +48,7 @@ export interface Token {
   description: string;
   /** Set when D-002 (or the provisional list) applies: why the value is only proposed. */
   provisional?: string;
-  /** Set for `astryx-retained` tokens (D-013 Q-06): why the Astryx value is kept. */
+  /** Set for `retained-default` tokens (D-013 Q-06): why the upstream value is kept. */
   retained?: string;
   /** Set for tokens `provisional.json` lists as Tecton-derived by decision (D-013 Q-06): what they map to. */
   derived?: string;
@@ -61,7 +61,7 @@ export interface Inputs {
   paletteJson: unknown;
   exportCss: string;
   semanticMap: SemanticMap;
-  astryxTokens: {count: number; tokens: Record<string, {category: string; default: string}>};
+  upstreamTokens: {count: number; tokens: Record<string, {category: string; default: string}>};
   tailwindNames: {names: string[]; source: {package: string}};
   overrides: OverridesFile;
   extraTokens: ExtraTokensFile;
@@ -78,7 +78,7 @@ export interface MapToken {
   value?: string;
   parts?: ShadowPart[];
   references?: string;
-  source: 'tecton-astryx' | 'proposed' | 'upstream-default';
+  source: 'tecton-binding' | 'proposed' | 'upstream-default';
   tectonRole?: string;
   exportAlt?: {var: string; light: PathValue; dark: PathValue};
   exportLightDiffers?: boolean;
@@ -149,7 +149,7 @@ export interface ReasonEntry {
 /**
  * `provisional.json` (D-002, D-013). Three disjoint groups; `tokens:check` enforces the exact sets:
  * - provisional: no Tecton decision, proposed values;
- * - `astryxRetained`: not brand tokens (motion, breakpoints, z-index), Astryx values kept on purpose;
+ * - `retainedDefault`: not brand tokens (motion, breakpoints, z-index), upstream values kept on purpose;
  * - `tectonDerived`: settled by D-013 Q-06 as Tecton-derived (headings 3-6, letter-spacing, destructive button).
  */
 export interface ProvisionalFile {
@@ -159,8 +159,8 @@ export interface ProvisionalFile {
   names: ReasonEntry[];
   /** Provisional items with no custom property (missing icons, ...). */
   nonTokens: ReasonEntry[];
-  astryxRetained: {
-    /** Categories whose tokens are all `astryx-retained`. */
+  retainedDefault: {
+    /** Categories whose tokens are all `retained-default`. */
     categories: {category: string; reason: string}[];
     names: ReasonEntry[];
     /** Items with no custom property (breakpoints, z-index). */

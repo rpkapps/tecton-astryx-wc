@@ -1,8 +1,8 @@
 import {html, type CSSResultGroup, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import base from '../styles/base.styles.css';
 import motion from '../styles/motion.styles.css';
 import {SKELETON_RADII, type SkeletonRadius} from './skeleton.types.js';

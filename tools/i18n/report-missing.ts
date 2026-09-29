@@ -1,7 +1,7 @@
 /**
  * `pnpm generate` step: writes `reports/i18n-missing.json` (A§3).
  *
- * Catalog ids = the 370 upstream ids (`@astryx.*`) in `packages/locales/src/catalogs/en.json` plus the
+ * Catalog ids = the 370 upstream ids (mapped to `@tct.*`) in `packages/locales/src/catalogs/en.json` plus the
  * new English ids of every `<folder>/<folder>.messages.json` (`@tct.<folder>.<key>`). The report lists,
  * per shipped locale, which catalog ids have no translation (new `@tct.*` ids exist in English only
  * until translated), and every message id used in source that no catalog defines (a typo or a
@@ -56,7 +56,7 @@ for (const tag of tags) {
 }
 
 // Ids referenced in shipped source.
-const ID_LITERAL = /['"`](@(?:astryx|tct)\.[A-Za-z0-9_.-]+)['"`]/g;
+const ID_LITERAL = /['"`](@tct\.[A-Za-z0-9_.-]+)['"`]/g;
 const unknown: {id: string; file: string}[] = [];
 for (const root of [PATHS.componentsSrc, PATHS.coreSrc]) {
   for (const file of walkFiles(root, {skipDirs: ['generated', '__snapshots__', 'examples']})) {

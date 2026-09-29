@@ -247,10 +247,6 @@
         {
           "file": "packages/core/src/controllers/scrollable-area.ts",
           "reason": "When WP-8's shared scrollable-area controller lands, replace `#syncBodyAccess()` in tct-bottom-sheet.ts (a named tab stop while the body overflows and holds nothing focusable) with it, as upstream does (`keyboardAccess: contentOrViewport`, first-native-control delegation)."
-        },
-        {
-          "file": "packages/core/src/events/events.test.ts",
-          "reason": "New core event class `tct-snap-change` (bottom sheet) was added in packages/core/src/events/; its flags and payload are asserted in the bottom-sheet tests; list it in the shared events test if wanted."
         }
       ],
       "sizeBudgetKb": 46,

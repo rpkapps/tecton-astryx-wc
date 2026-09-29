@@ -75,7 +75,7 @@ Not applicable.
 
 ## Localisation
 
-The default name (`@astryx.spinner.loading`, "Loading") comes from the language in scope in 30 languages.
+The default name (`@tct.spinner.loading`, "Loading") comes from the language in scope in 30 languages.
 Your `label` is yours to translate.
 
 ## Consumer responsibilities

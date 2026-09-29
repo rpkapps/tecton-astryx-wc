@@ -1,9 +1,9 @@
 /**
- * `@tecton-astryx/testing` (A§15.2, A§15.3): fixtures, event and accessibility assertions, keyboard
+ * `@tecton-wc/testing` (A§15.2, A§15.3): fixtures, event and accessibility assertions, keyboard
  * and form helpers, media emulation, Tier-2 switches, and the four standard suites. Dev only.
  *
- * Import from `@tecton-astryx/testing/index.js`, or the individual modules
- * (`@tecton-astryx/testing/fixture.js`, `@tecton-astryx/testing/suites/element.js`, ...).
+ * Import from `@tecton-wc/testing/index.js`, or the individual modules
+ * (`@tecton-wc/testing/fixture.js`, `@tecton-wc/testing/suites/element.js`, ...).
  */
 export * from './a11y.js';
 export * from './emulate.js';

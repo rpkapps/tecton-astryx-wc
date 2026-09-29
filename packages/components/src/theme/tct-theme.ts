@@ -1,7 +1,7 @@
 import {property} from 'lit/decorators.js';
-import {ContextConsumer, ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {themeContext, type ThemeContextValue} from '@tecton-astryx/core/context/keys.js';
-import {TctProviderElement} from '@tecton-astryx/core/provider-element.js';
+import {ContextConsumer, ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {themeContext, type ThemeContextValue} from '@tecton-wc/core/context/keys.js';
+import {TctProviderElement} from '@tecton-wc/core/provider-element.js';
 import {warnInvalidValue} from '../text/text.types.js';
 import lightStyles from './tct-theme.light.css?inline';
 import {
@@ -86,14 +86,22 @@ export class TctTheme extends TctProviderElement {
   /** Colour mode: `light`, `dark`, or `system` (follows the operating system; the default). */
   @property({reflect: true}) mode: ThemeMode = 'system';
 
-  readonly #provider = new ContextProvider(this, {context: themeContext, initialValue: null});
-  readonly #parent = new ContextConsumer(this, {
+  readonly #provider: ContextProvider<typeof themeContext> = new ContextProvider<
+    typeof themeContext
+  >(this, {
     context: themeContext,
-    subscribe: true,
-    callback: () => {
-      this.#syncRoot();
-    },
+    initialValue: null,
   });
+  readonly #parent: ContextConsumer<typeof themeContext> = new ContextConsumer<typeof themeContext>(
+    this,
+    {
+      context: themeContext,
+      subscribe: true,
+      callback: () => {
+        this.#syncRoot();
+      },
+    },
+  );
   #preference: MediaQueryList | undefined;
 
   #resolvedMode(): 'light' | 'dark' {

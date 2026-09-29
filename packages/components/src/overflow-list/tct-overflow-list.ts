@@ -5,15 +5,15 @@ import {
   OverflowController,
   type OverflowMeasurement,
   type OverflowSettings,
-} from '@tecton-astryx/core/controllers/overflow.js';
+} from '@tecton-wc/core/controllers/overflow.js';
 import {
   TctOverflowChangeEvent as OverflowChangeEvent,
   type OverflowItem,
-} from '@tecton-astryx/core/events/tct-overflow-change.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
-import defaults from '@tecton-astryx/locales/en/overflow-list.js';
+} from '@tecton-wc/core/events/tct-overflow-change.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
+import defaults from '@tecton-wc/locales/en/overflow-list.js';
 import base from '../styles/base.styles.css';
 import visuallyHidden from '../styles/visually-hidden.styles.css';
 import {
@@ -57,7 +57,7 @@ const itemId = (element: Element): number => {
  * @tag tct-overflow-list
  * @upstream OverflowList
  * @slot - The items. Each child is one item.
- * @csspart overflow-list - The visible row (Astryx target `astryx-overflow-list`).
+ * @csspart overflow-list - The visible row.
  * @csspart indicator - The wrapper of the indicator returned by `overflowRenderer`.
  * @csspart count - The built-in "+N" indicator (`show-count`).
  * @fires tct-overflow-change - The set of collapsed items changed; `items` holds the collapsed items and their indices.
@@ -108,7 +108,10 @@ export class TctOverflowList extends TctElement {
    */
   @property({attribute: false}) overflowRenderer: OverflowRenderer | undefined;
 
-  readonly #locale = new LocaleController(this, {namespace: 'overflow-list', defaults});
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'overflow-list',
+    defaults,
+  });
   readonly #overflow: OverflowController = new OverflowController(this, {
     targets: (): (Element | null | undefined)[] => [
       this.renderRoot?.querySelector('.list'),

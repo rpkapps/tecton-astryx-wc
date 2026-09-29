@@ -127,7 +127,7 @@
           "upstream": "useTruncation",
           "target": "TruncationController",
           "as": "controller",
-          "notes": "Shared with tct-text (@tecton-astryx/core/controllers/truncation.js)."
+          "notes": "Shared with tct-text (@tecton-wc/core/controllers/truncation.js)."
         }
       ],
       "differences": [

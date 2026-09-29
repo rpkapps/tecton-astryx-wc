@@ -8,7 +8,7 @@ examples: [basic, loading, imperative, custom-labels, inline, rtl]
 keywords: [alert dialog, alertdialog, confirm, confirmation, destructive, delete, modal, dialog, imperative, discard]
 dense:
   description: modal confirmation for destructive or irreversible actions (delete, revoke access, discard changes); alertdialog role, title and consequence, Cancel first and focused, no dismissal by a backdrop press, Escape cancels
-  usage: AlertDialog asks the user to confirm a destructive or irreversible action before it happens. It implements the WAI-ARIA alert dialog pattern; Escape and Cancel ask to close it (cancelable tct-open-change), the action button raises tct-action and the dialog stays open until you close it. At 640px and below the destructive action is above Cancel and both fill the width. Without markup use openAlertDialog() from @tecton-astryx/components/alert-dialog/alert-dialog.api.js.
+  usage: AlertDialog asks the user to confirm a destructive or irreversible action before it happens. It implements the WAI-ARIA alert dialog pattern; Escape and Cancel ask to close it (cancelable tct-open-change), the action button raises tct-action and the dialog stays open until you close it. At 640px and below the destructive action is above Cancel and both fill the width. Without markup use openAlertDialog() from @tecton-wc/components/alert-dialog/alert-dialog.api.js.
   bestPractices:
     - {do: true, text: 'Make the action label specific: "Delete project", not "OK" or "Confirm".'}
     - {do: true, text: 'Say in the description what will happen, so the user knows the consequence before confirming.'}
@@ -59,7 +59,7 @@ the page behind it is inert, focus stays inside, and it cannot be dismissed by a
 
 ## Anatomy
 
-- The **dialog surface**, backdrop and motion come from `tct-dialog` (purpose `required`).
+- The **dialog surface**, backdrop and motion come from `tct-dialog` (`purpose="form"` with `alert`).
 - The **heading** (level 2, `part="content"`) names the dialog; the **description** describes it, so a
   screen reader announces both when it opens.
 - An optional **extra content** slot sits under the description.

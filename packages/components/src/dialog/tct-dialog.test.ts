@@ -7,20 +7,20 @@
 import {html} from 'lit';
 import {userEvent} from 'vitest/browser';
 import {describe, expect, it, vi} from 'vitest';
-import {getAnnouncerRegions} from '@tecton-astryx/core/a11y/announcer.js';
-import {overrideFeature} from '@tecton-astryx/core/features.js';
-import {resetDevWarnings} from '@tecton-astryx/core/utils/dev.js';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
-import {axNode, expectAccessible} from '@tecton-astryx/testing/a11y.js';
-import {emulateMedia} from '@tecton-astryx/testing/emulate.js';
-import {recordEvents} from '@tecton-astryx/testing/events.js';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {pressKeys} from '@tecton-astryx/testing/keyboard.js';
-import {layerStack} from '@tecton-astryx/testing/layers.js';
-import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
-import {runOverlaySuite} from '@tecton-astryx/testing/suites/overlay.js';
-import {isChromium, isTier2} from '@tecton-astryx/testing/tier.js';
-import {aTimeout, animationsFinished, nextFrame, waitUntil} from '@tecton-astryx/testing/timing.js';
+import {getAnnouncerRegions} from '@tecton-wc/core/a11y/announcer.js';
+import {overrideFeature} from '@tecton-wc/core/features.js';
+import {resetDevWarnings} from '@tecton-wc/core/utils/dev.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
+import {axNode, expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {emulateMedia} from '@tecton-wc/testing/emulate.js';
+import {recordEvents} from '@tecton-wc/testing/events.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {pressKeys} from '@tecton-wc/testing/keyboard.js';
+import {layerStack} from '@tecton-wc/testing/layers.js';
+import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
+import {runOverlaySuite} from '@tecton-wc/testing/suites/overlay.js';
+import {isChromium, isTier2} from '@tecton-wc/testing/tier.js';
+import {aTimeout, animationsFinished, nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
 import '../field/define.js';
 import '../tooltip/define.js';
 import './define.js';
@@ -244,11 +244,55 @@ describe('tct-dialog: purpose (Dialog.test.tsx)', () => {
     expect(changes.events[0]).toMatchObject({open: false, reason: 'request'});
   });
 
-  it('only "required" carries role=alertdialog', async () => {
+  it('only "required" or `alert` carries role=alertdialog', async () => {
     for (const purpose of ['info', 'form']) {
       const dialog = await make(`heading="T" open purpose="${purpose}"`);
       expect(surfaceOf(dialog).hasAttribute('role'), purpose).toBe(false);
     }
+  });
+
+  it.each(['info', 'form', 'required'])(
+    'alert gives a %s dialog role=alertdialog without changing what dismisses it',
+    async (purpose) => {
+      const dialog = await make(`heading="T" open alert purpose="${purpose}"`);
+      await waitUntil(() => layerStack().length === 1, 'open');
+      expect(surfaceOf(dialog).getAttribute('role')).toBe('alertdialog');
+      expect((await axNode(surfaceOf(dialog))).role).toBe('alertdialog');
+      await animationsFinished(surfaceOf(dialog));
+      const changes = recordEvents(dialog, 'tct-open-change');
+      await pressKeys('Escape');
+      if (purpose === 'required') {
+        await aTimeout(100);
+        expect(dialog.open).toBe(true);
+        expect(changes.events).toHaveLength(0);
+      } else {
+        await waitUntil(() => !dialog.open, 'closed by Escape');
+        expect(changes.events).toHaveLength(1);
+        expect(changes.events[0]).toMatchObject({open: false, reason: 'escape', cancelable: true});
+      }
+    },
+  );
+
+  it('alert with purpose=form: a cancelled Escape keeps it open and a backdrop press never closes it', async () => {
+    const dialog = await make('heading="T" open alert purpose="form"');
+    await waitUntil(() => layerStack().length === 1, 'open');
+    await animationsFinished(surfaceOf(dialog));
+    dialog.addEventListener('tct-open-change', (event) => {
+      event.preventDefault();
+    });
+    await pressKeys('Escape');
+    await aTimeout(120);
+    expect(dialog.open).toBe(true);
+    await pressBackdrop();
+    await aTimeout(200);
+    expect(dialog.open).toBe(true);
+  });
+
+  it('alert is reflected, and inline (non-modal) never claims alertdialog', async () => {
+    const dialog = await make('heading="T" open inline alert');
+    expect(dialog.hasAttribute('alert')).toBe(true);
+    expect(dialog.shadowRoot!.querySelector('dialog')).toBeNull();
+    expect(dialog.shadowRoot!.querySelector('[role="alertdialog"]')).toBeNull();
   });
 
   it('a composing Escape is claimed and never closes the dialog', async () => {
@@ -489,7 +533,7 @@ describe('tct-dialog: naming (acceptance 6) and accessibility', () => {
     try {
       const dialog = await make('heading="T" open');
       await waitUntil(() => layerStack().length === 1, 'open');
-      const {announce} = await import('@tecton-astryx/core/a11y/announcer.js');
+      const {announce} = await import('@tecton-wc/core/a11y/announcer.js');
       announce('Saved', {politeness: 'polite'});
       await waitUntil(() => getAnnouncerRegions().polite?.textContent === 'Saved', 'spoken', 2500);
       // The live region lives inside the modal, so `showModal()` did not silence it.

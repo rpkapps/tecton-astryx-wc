@@ -4,7 +4,7 @@
  * (trusted events: implicit form submission, default actions and `:focus-visible` all behave).
  */
 import {userEvent} from 'vitest/browser';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 
 export {deepActiveElement};
 

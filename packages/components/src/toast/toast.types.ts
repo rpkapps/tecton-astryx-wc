@@ -1,5 +1,5 @@
 import type {TemplateResult} from 'lit';
-import type {ToastDismissReason} from '@tecton-astryx/core/events/tct-toast-dismiss.js';
+import type {ToastDismissReason} from '@tecton-wc/core/events/tct-toast-dismiss.js';
 
 export type {ToastDismissReason};
 

@@ -5,22 +5,22 @@
 import {html} from 'lit';
 import {userEvent} from 'vitest/browser';
 import {beforeAll, beforeEach, describe, expect, it, vi} from 'vitest';
-import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
+import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
 import {
   interactiveRoleContext,
   linkContext,
   type LinkContextValue,
-} from '@tecton-astryx/core/context/keys.js';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {axNode, expectAccessible} from '@tecton-astryx/testing/a11y.js';
-import {emulateMedia} from '@tecton-astryx/testing/emulate.js';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {deepActiveElement, pressKeys} from '@tecton-astryx/testing/keyboard.js';
-import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
-import {runKeyboardSuite} from '@tecton-astryx/testing/suites/keyboard.js';
-import {isChromium} from '@tecton-astryx/testing/tier.js';
-import {waitUntil} from '@tecton-astryx/testing/timing.js';
+} from '@tecton-wc/core/context/keys.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {axNode, expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {emulateMedia} from '@tecton-wc/testing/emulate.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {deepActiveElement, pressKeys} from '@tecton-wc/testing/keyboard.js';
+import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
+import {runKeyboardSuite} from '@tecton-wc/testing/suites/keyboard.js';
+import {isChromium} from '@tecton-wc/testing/tier.js';
+import {waitUntil} from '@tecton-wc/testing/timing.js';
 import './define.js';
 import parity from './parity.json' with {type: 'json'};
 import {computeTargetAndRel} from './link.rel.js';
@@ -31,16 +31,21 @@ class TctTestContext extends TctElement {
   static override readonly tagName = 'tct-test-context';
   readonly calls: {href: string; event: MouseEvent}[] = [];
   handled = true;
-  readonly router = new ContextProvider(this, {
-    context: linkContext,
-    initialValue: {
-      navigate: (href, event) => {
-        this.calls.push({href, event});
-        return this.handled;
-      },
-    } satisfies LinkContextValue,
-  });
-  readonly interactive = new ContextProvider(this, {
+  readonly router: ContextProvider<typeof linkContext> = new ContextProvider<typeof linkContext>(
+    this,
+    {
+      context: linkContext,
+      initialValue: {
+        navigate: (href, event) => {
+          this.calls.push({href, event});
+          return this.handled;
+        },
+      } satisfies LinkContextValue,
+    },
+  );
+  readonly interactive: ContextProvider<typeof interactiveRoleContext> = new ContextProvider<
+    typeof interactiveRoleContext
+  >(this, {
     context: interactiveRoleContext,
     initialValue: false,
   });
@@ -746,7 +751,7 @@ describe('tct-link: accessibility, direction and forced colours', () => {
   });
 
   it('warns in dev for an unknown colour', async () => {
-    const {resetDevWarnings} = await import('@tecton-astryx/core/utils/dev.js');
+    const {resetDevWarnings} = await import('@tecton-wc/core/utils/dev.js');
     resetDevWarnings();
     globalThis.tctDevMode = true;
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);

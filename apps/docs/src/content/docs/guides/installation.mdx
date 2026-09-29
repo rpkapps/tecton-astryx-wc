@@ -13,22 +13,22 @@ The library is unlicensed (all rights reserved) for now, and nothing is publishe
 
 | Route                | How                                                                                                                                                  | Good for                                   |
 | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
-| Workspace            | Add the repository to your pnpm workspace and depend on `"@tecton-astryx/components": "workspace:*"`.                                                | Apps that live next to the library         |
+| Workspace            | Add the repository to your pnpm workspace and depend on `"@tecton-wc/components": "workspace:*"`.                                                | Apps that live next to the library         |
 | Tarball              | Run `pnpm pack` in each package you need and install the tarballs. All packages share one version, so install them together.                          | Internal apps in other repositories        |
 | Git dependency       | Point the dependency at the repository and a tag.                                                                                                    | CI builds that clone the source            |
-| Self-hosted CDN      | Copy `dist/cdn/` from a build to your own static host (_planned_, milestone M6). There is no public CDN.                                              | Plain HTML pages and CMS-rendered markup   |
+| Self-hosted CDN      | Copy `dist/cdn/` from `pnpm build` to your own static host. There is no public CDN.                                              | Plain HTML pages and CMS-rendered markup   |
 
-Because the packages are unlicensed, keep them inside the organisation that owns them. Third-party licences (Lit, the fonts, Lucide and the upstream Astryx MIT licence) still apply to what the packages bundle; `THIRD-PARTY-NOTICES.md` in the repository lists them.
+Because the packages are unlicensed, keep them inside the organisation that owns them. Third-party licences (Lit, the fonts, Lucide and the MIT-licensed material that the code and documentation adapt) still apply to what the packages bundle; `THIRD-PARTY-NOTICES.md` in the repository lists them.
 
 ## Packages
 
 | Package                     | Depends on                                                   | Contains                                                                                                                  |
 | --------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
-| `@tecton-astryx/components` | `core`, `icons`, `locales`, `tokens` (CSS at build), `lit`   | Every public `tct-*` element, shared styles, define entries, autoloader, assembled `tecton.css` (planned)                  |
-| `@tecton-astryx/core`       | `lit`, `intl-messageformat`, `@floating-ui/dom` (lazy), `@internationalized/date`, `dompurify` (lazy), `@tecton-astryx/locales` | `TctElement`, `defineElement`, events, context, controllers, mixins, i18n, icon registry, feature detection, security |
-| `@tecton-astryx/tokens`     | none at runtime                                              | `tokens.css`, `palette.css`, `fonts.css`, `tecton.css`, the font files, token metadata (`tokens.js`, `tokens.json`)       |
-| `@tecton-astryx/icons`      | none                                                         | Icon sets as `IconDefinition` data modules                                                                                |
-| `@tecton-astryx/locales`    | none                                                         | 30 upstream catalogs, a generated pseudo-locale, lazily loaded                                                            |
+| `@tecton-wc/components` | `core`, `icons`, `locales`, `tokens` (CSS at build), `lit`   | Every `tct-*` element, shared styles, define entries, autoloader, assembled `tecton.css`, CDN build, Custom Elements Manifest |
+| `@tecton-wc/core`       | `lit`, `intl-messageformat`, `@floating-ui/dom` (lazy), `@internationalized/date`, `dompurify` (lazy), `@tecton-wc/locales` | `TctElement`, `defineElement`, events, context, controllers, mixins, i18n, icon registry, feature detection, security |
+| `@tecton-wc/tokens`     | none at runtime                                              | `tokens.css`, `palette.css`, `fonts.css`, `tecton.css`, the font files, token metadata (`tokens.js`, `tokens.json`)       |
+| `@tecton-wc/icons`      | none                                                         | Icon sets as `IconDefinition` data modules                                                                                |
+| `@tecton-wc/locales`    | none                                                         | 30 message catalogs, a generated pseudo-locale, lazily loaded                                                             |
 
 Only `lit` is a build-time dependency you may meet directly. The other runtime dependencies sit behind internal modules in `core` and are loaded only where needed: `@floating-ui/dom` for positioning when CSS anchor positioning is unavailable, `dompurify` when the native Sanitizer API is unavailable, `@internationalized/date` for the date elements, and `intl-messageformat` for ICU messages.
 
@@ -38,32 +38,32 @@ Class modules are free of side effects: importing a class never registers a tag.
 
 | Specifier                                        | Resolves to                | Effect                                                                    |
 | ------------------------------------------------ | -------------------------- | ------------------------------------------------------------------------- |
-| `@tecton-astryx/components/button`               | the family `define.js`     | Registers the family's tags and the tags it renders, and re-exports the classes |
-| `@tecton-astryx/components/button/tct-button.js` | the class module           | The class only, with no registration (for scoped registries)              |
-| `@tecton-astryx/components/define.js`            | generated                  | Registers every element                                                   |
-| `@tecton-astryx/components`                      | generated barrel           | Every class and type, with no registration                                |
-| `@tecton-astryx/components/autoloader.js`        | the autoloader (_planned_) | Registers each tag lazily, the first time it appears                      |
+| `@tecton-wc/components/button`               | the family `define.js`     | Registers the family's tags and the tags it renders, and re-exports the classes |
+| `@tecton-wc/components/button/tct-button.js` | the class module           | The class only, with no registration (for scoped registries)              |
+| `@tecton-wc/components/define.js`            | generated                  | Registers every element                                                   |
+| `@tecton-wc/components`                      | generated barrel           | Every class and type, with no registration                                |
+| `@tecton-wc/components/autoloader.js`        | the autoloader             | Registers each tag lazily, the first time it appears                      |
 
 ```js
 // register only what a page uses
-import '@tecton-astryx/components/button';
-import '@tecton-astryx/components/dialog';
+import '@tecton-wc/components/button';
+import '@tecton-wc/components/dialog';
 
 // or register everything (a larger bundle)
-import '@tecton-astryx/components/define.js';
+import '@tecton-wc/components/define.js';
 ```
 
 Registration is safe to repeat. Registering the same class twice does nothing. If a different class already owns a tag, the first definition is kept and a warning names both versions once, which is the usual sign that two copies of the library are on the page.
 
-Provider elements (`tct-theme`, `tct-size-provider`, `tct-internationalization-provider`, `tct-link-provider`) render nothing of their own and are registered the same way. Because the packages mark their define entries as side-effectful and everything else as side-effect free, a bundler tree-shakes an unused family away.
+Provider elements (`tct-theme`, `tct-size-provider`, `tct-internationalization-provider`, `tct-link-provider`, `tct-layer-provider`) have no shadow root of their own and are registered the same way. Because the packages mark their define entries as side-effectful and everything else as side-effect free, a bundler tree-shakes an unused family away.
 
 ### Scoped registries
 
-To keep the library out of the global registry (for example in a micro-frontend), register classes into a registry you own with the `defineElement` helper from `@tecton-astryx/core`, then attach that registry to your application's shadow root. Elements that a component renders in its own shadow root are created from templates, never by tag name from script, so they resolve through the same registry.
+To keep the library out of the global registry (for example in a micro-frontend), register classes into a registry you own with the `defineElement` helper from `@tecton-wc/core`, then attach that registry to your application's shadow root. Elements that a component renders in its own shadow root are created from templates, never by tag name from script, so they resolve through the same registry.
 
 ```js
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {TctButton} from '@tecton-astryx/components/button/tct-button.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {TctButton} from '@tecton-wc/components/button/tct-button.js';
 
 // Scoped registries are a progressive enhancement: feature-detect before using them.
 const registry = new CustomElementRegistry();
@@ -77,20 +77,20 @@ Scoped custom element registries are missing from at least one Tier 1 engine, so
 
 ## The autoloader
 
-_Planned._ `@tecton-astryx/components/autoloader.js` watches the document with one `MutationObserver` and imports a family's define entry the first time one of its tags appears. Elements that the library renders inside its own shadow roots are registered through their parent's dependencies, so the autoloader never needs to observe them.
+`@tecton-wc/components/autoloader.js` watches the document with one `MutationObserver` and imports a family's define entry the first time one of its tags appears. Importing it is all the setup there is. Elements that the library renders inside its own shadow roots are registered through their parent's dependencies, so the autoloader never needs to observe them.
 
 ```html
 <!-- preload the families you know you need on this page -->
 <html data-tct-preload="button dialog">
-  <script type="module" src="/vendor/tecton-astryx/autoloader.js"></script>
+  <script type="module" src="/vendor/tecton-wc/autoloader.js"></script>
 </html>
 ```
 
-The autoloader also exports `discover(root)` and `observe(root)` so an application can hand it shadow roots that it creates.
+The autoloader also exports `discover(root)`, `observe(root)` and `preload(families)`, so an application can hand it shadow roots that it creates or load families ahead of time.
 
 ## Self-hosted CDN build
 
-_Planned._ The `dist/cdn/` build bundles Lit and the approved dependencies with code splitting, one entry per family, plus `autoloader.js` and `define.js`. Copy it to your own static host:
+The `dist/cdn/` build bundles Lit and the other runtime dependencies with code splitting, one entry per family, plus `autoloader.js` and `define.js`. Copy it to your own static host:
 
 ```html
 <link rel="stylesheet" href="https://static.example.com/tecton/tecton.css" />
@@ -103,13 +103,13 @@ Load `tecton.css` once per page and never per component. It is the only place to
 
 | File                                                 | Contents                                                                                 | Status                     |
 | ---------------------------------------------------- | ---------------------------------------------------------------------------------------- | -------------------------- |
-| `@tecton-astryx/tokens/tokens.css`                   | Tokens only, light and dark, plus forced-colours and inverted-surface blocks             | Available                  |
-| `@tecton-astryx/tokens/fonts.css`                    | Figtree, IBM Plex Mono and metric-matched fallback faces                                 | Available, opt-in          |
-| `@tecton-astryx/tokens/palette.css`                  | The raw Tecton palette as `--tecton-palette-*` (1,820 colours)                           | Available, opt-in          |
-| `@tecton-astryx/tokens/tecton.css`                   | `tokens.css` plus `fonts.css`                                                            | Available                  |
-| `@tecton-astryx/components/light-dom.css`            | Styles for elements that render into the light DOM (tables, Markdown)                    | Planned                    |
-| `@tecton-astryx/components/cloak.css`                | Hides undefined tags briefly and reserves their space to avoid layout shift              | Planned, optional          |
-| `@tecton-astryx/components/tecton.css`               | All of the above in one link                                                             | Planned                    |
+| `@tecton-wc/tokens/tokens.css`                   | Tokens only, light and dark, plus forced-colours and inverted-surface blocks             | Available                  |
+| `@tecton-wc/tokens/fonts.css`                    | Figtree, IBM Plex Mono and metric-matched fallback faces                                 | Available, opt-in          |
+| `@tecton-wc/tokens/palette.css`                  | The raw Tecton palette as `--tecton-palette-*` (1,820 colours)                           | Available, opt-in          |
+| `@tecton-wc/tokens/tecton.css`                   | `tokens.css` plus `fonts.css`                                                            | Available                  |
+| `@tecton-wc/components/light-dom.css`            | Styles for elements that render into the light DOM (the providers today; tables and Markdown later) | Available          |
+| `@tecton-wc/components/cloak.css`                | Hides undefined tags briefly and reserves their space to avoid layout shift              | Available, optional        |
+| `@tecton-wc/components/tecton.css`               | All of the above in one link                                                             | Available                  |
 
 `palette.css` is a convenience for your own CSS. Component styles never reference palette variables.
 
@@ -125,26 +125,25 @@ Fonts are the application's to load, and are opt-in. `@font-face` rules must liv
 
 ```html
 <link rel="preload" as="font" type="font/woff2" crossorigin
-      href="/vendor/tecton-astryx/fonts/figtree-latin-wght-normal.woff2" />
+      href="/vendor/tecton-wc/fonts/figtree-latin-wght-normal.woff2" />
 ```
 
 ## Types and metadata
 
 Every element class augments `HTMLElementTagNameMap`, and every event class augments `GlobalEventHandlersEventMap`, so plain TypeScript knows that `document.querySelector('tct-button')` is a `TctButton` and that `addEventListener('tct-open-change', …)` receives a `TctOpenChangeEvent` with typed fields. Declaration files are emitted per package.
 
-A Custom Elements Manifest (`custom-elements.json`, _planned_) is exported from `@tecton-astryx/components`. Editors, Storybook-style tools, framework type generators and the [agent tooling](../working-with-ai/) all read it. Typed JSX and Vue component types generated from it are part of the framework integration package (WP-I, _planned_).
+A Custom Elements Manifest (`custom-elements.json`) and the agent registry (`agent-registry.json`) are exported from `@tecton-wc/components`. Editors, Storybook-style tools, framework type generators and the [agent tooling](../working-with-ai/) all read them. Typed JSX and Vue component types generated from the manifest are _planned_ with the framework integration harnesses.
 
 ## Server rendering
 
-Version 1 is SSR-safe, not SSR-rendered. Every module imports in Node without DOM globals, elements do no DOM work in constructors or `render()`, first paint never depends on `:state()` or on JavaScript-measured classes, and elements reuse an existing declarative shadow root. Whether individual families can be rendered to declarative shadow DOM on the server is decided from the SSR spike in the hardening package (WP-H), so do not promise it to your users yet.
+Version 1 is SSR-safe, not SSR-rendered. Every module imports in Node without DOM globals, elements do no DOM work in constructors or `render()`, first paint never depends on `:state()` or on JavaScript-measured classes, and elements reuse an existing declarative shadow root. Whether individual families can be rendered to declarative shadow DOM on the server is still being evaluated, so do not promise it to your users yet.
 
 ## Versioning
 
 All packages share one version. The public API follows semantic versioning even though nothing is published: tags, attributes, properties, methods, events (with their flags), slots, parts, custom states, documented custom properties and token names. Per-folder API snapshots make every change visible in review. A deprecation keeps an alias for one major version.
 
 {/*
-Sources: docs/ARCHITECTURE.md sections 2.1-2.6, 5.4, 6.8, 14; docs/plan/DECISIONS.md D-007, D-008. Not a direct port of an Astryx topic:
-Astryx's `getting-started` "Install" section and the docsite `/docs/[package]` stubs are the upstream counterparts.
+Sources: docs/ARCHITECTURE.md sections 2.1-2.6, 5.4, 6.8, 14; docs/plan/DECISIONS.md D-007, D-008; packages/components/package.json exports; packages/components/src/autoloader.ts.
 Guides: [mwg:custom-elements] [mwg:web-components] [mwg:prerendering-custom-elements] [mwg:visually-stable-font-fallbacks]
 [mwg:share-web-fonts-across-origins]
 */}

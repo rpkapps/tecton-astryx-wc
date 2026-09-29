@@ -5,16 +5,16 @@
  */
 import {html} from 'lit';
 import {afterEach, describe, expect, it, vi} from 'vitest';
-import english from '@tecton-astryx/locales/en/spinner.js';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {getLocaleDirection} from '@tecton-astryx/core/i18n/direction.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {axNode, expectAccessible} from '@tecton-astryx/testing/a11y.js';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
-import {isChromium} from '@tecton-astryx/testing/tier.js';
-import {aTimeout, waitUntil} from '@tecton-astryx/testing/timing.js';
+import english from '@tecton-wc/locales/en/spinner.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {getLocaleDirection} from '@tecton-wc/core/i18n/direction.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {axNode, expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
+import {isChromium} from '@tecton-wc/testing/tier.js';
+import {aTimeout, waitUntil} from '@tecton-wc/testing/timing.js';
 import '../spinner/define.js';
 import './define.js';
 import type {TctSpinner} from '../spinner/tct-spinner.js';
@@ -23,7 +23,10 @@ import type {TctInternationalizationProvider} from './tct-internationalization-p
 /** Reads locale, direction, strings and formatters the way every family does, via LocaleController. */
 class TestLocaleProbe extends TctElement {
   static override readonly tagName = 'tct-test-locale-probe';
-  readonly i18n = new LocaleController(this, {namespace: 'spinner', defaults: english});
+  readonly i18n: LocaleController = new LocaleController(this, {
+    namespace: 'spinner',
+    defaults: english,
+  });
   override render() {
     return html`<span id="text">${this.i18n.t('loading', undefined, 'loading-label')}</span>`;
   }
@@ -49,7 +52,7 @@ async function mount(markup: string, options: {lang?: string; dir?: 'ltr' | 'rtl
 const probeOf = (root: ParentNode, selector = 'tct-test-locale-probe'): TestLocaleProbe =>
   root.querySelector<TestLocaleProbe>(selector)!;
 
-const LOADING_ID = '@astryx.spinner.loading';
+const LOADING_ID = '@tct.spinner.loading';
 
 afterEach(() => {
   globalThis.tctDevMode = undefined;

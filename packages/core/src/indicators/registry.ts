@@ -24,7 +24,7 @@
  *    while enabled so disabled controls get no hover feedback.
  *
  * ```ts
- * import {indicatorScope, IndicatorController} from '@tecton-astryx/core/indicators/registry.js';
+ * import {indicatorScope, IndicatorController} from '@tecton-wc/core/indicators/registry.js';
  * static override styles = [base, indicatorScope, styles];
  * #indicator = new IndicatorController(this, 'checkbox');   // .tag === 'tct-checkbox-indicator'
  * ```
@@ -68,7 +68,7 @@ export interface IndicatorMap {
 
 export type IndicatorName = Extract<keyof IndicatorMap, string>;
 
-/** The indicator names Astryx ships a default for; exactly the keys of {@link defaultIndicators}. */
+/** The indicator names the library ships a default for; exactly the keys of {@link defaultIndicators}. */
 export type CoreIndicatorName = 'check' | 'checkbox' | 'radio';
 
 /** The indicators the library ships (name to tag). A theme's entries override these by name. */

@@ -21,7 +21,7 @@
  * Guides: [mwg:required-field-feedback]
  */
 import {html, nothing, type ReactiveController, type TemplateResult} from 'lit';
-import fieldMessages from '@tecton-astryx/locales/en/field.js';
+import fieldMessages from '@tecton-wc/locales/en/field.js';
 import {announce} from '../a11y/announcer.js';
 import {VISUALLY_HIDDEN_STYLE} from '../a11y/visually-hidden.js';
 import {ContextConsumer} from '../context/protocol.js';

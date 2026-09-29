@@ -1,4 +1,4 @@
-# tecton-astryx-wc — Architecture (ARC-001, binding)
+# tecton-wc — Architecture (ARC-001, binding)
 
 **Status:** binding for all implementation work. Written 2026-09-29 by the lead architect.
 **Inputs:** `docs/plan/PROJECT-BRIEF.md`, `DECISIONS.md` (D-001…D-008), `IMPLEMENTATION-PLAN.md`,
@@ -18,7 +18,7 @@ e.g. `[mwg:form-associated-custom-elements]`.
 | Id | Decision | One-line reason |
 | --- | --- | --- |
 | A-01 | Support floor = Chrome/Edge ≥ 137, Firefox ≥ 147, Safari/iOS ≥ 26 (§1). | First versions where Popover + `showPopover({source})` implicit anchors + CSS anchor positioning + ARIA element reflection + `:state()` + `requestClose()` all exist; this equals upstream Astryx's Tier 1 plus implicit anchors. |
-| A-02 | pnpm workspace; packages `@tecton-astryx/{tokens,core,icons,locales,components,testing}`; all `private`, `UNLICENSED` (D-008). | Headless core (reusable by lab/charts) split from styled elements (Spectrum gen2 model). |
+| A-02 | pnpm workspace; packages `@tecton-wc/{tokens,core,icons,locales,components,testing}`; all `private`, `UNLICENSED` (D-008). | Headless core (reusable by lab/charts) split from styled elements (Spectrum gen2 model). |
 | A-03 | TypeScript **6.0.x** with `experimentalDecorators` + `useDefineForClassFields: false`. | typescript-eslint supports TS < 6.1 (TS 7 is not usable yet); legacy decorators are what the CEM analyzer (bundled TS 5.4) reads reliably. Verified in a throwaway spike. |
 | A-04 | Component CSS authored as `*.styles.css`, compiled by an **in-house Vite plugin** into Lit `css` modules with build-time token fallbacks. | Real CSS tooling (stylelint) without an unapproved plugin (D-007). `.styles.css` avoids the Rolldown `preserveModules` name clash between `x.ts` and `x.css` (verified). |
 | A-05 | Build = Vite 8 library mode (Rolldown, `preserveModules`) + `tsc --emitDeclarationOnly`. | One toolchain for dev, tests, docs and build; verified working. |
@@ -26,9 +26,9 @@ e.g. `[mwg:form-associated-custom-elements]`.
 | A-07 | Text fields: native `<input>` in the control's shadow root by default; opt-in author-slotted `<input slot="input">` mode for autofill-critical fields (§9.8). | Uniform, framework-safe default; a real escape hatch for password managers. |
 | A-08 | One document-level layer stack; `<dialog>` for modals, `popover="manual"` for everything floating (§9.9). | Deterministic nesting across shadow roots; native top layer; no focus-trap code. |
 | A-09 | Positioning: CSS anchor positioning via implicit anchors first; lazy `@floating-ui/dom` fallback only when the probe fails (§9.10). Virtual anchors (pointer) use a 0×0 fixed anchor element on the CSS path. | Matches upstream `useLayer`. **D-014:** Safari 26 lacks native anchor positioning, so there the lazy fallback is a Tier-1 path too; it never loads where the CSS path works. |
-| A-10 | Context via an **in-house implementation of the Context Community Protocol** (`@tecton-astryx/core/context`). | `@lit/context` is not approved (D-007); the protocol is small and interoperable. |
+| A-10 | Context via an **in-house implementation of the Context Community Protocol** (`@tecton-wc/core/context`). | `@lit/context` is not approved (D-007); the protocol is small and interoperable. |
 | A-11 | Events: native `input`/`change`/`click` for native concepts; `tct-<x>-change` cancelable intent events; `tct-after-<x>-change` commit events only where the commit is asynchronous; one `Event` subclass per name (§7.6). | Platform `beforetoggle`/`toggle` model, Web Awesome typing model, no feedback loops. |
-| A-12 | i18n: upstream's 30 catalogs (+ generated pseudo) shipped as `@tecton-astryx/locales`; ICU via `intl-messageformat` behind `core/i18n/format.ts`; locale = nearest `lang`. | D-006 locale target; approved dependency; one resolution mechanism. |
+| A-12 | i18n: upstream's 30 catalogs (+ generated pseudo) shipped as `@tecton-wc/locales`; ICU via `intl-messageformat` behind `core/i18n/format.ts`; locale = nearest `lang`. | D-006 locale target; approved dependency; one resolution mechanism. |
 | A-13 | Icons: registry + `tct-icon`; default set = Astryx role names mapped to **Lucide** glyphs, generated at build time from the dev-only `lucide` package (D-009). The owner's Tecton domain icon set (18 glyphs, outlined and filled) ships in the default set (D-013 Q-02). | Owner chose Lucide (ISC/MIT); no runtime icon dependency. |
 | A-14 | Every generated artifact is **gitignored** and produced by `pnpm generate`; only snapshots that act as API guards are committed, one file per component folder. | Parallel worktrees never conflict on generated files. |
 | A-15 | Docs: Astro 7 + Starlight 0.42; component pages generated from CEM + `*.docs.md` + `examples/*.html` + `parity.json`; Starlight UI progressively replaced with our elements (WP-D). | Approved; search, sidebar and content collections for free; plan §8 docs-built-with-components satisfied incrementally. |
@@ -82,7 +82,7 @@ this list, the guide wins and the list is updated through the orchestrator.
 ### 2.1 Layout
 
 ```text
-tecton-astryx-wc/
+tecton-wc/
   AGENTS.md  CLAUDE.md  THIRD-PARTY-NOTICES.md  README.md
   package.json               root, private; scripts only; all devDependencies live here
   pnpm-workspace.yaml        packages/*, apps/*, tools
@@ -92,18 +92,18 @@ tecton-astryx-wc/
   .size-limit.js             programmatic, globs component folders (§18.4)
   .github/workflows/ci.yml
   packages/
-    tokens/       @tecton-astryx/tokens      token inputs, generator, CSS + TS outputs, fonts
-    core/         @tecton-astryx/core        headless runtime: base class, mixins, controllers,
+    tokens/       @tecton-wc/tokens      token inputs, generator, CSS + TS outputs, fonts
+    core/         @tecton-wc/core        headless runtime: base class, mixins, controllers,
                                              context, events, i18n, icons registry, security, date
-    icons/        @tecton-astryx/icons       icon sets as data modules (default = Astryx port)
-    locales/      @tecton-astryx/locales     30 upstream catalogs (+ pseudo) as lazy ES modules
-    components/   @tecton-astryx/components  every public tct-* element, shared styles, define entries
-    testing/      @tecton-astryx/testing     test utilities and standard suites (dev only)
+    icons/        @tecton-wc/icons       icon sets as data modules (default = Astryx port)
+    locales/      @tecton-wc/locales     30 upstream catalogs (+ pseudo) as lazy ES modules
+    components/   @tecton-wc/components  every public tct-* element, shared styles, define entries
+    testing/      @tecton-wc/testing     test utilities and standard suites (dev only)
     lab/ charts/ richtext/ vega/             extension packages, created by WP-X batches
   apps/
     docs/         Astro + Starlight site (private)
     integration/  framework harness apps (WP-I)
-  tools/          @tecton-astryx/tools: generators, checks, Vite plugin, stylelint plugin, CEM plugins
+  tools/          @tecton-wc/tools: generators, checks, Vite plugin, stylelint plugin, CEM plugins
   docs/           plan/, research/, ARCHITECTURE.md, CONVENTIONS.md
   reports/        generated (gitignored): parity, size, i18n, licences, a11y
 ```
@@ -118,7 +118,7 @@ tarballs or git, and the CDN bundle is a build artifact the owner can self-host.
 | Package | Depends on | Contains | Never contains |
 | --- | --- | --- | --- |
 | `tokens` | (dev) fontsource packages, capsize | inputs + hash lock, normaliser, generator, `dist/*.css`, `dist/tokens.{js,d.ts,json}` | runtime JS beyond token metadata |
-| `core` | `lit`, `intl-messageformat`, `@floating-ui/dom` (lazy), `@internationalized/date`, `dompurify` (lazy), `@tecton-astryx/locales` | `TctElement`, `defineElement`, events, context protocol, controllers, mixins, i18n, icon registry, `features`, security, date | tag registrations, CSS files, component templates |
+| `core` | `lit`, `intl-messageformat`, `@floating-ui/dom` (lazy), `@internationalized/date`, `dompurify` (lazy), `@tecton-wc/locales` | `TctElement`, `defineElement`, events, context protocol, controllers, mixins, i18n, icon registry, `features`, security, date | tag registrations, CSS files, component templates |
 | `icons` | — | `IconDefinition` data modules; the default set; generated per-icon modules | components |
 | `locales` | — | `src/catalogs/*.json` (copied from upstream, hash-locked), generated `dist/<tag>.js`, `dist/en/<namespace>.js`, `dist/pseudo.js`, alias table | runtime logic |
 | `components` | `core`, `icons`, `locales`, `tokens` (CSS at build), `lit` | `src/<folder>/…` (§4), `src/styles/*.styles.css` shared modules, generated barrels, autoloader, CDN build | imports of `@floating-ui/dom`, `intl-messageformat`, `dompurify`, `@internationalized/date` (only through `core`) |
@@ -131,7 +131,7 @@ work package edits a `package.json` or the lockfile.
 
 - **Source → dist:** Vite 8 library mode (`build.lib`, formats `es`), `rollupOptions.output`
   `{ preserveModules: true, preserveModulesRoot: 'src', entryFileNames: '[name].js' }`,
-  externals = every bare import (`lit`, `@tecton-astryx/*`, approved deps). Target `es2023`, not
+  externals = every bare import (`lit`, `@tecton-wc/*`, approved deps). Target `es2023`, not
   minified (consumers minify). Declarations: `tsc -b --emitDeclarationOnly` per package.
 - **CSS modules:** `tools/vite-plugin-tct-css.ts` (in-house, ~60 lines) transforms any
   `*.styles.css` import into `import {css} from 'lit'; export default css\`…\``. Steps: resolve
@@ -150,11 +150,11 @@ work package edits a `package.json` or the lockfile.
 
 ### 2.4 `exports` maps (wildcards only: adding a component never edits them)
 
-`@tecton-astryx/components`:
+`@tecton-wc/components`:
 
 ```jsonc
 {
-  "name": "@tecton-astryx/components", "private": true, "license": "UNLICENSED", "type": "module",
+  "name": "@tecton-wc/components", "private": true, "license": "UNLICENSED", "type": "module",
   "exports": {
     ".":                { "tct-source": "./src/generated/index.ts",  "types": "./dist/generated/index.d.ts",  "default": "./dist/generated/index.js" },
     "./define.js":      { "tct-source": "./src/generated/define-all.ts", "types": "./dist/generated/define-all.d.ts", "default": "./dist/generated/define-all.js" },
@@ -174,16 +174,16 @@ work package edits a `package.json` or the lockfile.
 
 | Specifier | Resolves to | Effect |
 | --- | --- | --- |
-| `@tecton-astryx/components/button` | `dist/button/define.js` | registers the family's tags (+ dependencies) and re-exports its classes |
-| `@tecton-astryx/components/button/tct-button.js` | `dist/button/tct-button.js` | class only, no registration (scoped registries) |
-| `@tecton-astryx/components/define.js` | generated | registers everything |
-| `@tecton-astryx/components` | generated barrel | all classes and types, no registration |
-| `@tecton-astryx/components/autoloader.js` | autoloader | lazy registration on sight |
+| `@tecton-wc/components/button` | `dist/button/define.js` | registers the family's tags (+ dependencies) and re-exports its classes |
+| `@tecton-wc/components/button/tct-button.js` | `dist/button/tct-button.js` | class only, no registration (scoped registries) |
+| `@tecton-wc/components/define.js` | generated | registers everything |
+| `@tecton-wc/components` | generated barrel | all classes and types, no registration |
+| `@tecton-wc/components/autoloader.js` | autoloader | lazy registration on sight |
 
-`@tecton-astryx/core` exposes `"./*": {tct-source: "./src/*.ts", types, default}` (e.g.
-`@tecton-astryx/core/controllers/layer.js`) plus a generated barrel `"."`; `sideEffects: false`.
-`@tecton-astryx/tokens` exposes `./tokens.css`, `./palette.css`, `./fonts.css`, `./tecton.css`,
-`./fonts/*`, `./tokens.js` (metadata), `./tokens.json`. `@tecton-astryx/locales` exposes `./*.js`
+`@tecton-wc/core` exposes `"./*": {tct-source: "./src/*.ts", types, default}` (e.g.
+`@tecton-wc/core/controllers/layer.js`) plus a generated barrel `"."`; `sideEffects: false`.
+`@tecton-wc/tokens` exposes `./tokens.css`, `./palette.css`, `./fonts.css`, `./tecton.css`,
+`./fonts/*`, `./tokens.js` (metadata), `./tokens.json`. `@tecton-wc/locales` exposes `./*.js`
 (`fr-FR.js`, `en/pagination.js`, `pseudo.js`) and `./aliases.js`.
 
 ### 2.5 Registration, autoloader, CDN
@@ -279,7 +279,7 @@ packages/components/src/<folder>/
 ```ts
 import {html, type CSSResultGroup, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import base from '../styles/base.styles.css';
 import focusRing from '../styles/focus-ring.styles.css';
 import styles from './tct-button.styles.css';
@@ -317,7 +317,7 @@ declare global {
 **`define.ts`** (the whole file):
 
 ```ts
-import {defineElement} from '@tecton-astryx/core/define.js';
+import {defineElement} from '@tecton-wc/core/define.js';
 import {TctButton} from './tct-button.js';
 defineElement(TctButton);
 export {TctButton};
@@ -379,7 +379,7 @@ rendered preview and the displayed source. Frontmatter-like first-line comment
 | `tecton-tokens.css` | `tecton-webcomponents/packages/wc/tokens/tecton-tokens.css` | **authoritative role values, light and dark, and typography where defined (D-001)** |
 | `semantic-map.json` | `docs/research/tecton-semantic-map.json` | which Tecton role binds to which Astryx token; theme-local tokens; component tokens; typography; radius; spacing; sizing; focus; motion; breakpoints; z-index |
 | `bindings.overrides.json` | authored (WP-F) | D-001 rebinds with reasons (e.g. `--color-text-accent` / `--color-icon-accent` → an ink role because the export's `action.primary.adornment` is 1.42:1 as ink) |
-| `astryx-tokens.json` | extracted once from upstream `tokens.stylex.ts`, `dataTokens.ts`, `syntax/tokens.ts`, `onMediaTokens.ts` at `ca632c6` | upstream name inventory + defaults (coverage check, verification theme) |
+| `upstream-tokens.json` | extracted once from upstream `tokens.stylex.ts`, `dataTokens.ts`, `syntax/tokens.ts`, `onMediaTokens.ts` at `ca632c6` | upstream name inventory + defaults (coverage check, verification theme) |
 | `tailwind-v4-theme-names.json` | snapshot | collision check |
 
 `inputs.lock.json` records sha256 per input; `tokens:check` fails on mismatch.
@@ -396,9 +396,9 @@ For every emitted semantic token and mode:
 4. Every value must resolve to a palette path or be a structural literal (lengths, `transparent`,
    durations). A colour that resolves to no palette path is an error unless allowlisted in
    `unresolved.allow.json` with a reason (D-001: "flag any that don't").
-5. Status per token: `tecton-export`, `tecton-astryx`, `upstream-default`, **`astryx-retained`** or
+5. Status per token: `tecton-export`, `tecton-binding`, `upstream-default`, **`retained-default`** or
    **`provisional`**. D-013 Q-06 settles what has no Tecton token: motion (10 tokens), breakpoints and
-   z-index keep the Astryx values on purpose and are `astryx-retained`; headings 3-6 (Tecton's
+   z-index keep the Astryx values on purpose and are `retained-default`; headings 3-6 (Tecton's
    large/medium/small/tiny), letter-spacing (`normal`) and the destructive button (bound to
    `--tecton-color-status-error-*`, recorded in the token metadata) are Tecton-derived; only data-viz colours
    (a proposed mapping from palette colours), `--size-element-lg` and the pipeline-defined extras stay
@@ -444,8 +444,8 @@ system fonts; this is a safety net, not a mode (styling.md §4.2).
   backdrop): text roles ≥ 4.5:1, icon/boundary roles and the focus ring ≥ 3:1 on every surface, both
   modes. Known design shortfalls live in `contrast.allow.json` with a reason (e.g.
   `--color-border-emphasized` 2.2:1). D-005 inverted-surface double ring is checked here.
-- The **provisional** set (data-viz 56, `--size-element-lg`, the 6 pipeline extras) and the
-  **astryx-retained** set (motion 10; non-tokens: breakpoints, z-index) are exact and disjoint (D-013); the
+- The **provisional** set (data-viz 56, `--size-element-lg`, the 7 pipeline extras) and the
+  **retained-default** set (motion 10; non-tokens: breakpoints, z-index) are exact and disjoint (D-013); the
   Tecton-derived items are checked (headings 3-6 follow the export's large/medium/small/tiny sizes,
   letter-spacing is `normal` everywhere, the destructive button binds only emitted
   `--tecton-color-status-error-*` roles). Docs list all three groups on "Differences and open items".
@@ -1142,14 +1142,14 @@ export class LocaleController implements ReactiveController {
   constructor(host: TctElement, options?: {namespace?: string; defaults?: Record<string, string>});
   readonly locale: string;              // nearest [lang] crossing shadow roots, else navigator.language
   readonly dir: 'ltr' | 'rtl';          // getComputedStyle(host).direction
-  /** `@astryx.<namespace>.<key>` (or full id); args formatted with ICU. Attribute overrides win. */
+  /** `@tct.<namespace>.<key>` (or full id); args formatted with ICU. Attribute overrides win. */
   t(key: string, args?: Record<string, unknown>, overrideAttribute?: string): string;
   collator(options?: Intl.CollatorOptions): Intl.Collator;
   numberFormat(options?: Intl.NumberFormatOptions): Intl.NumberFormat;
   dateTimeFormat(options?: Intl.DateTimeFormatOptions): Intl.DateTimeFormat;
 }
 export function registerTranslation(locale: string, messages: Record<string, string>): void;
-export function loadLocale(locale: string): Promise<void>;       // dynamic import from @tecton-astryx/locales
+export function loadLocale(locale: string): Promise<void>;       // dynamic import from @tecton-wc/locales
 export function setLocaleLoader(loader: ((tag: string) => Promise<Record<string, string>>) | null): void;
 export function getLocaleDirection(locale: string): 'ltr' | 'rtl'; // Intl.Locale#getTextInfo with fallback list
 export function formatMessage(pattern: string, args: Record<string, unknown> | undefined, locale: string): string; // i18n/format.ts
@@ -1158,7 +1158,7 @@ export function formatMessage(pattern: string, args: Record<string, unknown> | u
 - Resolution order for a message: host override attribute → `tct-internationalization-provider`
   overrides (context) → registered/loaded catalog for the resolved tag (exact → base-language alias →
   `en`) → English default (the component statically imports
-  `@tecton-astryx/locales/en/<namespace>.js` and passes it as `defaults`).
+  `@tecton-wc/locales/en/<namespace>.js` and passes it as `defaults`).
 - The provider reflects `lang` (and `dir` when given) onto itself so CSS `:lang()`, our walk and `Intl`
   agree. Changes to `<html lang dir>` and provider values re-render subscribers; other ancestor changes
   are picked up on reconnect or `localeController.refresh()`.
@@ -1291,7 +1291,7 @@ export function resetIcons(): void;
   bodies contain only `<path d fill fill-rule>` (no `<defs>`, ids, `url()`, `style`, `<foreignObject>`), so they
   survive the sanitiser unchanged. The Tecton `strata` glyph is the only user. Core's registry and `tct-icon`
   implement the field; `packages/icons/src/types.ts` mirrors it.
-- **Default set** (`@tecton-astryx/icons/default.js`, registered as the lowest-priority layer by
+- **Default set** (`@tecton-wc/icons/default.js`, registered as the lowest-priority layer by
   `tct-icon` on its first connect. It has no module side effect, and consumer registrations override it):
   upstream Astryx's role names (close, check, chevrons, status icons, calendar, clock, externalLink,
   menu, moreHorizontal, search, arrows, funnel, eyeSlash, viewColumns, copy, checkDouble, wrench, …)
@@ -1300,12 +1300,12 @@ export function resetIcons(): void;
   The default set also registers the **Tecton domain icons** (D-013 Q-02) as lazy loaders under their kebab
   names (`well`, `fault`, `seismic`, `strata`, …, outlined) and `<name>-filled`.
 - **Full Lucide set**: `tools/icons/extract-lucide.ts` reads the dev-only `lucide` package and generates
-  `@tecton-astryx/icons/lucide/<name>.js` data modules, one per icon, tree-shakeable and gitignored. It also
+  `@tecton-wc/icons/lucide/<name>.js` data modules, one per icon, tree-shakeable and gitignored. It also
   generates a `lucide` registry helper. Notices: Lucide ISC + Feather MIT in THIRD-PARTY-NOTICES.
 - **Tecton domain set** (D-013 Q-02, owner-supplied): 18 oil & gas / subsurface glyphs, each outlined and filled.
   The authored data is `packages/icons/src/tecton/glyphs/` (provenance in `packages/icons/src/tecton/README.md`);
-  `tools/icons/extract-tecton.ts` generates `@tecton-astryx/icons/tecton/<name>.js` (exports `outlined`,
-  `filled`, default = outlined) and `@tecton-astryx/icons/tecton.js` (`tectonIcons` loaders,
+  `tools/icons/extract-tecton.ts` generates `@tecton-wc/icons/tecton/<name>.js` (exports `outlined`,
+  `filled`, default = outlined) and `@tecton-wc/icons/tecton.js` (`tectonIcons` loaders,
   `tectonIconNames`, `tectonIconMeta`). `<rect>` and simple `<g>` wrappers convert to paths exactly; 17 of the 18
   glyphs render pixel-identically to the original markup. `strata` (a CSS conic gradient through
   `<foreignObject>`) is re-expressed as a wedge fan in `svg` and is a bounded approximation. The 131-glyph
@@ -1358,7 +1358,7 @@ Root `vitest.config.ts` with two projects:
 `setup.ts` loads `tokens.css` + `fonts.css`, injects a Tailwind-preflight-equivalent reset (real apps
 have one; components must render under it), and cleans fixtures after each test.
 
-### 15.2 Utilities (`@tecton-astryx/testing`)
+### 15.2 Utilities (`@tecton-wc/testing`)
 
 | Helper | Purpose |
 | --- | --- |
@@ -1420,7 +1420,7 @@ Code-coverage tooling is not proposed.
 
 ### 16.1 Stack
 
-`apps/docs`: Astro 7 + Starlight 0.42, static output. Loads `@tecton-astryx/components/tecton.css`
+`apps/docs`: Astro 7 + Starlight 0.42, static output. Loads `@tecton-wc/components/tecton.css`
 and `define.js`; maps Starlight CSS variables (`--sl-color-*`, fonts) to our tokens so the shell is
 Tecton-skinned from day one. Starlight UI components (Header, Sidebar, ThemeSelect, Search dialog,
 Pagination, TableOfContents) are overridden with our elements as the relevant batches land (WP-D).
@@ -1555,7 +1555,7 @@ any licence outside the allowlist: MIT, BSD-2-Clause, BSD-3-Clause, Apache-2.0, 
 explicit exceptions: `dompurify` (Apache-2.0 election), `axe-core` (MPL-2.0, dev only, must not
 appear in the prod tree) and the transitive dev-only licences approved under D-013 Q-01 (MIT-0, BlueOak-1.0.0,
 CC0-1.0, Python-2.0, MPL-2.0; each pinned to an exact package and licence, never in the shipped tree; any new
-licence still fails and needs review); our own workspace packages (`@tecton-astryx/*`, `UNLICENSED`, private).
+licence still fails and needs review); our own workspace packages (`@tecton-wc/*`, `UNLICENSED`, private).
 It also verifies `THIRD-PARTY-NOTICES.md` lists every production dependency.
 `THIRD-PARTY-NOTICES.md` records: runtime licences (lit, @floating-ui/*, @internationalized/date +
 @swc/helpers, intl-messageformat + @formatjs/* + tslib, dompurify under Apache-2.0), OFL-1.1 notices for

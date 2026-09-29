@@ -6,14 +6,14 @@
  */
 import {html} from 'lit';
 import {describe, expect, it} from 'vitest';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import {
   buttonGroupContext,
   type ButtonGroupContextValue,
   type ButtonGroupPosition,
-} from '@tecton-astryx/core/context/keys.js';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
+} from '@tecton-wc/core/context/keys.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
 import './define.js';
 import type {TctButton} from './tct-button.js';
 

@@ -1,6 +1,6 @@
 /*
  * Docs site skin (A§16.1): maps Starlight's `--sl-*` variables onto the Tecton tokens from
- * `@tecton-astryx/tokens/tecton.css`, so the shell follows the same light and dark values as the
+ * `@tecton-wc/tokens/tecton.css`, so the shell follows the same light and dark values as the
  * components (tokens switch on `prefers-color-scheme` and on `[data-theme]`, which Starlight's theme
  * provider sets). No colour literals: every colour below is a token or a `color-mix()` of tokens.
  * Site components (Example, DataTable, ...) are styled here as well so the sheet is linted once.

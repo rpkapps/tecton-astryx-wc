@@ -5,15 +5,15 @@
 import {html} from 'lit';
 import {userEvent} from 'vitest/browser';
 import {beforeAll, describe, expect, it} from 'vitest';
-import {announce, getAnnouncerRegions} from '@tecton-astryx/core/a11y/announcer.js';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {overrideFeature} from '@tecton-astryx/core/features.js';
-import {isScrollLocked} from '@tecton-astryx/core/layer/scroll-lock.js';
+import {announce, getAnnouncerRegions} from '@tecton-wc/core/a11y/announcer.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {overrideFeature} from '@tecton-wc/core/features.js';
+import {isScrollLocked} from '@tecton-wc/core/layer/scroll-lock.js';
 import {
   registerTopLayerPersistent,
   topmostModalSurface,
-} from '@tecton-astryx/core/layer/top-layer-host.js';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
+} from '@tecton-wc/core/layer/top-layer-host.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import {fixture, settle} from '../fixture.js';
 import {recordEvents} from '../events.js';
 import {pressKeys} from '../keyboard.js';

@@ -1,18 +1,18 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
-import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {RovingTabindexController} from '@tecton-astryx/core/controllers/roving-tabindex.js';
+import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {RovingTabindexController} from '@tecton-wc/core/controllers/roving-tabindex.js';
 import {
   accessibleText,
   resolveIdRefs,
   setAriaElements,
-} from '@tecton-astryx/core/controllers/aria-delegate.js';
-import {features} from '@tecton-astryx/core/features.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
-import {IdController} from '@tecton-astryx/core/utils/id.js';
-import defaults from '@tecton-astryx/locales/en/avatarGroup.js';
+} from '@tecton-wc/core/controllers/aria-delegate.js';
+import {features} from '@tecton-wc/core/features.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
+import {IdController} from '@tecton-wc/core/utils/id.js';
+import defaults from '@tecton-wc/locales/en/avatarGroup.js';
 import base from '../styles/base.styles.css';
 import visuallyHidden from '../styles/visually-hidden.styles.css';
 import {avatarGroupContext} from './avatar.context.js';
@@ -70,17 +70,28 @@ export class TctAvatarGroup extends TctElement {
   /** Shape of every member and of the overflow indicator. Wins over the members' own `shape`. */
   @property({reflect: true}) shape: AvatarShape = 'circle';
 
-  readonly #provider = new ContextProvider(this, {context: avatarGroupContext, initialValue: null});
-  readonly #locale = new LocaleController(this, {namespace: 'avatarGroup', defaults});
-  readonly #ids = new IdController(this, 'tct-avatar-group');
+  readonly #provider: ContextProvider<typeof avatarGroupContext> = new ContextProvider<
+    typeof avatarGroupContext
+  >(this, {
+    context: avatarGroupContext,
+    initialValue: null,
+  });
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'avatarGroup',
+    defaults,
+  });
+  readonly #ids: IdController = new IdController(this, 'tct-avatar-group');
   readonly #observer = new MutationObserver(() => {
     this.requestUpdate();
   });
-  readonly #roving = new RovingTabindexController<AvatarItem>(this, {
-    items: () => this.#items(),
-    orientation: 'horizontal',
-    focusTarget: (item) => item.control,
-  });
+  readonly #roving: RovingTabindexController<AvatarItem> = new RovingTabindexController<AvatarItem>(
+    this,
+    {
+      items: () => this.#items(),
+      orientation: 'horizontal',
+      focusTarget: (item) => item.control,
+    },
+  );
 
   /** @internal Re-renders when the host `aria-label` or `aria-describedby` changes. */
   override attributeChangedCallback(name: string, old: string | null, value: string | null): void {

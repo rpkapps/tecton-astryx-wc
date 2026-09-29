@@ -2,13 +2,13 @@ import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateRe
 import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import {linkContext} from '@tecton-astryx/core/context/keys.js';
-import {ContextConsumer, ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {ClickableContainerController} from '@tecton-astryx/core/controllers/clickable-container.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
-import {safeUrl} from '@tecton-astryx/core/utils/safe-url.js';
+import {linkContext} from '@tecton-wc/core/context/keys.js';
+import {ContextConsumer, ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {ClickableContainerController} from '@tecton-wc/core/controllers/clickable-container.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
+import {safeUrl} from '@tecton-wc/core/utils/safe-url.js';
 import base from '../styles/base.styles.css';
 import focusRing from '../styles/focus-ring.styles.css';
 import {itemDescriptionContext} from './item.context.js';
@@ -106,7 +106,7 @@ function lines(value: number | undefined): number | undefined {
  * @slot marker - A marker rendered before the start content (list bullet or counter).
  * @slot start - Leading content: an icon, avatar or checkbox.
  * @slot end - Trailing content: a badge, a timestamp or an action button.
- * @csspart item - The painted row (Astryx target `astryx-item`).
+ * @csspart item - The painted row.
  * @csspart marker - The marker slot (no wrapper: a slotted marker is a direct flex child of the row).
  * @csspart start - The start content wrapper.
  * @csspart label - The label.
@@ -185,9 +185,23 @@ export class TctItem extends TctElement {
   /** Declarative form of `interactiveElement`: a selector resolved against the item's light DOM. */
   @property({attribute: 'interactive-selector'}) interactiveSelector = '';
 
-  readonly #slots = new SlotController(this, 'start', 'end', 'label', 'description');
-  readonly #link = new ContextConsumer(this, {context: linkContext, subscribe: true});
-  readonly #description = new ContextProvider(this, {
+  readonly #slots: SlotController = new SlotController(
+    this,
+    'start',
+    'end',
+    'label',
+    'description',
+  );
+  readonly #link: ContextConsumer<typeof linkContext> = new ContextConsumer<typeof linkContext>(
+    this,
+    {
+      context: linkContext,
+      subscribe: true,
+    },
+  );
+  readonly #description: ContextProvider<typeof itemDescriptionContext> = new ContextProvider<
+    typeof itemDescriptionContext
+  >(this, {
     context: itemDescriptionContext,
     initialValue: null,
   });

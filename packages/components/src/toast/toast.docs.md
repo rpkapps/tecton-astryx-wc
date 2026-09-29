@@ -8,7 +8,7 @@ examples: [basic, with-action, unique-id, custom-content, provider, standalone, 
 keywords: [toast, notification, snackbar, alert, message, feedback, status, layer provider]
 dense:
   description: transient status notification (info or error) raised imperatively with toast(); stacked in a top-layer viewport; auto-hide with pause, close button, swipe dismiss
-  usage: Toast shows a brief, non-blocking notification to confirm an action or present temporary information. Call toast({body, type, endContent, uniqueId}) from @tecton-astryx/components/toast/toast.api.js; it returns a dismiss function. Wrap the app in tct-layer-provider to set position, max visible and inset; without it a fallback viewport is created on document.body.
+  usage: Toast shows a brief, non-blocking notification to confirm an action or present temporary information. Call toast({body, type, endContent, uniqueId}) from @tecton-wc/components/toast/toast.api.js; it returns a dismiss function. Wrap the app in tct-layer-provider to set position, max visible and inset; without it a fallback viewport is created on document.body.
   bestPractices:
     - {do: true, text: 'Use toasts to confirm an action or report a result that needs no decision.'}
     - {do: true, text: 'Keep the message short. Error toasts persist until dismissed; give info toasts with actions a longer duration.'}

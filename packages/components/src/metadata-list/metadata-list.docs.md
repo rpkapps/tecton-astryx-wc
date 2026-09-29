@@ -90,7 +90,7 @@ Not applicable. The list only displays values; it is not a form control.
 
 ## Localisation
 
-The toggle labels are localised (`@astryx.metadataList.showMore` and `showLess`) from the nearest
+The toggle labels are localised (`@tct.metadataList.showMore` and `showLess`) from the nearest
 `lang`; set `show-more-label` and `show-less-label` to override them. Write labels and values in the
 user's language. Layouts use logical properties, so labels lead on the right in right-to-left contexts.
 

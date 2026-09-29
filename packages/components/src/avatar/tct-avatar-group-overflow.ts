@@ -1,11 +1,11 @@
 import {html, type CSSResultGroup, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import defaults from '@tecton-astryx/locales/en/avatarGroup.js';
+import {ContextConsumer} from '@tecton-wc/core/context/protocol.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import defaults from '@tecton-wc/locales/en/avatarGroup.js';
 import base from '../styles/base.styles.css';
 import focusRing from '../styles/focus-ring.styles.css';
 import {avatarGroupContext} from './avatar.context.js';
@@ -48,9 +48,17 @@ export class TctAvatarGroupOverflow extends TctElement {
    */
   @property({type: Boolean, reflect: true}) interactive = false;
 
-  readonly #group = new ContextConsumer(this, {context: avatarGroupContext, subscribe: true});
-  readonly #locale = new LocaleController(this, {namespace: 'avatarGroup', defaults});
-  readonly #slots = new SlotController(this, 'default');
+  readonly #group: ContextConsumer<typeof avatarGroupContext> = new ContextConsumer<
+    typeof avatarGroupContext
+  >(this, {
+    context: avatarGroupContext,
+    subscribe: true,
+  });
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'avatarGroup',
+    defaults,
+  });
+  readonly #slots: SlotController = new SlotController(this, 'default');
   #hadControl = false;
 
   /** The inner button when `interactive`, else `null`: what the group's roving tab stop focuses. */

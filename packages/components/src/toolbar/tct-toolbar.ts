@@ -1,15 +1,15 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
-import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {sizeContext, type ElementSize} from '@tecton-astryx/core/context/keys.js';
+import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {sizeContext, type ElementSize} from '@tecton-wc/core/context/keys.js';
 import {
   KeyboardHintController,
   keyboardHintStyles,
-} from '@tecton-astryx/core/controllers/keyboard-hint.js';
-import {RovingTabindexController} from '@tecton-astryx/core/controllers/roving-tabindex.js';
-import {SizeController} from '@tecton-astryx/core/controllers/size.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+} from '@tecton-wc/core/controllers/keyboard-hint.js';
+import {RovingTabindexController} from '@tecton-wc/core/controllers/roving-tabindex.js';
+import {SizeController} from '@tecton-wc/core/controllers/size.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import base from '../styles/base.styles.css';
 import styles from './tct-toolbar.styles.css';
 import {focusableLeaves, updatables} from './toolbar.items.js';
@@ -51,7 +51,7 @@ const dividersConverter = {
  * @slot - Unslotted children: start content too.
  * @slot center - Content centred between start and end.
  * @slot end - Content aligned to the inline end.
- * @csspart toolbar - The bar that lays out the three areas (Astryx target `astryx-toolbar`).
+ * @csspart toolbar - The bar that lays out the three areas.
  * @csspart surface - The outer chrome that paints the variant surface and the dividers.
  * @csspart keyboard-hint - The arrow-key hint shown once on first keyboard focus.
  * @cloakDisplay block
@@ -78,18 +78,29 @@ export class TctToolbar extends TctElement {
   /** Sides that draw a divider rule: any of `top`, `bottom`, `start`, `end` (attribute: space separated). */
   @property({converter: dividersConverter, reflect: true}) dividers: ToolbarDivider[] = [];
 
-  readonly #size = new SizeController(this, {explicit: () => this.size, fallback: 'md'});
-  readonly #sizeProvider = new ContextProvider(this, {context: sizeContext, initialValue: null});
-
-  readonly #roving = new RovingTabindexController<HTMLElement>(this, {
-    items: () => [...this.children].flatMap((child) => focusableLeaves(child)),
-    orientation: () => this.#orientation(),
-    wrap: true,
-    // Arrow keys stay with a text field while the caret can still move; only at the edge do they leave it.
-    caretGuard: true,
+  readonly #size: SizeController = new SizeController(this, {
+    explicit: () => this.size,
+    fallback: 'md',
+  });
+  readonly #sizeProvider: ContextProvider<typeof sizeContext> = new ContextProvider<
+    typeof sizeContext
+  >(this, {
+    context: sizeContext,
+    initialValue: null,
   });
 
-  readonly #hint = new KeyboardHintController(this, {orientation: () => this.#orientation()});
+  readonly #roving: RovingTabindexController<HTMLElement> =
+    new RovingTabindexController<HTMLElement>(this, {
+      items: () => [...this.children].flatMap((child) => focusableLeaves(child)),
+      orientation: () => this.#orientation(),
+      wrap: true,
+      // Arrow keys stay with a text field while the caret can still move; only at the edge do they leave it.
+      caretGuard: true,
+    });
+
+  readonly #hint: KeyboardHintController = new KeyboardHintController(this, {
+    orientation: () => this.#orientation(),
+  });
 
   constructor() {
     super();

@@ -6,11 +6,11 @@
 import {html} from 'lit';
 import {afterEach, beforeAll, beforeEach, describe, expect, it, vi} from 'vitest';
 import {userEvent} from 'vitest/browser';
-import {getAnnouncerRegions} from '@tecton-astryx/core/a11y/announcer.js';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {overrideFeature} from '@tecton-astryx/core/features.js';
-import {resetDevWarnings} from '@tecton-astryx/core/utils/dev.js';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
+import {getAnnouncerRegions} from '@tecton-wc/core/a11y/announcer.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {overrideFeature} from '@tecton-wc/core/features.js';
+import {resetDevWarnings} from '@tecton-wc/core/utils/dev.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import {
   aTimeout,
   axNode,
@@ -21,8 +21,8 @@ import {
   pressKeys,
   runKeyboardSuite,
   waitUntil,
-} from '@tecton-astryx/testing/index.js';
-import {TctTestLayer} from '@tecton-astryx/testing/fixtures/test-layer.js';
+} from '@tecton-wc/testing/index.js';
+import {TctTestLayer} from '@tecton-wc/testing/fixtures/test-layer.js';
 import './define.js';
 import {
   dismissAllToasts,

@@ -1,8 +1,8 @@
 import {html, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import base from '../styles/base.styles.css';
 import {
   INDICATOR_SIZES,
@@ -20,16 +20,16 @@ import styles from './tct-checkbox-indicator.styles.css';
  * pending spinner while a change action runs).
  *
  * Hover and focus reach the indicator from its owner, not from props: an owner adds the
- * `indicator-scope` class from `indicatorScope` (`@tecton-astryx/core/indicators/registry.js`) to the
+ * `indicator-scope` class from `indicatorScope` (`@tecton-wc/core/indicators/registry.js`) to the
  * element whose hover should tint the box, and adds it only while enabled.
  *
  * @summary The checkbox box: checked, unchecked and indeterminate.
  * @tag tct-checkbox-indicator
  * @upstream CheckboxIndicator
  * @slot - Content drawn inside the box instead of the state mark (a spinner while pending).
- * @csspart checkbox-indicator - The box (Astryx target `astryx-checkbox-indicator`; the deprecated `checkbox` name is also set).
- * @csspart checkbox-indicator-check - The check mark (Astryx target `astryx-checkbox-indicator-check`).
- * @csspart checkbox-indicator-dash - The indeterminate bar (Astryx target `astryx-checkbox-indicator-dash`).
+ * @csspart checkbox-indicator - The box (the deprecated `checkbox` name is also set).
+ * @csspart checkbox-indicator-check - The check mark.
+ * @csspart checkbox-indicator-dash - The indeterminate bar.
  * @cssstate checked - The state is `checked`.
  * @cssstate indeterminate - The state is `indeterminate`.
  * @cssstate disabled - The owner is disabled.
@@ -48,7 +48,7 @@ export class TctCheckboxIndicator extends TctElement {
   /** Whether the owning control is disabled. Purely visual; the owner keeps the real disabled semantics. */
   @property({type: Boolean, reflect: true}) disabled = false;
 
-  readonly #slots = new SlotController(this, 'default');
+  readonly #slots: SlotController = new SlotController(this, 'default');
 
   protected override willUpdate(changed: PropertyValues<this>): void {
     // Decorative by contract: hidden from assistive technology whatever the author writes on the host.

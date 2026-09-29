@@ -10,7 +10,7 @@ import {
   expectAccessible,
   fixture,
   nextFrame,
-} from '@tecton-astryx/testing/index.js';
+} from '@tecton-wc/testing/index.js';
 import './define.js';
 import type {TctPopover} from './tct-popover.js';
 

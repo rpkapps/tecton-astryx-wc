@@ -1,16 +1,16 @@
 import {html, type CSSResultGroup, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
-import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
+import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
 import {
   sizeContext,
   type ButtonGroupContextValue,
   type ElementSize,
-} from '@tecton-astryx/core/context/keys.js';
-import {RovingTabindexController} from '@tecton-astryx/core/controllers/roving-tabindex.js';
-import {SizeController} from '@tecton-astryx/core/controllers/size.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
-import {focusTargetOf} from '@tecton-astryx/core/utils/focus.js';
+} from '@tecton-wc/core/context/keys.js';
+import {RovingTabindexController} from '@tecton-wc/core/controllers/roving-tabindex.js';
+import {SizeController} from '@tecton-wc/core/controllers/size.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
+import {focusTargetOf} from '@tecton-wc/core/utils/focus.js';
 import base from '../styles/base.styles.css';
 import styles from './tct-button-group.styles.css';
 import {
@@ -60,19 +60,28 @@ export class TctButtonGroup extends TctElement {
   /** Disables every member. A disabled member drops focus, so do not use it to show a pending action. */
   @property({type: Boolean, reflect: true}) disabled = false;
 
-  readonly #size = new SizeController(this, {explicit: () => this.size, fallback: 'md'});
-  readonly #sizeProvider = new ContextProvider(this, {context: sizeContext, initialValue: null});
-  readonly #members = new ButtonGroupMemberContext(this);
-
-  readonly #roving = new RovingTabindexController<HTMLElement>(this, {
-    items: () => groupMembers(this),
-    orientation: () => this.#resolvedOrientation(),
-    wrap: true,
-    focusTarget: (member) => focusTargetOf(member),
-    isDisabled: (member) => this.disabled || isMemberDisabled(member),
-    // A member that opens its own layer (a menu) keeps the arrow keys pressed inside it.
-    boundary: () => true,
+  readonly #size: SizeController = new SizeController(this, {
+    explicit: () => this.size,
+    fallback: 'md',
   });
+  readonly #sizeProvider: ContextProvider<typeof sizeContext> = new ContextProvider<
+    typeof sizeContext
+  >(this, {
+    context: sizeContext,
+    initialValue: null,
+  });
+  readonly #members: ButtonGroupMemberContext = new ButtonGroupMemberContext(this);
+
+  readonly #roving: RovingTabindexController<HTMLElement> =
+    new RovingTabindexController<HTMLElement>(this, {
+      items: () => groupMembers(this),
+      orientation: () => this.#resolvedOrientation(),
+      wrap: true,
+      focusTarget: (member) => focusTargetOf(member),
+      isDisabled: (member) => this.disabled || isMemberDisabled(member),
+      // A member that opens its own layer (a menu) keeps the arrow keys pressed inside it.
+      boundary: () => true,
+    });
 
   constructor() {
     super();

@@ -1,20 +1,30 @@
-import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
+import {
+  html,
+  nothing,
+  unsafeCSS,
+  type CSSResult,
+  type CSSResultGroup,
+  type PropertyValues,
+  type TemplateResult,
+} from 'lit';
 import {property} from 'lit/decorators.js';
-import english from '@tecton-astryx/locales/en/banner.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {TctDismissEvent} from '@tecton-astryx/core/events/tct-dismiss.js';
-import {TctAfterOpenChangeEvent} from '@tecton-astryx/core/events/tct-after-open-change.js';
-import {TctOpenChangeEvent} from '@tecton-astryx/core/events/tct-open-change.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
-import {IdController} from '@tecton-astryx/core/utils/id.js';
+import english from '@tecton-wc/locales/en/banner.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {TctDismissEvent} from '@tecton-wc/core/events/tct-dismiss.js';
+import {TctAfterOpenChangeEvent} from '@tecton-wc/core/events/tct-after-open-change.js';
+import {TctOpenChangeEvent} from '@tecton-wc/core/events/tct-open-change.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {adoptLightDomStyles} from '@tecton-wc/core/styles/light-dom.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
+import {IdController} from '@tecton-wc/core/utils/id.js';
 import {TctButton} from '../button/tct-button.js';
 import {CollapsibleController} from '../collapsible/collapsible.controller.js';
 import {TctIcon} from '../icon/tct-icon.js';
 import base from '../styles/base.styles.css';
 import motion from '../styles/motion.styles.css';
 import styles from './tct-banner.styles.css';
+import lightStyles from './tct-banner.light.css?inline';
 import {
   BANNER_CONTAINERS,
   BANNER_ELEVATIONS,
@@ -54,11 +64,11 @@ const ASSERTIVE = new Set<BannerStatus>(['warning', 'error']);
  * @slot description - The description as rich content (replaces the `description` text).
  * @slot icon - A custom icon replacing the status icon.
  * @slot end - Actions at the inline end of the header (typically ghost buttons).
- * @csspart frame - The outer box that carries the elevation (Astryx target `astryx-banner-frame`).
- * @csspart header - The status-coloured header (Astryx target `astryx-banner`).
- * @csspart icon - The status icon (Astryx target `astryx-banner-icon`).
- * @csspart description - The description (Astryx target `astryx-banner-description`).
- * @csspart content - The card-coloured content area (Astryx target `astryx-banner-content`).
+ * @csspart frame - The outer box that carries the elevation.
+ * @csspart header - The status-coloured header.
+ * @csspart icon - The status icon.
+ * @csspart description - The description.
+ * @csspart content - The card-coloured content area.
  * @fires tct-dismiss - The user pressed dismiss; cancelable. The banner hides unless prevented.
  * @fires tct-open-change - A user expanded or collapsed the content; cancelable.
  * @fires tct-after-open-change - The content state changed, for any reason.
@@ -103,16 +113,27 @@ export class TctBanner extends TctElement {
   /** Whether the content is showing (initial and current state). Ignored with `no-collapse`. */
   @property({type: Boolean, reflect: true}) open = false;
 
-  readonly #ids = new IdController(this, 'tct-banner');
-  readonly #locale = new LocaleController(this, {namespace: 'banner', defaults: english});
-  readonly #slots = new SlotController(this, 'default', 'heading', 'description', 'icon', 'end');
-  readonly #disclosure = new CollapsibleController(this, {
+  readonly #ids: IdController = new IdController(this, 'tct-banner');
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'banner',
+    defaults: english,
+  });
+  readonly #slots: SlotController = new SlotController(
+    this,
+    'default',
+    'heading',
+    'description',
+    'icon',
+    'end',
+  );
+  readonly #disclosure: CollapsibleController = new CollapsibleController(this, {
     open: () => this.open,
     setOpen: (open) => {
       this.open = open;
     },
     requestChange: (open) => this.dispatch(new TctOpenChangeEvent(open, 'trigger')),
   });
+  static #lightSheet: CSSResult | undefined;
   #focusOrigin: HTMLElement | null = null;
   #lastOpen: boolean | undefined;
 
@@ -129,6 +150,12 @@ export class TctBanner extends TctElement {
       },
       {capture: true},
     );
+  }
+
+  override connectedCallback(): void {
+    super.connectedCallback();
+    // Slotted links are light DOM: their sheet goes to the root that contains the banner (A§6.7).
+    adoptLightDomStyles(this, (TctBanner.#lightSheet ??= unsafeCSS(lightStyles)));
   }
 
   #remember(candidate: EventTarget | null): void {

@@ -1,7 +1,7 @@
 /** linkify(): ported from upstream useLinkify.test.tsx. */
 import {html, render, type TemplateResult} from 'lit';
 import {describe, expect, it} from 'vitest';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
 import './define.js';
 import {linkify} from './linkify.js';
 import type {TctLink} from './tct-link.js';

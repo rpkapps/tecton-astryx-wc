@@ -57,7 +57,7 @@
           "upstream": "useIcon",
           "target": "getIcon",
           "as": "module-function",
-          "notes": "@tecton-astryx/core/icons/registry.js returns the IconDefinition or lazy loader."
+          "notes": "@tecton-wc/core/icons/registry.js returns the IconDefinition or lazy loader."
         },
         {
           "upstream": "registerIcons",
