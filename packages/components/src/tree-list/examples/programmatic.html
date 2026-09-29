@@ -1,10 +1,10 @@
 <!-- title: Programmatic control and rich header; description: expand(), collapse(), toggle(), isExpanded() and focusItem() drive the tree without firing tct-tree-toggle; the header slot takes rich content. -->
-<div id="programmatic-root" style="display: grid; gap: var(--spacing-3); max-inline-size: 26rem">
-  <div style="display: flex; gap: var(--spacing-2); flex-wrap: wrap">
-    <button type="button" data-action="expand">Expand all</button>
-    <button type="button" data-action="collapse">Collapse all</button>
-    <button type="button" data-action="focus">Focus Logs</button>
-  </div>
+<tct-vstack id="programmatic-root" gap="3" max-width="26rem">
+  <tct-hstack wrap="wrap" gap="2">
+    <tct-button data-action="expand" label="Expand all"></tct-button>
+    <tct-button data-action="collapse" label="Collapse all"></tct-button>
+    <tct-button data-action="focus" label="Focus Logs"></tct-button>
+  </tct-hstack>
   <tct-tree-list>
     <strong slot="header">Build artefacts</strong>
   </tct-tree-list>
@@ -26,4 +26,4 @@
       }
     });
   </script>
-</div>
+</tct-vstack>
