@@ -164,7 +164,7 @@ describe('tct-chat-tokenized-text: rendering', () => {
     expect(found).toHaveLength(4);
     expect(found[0]!.querySelector('em.tpl')!.textContent).toBe('template');
     expect(found[1]!.contains(node)).toBe(true);
-    expect(found[2]!.textContent!.trim()).toBe('string');
+    expect(found[2]!.textContent.trim()).toBe('string');
     expect(calls).toBeGreaterThan(0);
   });
 

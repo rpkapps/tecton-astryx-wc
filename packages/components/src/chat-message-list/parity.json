@@ -17,7 +17,7 @@
           "kind": "prop",
           "target": "default",
           "as": "slot",
-          "notes": "The rows: tct-chat-message, tct-chat-system-message or any content."
+          "notes": "The rows: tct-chat-message, tct-chat-system-message or any content. Size: the budget is the measured gzip size + about 10%; it includes the ICU message parser (about 33 kB) that every translating family bundles (see provisional-budgets.json), which the performance work package removes."
         },
         {
           "upstream": "emptyState",
@@ -115,14 +115,14 @@
       "requests": [
         {
           "file": "packages/components/src/chat-layout (WP-16)",
-          "reason": "tct-chat-layout provides chatLayoutContext (chat-message-list/chat-layout.context.ts) and wires ChatStreamScrollController and ChatNewMessagesController: scroller = its scroll container; ChatNewMessagesController.contentRef = the context's contentRef; onResize = scroll.scrollIfLocked(). Its message area must not shrink below its content (flex: 1 0 auto), or the list stops growing with its messages and the resize observer never fires. The scroll button takes visible = scroll.isScrolledUp || news.hasNewMessages and label = \"New messages\" (@astryx.chatLayout.newMessages) while news.hasNewMessages; its click calls news.dismiss() and scroll.scrollToBottom(). chat-stream.test.ts holds a working harness."
+          "reason": "tct-chat-layout provides chatLayoutContext (chat-message-list/chat-layout.context.ts) and wires ChatStreamScrollController and ChatNewMessagesController: scroller = its scroll container; ChatNewMessagesController.contentRef = the context's contentRef; onResize = follow.scrollIfLocked(). Its message area must not shrink below its content (flex: 1 0 auto), or the list stops growing with its messages and the resize observer never fires. The scroll button takes visible = follow.isScrolledUp || news.hasNewMessages and label = \"New messages\" (@astryx.chatLayout.newMessages) while news.hasNewMessages; its click calls news.dismiss() and follow.scrollToBottom(). chat-stream.test.ts holds a working harness."
         },
         {
           "file": "packages/components/src/chat-composer (WP-16)",
           "reason": "Import the token types (ChatToken, ChatTokenBadge, ChatTokenCustom) from chat-message/chat-message.types.ts for ChatComposerToken, and share the ChatComposerToken to tct-chat-tokenized-text shape."
         }
       ],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 65,
       "notes": "Guides: [mwg:accessibility] section 8 (live regions: centralise, debounce, `off` for passive text, never per-token); [mwg:defer-work-until-scroll-ends] (scrollend, with its debounced-scroll fallback for Safari < 26.2); [mwg:scroll-position-aware-elements] (container scroll-state queries are Chrome-only, so button state is JS); [mwg:scroll-target-on-load] (scroll-initial-target evaluated; following needs a controller)."
     },
     "core.chat-layout-scroll-button": {
@@ -229,7 +229,7 @@
           "diff": "scrollEnd: () => hasDom() && 'onscrollend' in window,"
         }
       ],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 65,
       "notes": "Guides: [mwg:scroll-position-aware-elements]; [mwg:defer-work-until-scroll-ends]; [mwg:accessible-web-components] (focus is moved deliberately with tabindex -1 and focus(), never left to the browser)."
     }
   }

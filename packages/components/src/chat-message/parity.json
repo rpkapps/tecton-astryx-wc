@@ -19,7 +19,7 @@
           "as": "attribute",
           "reflect": true,
           "default": "assistant",
-          "notes": "Required upstream; an unset sender is an assistant message (the bubble's own fallback)."
+          "notes": "Required upstream; an unset sender is an assistant message (the bubble's own fallback). Size: the budget is the measured gzip size + about 10%; it includes the ICU message parser (about 33 kB) that every translating family bundles (see provisional-budgets.json), which the performance work package removes."
         },
         {
           "upstream": "children",
@@ -108,7 +108,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 40,
       "notes": "Guides: [mwg:accessible-web-components] (role and name through ElementInternals; ARIA relations stay inside one tree); [mwg:shadow-dom] (slots, whitespace); [mwg:css-layout] (logical flex layout, RTL for free)."
     },
     "core.chat-message-bubble": {
@@ -198,7 +198,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 40,
       "notes": "Guides: [mwg:css-layout] (logical corner radii follow the reading direction); [mwg:styling-web-components] (private custom properties, parts)."
     },
     "core.chat-message-metadata": {
@@ -268,7 +268,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 40,
       "notes": "Guides: [mwg:accessible-web-components] (status is an image with a name; separators are decorative); [mwg:css] (pulse only inside prefers-reduced-motion: no-preference)."
     },
     "core.chat-tokenized-text": {
@@ -313,6 +313,11 @@
           "id": "CHATTOKEN-02",
           "type": "a11y-improvement",
           "text": "No HTML-string sink: the text, token labels and any string a custom renderer returns are Lit text bindings, never markup. `announcementText` exposes the text as displayed (a mention by its label) so the message list announces what the reader sees."
+        },
+        {
+          "id": "CHATTOKEN-03",
+          "type": "waiver",
+          "text": "Known open item (not this folder's): in the dark theme the orange, pink and yellow hue badges fall under 4.5:1 when they sit on a chat bubble (--color-neutral), because the hue fills are tinted over the surface. Every hue passes on the page background and in light mode. Badge tokens belong to WP-2/tokens; the docs example uses the blue, green and purple variants."
         }
       ],
       "tests": {
@@ -324,7 +329,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 40,
       "notes": "Guides: [mwg:trusted-types] (no HTML sinks; Lit templates only); [mwg:shadow-dom] (unassigned light-DOM text is not rendered, so it is the source and never shown twice)."
     }
   }

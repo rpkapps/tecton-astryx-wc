@@ -31,7 +31,7 @@
           "kind": "slot",
           "target": "icon",
           "as": "slot",
-          "notes": "Rendered before the message in the default variant only, as upstream (the divider variant does not render it)."
+          "notes": "Rendered before the message in the default variant only, as upstream (the divider variant does not render it). Size: the budget is the measured gzip size + about 10%; it includes the ICU message parser (about 33 kB) that every translating family bundles (see provisional-budgets.json), which the performance work package removes."
         },
         {
           "upstream": "xstyle",
@@ -63,7 +63,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 13,
       "notes": "Guides: [mwg:accessible-web-components] (role and name through ElementInternals; the separator's name is text, not an IDREF across roots)."
     }
   }

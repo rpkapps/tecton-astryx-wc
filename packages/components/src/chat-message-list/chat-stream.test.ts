@@ -9,7 +9,7 @@ import {userEvent} from 'vitest/browser';
 import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
 import {overrideFeature} from '@tecton-astryx/core/features.js';
 import {resetAnnouncer} from '@tecton-astryx/core/a11y/announcer.js';
-import {axNode, expectAccessible} from '@tecton-astryx/testing/a11y.js';
+import {expectAccessible} from '@tecton-astryx/testing/a11y.js';
 import {emulateMedia} from '@tecton-astryx/testing/emulate.js';
 import {fixture} from '@tecton-astryx/testing/fixture.js';
 import {deepActiveElement, pressKeys} from '@tecton-astryx/testing/keyboard.js';
@@ -25,13 +25,13 @@ import type {TctChatMessageList} from './tct-chat-message-list.js';
 
 /** The chat layout's wiring: a scroll container, the context, both controllers and the button. */
 class ChatHarness extends LitElement {
-  readonly scroll = new ChatStreamScrollController(this, {
+  readonly follow = new ChatStreamScrollController(this, {
     scroller: () => this.renderRoot.querySelector<HTMLElement>('.scroller'),
   });
   readonly news = new ChatNewMessagesController(this, {
-    isLocked: () => this.scroll.isLocked,
+    isLocked: () => this.follow.isLocked,
     onResize: () => {
-      this.scroll.scrollIfLocked();
+      this.follow.scrollIfLocked();
     },
   });
   readonly #layout = new ContextProvider(this, {
@@ -62,7 +62,7 @@ class ChatHarness extends LitElement {
         <div style="display: flex; flex-direction: column; flex: 1 0 auto"><slot></slot></div>
       </div>
       <tct-chat-layout-scroll-button
-        ?visible=${this.scroll.isScrolledUp || this.news.hasNewMessages}
+        ?visible=${this.follow.isScrolledUp || this.news.hasNewMessages}
         label=${this.news.hasNewMessages ? 'New messages' : nothing}
         @click=${this.#onScrollButton}
       ></tct-chat-layout-scroll-button>`;
@@ -70,7 +70,7 @@ class ChatHarness extends LitElement {
 
   readonly #onScrollButton = (): void => {
     this.news.dismiss();
-    this.scroll.scrollToBottom();
+    this.follow.scrollToBottom();
   };
 }
 customElements.define('chat-stream-harness', ChatHarness);
@@ -176,7 +176,7 @@ describe('stick to bottom', () => {
     const {harness, list, scroller} = await makeChat();
     await waitUntil(() => distanceFromBottom(scroller) < 2, 'at bottom');
     scroller.scrollTop -= 500;
-    await waitUntil(() => !harness.scroll.isLocked, 'unlocked by the reader');
+    await waitUntil(() => !harness.follow.isLocked, 'unlocked by the reader');
     const held = scroller.scrollTop;
     list.streaming = true;
     const {bubble} = addMessage(list, '');
@@ -184,16 +184,16 @@ describe('stick to bottom', () => {
     await aTimeout(200);
     expect(Math.abs(scroller.scrollTop - held)).toBeLessThan(2);
     expect(distanceFromBottom(scroller)).toBeGreaterThan(500);
-    expect(harness.scroll.isLocked).toBe(false);
+    expect(harness.follow.isLocked).toBe(false);
   });
 
   it('follows again once the reader scrolls back to the bottom', async () => {
     const {harness, list, scroller} = await makeChat();
     await waitUntil(() => distanceFromBottom(scroller) < 2, 'at bottom');
     scroller.scrollTop -= 400;
-    await waitUntil(() => !harness.scroll.isLocked, 'unlocked');
+    await waitUntil(() => !harness.follow.isLocked, 'unlocked');
     scroller.scrollTop = scroller.scrollHeight;
-    await waitUntil(() => harness.scroll.isLocked, 're-locked after the scroll settles', 2000);
+    await waitUntil(() => harness.follow.isLocked, 're-locked after the scroll settles', 2000);
     const {bubble} = addMessage(list, '');
     await stream(bubble, 60);
     await waitUntil(() => distanceFromBottom(scroller) < 2, 'following again', ARRIVE_MS);
@@ -207,7 +207,7 @@ describe('stick to bottom', () => {
     element.remove();
     await nextFrame();
     await nextFrame();
-    expect(harness.scroll.isLocked).toBe(true);
+    expect(harness.follow.isLocked).toBe(true);
   });
 
   it('turns scroll anchoring off on the container while it follows, and back on when it lets go', async () => {
@@ -216,7 +216,7 @@ describe('stick to bottom', () => {
     expect(scroller.hasAttribute('data-tct-chat-following')).toBe(true);
     expect(getComputedStyle(scroller).overflowAnchor).toBe('none');
     scroller.scrollTop -= 500;
-    await waitUntil(() => !harness.scroll.isLocked, 'unlocked');
+    await waitUntil(() => !harness.follow.isLocked, 'unlocked');
     expect(scroller.hasAttribute('data-tct-chat-following')).toBe(false);
     expect(getComputedStyle(scroller).overflowAnchor).toBe('auto');
   });
@@ -278,10 +278,10 @@ describe('reduced motion', () => {
       await emulateMedia({reducedMotion: 'reduce'});
       const {harness, scroller} = await makeChat();
       scroller.scrollTop = 0;
-      await waitUntil(() => !harness.scroll.isLocked, 'unlocked');
-      harness.scroll.scrollToBottom({behavior: 'spring'});
+      await waitUntil(() => !harness.follow.isLocked, 'unlocked');
+      harness.follow.scrollToBottom({behavior: 'spring'});
       expect(distanceFromBottom(scroller)).toBeLessThan(2);
-      expect(harness.scroll.isLocked).toBe(true);
+      expect(harness.follow.isLocked).toBe(true);
     },
   );
 });
@@ -328,7 +328,7 @@ describe('the scroll button', () => {
     harness.button.click();
     await waitUntil(() => distanceFromBottom(scroller) < 2, 'scrolled to the bottom', ARRIVE_MS);
     await waitUntil(() => !harness.button.visible, 'button hides');
-    expect(harness.scroll.isLocked).toBe(true);
+    expect(harness.follow.isLocked).toBe(true);
   });
 
   it('shows "New messages" when one arrives while scrolled up, and clears it on activation', async () => {
@@ -409,32 +409,32 @@ describe('controllers on their own', () => {
   it('scrollToBottom({behavior: "instant"}) jumps in one call and locks', async () => {
     const {harness, scroller} = await makeChat();
     scroller.scrollTop = 0;
-    await waitUntil(() => !harness.scroll.isLocked, 'unlocked');
-    harness.scroll.scrollToBottom({behavior: 'instant'});
+    await waitUntil(() => !harness.follow.isLocked, 'unlocked');
+    harness.follow.scrollToBottom({behavior: 'instant'});
     expect(distanceFromBottom(scroller)).toBeLessThan(2);
-    expect(harness.scroll.isLocked).toBe(true);
-    expect(harness.scroll.isScrolledUp).toBe(false);
+    expect(harness.follow.isLocked).toBe(true);
+    expect(harness.follow.isScrolledUp).toBe(false);
   });
 
   it('unlock() stops following and lock() follows again', async () => {
     const {harness, list, scroller} = await makeChat();
     await waitUntil(() => distanceFromBottom(scroller) < 2, 'at bottom');
-    harness.scroll.unlock();
-    expect(harness.scroll.isLocked).toBe(false);
+    harness.follow.unlock();
+    expect(harness.follow.isLocked).toBe(false);
     addMessage(list, 'not followed');
     await aTimeout(150);
     expect(distanceFromBottom(scroller)).toBeGreaterThan(20);
-    harness.scroll.lock();
+    harness.follow.lock();
     await waitUntil(() => distanceFromBottom(scroller) < 2, 'followed again', ARRIVE_MS);
   });
 
   it('scrollToMessage puts a message at the top of the view and scrollToLastMessage finds the newest', async () => {
     const {harness, list, scroller} = await makeChat();
     const target = list.children[5] as HTMLElement;
-    harness.scroll.scrollToMessage(target);
+    harness.follow.scrollToMessage(target);
     expect(target.getBoundingClientRect().top).toBeCloseTo(scroller.getBoundingClientRect().top, 0);
     scroller.scrollTop = 0;
-    harness.scroll.scrollToLastMessage();
+    harness.follow.scrollToLastMessage();
     // The newest message is at the end, so "top of the view" is as far as the container can go: the bottom.
     const last = list.lastElementChild!.getBoundingClientRect();
     expect(last.bottom).toBeLessThanOrEqual(scroller.getBoundingClientRect().bottom + 1);
@@ -447,9 +447,9 @@ describe('controllers on their own', () => {
     scroller.scrollTop -= 50;
     await waitUntil(() => distanceFromBottom(scroller) >= 49, 'scrolled a little');
     await aTimeout(50);
-    expect(harness.scroll.isScrolledUp).toBe(false);
+    expect(harness.follow.isScrolledUp).toBe(false);
     scroller.scrollTop -= 200;
-    await waitUntil(() => harness.scroll.isScrolledUp, 'past the threshold');
+    await waitUntil(() => harness.follow.isScrolledUp, 'past the threshold');
   });
 
   it('stops observing and following when the host goes away', async () => {
@@ -479,7 +479,7 @@ describe('the message list registers with its layout', () => {
     replacement.append(message);
     await nextFrame();
     await nextFrame();
-    expect(harness.scroll.isLocked).toBe(true);
+    expect(harness.follow.isLocked).toBe(true);
   });
 
   it('uses the layout scroll container as the older-messages observation root', async () => {
@@ -496,7 +496,7 @@ describe('the message list registers with its layout', () => {
       runs++;
       return Promise.resolve();
     };
-    const harness = root as ChatHarness;
+    const harness = root as unknown as ChatHarness;
     await waitUntil(() => distanceFromBottom(harness.scroller) < 2, 'at bottom');
     const before = runs;
     harness.scroller.scrollTop = 0;

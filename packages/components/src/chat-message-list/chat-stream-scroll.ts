@@ -316,7 +316,11 @@ export class ChatStreamScrollController implements ReactiveController {
     const {damping = 0.7, stiffness = 0.05, mass = 1.25} = this.#options;
     this.#velocity = (damping * this.#velocity + stiffness * difference) / mass;
     // `instant`: a container with `scroll-behavior: smooth` must not fight the spring.
-    element.scrollTo({top: element.scrollTop + this.#velocity * tick, behavior: 'instant'});
+    // A scroll position rounds to a device pixel: a step under one pixel would be rounded away and the
+    // spring would sit a few pixels short of the bottom for ever, so it always moves at least one.
+    const step = this.#velocity * tick;
+    const move = Math.abs(step) < 1 ? Math.sign(difference) : step;
+    element.scrollTo({top: element.scrollTop + move, behavior: 'instant'});
     this.#lastScrollTop = element.scrollTop;
     this.#frame = requestAnimationFrame(this.#animate);
   };

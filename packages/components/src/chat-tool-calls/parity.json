@@ -17,7 +17,7 @@
           "kind": "prop",
           "target": "calls",
           "as": "property",
-          "notes": "Property only. ChatToolCallItem: name, status, target, duration, node, additions, deletions, stats, errorMessage, key, data, resultDetail. `stats` and `resultDetail` are TemplateResult | Node | string (a string is text)."
+          "notes": "Property only. ChatToolCallItem: name, status, target, duration, node, additions, deletions, stats, errorMessage, key, data, resultDetail. `stats` and `resultDetail` are TemplateResult | Node | string (a string is text). Size: the budget is the measured gzip size + about 10%; it includes the ICU message parser (about 33 kB) that every translating family bundles (see provisional-budgets.json), which the performance work package removes."
         },
         {
           "upstream": "label",
@@ -112,7 +112,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 58,
       "notes": "Guides: [mwg:animate-to-intrinsic-sizes] (evaluated; grid rows technique used, `interpolate-size` is Chrome only); [mwg:accessibility] (live regions: one centralised, debounced announcer; a status change is not worth speech unless it fails); [mwg:accessible-web-components] (ARIA relations inside one tree)."
     }
   }

@@ -133,21 +133,21 @@ Together with the scroll button they are what a chat layout is built from:
 import {ChatNewMessagesController, ChatStreamScrollController} from '@tecton-wc/components/chat-message-list';
 
 class MyChat extends LitElement {
-  scroll = new ChatStreamScrollController(this, {
+  follow = new ChatStreamScrollController(this, {
     scroller: () => this.renderRoot.querySelector('.scroller'),
   });
   news = new ChatNewMessagesController(this, {
-    isLocked: () => this.scroll.isLocked,
-    onResize: () => this.scroll.scrollIfLocked(),   // follow a message that grows while it streams
+    isLocked: () => this.follow.isLocked,
+    onResize: () => this.follow.scrollIfLocked(),   // follow a message that grows while it streams
   });
   // The message list finds `chatLayoutContext` and hands over its content element to `news.contentRef`.
   render() {
     return html`
       <div class="scroller"><slot></slot></div>
       <tct-chat-layout-scroll-button
-        ?visible=${this.scroll.isScrolledUp || this.news.hasNewMessages}
+        ?visible=${this.follow.isScrolledUp || this.news.hasNewMessages}
         label=${this.news.hasNewMessages ? 'New messages' : nothing}
-        @click=${() => { this.news.dismiss(); this.scroll.scrollToBottom(); }}
+        @click=${() => { this.news.dismiss(); this.follow.scrollToBottom(); }}
       ></tct-chat-layout-scroll-button>`;
   }
 }

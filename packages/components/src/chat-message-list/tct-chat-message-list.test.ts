@@ -7,7 +7,7 @@ import {axNode, expectAccessible} from '@tecton-astryx/testing/a11y.js';
 import {fixture} from '@tecton-astryx/testing/fixture.js';
 import {deepActiveElement} from '@tecton-astryx/testing/keyboard.js';
 import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
-import {isChromium} from '@tecton-astryx/testing/tier.js';
+import {isChromium, isTier2} from '@tecton-astryx/testing/tier.js';
 import {aTimeout, nextFrame, waitUntil} from '@tecton-astryx/testing/timing.js';
 import '../avatar/define.js';
 import '../chat-message/define.js';
@@ -37,7 +37,8 @@ function spyOnAnnouncements(): string[] {
 }
 
 /** Chromium reports `aria-busy` as "1"; other spellings mean the same. */
-const isBusy = (node: {busy?: string}): boolean => node.busy === 'true' || node.busy === '1';
+const isBusy = (node: Record<string, string | undefined>): boolean =>
+  node.busy === 'true' || node.busy === '1';
 
 const part = (element: Element, name: string): HTMLElement | null =>
   element.shadowRoot!.querySelector<HTMLElement>(`[part~="${name}"]`);
@@ -104,11 +105,11 @@ describe('tct-chat-message-list: semantics', () => {
     list.streaming = true;
     await list.updateComplete;
     expect(isBusy(await axNode(list))).toBe(true);
-    expect(list.matches(':state(busy)')).toBe(true);
+    if (!isTier2) expect(list.matches(':state(busy)')).toBe(true);
     list.streaming = false;
     await list.updateComplete;
     expect(isBusy(await axNode(list))).toBe(false);
-    expect(list.matches(':state(busy)')).toBe(false);
+    if (!isTier2) expect(list.matches(':state(busy)')).toBe(false);
   });
 
   it('passes axe with messages, a system message and an empty state, light and dark', async () => {

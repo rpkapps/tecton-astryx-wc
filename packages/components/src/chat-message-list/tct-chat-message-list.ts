@@ -269,7 +269,8 @@ export class TctChatMessageList extends TctElement {
   }
 
   readonly #onSentinel = (entries: IntersectionObserverEntry[]): void => {
-    if (entries[0]?.isIntersecting) void this.#loadOlder();
+    // A batch can hold several changes (in, out, in); the last one is the sentinel's state now.
+    if (entries.at(-1)?.isIntersecting) void this.#loadOlder();
   };
 
   async #loadOlder(): Promise<void> {

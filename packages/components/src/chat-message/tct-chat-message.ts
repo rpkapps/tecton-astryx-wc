@@ -93,6 +93,12 @@ export class TctChatMessage extends TctElement {
     return name !== '' ? name : this.#locale.t('messageFrom', {sender: this.#sender});
   }
 
+  override connectedCallback(): void {
+    super.connectedCallback();
+    // A reconnected message watches its name again (disconnecting stopped the observer).
+    if (this.hasUpdated) this.#observeName();
+  }
+
   override disconnectedCallback(): void {
     super.disconnectedCallback();
     this.#nameObserver?.disconnect();
@@ -116,17 +122,7 @@ export class TctChatMessage extends TctElement {
   }
 
   protected override updated(): void {
-    // The name slot can change text in place; the article's name follows it. Only the name's own
-    // subtree is watched, so a streaming body never re-renders the message.
-    this.#nameObserver ??= new MutationObserver(() => {
-      this.requestUpdate();
-    });
-    this.#nameObserver.disconnect();
-    for (const child of this.children) {
-      if (child.getAttribute('slot') === 'name') {
-        this.#nameObserver.observe(child, {childList: true, characterData: true, subtree: true});
-      }
-    }
+    this.#observeName();
   }
 
   override render(): TemplateResult {
@@ -178,6 +174,22 @@ export class TctChatMessage extends TctElement {
     return wanted !== undefined && (CHAT_DENSITIES as readonly string[]).includes(wanted)
       ? wanted
       : 'balanced';
+  }
+
+  /**
+   * The name slot can change text in place; the article's name follows it. Only the name's own
+   * subtree is watched, so a streaming body never re-renders the message.
+   */
+  #observeName(): void {
+    this.#nameObserver ??= new MutationObserver(() => {
+      this.requestUpdate();
+    });
+    this.#nameObserver.disconnect();
+    for (const child of this.children) {
+      if (child.getAttribute('slot') === 'name') {
+        this.#nameObserver.observe(child, {childList: true, characterData: true, subtree: true});
+      }
+    }
   }
 
   /** Text of the name: the slotted name wins over the attribute, as it does visually. */

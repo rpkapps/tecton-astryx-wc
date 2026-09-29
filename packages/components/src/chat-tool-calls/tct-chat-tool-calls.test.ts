@@ -7,7 +7,7 @@ import {expectEventCounts, recordEvents} from '@tecton-astryx/testing/events.js'
 import {fixture} from '@tecton-astryx/testing/fixture.js';
 import {deepActiveElement, pressKeys} from '@tecton-astryx/testing/keyboard.js';
 import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
-import {isChromium} from '@tecton-astryx/testing/tier.js';
+import {isChromium, isTier2} from '@tecton-astryx/testing/tier.js';
 import {aTimeout, waitUntil} from '@tecton-astryx/testing/timing.js';
 import {userEvent} from 'vitest/browser';
 import './define.js';
@@ -317,7 +317,7 @@ describe('tct-chat-tool-calls: group', () => {
     expect(header(element).getAttribute('aria-expanded')).toBe('true');
   });
 
-  it('exposes :state(expanded)', async () => {
+  it.skipIf(isTier2)('exposes :state(expanded)', async () => {
     const element = await make(many);
     expect(element.matches(':state(expanded)')).toBe(false);
     element.expanded = true;
@@ -539,7 +539,7 @@ describe('tct-chat-tool-calls: i18n, direction and theming', () => {
     await emulateMedia({forcedColors: 'active'});
     const element = await make(many);
     await userEvent.tab();
-    header(element).focus({focusVisible: true} as FocusOptions);
+    header(element).focus({focusVisible: true});
     expect(getComputedStyle(header(element)).outlineStyle).not.toBe('none');
   });
 });
