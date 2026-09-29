@@ -1,21 +1,21 @@
 <!-- title: Checkbox indicator; description: The checkbox box in its three states and two sizes, enabled and disabled. -->
-<div style="display: grid; gap: var(--spacing-3)">
-  <div style="display: flex; align-items: center; gap: var(--spacing-4)">
+<tct-vstack gap="3">
+  <tct-hstack gap="4" v-align="center">
     <tct-checkbox-indicator state="unchecked"></tct-checkbox-indicator>
     <tct-checkbox-indicator state="checked"></tct-checkbox-indicator>
     <tct-checkbox-indicator state="indeterminate"></tct-checkbox-indicator>
-    <span style="color: var(--color-text-secondary)">md (24px)</span>
-  </div>
-  <div style="display: flex; align-items: center; gap: var(--spacing-4)">
+    <tct-text type="inherit" color="secondary">md (24px)</tct-text>
+  </tct-hstack>
+  <tct-hstack gap="4" v-align="center">
     <tct-checkbox-indicator size="sm" state="unchecked"></tct-checkbox-indicator>
     <tct-checkbox-indicator size="sm" state="checked"></tct-checkbox-indicator>
     <tct-checkbox-indicator size="sm" state="indeterminate"></tct-checkbox-indicator>
-    <span style="color: var(--color-text-secondary)">sm (20px)</span>
-  </div>
-  <div style="display: flex; align-items: center; gap: var(--spacing-4)">
+    <tct-text type="inherit" color="secondary">sm (20px)</tct-text>
+  </tct-hstack>
+  <tct-hstack gap="4" v-align="center">
     <tct-checkbox-indicator disabled state="unchecked"></tct-checkbox-indicator>
     <tct-checkbox-indicator disabled state="checked"></tct-checkbox-indicator>
     <tct-checkbox-indicator disabled state="indeterminate"></tct-checkbox-indicator>
-    <span style="color: var(--color-text-secondary)">disabled</span>
-  </div>
-</div>
+    <tct-text type="inherit" color="secondary">disabled</tct-text>
+  </tct-hstack>
+</tct-vstack>
