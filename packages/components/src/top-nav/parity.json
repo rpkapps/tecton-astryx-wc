@@ -131,8 +131,8 @@
           "reason": "Upstream AppShell hands the side navigation content to the top navigation through `TopNavMobileContentContext` to build one combined drawer. A custom element cannot project one node into two places, so `tct-top-nav` adds a `tct-top-nav-drawer` satellite (`slot=\"drawer\"`) to the shell, which lists copies of the start and centre items above the side navigation and forwards their clicks. No shell change is needed; if the shell later exposes an API for drawer contributions, the satellite can use it."
         }
       ],
-      "sizeBudgetKb": null,
-      "notes": "Guides: [mwg:accessibility] landmark and disclosure navigation; [mwg:anchor-positioning] the mega menu is anchored to the bar; [mwg:navigation-drawer] the mobile hand-off; [mwg:styling-web-components] tokens and forced colours."
+      "sizeBudgetKb": 75,
+      "notes": "Size: the budget (75 kB gzip, measured 67.4 kB + 10%) covers the bundled dependency closure, not the folder alone: the side navigation heading base shared with the top navigation, the layer and positioning machinery, the mobile navigation toggle and drawer, tct-divider, tct-icon and the locale catalogs with the ICU message parser. Guides: [mwg:accessibility] landmark and disclosure navigation; [mwg:anchor-positioning] the mega menu is anchored to the bar; [mwg:navigation-drawer] the mobile hand-off; [mwg:styling-web-components] tokens and forced colours."
     },
     "core.top-nav-heading": {
       "tag": "tct-top-nav-heading",
