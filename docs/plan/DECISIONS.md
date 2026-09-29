@@ -75,3 +75,18 @@ From `docs/research/astryx-inventory.md` (upstream package is `@astryxdesign/cor
   guide's English-only statement is an upstream docs defect.
 - **TabList:** keep upstream semantics (nav + `aria-current` by default, tabs pattern only in
   tablist mode).
+
+## D-007 — External dependencies (owner-approved 2026-09-29)
+
+Rule: no external library is added without owner approval. The owner approved this list:
+
+- **Runtime:** `lit`, `@floating-ui/dom` (lazy positioning fallback only), `@internationalized/date`,
+  `intl-messageformat`, `dompurify` (fallback when the native Sanitizer is unavailable),
+  `@fontsource-variable/figtree`, `@fontsource/ibm-plex-mono`.
+- **Dev/build only:** `typescript`, `vite`, `vitest` + `@vitest/browser` + Playwright provider,
+  `playwright`, `@custom-elements-manifest/analyzer`, `astro` + `@astrojs/starlight`, `axe-core`,
+  `eslint` (+ typescript-eslint), `stylelint`, `size-limit`, `capsize` (@capsizecss/*).
+
+Anything else (including `@lit/context`, `@tanstack/*`, icon packages, Markdown parsers, syntax
+highlighters) needs a new owner approval. Every non-lit runtime dependency stays behind an
+internal module boundary so it can be swapped or removed.
