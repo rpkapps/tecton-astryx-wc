@@ -4,7 +4,6 @@ import {join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import stylelint from 'stylelint';
 import {describe, expect, it} from 'vitest';
-import repoConfig from '../../stylelint.config.js';
 import tct, {findColorLiteral} from './index.ts';
 
 /** All 148 CSS named colours (css-color-4), independent of the plugin's own list. */
@@ -276,7 +275,7 @@ describe('component CSS colour rule (fixtures, repository config)', () => {
     const result = await stylelint.lint({
       code,
       codeFilename: join(ROOT, 'packages/components/src/fixture', asFile),
-      config: repoConfig as stylelint.Config,
+      configFile: join(ROOT, 'stylelint.config.js'),
     });
     return result.results[0]!.warnings;
   }
@@ -340,7 +339,7 @@ describe('component CSS colour rule (fixtures, repository config)', () => {
     const result = await stylelint.lint({
       code: 'a { color: #fff; }',
       codeFilename: join(ROOT, 'apps/docs/src/styles/x.css'),
-      config: repoConfig as stylelint.Config,
+      configFile: join(ROOT, 'stylelint.config.js'),
     });
     expect(result.results[0]!.warnings).toEqual([]);
   });
