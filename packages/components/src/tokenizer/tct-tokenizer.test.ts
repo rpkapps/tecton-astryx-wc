@@ -993,7 +993,7 @@ describe('tct-tokenizer: busy and custom rendering', () => {
       </button>`;
     await element.updateComplete;
     const mine = [...element.shadowRoot!.querySelectorAll<HTMLButtonElement>('.mine')];
-    expect(mine.map((button) => button.textContent)).toEqual(['DESIGN', 'ENGINEERING']);
+    expect(mine.map((button) => textOf(button))).toEqual(['DESIGN', 'ENGINEERING']);
     expect(tokensOf(element)).toHaveLength(0);
     mine[0]!.click();
     expect(element.values).toEqual(['engineering']);

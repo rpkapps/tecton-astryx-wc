@@ -364,7 +364,21 @@ describe('tct-base-typeahead: search scheduling', () => {
     const element = await make('aria-label="Fruit" debounce-ms="250"');
     const control = controlledSource();
     element.searchSource = control.source;
-    await typeInto(element, 'abc');
+    // Three edits in one task: how long real keystrokes take must not decide whether they fall inside the delay.
+    const input = comboboxOf(element);
+    input.focus();
+    for (const value of ['a', 'ab', 'abc']) {
+      input.value = value;
+      input.dispatchEvent(
+        new InputEvent('input', {
+          bubbles: true,
+          composed: true,
+          data: value.at(-1) ?? null,
+          inputType: 'insertText',
+        }),
+      );
+    }
+    expect(control.calls, 'nothing is searched inside the delay').toHaveLength(0);
     await waitUntil(() => control.calls.length >= 1, 'the search runs once the typing paused');
     control.calls[0]!.resolve([FRUITS[0]!]);
     await whenOpen(element);
@@ -728,13 +742,20 @@ describe('tct-base-typeahead: events', () => {
     expect(element.open).toBe(false);
     element.removeEventListener('tct-open-change', prevent);
     await userEvent.keyboard('{Backspace}a');
-    await whenOpen(element);
     const events = recordEvents(element, ['tct-open-change', 'tct-after-open-change']);
+    await whenOpen(element);
+    // The opening settles (after-open-change) after the animation: wait for it, so it is not mistaken for the close.
+    await waitUntil(
+      () => events.named('tct-after-open-change').length === 1,
+      'the opening settles',
+    );
+    expect(events.named('tct-after-open-change')[0]).toMatchObject({open: true});
     await pressKeys('Escape');
-    await waitUntil(() => events.named('tct-after-open-change').length === 1, 'the close settles');
-    expect(events.named('tct-open-change')).toHaveLength(1);
+    await waitUntil(() => events.named('tct-after-open-change').length === 2, 'the close settles');
+    // The opening's intent event fired before recording started: the close fires exactly one.
+    expect(events.named('tct-open-change').map((event) => event.open)).toEqual([false]);
     expect(events.named('tct-open-change')[0]).toMatchObject({open: false, reason: 'escape'});
-    expect(events.named('tct-after-open-change')[0]).toMatchObject({open: false});
+    expect(events.named('tct-after-open-change')[1]).toMatchObject({open: false});
   });
 
   it('typing fires the native input event (composed); no change fires until a choice', async () => {
