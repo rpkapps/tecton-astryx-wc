@@ -1,0 +1,41 @@
+/*
+ * The one focus-ring implementation (D-005, A§6.5): Tecton hot pink, drawn with outline longhands on
+ * `:focus-visible` of the internal focusable element, so a variant may recolour it without restating
+ * width and style. Outlines follow `border-radius` and survive forced colours. [mwg:css] (Focus management)
+ *
+ *   .focus-ring          the focusable element itself (native <button>, <a>, <input> in the shadow root)
+ *   .focus-within-ring   a painted wrapper of a composite: ring while a descendant is :focus-visible
+ *   [data-focus-ring="double"]   inverted surfaces where pink fails 3:1: pink outline plus an inner
+ *                        ring from `--tecton-color-focus-inner` (D-005), on either class
+ *
+ * `--_focus-offset` (private, set by the component on the same element, e.g. Button's
+ * `var(--button-focus-offset)`) overrides the default `--focus-outline-offset`.
+ * Never draw the ring from a `delegatesFocus` host: hosts do not match `:focus-visible` there.
+ * Roving-tabindex hosts write their own `:host(:focus-visible)` rule with the same longhands.
+ */
+@layer state {
+  .focus-ring:focus-visible,
+  .focus-within-ring:has(:focus-visible) {
+    outline-width: var(--focus-outline-width);
+    outline-style: var(--focus-outline-style);
+    outline-color: var(--focus-outline-color);
+    outline-offset: var(--_focus-offset, var(--focus-outline-offset));
+  }
+
+  .focus-ring[data-focus-ring='double']:focus-visible,
+  .focus-within-ring[data-focus-ring='double']:has(:focus-visible) {
+    /* design: the inner ring is 1px and the outline sits directly against it */
+    outline-offset: 1px;
+    box-shadow: 0 0 0 1px var(--tecton-color-focus-inner);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .focus-ring:focus-visible,
+    .focus-within-ring:has(:focus-visible) {
+      outline-color: Highlight;
+      box-shadow: none;
+    }
+  }
+}

@@ -1,0 +1,62 @@
+/*
+ * Shared keyframes and the reduced-motion pattern (A§6.6, styling.md §9.3). `@keyframes` must be defined
+ * per shadow root, so components include this module instead of relying on the document.
+ * [mwg:css] (Transitions and animations, Accessibility)
+ *
+ * Reduced motion never zeroes durations globally (a 0s transition never fires `transitionend`).
+ *  - Movement (translate, scale, slide, press feedback) goes inside `@media (prefers-reduced-motion:
+ *    no-preference)` in the component sheet.
+ *  - Fades may stay, shortened.
+ *  - A looping animation declares its slowed-down version next to it in `--_animation-reduced`, e.g.
+ *      .spinner { animation: tct-spin 0.8s linear infinite; --_animation-reduced: tct-spin 6s linear infinite; }
+ *    Without one it stops under `reduce`. (`@property` is ignored in shadow roots, so the unregistered
+ *    custom property carries the pattern; it inherits, and `none` is the fallback.)
+ *
+ * Durations and easing come from `--duration-*` / `--ease-standard`.
+ */
+@layer component {
+  @keyframes tct-spin {
+    to {
+      rotate: 1turn;
+    }
+  }
+
+  @keyframes tct-fade-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes tct-fade-out {
+    to {
+      opacity: 0;
+    }
+  }
+
+  @keyframes tct-pulse {
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  /* Indeterminate progress: a bar sliding across its track along the inline axis. */
+  @keyframes tct-slide {
+    from {
+      translate: -100% 0;
+    }
+
+    to {
+      translate: 100% 0;
+    }
+  }
+}
+
+@layer a11y {
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation: var(--_animation-reduced, none) !important;
+    }
+  }
+}
