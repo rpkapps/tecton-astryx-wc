@@ -21,15 +21,10 @@ import {devWarn} from '@tecton-astryx/core/utils/dev.js';
 import {getTabbables} from '@tecton-astryx/core/utils/focus.js';
 import {uniqueId} from '@tecton-astryx/core/utils/id.js';
 import defaultMessages from '@tecton-astryx/locales/en/dropdownMenu.js';
-import {TctBottomSheet} from '../bottom-sheet/tct-bottom-sheet.js';
 import {TctButton} from '../button/tct-button.js';
 import type {ButtonSize, ButtonVariant} from '../button/button.types.js';
 import {TctDivider} from '../divider/tct-divider.js';
-import {TctHeading} from '../heading/tct-heading.js';
-import {TctIconButton} from '../icon-button/tct-icon-button.js';
 import {TctIcon} from '../icon/tct-icon.js';
-import {TctList} from '../list/tct-list.js';
-import {TctListItem} from '../list/tct-list-item.js';
 import base from '../styles/base.styles.css';
 import layer from '../styles/layer.styles.css';
 import motion from '../styles/motion.styles.css';
@@ -51,7 +46,7 @@ import {
 import {renderMenuOptions, labelText} from './menu-data.js';
 import {MenuKeyboardController} from './menu-keyboard.controller.js';
 import {collectMenuItems} from './menu-items.js';
-import {renderSheetView} from './menu-sheet.js';
+import {loadMenuSheetElements, renderSheetView} from './menu-sheet.js';
 import styles from './tct-dropdown-menu.styles.css';
 import surfaceStyles from './tct-menu-surface.styles.css';
 import sheetStyles from './tct-menu-sheet.styles.css';
@@ -111,11 +106,6 @@ export class TctDropdownMenu extends TctElement {
   static override readonly dependencies = [
     TctButton,
     TctIcon,
-    TctIconButton,
-    TctBottomSheet,
-    TctList,
-    TctListItem,
-    TctHeading,
     TctDivider,
     TctDropdownMenuItem,
     TctDropdownMenuCheckboxItem,
@@ -505,6 +495,8 @@ export class TctDropdownMenu extends TctElement {
     if (current?.size !== this.#size.value || current.open !== this.open) {
       this.#context.setValue(this.#contextValue());
     }
+    // The touch presentation's elements load the first time it is needed (see loadMenuSheetElements).
+    if (this.#usesSheet) void loadMenuSheetElements();
     // Closing returns the sheet to the root view.
     if (!this.open && this.#path.length > 0) this.#path = [];
   }

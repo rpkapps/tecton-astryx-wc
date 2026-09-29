@@ -113,7 +113,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 75,
       "notes": "Guides: [mwg:resilient-context-menus-and-nested-dropdowns] [mwg:accessibility] [mwg:accessible-web-components]. Compound content also renders in the bottom sheet (a `role=menu` container holding the slotted rows), as upstream."
     }
   }

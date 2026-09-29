@@ -1,0 +1,570 @@
+{
+  "folder": "dropdown-menu",
+  "elements": {
+    "tct-dropdown-menu": {
+      "class": "TctDropdownMenu",
+      "attributes": [
+        {
+          "name": "alignment",
+          "property": "alignment",
+          "type": "MenuAlignment",
+          "default": "'start'",
+          "reflects": false
+        },
+        {
+          "name": "back-label",
+          "property": "backLabel",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "icon",
+          "property": "icon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "icon-only",
+          "property": "iconOnly",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "menu-width",
+          "property": "menuWidth",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "no-chevron",
+          "property": "noChevron",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "open",
+          "property": "open",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "placement",
+          "property": "placement",
+          "type": "MenuPlacement",
+          "default": "'below'",
+          "reflects": false
+        },
+        {
+          "name": "presentation",
+          "property": "presentation",
+          "type": "MenuPresentation",
+          "default": "'popover'",
+          "reflects": true
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "ButtonSize | undefined",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "tooltip",
+          "property": "tooltip",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "variant",
+          "property": "variant",
+          "type": "ButtonVariant | undefined",
+          "values": [
+            "primary",
+            "secondary",
+            "ghost",
+            "destructive",
+            "outlined",
+            "text-only"
+          ],
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "items",
+          "type": "DropdownMenuOption[] | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "hide",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "requestClose",
+          "signature": "(reason: ChangeReason) => void"
+        },
+        {
+          "name": "show",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "toggle",
+          "signature": "(force?: boolean) => Promise<void>"
+        }
+      ],
+      "slots": [
+        "(default)",
+        "icon",
+        "trigger"
+      ],
+      "events": [
+        {
+          "name": "tct-after-open-change",
+          "class": "TctAfterOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "anchor",
+        "menu",
+        "section",
+        "section-heading",
+        "sheet",
+        "sheet-content",
+        "trigger"
+      ],
+      "cssStates": [
+        "open"
+      ],
+      "cssProperties": []
+    },
+    "tct-dropdown-menu-checkbox-item": {
+      "class": "TctDropdownMenuCheckboxItem",
+      "attributes": [
+        {
+          "name": "checked",
+          "property": "checked",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "close-on-select",
+          "property": "closeOnSelect",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "description",
+          "property": "description",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "icon",
+          "property": "icon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "menuLabel",
+          "type": "string",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "description",
+        "end",
+        "icon",
+        "label"
+      ],
+      "events": [
+        {
+          "name": "click",
+          "native": true
+        },
+        {
+          "name": "tct-value-change",
+          "class": "TctValueChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "dropdown-menu-item",
+        "item"
+      ],
+      "cssStates": [
+        "checked",
+        "disabled"
+      ],
+      "cssProperties": []
+    },
+    "tct-dropdown-menu-divider": {
+      "class": "TctDropdownMenuDivider",
+      "attributes": [],
+      "properties": [],
+      "methods": [],
+      "slots": [],
+      "events": [],
+      "cssParts": [
+        "divider"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-dropdown-menu-item": {
+      "class": "TctDropdownMenuItem",
+      "attributes": [
+        {
+          "name": "description",
+          "property": "description",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "icon",
+          "property": "icon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "no-close-on-select",
+          "property": "noCloseOnSelect",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "variant",
+          "property": "variant",
+          "type": "MenuItemVariant",
+          "values": [
+            "default",
+            "destructive"
+          ],
+          "default": "'default'",
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "menuLabel",
+          "type": "string",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "description",
+        "end",
+        "icon",
+        "label"
+      ],
+      "events": [
+        {
+          "name": "click",
+          "native": true
+        }
+      ],
+      "cssParts": [
+        "dropdown-menu-item",
+        "item"
+      ],
+      "cssStates": [
+        "disabled"
+      ],
+      "cssProperties": []
+    },
+    "tct-dropdown-menu-radio-group": {
+      "class": "TctDropdownMenuRadioGroup",
+      "attributes": [
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "no-close-on-select",
+          "property": "noCloseOnSelect",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "value",
+          "property": "value",
+          "type": "string | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [
+        {
+          "name": "tct-value-change",
+          "class": "TctValueChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-dropdown-menu-radio-item": {
+      "class": "TctDropdownMenuRadioItem",
+      "attributes": [
+        {
+          "name": "description",
+          "property": "description",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "icon",
+          "property": "icon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "value",
+          "property": "value",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "checked",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "menuLabel",
+          "type": "string",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "description",
+        "end",
+        "icon",
+        "label"
+      ],
+      "events": [
+        {
+          "name": "click",
+          "native": true
+        }
+      ],
+      "cssParts": [
+        "dropdown-menu-item",
+        "item"
+      ],
+      "cssStates": [
+        "checked",
+        "disabled"
+      ],
+      "cssProperties": []
+    },
+    "tct-dropdown-menu-sub-menu": {
+      "class": "TctDropdownMenuSubMenu",
+      "attributes": [
+        {
+          "name": "description",
+          "property": "description",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "has-spinner",
+          "property": "hasSpinner",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "icon",
+          "property": "icon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "menu-width",
+          "property": "menuWidth",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "open",
+          "property": "open",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "menuLabel",
+          "type": "string",
+          "readonly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "hide",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "show",
+          "signature": "() => Promise<void>"
+        }
+      ],
+      "slots": [
+        "(default)",
+        "description",
+        "icon",
+        "label"
+      ],
+      "events": [
+        {
+          "name": "tct-after-open-change",
+          "class": "TctAfterOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "dropdown-menu-item",
+        "indicator-icon",
+        "item",
+        "menu"
+      ],
+      "cssStates": [
+        "disabled",
+        "open"
+      ],
+      "cssProperties": []
+    }
+  }
+}

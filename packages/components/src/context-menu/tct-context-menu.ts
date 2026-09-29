@@ -19,7 +19,6 @@ import {devWarn} from '@tecton-astryx/core/utils/dev.js';
 import {containsFlat, deepActiveElement, getTabbables} from '@tecton-astryx/core/utils/focus.js';
 import defaultMessages from '@tecton-astryx/locales/en/contextMenu.js';
 import backMessages from '@tecton-astryx/locales/en/dropdownMenu.js';
-import {TctBottomSheet} from '../bottom-sheet/tct-bottom-sheet.js';
 import {TctDivider} from '../divider/tct-divider.js';
 import {
   dropdownMenuContext,
@@ -36,7 +35,7 @@ import {
 import {labelText, renderMenuOptions} from '../dropdown-menu/menu-data.js';
 import {collectMenuItems} from '../dropdown-menu/menu-items.js';
 import {MenuKeyboardController} from '../dropdown-menu/menu-keyboard.controller.js';
-import {renderSheetView} from '../dropdown-menu/menu-sheet.js';
+import {loadMenuSheetElements, renderSheetView} from '../dropdown-menu/menu-sheet.js';
 import {TctDropdownMenuCheckboxItem} from '../dropdown-menu/tct-dropdown-menu-checkbox-item.js';
 import {TctDropdownMenuDivider} from '../dropdown-menu/tct-dropdown-menu-divider.js';
 import {TctDropdownMenuItem} from '../dropdown-menu/tct-dropdown-menu-item.js';
@@ -45,11 +44,7 @@ import {TctDropdownMenuRadioItem} from '../dropdown-menu/tct-dropdown-menu-radio
 import {TctDropdownMenuSubMenu} from '../dropdown-menu/tct-dropdown-menu-sub-menu.js';
 import surfaceStyles from '../dropdown-menu/tct-menu-surface.styles.css';
 import sheetStyles from '../dropdown-menu/tct-menu-sheet.styles.css';
-import {TctHeading} from '../heading/tct-heading.js';
-import {TctIconButton} from '../icon-button/tct-icon-button.js';
 import {TctIcon} from '../icon/tct-icon.js';
-import {TctListItem} from '../list/tct-list-item.js';
-import {TctList} from '../list/tct-list.js';
 import base from '../styles/base.styles.css';
 import layer from '../styles/layer.styles.css';
 import motion from '../styles/motion.styles.css';
@@ -98,11 +93,6 @@ export class TctContextMenu extends TctElement {
   static override readonly tagName = 'tct-context-menu';
   static override readonly dependencies = [
     TctIcon,
-    TctIconButton,
-    TctBottomSheet,
-    TctList,
-    TctListItem,
-    TctHeading,
     TctDivider,
     TctDropdownMenuItem,
     TctDropdownMenuCheckboxItem,
@@ -368,6 +358,8 @@ export class TctContextMenu extends TctElement {
     if (current?.size !== this.#size.value || current.open !== this.open) {
       this.#context.setValue(this.#contextValue());
     }
+    // The touch presentation's elements load the first time it is needed (see loadMenuSheetElements).
+    if (this.#usesSheet) void loadMenuSheetElements();
     if (!this.open && this.#path.length > 0) this.#path = [];
   }
 

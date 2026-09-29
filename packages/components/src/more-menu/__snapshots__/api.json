@@ -1,0 +1,162 @@
+{
+  "folder": "more-menu",
+  "elements": {
+    "tct-more-menu": {
+      "class": "TctMoreMenu",
+      "attributes": [
+        {
+          "name": "alignment",
+          "property": "alignment",
+          "type": "MenuAlignment",
+          "default": "'start'",
+          "reflects": false
+        },
+        {
+          "name": "back-label",
+          "property": "backLabel",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "icon",
+          "property": "icon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "menu-width",
+          "property": "menuWidth",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "open",
+          "property": "open",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "placement",
+          "property": "placement",
+          "type": "MenuPlacement",
+          "default": "'below'",
+          "reflects": false
+        },
+        {
+          "name": "presentation",
+          "property": "presentation",
+          "type": "MenuPresentation",
+          "default": "'popover'",
+          "reflects": true
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "ButtonSize | undefined",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "tooltip",
+          "property": "tooltip",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "variant",
+          "property": "variant",
+          "type": "ButtonVariant | undefined",
+          "values": [
+            "primary",
+            "secondary",
+            "ghost",
+            "destructive",
+            "outlined",
+            "text-only"
+          ],
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "items",
+          "type": "DropdownMenuOption[] | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "hide",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "requestClose",
+          "signature": "(reason: ChangeReason) => void"
+        },
+        {
+          "name": "show",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "toggle",
+          "signature": "(force?: boolean) => Promise<void>"
+        }
+      ],
+      "slots": [
+        "(default)",
+        "icon",
+        "trigger"
+      ],
+      "events": [
+        {
+          "name": "tct-after-open-change",
+          "class": "TctAfterOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "anchor",
+        "menu",
+        "section",
+        "section-heading",
+        "sheet",
+        "sheet-content",
+        "trigger"
+      ],
+      "cssStates": [
+        "open"
+      ],
+      "cssProperties": []
+    }
+  }
+}

@@ -78,7 +78,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 82,
       "notes": "Guides: as dropdown-menu ([mwg:resilient-context-menus-and-nested-dropdowns] [mwg:accessible-web-components])."
     }
   }

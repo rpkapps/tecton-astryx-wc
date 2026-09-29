@@ -200,8 +200,8 @@
           "reason": "Menu markers cannot follow `defineIndicators()` theme overrides (DDMENU-08): a runtime tag needs a static template, and `unsafeStatic` is restricted to core/security. Proposed: a core helper `renderIndicator(name, theme, props)` returning a TemplateResult for the resolved tag, used by every owner of an indicator (menus, lists, checkbox inputs)."
         }
       ],
-      "sizeBudgetKb": null,
-      "notes": "Guides: [mwg:resilient-context-menus-and-nested-dropdowns] (anchor positioning + popover; the guide warns to add role=menu only with the full keyboard contract, which MenuKeyboardController provides) [mwg:accessibility] [mwg:spatial-navigation] [mwg:accessible-web-components] [mwg:animate-to-from-top-layer]. Structure: the menu is one `popover=\"manual\"` layer in the element's shadow root (the shared LayerController/PositionController path of tct-popover); the surface is `role=menu`; rows are light-DOM children slotted into it (compound) or shadow children (data), all discovered from the flat tree by `collectMenuItems`."
+      "sizeBudgetKb": 82,
+      "notes": "Guides: [mwg:resilient-context-menus-and-nested-dropdowns] (anchor positioning + popover; the guide warns to add role=menu only with the full keyboard contract, which MenuKeyboardController provides) [mwg:accessibility] [mwg:spatial-navigation] [mwg:accessible-web-components] [mwg:animate-to-from-top-layer]. Size: the touch presentation's elements (bottom sheet, list, heading, Back button) are a lazy chunk (menu-sheet.define.ts) loaded the first time a menu resolves to the sheet, so a popover-only menu does not pay for them (the button and shared i18n code dominate the remaining ~75 kB gzip). Structure: the menu is one `popover=\"manual\"` layer in the element's shadow root (the shared LayerController/PositionController path of tct-popover); the surface is `role=menu`; rows are light-DOM children slotted into it (compound) or shadow children (data), all discovered from the flat tree by `collectMenuItems`."
     },
     "core.dropdown-menu-item": {
       "tag": "tct-dropdown-menu-item",

@@ -5,6 +5,11 @@
  * [mwg:css-layout]
  */
 @layer component {
+  /* The sheet's elements load lazily; until they are defined nothing of it shows. */
+  tct-bottom-sheet:not(:defined) {
+    display: none;
+  }
+
   .sheet-content {
     box-sizing: border-box;
     inline-size: 100%;

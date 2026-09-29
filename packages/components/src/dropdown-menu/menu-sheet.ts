@@ -16,6 +16,19 @@ import {labelText} from './menu-data.js';
  * `tct-dropdown-menu` and `tct-context-menu`, which own the drill-in path and the open state.
  */
 
+let sheetElements: Promise<unknown> | undefined;
+
+/**
+ * Loads and registers the elements only the touch presentation renders (`tct-bottom-sheet`, the list,
+ * the heading and the Back button) the first time a menu resolves to the sheet. A menu that stays a
+ * popover never pays for them: the sheet stack is a large share of the menu's size. Until they are
+ * defined the sheet is hidden (`:not(:defined)`), so nothing flashes.
+ */
+export function loadMenuSheetElements(): Promise<unknown> {
+  sheetElements ??= import('./menu-sheet.define.js');
+  return sheetElements;
+}
+
 export interface SheetViewOptions {
   /** Title of the current view: the trigger label, or the submenu row that was drilled into. */
   title: string;
