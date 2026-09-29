@@ -41,8 +41,16 @@ export interface ParityEntry {
   status: Status;
   upstream: {name: string};
   api: ApiRow[];
+  hooks?: {upstream: string; target?: string; as?: string}[];
+  keyboard?: {keys: string; action: string; when?: string}[];
+  form?: {formAssociated: boolean; notes?: string};
   tests?: Record<string, boolean>;
-  differences?: {id: string}[];
+  differences?: {id: string; type: string; text: string}[];
+  provisional?: string[];
+  tokenRequests?: {name: string; reason: string; light?: string; dark?: string}[];
+  requests?: {file: string; reason: string; diff?: string}[];
+  sizeBudgetKb?: number | null;
+  notes?: string | string[];
 }
 
 export interface ParityFile {

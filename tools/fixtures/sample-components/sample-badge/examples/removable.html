@@ -1,0 +1,12 @@
+<!-- title: Removable; description: A badge with a remove button that raises tct-remove. -->
+<div id="removable-root">
+  <tct-sample-badge removable label="Draft"></tct-sample-badge>
+  <p id="removable-status" role="status">Nothing removed yet.</p>
+</div>
+<script type="module">
+  const root = document.getElementById('removable-root');
+  root.addEventListener('tct-remove', (event) => {
+    event.preventDefault();
+    document.getElementById('removable-status').textContent = 'Remove requested for ' + event.value;
+  });
+</script>

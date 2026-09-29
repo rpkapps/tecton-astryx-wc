@@ -96,6 +96,7 @@ tester.run('no-create-tct-element', rules['no-create-tct-element'], {
     {code: 'document.createElement(tag);'},
     {code: 'new Map();'},
     {code: 'new Tooltip();'},
+    {code: "new TctOpenChangeEvent(true, 'trigger');"},
   ],
   invalid: [
     {code: "document.createElement('tct-button');", errors: [{messageId: 'createElement'}]},

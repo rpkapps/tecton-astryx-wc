@@ -73,6 +73,8 @@ export default defineConfig([
     'reports/**',
     'apps/docs/.astro/**',
     'apps/docs/src/content/docs/components/**',
+    'apps/docs/src/content/docs/reference/**',
+    'apps/docs/dist/**',
     'packages/tokens/src/inputs/**',
     // Generated Lucide data (tools/icons/extract-lucide.ts): 1,854 machine-written modules
     'packages/icons/src/lucide/**',
