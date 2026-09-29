@@ -1,0 +1,38 @@
+/*
+ * tct-blockquote. The host is a block; the inner `<blockquote>` (part "base") carries the rule, the
+ * padding and the text colour. The rule is decorative (the quote is set apart by its text as well), so
+ * the 2.2:1 --color-border-emphasized role is allowed (D-013 Q-05); it is logical, so it moves to the
+ * right edge in RTL. `text-wrap: pretty` avoids orphans in longer quotes where supported (progressive
+ * enhancement, ignored elsewhere). [mwg:improve-text-layout-and-legibility] [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .base {
+    margin: 0; /* blockquote carries UA margins */
+    padding-inline-start: var(--spacing-4);
+    border-inline-start: var(--spacing-0-5) solid var(--color-border-emphasized);
+    color: var(--color-text-secondary);
+    overflow-wrap: break-word;
+    text-wrap: pretty;
+  }
+
+  .cite {
+    display: block;
+    margin-block-start: var(--spacing-2);
+    font-size: var(--text-supporting-size);
+    line-height: var(--text-supporting-leading);
+    font-style: normal;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .base {
+      border-inline-start-color: ButtonBorder;
+      color: CanvasText;
+    }
+  }
+}
