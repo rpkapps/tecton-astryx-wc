@@ -22,6 +22,8 @@ reports/
 
 # Build and tool caches
 *.tsbuildinfo
+# tsc -b type-check output (declarations for `pnpm typecheck` live here; `dist/` is only for `pnpm build`)
+.tsbuild/
 .vite/
 .astro/
 .eslintcache

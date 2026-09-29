@@ -1,0 +1,15 @@
+{
+  "//": "Declarations for `pnpm build`: the locales dist is written by packages/locales/scripts/generate.ts; tsc only adds types.d.ts.",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": false,
+    "incremental": false,
+    "declarationMap": false,
+    "customConditions": [],
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src/types.ts"],
+  "exclude": ["dist"],
+  "references": []
+}

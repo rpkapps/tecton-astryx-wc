@@ -68,6 +68,7 @@ export default defineConfig([
     '.claude/**',
     '**/node_modules/**',
     '**/dist/**',
+    '**/.tsbuild/**',
     '**/generated/**',
     '**/__snapshots__/**',
     'reports/**',

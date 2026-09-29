@@ -4,6 +4,7 @@
 # Generated (never formatted or committed)
 **/generated/
 **/dist/
+**/.tsbuild/
 custom-elements.json
 packages/components/agent-registry.json
 packages/icons/src/lucide/
