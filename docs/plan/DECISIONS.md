@@ -122,3 +122,39 @@ workspace `package.json` sets `"license": "UNLICENSED"` and `"private": true`, a
 to a registry. `THIRD-PARTY-NOTICES.md` is still required, because third-party licences still apply to what we
 bundle. The upstream Astryx licence must be honoured wherever we adapt its code or docs. Record
 the upstream licence and attribution in THIRD-PARTY-NOTICES.md.
+
+## D-009 — Additional dependencies and icon set (owner, 2026-09-29)
+
+The owner approved these dev-only packages. Transitive trees were checked and are all MIT/BSD/Apache/ISC:
+
+- `prettier`, the formatter for every worktree;
+- `@types/node`, types for the `tools/**` scripts;
+- `@lit-labs/ssr`, used only for the WP-H SSR/DSD spike.
+
+`@size-limit/file` counts as part of the approved `size-limit` tool (same project, MIT).
+
+**Icons: Lucide replaces Material Symbols (supersedes D-004's default-set choice).** The owner asked
+for Lucide. Checked: `lucide` 1.48.0 is ISC, with no dependencies. Its Feather-derived icons are
+MIT (Cole Bemis), and both licences are on the allowlist. `@material-symbols/svg-400` is **not**
+approved.
+
+- `lucide` is a **dev/build-time source only**. `tools/icons/extract-lucide.ts` generates
+  `IconDefinition` data modules (`@tecton-astryx/icons/lucide/<name>.js`, one per icon,
+  tree-shakeable, gitignored build output).
+- The **default set** keeps Astryx's role names (close, check, chevrons, status icons, calendar,
+  clock, externalLink, menu, moreHorizontal, search, arrows, funnel, eyeSlash, viewColumns, copy,
+  checkDouble, wrench, …). Each name maps to a Lucide glyph, which also covers the six roles missing
+  from the Tecton glyph set. The port of the Astryx default glyphs is dropped.
+- Lucide icons are stroke icons: `mode: 'stroke'`, 24×24 viewBox, stroke width 2 by default, and
+  `--icon-stroke-width` is exposed.
+- THIRD-PARTY-NOTICES carries the Lucide ISC licence and the Feather MIT notice.
+- The Tecton glyph set is still a drop-in registry, pending provenance (D-004).
+
+## D-010 — Browser support floor (owner, 2026-09-29)
+
+ARCHITECTURE §1 / A-01 is confirmed.
+
+- **Tier 1:** Chrome/Edge ≥ 137, Firefox ≥ 147, Safari ≥ 26.
+- **Tier 2 (degraded):** Chrome ≥ 116, Firefox ≥ 125, Safari ≥ 17.
+
+This is the project's recorded custom browser policy for modern-web-guidance.
