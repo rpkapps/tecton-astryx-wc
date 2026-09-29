@@ -1,0 +1,76 @@
+/*
+ * tct-timestamp: the reading is a `<time>` inside `tct-text` (typography, colour), reset to inherit; the hover
+ * card is a definition list laid out as a grid, so the values and the copy buttons align down their columns
+ * across lines. The card itself (surface, position, dismissal) is `tct-hover-card`.
+ * [mwg:css] [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: inline;
+  }
+
+  time {
+    display: inline;
+    font-family: inherit;
+    font-size: inherit;
+    font-style: normal;
+    font-weight: inherit;
+    line-height: inherit;
+    color: inherit;
+  }
+
+  .details {
+    display: grid;
+    grid-template-columns: 1fr;
+    column-gap: var(--spacing-4);
+    row-gap: var(--spacing-2);
+    align-items: center;
+    padding: 0;
+    margin: 0;
+  }
+
+  .details[data-columns='label-value-action'] {
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .details[data-columns='label-value'] {
+    grid-template-columns: auto 1fr;
+  }
+
+  .details[data-columns='value-action'] {
+    grid-template-columns: 1fr auto;
+  }
+
+  /* Each row lets its cells take part in the shared columns. */
+  .row {
+    display: contents;
+  }
+
+  .label {
+    padding: 0;
+    margin: 0;
+    font-size: var(--text-supporting-size);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--text-supporting-leading);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+  }
+
+  .value {
+    padding: 0;
+    margin: 0;
+    font-size: var(--text-body-size);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--text-body-leading);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+  }
+
+  .action {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    align-items: center;
+    justify-content: flex-end;
+  }
+}
