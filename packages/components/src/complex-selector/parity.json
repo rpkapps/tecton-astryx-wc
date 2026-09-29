@@ -1,0 +1,281 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "complex-selector",
+  "workPackage": "WP-11",
+  "entries": {
+    "core.complex-selector": {
+      "tag": "tct-complex-selector",
+      "status": "implemented",
+      "upstream": {
+        "name": "ComplexSelector",
+        "path": "packages/core/src/ComplexSelector/ComplexSelector.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "label",
+          "notes": "The accessible name of the trigger and of the popover dialog."
+        },
+        {
+          "upstream": "isLabelHidden",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "label-hidden",
+          "reflect": true
+        },
+        {
+          "upstream": "description",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "description"
+        },
+        {
+          "upstream": "isOptional",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "optional"
+        },
+        {
+          "upstream": "isRequired",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "required",
+          "reflect": true,
+          "notes": "Also a validity constraint (valueMissing); the Required indicator is part of the accessible name of the trigger."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "disabled",
+          "reflect": true,
+          "notes": "Also through <fieldset disabled>."
+        },
+        {
+          "upstream": "isLoading",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "loading",
+          "notes": "Busy: a spinner and `aria-busy`; the popover does not open while busy."
+        },
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "as": "property",
+          "target": "status",
+          "notes": "Object `{type, message?}`, or the `status-type` and `status-message` attributes."
+        },
+        {
+          "upstream": "statusVariant",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "status-variant",
+          "default": "attached"
+        },
+        {
+          "upstream": "labelTooltip",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "label-tooltip"
+        },
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "as": "property",
+          "target": "value",
+          "notes": "A string, `\"\"` for none; the `value` attribute is the default form reset restores (COMPLEXSELECTOR-01)."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "as": "native-event",
+          "target": "change",
+          "notes": "`input` then `change` fire, composed, when the content commits a different value with `commit(value)`; property writes fire nothing."
+        },
+        {
+          "upstream": "changeAction",
+          "kind": "prop",
+          "as": "property",
+          "target": "changeAction",
+          "notes": "Runs after every committed change with the new value; busy while pending, restored if it rejects."
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "as": "slot",
+          "target": "default",
+          "notes": "The popover content (COMPLEXSELECTOR-02); it calls `commit(value)` and `hide()` on the element."
+        },
+        {
+          "upstream": "triggerLabel",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "trigger-label",
+          "notes": "Also the `trigger-label` slot for markup."
+        },
+        {
+          "upstream": "placeholder",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "placeholder",
+          "notes": "Default: the localized \"Select...\"."
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "size",
+          "reflect": true,
+          "default": "md"
+        },
+        {
+          "upstream": "variant",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "variant",
+          "reflect": true,
+          "default": "input",
+          "notes": "`input` or `ghost`."
+        },
+        {
+          "upstream": "startIcon",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "start-icon",
+          "notes": "An icon name; the `start` slot takes markup."
+        },
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "width"
+        },
+        {
+          "upstream": "placement",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "placement",
+          "default": "below"
+        },
+        {
+          "upstream": "alignment",
+          "kind": "prop",
+          "as": "attribute",
+          "target": "alignment",
+          "default": "start"
+        },
+        {
+          "upstream": "handleRef",
+          "kind": "ref",
+          "as": "method",
+          "target": "show",
+          "notes": "The element is the handle: `show()`, `hide()`, `toggle()`, `requestClose()`, `commit(value)` and `focus()`."
+        },
+        {
+          "upstream": "onOpenChange",
+          "kind": "event",
+          "as": "event",
+          "target": "tct-open-change",
+          "notes": "Cancelable intent event before the user (trigger, ArrowDown, Escape, an outside press) or `requestClose()` opens or closes the popover; `tct-after-open-change` when it settled."
+        },
+        {
+          "upstream": "contentXstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: style the `content` part."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: attributes go on the host element."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useResolvedRequired",
+          "target": "formLayoutContext",
+          "as": "context",
+          "notes": "The form layout optionality default; the indicator follows it."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "ArrowDown",
+          "action": "Opens the popover and moves focus into it",
+          "when": "trigger focused, closed"
+        },
+        {
+          "keys": "Enter, Space",
+          "action": "Opens or closes the popover",
+          "when": "trigger focused"
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes the popover and returns focus to the trigger",
+          "when": "open; one layer per press"
+        },
+        {
+          "keys": "Tab, Shift+Tab",
+          "action": "Moves between the controls of the content and wraps at the ends",
+          "when": "open"
+        }
+      ],
+      "form": {
+        "formAssociated": true,
+        "notes": "Form-associated: submits `name=value` (a string, empty when none), resets to the `value` attribute, restores on navigation and joins <fieldset disabled>. `required` is a constraint (valueMissing)."
+      },
+      "differences": [
+        {
+          "id": "COMPLEXSELECTOR-01",
+          "type": "approved-api-difference",
+          "text": "The value is a string (encode structured values yourself, for example as JSON); it is uncontrolled with the `value` attribute as its default and native `input`/`change` events when the content commits a different value. Upstream is a controlled generic `Value` with `onChange`."
+        },
+        {
+          "id": "COMPLEXSELECTOR-02",
+          "type": "approved-api-difference",
+          "text": "The `children` render prop `(value, onChange, close, state)` is the default slot plus methods: the content calls `commit(value)` (upstream `onChange`) and `hide()` (upstream `close`) on the element, and reads `value`, `open` and `loading` from it. `handleRef` becomes the element itself (`show`, `hide`, `toggle`, `requestClose`, `focus`)."
+        },
+        {
+          "id": "COMPLEXSELECTOR-03",
+          "type": "approved-api-difference",
+          "text": "`triggerLabel` is the `trigger-label` attribute or slot and `startIcon` the `start-icon` attribute or `start` slot; `onOpenChange` is the cancelable `tct-open-change` intent event (user-driven changes and `requestClose()`) plus `tct-after-open-change`; `contentXstyle` is the `content` part."
+        },
+        {
+          "id": "COMPLEXSELECTOR-04",
+          "type": "a11y-improvement",
+          "text": "The popover is a `role=\"dialog\"` named by the label with focus moved into it, Tab kept inside (a focus trap) and returned to the trigger on close; ArrowDown on the trigger opens it. The content owns its own inner semantics."
+        },
+        {
+          "id": "COMPLEXSELECTOR-05",
+          "type": "approved-api-difference",
+          "text": "The `is*` props are bare boolean attributes and `xstyle`/`data-testid` are replaced by class, style, `::part()` and host attributes."
+        },
+        {
+          "id": "COMPLEXSELECTOR-06",
+          "type": "tecton-visual",
+          "text": "The trigger is the shared Tecton outlined field (or the tertiary action fill for `ghost`); the popover is a 1px rule on the recessed popover fill with no drop shadow (D-013)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 30,
+      "notes": "Guides: [mwg:accessible-web-components] the dialog popover and focus trap; [mwg:animate-to-from-top-layer] the popover enter and exit; [mwg:form-associated-custom-elements] value, validity, reset and restore. The popover is a dialog popover (kind popover with a focus trap), not an adaptive sheet: the content owns its layout."
+    }
+  }
+}
