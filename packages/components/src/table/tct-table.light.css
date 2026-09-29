@@ -1,0 +1,673 @@
+/*
+ * tct-table, light-DOM sheet (A§6.7). The table renders a native <table> into its own light DOM (and
+ * accepts authored <table> markup or tct-table-* elements), so every rule addresses light-DOM elements
+ * through `:where(tct-table)` at zero specificity: an application rule or utility class wins. Delivered by
+ * TctTable (adoptLightDomStyles) and by the static light-dom.css build.
+ *
+ * The parts are the native elements: <table>, <thead>, <tbody>, <tfoot>, <tr>, <th>, <td>, and the same
+ * roles drawn by tct-table-header/-body/-footer/-row/-header-cell/-cell. Density, dividers, striping,
+ * hover, vertical alignment and text overflow are attributes of tct-table read by the selectors below.
+ * The Tecton table roles (`--tecton-color-table-*`) paint the header, footer, stripes, hover and selection.
+ * [mwg:responsive-table] [mwg:styling-web-components] [mwg:interactions-in-complex-layouts]
+ */
+@layer tecton.light-dom {
+  /* -------------------------------------------------------------------------------- the host */
+  :where(tct-table:not([hidden])) {
+    display: block;
+    --_table-pad-block: var(--spacing-2);
+    --_table-pad-inline: var(--spacing-3);
+    color: var(--color-text-primary);
+    font-family: inherit;
+  }
+
+  :where(tct-table[density='compact']) {
+    --_table-pad-block: var(--spacing-1);
+    --_table-pad-inline: var(--spacing-2);
+  }
+
+  :where(tct-table[density='spacious']) {
+    --_table-pad-block: var(--spacing-3);
+    --_table-pad-inline: var(--spacing-4);
+  }
+
+  /* Children mode with tct-table-* parts: the host is the table box, so it cannot scroll by itself. */
+  :where(
+    tct-table[data-children]:not([hidden]):has(
+        > tct-table-header,
+        > tct-table-body,
+        > tct-table-footer,
+        > tct-table-row
+      )
+  ) {
+    display: table;
+    inline-size: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  /* Children mode with a native <table>: the host is the scroll region. */
+  :where(tct-table[data-children]:not([hidden]):has(> table)) {
+    /* physical: a table's columns run along the x axis whatever the writing direction */
+    overflow-x: auto;
+  }
+
+  /* ------------------------------------------------------------------------ the scroll region */
+  :where(tct-table) :where(.tct-table-scroll) {
+    /* physical: a table's columns run along the x axis whatever the writing direction */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    /* Inside a card, section or layout area the table bleeds to the container's edges. */
+    margin-inline: calc(-1 * var(--container-padding-inline-start, 0px))
+      calc(-1 * var(--container-padding-inline-end, 0px));
+    inline-size: calc(
+      100% + var(--container-padding-inline-start, 0px) + var(--container-padding-inline-end, 0px)
+    );
+  }
+
+  :where(tct-table) :where(.tct-table-scroll:first-child) {
+    margin-block-start: calc(-1 * var(--container-padding-block-start, 0px));
+  }
+
+  :where(tct-table) :where(.tct-table-scroll:last-child) {
+    margin-block-end: calc(-1 * var(--container-padding-block-end, 0px));
+  }
+
+  :where(tct-table) :where(.tct-table-scroll:focus-visible),
+  :where(tct-table[data-children]:focus-visible) {
+    outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+    outline-offset: calc(-1 * var(--focus-outline-width));
+  }
+
+  /* -------------------------------------------------------------------------------- the table */
+  :where(tct-table) :where(table) {
+    inline-size: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    table-layout: fixed;
+    font: inherit;
+    color: inherit;
+  }
+
+  :where(tct-table[data-children]) :where(table) {
+    table-layout: auto;
+  }
+
+  :where(tct-table) :where(tct-table-header:not([hidden])) {
+    display: table-header-group;
+  }
+
+  :where(tct-table) :where(tct-table-body:not([hidden])) {
+    display: table-row-group;
+  }
+
+  :where(tct-table) :where(tct-table-footer:not([hidden])) {
+    display: table-footer-group;
+  }
+
+  :where(tct-table) :where(tct-table-row:not([hidden])) {
+    display: table-row;
+  }
+
+  :where(tct-table) :where(tct-table-cell:not([hidden]), tct-table-header-cell:not([hidden])) {
+    display: table-cell;
+  }
+
+  /* ------------------------------------------------------------------------------------ cells */
+  :where(tct-table) :where(th, td, tct-table-cell, tct-table-header-cell) {
+    box-sizing: border-box;
+    padding-block: var(--_table-pad-block);
+    padding-inline: var(--_table-pad-inline);
+    text-align: start;
+    vertical-align: middle;
+    overflow: hidden;
+    overflow-wrap: break-word;
+  }
+
+  :where(tct-table) :where(td, tct-table-cell) {
+    font-size: var(--text-body-size);
+  }
+
+  :where(tct-table[vertical-align='top']) :where(td, tct-table-cell) {
+    vertical-align: top;
+  }
+
+  :where(tct-table[vertical-align='bottom']) :where(td, tct-table-cell) {
+    vertical-align: bottom;
+  }
+
+  :where(tct-table[text-overflow='truncate']) :where(td, tct-table-cell) {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  :where(tct-table) :where([data-align='center']) {
+    text-align: center;
+  }
+
+  :where(tct-table) :where([data-align='end']) {
+    text-align: end;
+  }
+
+  /* The first and last column line up with the container's content inset (a table in a card). */
+  :where(tct-table) :where(tr > :first-child) {
+    padding-inline-start: max(
+      var(--container-padding-inline-start, var(--_table-pad-inline)),
+      var(--spacing-2)
+    );
+  }
+
+  :where(tct-table) :where(tr > :last-child) {
+    padding-inline-end: max(
+      var(--container-padding-inline-end, var(--_table-pad-inline)),
+      var(--spacing-2)
+    );
+  }
+
+  /* Header cells: the lightest surface of the table, medium weight, always one line. */
+  :where(tct-table) :where(th, tct-table-header-cell) {
+    background-color: var(--tecton-color-table-header);
+    color: var(--color-text-primary);
+    font-size: var(--text-label-size);
+    font-weight: var(--font-weight-medium);
+    /* The subtlest icon ink is under 3:1 on this fill; the secondary text ink clears it. */
+    --color-icon-secondary: var(--color-text-secondary);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border-block-end: var(--border-width) solid var(--color-border);
+  }
+
+  /* A row header inside the body reads like a cell in medium weight. */
+  :where(tct-table) :where(tbody th, tfoot th, tct-table-body tct-table-header-cell) {
+    background-color: transparent;
+    font-size: var(--text-body-size);
+    white-space: normal;
+    border-block-end: 0;
+  }
+
+  :where(tct-table) :where(tfoot td, tfoot th, tct-table-footer > *) {
+    background-color: var(--tecton-color-table-footer);
+  }
+
+  :where(tct-table) :where(.tct-table-header-label) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    min-inline-size: 0;
+    max-inline-size: 100%;
+  }
+
+  /* --------------------------------------------------------------------------------- dividers */
+  :where(tct-table:is([dividers='rows'], [dividers='grid']))
+    :where(
+      tbody > tr:not(:last-child) > td,
+      tbody > tr:not(:last-child) > th,
+      tct-table-body > tct-table-row:not(:last-child) > *
+    ) {
+    border-block-end: var(--border-width) solid var(--color-border);
+  }
+
+  :where(tct-table:is([dividers='columns'], [dividers='grid']))
+    :where(
+      td:not(:last-child),
+      th:not(:last-child),
+      tct-table-cell:not(:last-child),
+      tct-table-header-cell:not(:last-child)
+    ) {
+    border-inline-end: var(--border-width) solid var(--color-border);
+  }
+
+  /* The empty and pending rows are not data: no divider, no hover. */
+  :where(tct-table) :where(tr.tct-table-empty > td, tr.tct-table-pending > td) {
+    border: 0;
+    padding: 0;
+  }
+
+  /* ------------------------------------------------------------------------------ row states */
+  :where(tct-table[striped])
+    :where(tbody > tr:nth-child(even), tct-table-body > tct-table-row:nth-child(even)) {
+    --_table-row-overlay: var(--tecton-color-table-stripe);
+    background-color: var(--tecton-color-table-stripe);
+  }
+
+  @media (hover: hover) {
+    :where(tct-table[has-hover])
+      :where(
+        tbody > tr:not([aria-disabled='true'], .tct-table-empty, .tct-table-pending):hover,
+        tct-table-body > tct-table-row:not([aria-disabled='true']):hover
+      ) {
+      --_table-row-overlay: var(--tecton-color-table-row-hover);
+      background-color: var(--tecton-color-table-row-hover);
+    }
+  }
+
+  :where(tct-table) :where(tr.tct-table-selected, tct-table-row.tct-table-selected) {
+    --_table-row-overlay: var(--tecton-color-table-row-selected);
+    --color-text-secondary: var(--tecton-color-table-row-selected-text-secondary);
+    background-color: var(--tecton-color-table-row-selected);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :where(tct-table[has-hover]) :where(tbody > tr) {
+      transition: background-color var(--duration-fast) var(--ease-standard);
+    }
+  }
+
+  /* ---------------------------------------------------------------------- plugin: sort control */
+  :where(tct-table) :where(.tct-table-sort) {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    inline-size: 100%;
+    block-size: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-inner);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-align: inherit;
+    cursor: pointer;
+  }
+
+  :where(tct-table) :where(th[data-align='center'] .tct-table-sort) {
+    justify-content: center;
+  }
+
+  :where(tct-table) :where(th[data-align='end'] .tct-table-sort) {
+    justify-content: flex-end;
+  }
+
+  :where(tct-table) :where(.tct-table-sort-icon) {
+    display: inline-flex;
+    opacity: 0.35;
+  }
+
+  :where(tct-table) :where(.tct-table-sort[data-sorted] .tct-table-sort-icon),
+  :where(tct-table) :where(.tct-table-sort:focus-visible .tct-table-sort-icon) {
+    opacity: 1;
+  }
+
+  @media (hover: hover) {
+    :where(tct-table) :where(th:hover .tct-table-sort-icon) {
+      opacity: 1;
+    }
+  }
+
+  :where(tct-table) :where(.tct-table-sort-rank) {
+    color: var(--color-accent);
+    font-size: 0.625rem; /* design: the multi-sort rank is a tight badge beside the arrow */
+    line-height: 1;
+  }
+
+  /* Every plugin control in a cell shows the shared focus ring. */
+  :where(tct-table)
+    :where(
+      .tct-table-sort:focus-visible,
+      .tct-table-expander:focus-visible,
+      .tct-table-resize-handle:focus-visible
+    ) {
+    outline: var(--focus-outline-width) var(--focus-outline-style) var(--focus-outline-color);
+    outline-offset: calc(-1 * var(--focus-outline-width));
+  }
+
+  /* --------------------------------------------------- plugin: expanders (row expansion, tree, groups) */
+  :where(tct-table) :where(.tct-table-expander) {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--spacing-6);
+    block-size: var(--spacing-6);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-inner);
+    background: transparent;
+    color: var(--color-icon-secondary);
+    cursor: pointer;
+  }
+
+  @media (hover: hover) {
+    :where(tct-table) :where(.tct-table-expander:hover) {
+      background-color: var(--color-overlay-hover);
+      color: var(--color-icon-primary);
+    }
+  }
+
+  :where(tct-table) :where(.tct-table-expander tct-icon) {
+    transition-property: transform;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :where(tct-table) :where(.tct-table-expander tct-icon) {
+      transition-duration: var(--duration-fast);
+    }
+  }
+
+  :where(tct-table) :where(.tct-table-expander[aria-expanded='true'] tct-icon) {
+    transform: rotate(90deg);
+  }
+
+  :where(tct-table) :where(.tct-table-expander[aria-expanded='true'] tct-icon:dir(rtl)) {
+    transform: scaleX(-1) rotate(90deg);
+  }
+
+  :where(tct-table) :where(.tct-table-expander[aria-expanded='false'] tct-icon:dir(rtl)) {
+    transform: scaleX(-1);
+  }
+
+  /* The header expand-all control reads a downward chevron only when every row is open. */
+  :where(tct-table) :where(.tct-table-expander[aria-expanded='mixed'] tct-icon) {
+    transform: none;
+  }
+
+  :where(tct-table) :where(.tct-table-tree-cell) {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    padding-inline-start: calc(var(--_tree-level, 0) * var(--_tree-indent, var(--spacing-4)));
+  }
+
+  :where(tct-table) :where(.tct-table-tree-spacer) {
+    display: inline-block;
+    flex-shrink: 0;
+    inline-size: var(--spacing-6);
+    block-size: var(--spacing-6);
+  }
+
+  :where(tct-table) :where(.tct-table-tree-header) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    min-inline-size: 0;
+  }
+
+  :where(tct-table) :where(tr.tct-table-row-clickable) {
+    cursor: pointer;
+  }
+
+  :where(tct-table) :where(tr.tct-table-group-row) {
+    background-color: var(--color-background-muted);
+    cursor: pointer;
+    user-select: none;
+  }
+
+  :where(tct-table) :where(tr.tct-table-group-row > td) {
+    padding-block: var(--spacing-2);
+    padding-inline-start: 0;
+    padding-inline-end: var(--spacing-3);
+    border-block-end: var(--border-width) solid var(--color-border);
+  }
+
+  /* The group heading pins to the start edge while the table scrolls sideways. */
+  :where(tct-table) :where(.tct-table-group-heading) {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    position: sticky;
+    inset-inline-start: 0;
+    inline-size: fit-content;
+    padding-inline-start: var(--spacing-1);
+  }
+
+  :where(tct-table) :where(.tct-table-group-heading[data-custom]) {
+    inline-size: auto;
+  }
+
+  :where(tct-table) :where(.tct-table-group-label) {
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  :where(tct-table) :where(.tct-table-group-count) {
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-normal);
+  }
+
+  :where(tct-table) :where(tr.tct-table-detail-row) {
+    background-color: var(--color-background-muted);
+  }
+
+  :where(tct-table) :where(tr.tct-table-detail-row > td) {
+    padding-block: var(--spacing-4);
+    padding-inline: var(--spacing-5);
+  }
+
+  /* ---------------------------------------------- plugin: synthetic columns (selection, index, status) */
+  :where(tct-table) :where(.tct-table-center) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  :where(tct-table) :where(.tct-table-row-index) {
+    color: var(--color-text-secondary);
+    font-family: var(--font-family-code);
+    font-size: var(--text-supporting-size);
+    font-variant-numeric: tabular-nums;
+  }
+
+  :where(tct-table) :where(.tct-table-status) {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--_table-status-color, inherit);
+  }
+
+  :where(tct-table) :where(.tct-table-status-dot) {
+    flex-shrink: 0;
+    inline-size: 8px; /* design: the status dot is a fixed 8px mark */
+    block-size: 8px;
+    border-radius: 50%;
+    background-color: var(--_table-status-color);
+  }
+
+  :where(tct-table) :where(.tct-table-visually-hidden) {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* ------------------------------------------------------------------- plugin: pagination chrome */
+  :where(tct-table) :where(.tct-table-pagination) {
+    display: flex;
+  }
+
+  :where(tct-table) :where(.tct-table-pagination[data-position='below']) {
+    margin-block-start: var(--spacing-2);
+  }
+
+  :where(tct-table) :where(.tct-table-pagination[data-position='above']) {
+    margin-block-end: var(--spacing-2);
+  }
+
+  :where(tct-table) :where(.tct-table-pagination[data-align='start']) {
+    justify-content: flex-start;
+  }
+
+  :where(tct-table) :where(.tct-table-pagination[data-align='center']) {
+    justify-content: center;
+  }
+
+  :where(tct-table) :where(.tct-table-pagination[data-align='end']) {
+    justify-content: flex-end;
+  }
+
+  /* ------------------------------------------------------------ plugin: column resize (handle) */
+  :where(tct-table) :where(th.tct-table-resizable) {
+    position: relative;
+    overflow: visible;
+  }
+
+  :where(tct-table) :where(.tct-table-resize-handle) {
+    --_indicator-color: transparent;
+    --_indicator-width: 1px;
+    position: absolute;
+    inset-block-start: 0;
+    /* Entirely inside the cell: the neighbouring cell's overflow would clip anything outside. */
+    inset-inline-end: 0;
+    z-index: 1;
+    inline-size: 8px; /* design: a wide invisible hit area around a 1px rule */
+    block-size: var(--_table-resize-height, 100%);
+    touch-action: none;
+    user-select: none;
+    cursor: ew-resize;
+  }
+
+  :where(tct-table) :where(.tct-table-resize-handle)::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    inline-size: var(--_indicator-width);
+    background-color: var(--_indicator-color);
+  }
+
+  @media (hover: hover) {
+    :where(tct-table) :where(.tct-table-resize-handle:hover) {
+      --_indicator-color: var(--color-accent);
+    }
+  }
+
+  :where(tct-table)
+    :where(.tct-table-resize-handle:focus-visible, .tct-table-resize-handle[data-resizing]) {
+    --_indicator-color: var(--color-accent);
+  }
+
+  :where(tct-table) :where(.tct-table-resize-handle[data-resizing]) {
+    --_indicator-width: 2px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :where(tct-table) :where(.tct-table-resize-handle)::after {
+      transition:
+        background-color var(--duration-fast) var(--ease-standard),
+        inline-size var(--duration-fast) var(--ease-standard);
+    }
+  }
+
+  /* Touch-only devices have no pointer for the handle; keyboards on them keep it. */
+  @media (hover: none) and (pointer: coarse) {
+    :where(tct-table) :where(.tct-table-resize-handle:not(:focus-visible)) {
+      display: none;
+    }
+  }
+
+  /* ---------------------------------------------------------- plugin: sticky (pinned) columns */
+  :where(tct-table) :where(.tct-table-sticky) {
+    position: sticky;
+    overflow: visible;
+    background-clip: padding-box;
+  }
+
+  :where(tct-table) :where(td.tct-table-sticky) {
+    z-index: 1;
+    /* Opaque, or scrolled content shows through the pinned column. */
+    background-color: var(--table-sticky-background, var(--color-background-card));
+  }
+
+  :where(tct-table) :where(th.tct-table-sticky) {
+    z-index: 3;
+  }
+
+  /* The row's own fill (stripe, hover, selection) is replayed on a layer above the opaque base. */
+  :where(tct-table) :where(td.tct-table-sticky)::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-color: var(--_table-row-overlay, transparent);
+    pointer-events: none;
+  }
+
+  /* A soft shadow over the scrolling region, shown only while content hides behind the pinned edge. */
+  :where(tct-table) :where(.tct-table-sticky[data-sticky='start'])::after,
+  :where(tct-table) :where(.tct-table-sticky[data-sticky='end'])::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inline-size: 6px; /* design: the sticky-edge shadow strip */
+    pointer-events: none;
+  }
+
+  :where(tct-table) :where(.tct-table-sticky[data-sticky='start'])::after {
+    inset-inline-end: 0;
+    translate: 100% 0;
+    opacity: var(--_table-sticky-shadow-start, 0);
+    background-image: linear-gradient(to right, var(--color-shadow), transparent);
+  }
+
+  :where(tct-table) :where(.tct-table-sticky[data-sticky='start']:dir(rtl))::after {
+    translate: -100% 0;
+    background-image: linear-gradient(to left, var(--color-shadow), transparent);
+  }
+
+  :where(tct-table) :where(.tct-table-sticky[data-sticky='end'])::after {
+    inset-inline-start: 0;
+    translate: -100% 0;
+    opacity: var(--_table-sticky-shadow-end, 0);
+    background-image: linear-gradient(to left, var(--color-shadow), transparent);
+  }
+
+  :where(tct-table) :where(.tct-table-sticky[data-sticky='end']:dir(rtl))::after {
+    translate: 100% 0;
+    background-image: linear-gradient(to right, var(--color-shadow), transparent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :where(tct-table) :where(.tct-table-sticky)::after {
+      transition: opacity var(--duration-fast) var(--ease-standard);
+    }
+  }
+
+  /* -------------------------------------------------------------------------- forced colours */
+  @media (forced-colors: active) {
+    :where(tct-table) :where(th, td, tct-table-cell, tct-table-header-cell) {
+      border-color: CanvasText;
+    }
+
+    :where(tct-table) :where(tr.tct-table-selected) {
+      outline: 2px solid Highlight;
+      outline-offset: -2px;
+    }
+
+    :where(tct-table) :where(.tct-table-status-dot) {
+      background-color: CanvasText;
+      forced-color-adjust: none;
+    }
+
+    :where(tct-table) :where(.tct-table-resize-handle)::after {
+      background-color: Highlight;
+      opacity: 0;
+    }
+
+    :where(tct-table)
+      :where(
+        .tct-table-resize-handle:focus-visible,
+        .tct-table-resize-handle[data-resizing]
+      )::after {
+      opacity: 1;
+    }
+
+    :where(tct-table)
+      :where(
+        .tct-table-scroll:focus-visible,
+        .tct-table-sort:focus-visible,
+        .tct-table-expander:focus-visible,
+        .tct-table-resize-handle:focus-visible
+      ) {
+      outline-color: Highlight;
+    }
+
+    :where(tct-table) :where(td.tct-table-sticky) {
+      background-color: Canvas;
+    }
+  }
+}
