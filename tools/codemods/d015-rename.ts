@@ -4,6 +4,7 @@
  *
  *   node tools/codemods/d015-rename.ts             rewrite the working tree, print what changed
  *   node tools/codemods/d015-rename.ts --dry-run   print what would change, write nothing
+ *   node tools/codemods/d015-rename.ts --no-format do not run prettier on the files it changed
  *
  * It is idempotent (a second run changes nothing) and has no dependencies. It rewrites:
  *
@@ -21,8 +22,12 @@
  * (historic and internal), and this directory. Prose that says "Astryx" is not rewritten: new prose says
  * "upstream" (D-015), and `pnpm docs:public-check` reports what is left in anything that ships.
  *
+ * The shorter names can let an import fit on one line, so the changed files are then formatted with the
+ * repository's prettier (`pnpm exec prettier --write --ignore-unknown`).
+ *
  * After running it: `pnpm install --offline` (workspace-only lockfile changes) and `pnpm check`.
  */
+import {spawnSync} from 'node:child_process';
 import {readFileSync, readdirSync, statSync, writeFileSync} from 'node:fs';
 import {join, relative, resolve, sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -169,6 +174,29 @@ export function run({root, dryRun = false}: RunOptions): RunResult {
   return {changed, scanned};
 }
 
+/** Formats the changed files with the repository's prettier (unknown file types are ignored). */
+function format(root: string, paths: readonly string[]): void {
+  for (let i = 0; i < paths.length; i += 80) {
+    const result = spawnSync(
+      'pnpm',
+      [
+        'exec',
+        'prettier',
+        '--write',
+        '--ignore-unknown',
+        '--log-level',
+        'warn',
+        ...paths.slice(i, i + 80),
+      ],
+      {cwd: root, stdio: 'inherit'},
+    );
+    if (result.status !== 0) {
+      console.warn('  prettier did not run cleanly; run `pnpm format` before `pnpm check`.');
+      return;
+    }
+  }
+}
+
 function main(): void {
   const dryRun = process.argv.includes('--dry-run');
   const root = resolve(fileURLToPath(new URL('../..', import.meta.url)));
@@ -190,6 +218,12 @@ function main(): void {
       (summary ? ` (${summary})` : '') +
       '.',
   );
+  if (changed.length > 0 && !dryRun && !process.argv.includes('--no-format')) {
+    format(
+      root,
+      changed.map((file) => file.path),
+    );
+  }
   if (changed.length > 0 && !dryRun) {
     console.log('Next: pnpm install --offline (lockfile), then pnpm check.');
   }
