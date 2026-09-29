@@ -275,8 +275,11 @@ describe('tct-switch: track and thumb', () => {
     expect(getComputedStyle(track).boxShadow).not.toBe('none');
     element.checked = true;
     await element.updateComplete;
-    await nextFrame();
-    expect(getComputedStyle(track).backgroundColor).not.toMatch(/, 0\)$|\/ 0\)$/);
+    // The fill fades in: it is not transparent once the transition has started.
+    await waitUntil(
+      () => !/, 0\)$|\/ 0\)$/.test(getComputedStyle(track).backgroundColor),
+      'the on track is filled',
+    );
     expect(getComputedStyle(track).boxShadow).toBe('none');
   });
 

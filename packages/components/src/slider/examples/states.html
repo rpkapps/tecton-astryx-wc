@@ -1,0 +1,12 @@
+<!-- title: States; description: Hidden label, required and optional indicators, disabled (with a reason), read-only, loading, and the statuses. -->
+<tct-vstack gap="4">
+  <tct-slider label="Label hidden but named" label-hidden value="40"></tct-slider>
+  <tct-slider label="Required" required value="40"></tct-slider>
+  <tct-slider label="Optional" optional label-tooltip="You can change this later." value="40"></tct-slider>
+  <tct-slider label="Disabled" disabled value="40"></tct-slider>
+  <tct-slider label="Disabled with a reason" disabled disabled-message="Volume is locked while sharing your screen." value="40"></tct-slider>
+  <tct-slider label="Read-only" readonly value="40"></tct-slider>
+  <tct-slider label="Loading" loading value="40"></tct-slider>
+  <tct-slider label="Error" value="90" status-type="error" status-message="Too loud for the room."></tct-slider>
+  <tct-slider label="Warning" value="80" status-type="warning" status-message="Close to the limit."></tct-slider>
+</tct-vstack>

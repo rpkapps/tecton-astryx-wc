@@ -1,0 +1,10 @@
+{
+  "@tct.slider.minimumValue": {
+    "defaultMessage": "Minimum value",
+    "description": "Accessible name of the first (lower) thumb of a range Slider. It composes with the slider's label, which names the group. Example: `Price range, Minimum value`."
+  },
+  "@tct.slider.maximumValue": {
+    "defaultMessage": "Maximum value",
+    "description": "Accessible name of the second (upper) thumb of a range Slider. It composes with the slider's label, which names the group. Example: `Price range, Maximum value`."
+  }
+}

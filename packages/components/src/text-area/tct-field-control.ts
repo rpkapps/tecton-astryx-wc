@@ -138,7 +138,7 @@ export abstract class TctFieldControl extends FormControlMixin(TctElement) {
   /** Label, description and status: shadow templates, or satellites in slotted-control mode. @internal */
   protected readonly chrome: FieldChromeController = new FieldChromeController(this, {
     mode: () => (this.slottedControl ? 'light' : 'shadow'),
-    control: () => this.formControl,
+    control: () => this.chromeTarget,
     state: () => ({
       label: this.label,
       labelHidden: this.labelHidden,
@@ -159,6 +159,15 @@ export abstract class TctFieldControl extends FormControlMixin(TctElement) {
   #pending = 0;
 
   // ------------------------------------------------------------------------------- hooks
+
+  /**
+   * The element the chrome wires `aria-labelledby` and `aria-describedby` on (default: the form control).
+   * A composite whose form control is one of several parts (the thumbs of a range slider) points it at the
+   * element that carries the group's name and description.
+   */
+  protected get chromeTarget(): HTMLElement | null {
+    return this.formControl;
+  }
 
   /** The size the chrome (label type scale) follows. */
   protected abstract get fieldSize(): ElementSize;
@@ -369,7 +378,7 @@ export abstract class TctFieldControl extends FormControlMixin(TctElement) {
    * ids live in the host's tree, so from a shadow control they can only be element references.
    */
   #syncDescribedBy(): void {
-    const control = this.formControl;
+    const control = this.chromeTarget;
     if (!control || !this.isConnected) return;
     const slotted = control === this.slottedControl;
     const helpers = new Set(

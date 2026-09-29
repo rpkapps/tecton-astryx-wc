@@ -1,0 +1,397 @@
+/*
+ * tct-slider: the field chrome (label, description, status) is the shared field module; this sheet draws the
+ * track, the fill, the ticks and the thumbs. Positions come from one private property per element: `--_pct`
+ * is the value's place on the track in percent, and every position maps it onto the thumb's travel, the box
+ * less half a thumb at each end (the geometry of a native range), so the thumb stays inside the box at the
+ * ends and the fill and ticks agree with it. Thumb centring uses `translate` with a direction factor
+ * (`--_dir`: 1, or -1 in right-to-left text) instead of a physical transform on `[dir=rtl] *`.
+ *
+ * Private custom properties: `--_thumb-size` (20px; the pointer maths in the class agree with it),
+ * `--_track-size`, `--_dir`, `--_pct`, `--_start`, `--_end`. [mwg:css] [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    --_thumb-size: 20px;
+    --_track-size: 4px;
+    --_dir: 1;
+
+    display: block;
+    min-inline-size: 0;
+  }
+
+  :host(:dir(rtl)) {
+    --_dir: -1;
+  }
+
+  /* In a horizontal-labels form the host disappears so the parent grid places label and slider. */
+  :host([data-horizontal-labels]) {
+    display: contents;
+  }
+
+  .control-cell {
+    gap: 0;
+  }
+
+  .row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+  }
+
+  .track {
+    position: relative;
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    isolation: isolate;
+    touch-action: none;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .track[data-orientation='horizontal'] {
+    inline-size: 100%;
+    block-size: var(--_thumb-size);
+  }
+
+  .track[data-orientation='vertical'] {
+    flex-direction: column;
+    flex-grow: 0;
+    justify-content: center;
+    inline-size: var(--_thumb-size);
+    block-size: 160px; /* design: upstream vertical track length */
+  }
+
+  /* The whole track is the tap target; on touch it is floored to the 24px WCAG 2.5.8 minimum. */
+  @media (pointer: coarse) {
+    .track[data-orientation='horizontal'] {
+      min-block-size: 24px;
+    }
+
+    .track[data-orientation='vertical'] {
+      min-inline-size: 24px;
+    }
+  }
+
+  .rail,
+  .fill {
+    position: absolute;
+    border-radius: var(--radius-full);
+  }
+
+  .rail {
+    background-color: var(--color-track);
+  }
+
+  .fill {
+    background-color: var(--tecton-color-checkbox-checked-fill);
+  }
+
+  .track[data-orientation='horizontal'] .rail {
+    inset-inline: 0;
+    inset-block-start: 50%;
+    block-size: var(--_track-size);
+    translate: 0 -50%;
+  }
+
+  .track[data-orientation='vertical'] .rail {
+    inset-block: 0;
+    inset-inline-start: 50%;
+    inline-size: var(--_track-size);
+    translate: calc(-50% * var(--_dir)) 0;
+  }
+
+  /* A single slider fills from the start; a range fills between its thumbs. */
+  .track[data-orientation='horizontal'] .fill {
+    inset-inline-start: 0;
+    inset-block-start: 50%;
+    inline-size: calc(
+      var(--_end) * 1% + var(--_thumb-size) / 2 - var(--_end) * var(--_thumb-size) / 100
+    );
+    block-size: var(--_track-size);
+    translate: 0 -50%;
+  }
+
+  .track[data-orientation='vertical'] .fill {
+    inset-block-end: 0;
+    inset-inline-start: 50%;
+    block-size: calc(
+      var(--_end) * 1% + var(--_thumb-size) / 2 - var(--_end) * var(--_thumb-size) / 100
+    );
+    inline-size: var(--_track-size);
+    translate: calc(-50% * var(--_dir)) 0;
+  }
+
+  :host([range]) .track[data-orientation='horizontal'] .fill {
+    inset-inline-start: calc(
+      var(--_start) * 1% + var(--_thumb-size) / 2 - var(--_start) * var(--_thumb-size) / 100
+    );
+    inline-size: calc(
+      (var(--_end) - var(--_start)) * 1% - (var(--_end) - var(--_start)) * var(--_thumb-size) / 100
+    );
+  }
+
+  :host([range]) .track[data-orientation='vertical'] .fill {
+    inset-block-end: calc(
+      var(--_start) * 1% + var(--_thumb-size) / 2 - var(--_start) * var(--_thumb-size) / 100
+    );
+    block-size: calc(
+      (var(--_end) - var(--_start)) * 1% - (var(--_end) - var(--_start)) * var(--_thumb-size) / 100
+    );
+  }
+
+  /* -------------------------------------------------------------------------------- thumbs */
+  .thumb {
+    --_pos: calc(
+      var(--_pct) * 1% + var(--_thumb-size) / 2 - var(--_pct) * var(--_thumb-size) / 100
+    );
+
+    position: absolute;
+    z-index: 1;
+    box-sizing: border-box;
+    inline-size: var(--_thumb-size);
+    block-size: var(--_thumb-size);
+    cursor: grab;
+    background-color: var(--tecton-color-checkbox-checked-fill);
+    border-radius: var(--radius-full);
+    outline: none;
+    transition:
+      background-color var(--duration-fast) var(--ease-standard),
+      box-shadow var(--duration-fast) var(--ease-standard);
+  }
+
+  .track[data-orientation='horizontal'] .thumb {
+    inset-block-start: 50%;
+    inset-inline-start: var(--_pos);
+    translate: calc(-50% * var(--_dir)) -50%;
+  }
+
+  .track[data-orientation='vertical'] .thumb {
+    inset-block-end: var(--_pos);
+    inset-inline-start: 50%;
+    translate: calc(-50% * var(--_dir)) 50%;
+  }
+
+  /* --------------------------------------------------------------------------------- bubble */
+  .bubble {
+    position: absolute;
+    z-index: 2;
+    padding-block: var(--spacing-1);
+    padding-inline: var(--spacing-2);
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+    color: var(--color-background-surface);
+    white-space: nowrap;
+    pointer-events: none;
+    visibility: hidden;
+    background-color: var(--color-text-primary);
+    border-radius: var(--radius-container);
+    opacity: 0;
+    transition:
+      opacity var(--duration-fast) var(--ease-standard),
+      visibility var(--duration-fast) var(--ease-standard);
+  }
+
+  .track[data-orientation='horizontal'] .bubble {
+    inset-block-end: calc(100% + var(--spacing-2));
+    inset-inline-start: 50%;
+    translate: calc(-50% * var(--_dir)) 0;
+  }
+
+  .track[data-orientation='vertical'] .bubble {
+    inset-block-start: 50%;
+    inset-inline-end: calc(100% + var(--spacing-2));
+    translate: 0 -50%;
+  }
+
+  /* ---------------------------------------------------------------------------------- marks */
+  .marks {
+    position: absolute;
+  }
+
+  .track[data-orientation='horizontal'] .marks {
+    inset-inline: 0;
+    inset-block-start: 50%;
+  }
+
+  .track[data-orientation='vertical'] .marks {
+    inset-block: 0;
+    inset-inline-start: 50%;
+  }
+
+  .mark,
+  .mark-label {
+    --_pos: calc(
+      var(--_pct) * 1% + var(--_thumb-size) / 2 - var(--_pct) * var(--_thumb-size) / 100
+    );
+
+    position: absolute;
+  }
+
+  .mark {
+    background-color: var(--color-track);
+    border-radius: var(--radius-full);
+  }
+
+  .mark[data-filled] {
+    background-color: var(--tecton-color-checkbox-checked-fill);
+  }
+
+  .track[data-orientation='horizontal'] .mark {
+    inset-inline-start: var(--_pos);
+    inline-size: 2px;
+    block-size: 8px;
+    translate: calc(-50% * var(--_dir)) -50%;
+  }
+
+  .track[data-orientation='vertical'] .mark {
+    inset-block-end: var(--_pos);
+    inline-size: 8px;
+    block-size: 2px;
+    translate: calc(-50% * var(--_dir)) 50%;
+  }
+
+  .mark-label {
+    font-family: var(--font-family-body);
+    font-size: var(--text-supporting-size);
+    line-height: var(--text-supporting-leading);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+  }
+
+  .track[data-orientation='horizontal'] .mark-label {
+    inset-block-start: calc(var(--_thumb-size) / 2 + var(--spacing-1));
+    inset-inline-start: var(--_pos);
+    translate: calc(-50% * var(--_dir)) 0;
+  }
+
+  .track[data-orientation='vertical'] .mark-label {
+    inset-block-end: var(--_pos);
+    inset-inline-start: calc(var(--_thumb-size) / 2 + var(--spacing-1));
+    translate: 0 50%;
+  }
+
+  .value {
+    flex-shrink: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--text-label-size);
+    color: var(--color-text-primary);
+    white-space: nowrap;
+  }
+
+  /* Room for the tick labels under a horizontal track, or beside a vertical one. */
+  .row[data-mark-labels][data-orientation='horizontal'] {
+    padding-block-end: var(--spacing-6);
+  }
+
+  .row[data-mark-labels][data-orientation='vertical'] {
+    padding-inline-end: var(--spacing-10);
+  }
+
+  :host([orientation='vertical']) .row {
+    align-items: flex-start;
+  }
+}
+
+@layer state {
+  @media (hover: hover) {
+    .thumb:hover:not([data-disabled]) {
+      background-color: color-mix(
+        in srgb,
+        var(--tecton-color-checkbox-checked-fill),
+        var(--color-tint-hover) 15%
+      );
+    }
+  }
+
+  /* Pressed follows the drag (the finger lands on the track and the thumb follows), not `:active`. */
+  .thumb[data-dragging]:not([data-disabled]) {
+    background-image: linear-gradient(var(--color-overlay-pressed), var(--color-overlay-pressed));
+  }
+
+  /*
+   * The keyboard ring only: a thumb focused from script by a press draws `:focus-visible` in Chromium,
+   * which is not keyboard focus, so `data-pointer` (set for a press, cleared by the next key or a blur)
+   * takes it back off. Same longhands as the shared focus-ring module.
+   */
+  .thumb:focus-visible:not([data-pointer], [data-disabled]) {
+    outline-width: var(--focus-outline-width);
+    outline-style: var(--focus-outline-style);
+    outline-color: var(--focus-outline-color);
+    outline-offset: var(--focus-outline-offset);
+  }
+
+  @media (hover: hover) {
+    .thumb:hover:not([data-disabled]) .bubble {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+
+  .thumb:focus-visible:not([data-pointer]) .bubble,
+  .thumb[data-dragging] .bubble {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .track[data-dragging] {
+    cursor: grabbing;
+  }
+
+  /* Disabled and read-only: the accent is discarded, both the fill and the thumb go neutral. */
+  .track[data-disabled],
+  :host([readonly]) .track {
+    cursor: default;
+  }
+
+  .track[data-disabled] .rail,
+  .track[data-disabled] .mark {
+    background-color: var(--tecton-color-disabled-outline-border);
+  }
+
+  .track[data-disabled] .fill,
+  .track[data-disabled] .thumb,
+  .track[data-disabled] .mark[data-filled] {
+    background-color: var(--tecton-color-disabled-outline-adornment);
+  }
+
+  .track[data-disabled] .thumb,
+  :host([readonly]) .thumb {
+    cursor: default;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .rail,
+    .mark {
+      background-color: GrayText;
+    }
+
+    .fill,
+    .mark[data-filled] {
+      background-color: Highlight;
+    }
+
+    .thumb {
+      background-color: Highlight;
+      border: 1px solid ButtonBorder;
+    }
+
+    .thumb:focus-visible:not([data-pointer], [data-disabled]) {
+      outline-color: Highlight;
+    }
+
+    .track[data-disabled] .fill,
+    .track[data-disabled] .thumb {
+      background-color: GrayText;
+    }
+
+    .bubble {
+      color: CanvasText;
+      background-color: Canvas;
+      border: 1px solid CanvasText;
+    }
+  }
+}
