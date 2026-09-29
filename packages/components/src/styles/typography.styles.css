@@ -1,0 +1,140 @@
+/*
+ * Shared typography for tct-text and tct-heading (upstream `text.stylex.ts`): colour, weight, display,
+ * truncation, wrapping, justification, capsize, strikethrough and tabular numbers, driven by the reflected
+ * host attributes both elements share. The element's own sheet sets the type/level scale as the private
+ * `--_size`, `--_leading`, `--_weight` (and optionally `--_family`, `--_color`) on `.text`; this module
+ * consumes them once. A guaranteed-invalid value (`initial`) falls back to `inherit`, which is how the
+ * `inherit` type takes size, leading and weight from the surrounding text.
+ *
+ *   .text   the painted inner element (part `text`); holds a `<slot>`
+ *
+ * [mwg:improve-text-layout-and-legibility] [mwg:precise-text-alignment] (text-box is a progressive
+ * enhancement: engines without it render the default leading)
+ */
+@layer component {
+  .text {
+    --_color: var(--color-text-primary);
+
+    font-family: var(--_family, inherit);
+    font-size: var(--_size, inherit);
+    line-height: var(--_leading, inherit);
+    font-weight: var(--_weight, inherit);
+    color: var(--_color, inherit);
+    display: inline;
+  }
+
+  /* Colour (after the element's own defaults so an explicit colour wins). */
+  :host([color='primary']) .text {
+    --_color: var(--color-text-primary);
+  }
+
+  :host([color='secondary']) .text,
+  :host([color='placeholder']) .text {
+    --_color: var(--color-text-secondary);
+  }
+
+  :host([color='disabled']) .text {
+    --_color: var(--color-text-disabled);
+  }
+
+  :host([color='accent']) .text {
+    --_color: var(--color-text-accent);
+  }
+
+  :host([color='inherit']) .text {
+    --_color: initial;
+  }
+
+  /* Weight override. */
+  :host([weight='normal']) .text {
+    --_weight: var(--font-weight-normal);
+  }
+
+  :host([weight='medium']) .text {
+    --_weight: var(--font-weight-medium);
+  }
+
+  :host([weight='semibold']) .text {
+    --_weight: var(--font-weight-semibold);
+  }
+
+  :host([weight='bold']) .text {
+    --_weight: var(--font-weight-bold);
+  }
+
+  /* Display. Truncation and capsize force block (upstream). */
+  :host([display='block']) .text {
+    display: block;
+  }
+
+  :host([max-lines]:not([max-lines='0'])) .text,
+  :host([has-capsize]) .text {
+    display: block;
+  }
+
+  /* Truncation: one line clips with an ellipsis, several use -webkit-line-clamp (Baseline widely). */
+  :host([max-lines='1']) .text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: break-all;
+  }
+
+  :host([max-lines]:not([max-lines='0'], [max-lines='1'])) .text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--_lines);
+    overflow: hidden;
+  }
+
+  :host([max-lines]:not([max-lines='0'])) .text {
+    overflow-wrap: break-word;
+  }
+
+  :host([max-lines]:not([max-lines='0'])[word-break='break-word']) .text {
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+
+  :host([max-lines]:not([max-lines='0'])[word-break='break-all']) .text {
+    word-break: break-all;
+  }
+
+  /* Wrapping and justification. */
+  :host([text-wrap='wrap']) .text {
+    text-wrap: wrap;
+  }
+
+  :host([text-wrap='nowrap']) .text {
+    text-wrap: nowrap;
+  }
+
+  :host([text-wrap='balance']) .text {
+    text-wrap: balance;
+  }
+
+  :host([text-wrap='pretty']) .text {
+    text-wrap: pretty;
+  }
+
+  :host([justify='center']) .text {
+    text-align: center;
+  }
+
+  :host([justify='end']) .text {
+    text-align: end;
+  }
+
+  /* Optical alignment: trim the leading above the cap height and below the baseline. */
+  :host([has-capsize]) .text {
+    text-box: trim-both cap alphabetic;
+  }
+
+  :host([has-strikethrough]) .text {
+    text-decoration: line-through;
+  }
+
+  :host([has-tabular-numbers]) .text {
+    font-variant-numeric: tabular-nums;
+  }
+}
