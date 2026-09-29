@@ -229,7 +229,7 @@
       ],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 72,
       "notes": "Guides: [mwg:form-associated-custom-elements]; [mwg:accessible-web-components] role=slider, a range's group and thumb names; [mwg:brand-consistent-forms]; [mwg:accessible-error-announcement]."
     }
   }

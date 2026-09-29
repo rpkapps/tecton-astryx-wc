@@ -191,7 +191,7 @@
           "reason": "CheckboxInput, RadioListItem and Switch render their visual by tag. To honour `defineIndicators()` replacements, core needs a helper that renders a registry-resolved tag (a `staticHtml` template with `unsafeStatic`, allowed only in core/security), e.g. `renderIndicator(tag, {state, size, disabled}, content)`. Until then the default tags are rendered."
         }
       ],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 81,
       "notes": "Guides: [mwg:form-associated-custom-elements] value, validity, reset and restore through ElementInternals; [mwg:brand-consistent-forms] native checkbox under a branded indicator; [mwg:validate-input-after-interaction] user-invalid timing; [mwg:required-field-feedback] indicators are text; [mwg:accessible-error-announcement] the status is announced once; [mwg:accessible-web-components] the label, description and status share the control's shadow root."
     },
     "core.checkbox-list": {
@@ -343,7 +343,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 81,
       "notes": "Guides: [mwg:form-associated-custom-elements] a multi-value control submits a FormData; [mwg:accessible-web-components] the group role and its label live in one shadow root; [mwg:required-field-feedback]."
     },
     "core.checkbox-list-item": {
@@ -455,7 +455,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null
+      "sizeBudgetKb": 81
     }
   }
 }

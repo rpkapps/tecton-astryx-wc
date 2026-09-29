@@ -240,7 +240,7 @@
       ],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 73,
       "notes": "Guides: [mwg:form-associated-custom-elements] FormData value with File entries; [mwg:accessible-web-components] a real button carries the role and name over a hidden native input; [mwg:accessible-error-announcement]; [mwg:validate-input-after-interaction]."
     }
   }

@@ -188,7 +188,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 78,
       "notes": "Guides: [mwg:form-associated-custom-elements] a FACE on the group with a validation anchor (earlier-project review H6); [mwg:accessible-web-components] the radiogroup, its label and description share one shadow root; [mwg:required-field-feedback] and [mwg:validate-input-after-interaction]; [mwg:accessible-error-announcement]."
     },
     "core.radio-list-item": {
@@ -280,7 +280,7 @@
           "reason": "Same as CheckboxInput: rendering the registry-resolved indicator tag (defineIndicators) needs a core helper using unsafeStatic. Until then the default `tct-radio-indicator` is rendered."
         }
       ],
-      "sizeBudgetKb": null
+      "sizeBudgetKb": 78
     }
   }
 }

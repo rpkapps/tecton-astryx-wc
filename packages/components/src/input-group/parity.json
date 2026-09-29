@@ -133,7 +133,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 56,
       "notes": "Guides: [mwg:styling-web-components] custom properties cross the boundary, `::part` from the outer tree, `::slotted` loses to light-DOM resets; [mwg:accessible-web-components] the group role and its label live in one shadow root; [mwg:child-state-based-styling] the group follows the focus inside it."
     },
     "core.input-group-text": {
@@ -182,7 +182,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null
+      "sizeBudgetKb": 56
     }
   }
 }

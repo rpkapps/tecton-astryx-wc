@@ -92,6 +92,8 @@
 
   /* The status button of the tooltip variant is the one interactive thing in the end slot. */
   .end-slot .status-button {
+    min-inline-size: var(--spacing-6);
+    min-block-size: var(--spacing-6);
     pointer-events: auto;
   }
 

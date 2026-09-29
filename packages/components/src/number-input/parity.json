@@ -316,7 +316,7 @@
           "reason": "The parity check should accept global attributes as targets (`autofocus` for hasAutoFocus); the CEM does not list them for the element."
         }
       ],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 75,
       "notes": "Guides: [mwg:form-associated-custom-elements] ElementInternals value, validity, reset and restore; [mwg:validate-input-after-interaction]; [mwg:ime-safe-enter-submit] IME-safe Enter and arrows; [mwg:accessible-error-announcement] the unreadable-text announcement; [mwg:required-field-feedback]."
     }
   }

@@ -186,7 +186,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 71,
       "notes": "Guides: [mwg:form-associated-custom-elements]; [mwg:accessible-web-components] role=switch on the native checkbox, label and description in the same root; [mwg:brand-consistent-forms] native input under a branded track; [mwg:validate-input-after-interaction]; [mwg:accessible-error-announcement]."
     }
   }

@@ -275,7 +275,7 @@
           "reason": "The parity check should accept the global `spellcheck` attribute as a target (as it does `autofocus`), so hasSpellCheck can point at it instead of being waived."
         }
       ],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 72,
       "notes": "Guides: [mwg:form-associated-custom-elements]; [mwg:form-fields-automatically-fit-contents] field-sizing with a measured fallback; [mwg:validate-input-after-interaction]; [mwg:accessible-error-announcement] the counter and the status speak once; [mwg:required-field-feedback]."
     }
   }
