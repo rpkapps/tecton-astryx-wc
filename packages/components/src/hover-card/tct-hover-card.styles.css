@@ -1,0 +1,118 @@
+/*
+ * tct-hover-card. Same Tecton surface as the popover: a 1px rule on the recessed popover fill and no
+ * drop shadow (D-013). The positioned layer paints nothing; `.card` is the painted box.
+ * [mwg:css] [mwg:animate-to-from-top-layer] [mwg:interest-triggered-tooltips]
+ * TODO(layer.styles.css): the reset and enter rules move to the shared layer module once it lands.
+ */
+@layer component {
+  :host {
+    display: inline;
+  }
+
+  /* An element trigger keeps its own box: the wrapper generates none. */
+  .trigger {
+    display: contents;
+  }
+
+  .trigger[data-text],
+  .trigger[data-indicate] {
+    display: inline;
+  }
+
+  .trigger[data-indicate] {
+    text-decoration-line: underline;
+    text-decoration-style: dashed;
+    text-decoration-color: var(--color-border-emphasized);
+    text-underline-offset: var(--spacing-0-5);
+  }
+
+  .layer {
+    box-sizing: border-box;
+    padding: 0;
+    border: 0;
+    overflow: visible;
+    background: transparent;
+    color: inherit;
+  }
+
+  @supports not selector(:popover-open) {
+    .layer {
+      position: fixed;
+      display: none;
+    }
+  }
+
+  .card {
+    --_bg: var(--color-background-popover);
+    --_border: var(--color-border);
+    --_radius: var(--radius-container);
+
+    display: block;
+    box-sizing: border-box;
+    max-inline-size: calc(100vi - var(--spacing-8));
+    max-block-size: calc(100dvb - var(--spacing-8));
+    overflow: auto;
+    padding: var(--spacing-3);
+    border: var(--border-width) solid var(--_border);
+    border-radius: var(--_radius);
+    background: var(--_bg);
+    color: var(--color-text-primary);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+    text-decoration: none;
+  }
+
+  .layer:popover-open {
+    opacity: 1;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .layer:popover-open {
+      translate: 0 0;
+      transition:
+        opacity var(--duration-fast) var(--ease-standard),
+        translate var(--duration-fast) var(--ease-standard);
+
+      @starting-style {
+        translate: 0 var(--spacing-1);
+      }
+    }
+
+    .layer[data-placement='below']:popover-open {
+      @starting-style {
+        translate: 0 calc(-1 * var(--spacing-1));
+      }
+    }
+
+    .layer[data-placement='start']:popover-open {
+      @starting-style {
+        translate: var(--spacing-1) 0;
+      }
+    }
+
+    .layer[data-placement='end']:popover-open {
+      @starting-style {
+        translate: calc(-1 * var(--spacing-1)) 0;
+      }
+    }
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .card {
+      border-color: CanvasText;
+      background: Canvas;
+      color: CanvasText;
+    }
+
+    .trigger[data-indicate] {
+      text-decoration-color: CanvasText;
+    }
+  }
+}

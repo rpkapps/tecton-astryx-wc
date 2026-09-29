@@ -171,11 +171,8 @@ export class TctPopover extends TctElement {
     surface: () => this.#layerElement,
     trigger: () => this.#boundButton,
     haspopup: 'dialog',
-    // Ignoring Escape lets it fall through to an enclosing layer. With none to fall through to,
-    // `block` claims the press: an unclaimed Escape would reach the platform's CloseWatcher, which
-    // closes the top-most layer whatever its own Escape setting says (a core gap, see parity requests).
-    escape: (): EscapeBehavior =>
-      !this.noEscapeDismiss ? 'close' : this.#layer.parent?.isOpen ? 'none' : 'block',
+    // Ignoring Escape: the press falls through to an enclosing layer, or to nothing.
+    escape: (): EscapeBehavior => (this.noEscapeDismiss ? 'none' : 'close'),
     outsidePress: () => !this.noLightDismiss,
     initialFocus: () => (this.noAutoFocus ? null : this.#initialFocusTarget()),
     exitAnimation: () => this.#exitAnimation(),
@@ -249,7 +246,6 @@ export class TctPopover extends TctElement {
 
   #request(open: boolean, reason: ChangeReason): void {
     if (open && this.disabled) return;
-    // eslint-disable-next-line tct/no-create-tct-element -- an event class, not an element
     if (this.dispatch(new TctOpenChangeEvent(open, reason))) this.open = open;
   }
 
@@ -407,7 +403,6 @@ export class TctPopover extends TctElement {
     }
     const settled = this.open ? this.#layer.show() : this.#layer.hide();
     this.#settled = settled.then(() => {
-      // eslint-disable-next-line tct/no-create-tct-element -- an event class, not an element
       if (this.open === this.#layer.isOpen) this.dispatch(new TctAfterOpenChangeEvent(this.open));
       if (this.open) this.#scheduleMeasure();
     });
