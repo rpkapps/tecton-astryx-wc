@@ -1,0 +1,119 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "chat-tool-calls",
+  "workPackage": "WP-9",
+  "entries": {
+    "core.chat-tool-calls": {
+      "tag": "tct-chat-tool-calls",
+      "status": "implemented",
+      "upstream": {
+        "name": "ChatToolCalls",
+        "path": "packages/core/src/Chat/ChatToolCalls.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "calls",
+          "kind": "prop",
+          "target": "calls",
+          "as": "property",
+          "notes": "Property only. ChatToolCallItem: name, status, target, duration, node, additions, deletions, stats, errorMessage, key, data, resultDetail. `stats` and `resultDetail` are TemplateResult | Node | string (a string is text)."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Summary label of an expanded group; unset: \"{count} tool calls\"."
+        },
+        {
+          "upstream": "isExpanded",
+          "kind": "prop",
+          "target": "expanded",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "D-006: the attribute is the initial state, the property is the current one; both controlled and uncontrolled use work."
+        },
+        {
+          "upstream": "defaultIsExpanded",
+          "kind": "prop",
+          "target": "expanded",
+          "as": "attribute",
+          "notes": "The same attribute: uncontrolled default (D-006)."
+        },
+        {
+          "upstream": "onExpandedChange",
+          "kind": "event",
+          "target": "tct-expanded-change",
+          "as": "event",
+          "notes": "Cancelable intent event, fired before the user's toggle applies; property and attribute writes never fire it. New class TctExpandedChangeEvent in core/events."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base|header|call|row|status|name|target|detail) or the tokens."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Enter, Space",
+          "action": "Expands or collapses the group of calls",
+          "when": "the group header is focused"
+        },
+        {
+          "keys": "Enter, Space",
+          "action": "Shows or hides the result detail of the call",
+          "when": "a row with resultDetail is focused"
+        },
+        {
+          "keys": "Tab",
+          "action": "Collapsed rows are inert: they are skipped until the group is expanded"
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "CHATTOOLS-01",
+          "type": "a11y-improvement",
+          "text": "The group header and rows with a result detail are native <button>s with aria-expanded (upstream: div role=button with tabindex and hand-written key handlers). The collapsed count carries hidden text \"{count} tool calls\" so the header's name says what the number counts."
+        },
+        {
+          "id": "CHATTOOLS-02",
+          "type": "approved-api-difference",
+          "text": "Rows are matched by `key`, else by name and occurrence, never by status: upstream's derived key includes the status, so a running call that completes remounts its row and closes an open detail. Here it stays open."
+        },
+        {
+          "id": "CHATTOOLS-03",
+          "type": "a11y-improvement",
+          "text": "A call that fails is announced once (politely, through the Announcer) as \"{name}: Error: {message}\", because the enclosing message list's native live region is off (CHATLIST-01) and a listener would otherwise not learn of it. Calls that arrive already failed (history) and every other status change stay silent: the status text is in the reading order."
+        },
+        {
+          "id": "CHATTOOLS-04",
+          "type": "tecton-visual",
+          "text": "Status, additions and deletions use --color-text-green / --color-text-red ink (the React theme's chat-tool-calls override): the filled --color-success / --color-error fall under 4.5:1 with the hover wash. Pending and running use tct-spinner shade=subtle."
+        },
+        {
+          "id": "CHATTOOLS-05",
+          "type": "approved-api-difference",
+          "text": "The group opens with grid-template-rows 0fr to 1fr inside prefers-reduced-motion: no-preference; collapsed content is `inert` (removed from the tab order and the accessibility tree). `interpolate-size` was evaluated and rejected: Chrome only."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:animate-to-intrinsic-sizes] (evaluated; grid rows technique used, `interpolate-size` is Chrome only); [mwg:accessibility] (live regions: one centralised, debounced announcer; a status change is not worth speech unless it fails); [mwg:accessible-web-components] (ARIA relations inside one tree)."
+    }
+  }
+}
