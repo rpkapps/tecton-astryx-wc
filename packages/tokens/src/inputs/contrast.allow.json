@@ -1,0 +1,137 @@
+{
+  "$comment": "Authored (WP-F). Known contrast shortfalls, each with a reason and the ratio measured when recorded (per mode). tokens:check fails when a listed pair gets worse, when an unlisted pair fails, and when a listed pair no longer fails (delete the entry). Ratios are WCAG 2.x after alpha compositing.",
+  "entries": [
+    {
+      "pair": "--tecton-color-info-bright on --color-background-body",
+      "measured": {
+        "light": 2.23
+      },
+      "reason": "Export design value. In light mode the export's status.info.bright is blue.onLight.220 (#89a6e1): a highlight/fill step, not an ink. Use --tecton-color-info (or the info outline text role) for text; dark mode passes."
+    },
+    {
+      "pair": "--tecton-color-info-bright on --color-background-surface",
+      "measured": {
+        "light": 2.34
+      },
+      "reason": "Export design value. In light mode the export's status.info.bright is blue.onLight.220 (#89a6e1): a highlight/fill step, not an ink. Use --tecton-color-info (or the info outline text role) for text; dark mode passes."
+    },
+    {
+      "pair": "--tecton-color-info-bright on --color-background-card",
+      "measured": {
+        "light": 2.34
+      },
+      "reason": "Export design value. In light mode the export's status.info.bright is blue.onLight.220 (#89a6e1): a highlight/fill step, not an ink. Use --tecton-color-info (or the info outline text role) for text; dark mode passes."
+    },
+    {
+      "pair": "--tecton-color-info-bright on --color-background-popover",
+      "measured": {
+        "light": 2.34
+      },
+      "reason": "Export design value. In light mode the export's status.info.bright is blue.onLight.220 (#89a6e1): a highlight/fill step, not an ink. Use --tecton-color-info (or the info outline text role) for text; dark mode passes."
+    },
+    {
+      "pair": "--tecton-color-text-placeholder on --color-background-body",
+      "measured": {
+        "light": 3.12,
+        "dark": 3.11
+      },
+      "reason": "Tecton design value: the placeholder role (gray 310) is 3.1:1 in both modes. Fields bind the outlined-input placeholder role --tecton-color-input-outlined-text-placeholder (4.7:1, in this matrix and passing), not this one. Kept because the export and tecton-astryx both define it."
+    },
+    {
+      "pair": "--tecton-color-text-placeholder on --color-background-surface",
+      "measured": {
+        "light": 3.27,
+        "dark": 3.42
+      },
+      "reason": "Tecton design value: the placeholder role (gray 310) is 3.1:1 in both modes. Fields bind the outlined-input placeholder role --tecton-color-input-outlined-text-placeholder (4.7:1, in this matrix and passing), not this one. Kept because the export and tecton-astryx both define it."
+    },
+    {
+      "pair": "--tecton-color-text-placeholder on --color-background-card",
+      "measured": {
+        "light": 3.27,
+        "dark": 3.42
+      },
+      "reason": "Tecton design value: the placeholder role (gray 310) is 3.1:1 in both modes. Fields bind the outlined-input placeholder role --tecton-color-input-outlined-text-placeholder (4.7:1, in this matrix and passing), not this one. Kept because the export and tecton-astryx both define it."
+    },
+    {
+      "pair": "--tecton-color-text-placeholder on --color-background-popover",
+      "measured": {
+        "light": 3.27,
+        "dark": 3.42
+      },
+      "reason": "Tecton design value: the placeholder role (gray 310) is 3.1:1 in both modes. Fields bind the outlined-input placeholder role --tecton-color-input-outlined-text-placeholder (4.7:1, in this matrix and passing), not this one. Kept because the export and tecton-astryx both define it."
+    },
+    {
+      "pair": "--tecton-color-top-nav-text on --tecton-color-top-nav-background",
+      "measured": {
+        "light": 4
+      },
+      "reason": "Tecton export design value: black at 50% on the white top-nav band (light mode) is 4.0:1. The tecton-astryx derivation (white text on black) passed but left primary text at 1.2:1 on the band, so the export was adopted (D-001). Large nav labels only; owner sign-off pending."
+    },
+    {
+      "pair": "--color-icon-secondary on --tecton-color-table-header-bg",
+      "measured": {
+        "dark": 2.88
+      },
+      "reason": "Inherited design shortfall (2.9:1 in dark mode). Mitigation is component-level, as in tecton-astryx: the table header re-points its icons to --color-text-secondary (icon-on-table-header-mitigated in this matrix, passing 3:1)."
+    },
+    {
+      "pair": "--color-border-emphasized on --color-background-body",
+      "measured": {
+        "light": 2.2,
+        "dark": 2.21
+      },
+      "reason": "Inherited from the Tecton design (divider medium, 2.2:1 in both modes; tecton-astryx pins it with a test). Not a sole boundary indicator; use --tecton-color-divider-strong (3.1:1, in this matrix) where a boundary must be perceived."
+    },
+    {
+      "pair": "--tecton-color-input-outlined-border on --color-background-body",
+      "measured": {
+        "dark": 2.21
+      },
+      "reason": "Tecton export dark value (graphite.onDark.220 #57515c): 2.2-2.4:1. The light value passes (3.1:1). The field label, value and focus state also identify the control (WCAG 1.4.11 applies to a sole indicator); components may use --tecton-color-divider-strong for a stronger rule. Owner sign-off pending."
+    },
+    {
+      "pair": "--tecton-color-input-outlined-border on --color-background-surface",
+      "measured": {
+        "dark": 2.43
+      },
+      "reason": "Tecton export dark value (graphite.onDark.220 #57515c): 2.2-2.4:1. The light value passes (3.1:1). The field label, value and focus state also identify the control (WCAG 1.4.11 applies to a sole indicator); components may use --tecton-color-divider-strong for a stronger rule. Owner sign-off pending."
+    },
+    {
+      "pair": "--focus-outline-color on --tecton-color-table-cell-bg-hover",
+      "measured": {
+        "light": 2.99
+      },
+      "reason": "Tecton table fills are darker than the page in light mode (header graphite.140, hover/active/footer washes): the hot-pink ring measures 2.3-3.0:1 there. No second focus hue exists in Tecton (D-005). The Table work package draws the documented double ring (--tecton-color-focus-inner) on these cells or re-points --focus-outline-color locally (styling.md 8)."
+    },
+    {
+      "pair": "--focus-outline-color on --tecton-color-table-cell-bg-active",
+      "measured": {
+        "light": 2.71,
+        "dark": 2.96
+      },
+      "reason": "Tecton table fills are darker than the page in light mode (header graphite.140, hover/active/footer washes): the hot-pink ring measures 2.3-3.0:1 there. No second focus hue exists in Tecton (D-005). The Table work package draws the documented double ring (--tecton-color-focus-inner) on these cells or re-points --focus-outline-color locally (styling.md 8)."
+    },
+    {
+      "pair": "--focus-outline-color on --tecton-color-table-header-bg",
+      "measured": {
+        "light": 2.33
+      },
+      "reason": "Tecton table fills are darker than the page in light mode (header graphite.140, hover/active/footer washes): the hot-pink ring measures 2.3-3.0:1 there. No second focus hue exists in Tecton (D-005). The Table work package draws the documented double ring (--tecton-color-focus-inner) on these cells or re-points --focus-outline-color locally (styling.md 8)."
+    },
+    {
+      "pair": "--focus-outline-color on --tecton-color-table-footer-bg",
+      "measured": {
+        "light": 2.99
+      },
+      "reason": "Tecton table fills are darker than the page in light mode (header graphite.140, hover/active/footer washes): the hot-pink ring measures 2.3-3.0:1 there. No second focus hue exists in Tecton (D-005). The Table work package draws the documented double ring (--tecton-color-focus-inner) on these cells or re-points --focus-outline-color locally (styling.md 8)."
+    },
+    {
+      "pair": "--focus-outline-color on --color-background-inverted",
+      "measured": {
+        "dark": 2.75
+      },
+      "reason": "D-005 double ring: pink on the dark-mode inverted surface (#f6f5f8) is 2.75:1, so inverted surfaces draw the inner ring --tecton-color-focus-inner (near-black, focus-inner-on-inverted in this matrix, passing 3:1) next to the pink outline."
+    }
+  ]
+}

@@ -6,6 +6,9 @@ node_modules/
 **/dist/
 custom-elements.json
 apps/docs/src/content/docs/components/
+# Lucide icon data (D-009): one module per glyph plus the registry helper, from tools/icons/extract-lucide.ts
+packages/icons/src/lucide/
+packages/icons/src/lucide.ts
 apps/docs/.astro/
 reports/
 

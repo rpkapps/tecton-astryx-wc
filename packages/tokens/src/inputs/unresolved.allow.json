@@ -1,0 +1,4 @@
+{
+  "$comment": "Authored (WP-F). Export colours that resolve to no palette entry (D-001: 'flag any that don't'). Empty: every one of the 784 export values resolves to a palette hex. An entry here needs a reason.",
+  "entries": []
+}
