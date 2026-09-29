@@ -43,7 +43,7 @@
           "target": "required",
           "as": "attribute",
           "reflect": true,
-          "notes": "Also a validity constraint (valueMissing) and `aria-required`."
+          "notes": "Also a validity constraint (valueMissing). The trigger is a button, which cannot carry `aria-required`; the Required indicator and the invalid state after a submit attempt convey it."
         },
         {
           "upstream": "isDisabled",

@@ -513,7 +513,7 @@ export class TctCalendar extends TctElement {
         @focusin=${this.#grids[paneIndex]!.handleFocus}
       >
         <div class="row" role="row">
-          ${this.hasWeekNumbers ? html`<div class="day-name" role="columnheader"></div>` : nothing}
+          ${this.hasWeekNumbers ? html`<div class="day-name" role="presentation"></div>` : nothing}
           ${dayNames.map(
             (name, offset) =>
               html`<div

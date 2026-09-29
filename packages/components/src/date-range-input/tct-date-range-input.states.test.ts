@@ -51,7 +51,8 @@ describe('tct-date-range-input: validity and when it shows', () => {
     expect(field.checkValidity()).toBe(false);
     expect(displayed(field)).toBe(false);
     expect(trigger(field).hasAttribute('aria-invalid')).toBe(false);
-    expect(trigger(field).getAttribute('aria-required')).toBe('true');
+    // a button cannot carry aria-required (axe aria-allowed-attr); the constraint is the validity flag
+    expect(trigger(field).hasAttribute('aria-required')).toBe(false);
     await userEvent.click(harness.form.querySelector('button')!);
     await field.updateComplete;
     expect(harness.submitEvents).toHaveLength(0);

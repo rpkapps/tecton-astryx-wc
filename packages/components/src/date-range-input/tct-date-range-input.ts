@@ -465,11 +465,6 @@ export class TctDateRangeInput extends TctPickerField {
         ?disabled=${disabled && !inert}
         aria-disabled=${ifDefined(inert || this.busy ? 'true' : undefined)}
         aria-label=${`${this.label}: ${shown}`}
-        aria-required=${ifDefined(
-          (this.required && !this.optional) || (!this.required && this.announcesRequired)
-            ? 'true'
-            : undefined,
-        )}
         aria-busy=${ifDefined(this.busy ? 'true' : undefined)}
         aria-expanded=${this.open ? 'true' : 'false'}
         aria-haspopup="dialog"

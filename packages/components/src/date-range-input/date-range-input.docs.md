@@ -23,7 +23,7 @@ dense:
     label-icon: attribute of labelIcon
     description: helper text between the label and the field
     optional: shows an Optional indicator; mutually exclusive with required
-    required: constraint (a range is needed), aria-required and a Required indicator
+    required: constraint (a range is needed) and a Required indicator
     disabled: disables the field (also through fieldset disabled)
     disabledMessage: explains why the field is disabled; shows a tooltip and keeps the trigger focusable
     disabled-message: attribute of disabledMessage
