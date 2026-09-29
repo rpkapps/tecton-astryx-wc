@@ -52,5 +52,8 @@
     "@tecton-astryx/locales": "workspace:*",
     "@tecton-astryx/tokens": "workspace:*",
     "lit": "catalog:"
+  },
+  "devDependencies": {
+    "@tecton-astryx/testing": "workspace:*"
   }
 }

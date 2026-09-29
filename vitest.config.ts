@@ -61,6 +61,7 @@ const OPTIMIZE_DEPS = [
   'lit/static-html.js',
   '@floating-ui/dom',
   '@internationalized/date',
+  'axe-core',
   'intl-messageformat',
   'dompurify',
 ];

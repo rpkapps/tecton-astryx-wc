@@ -26,5 +26,8 @@
     "dompurify": "catalog:",
     "intl-messageformat": "catalog:",
     "lit": "catalog:"
+  },
+  "devDependencies": {
+    "@tecton-astryx/testing": "workspace:*"
   }
 }

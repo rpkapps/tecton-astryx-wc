@@ -131,6 +131,10 @@ importers:
       lit:
         specifier: 'catalog:'
         version: 3.3.3
+    devDependencies:
+      '@tecton-astryx/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/core:
     dependencies:
@@ -152,6 +156,10 @@ importers:
       lit:
         specifier: 'catalog:'
         version: 3.3.3
+    devDependencies:
+      '@tecton-astryx/testing':
+        specifier: workspace:*
+        version: link:../testing
 
   packages/icons: {}
 
