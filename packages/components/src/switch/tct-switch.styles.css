@@ -1,7 +1,7 @@
 /*
  * tct-switch: the track and its thumb over the native `role="switch"` input. The row, the label block and
  * the focus ring are in tct-toggle-control.styles.css. Tecton (design/components/switch.md,
- * tecton-astryx components.ts `switch`): the off track is an outline round a transparent pill (an inset
+ * the owner's Tecton theme, `switch` target): the off track is an outline round a transparent pill (an inset
  * ring, so it costs no layout), the on track is the violet, the disabled states have their own roles, and
  * the off and on thumbs are two roles. Hover reaches the track through `.indicator-scope` on the row
  * (inherited `--_indicator-hover`); a press paints the pressed overlay over the track and the thumb.
