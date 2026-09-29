@@ -3,9 +3,9 @@
   <tct-tree-list header="Deployments"></tct-tree-list>
   <script type="module">
     const badge = (text) => {
-      const node = document.createElement('span');
+      const node = document.createElement('tct-text');
+      node.color = 'secondary';
       node.textContent = text;
-      node.style.color = 'var(--color-text-secondary)';
       return node;
     };
     document.querySelector('#states-root tct-tree-list').items = [

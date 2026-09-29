@@ -68,6 +68,36 @@
       ]
     },
     {
+      "id": "text-on-row-states",
+      "kind": "text",
+      "min": 4.5,
+      "description": "Primary and secondary ink on the Tecton table-row hover fill and on the accent-muted selected wash (tree-list, item and list-item rows; the wash composites over the body).",
+      "fg": [
+        "--color-text-primary",
+        "--color-text-secondary"
+      ],
+      "bg": [
+        "--tecton-color-table-row-hover",
+        "--color-accent-muted"
+      ]
+    },
+    {
+      "id": "text-on-selected-row",
+      "kind": "text",
+      "min": 4.5,
+      "description": "Ink on the selected table-row fill (tree-list). --color-text-secondary is 3.5:1 there in dark, so a selected row re-points its secondary role to --tecton-color-table-row-selected-text-secondary; that role and the primary ink are what must pass on the fill.",
+      "pairs": [
+        [
+          "--color-text-primary",
+          "--tecton-color-table-row-selected"
+        ],
+        [
+          "--tecton-color-table-row-selected-text-secondary",
+          "--tecton-color-table-row-selected"
+        ]
+      ]
+    },
+    {
       "id": "on-fill",
       "kind": "text",
       "min": 4.5,

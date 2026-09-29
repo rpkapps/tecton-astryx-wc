@@ -10,8 +10,9 @@
  * natively so the line stays continuous and does not overhang the last row.
  *
  * Tecton: selection is the table-row selected fill and hover the table-row hover fill
- * (components.ts `tree-list-item`); guides are decorative separation (`--color-border-emphasized` is
- * allowed for that only, D-013 Q-05). [mwg:css-layout] [mwg:styling-web-components]
+ * (components.ts `tree-list-item`); secondary text on the selected fill re-points to
+ * `--tecton-color-table-row-selected-text-secondary` (the secondary role fails 4.5:1 there in dark);
+ * guides are decorative separation (`--color-border-emphasized` is allowed for that only, D-013 Q-05). [mwg:css-layout] [mwg:styling-web-components]
  */
 @layer component {
   :host {
@@ -128,7 +129,15 @@
     cursor: pointer;
   }
 
+  /*
+   * `--color-text-secondary` is 3.5:1 on the dark selected fill (4.5:1 needed; the token contrast matrix
+   * guards the replacement role). Inside a selected row the secondary role therefore resolves to the
+   * selected-row secondary ink. Redefining the inherited role (not only `.description`) also fixes
+   * consumer start/end content that paints itself with `--color-text-secondary`.
+   */
   .row[data-selected] {
+    --color-text-secondary: var(--tecton-color-table-row-selected-text-secondary);
+
     background-color: var(--tecton-color-table-row-selected);
   }
 
