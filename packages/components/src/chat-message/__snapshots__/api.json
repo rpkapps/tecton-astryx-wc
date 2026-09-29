@@ -1,0 +1,206 @@
+{
+  "folder": "chat-message",
+  "elements": {
+    "tct-chat-message": {
+      "class": "TctChatMessage",
+      "attributes": [
+        {
+          "name": "density",
+          "property": "density",
+          "type": "ChatDensity | undefined",
+          "values": [
+            "compact",
+            "balanced",
+            "spacious"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "name",
+          "property": "name",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "sender",
+          "property": "sender",
+          "type": "ChatSender",
+          "values": [
+            "user",
+            "assistant",
+            "system"
+          ],
+          "default": "'assistant'",
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "accessibleName",
+          "type": "string",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)",
+        "avatar",
+        "metadata",
+        "name"
+      ],
+      "events": [],
+      "cssParts": [
+        "avatar",
+        "base",
+        "body",
+        "column",
+        "metadata",
+        "name"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-chat-message-bubble": {
+      "class": "TctChatMessageBubble",
+      "attributes": [
+        {
+          "name": "group",
+          "property": "group",
+          "type": "ChatBubbleGroup | undefined",
+          "values": [
+            "first",
+            "middle",
+            "last"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "metadata",
+          "property": "metadata",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "name",
+          "property": "name",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "variant",
+          "property": "variant",
+          "type": "ChatBubbleVariant",
+          "values": [
+            "filled",
+            "ghost"
+          ],
+          "default": "'filled'",
+          "reflects": true
+        },
+        {
+          "name": "width",
+          "property": "width",
+          "type": "string | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)",
+        "metadata",
+        "name"
+      ],
+      "events": [],
+      "cssParts": [
+        "bubble",
+        "metadata",
+        "name"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-chat-message-metadata": {
+      "class": "TctChatMessageMetadata",
+      "attributes": [
+        {
+          "name": "footer",
+          "property": "footer",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "status",
+          "property": "status",
+          "type": "ChatMessageStatus | undefined",
+          "values": [
+            "sending",
+            "sent",
+            "delivered",
+            "read",
+            "error"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "timestamp",
+          "property": "timestamp",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "footer",
+        "timestamp"
+      ],
+      "events": [],
+      "cssParts": [
+        "base",
+        "footer",
+        "status",
+        "timestamp"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-chat-tokenized-text": {
+      "class": "TctChatTokenizedText",
+      "attributes": [
+        {
+          "name": "text",
+          "property": "text",
+          "type": "string | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "announcementText",
+          "type": "string",
+          "readonly": true
+        },
+        {
+          "name": "tokens",
+          "type": "readonly ChatToken[] | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [],
+      "slots": [],
+      "events": [],
+      "cssParts": [
+        "base",
+        "token"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

@@ -1,0 +1,17 @@
+<!-- title: Tokenized text; description: Serialized token values in stored text (@mentions, #tags, /commands) become badges. Structured tokens take label, variant and an icon; custom tokens return text or a template. Markup in the text is shown as characters. -->
+<tct-vstack id="tokens-root" max-width="520">
+  <tct-chat-message sender="user">
+    <tct-chat-message-bubble>
+      <tct-chat-tokenized-text id="tokens-text" text="Hey @u1 and @u2, please review #well-a12 and run /forecast &lt;b&gt;now&lt;/b&gt;."></tct-chat-tokenized-text>
+    </tct-chat-message-bubble>
+  </tct-chat-message>
+</tct-vstack>
+<script type="module">
+  const text = document.getElementById('tokens-text');
+  text.tokens = [
+    {value: '@u1', label: '@Ana', variant: 'blue'},
+    {value: '@u2', label: '@Ben', variant: 'green'},
+    {value: '#well-a12', label: '#A-12', variant: 'orange', icon: 'success'},
+    {value: '/forecast', render: () => 'Forecast'},
+  ];
+</script>

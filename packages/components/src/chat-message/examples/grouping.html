@@ -1,0 +1,12 @@
+<!-- title: Grouped bubbles; description: group="first|middle|last" squares the corners where consecutive bubbles from one sender meet. The sender's side follows the reading direction. -->
+<tct-vstack max-width="520" gap="4">
+  <tct-chat-message sender="assistant">
+    <tct-chat-message-bubble group="first">First bubble of the run.</tct-chat-message-bubble>
+    <tct-chat-message-bubble group="middle">A middle bubble.</tct-chat-message-bubble>
+    <tct-chat-message-bubble group="last">The last bubble.</tct-chat-message-bubble>
+  </tct-chat-message>
+  <tct-chat-message sender="user">
+    <tct-chat-message-bubble group="first">The user's run tightens the end side.</tct-chat-message-bubble>
+    <tct-chat-message-bubble group="last">Second and last.</tct-chat-message-bubble>
+  </tct-chat-message>
+</tct-vstack>
