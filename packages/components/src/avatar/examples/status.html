@@ -1,0 +1,17 @@
+<!-- title: Status dot; description: Three statuses that differ by shape as well as colour; the label joins the avatar's accessible name. -->
+<div style="display: flex; gap: var(--spacing-5); align-items: center">
+  <tct-avatar name="Ada Lovelace" size="lg">
+    <tct-avatar-status-dot slot="status" variant="success" label="Online"></tct-avatar-status-dot>
+  </tct-avatar>
+  <tct-avatar name="Grace Hopper" size="lg">
+    <tct-avatar-status-dot slot="status" variant="neutral" label="Away"></tct-avatar-status-dot>
+  </tct-avatar>
+  <tct-avatar name="Alan Turing" size="lg">
+    <tct-avatar-status-dot slot="status" variant="error" label="Busy"></tct-avatar-status-dot>
+  </tct-avatar>
+  <tct-avatar name="Katherine Johnson" size="xl" shape="rounded">
+    <tct-avatar-status-dot slot="status" variant="success" label="Verified">
+      <tct-icon slot="icon" name="check"></tct-icon>
+    </tct-avatar-status-dot>
+  </tct-avatar>
+</div>

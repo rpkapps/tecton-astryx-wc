@@ -1,0 +1,22 @@
+<!-- title: Photo; description: A loaded image fills the avatar; its accessible name still comes from the name. -->
+<div id="photo-example" style="display: flex; gap: var(--spacing-3); align-items: center">
+  <tct-avatar name="Ada Lovelace" size="lg"></tct-avatar>
+  <tct-avatar name="Grace Hopper" size="lg" shape="rounded"></tct-avatar>
+</div>
+<script type="module">
+  // A generated image keeps this example self-contained: blob: URLs pass the resource URL policy.
+  const root = document.getElementById('photo-example');
+  const canvas = document.createElement('canvas');
+  canvas.width = canvas.height = 96;
+  const context = canvas.getContext('2d');
+  const gradient = context.createLinearGradient(0, 0, 96, 96);
+  const tokens = getComputedStyle(root);
+  gradient.addColorStop(0, tokens.getPropertyValue('--color-accent').trim());
+  gradient.addColorStop(1, tokens.getPropertyValue('--tecton-color-avatar-fill').trim());
+  context.fillStyle = gradient;
+  context.fillRect(0, 0, 96, 96);
+  canvas.toBlob((blob) => {
+    const url = URL.createObjectURL(blob);
+    for (const avatar of root.querySelectorAll('tct-avatar')) avatar.src = url;
+  });
+</script>

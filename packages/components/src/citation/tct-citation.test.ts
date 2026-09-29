@@ -339,11 +339,21 @@ describe('tct-citation: accessibility and keyboard', () => {
   });
 
   it('draws a focus ring on the link for keyboard focus', async () => {
-    const citation = await make();
+    const wrapper = await fixture<HTMLElement>(
+      html`<div>
+        <button type="button">before</button
+        ><tct-citation
+          number="1"
+          source-title="Example"
+          source-url="https://example.com"
+        ></tct-citation>
+      </div>`,
+    );
+    const citation = wrapper.querySelector<TctCitation>('tct-citation')!;
+    wrapper.querySelector('button')!.focus();
     await pressKeys('Tab');
-    if (deepActiveElement() === baseOf(citation)) {
-      expect(getComputedStyle(baseOf(citation)).outlineStyle).not.toBe('none');
-    }
+    expect(deepActiveElement()).toBe(baseOf(citation));
+    expect(getComputedStyle(baseOf(citation)).outlineStyle).not.toBe('none');
   });
 });
 

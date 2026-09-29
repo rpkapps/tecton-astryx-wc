@@ -1,0 +1,395 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "avatar",
+  "workPackage": "WP-2",
+  "entries": {
+    "core.avatar": {
+      "tag": "tct-avatar",
+      "status": "implemented",
+      "upstream": {
+        "name": "Avatar",
+        "path": "packages/core/src/Avatar/Avatar.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "src", "kind": "prop", "target": "src", "as": "attribute"},
+        {
+          "upstream": "fallbackSrc",
+          "kind": "prop",
+          "target": "fallbackSrc",
+          "as": "attribute",
+          "notes": "Attribute fallback-src."
+        },
+        {"upstream": "name", "kind": "prop", "target": "name", "as": "attribute"},
+        {"upstream": "alt", "kind": "prop", "target": "alt", "as": "attribute"},
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "default": "md",
+          "notes": "xsm 20px, sm 24, md 36, lg 48, xl 128, or a number of pixels (numeric attribute strings become numbers). An avatar group's size wins."
+        },
+        {
+          "upstream": "shape",
+          "kind": "prop",
+          "target": "shape",
+          "as": "attribute",
+          "default": "circle"
+        },
+        {
+          "upstream": "status",
+          "kind": "slot",
+          "target": "status",
+          "as": "slot",
+          "notes": "Named slot; a tct-avatar-status-dot reports its label through context (avatarContext) at any nesting depth."
+        },
+        {
+          "upstream": "tooltip",
+          "kind": "prop",
+          "target": "tooltip",
+          "as": "attribute",
+          "default": "true",
+          "notes": "Absent or true shows the name, a string shows that text, tooltip=\"false\" (or the property false) shows none."
+        },
+        {"upstream": "href", "kind": "prop", "target": "href", "as": "attribute"},
+        {
+          "upstream": "as",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "Custom React link component. The WC equivalent is the router hand-off of tct-link-provider (linkContext navigate), which every link-rendering element consumes; there is no per-element component override."
+        },
+        {"upstream": "target", "kind": "prop", "target": "target", "as": "attribute"},
+        {"upstream": "rel", "kind": "prop", "target": "rel", "as": "attribute"},
+        {
+          "upstream": "onClick",
+          "kind": "event",
+          "target": "click",
+          "as": "native-event",
+          "notes": "Native click retargeted from the inner link or button. Upstream renders a <button> when given an onClick; an element cannot observe listeners, so a button avatar is opted into with the `interactive` attribute."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "Plain data-* attributes are set on the host directly; there is nothing to map."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base|content|fallback|status) or the size and shape attributes."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "resolveSize",
+          "target": "resolveSize",
+          "as": "module-function",
+          "notes": "avatar.types.js: named size to CSS px."
+        },
+        {
+          "upstream": "useDevWarning",
+          "target": "devWarn",
+          "as": "module-function",
+          "notes": "@tecton-astryx/core/utils/dev.js: warns once when an interactive avatar has no accessible name."
+        },
+        {
+          "upstream": "AvatarSizeContext",
+          "target": "avatarContext",
+          "as": "context",
+          "notes": "Provided by tct-avatar to its status dot (size in px)."
+        },
+        {
+          "upstream": "AvatarStatusLabelContext",
+          "target": "avatarContext",
+          "as": "context",
+          "notes": "The same context carries reportStatusLabel(): a status hands its label to the avatar, which composes the accessible name."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Moves focus to an interactive avatar",
+          "when": "href or interactive; inside a group the group is one tab stop"
+        },
+        {"keys": "Enter", "action": "Follows the link", "when": "href"},
+        {"keys": "Enter, Space", "action": "Activates the button", "when": "interactive"}
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "AVATAR-01",
+          "type": "approved-api-difference",
+          "text": "Button avatars are opted into with `interactive` because an element cannot see click listeners (upstream's onClick element swap). href still wins over interactive."
+        },
+        {
+          "id": "AVATAR-02",
+          "type": "approved-api-difference",
+          "text": "The role and name live on the inner root element (role=img, or the link/button), not on the host, so the name can sit next to its tooltip description in one tree. A host aria-label overrides the derived name and is followed; a host aria-hidden hides the whole avatar natively."
+        },
+        {
+          "id": "AVATAR-03",
+          "type": "tecton-visual",
+          "text": "The fallback surface is the Tecton avatar fill and ink (--tecton-color-avatar-fill / -text) instead of --color-neutral / --color-text-secondary. The Tecton design specifies 40/32/24/18px avatars and accent colours per instance; neither is a Tecton decision for this library (tecton-theme.md 6, 11), so the Astryx size scale stays."
+        },
+        {
+          "id": "AVATAR-04",
+          "type": "approved-api-difference",
+          "text": "Image URLs (src, fallback-src) go through the resource URL policy (safeUrl): script schemes and data: URLs are refused and the initials show. Upstream loads any string."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components] name and role inside the shadow root, delegatesFocus; [mwg:styling-web-components] parts and private custom properties; [mwg:shadow-dom] slots; [mwg:security] URL policy; [mwg:contrast-color] no user-supplied colours exist upstream, so the fixed Tecton pair is used."
+    },
+    "core.avatar-status-dot": {
+      "tag": "tct-avatar-status-dot",
+      "status": "implemented",
+      "upstream": {
+        "name": "AvatarStatusDot",
+        "path": "packages/core/src/Avatar/AvatarStatusDot.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "variant",
+          "kind": "prop",
+          "target": "variant",
+          "as": "attribute",
+          "reflect": true,
+          "default": "success"
+        },
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
+        {
+          "upstream": "icon",
+          "kind": "slot",
+          "target": "icon",
+          "as": "slot",
+          "notes": "Drawn at medium and large avatar sizes; replaces the built-in shape glyph."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style or ::part(base|glyph|icon)."
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "AVATARSTATUSDOT-01",
+          "type": "approved-api-difference",
+          "text": "The label reaches the avatar through avatarContext.reportStatusLabel (a context call from the dot), not a ref written in the commit phase; it works at any depth in the status slot and needs no introspection of a `label` prop."
+        },
+        {
+          "id": "AVATARSTATUSDOT-02",
+          "type": "tecton-visual",
+          "text": "Success and error plates are the Tecton status main roles (--tecton-color-status-success / -error) with the surface colour as ink, matching tecton-astryx's avatar status dot override; plate and ink keep at least 3:1 in both modes (tested)."
+        },
+        {
+          "id": "AVATARSTATUSDOT-03",
+          "type": "a11y-improvement",
+          "text": "Forced colours draw each shape explicitly (solid disc, hollow ring, disc with a bar) with system colours instead of losing the plate."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "forcedColors": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components] role and name through ElementInternals; [mwg:styling-web-components]; [mwg:css] forced colours."
+    },
+    "core.avatar-group": {
+      "tag": "tct-avatar-group",
+      "status": "implemented",
+      "upstream": {
+        "name": "AvatarGroup",
+        "path": "packages/core/src/AvatarGroup/AvatarGroup.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md"
+        },
+        {
+          "upstream": "shape",
+          "kind": "prop",
+          "target": "shape",
+          "as": "attribute",
+          "reflect": true,
+          "default": "circle"
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "The element is the ref; the role=group container is the part `base`."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style or ::part(base)."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "Plain data-* attributes are set on the host directly."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useListFocus",
+          "target": "RovingTabindexController",
+          "as": "controller",
+          "notes": "@tecton-astryx/core/controllers/roving-tabindex.js over the interactive members' inner controls."
+        },
+        {
+          "upstream": "useAvatarGroup",
+          "target": "avatarGroupContext",
+          "as": "context",
+          "notes": "Provided to avatars and the overflow indicator: size, shape, overlap, numericSize."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Enters and leaves the group as one Tab stop",
+          "when": "the group has interactive members"
+        },
+        {
+          "keys": "ArrowRight",
+          "action": "Moves focus to the next interactive avatar",
+          "when": "mirrored in right-to-left"
+        },
+        {
+          "keys": "ArrowLeft",
+          "action": "Moves focus to the previous interactive avatar",
+          "when": "mirrored in right-to-left"
+        },
+        {"keys": "Home", "action": "Moves focus to the first interactive avatar"},
+        {"keys": "End", "action": "Moves focus to the last interactive avatar"}
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "AVATARGROUP-01",
+          "type": "approved-api-difference",
+          "text": "The group name is the host aria-label (default \"Avatars\", localised) and follows attribute changes; the keyboard hint and any author aria-describedby are combined into one description (element references, or text on Tier 2) because ids cannot cross the shadow root."
+        },
+        {
+          "id": "AVATARGROUP-02",
+          "type": "approved-api-difference",
+          "text": "Roving items are the members whose `control` is not null (interactive avatars and overflow); members tell the group when they become interactive through avatarGroupContext.refresh(), instead of upstream's post-commit DOM query for [data-avatar-item]."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "rtl": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components] group role and description in one tree; [mwg:shadow-dom] slotted members; [mwg:styling-web-components]."
+    },
+    "core.avatar-group-overflow": {
+      "tag": "tct-avatar-group-overflow",
+      "status": "implemented",
+      "upstream": {
+        "name": "AvatarGroupOverflow",
+        "path": "packages/core/src/AvatarGroup/AvatarGroupOverflow.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "count", "kind": "prop", "target": "count", "as": "attribute", "default": "0"},
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "Custom content instead of the default \"+N\"; the accessible name stays the count phrase."
+        },
+        {
+          "upstream": "onClick",
+          "kind": "event",
+          "target": "click",
+          "as": "native-event",
+          "notes": "Native click; the button is opted into with the `interactive` attribute (an element cannot observe click listeners)."
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "The element is the ref; the inner control is exposed as `control`."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style or ::part(base)."
+        }
+      ],
+      "keyboard": [
+        {"keys": "Enter, Space", "action": "Activates the overflow button", "when": "interactive"}
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "AVATARGROUPOVERFLOW-01",
+          "type": "a11y-improvement",
+          "text": "The static indicator is role=\"img\" named \"N more\" instead of an aria-label on a bare span, which assistive technology ignores."
+        },
+        {
+          "id": "AVATARGROUPOVERFLOW-02",
+          "type": "approved-api-difference",
+          "text": "`interactive` opts into the button (upstream renders one when given an onClick); see AVATAR-01."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components]; [mwg:styling-web-components]; [mwg:shadow-dom]."
+    }
+  }
+}

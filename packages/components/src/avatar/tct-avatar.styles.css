@@ -1,0 +1,132 @@
+/*
+ * tct-avatar. The host is layout only. `.root` is the avatar box (a <div>, or the <a>/<button> when
+ * interactive); size, shape radius and group overlap arrive as private custom properties. The fallback
+ * surface is the Tecton avatar fill and ink. [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+
+  .root {
+    --_radius: var(--radius-full);
+
+    position: relative;
+    box-sizing: content-box;
+    display: inline-flex;
+    flex-shrink: 0;
+    inline-size: var(--_size);
+    block-size: var(--_size);
+    border-radius: var(--_radius);
+  }
+
+  .root[data-shape='rounded'] {
+    --_radius: var(--radius-element);
+  }
+
+  .root[data-shape='square'] {
+    --_radius: var(--radius-none);
+  }
+
+  /* An interactive avatar is a transparent, correctly sized wrapper around the visuals. */
+  a.root,
+  button.root {
+    appearance: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  /* Stacked in a group: a surface-coloured ring separates neighbours; later members overlap the previous. */
+  .root[data-in-group] {
+    box-sizing: content-box;
+    border: 2px solid var(--color-background-surface); /* design: ring between stacked avatars (upstream) */
+    background-color: var(--color-background-surface);
+  }
+
+  :host(:not(:first-child)) .root[data-in-group] {
+    margin-inline-start: var(--_overlap);
+  }
+
+  .content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 100%;
+    block-size: 100%;
+    overflow: hidden;
+    border-radius: var(--_radius);
+    user-select: none;
+  }
+
+  .image {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  .fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: 100%;
+    block-size: 100%;
+    background-color: var(--tecton-color-avatar-fill);
+    color: var(--tecton-color-avatar-text);
+    font-family: var(--font-family-body);
+    /* design: initials take 40% of the avatar size (upstream INITIALS_FONT_SIZE_RATIO) */
+    font-size: calc(var(--_size) * 0.4);
+    font-weight: var(--font-weight-medium);
+    text-transform: uppercase;
+  }
+
+  .person {
+    /* design: the default person glyph is 60% of the avatar size (upstream) */
+    inline-size: calc(var(--_size) * 0.6);
+    block-size: calc(var(--_size) * 0.6);
+  }
+
+  .status {
+    position: absolute;
+    /* A flex container, so the dot is a flex item and the wrapper is exactly as tall as the dot
+       (an inline dot would add a line box and descender space). */
+    display: flex;
+  }
+
+  /* On a circle the dot sits where a 45-degree diagonal meets the edge: (1 - 1/sqrt 2) / 2 = 14.64% of the size. */
+  .root[data-shape='circle'] .status {
+    inset-block-end: calc(var(--_size) * 0.1464);
+    inset-inline-end: calc(var(--_size) * 0.1464);
+    translate: 50% 50%;
+  }
+
+  .root:not([data-shape='circle']) .status {
+    inset-block-end: 0;
+    inset-inline-end: 0;
+    translate: 25% 25%;
+  }
+
+  :host(:dir(rtl)) .root[data-shape='circle'] .status {
+    translate: -50% 50%;
+  }
+
+  :host(:dir(rtl)) .root:not([data-shape='circle']) .status {
+    translate: -25% 25%;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .fallback {
+      background-color: Canvas;
+      color: CanvasText;
+      border: var(--border-width) solid CanvasText;
+    }
+  }
+}
