@@ -1,0 +1,25 @@
+<!-- title: Lazy children; description: expandable shows the toggle before any children exist; tct-tree-toggle reports the user's intent and the handler assigns children when expanded is true. -->
+<div id="lazy-loading-root" style="max-inline-size: 24rem">
+  <tct-tree-list header="Remote folders"></tct-tree-list>
+  <script type="module">
+    const tree = document.querySelector('#lazy-loading-root tct-tree-list');
+    const data = [
+      {id: 'inbox', label: 'Inbox', expandable: true},
+      {id: 'projects', label: 'Projects', expandable: true},
+      {id: 'trash', label: 'Trash'},
+    ];
+    tree.items = data;
+    tree.addEventListener('tct-tree-toggle', (event) => {
+      const item = data.find((entry) => entry.id === event.id);
+      if (!event.expanded || !item || item.children) return;
+      // Stand-in for a request: children arrive a moment later.
+      setTimeout(() => {
+        item.children = [
+          {id: `${item.id}-1`, label: `${item.label} item 1`},
+          {id: `${item.id}-2`, label: `${item.label} item 2`},
+        ];
+        tree.items = [...data];
+      }, 300);
+    });
+  </script>
+</div>

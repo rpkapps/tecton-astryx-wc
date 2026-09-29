@@ -1,0 +1,293 @@
+/*
+ * tct-tree-list: a data-driven tree rendered in one shadow root (A§8.1: TreeList is a data-heavy
+ * widget, so the ARIA relationships between the treeitems, their groups, the header and the tree stay
+ * in one tree). The treeitem <li> owns the roving tab stop and the semantics; the row inside it paints
+ * (hover, selection, focus ring). The ring is drawn only for the focused treeitem's own row, through
+ * child combinators, so it can never leak to a descendant row however deep the tree nests.
+ *
+ * Levers (public, themeable): `--tree-list-indent` (per-level indent, default spacing-4) and
+ * `--tree-list-row-gap` (gap between rows, default spacing-0-5). The guide connector spans the gap
+ * natively so the line stays continuous and does not overhang the last row.
+ *
+ * Tecton: selection is the table-row selected fill and hover the table-row hover fill
+ * (components.ts `tree-list-item`); guides are decorative separation (`--color-border-emphasized` is
+ * allowed for that only, D-013 Q-05). [mwg:css-layout] [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .root {
+    --_indent: var(--tree-list-indent, var(--spacing-4));
+    --_row-gap: var(--tree-list-row-gap, var(--spacing-0-5));
+
+    position: relative;
+  }
+
+  .header {
+    margin-block-end: var(--spacing-2);
+  }
+
+  .tree,
+  .group {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+
+  .item {
+    position: relative;
+    inline-size: 100%;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+
+    /* The treeitem is the roving-tabindex focus owner; its row draws the ring (see the state layer). */
+    outline: none;
+  }
+
+  /* -------------------------------------------------------------------------- guides */
+
+  .branches {
+    padding-inline-start: var(--spacing-2);
+  }
+
+  .guide-box {
+    position: absolute;
+    inline-size: var(--spacing-5);
+    block-size: 100%;
+
+    /* The guide's own column: the row's inset, then one indent per level. */
+    inset-inline-start: calc(
+      var(--spacing-2) + var(--spacing-0-5) + var(--_guide-level) * var(--_indent)
+    );
+  }
+
+  .guide {
+    position: absolute;
+    inset-inline: 0;
+    inline-size: 1px; /* design: a 1px hairline */
+    margin: auto;
+    border-radius: 1px;
+    background-color: var(--color-border-emphasized);
+
+    /* Bridge the hairline into the next contiguous sibling so the connector reads as one line. */
+    block-size: calc(100% + 1px);
+  }
+
+  /* The last row of a group has nothing below: stop at the row's bottom edge, not in the gap. */
+  .guide[data-last] {
+    block-size: calc(100% - var(--_row-gap) / 2);
+  }
+
+  /* -------------------------------------------------------------------------- rows */
+
+  .row-wrapper {
+    position: relative;
+
+    /* Half of the row gap above and half below: padding cannot collapse, so rows end up a full gap apart. */
+    padding-block: calc(var(--_row-gap) / 2);
+  }
+
+  .row {
+    --_hover-bg: var(--tecton-color-table-row-hover);
+
+    display: flex;
+    position: relative;
+    align-items: center;
+    gap: var(--spacing-2);
+    box-sizing: border-box;
+    overflow: hidden;
+    margin-inline-start: calc(var(--_level) * var(--_indent) + var(--_reserve, 0px));
+    padding-inline: var(--spacing-2);
+    border-radius: var(--radius-element);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+    text-align: start;
+  }
+
+  /* A leaf reserves the chevron column (chevron width + gap) so its label lines up under a parent's label. */
+  .row[data-reserve] {
+    --_reserve: calc(var(--spacing-4) + var(--spacing-2));
+  }
+
+  .row[data-density='compact'] {
+    padding-block: var(--spacing-1);
+  }
+
+  .row[data-density='balanced'] {
+    padding-block: var(--spacing-2);
+  }
+
+  .row[data-density='spacious'] {
+    padding-block: var(--spacing-3);
+  }
+
+  .row[data-interactive] {
+    cursor: pointer;
+  }
+
+  .row[data-selected] {
+    background-color: var(--tecton-color-table-row-selected);
+  }
+
+  .row[data-disabled] {
+    opacity: 0.5;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .content,
+  .action {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-inline-size: 0;
+    text-align: start;
+  }
+
+  /* The invisible action: a real <button> or <a> carrying the label and description. */
+  .action {
+    appearance: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: inherit;
+    text-decoration: none;
+    outline: none;
+  }
+
+  .label {
+    color: var(--color-text-primary);
+  }
+
+  .description {
+    color: var(--color-text-secondary);
+    font-size: var(--text-supporting-size);
+    line-height: var(--text-supporting-leading);
+  }
+
+  .start,
+  .end {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  .end {
+    margin-inline-start: auto;
+  }
+
+  /* -------------------------------------------------------------------------- chevron */
+
+  .chevron {
+    --_icon-size: var(--spacing-4);
+
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    appearance: none;
+    inline-size: var(--spacing-4);
+    block-size: var(--spacing-4);
+    margin: 0;
+    margin-inline: var(--spacing-1) calc(var(--spacing-1) * -1);
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-inner);
+    background: none;
+    color: var(--color-icon-secondary);
+    cursor: pointer;
+  }
+
+  .chevron[disabled] {
+    cursor: default;
+  }
+
+  .chevron-icon {
+    display: flex;
+  }
+
+  /*
+   * The glyph is drawn pointing at the inline end (a chevron right in LTR, left in RTL: the icon mirrors
+   * itself); expanded turns it a quarter towards the block end. The rotation is opposite in RTL because
+   * the mirrored glyph starts pointing left.
+   */
+  .chevron[data-expanded] .chevron-icon {
+    rotate: 90deg;
+  }
+
+  :host(:dir(rtl)) .chevron[data-expanded] .chevron-icon {
+    rotate: -90deg;
+  }
+}
+
+@layer state {
+  @media (hover: hover) {
+    .row[data-interactive]:not([data-disabled]):hover {
+      background-image: linear-gradient(var(--_hover-bg), var(--_hover-bg));
+    }
+  }
+
+  .row[data-interactive]:not([data-disabled]):active {
+    background-image: linear-gradient(var(--color-overlay-pressed), var(--color-overlay-pressed));
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .row[data-interactive] {
+      transition: background-image var(--duration-fast) var(--ease-standard);
+    }
+
+    .chevron-icon {
+      transition: rotate var(--duration-fast) var(--ease-standard);
+    }
+  }
+
+  /* Only the focused treeitem's own row rings: child combinators never reach a descendant's row. */
+  .item:focus-visible > .row-wrapper > .row {
+    outline-color: var(--focus-outline-color);
+    outline-offset: var(--focus-outline-offset);
+    outline-style: var(--focus-outline-style);
+    outline-width: var(--focus-outline-width);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .row[data-selected] {
+      background-color: Highlight;
+    }
+
+    .row[data-selected] .label,
+    .row[data-selected] .description,
+    .row[data-selected] .chevron {
+      color: HighlightText;
+    }
+
+    .row[data-disabled] {
+      opacity: 1;
+    }
+
+    .row[data-disabled] .label,
+    .row[data-disabled] .description,
+    .row[data-disabled] .chevron {
+      color: GrayText;
+    }
+
+    .guide {
+      background-color: CanvasText;
+    }
+
+    .chevron {
+      color: ButtonText;
+    }
+
+    .item:focus-visible > .row-wrapper > .row {
+      outline-color: Highlight;
+    }
+  }
+}
