@@ -11,6 +11,7 @@ import {recordEvents} from '@tecton-astryx/testing/events.js';
 import {fixture} from '@tecton-astryx/testing/fixture.js';
 import {deepActiveElement, pressKeys} from '@tecton-astryx/testing/keyboard.js';
 import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
+import {runKeyboardSuite} from '@tecton-astryx/testing/suites/keyboard.js';
 import {isChromium} from '@tecton-astryx/testing/tier.js';
 import {waitUntil} from '@tecton-astryx/testing/timing.js';
 import {userEvent} from 'vitest/browser';
@@ -19,6 +20,7 @@ import '../icon/define.js';
 import {getInitials} from './avatar.initials.js';
 import {AVATAR_SHAPES, resolveSize} from './avatar.types.js';
 import './define.js';
+import parity from './parity.json' with {type: 'json'};
 import type {TctAvatar} from './tct-avatar.js';
 
 /** A real, loadable image (a `blob:` URL passes the resource policy; `data:` does not). */
@@ -78,6 +80,81 @@ runElementSuite({
   attributes: {name: 'name', size: 'size', shape: 'shape', src: 'src'},
   // The runElementSuite default render is decorative-safe; the interactive variant is covered below.
   skip: ['a11y'],
+});
+
+runKeyboardSuite({
+  tag: 'tct-avatar',
+  render: () =>
+    `<button type="button">before</button><tct-avatar name="Ada" href="#ada"></tct-avatar><tct-avatar name="Bob" interactive></tct-avatar><tct-avatar name="Cy"></tct-avatar>`,
+  table: parity.entries['core.avatar'].keyboard,
+  steps: {
+    'Moves focus to an interactive avatar': {
+      focus: (element) => element.previousElementSibling as HTMLElement,
+      keys: ['Tab'],
+      expect: ({element}) => {
+        expect(deepActiveElement()).toBe((element as TctAvatar).control);
+      },
+    },
+    'Follows the link': {
+      setup: (element) => {
+        (element as unknown as {clicks: number}).clicks = 0;
+        (element as TctAvatar).control!.addEventListener('click', (event) => {
+          event.preventDefault(); // keep the test page where it is
+          (element as unknown as {clicks: number}).clicks++;
+        });
+      },
+      focus: (element) => (element as TctAvatar).control,
+      keys: ['Enter'],
+      expect: ({element}) => {
+        expect((element as unknown as {clicks: number}).clicks).toBe(1);
+      },
+    },
+    'Activates the button': {
+      setup: (element) => {
+        const bob = element.nextElementSibling as TctAvatar;
+        (bob as unknown as {clicks: number}).clicks = 0;
+        bob.control!.addEventListener('click', () => {
+          (bob as unknown as {clicks: number}).clicks++;
+        });
+      },
+      focus: (element) => (element.nextElementSibling as TctAvatar).control,
+      keys: ['Enter'],
+      expect: ({element}) => {
+        expect((element.nextElementSibling as unknown as {clicks: number}).clicks).toBe(1);
+      },
+    },
+    'Moves focus to a static avatar and opens its tooltip': {
+      focus: (element) => (element.nextElementSibling as TctAvatar).control,
+      keys: ['Tab'],
+      expect: async ({element}) => {
+        const cy = element.nextElementSibling!.nextElementSibling as TctAvatar;
+        expect(deepActiveElement()).toBe(rootOf(cy));
+        await waitUntil(
+          () => cy.shadowRoot!.querySelector('.tooltip-surface')!.matches(':popover-open'),
+          'tooltip open on focus',
+        );
+      },
+    },
+    'Closes the tooltip': {
+      setup: async (element) => {
+        const cy = element.nextElementSibling!.nextElementSibling as TctAvatar;
+        await userEvent.hover(rootOf(cy));
+        await waitUntil(
+          () => cy.shadowRoot!.querySelector('.tooltip-surface')!.matches(':popover-open'),
+          'tooltip open on hover',
+        );
+      },
+      focus: (element) => rootOf(element.nextElementSibling!.nextElementSibling as TctAvatar),
+      keys: ['Escape'],
+      expect: async ({element}) => {
+        const cy = element.nextElementSibling!.nextElementSibling as TctAvatar;
+        await waitUntil(
+          () => !cy.shadowRoot!.querySelector('.tooltip-surface')!.matches(':popover-open'),
+          'tooltip closed by Escape',
+        );
+      },
+    },
+  },
 });
 
 describe('tct-avatar (Avatar.test.tsx)', () => {
@@ -536,5 +613,159 @@ describe('tct-avatar: accessibility, forced colours, right-to-left', () => {
       if (dir === 'ltr') expect(centre).toBeGreaterThan(root.left + root.width / 2);
       else expect(centre).toBeLessThan(root.left + root.width / 2);
     }
+  });
+});
+
+describe('tct-avatar: name tooltip (Avatar.test.tsx "name tooltip")', () => {
+  const surfaceOf = (avatar: TctAvatar): HTMLElement | null =>
+    avatar.shadowRoot!.querySelector<HTMLElement>('.tooltip-surface');
+  const isOpen = (avatar: TctAvatar): boolean =>
+    surfaceOf(avatar)?.matches(':popover-open') ?? false;
+
+  /** The real mouse pointer stays where the last test left it; park it in an empty corner. */
+  const parkPointer = async (): Promise<void> => {
+    const corner = document.createElement('div');
+    corner.style.cssText =
+      'position:fixed;inset-block-end:0;inset-inline-end:0;inline-size:4px;block-size:4px';
+    document.body.append(corner);
+    await userEvent.hover(corner);
+    corner.remove();
+  };
+
+  it('shows the name in a tooltip by default', async () => {
+    const avatar = await make('name="Ada Lovelace"');
+    expect(surfaceOf(avatar)!.textContent.trim()).toBe('Ada Lovelace');
+    expect(surfaceOf(avatar)!.getAttribute('role')).toBe('tooltip');
+  });
+
+  it('shows a custom string tooltip instead of the name', async () => {
+    const avatar = await make('name="alovelace" tooltip="Ada Lovelace, Mathematician"');
+    expect(surfaceOf(avatar)!.textContent.trim()).toBe('Ada Lovelace, Mathematician');
+    expect(surfaceOf(avatar)!.textContent).not.toContain('alovelace');
+  });
+
+  it('renders no tooltip when tooltip="false"', async () => {
+    const avatar = await make('name="Ada Lovelace" tooltip="false"');
+    expect(surfaceOf(avatar)).toBeNull();
+    avatar.tooltip = true;
+    await avatar.updateComplete;
+    expect(surfaceOf(avatar)).not.toBeNull();
+    avatar.tooltip = false;
+    await avatar.updateComplete;
+    expect(surfaceOf(avatar)).toBeNull();
+  });
+
+  it('renders no tooltip for a decorative avatar (no name or alt)', async () => {
+    const avatar = await make();
+    expect(surfaceOf(avatar)).toBeNull();
+  });
+
+  it('renders no tooltip when the default would show the name and the name is blank', async () => {
+    const avatar = await make('name="   " alt="Profile photo"');
+    // The default tooltip uses `name` (not `alt`): a blank name leaves nothing to show.
+    expect(surfaceOf(avatar)).toBeNull();
+    if (isChromium) expect((await axNode(rootOf(avatar))).name).toBe('Profile photo');
+  });
+
+  it('still shows a custom string tooltip when there is no name', async () => {
+    const avatar = await make('tooltip="Anonymous user"');
+    expect(surfaceOf(avatar)!.textContent.trim()).toBe('Anonymous user');
+  });
+
+  it('makes a static root focusable while a tooltip is attached, and not when it is off', async () => {
+    const withTip = await make('name="Ada Lovelace"');
+    expect(rootOf(withTip).getAttribute('tabindex')).toBe('0');
+    const without = await make('name="Ada Lovelace" tooltip="false"');
+    expect(rootOf(without).hasAttribute('tabindex')).toBe(false);
+  });
+
+  it('keeps the accessible name on the root regardless of the tooltip', async () => {
+    const avatar = await make('name="Ada Lovelace"');
+    expect(rootOf(avatar).getAttribute('aria-label')).toBe('Ada Lovelace');
+    avatar.tooltip = false;
+    await avatar.updateComplete;
+    expect(rootOf(avatar).getAttribute('aria-label')).toBe('Ada Lovelace');
+    avatar.tooltip = 'Ada Lovelace, Eng';
+    avatar.name = 'alovelace';
+    await avatar.updateComplete;
+    // alt || name still drives the accessible name, not the custom tooltip.
+    expect(rootOf(avatar).getAttribute('aria-label')).toBe('alovelace');
+    avatar.alt = "Ada's profile photo";
+    await avatar.updateComplete;
+    expect(rootOf(avatar).getAttribute('aria-label')).toBe("Ada's profile photo");
+  });
+
+  it('does not describe the root with the default name tooltip (no double-announce)', async () => {
+    const avatar = await make('name="Ada Lovelace"');
+    expect(rootOf(avatar).hasAttribute('aria-describedby')).toBe(false);
+    avatar.name = 'Grace Hopper';
+    await avatar.updateComplete;
+    expect(rootOf(avatar).hasAttribute('aria-describedby')).toBe(false);
+  });
+
+  it('describes the root with a custom string tooltip (matches Button)', async () => {
+    const avatar = await make('name="alovelace" tooltip="Ada Lovelace, Mathematician"');
+    expect(rootOf(avatar).getAttribute('aria-describedby')).toBe(surfaceOf(avatar)!.id);
+  });
+
+  it('shows the tooltip on hover above the avatar and hides it on leave', async () => {
+    await parkPointer();
+    const wrapper = await fixture<HTMLElement>(
+      `<div style="padding: 80px"><tct-avatar name="Ada Lovelace"></tct-avatar></div>`,
+    );
+    const avatar = wrapper.querySelector<TctAvatar>('tct-avatar')!;
+    await avatar.updateComplete;
+    await userEvent.hover(rootOf(avatar));
+    await waitUntil(() => isOpen(avatar), 'tooltip open');
+    expect(surfaceOf(avatar)!.getBoundingClientRect().bottom).toBeLessThanOrEqual(
+      rootOf(avatar).getBoundingClientRect().top + 1,
+    );
+    await parkPointer();
+    await waitUntil(() => !isOpen(avatar), 'tooltip closed');
+  });
+
+  it('shows on keyboard focus of the tab stop, and Escape closes it', async () => {
+    await parkPointer();
+    const wrapper = await fixture<HTMLElement>(
+      `<div style="padding: 80px"><button>before</button><tct-avatar name="Ada Lovelace"></tct-avatar></div>`,
+    );
+    const avatar = wrapper.querySelector<TctAvatar>('tct-avatar')!;
+    await avatar.updateComplete;
+    wrapper.querySelector('button')!.focus();
+    await pressKeys('Tab');
+    expect(deepActiveElement()).toBe(rootOf(avatar));
+    await waitUntil(() => isOpen(avatar), 'tooltip open on focus');
+    await pressKeys('Escape');
+    await waitUntil(() => !isOpen(avatar), 'tooltip closed by Escape');
+  });
+
+  it('gives an interactive avatar the tooltip without adding a tab stop of its own', async () => {
+    const avatar = await make('name="Ada Lovelace" interactive');
+    expect(rootOf(avatar).localName).toBe('button');
+    expect(rootOf(avatar).hasAttribute('tabindex')).toBe(false);
+    expect(surfaceOf(avatar)!.textContent.trim()).toBe('Ada Lovelace');
+  });
+
+  it('adds no tab stop to a static avatar inside a group', async () => {
+    const wrapper = await fixture<HTMLElement>(
+      `<tct-avatar-group><tct-avatar name="Ada Lovelace"></tct-avatar></tct-avatar-group>`,
+    );
+    const avatar = wrapper.querySelector<TctAvatar>('tct-avatar')!;
+    await avatar.updateComplete;
+    expect(rootOf(avatar).hasAttribute('tabindex')).toBe(false);
+    // The hover tooltip is still there.
+    expect(surfaceOf(avatar)!.textContent.trim()).toBe('Ada Lovelace');
+  });
+
+  it('passes axe with the tooltip open', async () => {
+    await parkPointer();
+    const wrapper = await fixture<HTMLElement>(
+      `<div style="padding: 80px"><tct-avatar name="Ada Lovelace"></tct-avatar></div>`,
+    );
+    const avatar = wrapper.querySelector<TctAvatar>('tct-avatar')!;
+    await avatar.updateComplete;
+    await userEvent.hover(rootOf(avatar));
+    await waitUntil(() => isOpen(avatar), 'tooltip open');
+    await expectAccessible(wrapper);
   });
 });

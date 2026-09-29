@@ -5,6 +5,7 @@ import {ContextConsumer, ContextProvider} from '@tecton-astryx/core/context/prot
 import {linkContext} from '@tecton-astryx/core/context/keys.js';
 import {AriaDelegateController} from '@tecton-astryx/core/controllers/aria-delegate.js';
 import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
+import {TooltipController} from '@tecton-astryx/core/controllers/tooltip.js';
 import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
 import {TctElement} from '@tecton-astryx/core/tct-element.js';
 import {devWarn} from '@tecton-astryx/core/utils/dev.js';
@@ -12,6 +13,7 @@ import {safeUrl} from '@tecton-astryx/core/utils/safe-url.js';
 import defaults from '@tecton-astryx/locales/en/avatar.js';
 import base from '../styles/base.styles.css';
 import focusRing from '../styles/focus-ring.styles.css';
+import layer from '../styles/layer.styles.css';
 import {avatarContext, avatarGroupContext} from './avatar.context.js';
 import {getInitials} from './avatar.initials.js';
 import {
@@ -62,6 +64,7 @@ const tooltipConverter = {
  * @csspart content - The clipping container of the photo or fallback.
  * @csspart fallback - The initials or default icon surface (Astryx target `astryx-avatar-fallback`).
  * @csspart status - The positioned wrapper of the status slot.
+ * @csspart tooltip - The tooltip surface, when there is one.
  * @fires click - Native click, retargeted from the inner link or button (only when `href` or `interactive`).
  * @cloakDisplay inline-flex
  */
@@ -71,7 +74,7 @@ export class TctAvatar extends TctElement {
     ...TctElement.shadowRootOptions,
     delegatesFocus: true,
   };
-  static override styles: CSSResultGroup = [base, focusRing, styles];
+  static override styles: CSSResultGroup = [base, focusRing, layer, styles];
 
   /** `aria-label` overrides the derived name and is read in `render()`. */
   static override get observedAttributes(): string[] {
@@ -133,9 +136,34 @@ export class TctAvatar extends TctElement {
   #hadControl = false;
   readonly #aria = new AriaDelegateController(this, {
     target: () => this.control,
-    // The name is composed here; a host aria-label is read in render().
-    exclude: ['aria-label'],
+    // The name is composed here (a host aria-label is read in render()); with a tooltip the description
+    // is the tooltip's, like `tct-button`.
+    exclude: () => ['aria-label', ...(this.#tooltipText ? ['aria-describedby'] : [])],
   });
+
+  constructor() {
+    super();
+    // The surface sits in this shadow root next to the avatar root (the trigger), so `aria-describedby`
+    // stays inside one tree. [mwg:interest-triggered-tooltips]
+    new TooltipController(this, {
+      mode: 'shadow',
+      trigger: () => this.renderRoot.querySelector<HTMLElement>('.root'),
+      surface: () => this.renderRoot.querySelector<HTMLElement>('.tooltip-surface'),
+      content: () => this.#tooltipText,
+      focusTrigger: 'auto',
+      touchTrigger: 'auto',
+    });
+  }
+
+  /**
+   * The tooltip text: nothing for `false`, the string itself for a string, else the `name` (not `alt`,
+   * upstream). A blank result means no tooltip.
+   */
+  get #tooltipText(): string {
+    if (this.tooltip === false) return '';
+    const text = typeof this.tooltip === 'string' ? this.tooltip : (meaningful(this.name) ?? '');
+    return text.trim();
+  }
 
   /** The inner link or button when the avatar is interactive, else `null` (the group's roving stop). */
   get control(): HTMLElement | null {
@@ -162,6 +190,7 @@ export class TctAvatar extends TctElement {
   }
 
   protected override updated(): void {
+    this.#hideDefaultDescription();
     const control = this.control;
     if (this.#hadControl !== (control !== null)) {
       this.#hadControl = control !== null;
@@ -171,6 +200,23 @@ export class TctAvatar extends TctElement {
     if (control && !this.#group.value && control.hasAttribute('tabindex')) {
       control.removeAttribute('tabindex');
     }
+  }
+
+  /**
+   * The default name tooltip is visual only: its text repeats the accessible name, so describing the root
+   * with it would announce the name twice (upstream). A custom string does add information and stays
+   * described. The tooltip controller wires the description; this takes it off again.
+   */
+  #hideDefaultDescription(): void {
+    if (typeof this.tooltip === 'string') return;
+    const root = this.renderRoot.querySelector<HTMLElement>('.root');
+    const id = this.renderRoot.querySelector<HTMLElement>('.tooltip-surface')?.id;
+    if (!root || !id) return;
+    const tokens = (root.getAttribute('aria-describedby') ?? '')
+      .split(/\s+/)
+      .filter((token) => token !== '' && token !== id);
+    if (tokens.length > 0) root.setAttribute('aria-describedby', tokens.join(' '));
+    else root.removeAttribute('aria-describedby');
   }
 
   protected override willUpdate(changed: PropertyValues<this>): void {
@@ -236,6 +282,12 @@ export class TctAvatar extends TctElement {
       );
     }
 
+    const tooltipText = this.#tooltipText;
+    const tooltip = tooltipText
+      ? html`<div class="layer-surface tooltip-surface" part="tooltip" popover="manual">
+          ${tooltipText}
+        </div>`
+      : nothing;
     const inline = {
       '--_size': `${px}px`,
       '--_overlap': `${-(group?.overlap ?? 0)}px`,
@@ -284,47 +336,51 @@ export class TctAvatar extends TctElement {
     if (this.href !== undefined) {
       const href = safeUrl(this.href, {allowData: true}) ?? undefined;
       return html`<a
-        class="root focus-ring"
-        part="base"
-        data-shape=${shape}
-        data-size=${String(size)}
-        ?data-in-group=${group !== null && group !== undefined}
-        href=${href ?? nothing}
-        target=${this.target ?? nothing}
-        rel=${this.rel ?? nothing}
-        aria-label=${accessibleName ?? nothing}
-        style=${styleMap(inline)}
-        @click=${this.#onLinkClick}
-        >${content}</a
-      >`;
+          class="root focus-ring"
+          part="base"
+          data-shape=${shape}
+          data-size=${String(size)}
+          ?data-in-group=${group !== null && group !== undefined}
+          href=${href ?? nothing}
+          target=${this.target ?? nothing}
+          rel=${this.rel ?? nothing}
+          aria-label=${accessibleName ?? nothing}
+          style=${styleMap(inline)}
+          @click=${this.#onLinkClick}
+          >${content}</a
+        >${tooltip}`;
     }
     if (this.interactive) {
       return html`<button
-        type="button"
+          type="button"
+          class="root focus-ring"
+          part="base"
+          data-shape=${shape}
+          data-size=${String(size)}
+          ?data-in-group=${group !== null && group !== undefined}
+          aria-label=${accessibleName ?? nothing}
+          style=${styleMap(inline)}
+        >
+          ${content}</button
+        >${tooltip}`;
+    }
+    // A static avatar is not natively focusable: with a tooltip it gets a tab stop so keyboard users can
+    // reveal it (WCAG 1.4.13, 2.1.1). A group owns one roving tab stop for its members instead.
+    return html`<div
         class="root focus-ring"
         part="base"
         data-shape=${shape}
         data-size=${String(size)}
         ?data-in-group=${group !== null && group !== undefined}
+        tabindex=${tooltipText && !group ? '0' : nothing}
+        role=${accessibleName ? 'img' : 'presentation'}
+        aria-hidden=${accessibleName ? nothing : 'true'}
         aria-label=${accessibleName ?? nothing}
         style=${styleMap(inline)}
       >
         ${content}
-      </button>`;
-    }
-    return html`<div
-      class="root"
-      part="base"
-      data-shape=${shape}
-      data-size=${String(size)}
-      ?data-in-group=${group !== null && group !== undefined}
-      role=${accessibleName ? 'img' : 'presentation'}
-      aria-hidden=${accessibleName ? nothing : 'true'}
-      aria-label=${accessibleName ?? nothing}
-      style=${styleMap(inline)}
-    >
-      ${content}
-    </div>`;
+      </div>
+      ${tooltip}`;
   }
 
   /** Remembers which exact URL failed, so a changed `src` gets a fresh attempt. */
