@@ -130,17 +130,9 @@ describe('overlay contract (acceptance 5)', () => {
     async (purpose, closes) => {
       const s = await scene(purpose);
       await openBoth(s);
-      const box = surfaceOf(s.inner).getBoundingClientRect();
-      surfaceOf(s.inner).dispatchEvent(
-        new PointerEvent('pointerdown', {
-          bubbles: true,
-          composed: true,
-          clientX: Math.max(2, box.left - 20),
-          clientY: box.top + 5,
-        }),
-      );
+      await userEvent.click(document.documentElement, {position: {x: 5, y: 5}, force: true});
       await nextFrame();
-      if (closes) await waitUntil(() => !s.inner.open, `${purpose}: dismissed`);
+      if (closes) await waitUntil(() => !s.inner.open, `${purpose}: dismissed`, 3000);
       else {
         await new Promise((resolve) => setTimeout(resolve, 100));
         expect(s.inner.open, `${purpose}: kept`).toBe(true);

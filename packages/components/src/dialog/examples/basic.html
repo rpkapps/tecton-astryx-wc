@@ -1,0 +1,19 @@
+<!-- title: Basic; description: The heading names the dialog and takes focus; Escape and a press on the backdrop close it, and focus returns to the button that opened it. -->
+<div id="basic-example">
+  <tct-button variant="primary" data-open>Open dialog</tct-button>
+  <tct-dialog heading="Delete survey?" subtitle="This cannot be undone.">
+    <p style="margin: 0">The survey and its 12 attached logs will be removed from the project.</p>
+    <div style="display: flex; gap: var(--spacing-2); justify-content: flex-end">
+      <tct-button data-close>Cancel</tct-button>
+      <tct-button variant="destructive" data-close>Delete</tct-button>
+    </div>
+  </tct-dialog>
+</div>
+<script type="module">
+  const root = document.getElementById('basic-example');
+  const dialog = root.querySelector('tct-dialog');
+  root.querySelector('[data-open]').addEventListener('click', () => dialog.show());
+  for (const button of root.querySelectorAll('[data-close]')) {
+    button.addEventListener('click', () => dialog.requestClose());
+  }
+</script>
