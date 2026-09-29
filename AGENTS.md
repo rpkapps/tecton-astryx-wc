@@ -78,6 +78,7 @@ docs/                plan/, research/, ARCHITECTURE.md, CONVENTIONS.md
 | `pnpm lint` / `pnpm lint:css` / `pnpm typecheck` | ESLint / Stylelint / `tsc -b` |
 | `pnpm api:update` / `pnpm api:check` | per-folder API snapshots |
 | `pnpm parity` / `pnpm parity:check` | parity report / schema + coverage rules |
+| `pnpm build` / `pnpm build:smoke` | package and CDN builds (Node only) / the CDN bundle loaded in Chromium |
 | `pnpm tokens:check`, `pnpm size`, `pnpm licenses:check` | token drift, size budgets, licence allowlist |
 | `pnpm examples:check` | examples use layout components, no hand-written layout/surface CSS (CONVENTIONS §7) |
 | `pnpm docs:dev` / `pnpm docs:build` / `pnpm docs:a11y` | docs site |

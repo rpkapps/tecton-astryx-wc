@@ -1517,7 +1517,8 @@ step in `pnpm check`.
 | `pnpm lint` / `lint:css` | ESLint / Stylelint |
 | `pnpm typecheck` | `tsc -b` over all packages and tools |
 | `pnpm test` | Vitest (browser + node); `pnpm test <path>` for one folder |
-| `pnpm build` | packages, then CDN bundle |
+| `pnpm build` | packages, then CDN bundle (Node only) |
+| `pnpm build:smoke` | loads the CDN bundle in Chromium; every tag must define itself |
 | `pnpm api:check` / `api:update` | per-folder API snapshots |
 | `pnpm tokens:check` | §5.6 |
 | `pnpm parity` | §15.5 report; `parity:check` validates schemas and coverage rules |

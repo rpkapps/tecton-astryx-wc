@@ -20,6 +20,7 @@
     "typecheck": "node tools/generate.ts && tsc -b && tsc -p tools/tsconfig.json",
     "test": "node tools/test.ts",
     "build": "node tools/run-if-exists.ts tools/build.ts -- node tools/build.ts",
+    "build:smoke": "node tools/build/cdn-smoke.ts",
     "api:check": "node tools/run-if-exists.ts tools/api/snapshot.ts -- node tools/api/snapshot.ts --check",
     "api:update": "node tools/run-if-exists.ts tools/api/snapshot.ts -- node tools/api/snapshot.ts --update",
     "tokens:check": "node tools/run-if-exists.ts packages/tokens/scripts/check.ts -- node packages/tokens/scripts/check.ts",

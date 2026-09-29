@@ -13,14 +13,16 @@
  * external. Declarations come from `tsc -p <package>/tsconfig.build.json --emitDeclarationOnly`, whose
  * config excludes tests, fixtures and generator inputs, so no test `.d.ts` or `pipeline/` reaches
  * `dist`. Afterwards: every package's `exports` are checked against the output, and every built module is
- * imported in Node without a DOM (A§14), and the CDN bundle is loaded in Chromium and must define every tag.
+ * imported in Node without a DOM (A§14).
+ *
+ * The build needs only Node. Loading the CDN bundle in a browser is its own step, `pnpm build:smoke`
+ * (`tools/build/cdn-smoke.ts`), which `pnpm check` runs straight after this one.
  */
 import {spawnSync} from 'node:child_process';
 import {existsSync, readdirSync, rmSync} from 'node:fs';
 import {join, relative} from 'node:path';
 import {build} from 'vite';
 import {libraryConfig, entryRecord, sourceModules} from './build/vite.ts';
-import {main as cdnSmoke} from './build/cdn-smoke.ts';
 import {main as serverImport} from './build/server-import.ts';
 import {readPackage, verifyExports, workspaceResolveRoot} from './build/verify-exports.ts';
 import {componentFolderNames} from './lib/docs-model.ts';
@@ -206,8 +208,7 @@ async function main(): Promise<number> {
   }
   console.log('  build cli: the built launcher answers version, search, component and layout');
 
-  const status = await serverImport();
-  return status === 0 ? cdnSmoke() : status;
+  return serverImport();
 }
 
 process.exit(await main());

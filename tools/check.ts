@@ -2,7 +2,7 @@
  * `pnpm check`: everything, in order, stopping at the first failure (A§18.3).
  *
  *   generate -> format:check -> typecheck -> lint -> lint:css -> tokens:check -> api:check ->
- *   parity:check -> examples:check -> licenses:check -> test -> build -> size -> docs:build -> docs:mcp -> docs:a11y
+ *   parity:check -> examples:check -> licenses:check -> test -> build -> build:smoke -> size -> docs:build -> docs:mcp -> docs:a11y
  *
  * Steps that belong to later milestones skip themselves (with a message) until their inputs exist,
  * so this stays green from M1 onwards. Generation runs once; later steps see TCT_GENERATED=1.
@@ -26,6 +26,8 @@ const STEPS: readonly string[] = [
   'licenses:check',
   'test',
   'build',
+  // Loads the CDN bundle in Chromium; kept out of `pnpm build` so building needs only Node.
+  'build:smoke',
   'size',
   'docs:build',
   // The live /mcp route of the built standalone server (D-016); needs the build above.

@@ -39,7 +39,7 @@ jobs:
       - run: pnpm build
 
   # 1. Everything, in order, with Chromium: generate, format, lint, typecheck, tokens, api, parity,
-  #    licences, tests, build (incl. exports, server-import and CDN smoke checks), size, docs build and
+  #    licences, tests, build (incl. exports and server-import checks), CDN smoke, size, docs build and
   #    the docs accessibility crawl.
   check:
     runs-on: ubuntu-latest

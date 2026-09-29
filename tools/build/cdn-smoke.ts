@@ -3,7 +3,8 @@
  * `tecton.css` and `cdn/autoloader.js` exactly as the docs describe, adds one element of every
  * public tag and waits until the autoloader has defined it. Fails on any console or page error and when
  * the tokens are missing. With zero components it still checks that the bundle and the stylesheet load.
- * Runs at the end of `pnpm build`; alone: `node tools/build/cdn-smoke.ts`.
+ * `pnpm build:smoke`, after `pnpm build` (`pnpm check` runs it straight after the build). Uses the browser
+ * from `CHROMIUM_PATH` when set (an installed Chrome or Edge), so no Playwright download is needed.
  */
 import {existsSync} from 'node:fs';
 import {join} from 'node:path';

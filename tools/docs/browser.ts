@@ -12,7 +12,16 @@ export function chromiumExecutable(env: NodeJS.ProcessEnv = process.env): string
   return existsSync(LOCAL_CHROMIUM) ? LOCAL_CHROMIUM : undefined;
 }
 
-export function launchChromium(): Promise<Browser> {
+export async function launchChromium(): Promise<Browser> {
   const executablePath = chromiumExecutable();
-  return chromium.launch({headless: true, ...(executablePath ? {executablePath} : {})});
+  try {
+    return await chromium.launch({headless: true, ...(executablePath ? {executablePath} : {})});
+  } catch (error) {
+    throw new Error(
+      'Could not start Chromium. Point CHROMIUM_PATH at an installed Chrome or Edge (137 or newer), e.g. ' +
+        'PowerShell: $env:CHROMIUM_PATH = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe" ' +
+        '(see AGENTS.md).',
+      {cause: error},
+    );
+  }
 }
