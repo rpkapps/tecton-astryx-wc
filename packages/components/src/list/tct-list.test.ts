@@ -631,7 +631,7 @@ describe('tct-list-item: keyboard', () => {
   const shell = (rowMarkup: string) =>
     `<button id="before">before</button><tct-list header="Items">${rowMarkup}</tct-list>`;
   const innerOf = (element: HTMLElement) =>
-    (element.shadowRoot!.querySelector('tct-item')!).shadowRoot!;
+    element.shadowRoot!.querySelector('tct-item')!.shadowRoot!;
   const clicks = new WeakMap<Element, number>();
 
   runKeyboardSuite({

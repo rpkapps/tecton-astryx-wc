@@ -51,7 +51,7 @@ async function settled(element: TctOverflowList): Promise<void> {
 }
 
 const resize = async (element: TctOverflowList, width: number): Promise<void> => {
-  (element.parentElement!).style.width = `${width}px`;
+  element.parentElement!.style.width = `${width}px`;
   await settled(element);
 };
 
@@ -479,7 +479,7 @@ describe('tct-overflow-list: behaviour, semantics and accessibility', () => {
     expect(tree.filter((line) => line.startsWith('button'))).toHaveLength(shown(element).length);
     // Tab visits only the visible buttons.
     const visited: string[] = [];
-    (element.querySelector('button')!).focus();
+    element.querySelector('button')!.focus();
     for (let i = 0; i < 6; i++) {
       await pressKeys('Tab');
       const active = document.activeElement as HTMLElement | null;
