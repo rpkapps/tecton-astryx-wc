@@ -35,7 +35,7 @@ class ScrollHost extends LitElement {
   `;
   access: ScrollKeyboardAccess = {owner: 'implicit'};
   axis: 'inline' | 'block' | 'both' = 'block';
-  readonly scroll: ScrollableAreaController = new ScrollableAreaController(this, {
+  readonly scroller: ScrollableAreaController = new ScrollableAreaController(this, {
     viewport: () => this.renderRoot.querySelector<HTMLElement>('.viewport'),
     content: () => this.renderRoot.querySelector<HTMLElement>('.content'),
     slot: () => this.renderRoot.querySelector('slot'),
@@ -125,7 +125,7 @@ describe('ScrollableAreaController: named viewport', () => {
     const {element, viewport} = await host('', '<div id="inner">x</div>' + tall, (target) => {
       target.access = {owner: 'viewport', label: 'Log'};
     });
-    expect(element.scroll.isScrollable).toBe(true);
+    expect(element.scroller.isScrollable).toBe(true);
     expect(getRegisteredScrollOwnerState(viewport)?.block.isScrollable).toBe(true);
     // The light DOM child is inside the viewport as rendered (through the slot).
     expect(findNearestScrollOwner(element.querySelector('#inner')!, 'block')).toBe(viewport);
@@ -151,17 +151,15 @@ describe('ScrollableAreaController: named viewport', () => {
   });
 
   it('keeps the same state object while nothing changed and notifies on a change', async () => {
-    let changes = 0;
     const {element, viewport} = await host('', tall, (target) => {
       target.access = {owner: 'viewport', label: 'Log'};
     });
-    const first = element.scroll.state;
-    element.scroll.update();
-    expect(element.scroll.state).toBe(first);
-    void changes;
+    const first = element.scroller.state;
+    element.scroller.update();
+    expect(element.scroller.state).toBe(first);
     viewport.scrollTop = 1000;
-    await waitUntil(() => element.scroll.state !== first);
-    expect(element.scroll.state.block.atEnd).toBe(true);
+    await waitUntil(() => element.scroller.state !== first);
+    expect(element.scroller.state.block.atEnd).toBe(true);
   });
 
   it('a requested axis that fits stays inactive even when another overflows', async () => {
@@ -169,7 +167,7 @@ describe('ScrollableAreaController: named viewport', () => {
       target.access = {owner: 'viewport', label: 'Log'};
       target.axis = 'inline';
     });
-    expect(element.scroll.isScrollable).toBe(false);
+    expect(element.scroller.isScrollable).toBe(false);
   });
 });
 

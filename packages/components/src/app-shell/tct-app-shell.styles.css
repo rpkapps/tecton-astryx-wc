@@ -27,11 +27,11 @@
   }
 
   .shell[data-height='fill'] {
-    block-size: 100dvh;
+    block-size: var(--app-shell-height, 100dvh);
   }
 
   .shell[data-height='auto'] {
-    min-block-size: 100dvh;
+    min-block-size: var(--app-shell-height, 100dvh);
   }
 
   .shell:is([data-variant='surface'], [data-variant='section']) {
@@ -124,7 +124,7 @@
   .sidenav-frame[data-sticky] {
     position: sticky;
     inset-block-start: var(--_header-height, 0px);
-    block-size: calc(100dvh - var(--_header-height, 0px));
+    block-size: calc(var(--app-shell-height, 100dvh) - var(--_header-height, 0px));
   }
 
   .sidenav-frame > tct-layout-panel {

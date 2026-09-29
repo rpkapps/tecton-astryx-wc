@@ -30,7 +30,7 @@ import styles from './tct-layout-content.styles.css';
  * @tag tct-layout-content
  * @upstream LayoutContent
  * @slot - The content.
- * @csspart base - The content box: scrolling, padding and the landmark (Astryx target `astryx-layout-content`).
+ * @csspart base - The content box: scrolling, padding and the landmark.
  * @cssprop --layout-padding-outer-x - Read: the inline padding at the layout's outer edge.
  * @cssprop --layout-padding-outer-y - Read: the block padding at the layout's outer edge.
  * @cssprop --layout-padding-inner-x - Read: the inline padding towards a panel.

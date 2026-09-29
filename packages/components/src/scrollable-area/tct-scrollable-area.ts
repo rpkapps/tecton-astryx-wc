@@ -52,7 +52,7 @@ import styles from './tct-scrollable-area.styles.css';
  * @tag tct-scrollable-area
  * @upstream ScrollableArea
  * @slot - The content, laid out in the observed content box.
- * @csspart viewport - The native scroll container: accessible name, tab stop while scrollable, overflow (Astryx target `astryx-scrollable-area`, state `axis`).
+ * @csspart viewport - The native scroll container: accessible name, tab stop while scrollable, overflow.
  * @cssprop --container-padding-inline-start - Read (with `full-bleed`) from the enclosing padded container to escape it; published for the content: this area's inline-start content padding.
  * @cssprop --container-padding-inline-end - Read and published like the inline-start one, for the inline end.
  * @cssprop --container-padding-block-start - Read (first child, with `full-bleed`) and published: the block-start content padding.

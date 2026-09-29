@@ -59,7 +59,7 @@ const snapsConverter = {
  * @tag tct-layout-panel
  * @upstream LayoutPanel
  * @slot - The panel content.
- * @csspart base - The panel box: width, padding, divider and scrolling (Astryx target `astryx-layout-panel`).
+ * @csspart base - The panel box: width, padding, divider and scrolling.
  * @cssprop --layout-padding-outer-x - Read: the inline padding at the layout's outer edge.
  * @cssprop --layout-padding-outer-y - Read: the block padding at the layout's outer edge.
  * @cssprop --layout-padding-inner-x - Read: the inline padding towards the content.

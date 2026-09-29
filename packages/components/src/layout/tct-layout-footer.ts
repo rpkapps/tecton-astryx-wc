@@ -27,7 +27,7 @@ import styles from './tct-layout-footer.styles.css';
  * @tag tct-layout-footer
  * @upstream LayoutFooter
  * @slot - The footer content.
- * @csspart base - The footer box: it carries the divider and the height (Astryx target `astryx-layout-footer`).
+ * @csspart base - The footer box: it carries the divider and the height.
  * @cssprop --layout-padding-outer-x - Read: the inline padding at the layout's outer edge.
  * @cssprop --layout-padding-outer-y - Read: the block-end padding at the layout's outer edge.
  * @cssprop --layout-padding-inner-y - Read: the block-start padding towards the content above.

@@ -27,7 +27,7 @@ import styles from './tct-layout-header.styles.css';
  * @tag tct-layout-header
  * @upstream LayoutHeader
  * @slot - The header content.
- * @csspart base - The header box: it carries the divider and the height (Astryx target `astryx-layout-header`).
+ * @csspart base - The header box: it carries the divider and the height.
  * @cssprop --layout-padding-outer-x - Read: the inline padding at the layout's outer edge.
  * @cssprop --layout-padding-outer-y - Read: the block-start padding at the layout's outer edge.
  * @cssprop --layout-padding-inner-y - Read: the block-end padding towards the content below.

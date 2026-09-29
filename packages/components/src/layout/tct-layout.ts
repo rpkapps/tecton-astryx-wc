@@ -4,7 +4,6 @@ import {styleMap} from 'lit/directives/style-map.js';
 import {
   ContextConsumer,
   ContextProvider,
-  ContextProviderEvent,
   type ContextRequestEvent,
   type UnknownContext,
 } from '@tecton-astryx/core/context/protocol.js';
@@ -17,7 +16,12 @@ import {
 import {TctElement} from '@tecton-astryx/core/tct-element.js';
 import {devWarn} from '@tecton-astryx/core/utils/dev.js';
 import base from '../styles/base.styles.css';
-import {layoutDividerContext, layoutSlotsContext, NO_LAYOUT_SLOTS} from './layout.context.js';
+import {
+  announceLayoutAreaProvider,
+  layoutDividerContext,
+  layoutSlotsContext,
+  NO_LAYOUT_SLOTS,
+} from './layout.context.js';
 import type {LayoutSlotsValue} from './layout.context.js';
 import {
   cssLength,
@@ -72,7 +76,7 @@ const REGION = {
  * @slot start - The panel at the inline start (a `tct-layout-panel`, optionally followed by a `tct-resize-handle`).
  * @slot end - The panel at the inline end.
  * @slot footer - The footer region (a `tct-layout-footer`).
- * @csspart base - The layout box: it fills (or grows with) its container (Astryx target `astryx-layout`, state `height`).
+ * @csspart base - The layout box: it fills (or grows with) its container.
  * @cssprop --layout-padding-outer-x - Inline padding of regions at the outer edges of the layout; the `padding` attribute sets it (also read from an enclosing card or section).
  * @cssprop --layout-padding-outer-y - Block padding of regions at the outer edges of the layout.
  * @cssprop --layout-padding-inner-x - Inline padding between regions (read from an enclosing card or section).
@@ -198,7 +202,7 @@ export class TctLayout extends TctElement {
   protected override firstUpdated(): void {
     // Regions that connected before the slot wrappers rendered asked for their area unanswered:
     // announce, so they ask again.
-    this.dispatchEvent(new ContextProviderEvent(layoutAreaContext, this));
+    announceLayoutAreaProvider(this);
   }
 
   override render(): TemplateResult {

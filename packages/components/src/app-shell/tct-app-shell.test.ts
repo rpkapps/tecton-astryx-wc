@@ -91,6 +91,25 @@ describe('tct-app-shell: frame', () => {
     expect(slot.assignedElements()[0]!.id).toBe('top');
   });
 
+  it('no-landmarks leaves the header and the main region without a landmark role', async () => {
+    const element = await shell('no-landmarks', ['banner', 'top', 'side', 'main']);
+    expect(rootOf(element).querySelector('[role="banner"]')).toBeNull();
+    expect(mainBox(element).hasAttribute('role')).toBe(false);
+    expect((await axNode(rootOf(element).querySelector<HTMLElement>('.header')!)).role).not.toBe(
+      'banner',
+    );
+    // The frame itself is unchanged: the skip link still moves focus to the main region.
+    skip(element).click();
+    await nextFrame();
+    expect(deepActiveElement()).toBe(mainBox(element));
+  });
+
+  it('--app-shell-height sets the height of the shell in place of the viewport height', async () => {
+    const element = await shell('style="--app-shell-height: 333px"', ['side', 'top', 'main']);
+    const box = rootOf(element).querySelector<HTMLElement>('.shell')!;
+    expect(box.getBoundingClientRect().height).toBe(333);
+  });
+
   it('renders the banner above the top navigation', async () => {
     const element = await shell('', ['banner', 'top', 'main']);
     const banner = rootOf(element).querySelector<HTMLSlotElement>('slot[name="banner"]')!;

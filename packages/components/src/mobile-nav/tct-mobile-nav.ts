@@ -54,7 +54,7 @@ const cssDuration = (element: Element, token: string, fallback: number): number 
  * @upstream MobileNav
  * @slot - The navigation content.
  * @slot header - Header content next to the close button, instead of the `header` text.
- * @csspart dialog - The full-viewport `<dialog>` that carries the backdrop (Astryx target `astryx-mobile-nav`, state `side`).
+ * @csspart dialog - The full-viewport `<dialog>` that carries the backdrop.
  * @csspart drawer - The sliding panel: background, border, width and the header and content inside.
  * @cssstate open - The drawer is open.
  * @fires tct-open-change - The user or a close request asks to open or close it; cancelable, carries `open` and `reason`.

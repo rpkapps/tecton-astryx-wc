@@ -55,8 +55,8 @@ const defaults = {...resizableMessages, ...handleMessages};
  * @tag tct-resize-handle
  * @upstream ResizeHandle
  * @slot - A grip of your own, replacing the default pill.
- * @csspart base - The handle line: the divider, the focus ring and the container of the grab zone and the grip (Astryx target `astryx-resize-handle`).
- * @csspart pill - The default grip pill (Astryx target `astryx-resize-handle-pill`).
+ * @csspart base - The handle line: the divider, the focus ring and the container of the grab zone and the grip.
+ * @csspart pill - The default grip pill.
  * @cssprop --resize-handle-hit-area - Size of the grab zone across the handle in `position="overlay"` mode. Default 16px.
  * @cssstate dragging - A drag is in progress.
  * @cloakDisplay flex

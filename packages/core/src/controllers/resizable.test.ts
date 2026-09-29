@@ -111,7 +111,7 @@ describe('ResizableController: size and bounds', () => {
       max: 300,
     });
     for (const bad of [-1, Number.NaN, '101%', '4em', 'min(40%, 300px)', null, undefined, [], {}]) {
-      expect(parseResizableSize(bad), String(bad)).toBeNull();
+      expect(parseResizableSize(bad), JSON.stringify(bad) ?? 'undefined').toBeNull();
     }
     // Exactly one bound.
     expect(

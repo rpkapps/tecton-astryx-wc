@@ -1,4 +1,5 @@
-import {createContext} from '@tecton-astryx/core/context/protocol.js';
+import {createContext, ContextProviderEvent} from '@tecton-astryx/core/context/protocol.js';
+import {layoutAreaContext} from '@tecton-astryx/core/context/keys.js';
 
 /**
  * Which slots of the enclosing `tct-layout` are filled, so the regions inside can collapse the
@@ -39,3 +40,12 @@ export interface LayoutDividerValue {
 export const layoutDividerContext = createContext<LayoutDividerValue | null, symbol>(
   Symbol.for('tct.layout-divider'),
 );
+
+/**
+ * Tells the regions inside a layout that it answers `layoutAreaContext` now, so the ones that asked
+ * before it could answer ask again. A plain function, not a class member, so it does not show up as an
+ * event of the layout.
+ */
+export function announceLayoutAreaProvider(layout: HTMLElement): void {
+  layout.dispatchEvent(new ContextProviderEvent(layoutAreaContext, layout));
+}

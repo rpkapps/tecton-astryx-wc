@@ -74,10 +74,11 @@ import styles from './tct-app-shell.styles.css';
  * @slot mobile-nav - A `tct-mobile-nav` of your own, replacing the automatic drawer.
  * @slot drawer - Extra content at the top of the automatic drawer, above the side navigation.
  * @slot mobile-bar - Content of the mobile top bar next to the toggle (a side-navigation-only shell, below the breakpoint).
- * @csspart base - The shell box: the background of the variant and the height (Astryx target `astryx-app-shell`, state `variant`).
- * @csspart header - The header region: banner and top navigation (Astryx target `astryx-app-shell-header`, state `variant`).
- * @csspart sidenav - The side navigation panel box (Astryx target `astryx-app-shell-sidenav`, state `variant`).
+ * @csspart base - The shell box: the background of the variant and the height.
+ * @csspart header - The header region: banner and top navigation.
+ * @csspart sidenav - The side navigation panel box.
  * @csspart skip-link - The skip link while it is visible (focused).
+ * @cssprop --app-shell-height - Height of the shell in place of the viewport height (default 100dvh): for a shell inside a bounded frame, such as a preview or a docs example.
  * @cssprop --layout-padding-outer-x - Reset to zero for the layout inside the shell: the regions manage their own padding.
  * @cssstate mobile - The viewport is below the mobile breakpoint.
  * @cssstate mobile-nav-open - The mobile drawer is open.
@@ -136,6 +137,13 @@ export class TctAppShell extends TctElement {
    * and the hint has no effect. Ignored when the breakpoint is `none`.
    */
   @property({type: Boolean, attribute: 'default-is-mobile'}) defaultIsMobile = false;
+
+  /**
+   * For a shell inside a page that already has a `banner` and a `main` landmark (a preview, an embedded
+   * app, a documentation example): the header and the main region get no landmark role, so the page does
+   * not end up with two of each. The skip link and the layout are unchanged.
+   */
+  @property({type: Boolean, attribute: 'no-landmarks'}) noLandmarks = false;
 
   readonly #slots = new SlotController(
     this,
@@ -393,7 +401,7 @@ export class TctAppShell extends TctElement {
           slot="header"
           class="header"
           part="header"
-          role="banner"
+          role=${ifDefined(this.noLandmarks ? undefined : 'banner')}
           data-variant=${variant}
           data-bg=${headerBackground ?? 'none'}
           ?data-sticky=${auto}
@@ -416,7 +424,7 @@ export class TctAppShell extends TctElement {
           slot="header"
           class="header"
           part="header"
-          role=${ifDefined(hasHeaderContent ? undefined : 'banner')}
+          role=${ifDefined(hasHeaderContent || this.noLandmarks ? undefined : 'banner')}
           data-variant=${variant}
           data-bg=${headerBackground ?? 'none'}
           ?data-sticky=${auto}
@@ -461,7 +469,7 @@ export class TctAppShell extends TctElement {
       id=${APP_SHELL_MAIN_ID}
       class="main"
       exportparts="base: main"
-      landmark="main"
+      landmark=${ifDefined(this.noLandmarks ? undefined : 'main')}
       padding=${padding}
       focusable
       ?no-scroll=${auto}
