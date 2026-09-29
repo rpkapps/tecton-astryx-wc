@@ -91,9 +91,9 @@ describe('tct-blockquote (Blockquote.test.tsx)', () => {
     const element = await quote('', 'Quote<span slot="cite" id="custom">Custom attribution</span>');
     expect(citeOf(element)).not.toBeNull();
     expect(element.querySelector('#custom')!.textContent).toBe('Custom attribution');
-    expect(element.shadowRoot!.querySelector('slot[name="cite"]')!.assignedElements()).toHaveLength(
-      1,
-    );
+    expect(
+      element.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="cite"]')!.assignedElements(),
+    ).toHaveLength(1);
   });
 
   it('the cite slot wins over the cite attribute as the visible attribution', async () => {

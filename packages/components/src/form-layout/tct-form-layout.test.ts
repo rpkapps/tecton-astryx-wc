@@ -91,8 +91,8 @@ describe('tct-form-layout: rendering (FormLayout.test.tsx)', () => {
     expect(css(element).display).toBe('flex');
     expect(css(element).flexDirection).toBe('column');
     expect(css(element).rowGap).toBe('16px');
-    const [a, b] = [...element.querySelectorAll('input')] as [HTMLElement, HTMLElement];
-    expect(b.getBoundingClientRect().top).toBeGreaterThan(a.getBoundingClientRect().bottom);
+    const [a, b] = element.querySelectorAll('input');
+    expect(b!.getBoundingClientRect().top).toBeGreaterThan(a!.getBoundingClientRect().bottom);
   });
 
   it('supports horizontal direction: equal columns side by side', async () => {

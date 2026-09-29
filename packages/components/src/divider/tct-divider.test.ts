@@ -141,7 +141,7 @@ describe('tct-divider (Divider.test.tsx)', () => {
     expect(element.querySelector('#custom')).not.toBeNull();
     expect(lines(element)).toHaveLength(2);
     expect(
-      element.shadowRoot!.querySelector('slot[name="label"]')!.assignedElements(),
+      element.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="label"]')!.assignedElements(),
     ).toHaveLength(1);
   });
 
