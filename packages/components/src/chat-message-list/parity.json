@@ -1,0 +1,236 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "chat-message-list",
+  "workPackage": "WP-9",
+  "entries": {
+    "core.chat-message-list": {
+      "tag": "tct-chat-message-list",
+      "status": "implemented",
+      "upstream": {
+        "name": "ChatMessageList",
+        "path": "packages/core/src/Chat/ChatMessageList.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "prop",
+          "target": "default",
+          "as": "slot",
+          "notes": "The rows: tct-chat-message, tct-chat-system-message or any content. Size: the budget is the measured gzip size + about 10%; it includes the ICU message parser (about 33 kB) that every translating family bundles (see provisional-budgets.json), which the performance work package removes."
+        },
+        {
+          "upstream": "emptyState",
+          "kind": "slot",
+          "target": "empty-state",
+          "as": "slot"
+        },
+        {
+          "upstream": "scrollToTopAction",
+          "kind": "prop",
+          "target": "scrollToTopAction",
+          "as": "property",
+          "notes": "Async action run when the top sentinel scrolls into view; shows a spinner and marks the log busy while pending; a second run does not start before it settles (A§7.2 *Action rule; upstream can overlap, spec OQ1)."
+        },
+        {
+          "upstream": "density",
+          "kind": "prop",
+          "target": "density",
+          "as": "attribute",
+          "reflect": true,
+          "default": "balanced"
+        },
+        {
+          "upstream": "gap",
+          "kind": "prop",
+          "target": "gap",
+          "as": "attribute",
+          "notes": "A spacing-scale step (0 to 10), not reflected."
+        },
+        {
+          "upstream": "align",
+          "kind": "prop",
+          "target": "align",
+          "as": "attribute",
+          "reflect": true,
+          "default": "bottom"
+        },
+        {
+          "upstream": "isStreaming",
+          "kind": "prop",
+          "target": "streaming",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "aria-busy while set, and it holds announcements until it returns to false."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base|loading|empty) or the tokens."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useChatLayoutContext",
+          "target": "chatLayoutContext",
+          "as": "context",
+          "notes": "chat-layout.context.ts: {scrollContainer(), contentRef(el)}. Consumed here (the content element is registered with the layout, the scroll container roots the sentinel observer); provided by tct-chat-layout (WP-16), which imports the key from this folder."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Focuses the log (tabindex 0 unless the author sets one)"
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "CHATLIST-01",
+          "type": "a11y-improvement",
+          "text": "The log's native live region is off (role=log, aria-live=off). Upstream leaves it polite and relies on aria-busy to defer speech while streaming, which assistive technology honours inconsistently, so a stream is read token by token. The list instead announces each message once through the shared Announcer: while `streaming` nothing is spoken and the message is announced when it returns to false; without the flag a message is announced after 500 ms of quiet. Own (user) messages, history rows (inserted above the newest, or present at load) and all but the last of a batch larger than three are not announced; `no-announce` turns it off. `aria-busy` is also set while older messages load."
+        },
+        {
+          "id": "CHATLIST-02",
+          "type": "approved-api-difference",
+          "text": "`focusLatestMessage()` and `no-announce` are additions. The list never moves focus or scrolls on its own; focusLatestMessage() is where the scroll button hands focus over. The messages are light-DOM children of the list; only the loading spinner, the spacer, the sentinel and the empty state are rendered in its shadow root."
+        },
+        {
+          "id": "CHATLIST-03",
+          "type": "approved-api-difference",
+          "text": "The spacer cancels the row gap that follows it (negative margin), so a list that fills its container starts at the same place with either alignment; upstream leaves one extra gap above the first row in `bottom` mode."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "rtl": true,
+        "forcedColors": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/components/src/chat-layout (WP-16)",
+          "reason": "tct-chat-layout provides chatLayoutContext (chat-message-list/chat-layout.context.ts) and wires ChatStreamScrollController and ChatNewMessagesController: scroller = its scroll container; ChatNewMessagesController.contentRef = the context's contentRef; onResize = follow.scrollIfLocked(). Its message area must not shrink below its content (flex: 1 0 auto), or the list stops growing with its messages and the resize observer never fires. The scroll button takes visible = follow.isScrolledUp || news.hasNewMessages and label = \"New messages\" (@tct.chatLayout.newMessages) while news.hasNewMessages; its click calls news.dismiss() and follow.scrollToBottom(). chat-stream.test.ts holds a working harness."
+        },
+        {
+          "file": "packages/components/src/chat-composer (WP-16)",
+          "reason": "Import the token types (ChatToken, ChatTokenBadge, ChatTokenCustom) from chat-message/chat-message.types.ts for ChatComposerToken, and share the ChatComposerToken to tct-chat-tokenized-text shape."
+        }
+      ],
+      "sizeBudgetKb": 65,
+      "notes": "Guides: [mwg:accessibility] section 8 (live regions: centralise, debounce, `off` for passive text, never per-token); [mwg:defer-work-until-scroll-ends] (scrollend, with its debounced-scroll fallback for Safari < 26.2); [mwg:scroll-position-aware-elements] (container scroll-state queries are Chrome-only, so button state is JS); [mwg:scroll-target-on-load] (scroll-initial-target evaluated; following needs a controller)."
+    },
+    "core.chat-layout-scroll-button": {
+      "tag": "tct-chat-layout-scroll-button",
+      "status": "implemented",
+      "upstream": {
+        "name": "ChatLayoutScrollButton",
+        "path": "packages/core/src/Chat/ChatLayoutScrollButton.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "isVisible",
+          "kind": "prop",
+          "target": "visible",
+          "as": "attribute",
+          "reflect": true,
+          "default": "false"
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Widens the pill and is the button's text and name; unset: an icon button named \"Scroll to bottom\"."
+        },
+        {
+          "upstream": "onClick",
+          "kind": "event",
+          "target": "click",
+          "as": "native-event",
+          "notes": "Native click from the inner button, retargeted to the host: one per activation. Scrolling is the consumer's."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(wrapper|pill|button) or the tokens."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useChatStreamScroll",
+          "target": "ChatStreamScrollController",
+          "as": "controller",
+          "notes": "chat-stream-scroll.ts. {isScrolledUp, isLocked, scrollToBottom({behavior}), scrollToMessage, scrollToLastMessage, lock, unlock, scrollIfLocked}. Spring follow with reduced-motion jump, reader-wins unlock from position, first fill instant, scroll anchoring off while following."
+        },
+        {
+          "upstream": "useChatNewMessages",
+          "target": "ChatNewMessagesController",
+          "as": "controller",
+          "notes": "chat-new-messages.ts. {hasNewMessages, dismiss(), contentRef(el), onResize}. Observes the content with the shared resize observer; finds the last message through slots."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Enter, Space",
+          "action": "Activates the button (a click)",
+          "when": "the button is visible"
+        },
+        {
+          "keys": "Tab",
+          "action": "Reaches the button only while it is visible (hidden: inert, visibility hidden); never the first tab stop at rest"
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "CHATSCROLL-01",
+          "type": "a11y-improvement",
+          "text": "Focus is not lost when the button hides while it holds focus: it moves to `focusTarget`, else the newest message of the nearest tct-chat-message-list (focusLatestMessage()), after the scroll the button asked for. Hidden is `inert` as well as `visibility: hidden`, so it is out of the tab order and the accessibility tree immediately, not at the end of the fade."
+        },
+        {
+          "id": "CHATSCROLL-02",
+          "type": "approved-api-difference",
+          "text": "The pill takes the default padding of tct-button (no padding hook; `--radius-element` is set to the full radius on the inner button). The host lets clicks through outside the pill (pointer-events: none), where upstream sets it on the dock."
+        },
+        {
+          "id": "CHATSCROLL-03",
+          "type": "approved-api-difference",
+          "text": "useChatStreamScroll and useChatNewMessages are Lit reactive controllers. `scrollend` re-locking has a debounced-scroll fallback that also runs where scrollend exists (the handler is idempotent), because feature probes belong to core/features.ts (a shared file; see requests). `overflow-anchor: none` on the following container is an adopted stylesheet rule on an attribute, so the consumer's own value is never read or written (as upstream's injected <style>)."
+        },
+        {
+          "id": "CHATSCROLL-04",
+          "type": "a11y-improvement",
+          "text": "A reader's upward move that has not produced its scroll event yet wins over a resize-driven write of ours (the reduced-motion jump in particular would otherwise put the position back before the reader's scroll was ever seen); the spring ends on the exact bottom pixel instead of stalling one or two pixels short."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/core/src/features.ts",
+          "reason": "Optional: add a `scrollEnd` probe (`'onscrollend' in window`) so ChatStreamScrollController can skip its debounced-scroll settle timer where the engine fires scrollend (Safari < 26.2 lacks it). The controller is correct without it, so nothing is blocked.",
+          "diff": "scrollEnd: () => hasDom() && 'onscrollend' in window,"
+        }
+      ],
+      "sizeBudgetKb": 65,
+      "notes": "Guides: [mwg:scroll-position-aware-elements]; [mwg:defer-work-until-scroll-ends]; [mwg:accessible-web-components] (focus is moved deliberately with tabindex -1 and focus(), never left to the browser)."
+    }
+  }
+}

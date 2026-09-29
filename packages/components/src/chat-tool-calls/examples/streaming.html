@@ -1,0 +1,25 @@
+<!-- title: Streaming calls; description: Update calls as an agent works: pending, running, complete, error. Give each call a key so rows keep their identity and an open detail stays open. Nothing moves focus and nothing is spoken until a call fails. -->
+<tct-vstack id="tool-streaming-root" max-width="520" gap="3">
+  <tct-hstack h-align="start">
+    <tct-button id="tool-streaming-run">Run the agent</tct-button>
+  </tct-hstack>
+  <tct-chat-tool-calls id="tool-streaming" expanded></tct-chat-tool-calls>
+</tct-vstack>
+<script type="module">
+  const list = document.getElementById('tool-streaming');
+  const run = document.getElementById('tool-streaming-run');
+  const steps = [
+    [{name: 'read_file', key: 'a', status: 'running', target: 'forecast/model.py'}],
+    [{name: 'read_file', key: 'a', status: 'complete', target: 'forecast/model.py', duration: '90ms'}, {name: 'run_tests', key: 'b', status: 'running', target: 'pytest forecast/'}],
+    [{name: 'read_file', key: 'a', status: 'complete', target: 'forecast/model.py', duration: '90ms'}, {name: 'run_tests', key: 'b', status: 'error', target: 'pytest forecast/', errorMessage: '2 tests failed'}],
+  ];
+  run.addEventListener('click', () => {
+    run.disabled = true;
+    steps.forEach((calls, index) => {
+      setTimeout(() => {
+        list.calls = calls;
+        if (index === steps.length - 1) run.disabled = false;
+      }, index * 1200);
+    });
+  });
+</script>
