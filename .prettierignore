@@ -1,0 +1,30 @@
+# Generated (never formatted or committed)
+**/generated/
+**/dist/
+custom-elements.json
+reports/
+apps/docs/src/content/docs/components/
+.astro/
+node_modules/
+pnpm-lock.yaml
+
+# Committed derived API guards are written by scripts, not by hand
+**/__snapshots__/
+
+# Authored prose and tables: formatting them only creates noisy diffs
+*.md
+*.mdx
+
+# Example fragments are HTML fragments without <html>/<body>; Prettier would reflow inline whitespace
+**/examples/*.html
+
+# Test fixtures may be intentionally malformed
+**/fixtures/
+
+# Hash-locked verbatim copies of upstream/owner inputs (formatting would break the lock)
+packages/tokens/src/inputs/
+packages/tokens/snapshots/
+packages/locales/src/catalogs/
+
+# Orchestrator-owned plans, research and architecture documents (including their JSON inputs)
+docs/

@@ -1,0 +1,19 @@
+{
+  "name": "@tecton-astryx/docs",
+  "private": true,
+  "license": "UNLICENSED",
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Astro + Starlight documentation site (shell added in milestone M6).",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "^0.42.4",
+    "@tecton-astryx/components": "workspace:*",
+    "@tecton-astryx/tokens": "workspace:*",
+    "astro": "^7.3.5"
+  }
+}

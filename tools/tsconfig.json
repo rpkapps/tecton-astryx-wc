@@ -1,0 +1,17 @@
+{
+  "extends": "../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "emitDeclarationOnly": false,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+    "module": "esnext",
+    "types": ["node"]
+  },
+  "include": ["./**/*.ts", "../vitest.config.ts", "../packages/*/scripts/**/*.ts"],
+  "exclude": ["./**/fixtures/**"]
+}

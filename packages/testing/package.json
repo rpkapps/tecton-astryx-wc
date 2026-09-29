@@ -1,0 +1,24 @@
+{
+  "name": "@tecton-astryx/testing",
+  "private": true,
+  "license": "UNLICENSED",
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Test utilities and standard suites (dev only, never shipped).",
+  "sideEffects": false,
+  "exports": {
+    "./*.js": {
+      "tct-source": "./src/*.ts",
+      "default": "./src/*.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "@tecton-astryx/core": "workspace:*",
+    "axe-core": "catalog:",
+    "lit": "catalog:"
+  },
+  "peerDependencies": {
+    "vitest": "^5.0.2"
+  }
+}

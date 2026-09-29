@@ -1,0 +1,30 @@
+{
+  "name": "@tecton-astryx/core",
+  "private": true,
+  "license": "UNLICENSED",
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Headless runtime: base class, events, context, controllers, mixins, i18n, icon registry, security, date.",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "tct-source": "./src/generated/index.ts",
+      "types": "./dist/generated/index.d.ts",
+      "default": "./dist/generated/index.js"
+    },
+    "./*.js": {
+      "tct-source": "./src/*.ts",
+      "types": "./dist/*.d.ts",
+      "default": "./dist/*.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "@floating-ui/dom": "catalog:",
+    "@internationalized/date": "catalog:",
+    "@tecton-astryx/locales": "workspace:*",
+    "dompurify": "catalog:",
+    "intl-messageformat": "catalog:",
+    "lit": "catalog:"
+  }
+}

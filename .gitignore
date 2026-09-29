@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# Generated artifacts (ARCHITECTURE §3): never edit, never commit. `pnpm generate` recreates them.
+**/generated/
+**/dist/
+custom-elements.json
+apps/docs/src/content/docs/components/
+apps/docs/.astro/
+reports/
+
+# Build and tool caches
+*.tsbuildinfo
+.vite/
+.astro/
+.eslintcache
+.stylelintcache
+.cache/
+coverage/
+
+# Vitest browser mode failure screenshots and attachments
+**/__screenshots__/
+.vitest-attachments/
+
+# Editors and OS
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.log
+.env
+.env.*

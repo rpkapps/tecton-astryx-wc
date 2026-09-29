@@ -1,0 +1,21 @@
+packages:
+  - packages/*
+  - apps/*
+  - tools
+
+# Versions of the dependencies that are declared in more than one package.json, kept in one place.
+# (D-007 / D-009 approved list only; changing this file changes the lockfile: owner decision.)
+catalog:
+  '@floating-ui/dom': ^1.8.0
+  '@internationalized/date': ^3.12.4
+  axe-core: ^4.13.0
+  dompurify: ^3.4.16
+  intl-messageformat: ^12.1.2
+  lit: ^3.3.3
+  vitest: ^5.0.2
+
+# Never let dependencies run install scripts (Playwright browsers are never downloaded here).
+onlyBuiltDependencies: []
+ignoredBuiltDependencies:
+  - esbuild
+  - rs-module-lexer

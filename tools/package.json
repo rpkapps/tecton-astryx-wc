@@ -1,0 +1,8 @@
+{
+  "name": "@tecton-astryx/tools",
+  "private": true,
+  "license": "UNLICENSED",
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Generators, checks, Vite plugin, ESLint/Stylelint plugins, CEM plugins. Scripts run on Node type stripping."
+}

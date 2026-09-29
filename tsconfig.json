@@ -1,0 +1,23 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "packages/tokens"
+    },
+    {
+      "path": "packages/locales"
+    },
+    {
+      "path": "packages/icons"
+    },
+    {
+      "path": "packages/core"
+    },
+    {
+      "path": "packages/components"
+    },
+    {
+      "path": "packages/testing"
+    }
+  ]
+}

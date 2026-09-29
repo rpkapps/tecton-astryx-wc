@@ -1,0 +1,56 @@
+{
+  "name": "@tecton-astryx/components",
+  "private": true,
+  "license": "UNLICENSED",
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Every public tct-* element, shared styles, define entries, autoloader and CDN bundle.",
+  "exports": {
+    ".": {
+      "tct-source": "./src/generated/index.ts",
+      "types": "./dist/generated/index.d.ts",
+      "default": "./dist/generated/index.js"
+    },
+    "./define.js": {
+      "tct-source": "./src/generated/define-all.ts",
+      "types": "./dist/generated/define-all.d.ts",
+      "default": "./dist/generated/define-all.js"
+    },
+    "./autoloader.js": {
+      "tct-source": "./src/autoloader.ts",
+      "types": "./dist/autoloader.d.ts",
+      "default": "./dist/autoloader.js"
+    },
+    "./custom-elements.json": "./custom-elements.json",
+    "./tecton.css": "./dist/tecton.css",
+    "./light-dom.css": "./dist/light-dom.css",
+    "./cloak.css": "./dist/cloak.css",
+    "./cdn/*": "./dist/cdn/*",
+    "./package.json": "./package.json",
+    "./*.js": {
+      "tct-source": "./src/*.ts",
+      "types": "./dist/*.d.ts",
+      "default": "./dist/*.js"
+    },
+    "./*": {
+      "tct-source": "./src/*/define.ts",
+      "types": "./dist/*/define.d.ts",
+      "default": "./dist/*/define.js"
+    }
+  },
+  "sideEffects": [
+    "./dist/*/define.js",
+    "./dist/generated/define-all.js",
+    "./dist/autoloader.js",
+    "./dist/cdn/**",
+    "./src/*/define.ts",
+    "**/*.css"
+  ],
+  "dependencies": {
+    "@tecton-astryx/core": "workspace:*",
+    "@tecton-astryx/icons": "workspace:*",
+    "@tecton-astryx/locales": "workspace:*",
+    "@tecton-astryx/tokens": "workspace:*",
+    "lit": "catalog:"
+  }
+}
