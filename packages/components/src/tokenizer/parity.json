@@ -1,0 +1,393 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "tokenizer",
+  "workPackage": "WP-12",
+  "entries": {
+    "core.tokenizer": {
+      "tag": "tct-tokenizer",
+      "status": "implemented",
+      "upstream": {
+        "name": "Tokenizer",
+        "path": "packages/core/src/Tokenizer/Tokenizer.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute"
+        },
+        {
+          "upstream": "searchSource",
+          "kind": "prop",
+          "target": "searchSource",
+          "as": "property",
+          "notes": "`{search(query), bootstrap(), cancel?()}`; items already chosen are left out of the results."
+        },
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "items",
+          "as": "property",
+          "notes": "The chosen items, in the order they were added. Uncontrolled: `defaultItems` is where form reset returns to. `values` is the read-only list of their ids. Writing `items` fires no events."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "tct-selection-change",
+          "as": "event",
+          "notes": "Cancelable, before the tokens change. `action` is `add`, `create`, `remove` or `clear`, `item` the item concerned and `items` the list after the change; one bulk event per paste. The native `input` and one `change` follow."
+        },
+        {
+          "upstream": "placeholder",
+          "kind": "prop",
+          "target": "placeholder",
+          "as": "attribute",
+          "notes": "Shown while there are no tokens and nothing is typed. Unset shows the localised \"Search…\"; an empty string shows none."
+        },
+        {
+          "upstream": "maxEntries",
+          "kind": "prop",
+          "target": "max-entries",
+          "as": "attribute",
+          "notes": "At the limit the input takes no room (it stays for Backspace and focus) and offers no results."
+        },
+        {
+          "upstream": "hasClear",
+          "kind": "prop",
+          "target": "has-clear",
+          "as": "attribute",
+          "default": false,
+          "notes": "A clear-all button while there are tokens."
+        },
+        {
+          "upstream": "renderToken",
+          "kind": "prop",
+          "target": "renderToken",
+          "as": "property",
+          "notes": "`(item, remove) => template | node | text`; call `remove()` from your own control. Default: a removable `tct-token`."
+        },
+        {
+          "upstream": "renderItem",
+          "kind": "prop",
+          "target": "renderItem",
+          "as": "property"
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Also through <fieldset disabled>."
+        },
+        {
+          "upstream": "htmlName",
+          "kind": "prop",
+          "target": "name",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "One `name=id` entry per token (repeated name) in FormData."
+        },
+        {
+          "upstream": "disabledMessage",
+          "kind": "prop",
+          "target": "disabled-message",
+          "as": "attribute"
+        },
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "target": "status",
+          "as": "property",
+          "notes": "Object `{type, message?}`, or the `status-type` and `status-message` attributes."
+        },
+        {
+          "upstream": "statusVariant",
+          "kind": "prop",
+          "target": "status-variant",
+          "as": "attribute",
+          "default": "attached"
+        },
+        {
+          "upstream": "isLabelHidden",
+          "kind": "prop",
+          "target": "label-hidden",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "description",
+          "kind": "prop",
+          "target": "description",
+          "as": "attribute"
+        },
+        {
+          "upstream": "isRequired",
+          "kind": "prop",
+          "target": "required",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "A validity constraint: at least one token, whatever is typed."
+        },
+        {
+          "upstream": "isOptional",
+          "kind": "prop",
+          "target": "optional",
+          "as": "attribute"
+        },
+        {
+          "upstream": "labelTooltip",
+          "kind": "prop",
+          "target": "label-tooltip",
+          "as": "attribute"
+        },
+        {
+          "upstream": "hasEntriesOnFocus",
+          "kind": "prop",
+          "target": "entries-on-focus",
+          "as": "attribute",
+          "default": false
+        },
+        {
+          "upstream": "maxMenuItems",
+          "kind": "prop",
+          "target": "max-menu-items",
+          "as": "attribute",
+          "default": 10
+        },
+        {
+          "upstream": "menuWidth",
+          "kind": "prop",
+          "target": "menu-width",
+          "as": "attribute",
+          "notes": "Px; never narrower than the field."
+        },
+        {
+          "upstream": "minQueryLength",
+          "kind": "prop",
+          "target": "min-query-length",
+          "as": "attribute",
+          "default": 1,
+          "notes": "The Create entry needs no search, so it is offered below the minimum."
+        },
+        {
+          "upstream": "emptySearchResultsText",
+          "kind": "prop",
+          "target": "empty-search-results-text",
+          "as": "attribute"
+        },
+        {
+          "upstream": "hasAutoFocus",
+          "kind": "prop",
+          "target": "autofocus",
+          "as": "attribute"
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md",
+          "notes": "Unset takes the nearest size provider, else md."
+        },
+        {
+          "upstream": "debounceMs",
+          "kind": "prop",
+          "target": "debounceMs",
+          "as": "property",
+          "default": 150,
+          "notes": "The `debounce-ms` attribute."
+        },
+        {
+          "upstream": "hasCreate",
+          "kind": "prop",
+          "target": "has-create",
+          "as": "attribute",
+          "default": false,
+          "notes": "Typing offers a `Create \"text\"` result (localised); choosing it, or pressing Enter with it highlighted, adds a token with the text as id and label."
+        },
+        {
+          "upstream": "onChangeQuery",
+          "kind": "event",
+          "target": "input",
+          "as": "native-event",
+          "notes": "Native `input` on every edit; the text is the `query` getter."
+        },
+        {
+          "upstream": "startIcon",
+          "kind": "slot",
+          "target": "start-icon",
+          "as": "attribute",
+          "notes": "An icon name; the `start` slot takes your own content instead."
+        },
+        {
+          "upstream": "endContent",
+          "kind": "slot",
+          "target": "end",
+          "as": "slot"
+        },
+        {
+          "upstream": "handleRef",
+          "kind": "ref",
+          "target": "focus",
+          "as": "method",
+          "notes": "The element is the handle: `focus()` and `blur()` reach the input."
+        },
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "target": "width",
+          "as": "attribute",
+          "notes": "A number is px, a string a CSS length. Not reflected."
+        },
+        {
+          "upstream": "tokenOverflowBehavior",
+          "kind": "prop",
+          "target": "token-overflow",
+          "as": "attribute",
+          "reflect": true,
+          "default": "none",
+          "notes": "`none` (wrap), `unfocused-inline` (one row with \"+N more\" while unfocused, expanding in place on focus) or `unfocused-layer` (accepted; currently expands in place, see TOKENIZER-04)."
+        },
+        {
+          "upstream": "onFocus",
+          "kind": "event",
+          "target": "focus",
+          "as": "native-event",
+          "notes": "Fires from the inner input; focus moving between the tokens, the input and the end controls is not a new focus of the field."
+        },
+        {
+          "upstream": "onBlur",
+          "kind": "event",
+          "target": "blur",
+          "as": "native-event"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(field), ::part(input), ::part(token), ::part(popup) and the tokens."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useAnnounce",
+          "target": "announce",
+          "as": "module-function",
+          "notes": "`@tecton-wc/core/a11y/announcer.js`: additions, removals and pasted lists are announced (localised), the result count once per menu."
+        },
+        {
+          "upstream": "useLayer",
+          "as": "waived",
+          "reason": "Only the `unfocused-layer` overflow used it; that mode expands in place for now (TOKENIZER-04). The result popup uses the shared layer module."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "ArrowDown",
+          "action": "Opens the results and highlights the first one",
+          "when": "the results are closed and there is a query (or entries-on-focus)"
+        },
+        {
+          "keys": "ArrowDown",
+          "action": "Highlights the next result",
+          "when": "the results are open"
+        },
+        {
+          "keys": "ArrowUp",
+          "action": "Highlights the previous result",
+          "when": "the results are open"
+        },
+        {
+          "keys": "Enter",
+          "action": "Adds the highlighted result as a token and keeps the input for the next one",
+          "when": "the results are open"
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes the results, keeping the text",
+          "when": "the results are open"
+        },
+        {
+          "keys": "Tab",
+          "action": "Closes the results and moves focus on",
+          "when": "the results are open"
+        },
+        {
+          "keys": "Backspace",
+          "action": "Removes the last token and announces it",
+          "when": "the input is empty"
+        },
+        {
+          "keys": "Tab",
+          "action": "Lands on the input, not on the first token's remove button",
+          "when": "focus arrives from outside the field"
+        },
+        {
+          "keys": "Enter, Space",
+          "action": "Removes a token",
+          "when": "its remove button has focus"
+        }
+      ],
+      "form": {
+        "formAssociated": true,
+        "notes": "Form-associated (ElementInternals): submits one `name=id` entry per token (repeated names in FormData, in order), nothing without tokens or a name; resets to `defaultItems`, restores on navigation (the state carries the labels), joins <fieldset disabled>. `required` means at least one token. Enter in the open results adds a token and never submits."
+      },
+      "differences": [
+        {
+          "id": "TOKENIZER-01",
+          "type": "approved-api-difference",
+          "text": "Uncontrolled by default: `items` (with `defaultItems`) is a property and every user change fires the cancelable `tct-selection-change` (with `action`, `item`, `items`) followed by the native `input` and one `change`, instead of a controlled `value` plus `onChange(items, change)`. `tokenOverflowBehavior` becomes `token-overflow` with kebab values; `hasClear` and `hasCreate` keep their meaning as attributes."
+        },
+        {
+          "id": "TOKENIZER-02",
+          "type": "approved-api-difference",
+          "text": "Form participation is through ElementInternals (repeated `name` entries) rather than hidden inputs, with `required` validity and restore state; pasting a list (line breaks, tabs, commas, semicolons) adds one token per entry that names a result exactly, or per entry with `has-create`, and keeps what it could not resolve in the input."
+        },
+        {
+          "id": "TOKENIZER-03",
+          "type": "a11y-improvement",
+          "text": "Additions, removals and pasted lists are announced through the announcer with localised messages (`@tct.tokenizer.*`); the \"+N more\" indicator is text, not a hover-only badge; the result count is announced once per menu; Backspace on the empty input removes the last token; focus arriving from outside lands on the input instead of walking every remove button."
+        },
+        {
+          "id": "TOKENIZER-04",
+          "type": "waiver",
+          "text": "`token-overflow=\"unfocused-layer\"` is accepted but expands in place like `unfocused-inline`; upstream promotes the expanded field to the top layer over the content below (a placeholder keeps the collapsed height). Moving the box into a popover while it holds focus needs a same-size placeholder twin and its own positioning and results-popup stacking; deferred as a follow-up."
+        },
+        {
+          "id": "TOKENIZER-05",
+          "type": "tecton-visual",
+          "text": "One outlined box from the Tecton input tokens holds the tokens (Tecton chip roles), the input and the end lane (busy, clear-all, status icon); the result rows and the Create entry use the same highlight and pressed fills as `tct-typeahead`, checked for contrast in light and dark."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/components/src/typeahead/typeahead-engine.ts",
+          "reason": "Unify the combobox logic with the WP-11 `controllers/combobox.ts` once both are merged (see the typeahead folder's request)."
+        },
+        {
+          "file": "packages/locales",
+          "reason": "The three new tokenizer messages (`@tct.tokenizer.createOption`, `overflowMore`, `tokensAdded`) have no upstream translation: the 29 locales fall back to English until the catalogs carry them."
+        }
+      ],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:form-associated-custom-elements] repeated FormData entries, reset and restore; [mwg:accessibility] editable combobox with active descendant, announcements; [mwg:ime-safe-enter-submit]; [mwg:resilient-context-menus-and-nested-dropdowns] popup dismissal."
+    }
+  }
+}

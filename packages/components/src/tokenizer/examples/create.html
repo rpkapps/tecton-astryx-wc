@@ -1,0 +1,14 @@
+<!-- title: Create from text; description: has-create offers a Create "text" result for anything typed that is not in the source, for free-form tagging. Pressing Enter with it highlighted adds the text as a token. -->
+<tct-vstack id="create-root" max-width="420">
+  <tct-tokenizer label="Tags" has-create placeholder="Type a tag" entries-on-focus></tct-tokenizer>
+</tct-vstack>
+<script type="module">
+  import {createStaticSource} from '@tecton-wc/components/typeahead/utils.js';
+
+  const tags = [
+    {id: 'bug', label: 'bug'},
+    {id: 'feature', label: 'feature'},
+    {id: 'docs', label: 'docs'},
+  ];
+  document.querySelector('#create-root tct-tokenizer').searchSource = createStaticSource(tags);
+</script>

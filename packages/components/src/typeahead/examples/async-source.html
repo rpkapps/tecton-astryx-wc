@@ -1,0 +1,24 @@
+<!-- title: Async source; description: A source may return a promise. Searches are debounced (debounce-ms), a newer query supersedes an older one so a slow response never wins, and cancel() lets you abort the request. min-query-length keeps short queries from searching. -->
+<tct-vstack id="async-source-root" max-width="360" gap="2">
+  <tct-typeahead label="City" placeholder="Search cities (at least 2 letters)" min-query-length="2" debounce-ms="200"></tct-typeahead>
+  <tct-text type="supporting" color="secondary">Each search takes half a second.</tct-text>
+</tct-vstack>
+<script type="module">
+  const cities = ['Amsterdam', 'Athens', 'Berlin', 'Bern', 'Brussels', 'Budapest', 'Copenhagen', 'Dublin', 'Lisbon', 'Madrid', 'Oslo', 'Paris', 'Prague', 'Rome', 'Vienna'];
+  let timer;
+  const field = document.querySelector('#async-source-root tct-typeahead');
+  field.searchSource = {
+    bootstrap: () => [],
+    search(query) {
+      return new Promise((resolve) => {
+        timer = setTimeout(() => {
+          resolve(cities.filter((city) => city.toLowerCase().includes(query.toLowerCase())).map((city) => ({id: city.toLowerCase(), label: city})));
+        }, 500);
+      });
+    },
+    // Called when a newer search supersedes this one, or the menu closes.
+    cancel() {
+      clearTimeout(timer);
+    },
+  };
+</script>

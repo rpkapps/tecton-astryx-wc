@@ -1,0 +1,18 @@
+<!-- title: Maximum entries; description: max-entries stops the field accepting more. At the limit the input takes no room and offers no results, but it stays focusable so Backspace still removes the last token. -->
+<tct-vstack id="max-entries-root" max-width="420">
+  <tct-tokenizer label="Approvers" description="Up to three." max-entries="3" has-clear placeholder="Search people"></tct-tokenizer>
+</tct-vstack>
+<script type="module">
+  import {createStaticSource} from '@tecton-wc/components/typeahead/utils.js';
+
+  const people = [
+    {id: 'ada', label: 'Ada Lovelace'},
+    {id: 'grace', label: 'Grace Hopper'},
+    {id: 'alan', label: 'Alan Turing'},
+    {id: 'edsger', label: 'Edsger Dijkstra'},
+    {id: 'barbara', label: 'Barbara Liskov'},
+  ];
+  const field = document.querySelector('#max-entries-root tct-tokenizer');
+  field.searchSource = createStaticSource(people);
+  field.items = people.slice(0, 3);
+</script>

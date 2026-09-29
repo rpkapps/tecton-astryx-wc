@@ -1,0 +1,21 @@
+<!-- title: Basic; description: A multi-select search field. Choosing a result adds a removable token and clears the query; results already chosen are left out. Backspace in the empty input removes the last token, and pasting a list adds one token per entry. -->
+<tct-vstack id="basic-root" max-width="420">
+  <tct-tokenizer label="Teams" description="Type to search, or paste a list." placeholder="Search teams"></tct-tokenizer>
+</tct-vstack>
+<script type="module">
+  import {createStaticSource} from '@tecton-wc/components/typeahead/utils.js';
+
+  const teams = [
+    {id: 'design', label: 'Design'},
+    {id: 'engineering', label: 'Engineering'},
+    {id: 'marketing', label: 'Marketing'},
+    {id: 'sales', label: 'Sales'},
+    {id: 'support', label: 'Support'},
+    {id: 'legal', label: 'Legal'},
+    {id: 'finance', label: 'Finance'},
+    {id: 'people', label: 'People'},
+  ];
+  const field = document.querySelector('#basic-root tct-tokenizer');
+  field.searchSource = createStaticSource(teams);
+  field.items = [teams[0], teams[1]];
+</script>

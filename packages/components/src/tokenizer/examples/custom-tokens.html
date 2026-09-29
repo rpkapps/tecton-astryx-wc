@@ -1,0 +1,22 @@
+<!-- title: Custom tokens and rows; description: renderToken returns your own token, and calls remove() from its own control. renderItem changes the result rows the same way as in tct-typeahead. -->
+<tct-vstack id="custom-tokens-root" max-width="420">
+  <tct-tokenizer label="Reviewers" placeholder="Search people"></tct-tokenizer>
+</tct-vstack>
+<script type="module">
+  import {html} from 'lit';
+  import {createStaticSource} from '@tecton-wc/components/typeahead/utils.js';
+
+  const people = [
+    {id: 'ada', label: 'Ada Lovelace', auxiliaryData: {role: 'Analyst'}},
+    {id: 'grace', label: 'Grace Hopper', auxiliaryData: {role: 'Engineer'}},
+    {id: 'alan', label: 'Alan Turing', auxiliaryData: {role: 'Researcher'}},
+  ];
+  const field = document.querySelector('#custom-tokens-root tct-tokenizer');
+  field.searchSource = createStaticSource(people);
+  field.items = [people[0]];
+  field.renderToken = (item, remove) => html`
+    <tct-token label=${item.label} color="blue" removable @tct-remove=${remove}>
+      <tct-text slot="end" type="supporting" color="secondary">${item.auxiliaryData.role}</tct-text>
+    </tct-token>`;
+  field.renderItem = (item) => html`<tct-typeahead-item .item=${item} description=${item.auxiliaryData.role}></tct-typeahead-item>`;
+</script>

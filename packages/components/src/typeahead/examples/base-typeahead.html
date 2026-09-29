@@ -1,0 +1,26 @@
+<!-- title: Base typeahead; description: tct-base-typeahead is the combobox engine without a field: a bare input and the result popup. Name it with aria-label or aria-labelledby and draw the box yourself. tct-selection-change fires before the item changes. -->
+<tct-vstack id="base-typeahead-root" max-width="360" gap="2">
+  <tct-base-typeahead aria-label="Fruit" placeholder="Search fruit"></tct-base-typeahead>
+  <tct-text type="supporting" color="secondary" role="status">Nothing chosen yet.</tct-text>
+</tct-vstack>
+<script type="module">
+  import {createStaticSource} from '@tecton-wc/components/typeahead/utils.js';
+
+  const fruits = [
+    {id: 'apple', label: 'Apple'},
+    {id: 'apricot', label: 'Apricot'},
+    {id: 'banana', label: 'Banana'},
+    {id: 'blueberry', label: 'Blueberry'},
+    {id: 'cherry', label: 'Cherry'},
+    {id: 'grape', label: 'Grape'},
+    {id: 'lemon', label: 'Lemon'},
+    {id: 'mango', label: 'Mango'},
+    {id: 'peach', label: 'Peach'},
+  ];
+  const root = document.getElementById('base-typeahead-root');
+  const base = root.querySelector('tct-base-typeahead');
+  base.searchSource = createStaticSource(fruits);
+  base.addEventListener('tct-selection-change', (event) => {
+    root.querySelector('tct-text').textContent = `Chose ${event.item.label}.`;
+  });
+</script>
