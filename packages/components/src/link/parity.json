@@ -1,0 +1,235 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "link",
+  "workPackage": "WP-2",
+  "entries": {
+    "core.link": {
+      "tag": "tct-link",
+      "status": "implemented",
+      "upstream": {
+        "name": "Link",
+        "path": "packages/core/src/Link/Link.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "as",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-as: a React component cannot be passed to an element. Client-side routing goes through tct-link-provider (linkContext.navigate), which every tct-link, tct-button and tct-avatar in its subtree consults; the anchor stays a native <a href>."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "aria-label of the inner element; a host aria-label wins."
+        },
+        {
+          "upstream": "href",
+          "kind": "prop",
+          "target": "href",
+          "as": "attribute",
+          "notes": "Without it a <button type=button> renders. A destination the URL policy refuses renders an anchor without href."
+        },
+        {
+          "upstream": "hasUnderline",
+          "kind": "prop",
+          "target": "has-underline",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "isExternalLink",
+          "kind": "prop",
+          "target": "external",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "newTabLabel",
+          "kind": "prop",
+          "target": "new-tab-label",
+          "as": "attribute",
+          "notes": "Default: the localised @astryx.link.newTab message."
+        },
+        {"upstream": "target", "kind": "prop", "target": "target", "as": "attribute"},
+        {"upstream": "rel", "kind": "prop", "target": "rel", "as": "attribute"},
+        {
+          "upstream": "download",
+          "kind": "prop",
+          "target": "download",
+          "as": "attribute",
+          "notes": "Boolean attribute or a file name; the property is true or the file name."
+        },
+        {
+          "upstream": "referrerPolicy",
+          "kind": "prop",
+          "target": "referrer-policy",
+          "as": "attribute"
+        },
+        {
+          "upstream": "onClick",
+          "kind": "event",
+          "target": "click",
+          "as": "native-event",
+          "notes": "The native click, retargeted from the inner anchor or button; a disabled link never fires it."
+        },
+        {
+          "upstream": "tooltip",
+          "kind": "prop",
+          "target": "tooltip",
+          "as": "attribute",
+          "notes": "Built-in hover and focus tooltip through TooltipController (shadow mode), above the link."
+        },
+        {
+          "upstream": "isStandalone",
+          "kind": "prop",
+          "target": "standalone",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Forwarded to the wrapping tct-text."
+        },
+        {
+          "upstream": "weight",
+          "kind": "prop",
+          "target": "weight",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Forwarded to the wrapping tct-text."
+        },
+        {
+          "upstream": "color",
+          "kind": "prop",
+          "target": "color",
+          "as": "attribute",
+          "reflect": true,
+          "default": "accent"
+        },
+        {
+          "upstream": "display",
+          "kind": "prop",
+          "target": "display",
+          "as": "attribute",
+          "reflect": true,
+          "default": "inline"
+        },
+        {
+          "upstream": "maxLines",
+          "kind": "prop",
+          "target": "max-lines",
+          "as": "attribute",
+          "default": 0,
+          "notes": "Forwarded to the wrapping tct-text (truncation with a tooltip of the full text)."
+        },
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "type",
+          "kind": "prop",
+          "target": "type",
+          "as": "attribute",
+          "reflect": true,
+          "default": "body",
+          "notes": "Forwarded to the wrapping tct-text; use inherit for an inline link inside a paragraph."
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "target": "control",
+          "as": "property",
+          "notes": "The inner <a> or <button>."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle family: data-* attributes are set on the host directly; nothing to map."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base|text|external-icon|tooltip) or the tokens."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useInteractiveRole",
+          "as": "context",
+          "target": "interactiveRoleContext",
+          "notes": "href wins; otherwise a container's request (Popover and menu triggers) or a missing href renders a button; a disabled destination renders a plain anchor without href."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Moves focus to the link",
+          "when": "a live link or the button form"
+        },
+        {"keys": "Enter", "action": "Follows the link (Enter)", "when": "href"},
+        {
+          "keys": "Enter, Space",
+          "action": "Activates the button form (Enter, Space)",
+          "when": "no href"
+        },
+        {"keys": "Tab", "action": "Skips a disabled link", "when": "disabled"}
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "LINK-01",
+          "type": "tecton-visual",
+          "text": "Tecton links are body-coloured and the underline (on hover, or always with has-underline) is the only affordance: color=accent (the default) resolves to the primary text colour with no hover tint, as the owner's React theme re-points --color-text-accent for Link. primary and secondary keep upstream's 15% hover tint. The inner tct-text inherits the link colour so text, underline and icon always agree."
+        },
+        {
+          "id": "LINK-02",
+          "type": "approved-api-difference",
+          "text": "The router is not a component prop: tct-link-provider provides linkContext.navigate(href, event). A plain primary click on a same-origin link (not external, targeted, download or modified) is offered to it; returning true cancels the native navigation. Everything else stays native."
+        },
+        {
+          "id": "LINK-03",
+          "type": "a11y-improvement",
+          "text": "In forced colours the link takes LinkText (GrayText when disabled) instead of its palette colour, and the disabled dimming is dropped there."
+        },
+        {
+          "id": "LINK-04",
+          "type": "approved-api-difference",
+          "text": "With a tooltip active a host aria-describedby is not mirrored onto the inner control (tct-button does the same): the tooltip owns the description."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components] native a/button in the shadow root with delegatesFocus; [mwg:security] URL policy and noopener; [mwg:interest-triggered-tooltips] and [mwg:position-aware-tooltips] via TooltipController; [mwg:css] forced colours, hover only under (hover: hover). Utilities: useLinkify is the module function linkify() (linkify.ts); useLinkComponent is replaced by linkContext (tct-link-provider)."
+    }
+  }
+}

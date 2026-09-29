@@ -1,0 +1,116 @@
+/*
+ * tct-link. The host is inline text; `.root` is the native <a> or <button> (link styling stripped to look
+ * identical). The colour is set here on the root and inherited by the wrapping tct-text (colour="inherit"),
+ * so the underline, the text and the external icon always agree. Tecton binds `accent` (the default) to the
+ * primary text colour with the underline as the only affordance and no hover colour; the other colours keep
+ * upstream's hover tint. [mwg:styling-web-components] [mwg:css]
+ */
+@layer component {
+  :host {
+    display: inline;
+  }
+
+  :host([display='block']) {
+    display: block;
+  }
+
+  .root {
+    --_color: var(--color-text-primary);
+    --_focus-offset: 2px; /* design: the ring hugs the word with a little air (Tecton link focus) */
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-0-5);
+    box-sizing: border-box;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-inner);
+    background-color: transparent;
+    color: var(--_color);
+    font: inherit;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      color var(--duration-fast) var(--ease-standard),
+      text-decoration-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .root[data-color='primary'] {
+    --_color: var(--color-text-primary);
+  }
+
+  .root[data-color='secondary'],
+  .root[data-color='placeholder'] {
+    --_color: var(--color-text-secondary);
+  }
+
+  .root[data-color='disabled'] {
+    --_color: var(--color-text-disabled);
+  }
+
+  .root[data-color='inherit'] {
+    color: inherit;
+  }
+
+  /* Accent: Tecton links are body-coloured. */
+  .root[data-color='accent'] {
+    --_color: var(--color-text-primary);
+  }
+
+  :host([standalone]) .root {
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+  }
+
+  :host([has-underline]) .root {
+    text-decoration: underline;
+  }
+
+  .external {
+    flex-shrink: 0;
+  }
+
+  .root[aria-disabled='true'] {
+    cursor: default;
+    opacity: 0.5; /* design: disabled links dim to half strength (upstream) */
+    pointer-events: none;
+  }
+}
+
+@layer state {
+  @media (hover: hover) {
+    .root:hover:where(:not([aria-disabled='true'])) {
+      text-decoration: underline;
+    }
+
+    .root[data-color='primary']:hover:where(:not([aria-disabled='true'])) {
+      --_color: color-mix(in srgb, var(--color-text-primary), var(--color-tint-hover) 15%);
+    }
+
+    .root[data-color='secondary']:hover:where(:not([aria-disabled='true'])) {
+      --_color: color-mix(in srgb, var(--color-text-secondary), var(--color-tint-hover) 15%);
+    }
+  }
+
+  /* The system's pressed overlay behind the text; hover is the colour change above, so a press is the one
+     background it paints. */
+  .root:active:where(:not([aria-disabled='true'])) {
+    background-color: var(--color-overlay-pressed);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .root {
+      color: LinkText;
+      opacity: 1;
+    }
+
+    .root[aria-disabled='true'] {
+      color: GrayText;
+    }
+  }
+}
