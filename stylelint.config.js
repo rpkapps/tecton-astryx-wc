@@ -27,6 +27,7 @@ const COMPONENT_RULES = {
 export default {
   plugins: tct.plugins,
   ignoreFiles: [
+    '.claude/**',
     '**/node_modules/**',
     '**/dist/**',
     '**/generated/**',

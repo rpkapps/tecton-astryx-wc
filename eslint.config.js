@@ -64,6 +64,7 @@ const DEV_ONLY_IN_SHIPPED = [
 
 export default defineConfig([
   globalIgnores([
+    '.claude/**',
     '**/node_modules/**',
     '**/dist/**',
     '**/generated/**',

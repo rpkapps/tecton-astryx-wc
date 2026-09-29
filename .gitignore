@@ -30,3 +30,6 @@ coverage/
 *.log
 .env
 .env.*
+
+# Agent git worktrees
+.claude/worktrees/

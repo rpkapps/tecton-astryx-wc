@@ -1,3 +1,6 @@
+# Agent worktrees (never part of this tree)
+.claude/
+
 # Generated (never formatted or committed)
 **/generated/
 **/dist/
