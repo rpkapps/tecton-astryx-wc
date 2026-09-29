@@ -1,0 +1,12 @@
+<!-- title: Custom trigger and icon-only; description: Put your own button in slot="trigger", or set icon and icon-only for an icon-only built-in trigger (use tct-more-menu for the three-dot overflow pattern). -->
+<tct-hstack gap="4" v-align="center">
+  <tct-dropdown-menu label="Your button">
+    <tct-button slot="trigger" variant="primary" label="Custom trigger"></tct-button>
+    <tct-dropdown-menu-item label="Edit"></tct-dropdown-menu-item>
+    <tct-dropdown-menu-item label="Duplicate"></tct-dropdown-menu-item>
+  </tct-dropdown-menu>
+  <tct-dropdown-menu label="Tools" icon="wrench" icon-only variant="ghost" tooltip="Tools">
+    <tct-dropdown-menu-item label="Search" icon="search"></tct-dropdown-menu-item>
+    <tct-dropdown-menu-item label="Settings" icon="wrench"></tct-dropdown-menu-item>
+  </tct-dropdown-menu>
+</tct-hstack>

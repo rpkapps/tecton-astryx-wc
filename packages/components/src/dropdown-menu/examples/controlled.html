@@ -1,0 +1,23 @@
+<!-- title: Controlled open state; description: The menu owns its state; set open to drive it, listen to tct-open-change and call preventDefault() to veto a user-driven change. Property and attribute writes never emit events. -->
+<div id="controlled-root">
+  <tct-vstack gap="3">
+    <tct-hstack gap="3" v-align="center">
+      <tct-button label="Toggle from outside"></tct-button>
+      <tct-text color="secondary">Escape and outside presses are vetoed.</tct-text>
+    </tct-hstack>
+    <tct-dropdown-menu label="Controlled">
+      <tct-dropdown-menu-item label="Edit"></tct-dropdown-menu-item>
+      <tct-dropdown-menu-item label="Duplicate"></tct-dropdown-menu-item>
+    </tct-dropdown-menu>
+  </tct-vstack>
+  <script type="module">
+    const root = document.querySelector('#controlled-root');
+    const menu = root.querySelector('tct-dropdown-menu');
+    root.querySelector('tct-button').addEventListener('click', () => {
+      menu.open = !menu.open;
+    });
+    menu.addEventListener('tct-open-change', (event) => {
+      if (!event.open && (event.reason === 'escape' || event.reason === 'outside')) event.preventDefault();
+    });
+  </script>
+</div>

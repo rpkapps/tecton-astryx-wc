@@ -1,0 +1,14 @@
+<!-- title: Disabled and menu width; description: A disabled context menu leaves the browser's own menu alone. menu-width sets a minimum width. -->
+<div id="disabled-root">
+  <tct-hstack gap="4" wrap="wrap">
+    <tct-context-menu label="Disabled" disabled>
+      <tct-card padding="6" tabindex="0"><tct-text color="secondary">Disabled: the browser menu shows</tct-text></tct-card>
+    </tct-context-menu>
+    <tct-context-menu label="Wide" menu-width="280">
+      <tct-card padding="6" tabindex="0"><tct-text color="secondary">Wide menu</tct-text></tct-card>
+    </tct-context-menu>
+  </tct-hstack>
+  <script type="module">
+    for (const menu of document.querySelectorAll('#disabled-root tct-context-menu')) menu.items = [{label: 'Cut'}, {label: 'Copy'}];
+  </script>
+</div>

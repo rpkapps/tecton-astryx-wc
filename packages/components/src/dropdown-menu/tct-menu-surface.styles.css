@@ -51,7 +51,10 @@
     font-family: var(--font-family-body);
     font-size: var(--text-label-size);
     line-height: var(--text-label-leading);
+    /* physical: overflow-block / overflow-inline are not available in every Tier-2 engine */
     overflow-x: hidden;
+
+    /* physical: as above */
     overflow-y: auto;
     overscroll-behavior: contain;
     -webkit-user-select: none;

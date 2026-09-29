@@ -54,10 +54,10 @@ const MENU_MAX_INLINE_SIZE = 'calc(100vi - var(--spacing-8))';
  * @slot label - Rich label; overrides the `label` attribute.
  * @slot description - Rich description; overrides the `description` attribute.
  * @slot icon - Custom leading icon; overrides the `icon` attribute.
- * @csspart item - The painted trigger row (Astryx target `astryx-dropdown-menu-item`).
+ * @csspart item - The painted trigger row (upstream theming target `dropdown-menu-item`).
  * @csspart dropdown-menu-item - The painted trigger row, under the upstream target name.
- * @csspart menu - The painted flyout surface (Astryx target `astryx-dropdown-menu`).
- * @csspart indicator-icon - The trailing caret (Astryx target `astryx-dropdown-menu-indicator-icon`).
+ * @csspart menu - The painted flyout surface (upstream theming target `dropdown-menu`).
+ * @csspart indicator-icon - The trailing caret (upstream theming target `dropdown-menu-indicator-icon`).
  * @cssstate open - The flyout is open.
  * @cssstate disabled - The row cannot open its flyout.
  * @fires {TctOpenChangeEvent} tct-open-change - Before the user (click, keys, hover, Escape) opens or closes the flyout; cancelable.
@@ -131,7 +131,7 @@ export class TctDropdownMenuSubMenu extends TctElement {
 
   readonly #context = new ContextProvider(this, {
     context: dropdownMenuContext,
-    initialValue: undefined as unknown as DropdownMenuContextValue | null,
+    initialValue: null,
   });
 
   readonly #keys = new MenuKeyboardController(this, {
@@ -335,7 +335,7 @@ export class TctDropdownMenuSubMenu extends TctElement {
       next?.size !== current?.size ||
       next?.close !== current?.close
     ) {
-      this.#context.setValue(next as DropdownMenuContextValue);
+      this.#context.setValue(next);
     }
   }
 

@@ -134,7 +134,7 @@ export class LongPressController implements ReactiveController {
 
   readonly #onMove = (event: PointerEvent): void => {
     const start = this.#start;
-    if (!start || event.pointerId !== start.pointerId) return;
+    if (start?.pointerId !== event.pointerId) return;
     const limit = this.#read(this.#options.moveCancelPx, LONG_PRESS_DEFAULT_MOVE_CANCEL_PX);
     // Treated as a scroll or drag, not a long press.
     if (Math.abs(event.clientX - start.x) > limit || Math.abs(event.clientY - start.y) > limit) {

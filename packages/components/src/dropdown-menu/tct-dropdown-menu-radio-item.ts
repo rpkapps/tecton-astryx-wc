@@ -27,7 +27,7 @@ import styles from './tct-menu-item.styles.css';
  * @slot description - Rich description; overrides the `description` attribute.
  * @slot icon - Custom leading icon; overrides the `icon` attribute.
  * @slot end - Trailing content: a badge or metadata.
- * @csspart item - The painted row (Astryx target `astryx-dropdown-menu-item`).
+ * @csspart item - The painted row (upstream theming target `dropdown-menu-item`).
  * @csspart dropdown-menu-item - The painted row, under the upstream target name.
  * @cssstate checked - This option is the group's value.
  * @cssstate disabled - The row cannot be chosen.
@@ -69,7 +69,7 @@ export class TctDropdownMenuRadioItem extends TctElement {
   /** Whether this option is the group's value (false outside a group). */
   get checked(): boolean {
     const group = this.#group.value;
-    return group !== undefined && group !== null && group.value === this.value;
+    return group ? group.value === this.value : false;
   }
 
   /** The row's text, as typeahead and assistive technology see it. */

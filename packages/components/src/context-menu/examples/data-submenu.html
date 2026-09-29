@@ -1,0 +1,15 @@
+<!-- title: Sections and submenus; description: Data mode supports titled sections, dividers and nested items: a flyout in a popover, a drill-in view with a Back button in a bottom sheet. -->
+<div id="data-submenu-root">
+  <tct-context-menu label="File actions">
+    <tct-card padding="6" tabindex="0">
+      <tct-text color="secondary">Right-click this file</tct-text>
+    </tct-card>
+  </tct-context-menu>
+  <script type="module">
+    document.querySelector('#data-submenu-root tct-context-menu').items = [
+      {label: 'Open', icon: 'externalLink'},
+      {label: 'Move to', items: [{label: 'Inbox'}, {label: 'Archive'}, {label: 'Projects', items: [{label: 'North Sea'}, {label: 'Barents Sea'}]}]},
+      {type: 'section', title: 'Danger zone', items: [{label: 'Delete', variant: 'destructive'}, {label: 'Empty trash', disabled: true}]},
+    ];
+  </script>
+</div>

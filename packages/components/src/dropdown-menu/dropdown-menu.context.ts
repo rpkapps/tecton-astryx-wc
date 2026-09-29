@@ -17,9 +17,9 @@ export interface DropdownMenuContextValue {
    * closes its flyout and asks its parent, up to the root, which dispatches the cancelable
    * `tct-open-change` and closes. Focus returns to {@link returnFocusTarget}.
    */
-  close(reason?: ChangeReason): void;
+  readonly close: (reason?: ChangeReason) => void;
   /** Where focus goes when the whole menu closes: the trigger (or the element focused before a context menu opened). */
-  returnFocusTarget(): HTMLElement | null;
+  readonly returnFocusTarget: () => HTMLElement | null;
 }
 
 /** Upstream `DropdownMenuContext`. `null` outside a menu: rows still render and simply do not close anything. */
@@ -32,7 +32,7 @@ export interface DropdownMenuRadioGroupContextValue {
   /** The selected value of the group; `undefined` when nothing is selected. */
   readonly value: string | undefined;
   /** Asks the group to select `value` (a user activation): dispatches the intent event first. */
-  select(value: string, reason: ChangeReason): void;
+  readonly select: (value: string, reason: ChangeReason) => void;
   /** Whether choosing a value also closes the menu. */
   readonly closeOnSelect: boolean;
 }

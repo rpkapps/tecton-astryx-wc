@@ -96,9 +96,9 @@ const MENU_MAX_INLINE_SIZE = 'calc(100vi - var(--spacing-8))';
  * @slot icon - Custom icon of the built-in trigger; overrides the `icon` attribute.
  * @csspart anchor - The inline-flex wrapper the menu is anchored to.
  * @csspart trigger - The built-in trigger button.
- * @csspart menu - The painted menu surface (Astryx target `astryx-dropdown-menu`).
+ * @csspart menu - The painted menu surface (upstream theming target `dropdown-menu`).
  * @csspart section - A data-mode group of rows.
- * @csspart section-heading - The heading of a data-mode group (Astryx target `astryx-dropdown-menu-section-heading`).
+ * @csspart section-heading - The heading of a data-mode group (upstream theming target `dropdown-menu-section-heading`).
  * @csspart sheet - The bottom sheet of the touch presentation.
  * @csspart sheet-content - The content of the bottom sheet.
  * @cssstate open - The menu is open.
@@ -432,7 +432,7 @@ export class TctDropdownMenu extends TctElement {
     button.setAttribute('aria-expanded', String(this.open));
     // The button and the surface share this shadow root only for the built-in trigger.
     const surface = this.#surface;
-    if (this.open && !this.#usesSheet && surface && button.getRootNode() === surface.getRootNode()) {
+    if (this.open && !this.#usesSheet && surface?.getRootNode() === button.getRootNode()) {
       button.setAttribute('aria-controls', surface.id);
     } else {
       button.removeAttribute('aria-controls');
@@ -502,7 +502,7 @@ export class TctDropdownMenu extends TctElement {
       );
     }
     const current = this.#context.value;
-    if (!current || current.size !== this.#size.value || current.open !== this.open) {
+    if (current?.size !== this.#size.value || current.open !== this.open) {
       this.#context.setValue(this.#contextValue());
     }
     // Closing returns the sheet to the root view.

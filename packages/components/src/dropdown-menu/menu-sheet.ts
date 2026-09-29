@@ -87,7 +87,7 @@ function renderList(
       ({option}) => {
         if (isDividerOption(option)) {
           return html`<div role="presentation" class="sheet-structure">
-            <tct-divider class="sheet-divider"></tct-divider>
+            <tct-divider class="sheet-divider" role="none"></tct-divider>
           </div>`;
         }
         if (isSectionOption(option)) {

@@ -84,7 +84,7 @@ type OpenAt = {x: number; y: number};
  * @slot - The trigger area: right-click, long-press or press ContextMenu on this content.
  * @slot menu - The menu rows (compound mode).
  * @csspart trigger - The wrapper of the trigger area.
- * @csspart menu - The painted menu surface (Astryx target `astryx-context-menu`).
+ * @csspart menu - The painted menu surface (upstream theming target `context-menu`).
  * @csspart section - A data-mode group of rows.
  * @csspart section-heading - The heading of a data-mode group.
  * @csspart sheet - The bottom sheet of the touch presentation.
@@ -365,7 +365,7 @@ export class TctContextMenu extends TctElement {
       );
     }
     const current = this.#context.value;
-    if (!current || current.size !== this.#size.value || current.open !== this.open) {
+    if (current?.size !== this.#size.value || current.open !== this.open) {
       this.#context.setValue(this.#contextValue());
     }
     if (!this.open && this.#path.length > 0) this.#path = [];

@@ -1,0 +1,13 @@
+<!-- title: Basic; description: An icon-only three-dot trigger that opens a list of actions. The label is the trigger's accessible name, its tooltip and the menu's name. -->
+<div id="basic-root">
+  <tct-more-menu label="Project actions"></tct-more-menu>
+  <script type="module">
+    document.querySelector('#basic-root tct-more-menu').items = [
+      {label: 'Edit project', icon: 'wrench'},
+      {label: 'Duplicate project', icon: 'copy'},
+      {label: 'Share project', icon: 'externalLink'},
+      {type: 'divider'},
+      {label: 'Delete project', variant: 'destructive', icon: 'stop'},
+    ];
+  </script>
+</div>

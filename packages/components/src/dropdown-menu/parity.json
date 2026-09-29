@@ -1,0 +1,506 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "dropdown-menu",
+  "workPackage": "WP-6",
+  "entries": {
+    "core.dropdown-menu": {
+      "tag": "tct-dropdown-menu",
+      "status": "implemented",
+      "upstream": {
+        "name": "DropdownMenu",
+        "path": "packages/core/src/DropdownMenu/DropdownMenu.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "button",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "The trigger-button config becomes attributes of the built-in tct-button: label (also the menu's accessible name), variant, size, icon, icon-only, tooltip, disabled. A trigger of your own goes in slot=\"trigger\"; the button's own click handler and ref are the element's native click and its shadow trigger part."
+        },
+        {"upstream": "items", "kind": "prop", "target": "items", "as": "property"},
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "Compound rows: tct-dropdown-menu-item, -checkbox-item, -radio-group, -divider, -sub-menu."
+        },
+        {
+          "upstream": "presentation",
+          "kind": "prop",
+          "target": "presentation",
+          "as": "attribute",
+          "reflect": true,
+          "default": "popover"
+        },
+        {
+          "upstream": "isMenuOpen",
+          "kind": "prop",
+          "target": "open",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Optional-controlled upstream; here the element owns the state and `open` is the current value (D-006). A menu that mounts open does not steal focus."
+        },
+        {
+          "upstream": "onOpenChange",
+          "kind": "event",
+          "target": "tct-open-change",
+          "as": "event",
+          "notes": "Cancelable intent event before user-driven changes (trigger, Escape, outside press, Tab, choosing a row); `tct-after-open-change` once a change settled."
+        },
+        {
+          "upstream": "menuWidth",
+          "kind": "prop",
+          "target": "menuWidth",
+          "as": "attribute",
+          "notes": "`menu-width`: a bare number is px; intrinsic keywords set the preferred width; capped to the viewport gutter."
+        },
+        {"upstream": "placement", "kind": "prop", "target": "placement", "as": "attribute", "default": "below"},
+        {"upstream": "alignment", "kind": "prop", "target": "alignment", "as": "attribute", "default": "start"},
+        {
+          "upstream": "onClick",
+          "kind": "event",
+          "target": "click",
+          "as": "native-event",
+          "notes": "Native click on the trigger, retargeted to the host. Row and trigger clicks all bubble to the host; listen on a row for its activation."
+        },
+        {
+          "upstream": "hasChevron",
+          "kind": "prop",
+          "target": "noChevron",
+          "as": "attribute",
+          "default": false,
+          "notes": "Inverted: `no-chevron` (A§7.2)."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: attributes go on the host element."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(menu), ::part(trigger) and the tokens."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "DropdownMenuContext",
+          "target": "dropdownMenuContext",
+          "as": "context",
+          "notes": "dropdown-menu.context.ts: size, root open state, close(reason) and the focus-return target, provided by every menu and re-provided by each submenu; upstream useDropdownMenuContext."
+        },
+        {
+          "upstream": "useListFocus",
+          "target": "MenuKeyboardController",
+          "as": "controller",
+          "notes": "menu-keyboard.controller.ts composes RovingTabindexController (vertical, no wrap, disabled focusable) and TypeaheadController."
+        },
+        {"upstream": "useTypeahead", "target": "TypeaheadController", "as": "controller"},
+        {
+          "upstream": "useMenuHover",
+          "target": "tct-dropdown-menu-sub-menu (hover intent, click guard)",
+          "as": "controller",
+          "notes": "Hover intent for submenus lives in the submenu element."
+        },
+        {"upstream": "useLayer", "target": "LayerController + PositionController", "as": "controller"},
+        {"upstream": "useAdaptivePresentation", "target": "AdaptivePresentationController", "as": "controller"},
+        {
+          "upstream": "useFocusReturnVisibility",
+          "target": "LayerController returnFocus (focus({focusVisible}) from the last input device)",
+          "as": "controller"
+        },
+        {
+          "upstream": "useMenuOverflow",
+          "as": "waived",
+          "reason": "The panel is `overflow-y: auto` always and row focus rings are inset, so no overflow measurement is needed; the active row is a tab stop inside the scroll region."
+        }
+      ],
+      "keyboard": [
+        {"keys": "Enter, Space", "action": "Opens the menu and focuses the first enabled row", "when": "trigger focused"},
+        {"keys": "ArrowDown", "action": "Opens the menu and focuses the first enabled row; walks into an already open menu", "when": "trigger focused"},
+        {"keys": "ArrowDown, ArrowUp", "action": "Moves to the next / previous row; no wrap; disabled rows are focusable", "when": "menu open, focus in the rows"},
+        {"keys": "Home, End", "action": "Focuses the first / last row", "when": "menu open"},
+        {"keys": "ArrowDown, ArrowUp, Home, End", "action": "First key after a pointer open enters the rows (the surface holds focus, so no row reads as pre-selected)", "when": "surface focused"},
+        {"keys": "Printable character", "action": "Focuses the next enabled row whose label starts with the typed text (locale-aware)", "when": "menu open"},
+        {"keys": "Enter, Space", "action": "Activates the focused row through its own click; closes the menu unless the row opts out", "when": "row focused"},
+        {"keys": "ArrowRight (ArrowLeft in RTL), Enter, Space", "action": "Opens a submenu and focuses its first enabled row", "when": "submenu row focused"},
+        {"keys": "ArrowLeft (ArrowRight in RTL)", "action": "Closes the submenu and focuses its row", "when": "focus inside a flyout"},
+        {"keys": "Escape", "action": "Closes only the top-most level: a submenu (focus returns to its row), else the menu (focus returns to the trigger)", "when": "menu open; one layer per press"},
+        {"keys": "Tab, Shift+Tab", "action": "Closes the whole menu; focus continues from the trigger", "when": "menu open"}
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "DDMENU-01",
+          "type": "approved-api-difference",
+          "text": "The `button` prop is flattened into attributes of the built-in trigger (`label`, `variant`, `size`, `icon`, `icon-only`, `tooltip`, `disabled`) and a `slot=\"trigger\"` for a trigger of your own; `hasChevron` is `no-chevron`; `isMenuOpen`/`onOpenChange` are `open` and the cancelable `tct-open-change` (D-006, A§7.2). `children` is the default slot and data mode keeps the `items` property, as upstream."
+        },
+        {
+          "id": "DDMENU-02",
+          "type": "a11y-improvement",
+          "text": "Disabled rows stay in the roving order and can be focused with the arrow keys (APG menu pattern: 'disabled menu items are focusable'), so keyboard and screen-reader users discover them and hear them announced as unavailable. Upstream skips `aria-disabled` rows. Typeahead and the initial focus still skip disabled rows, as upstream."
+        },
+        {
+          "id": "DDMENU-03",
+          "type": "approved-api-difference",
+          "text": "Data-mode row fields: `onClick` receives the click event; `hasCloseOnSelect` is `closeOnSelect` (data-mode default true); `isDisabled` is `disabled`; `endContent` and `label` take text or a Lit template; `icon` is a registered icon name; `hasSpinner` is offered on submenu rows. Sections and dividers are unchanged."
+        },
+        {
+          "id": "DDMENU-04",
+          "type": "approved-api-difference",
+          "text": "The bottom-sheet presentation is data-mode only, as upstream ('compound children currently support popover only'); a compound menu with `presentation=\"bottom-sheet\"` stays a popover and warns in development."
+        },
+        {
+          "id": "DDMENU-05",
+          "type": "approved-api-difference",
+          "text": "`click` on the host also bubbles from rows and includes the click that light-dismissed the menu: a native click cannot be swallowed. The layer stack still ignores that click for reopening (`toggleFromTrigger`), so the menu does not reopen."
+        },
+        {
+          "id": "DDMENU-06",
+          "type": "a11y-improvement",
+          "text": "The trigger carries `aria-controls` only for the built-in button (both ends share the shadow root); a slotted trigger relies on `aria-expanded` and `aria-haspopup`, because ID references never cross a shadow boundary (A§8.2). Focus rings on rows are drawn inset, so a scrolling menu never clips them."
+        },
+        {
+          "id": "DDMENU-07",
+          "type": "tecton-visual",
+          "text": "Tecton menu: a 1px rule on the recessed popover fill, no drop shadow, an element (4px) corner; rows fill with the Tecton table-row hover role with a 2px corner, the highlight follows DOM focus (a mouse moving over a row focuses it), md rows are 6px of block padding; destructive rows use the error role (D-013, design/components/menu.md, theme components.ts `dropdown-menu`)."
+        },
+        {
+          "id": "DDMENU-08",
+          "type": "waiver",
+          "text": "Checkbox and radio markers render the built-in `tct-checkbox-indicator` / `tct-radio-indicator` tags: a theme's `defineIndicators()` override is not honoured inside menus, because rendering a runtime-chosen tag needs `unsafeStatic`, which is only allowed in core/security. See the request on this entry."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/core/src/layer/position.ts",
+          "reason": "PositionController writes `max-inline-size: 100%; max-block-size: 100%` on the layer. In a small `position-area` cell (a 0x0 pointer anchor at a viewport edge, a flyout near the screen edge) that clamps the layer to the cell, the browser never sees an overflow and never tries the flipped areas, so the menu spills off screen. Menus override it with `!important` rules in dropdown-menu/tct-menu-surface.styles.css (upstream puts the clamp on the inner surface: 'applying it to the anchor-positioned popover itself prevents Chromium from selecting flip-inline'). Proposed: an option `clamp: 'area' | 'none'` (default 'area'), or write the clamps on the element `surface()` returns only when its cell is large enough.",
+          "diff": "PositionOptions: + clamp?: 'area' | 'none'; #writeCss: skip the two max-* size writes when clamp === 'none'."
+        },
+        {
+          "file": "packages/core/src/indicators/registry.ts",
+          "reason": "Menu markers cannot follow `defineIndicators()` theme overrides (DDMENU-08): a runtime tag needs a static template, and `unsafeStatic` is restricted to core/security. Proposed: a core helper `renderIndicator(name, theme, props)` returning a TemplateResult for the resolved tag, used by every owner of an indicator (menus, lists, checkbox inputs)."
+        }
+      ],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:resilient-context-menus-and-nested-dropdowns] (anchor positioning + popover; the guide warns to add role=menu only with the full keyboard contract, which MenuKeyboardController provides) [mwg:accessibility] [mwg:spatial-navigation] [mwg:accessible-web-components] [mwg:animate-to-from-top-layer]. Structure: the menu is one `popover=\"manual\"` layer in the element's shadow root (the shared LayerController/PositionController path of tct-popover); the surface is `role=menu`; rows are light-DOM children slotted into it (compound) or shadow children (data), all discovered from the flat tree by `collectMenuItems`."
+    },
+    "core.dropdown-menu-item": {
+      "tag": "tct-dropdown-menu-item",
+      "status": "implemented",
+      "upstream": {
+        "name": "DropdownMenuItem",
+        "path": "packages/core/src/DropdownMenu/DropdownMenuItem.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "icon", "kind": "prop", "target": "icon", "as": "attribute", "notes": "A registered icon name; a custom icon goes in slot=\"icon\"."},
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute", "notes": "Rich label: slot=\"label\"."},
+        {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute", "notes": "Rich description: slot=\"description\"."},
+        {"upstream": "endContent", "kind": "slot", "target": "end", "as": "slot"},
+        {"upstream": "onClick", "kind": "event", "target": "click", "as": "native-event", "notes": "Once per activation (pointer, Enter, Space); never for a disabled row."},
+        {"upstream": "isDisabled", "kind": "prop", "target": "disabled", "as": "attribute", "reflect": true, "default": false},
+        {
+          "upstream": "hasCloseOnSelect",
+          "kind": "prop",
+          "target": "noCloseOnSelect",
+          "as": "attribute",
+          "default": false,
+          "notes": "Inverted: `no-close-on-select` (A§7.2)."
+        },
+        {"upstream": "variant", "kind": "prop", "target": "variant", "as": "attribute", "reflect": true, "default": "default"},
+        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style and ::part(item)."},
+        {"upstream": "className", "kind": "prop", "as": "waived", "reason": "A-xstyle: `class` goes on the host."},
+        {"upstream": "style", "kind": "prop", "as": "waived", "reason": "A-xstyle: `style` goes on the host."}
+      ],
+      "hooks": [
+        {
+          "upstream": "focusMenuItemOnHover",
+          "target": "MenuItemController",
+          "as": "controller",
+          "notes": "menu-item.controller.ts: hover-follows-focus for a mouse (never touch or pen, never a disabled row, never scrolling)."
+        }
+      ],
+      "keyboard": [
+        {"keys": "Enter, Space", "action": "Activates the row (one click)", "when": "focused"}
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "DDMENUITEM-01",
+          "type": "approved-api-difference",
+          "text": "The row is a custom element whose role (`menuitem`), `aria-disabled` and name live on the host through ElementInternals; the menu's roving tabindex writes `tabindex` on the host. Serves the upstream `ContextMenuItem` and `BreadcrumbMenuItem` aliases: no alias tags (A§7.1)."
+        },
+        {
+          "id": "DDMENUITEM-02",
+          "type": "a11y-improvement",
+          "text": "A disabled row swallows its click before any listener (`stopImmediatePropagation`), so no consumer or parent handler runs for it; it stays focusable and announced as unavailable (see DDMENU-02)."
+        }
+      ],
+      "tests": {"render": true, "a11y": true, "api": true, "keyboard": true, "events": true, "rtl": true, "forcedColors": true, "i18n": true},
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Composes tct-item (WP-5) for the row layout; the row is styled through its exported `item` part [mwg:styling-web-components]."
+    },
+    "core.dropdown-menu-divider": {
+      "tag": "tct-dropdown-menu-divider",
+      "status": "implemented",
+      "upstream": {
+        "name": "DropdownMenuDivider",
+        "path": "packages/core/src/DropdownMenu/DropdownMenuDivider.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style and ::part(divider)."},
+        {"upstream": "className", "kind": "prop", "as": "waived", "reason": "A-xstyle: `class` goes on the host."},
+        {"upstream": "style", "kind": "prop", "as": "waived", "reason": "A-xstyle: `style` goes on the host."}
+      ],
+      "hooks": [],
+      "keyboard": [],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "DDMENUDIV-01",
+          "type": "approved-api-difference",
+          "text": "The host is the `separator` (ElementInternals); the inner tct-divider only draws the rule. Serves the `ContextMenuDivider` and `BreadcrumbMenuDivider` aliases. The rule takes one spacing step of block margin, as upstream."
+        }
+      ],
+      "tests": {"render": true, "a11y": true, "api": true, "keyboard": true, "events": true, "rtl": true, "forcedColors": true, "i18n": false},
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null
+    },
+    "core.dropdown-menu-checkbox-item": {
+      "tag": "tct-dropdown-menu-checkbox-item",
+      "status": "implemented",
+      "upstream": {
+        "name": "DropdownMenuCheckboxItem",
+        "path": "packages/core/src/DropdownMenu/DropdownMenuCheckboxItem.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
+        {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute"},
+        {"upstream": "icon", "kind": "prop", "target": "icon", "as": "attribute"},
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "checked",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Controlled-only upstream; here the element owns the state and `checked` is the current value (D-006). A menu row is not a form control, so the attribute reflects."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "tct-value-change",
+          "as": "event",
+          "notes": "Cancelable intent event before activation flips `checked`; `value` is the requested state (non-form selection, A§7.6)."
+        },
+        {"upstream": "isDisabled", "kind": "prop", "target": "disabled", "as": "attribute", "reflect": true, "default": false},
+        {
+          "upstream": "hasCloseOnSelect",
+          "kind": "prop",
+          "target": "closeOnSelect",
+          "as": "attribute",
+          "default": false,
+          "notes": "Upstream default is already false (checkbox rows keep the menu open), so the attribute is not inverted."
+        },
+        {"upstream": "endContent", "kind": "slot", "target": "end", "as": "slot"}
+      ],
+      "hooks": [],
+      "keyboard": [
+        {"keys": "Enter, Space", "action": "Toggles the row (one tct-value-change, one click)", "when": "focused"}
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "DDMENUCHK-01",
+          "type": "approved-api-difference",
+          "text": "`value`/`onChange` become `checked` plus the cancelable `tct-value-change` (a menu row is not a form control, so no native `input`/`change`). The checkbox drawn in the row is the built-in decorative indicator (aria-hidden): the row is the one announced control, with `aria-checked`. On a coarse pointer the box moves to the inline end."
+        }
+      ],
+      "tests": {"render": true, "a11y": true, "api": true, "keyboard": true, "events": true, "rtl": true, "forcedColors": true, "i18n": true},
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null
+    },
+    "core.dropdown-menu-radio-group": {
+      "tag": "tct-dropdown-menu-radio-group",
+      "status": "implemented",
+      "upstream": {
+        "name": "DropdownMenuRadioGroup",
+        "path": "packages/core/src/DropdownMenu/DropdownMenuRadioGroup.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "attribute",
+          "notes": "Controlled-only upstream; here the attribute is the initial value and the property the current one (D-006)."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "tct-value-change",
+          "as": "event",
+          "notes": "Cancelable intent event before a user choice changes `value`; not fired for the value that is already selected."
+        },
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute", "notes": "Required: the group's accessible name."},
+        {
+          "upstream": "hasCloseOnSelect",
+          "kind": "prop",
+          "target": "noCloseOnSelect",
+          "as": "attribute",
+          "default": false,
+          "notes": "Inverted: `no-close-on-select` (A§7.2). Choosing a row closes the menu by default."
+        },
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"}
+      ],
+      "hooks": [
+        {
+          "upstream": "DropdownMenuRadioGroupContext",
+          "target": "dropdownMenuRadioGroupContext",
+          "as": "context",
+          "notes": "dropdown-menu.context.ts: value, select() and closeOnSelect for the radio rows."
+        }
+      ],
+      "keyboard": [],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "DDMENURG-01",
+          "type": "approved-api-difference",
+          "text": "The host is the `group` (ElementInternals) named by `label`. Choosing the value that is already selected fires no event (native radio semantics); upstream calls `onChange` every time."
+        }
+      ],
+      "tests": {"render": true, "a11y": true, "api": true, "keyboard": true, "events": true, "rtl": true, "forcedColors": true, "i18n": true},
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null
+    },
+    "core.dropdown-menu-radio-item": {
+      "tag": "tct-dropdown-menu-radio-item",
+      "status": "implemented",
+      "upstream": {
+        "name": "DropdownMenuRadioItem",
+        "path": "packages/core/src/DropdownMenu/DropdownMenuRadioItem.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "value", "kind": "prop", "target": "value", "as": "attribute"},
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
+        {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute"},
+        {"upstream": "icon", "kind": "prop", "target": "icon", "as": "attribute"},
+        {"upstream": "isDisabled", "kind": "prop", "target": "disabled", "as": "attribute", "reflect": true, "default": false},
+        {"upstream": "endContent", "kind": "slot", "target": "end", "as": "slot"}
+      ],
+      "hooks": [],
+      "keyboard": [
+        {"keys": "Enter, Space", "action": "Chooses the option (asks the group to change value)", "when": "focused"}
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "DDMENURI-01",
+          "type": "approved-api-difference",
+          "text": "Outside a radio group the row cannot be chosen and a warning is logged in development; upstream throws during render, which a custom element must not do."
+        }
+      ],
+      "tests": {"render": true, "a11y": true, "api": true, "keyboard": true, "events": true, "rtl": true, "forcedColors": true, "i18n": true},
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null
+    },
+    "core.dropdown-menu-sub-menu": {
+      "tag": "tct-dropdown-menu-sub-menu",
+      "status": "implemented",
+      "upstream": {
+        "name": "DropdownMenuSubMenu",
+        "path": "packages/core/src/DropdownMenu/DropdownMenuSubMenu.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
+        {"upstream": "icon", "kind": "prop", "target": "icon", "as": "attribute"},
+        {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute"},
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot", "notes": "The flyout rows."},
+        {"upstream": "isDisabled", "kind": "prop", "target": "disabled", "as": "attribute", "reflect": true, "default": false},
+        {
+          "upstream": "hasSpinner",
+          "kind": "prop",
+          "target": "hasSpinner",
+          "as": "attribute",
+          "default": false,
+          "notes": "`has-spinner` (A§7.2 `hasX`): a spinner in place of the caret while the children load."
+        },
+        {"upstream": "menuWidth", "kind": "prop", "target": "menuWidth", "as": "attribute", "notes": "`menu-width`."},
+        {
+          "upstream": "onOpenChange",
+          "kind": "event",
+          "target": "tct-open-change",
+          "as": "event",
+          "notes": "Cancelable intent event before a user-driven open or close; `tct-after-open-change` once settled."
+        },
+        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style, ::part(item) and ::part(menu)."},
+        {"upstream": "data-testid", "kind": "prop", "as": "waived", "reason": "A-xstyle: attributes go on the host element."},
+        {"upstream": "menuDataTestId", "kind": "prop", "as": "waived", "reason": "A-xstyle: the flyout is ::part(menu) of the host."},
+        {"upstream": "className", "kind": "prop", "as": "waived", "reason": "A-xstyle: `class` goes on the host."},
+        {"upstream": "style", "kind": "prop", "as": "waived", "reason": "A-xstyle: `style` goes on the host."}
+      ],
+      "hooks": [
+        {"upstream": "useMenuHover", "target": "hover intent in tct-dropdown-menu-sub-menu (150ms open, 200ms close, 500ms click guard)", "as": "controller"}
+      ],
+      "keyboard": [
+        {"keys": "ArrowRight (ArrowLeft in RTL), Enter, Space", "action": "Opens the flyout and focuses its first enabled row (the flyout itself when it has none yet)", "when": "row focused"},
+        {"keys": "ArrowLeft (ArrowRight in RTL)", "action": "Closes the flyout and focuses the row", "when": "focus in the flyout"},
+        {"keys": "Escape", "action": "Closes only the flyout and focuses the row; the next Escape closes the menu", "when": "flyout open"}
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "DDMENUSUB-01",
+          "type": "approved-api-difference",
+          "text": "Serves the `ContextMenuSubMenu` and `BreadcrumbMenuSubMenu` aliases (no alias tags). The flyout is a `popover=\"manual\"` layer in the row's shadow root, positioned on the inline end with a flip; nested flyouts close with their parent (the row re-provides the menu context with `open` true only while both are open)."
+        },
+        {
+          "id": "DDMENUSUB-02",
+          "type": "a11y-improvement",
+          "text": "Escape closes only the top-most level through the shared layer stack (one layer per press) and hands focus back to the row; upstream marked the event handled by hand."
+        }
+      ],
+      "tests": {"render": true, "a11y": true, "api": true, "keyboard": true, "events": true, "rtl": true, "forcedColors": true, "i18n": true},
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null
+    }
+  }
+}

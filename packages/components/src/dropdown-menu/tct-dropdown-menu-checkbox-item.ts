@@ -26,7 +26,7 @@ import styles from './tct-menu-item.styles.css';
  * @slot description - Rich description; overrides the `description` attribute.
  * @slot icon - Custom leading icon; overrides the `icon` attribute.
  * @slot end - Trailing content: a keyboard-shortcut hint or a badge.
- * @csspart item - The painted row (Astryx target `astryx-dropdown-menu-item`).
+ * @csspart item - The painted row (upstream theming target `dropdown-menu-item`).
  * @csspart dropdown-menu-item - The painted row, under the upstream target name.
  * @cssstate checked - The row is checked.
  * @cssstate disabled - The row cannot be activated.

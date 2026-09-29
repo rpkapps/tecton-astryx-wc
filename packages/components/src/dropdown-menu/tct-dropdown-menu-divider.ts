@@ -12,7 +12,7 @@ import styles from './tct-dropdown-menu-divider.styles.css';
  * @summary A rule between groups of menu rows.
  * @tag tct-dropdown-menu-divider
  * @upstream DropdownMenuDivider
- * @csspart divider - The rule (Astryx target `astryx-dropdown-menu-divider`).
+ * @csspart divider - The rule (upstream theming target `dropdown-menu-divider`).
  * @cloakDisplay block
  */
 export class TctDropdownMenuDivider extends TctElement {

@@ -1,0 +1,15 @@
+<!-- title: Sizes and width; description: The trigger size (sm, md, lg) also sizes the rows. menu-width sets a minimum width; the menu never grows past the viewport. -->
+<tct-hstack gap="4" wrap="wrap" v-align="center">
+  <tct-dropdown-menu label="Small" size="sm">
+    <tct-dropdown-menu-item label="Compact row"></tct-dropdown-menu-item>
+    <tct-dropdown-menu-item label="Compact row"></tct-dropdown-menu-item>
+  </tct-dropdown-menu>
+  <tct-dropdown-menu label="Medium" size="md">
+    <tct-dropdown-menu-item label="Default row"></tct-dropdown-menu-item>
+    <tct-dropdown-menu-item label="Default row"></tct-dropdown-menu-item>
+  </tct-dropdown-menu>
+  <tct-dropdown-menu label="Large" size="lg" menu-width="280">
+    <tct-dropdown-menu-item label="Roomy row, 280px minimum"></tct-dropdown-menu-item>
+    <tct-dropdown-menu-item label="Roomy row"></tct-dropdown-menu-item>
+  </tct-dropdown-menu>
+</tct-hstack>

@@ -19,7 +19,7 @@ import {TctDropdownMenu} from '../dropdown-menu/tct-dropdown-menu.js';
  * @slot - The menu rows (compound mode).
  * @slot icon - A custom trigger icon, replacing the three dots.
  * @csspart trigger - The icon-only trigger button.
- * @csspart menu - The painted menu surface (Astryx target `astryx-more-menu` and `astryx-dropdown-menu`).
+ * @csspart menu - The painted menu surface (upstream theming targets `more-menu` and `dropdown-menu`).
  * @fires {TctOpenChangeEvent} tct-open-change - Before the user opens or closes it; cancelable.
  * @fires {TctAfterOpenChangeEvent} tct-after-open-change - After an open or close settled.
  * @hideInherited iconOnly, noChevron - The trigger is always icon-only.

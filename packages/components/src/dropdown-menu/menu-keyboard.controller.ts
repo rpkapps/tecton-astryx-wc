@@ -161,7 +161,8 @@ export class MenuKeyboardController implements ReactiveController {
 
     if (this.#typeahead.isTypeaheadKey(event)) {
       const items = this.#options.items();
-      this.#typeaheadFrom(event, items.indexOf(itemContaining(items, origin) as MenuItemElement));
+      const current = itemContaining(items, origin);
+      this.#typeaheadFrom(event, current ? items.indexOf(current) : -1);
     }
   };
 
