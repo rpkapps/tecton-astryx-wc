@@ -1,0 +1,9 @@
+<!-- title: Colours; description: Text colour roles. supporting defaults to secondary, everything else to primary. -->
+<div style="display: flex; flex-direction: column; gap: var(--spacing-1)">
+  <tct-text color="primary" display="block">primary</tct-text>
+  <tct-text color="secondary" display="block">secondary</tct-text>
+  <tct-text color="accent" display="block">accent</tct-text>
+  <tct-text color="disabled" display="block">disabled</tct-text>
+  <tct-text type="supporting" display="block">supporting (secondary by default)</tct-text>
+  <span style="color: var(--color-text-secondary)">Surrounding text, then <tct-text type="inherit">inherit takes its size and colour</tct-text>.</span>
+</div>
