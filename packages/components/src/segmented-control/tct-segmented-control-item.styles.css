@@ -1,0 +1,123 @@
+@layer component {
+  :host {
+    display: inline-flex;
+  }
+
+  .item {
+    /* Defaults are the md size; `data-size` re-points them. Height is the control height minus its padding. */
+    --_height: calc(
+      var(--size-element-md) - 2 * var(--_segmented-control-padding, var(--spacing-0-5))
+    );
+    --_padding-inline: var(--spacing-3);
+    --_font-size: var(--text-label-size);
+    --_icon-size: var(--tecton-icon-size-100);
+    --_background: transparent;
+    --_color: var(--tecton-color-tab-rest-text);
+
+    display: inline-flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-1);
+    min-inline-size: 0;
+    block-size: var(--_height);
+    padding-inline: var(--_padding-inline);
+
+    /* Concentric with the strip: its radius minus its padding, never negative. */
+    border-radius: max(
+      0px,
+      calc(
+        var(--_segmented-control-radius, var(--radius-element)) -
+          var(--_segmented-control-padding, var(--spacing-0-5))
+      )
+    );
+    background-color: var(--_background);
+    color: var(--_color);
+    font-size: var(--_font-size);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--text-label-leading);
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    transition-property: color, background-color;
+    transition-duration: var(--duration-fast);
+    transition-timing-function: var(--ease-standard);
+  }
+
+  .item[data-size='sm'] {
+    --_height: calc(
+      var(--size-element-sm) - 2 * var(--_segmented-control-padding, var(--spacing-0-5))
+    );
+    --_padding-inline: var(--spacing-2);
+    --_font-size: var(--text-supporting-size);
+  }
+
+  .item[data-size='lg'] {
+    --_height: calc(
+      var(--size-element-lg) - 2 * var(--_segmented-control-padding, var(--spacing-0-5))
+    );
+    --_icon-size: var(--tecton-icon-size-150);
+  }
+
+  .label {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+@layer state {
+  /* Tecton's selected segment is a flat fill, not a lifted pill. */
+  .item[data-selected] {
+    --_background: var(--tecton-color-tab-filled-selected);
+    --_color: var(--tecton-color-tab-selected-text);
+  }
+
+  .item[data-disabled] {
+    --_color: var(--color-text-disabled);
+
+    cursor: default;
+  }
+
+  /* The shared hover and pressed wash, on the segments a press can still change. */
+  @media (hover: hover) {
+    .item:not([data-selected], [data-disabled]):hover {
+      background-image: linear-gradient(var(--color-overlay-hover), var(--color-overlay-hover));
+    }
+  }
+
+  .item:not([data-selected], [data-disabled]):active {
+    background-image: linear-gradient(var(--color-overlay-pressed), var(--color-overlay-pressed));
+  }
+
+  /* Roving-tabindex host: the ring is drawn on the painted part, which fills the host. */
+  :host(:focus-visible) .item {
+    outline-width: var(--focus-outline-width);
+    outline-style: var(--focus-outline-style);
+    outline-color: var(--focus-outline-color);
+    outline-offset: var(--focus-outline-offset);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .item {
+      color: ButtonText;
+    }
+
+    .item[data-selected] {
+      /* The UA would keep form-control colours; colour is the state here, so opt out of remapping. */
+      forced-color-adjust: none;
+      background-color: Highlight;
+      color: HighlightText;
+    }
+
+    .item[data-disabled] {
+      color: GrayText;
+    }
+
+    :host(:focus-visible) .item {
+      outline-color: Highlight;
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "folder": "internationalization-provider",
+  "elements": {
+    "tct-internationalization-provider": {
+      "class": "TctInternationalizationProvider",
+      "attributes": [
+        {
+          "name": "dir",
+          "property": "dir",
+          "type": "'ltr' | 'rtl'",
+          "values": [
+            "ltr",
+            "rtl"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "locale",
+          "property": "locale",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "messages",
+          "type": "Messages | undefined",
+          "default": "undefined",
+          "readonly": false
+        },
+        {
+          "name": "overrides",
+          "type": "Overrides | undefined",
+          "default": "undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

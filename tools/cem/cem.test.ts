@@ -45,6 +45,8 @@ describe('CEM analysis of the sample component', () => {
       expect.arrayContaining(['variant', 'size', 'label', 'removable', 'requestRemove']),
     );
     expect(names).not.toContain('_measure');
+    // `this.internals.role = …` in the constructor is not a `role` field (analyzer quirk).
+    expect(names).not.toContain('role');
     expect(names).not.toContain('updated');
     expect(names).not.toContain('styles');
     expect(names).not.toContain('tagName');

@@ -1,0 +1,67 @@
+@layer component {
+  :host {
+    display: inline-flex;
+    inline-size: fit-content;
+  }
+
+  :host([layout='fill']) {
+    display: flex;
+    inline-size: 100%;
+  }
+
+  .control {
+    /* Private and inherited by the segments (through the slot): they size their radius from these. */
+    --_segmented-control-padding: var(--spacing-0-5);
+    --_segmented-control-radius: var(--radius-element);
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-0-5);
+    inline-size: fit-content;
+    padding: var(--_segmented-control-padding);
+    border-radius: var(--_segmented-control-radius);
+    background-color: var(--tecton-color-tab-strip-background);
+  }
+
+  .control[data-layout='fill'] {
+    display: flex;
+    inline-size: 100%;
+  }
+
+  /* Fill: segments share the strip equally (and may shrink so labels truncate instead of overflowing). */
+  .control[data-layout='fill'] ::slotted(tct-segmented-control-item) {
+    flex: 1;
+    min-inline-size: 0;
+  }
+
+  /* The reason tooltip of a disabled control: a bordered popover, no drop shadow (Tecton). */
+  .disabled-message {
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-element);
+    padding-block: var(--spacing-1);
+    padding-inline: var(--spacing-2);
+    background: var(--color-background-popover);
+    color: var(--color-text-primary);
+    font-size: var(--text-supporting-size);
+    line-height: var(--text-supporting-leading);
+
+    /* design: a reason stays a short readable line */
+    max-inline-size: 20rem;
+    overflow-wrap: anywhere;
+  }
+}
+
+@layer state {
+  .control[data-disabled] {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  /* Explained: keep the strip hoverable so the reason tooltip can show; selection is blocked in code. */
+  .control[data-disabled][data-has-message] {
+    pointer-events: auto;
+  }
+}

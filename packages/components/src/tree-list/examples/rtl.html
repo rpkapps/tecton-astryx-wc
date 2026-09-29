@@ -1,0 +1,18 @@
+<!-- title: Right-to-left; description: Nesting, the guide lines and the chevron mirror; ArrowLeft expands and ArrowRight collapses. -->
+<div id="rtl-root" dir="rtl" lang="ar" style="max-inline-size: 24rem">
+  <tct-tree-list header="الملفات"></tct-tree-list>
+  <script type="module">
+    document.querySelector('#rtl-root tct-tree-list').items = [
+      {
+        id: 'docs',
+        label: 'المستندات',
+        isExpanded: true,
+        children: [
+          {id: 'report', label: 'التقرير السنوي', description: 'PDF'},
+          {id: 'notes', label: 'ملاحظات'},
+        ],
+      },
+      {id: 'images', label: 'الصور', children: [{id: 'logo', label: 'الشعار'}]},
+    ];
+  </script>
+</div>

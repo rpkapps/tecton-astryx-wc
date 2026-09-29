@@ -1,0 +1,175 @@
+/*
+ * Not built on the shared `base`: its `[hidden] { display: none !important }` (reset layer, so nothing can
+ * override it) would defeat `hidden="until-found"`, which must keep its own display to stay findable
+ * [mwg:search-hidden-content]. The rest of base is repeated in the reset layer below.
+ */
+@layer reset, component, state, a11y;
+
+@layer reset {
+  :host {
+    box-sizing: border-box;
+  }
+
+  :host([hidden]) {
+    display: none !important;
+  }
+
+  *,
+  ::before,
+  ::after {
+    box-sizing: inherit;
+  }
+
+  button {
+    margin: 0;
+    font: inherit;
+    letter-spacing: inherit;
+  }
+}
+
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .collapsible {
+    inline-size: 100%;
+  }
+
+  /* The accordion row chrome of a group: a hairline above every item except the first. */
+  .collapsible[data-divided] {
+    border-block-start: var(--border-width) solid var(--color-border);
+  }
+
+  :host(:first-child) .collapsible[data-divided] {
+    border-block-start-width: 0;
+  }
+
+  .trigger {
+    --_icon-size: var(--text-large-size);
+    --_padding-block: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    inline-size: 100%;
+    border: 0;
+    border-radius: var(--radius-inner);
+    padding-block: var(--_padding-block);
+    padding-inline: 0;
+    background: none;
+    color: var(--color-text-primary);
+    font-family: var(--font-family-body);
+    font-size: var(--text-large-size);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--text-large-leading);
+    text-align: start;
+    cursor: pointer;
+  }
+
+  .trigger[data-density='compact'] {
+    --_padding-block: var(--spacing-1);
+  }
+
+  .trigger[data-density='balanced'] {
+    --_padding-block: var(--spacing-2);
+  }
+
+  .trigger[data-density='spacious'] {
+    --_padding-block: var(--spacing-3);
+  }
+
+  /* Fill the row (not hug the label) so a composed trigger can put something beside the chevron. */
+  .label {
+    flex-grow: 1;
+  }
+
+  @supports (text-box-trim: trim-both) {
+    .label {
+      /* Trim the leading so the row height is the padding, not the line box (upstream capsize). */
+      text-box: trim-both cap alphabetic;
+    }
+  }
+
+  .chevron {
+    flex-shrink: 0;
+  }
+
+  .chevron[data-position='start'] {
+    margin-inline-end: var(--spacing-2);
+  }
+
+  /*
+   * Padding lives on the inner body, never on the region that carries hidden="until-found": that region
+   * is content-visibility: hidden while collapsed and must not keep a box of its own
+   * [mwg:search-hidden-content].
+   */
+  .body {
+    --_padding-block-end: 0;
+
+    padding-block-start: var(--spacing-1);
+    padding-block-end: var(--_padding-block-end);
+    color: var(--color-text-primary);
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-size);
+    font-weight: var(--text-body-weight);
+    line-height: var(--text-body-leading);
+  }
+
+  .body[data-density='compact'] {
+    --_padding-block-end: var(--spacing-1);
+  }
+
+  .body[data-density='balanced'] {
+    --_padding-block-end: var(--spacing-2);
+  }
+
+  .body[data-density='spacious'] {
+    --_padding-block-end: var(--spacing-3);
+  }
+}
+
+@layer state {
+  /* The shared pressed wash: the trigger has no hover surface of its own, only this while pressed. */
+  .trigger:not([aria-disabled='true']):active {
+    background-image: linear-gradient(var(--color-overlay-pressed), var(--color-overlay-pressed));
+  }
+
+  .trigger[aria-disabled='true'] {
+    opacity: 0.5;
+    cursor: default;
+  }
+
+  /* Movement only when the user has not asked for less. */
+  @media (prefers-reduced-motion: no-preference) {
+    .chevron {
+      transition: rotate var(--duration-fast) var(--ease-standard);
+    }
+  }
+
+  .trigger[aria-expanded='true'] .chevron[data-position='end'] {
+    rotate: 180deg;
+  }
+
+  /* A leading arrow turns a quarter: into the row when closed, down when open. */
+  .trigger[aria-expanded='true'] .chevron[data-position='start'] {
+    rotate: 90deg;
+  }
+
+  /* The glyph mirrors in RTL, so "down" is the other quarter turn. */
+  :host(:dir(rtl)) .trigger[aria-expanded='true'] .chevron[data-position='start'] {
+    rotate: -90deg;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .trigger {
+      color: ButtonText;
+    }
+
+    .trigger[aria-disabled='true'] {
+      color: GrayText;
+    }
+  }
+}

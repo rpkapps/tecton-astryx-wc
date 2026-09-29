@@ -1,0 +1,275 @@
+{
+  "folder": "field",
+  "elements": {
+    "tct-field": {
+      "class": "TctField",
+      "attributes": [
+        {
+          "name": "description",
+          "property": "description",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "description-id",
+          "property": "descriptionId",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "group-label",
+          "property": "groupLabel",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "input-id",
+          "property": "inputId",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label-hidden",
+          "property": "labelHidden",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label-icon",
+          "property": "labelIcon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label-id",
+          "property": "labelId",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label-tooltip",
+          "property": "labelTooltip",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "optional",
+          "property": "optional",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "required",
+          "property": "required",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "status-id",
+          "property": "statusId",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "status-message",
+          "property": "statusMessage",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "status-type",
+          "property": "statusType",
+          "type": "InputStatusType | undefined",
+          "values": [
+            "error",
+            "warning",
+            "success",
+            "info"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "status-variant",
+          "property": "statusVariant",
+          "type": "FieldStatusVariant",
+          "values": [
+            "attached",
+            "detached",
+            "tooltip"
+          ],
+          "default": "'attached'",
+          "reflects": false
+        },
+        {
+          "name": "width",
+          "property": "width",
+          "type": "number | string | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "status",
+          "type": "InputStatus | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)",
+        "description",
+        "label",
+        "status"
+      ],
+      "events": [],
+      "cssParts": [
+        "field",
+        "label-tip"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-field-label": {
+      "class": "TctFieldLabel",
+      "attributes": [
+        {
+          "name": "description",
+          "property": "description",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "group-label",
+          "property": "groupLabel",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "input-id",
+          "property": "inputId",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label-hidden",
+          "property": "labelHidden",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label-icon",
+          "property": "labelIcon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label-tooltip",
+          "property": "labelTooltip",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "optional",
+          "property": "optional",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "required",
+          "property": "required",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "description",
+        "label",
+        "label-indicator",
+        "label-tip"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-input-clear-button": {
+      "class": "TctInputClearButton",
+      "attributes": [
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [],
+      "events": [
+        {
+          "name": "click",
+          "native": true
+        }
+      ],
+      "cssParts": [
+        "button",
+        "icon"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

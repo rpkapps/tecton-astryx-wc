@@ -250,6 +250,21 @@ describe('checkParity', () => {
     ]);
   });
 
+  it('accepts an HTML global attribute as an attribute target, but not as another kind', () => {
+    const cem = {modules: [{declarations: [{tagName: 'tct-button', attributes: [], members: []}]}]};
+    const api = [
+      {upstream: 'hasAutoFocus', kind: 'prop', as: 'attribute', target: 'autofocus'},
+      {upstream: 'autoFocusProp', kind: 'prop', as: 'property', target: 'autofocus'},
+    ];
+    const parity = {folder: 'button', workPackage: 'WP-F', entries: {'core.button': entry({api})}};
+    const cemProblems = problems(parity, undefined, cem).filter((p) =>
+      p.includes('absent from the CEM'),
+    );
+    expect(cemProblems).toEqual([
+      'core.button: api "autoFocusProp" targets property "autofocus", absent from the CEM for tct-button',
+    ]);
+  });
+
   describe('docs frontmatter (D-011)', () => {
     const parity = {folder: 'button', workPackage: 'WP-F', entries: {'core.button': entry()}};
     const files = (docs: string) => ({

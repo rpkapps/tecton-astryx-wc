@@ -1,0 +1,236 @@
+{
+  "folder": "segmented-control",
+  "elements": {
+    "tct-segmented-control": {
+      "class": "TctSegmentedControl",
+      "attributes": [
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "disabled-message",
+          "property": "disabledMessage",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "invalid",
+          "property": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": true
+        },
+        {
+          "name": "layout",
+          "property": "layout",
+          "type": "SegmentedControlLayout",
+          "values": [
+            "hug",
+            "fill"
+          ],
+          "default": "'hug'",
+          "reflects": true
+        },
+        {
+          "name": "name",
+          "property": "name",
+          "type": "string",
+          "default": "''",
+          "reflects": true
+        },
+        {
+          "name": "readonly",
+          "property": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "required",
+          "property": "required",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "ElementSize | undefined",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "value",
+          "property": "defaultValue",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "[BLOCKS_IMPLICIT_SUBMISSION]",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "displayedValidationMessage",
+          "type": "string",
+          "readonly": true
+        },
+        {
+          "name": "form",
+          "type": "HTMLFormElement | null",
+          "readonly": true
+        },
+        {
+          "name": "isDisabled",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "labels",
+          "type": "NodeList",
+          "readonly": true
+        },
+        {
+          "name": "showInvalid",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "validationMessage",
+          "type": "string",
+          "readonly": true
+        },
+        {
+          "name": "validity",
+          "type": "ValidityState",
+          "readonly": true
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "readonly": false
+        },
+        {
+          "name": "willValidate",
+          "type": "boolean",
+          "readonly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "checkValidity",
+          "signature": "() => boolean"
+        },
+        {
+          "name": "reportValidity",
+          "signature": "() => boolean"
+        },
+        {
+          "name": "setCustomValidity",
+          "signature": "(message: string) => void"
+        }
+      ],
+      "slots": [
+        "(default)"
+      ],
+      "events": [
+        {
+          "name": "change",
+          "native": true
+        },
+        {
+          "name": "input",
+          "native": true
+        }
+      ],
+      "cssParts": [
+        "control",
+        "disabled-message",
+        "keyboard-hint"
+      ],
+      "cssStates": [
+        "disabled",
+        "user-invalid"
+      ],
+      "cssProperties": []
+    },
+    "tct-segmented-control-item": {
+      "class": "TctSegmentedControlItem",
+      "attributes": [
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label-hidden",
+          "property": "labelHidden",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "value",
+          "property": "value",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "isDisabled",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "selected",
+          "type": "boolean",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "icon"
+      ],
+      "events": [],
+      "cssParts": [
+        "item",
+        "label"
+      ],
+      "cssStates": [
+        "disabled",
+        "selected"
+      ],
+      "cssProperties": []
+    }
+  }
+}

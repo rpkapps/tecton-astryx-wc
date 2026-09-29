@@ -1,0 +1,21 @@
+<!-- title: Checkbox indicator; description: The checkbox box in its three states and two sizes, enabled and disabled. -->
+<div style="display: grid; gap: var(--spacing-3)">
+  <div style="display: flex; align-items: center; gap: var(--spacing-4)">
+    <tct-checkbox-indicator state="unchecked"></tct-checkbox-indicator>
+    <tct-checkbox-indicator state="checked"></tct-checkbox-indicator>
+    <tct-checkbox-indicator state="indeterminate"></tct-checkbox-indicator>
+    <span style="color: var(--color-text-secondary)">md (24px)</span>
+  </div>
+  <div style="display: flex; align-items: center; gap: var(--spacing-4)">
+    <tct-checkbox-indicator size="sm" state="unchecked"></tct-checkbox-indicator>
+    <tct-checkbox-indicator size="sm" state="checked"></tct-checkbox-indicator>
+    <tct-checkbox-indicator size="sm" state="indeterminate"></tct-checkbox-indicator>
+    <span style="color: var(--color-text-secondary)">sm (20px)</span>
+  </div>
+  <div style="display: flex; align-items: center; gap: var(--spacing-4)">
+    <tct-checkbox-indicator disabled state="unchecked"></tct-checkbox-indicator>
+    <tct-checkbox-indicator disabled state="checked"></tct-checkbox-indicator>
+    <tct-checkbox-indicator disabled state="indeterminate"></tct-checkbox-indicator>
+    <span style="color: var(--color-text-secondary)">disabled</span>
+  </div>
+</div>

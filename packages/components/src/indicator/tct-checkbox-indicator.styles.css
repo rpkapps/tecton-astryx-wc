@@ -1,0 +1,192 @@
+/*
+ * tct-checkbox-indicator: the checkbox box. Decorative; the owning control keeps the input, name and
+ * focus. Tecton reads selection as a bright chip, not as an accent (design/components/checkbox.md):
+ * the checked box fills with the checkbox fill role and draws a glyph in the glyph role. Every
+ * indicator role meets the 3:1 non-text contrast rule against the surface (D-013 Q-05): the border,
+ * checked fill and indeterminate fill roles all measure >= 3:1 in both modes.
+ *
+ * Hover reaches the indicator through the inherited `--_indicator-hover` (0 or 1) that an owner
+ * publishes with the `indicator-scope` class (core indicatorScope); an ancestor cannot be matched
+ * across a shadow boundary.
+ * [mwg:styling-web-components] [mwg:brand-consistent-forms]
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+    flex-shrink: 0;
+  }
+
+  .box {
+    /* Tecton per-component overrides (components.ts `checkbox-indicator`). */
+    --_surface: var(--tecton-color-component-input-outlined-background);
+    --_border: var(--tecton-color-checkbox-border);
+    --_border-hover: var(--tecton-color-checkbox-hover-border);
+    --_disabled-border: var(--tecton-color-checkbox-disabled-border);
+    --_checked-fill: var(--tecton-color-checkbox-checked-fill);
+    --_indeterminate-fill: var(--tecton-color-checkbox-indeterminate-fill);
+    --_glyph: var(--tecton-color-checkbox-glyph);
+    --_hover: var(--_indicator-hover, 0);
+
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+
+    /* design: the control box is 24px (md) or 20px (sm), as upstream */
+    inline-size: 1.5rem;
+    block-size: 1.5rem;
+    border: var(--border-width) solid var(--_border);
+    border-radius: var(--radius-inner);
+    background-color: var(--_surface);
+    color: var(--_glyph);
+  }
+
+  .box[data-size='sm'] {
+    /* design: the control box is 20px at sm */
+    inline-size: 1.25rem;
+    block-size: 1.25rem;
+  }
+
+  /* The unchecked border brightens toward the Tecton hover border while the owner is hovered. */
+  .box[data-state='unchecked'] {
+    /* Foreground of an inherit-shade loading spinner: the brand accent on the surface fill. */
+    color: var(--color-icon-accent);
+    border-color: color-mix(
+      in srgb,
+      var(--_border),
+      var(--_border-hover) calc(var(--_hover) * 100%)
+    );
+    background-color: color-mix(
+      in srgb,
+      var(--_surface),
+      var(--color-tint-hover) calc(var(--_hover) * 5%)
+    );
+  }
+
+  .box[data-state='checked'] {
+    border-color: color-mix(
+      in srgb,
+      var(--_checked-fill),
+      var(--color-tint-hover) calc(var(--_hover) * 15%)
+    );
+    background-color: color-mix(
+      in srgb,
+      var(--_checked-fill),
+      var(--color-tint-hover) calc(var(--_hover) * 15%)
+    );
+  }
+
+  .box[data-state='indeterminate'] {
+    border-color: color-mix(
+      in srgb,
+      var(--_indeterminate-fill),
+      var(--color-tint-hover) calc(var(--_hover) * 15%)
+    );
+    background-color: color-mix(
+      in srgb,
+      var(--_indeterminate-fill),
+      var(--color-tint-hover) calc(var(--_hover) * 15%)
+    );
+  }
+
+  .box[data-disabled] {
+    border-color: var(--_disabled-border);
+    opacity: 0.5;
+  }
+
+  .box[data-disabled][data-state='unchecked'] {
+    background-color: var(--color-background-muted);
+  }
+
+  .check,
+  .dash {
+    display: none;
+  }
+
+  .check {
+    /* design: the check glyph is 14px (md) or 12px (sm) */
+    inline-size: 0.875rem;
+    block-size: 0.875rem;
+    color: var(--_glyph);
+  }
+
+  .box[data-size='sm'] .check {
+    inline-size: 0.75rem;
+    block-size: 0.75rem;
+  }
+
+  .box[data-state='checked'] .check {
+    display: block;
+  }
+
+  .dash {
+    /* design: the indeterminate bar is 12x2px (md) or 10x2px (sm) */
+    inline-size: 0.75rem;
+    block-size: 0.125rem;
+    border-radius: var(--radius-full);
+    background-color: var(--_glyph);
+  }
+
+  .box[data-size='sm'] .dash {
+    inline-size: 0.625rem;
+  }
+
+  .box[data-state='indeterminate'] .dash {
+    display: block;
+  }
+
+  /* A slotted child (a pending spinner) replaces the state mark and keeps the box. */
+  .box[data-slotted] .check,
+  .box[data-slotted] .dash {
+    display: none;
+  }
+
+  ::slotted(*) {
+    flex-shrink: 0;
+  }
+}
+
+@layer state {
+  @media (prefers-reduced-motion: no-preference) {
+    .box {
+      transition:
+        background-color var(--duration-fast) var(--ease-standard),
+        border-color var(--duration-fast) var(--ease-standard);
+    }
+  }
+}
+
+@layer a11y {
+  /*
+   * Forced colours strips painted backgrounds and does not reliably force an SVG stroke painted with
+   * currentColor, so the box is Canvas with a system border and the glyphs are CanvasText: the check
+   * and the bar stay perceivable on the box (WCAG 1.4.11), and a checked box still differs from an
+   * unchecked one by its mark.
+   */
+  @media (forced-colors: active) {
+    .box {
+      border-color: ButtonBorder;
+      background-color: Canvas;
+      color: CanvasText;
+    }
+
+    .box[data-state='checked'],
+    .box[data-state='indeterminate'] {
+      border-color: Highlight;
+    }
+
+    .check {
+      color: CanvasText;
+    }
+
+    .dash {
+      background-color: CanvasText;
+    }
+
+    .box[data-disabled] {
+      border-color: GrayText;
+      opacity: 1;
+    }
+  }
+}

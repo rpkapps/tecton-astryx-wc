@@ -1,0 +1,71 @@
+{
+  "folder": "spinner",
+  "elements": {
+    "tct-spinner": {
+      "class": "TctSpinner",
+      "attributes": [
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "shade",
+          "property": "shade",
+          "type": "SpinnerShade",
+          "values": [
+            "default",
+            "subtle",
+            "on-media",
+            "inherit"
+          ],
+          "default": "'default'",
+          "reflects": true
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "SpinnerSize",
+          "values": [
+            "sm",
+            "md",
+            "lg",
+            "xl"
+          ],
+          "default": "'md'",
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "label",
+        "spinner"
+      ],
+      "cssStates": [],
+      "cssProperties": [
+        {
+          "name": "--spinner-arc-fraction"
+        },
+        {
+          "name": "--spinner-color"
+        },
+        {
+          "name": "--spinner-diameter"
+        },
+        {
+          "name": "--spinner-stroke-width"
+        },
+        {
+          "name": "--spinner-track-color"
+        }
+      ]
+    }
+  }
+}

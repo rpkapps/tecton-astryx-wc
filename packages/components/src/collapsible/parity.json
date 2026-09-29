@@ -1,0 +1,262 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "collapsible",
+  "workPackage": "WP-3",
+  "entries": {
+    "core.collapsible": {
+      "tag": "tct-collapsible",
+      "status": "implemented",
+      "upstream": {
+        "name": "Collapsible",
+        "path": "packages/core/src/Collapsible/Collapsible.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "trigger",
+          "kind": "slot",
+          "target": "trigger",
+          "as": "slot",
+          "notes": "Rich trigger content. A plain-text `trigger` attribute is the fallback shown when the slot is empty."
+        },
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "defaultIsOpen",
+          "kind": "prop",
+          "target": "open",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "The `open` attribute is the initial state. Default differs from upstream (open): see COLLAPSIBLE-01."
+        },
+        {
+          "upstream": "isOpen",
+          "kind": "prop",
+          "target": "open",
+          "as": "property",
+          "reflect": true,
+          "notes": "Current state. Controlled use: listen to tct-open-change, preventDefault() it, and set `open` yourself."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "onOpenChange",
+          "kind": "event",
+          "target": "tct-open-change",
+          "as": "event",
+          "notes": "Cancelable intent event before a user toggle (reason `trigger`); `tct-after-open-change` follows every actual change, including code and find in page."
+        },
+        {
+          "upstream": "chevronPosition",
+          "kind": "prop",
+          "target": "chevronPosition",
+          "as": "attribute",
+          "reflect": true,
+          "default": "end (or the group's)",
+          "notes": "Attribute `chevron-position`."
+        },
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "attribute",
+          "notes": "Identifies the item in a tct-collapsible-group."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: attributes on the host element pass through natively."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(collapsible|trigger|content|chevron) and custom properties."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useCollapsible",
+          "target": "CollapsibleController",
+          "as": "controller",
+          "notes": "Family-local controller (collapsible.controller.ts): own state, group-controlled state, toggle with the cancelable intent event. Banner (and later Card and Section) use it for their disclosure."
+        },
+        {
+          "upstream": "CollapsibleGroupContext",
+          "target": "collapsibleGroupContext (family-private)",
+          "as": "context"
+        },
+        {
+          "upstream": "CollapsibleGroupPresentationContext",
+          "target": "collapsibleGroupContext (family-private)",
+          "as": "context",
+          "notes": "Merged into one value: state and presentation."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Enter",
+          "action": "Toggles the region; the trigger keeps focus",
+          "when": "trigger focused, not disabled"
+        },
+        {
+          "keys": "Space",
+          "action": "Toggles the region, like Enter",
+          "when": "trigger focused, not disabled"
+        },
+        {
+          "keys": "Tab",
+          "action": "Moves into the content when open and past the trigger when collapsed; a disabled trigger is skipped"
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "COLLAPSIBLE-01",
+          "type": "approved-api-difference",
+          "text": "Starts collapsed unless `open` is written (like `<details>`). Upstream defaultIsOpen defaults to true; a boolean attribute cannot default to true and be turned off from HTML, and the inverted name the mapping rules prescribe (`collapsed`) would make `open` a second name for the same state. Banner, which upstream starts collapsed, matches. Write `open` on items that must start open."
+        },
+        {
+          "id": "COLLAPSIBLE-02",
+          "type": "a11y-improvement",
+          "text": "Collapsed content uses hidden=\"until-found\" where supported, so browser find in page reveals and opens the item (beforematch syncs the state); elsewhere it is plainly hidden. Upstream uses display: none, which is invisible to find in page. The reveal cannot be vetoed, so only tct-after-open-change fires for it."
+        },
+        {
+          "id": "COLLAPSIBLE-03",
+          "type": "approved-api-difference",
+          "text": "The stylesheet does not use the shared base: base's `[hidden] { display: none !important }` (reset layer) cannot be overridden and would defeat hidden=\"until-found\". The rest of base is repeated in the component's reset layer. See requests."
+        },
+        {
+          "id": "COLLAPSIBLE-04",
+          "type": "approved-api-difference",
+          "text": "Inside a group the item fires no tct-open-change; the group fires the cancelable tct-value-change with the requested selection. Row chrome (dividers, density, chevron position) reaches only the group's direct items: a collapsible nested in another one re-provides the group state without the chrome."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/components/src/styles/base.styles.css",
+          "reason": "Let components use hidden=\"until-found\": exclude it from the important display:none rule, then tct-collapsible (and later tab panels, accordions in other families) can adopt base again and drop their reset copy.",
+          "diff": "-  :host([hidden]),\n-  [hidden] {\n+  :host([hidden]),\n+  [hidden]:not([hidden='until-found']) {\n     display: none !important;\n   }"
+        }
+      ],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:search-hidden-content] (hidden=until-found, beforematch state sync, fallback to plain hidden) [mwg:accessible-web-components] (trigger and region in one shadow root, aria-controls stays valid) [mwg:animate-to-intrinsic-sizes] (considered; upstream does not animate the height, neither do we)."
+    },
+    "core.collapsible-group": {
+      "tag": "tct-collapsible-group",
+      "status": "implemented",
+      "upstream": {
+        "name": "CollapsibleGroup",
+        "path": "packages/core/src/Collapsible/CollapsibleGroup.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "type",
+          "kind": "prop",
+          "target": "type",
+          "as": "attribute",
+          "reflect": true,
+          "default": "single"
+        },
+        {
+          "upstream": "defaultValue",
+          "kind": "prop",
+          "target": "defaultValue",
+          "as": "attribute",
+          "notes": "Attribute `value`: the initial open item(s), space separated for `multiple`."
+        },
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "property",
+          "notes": "Current open item(s): string for single ('' when none), string[] for multiple."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "tct-value-change",
+          "as": "event",
+          "notes": "Cancelable intent event before a user toggle; `value` is the requested selection in the same shape as the property."
+        },
+        {
+          "upstream": "hasDividers",
+          "kind": "prop",
+          "target": "hasDividers",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Attribute `has-dividers`."
+        },
+        {
+          "upstream": "density",
+          "kind": "prop",
+          "target": "density",
+          "as": "attribute",
+          "reflect": true,
+          "default": "balanced with dividers, else none"
+        },
+        {
+          "upstream": "chevronPosition",
+          "kind": "prop",
+          "target": "chevronPosition",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Attribute `chevron-position`."
+        },
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"}
+      ],
+      "hooks": [],
+      "keyboard": [],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "COLLAPSIBLEGROUP-01",
+          "type": "approved-api-difference",
+          "text": "Upstream is uncontrolled or controlled through value/onChange; here the group owns its selection like a native control (D-006): a user toggle fires tct-value-change first and applies unless prevented; a controlled framework sets `value` back. Property and attribute writes fire nothing."
+        },
+        {
+          "id": "COLLAPSIBLEGROUP-02",
+          "type": "approved-api-difference",
+          "text": "A group without dividers adds no box (display: contents), like upstream's DOM-less group; with has-dividers it is a flex column and each item draws its own hairline (first item exempt through :host(:first-child))."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": true,
+        "rtl": false,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null
+    }
+  }
+}

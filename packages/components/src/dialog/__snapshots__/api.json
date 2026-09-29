@@ -1,0 +1,246 @@
+{
+  "folder": "dialog",
+  "elements": {
+    "tct-dialog": {
+      "class": "TctDialog",
+      "attributes": [
+        {
+          "name": "heading",
+          "property": "heading",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "inline",
+          "property": "inline",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "max-height",
+          "property": "maxHeight",
+          "type": "number | string",
+          "default": "'75dvh'",
+          "reflects": false
+        },
+        {
+          "name": "no-close-button",
+          "property": "noCloseButton",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "open",
+          "property": "open",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "padding",
+          "property": "padding",
+          "type": "DialogPadding | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "purpose",
+          "property": "purpose",
+          "type": "DialogPurpose",
+          "values": [
+            "required",
+            "form",
+            "info"
+          ],
+          "default": "'info'",
+          "reflects": true
+        },
+        {
+          "name": "subtitle",
+          "property": "subtitle",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "variant",
+          "property": "variant",
+          "type": "DialogVariant",
+          "values": [
+            "standard",
+            "fullscreen"
+          ],
+          "default": "'standard'",
+          "reflects": true
+        },
+        {
+          "name": "width",
+          "property": "width",
+          "type": "number | string",
+          "default": "400",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "isOpen",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "position",
+          "type": "DialogPosition | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "hide",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "requestClose",
+          "signature": "(reason: ChangeReason) => void"
+        },
+        {
+          "name": "show",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "toggle",
+          "signature": "(force?: boolean) => Promise<void>"
+        }
+      ],
+      "slots": [
+        "(default)",
+        "heading"
+      ],
+      "events": [
+        {
+          "name": "tct-after-open-change",
+          "class": "TctAfterOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "content",
+        "dialog"
+      ],
+      "cssStates": [
+        "open"
+      ],
+      "cssProperties": [
+        {
+          "name": "--dialog-padding"
+        }
+      ]
+    },
+    "tct-dialog-header": {
+      "class": "TctDialogHeader",
+      "attributes": [
+        {
+          "name": "close-label",
+          "property": "closeLabel",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "end-content-edge-compensation",
+          "property": "endContentEdgeCompensation",
+          "type": "DialogEndCompensation | undefined",
+          "values": [
+            "inline",
+            "block",
+            "all"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "has-divider",
+          "property": "hasDivider",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "heading",
+          "property": "heading",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "no-close-button",
+          "property": "noCloseButton",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "subtitle",
+          "property": "subtitle",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "headingElement",
+          "type": "HTMLElement | null",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "end",
+        "start",
+        "title"
+      ],
+      "events": [
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "close-button",
+        "end",
+        "header",
+        "start",
+        "subtitle",
+        "title-block"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

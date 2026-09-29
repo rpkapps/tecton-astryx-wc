@@ -31,8 +31,20 @@ const LIT = /^(lit|lit-html|lit-element|@lit\/|@lit-labs\/)/;
 
 const RANK = ['S', 'M', 'L', 'XL'];
 
-/** Budget of a folder in kB: an explicit `sizeBudgetKb`, else the largest upstream complexity it implements. */
+/** Temporary per-folder budgets (see the file's comment); they win over every other source. */
+const PROVISIONAL = (
+  JSON.parse(readFileSync(join(import.meta.dirname, 'provisional-budgets.json'), 'utf8')) as {
+    budgets: Record<string, number>;
+  }
+).budgets;
+
+/**
+ * Budget of a folder in kB: a provisional override, else an explicit `sizeBudgetKb`, else the largest
+ * upstream complexity it implements.
+ */
 export function folderBudgetKb(folder: string, manifest: Manifest): number {
+  const provisional = PROVISIONAL[folder];
+  if (provisional !== undefined) return provisional;
   const file = join(PATHS.componentsSrc, folder, 'parity.json');
   let explicit: number | undefined;
   let complexity = 'M';

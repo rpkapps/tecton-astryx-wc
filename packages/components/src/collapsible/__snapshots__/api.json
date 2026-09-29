@@ -1,0 +1,173 @@
+{
+  "folder": "collapsible",
+  "elements": {
+    "tct-collapsible": {
+      "class": "TctCollapsible",
+      "attributes": [
+        {
+          "name": "chevron-position",
+          "property": "chevronPosition",
+          "type": "CollapsibleChevronPosition | undefined",
+          "values": [
+            "start",
+            "end"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "open",
+          "property": "open",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "trigger",
+          "property": "trigger",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "value",
+          "property": "value",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "name": "hide",
+          "signature": "() => void"
+        },
+        {
+          "name": "requestClose",
+          "signature": "() => void"
+        },
+        {
+          "name": "show",
+          "signature": "() => void"
+        },
+        {
+          "name": "toggle",
+          "signature": "(force?: boolean) => void"
+        }
+      ],
+      "slots": [
+        "(default)",
+        "trigger"
+      ],
+      "events": [
+        {
+          "name": "tct-after-open-change",
+          "class": "TctAfterOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "body",
+        "chevron",
+        "collapsible",
+        "content",
+        "trigger"
+      ],
+      "cssStates": [
+        "disabled",
+        "open"
+      ],
+      "cssProperties": []
+    },
+    "tct-collapsible-group": {
+      "class": "TctCollapsibleGroup",
+      "attributes": [
+        {
+          "name": "chevron-position",
+          "property": "chevronPosition",
+          "type": "CollapsibleChevronPosition | undefined",
+          "values": [
+            "start",
+            "end"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "density",
+          "property": "density",
+          "type": "CollapsibleDensity | undefined",
+          "values": [
+            "compact",
+            "balanced",
+            "spacious"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "has-dividers",
+          "property": "hasDividers",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "type",
+          "property": "type",
+          "type": "CollapsibleGroupType",
+          "values": [
+            "single",
+            "multiple"
+          ],
+          "default": "'single'",
+          "reflects": true
+        },
+        {
+          "name": "value",
+          "property": "defaultValue",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "value",
+          "type": "string | string[]",
+          "readonly": false
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [
+        {
+          "name": "tct-value-change",
+          "class": "TctValueChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

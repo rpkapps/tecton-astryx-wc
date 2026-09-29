@@ -1,0 +1,158 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "tree-list",
+  "workPackage": "WP-5",
+  "entries": {
+    "core.tree-list": {
+      "tag": "tct-tree-list",
+      "status": "implemented",
+      "upstream": {
+        "name": "TreeList",
+        "path": "packages/core/src/TreeList/TreeList.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "items",
+          "kind": "prop",
+          "target": "items",
+          "as": "property",
+          "notes": "Recursive TreeListItemData[]: id, label, description, startContent, endContent, children, expandable (additive), onClick, href, target, isDisabled, isSelected, isExpanded, style and part (replace className/xstyle). Content fields take a template, a node or text (never HTML)."
+        },
+        {
+          "upstream": "density",
+          "kind": "prop",
+          "target": "density",
+          "as": "attribute",
+          "reflect": true,
+          "default": "balanced"
+        },
+        {
+          "upstream": "variant",
+          "kind": "prop",
+          "target": "variant",
+          "as": "attribute",
+          "reflect": true,
+          "default": "lineGuides"
+        },
+        {
+          "upstream": "header",
+          "kind": "prop",
+          "target": "header",
+          "as": "attribute",
+          "notes": "Text header via the attribute; rich content via the header slot. Either names the tree (aria-labelledby inside the shadow root)."
+        },
+        {"upstream": "header", "kind": "slot", "target": "header", "as": "slot"},
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, the parts (tree-list, tree-list-item, ...) and the public levers --tree-list-indent and --tree-list-row-gap."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-native-attrs: data-* attributes are set on the host as-is; there is no prop."
+        },
+        {
+          "upstream": "toggleChildrenLabel",
+          "kind": "prop",
+          "target": "toggle-children-label",
+          "as": "attribute",
+          "notes": "Additive: overrides the toggle's accessible name (message @astryx.treeList.toggleChildren)."
+        },
+        {
+          "upstream": "ref",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-ref: the element is its own reference."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useTreeFocus",
+          "target": "TreeFocusController",
+          "as": "controller",
+          "notes": "@tecton-astryx/core/controllers/tree-focus.js: visible-item navigation, roving tab stop, typeahead, Left/Right/Enter/Space. Owns no state beyond the active item id."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "ArrowDown, ArrowUp",
+          "action": "Moves focus to the next or previous enabled visible item"
+        },
+        {"keys": "Home, End", "action": "Moves focus to the first or last visible item"},
+        {
+          "keys": "ArrowRight (ArrowLeft in RTL)",
+          "action": "Expands a collapsed branch; on an expanded branch moves to its first child"
+        },
+        {
+          "keys": "ArrowLeft (ArrowRight in RTL)",
+          "action": "Collapses an expanded branch; otherwise moves to the parent"
+        },
+        {
+          "keys": "Enter, Space",
+          "action": "Activates the item, or toggles a branch that has no action of its own"
+        },
+        {
+          "keys": "Printable characters",
+          "action": "Jumps to the next item whose label starts with the typed text"
+        },
+        {
+          "keys": "Tab",
+          "action": "Leaves the tree: it is one tab stop",
+          "when": "the tab stop is the selected item, else the first enabled item"
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "TREE-01",
+          "type": "approved-api-difference",
+          "text": "The whole tree renders in one shadow root (ul role=tree, li role=treeitem, li > ul role=group), so aria-level, aria-posinset, aria-setsize, aria-expanded, aria-selected, aria-disabled and the header/label references all stay in one tree. Each treeitem is named by its label element (aria-labelledby) and described by the description; the row's invisible action button or anchor is presentational for assistive technology and is not a tab stop (the treeitem is)."
+        },
+        {
+          "id": "TREE-02",
+          "type": "approved-api-difference",
+          "text": "Data-item `className` and `xstyle` are replaced by `style` (a name-value map on the row, custom properties included) and `part` (extra part tokens on the row). The upstream onKeyDown prop is a plain keydown listener on the host: the controller listens in the capture phase inside the tree, so a consumer's listener still sees the event and can preventDefault() to opt out."
+        },
+        {
+          "id": "TREE-03",
+          "type": "approved-api-difference",
+          "text": "Expansion is owned by the tree, seeded from `isExpanded` on the items and overridden by the user (or expand()/collapse()/toggle()) by id across `items` replacements. A user toggle first fires the cancelable intent event tct-tree-toggle (id, expanded, reason); programmatic calls fire nothing. The additive `expandable` item flag shows the toggle before any children exist, for lazily loaded branches: assign `children` from the event handler."
+        },
+        {
+          "id": "TREE-04",
+          "type": "approved-api-difference",
+          "text": "`onClick` is called for a click on the row and for Enter/Space on the focused treeitem. A click on nested interactive content in startContent/endContent (a button, a link, a menu trigger) belongs to that content and does not activate or toggle the row. `target=\"_blank\"` links add rel=\"noopener noreferrer\"; an unsafe href renders a destination-less anchor (D-014 URL policy)."
+        },
+        {
+          "id": "TREE-05",
+          "type": "a11y-improvement",
+          "text": "When the focused item leaves the tree (its branch collapses, an ancestor is removed, `items` is replaced) focus moves to the nearest surviving item (its closest visible ancestor, else the neighbour) instead of dropping to the page. The focus ring is drawn on the focused treeitem's own row only, so it can never appear on a nested row."
+        },
+        {
+          "id": "TREE-06",
+          "type": "approved-api-difference",
+          "text": "The toggle chevron is tct-icon (chevron-right, which mirrors itself in RTL) turned a quarter with the `rotate` property (transition disabled under prefers-reduced-motion). The connector guides are decorative separation, so they use the emphasized border token (D-013 Q-05); in forced colours they are CanvasText."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components] ARIA relationships must stay within a single shadow root, so the whole tree renders in one; [mwg:shadow-dom] parts and inherited levers; [mwg:styling-web-components] --tree-list-indent / --tree-list-row-gap as public custom properties; [mwg:css-layout] flex rows with a native-width guide; [mwg:accessibility] and [mwg:spatial-navigation] roving tab stop, typeahead and native scrolling kept when a key is not handled. Selection and hover use the table-row tokens (--tecton-color-table-row-selected / -hover)."
+    }
+  }
+}
