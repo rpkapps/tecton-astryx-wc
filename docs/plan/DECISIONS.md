@@ -43,3 +43,17 @@ tecton-astryx's 131 icon glyphs have no recorded licence/provenance. Do not ship
 provenance is confirmed. Build the icon system (registry + `tct-icon`) against an
 open-licensed set whose names match (Material Symbols, Apache-2.0) as the default, with
 the Tecton glyphs as a drop-in registry once cleared. Open question for the owner.
+
+## D-005 — Styling open questions (2026-09-29)
+
+Resolving the open questions in `docs/research/styling.md` §16:
+
+- **Prefix:** `tct-` is final for tags and custom events.
+- **Focus ring:** Tecton hot pink everywhere, including destructive buttons (Tecton defines only
+  one focus role). Every surface a ring can sit on is contrast-checked; inverted surfaces (where
+  pink fails 3:1) get a documented double-ring (pink + surface-contrast inner ring) fallback.
+- **`prefers-contrast: more`:** deferred; not in v1 scope. Forced-colors support is required.
+- **`palette.css`:** published as an opt-in asset; component CSS is linted so it never references
+  palette variables.
+- **Token names:** Astryx's unprefixed semantic names verbatim; Tecton-only roles under
+  `--tecton-*`; component-private `--_<component>-*`.
