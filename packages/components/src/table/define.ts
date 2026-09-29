@@ -66,6 +66,27 @@ export {TableColumnResizeController, computeColumnWidths} from './plugins/column
 export type {TableColumnResizeConfig} from './plugins/column-resize.js';
 export {TableStickyColumnsController} from './plugins/sticky-columns.js';
 export type {TableStickyColumnsConfig} from './plugins/sticky-columns.js';
+export {TableGroupedRowsController} from './plugins/grouped-rows.js';
+export type {TableGroupedRowsConfig} from './plugins/grouped-rows.js';
+export {TableRowExpansionController, TABLE_EXPANSION_COLUMN_KEY} from './plugins/row-expansion.js';
+export type {TableRowExpansionConfig} from './plugins/row-expansion.js';
+export {TableTreeDataController, TABLE_TREE_INDENTS} from './plugins/tree.js';
+export type {TableTreeDataConfig, TableTreeIndent, TableTreeRowMeta} from './plugins/tree.js';
+export {TableTreeStateController} from './plugins/tree-state.js';
+export type {TableTreeStateOptions} from './plugins/tree-state.js';
+export {TableRowIndexController, TABLE_ROW_INDEX_COLUMN_KEY} from './plugins/row-index.js';
+export type {TableRowIndexConfig} from './plugins/row-index.js';
+export {
+  TableRowStatusController,
+  TABLE_ROW_STATUS_COLORS,
+  TABLE_ROW_STATUS_COLUMN_KEY,
+} from './plugins/row-status.js';
+export type {
+  TableRowStatus,
+  TableRowStatusColor,
+  TableRowStatusConfig,
+  TableSemanticRowStatus,
+} from './plugins/row-status.js';
 export type {
   BodyCellRenderProps,
   BodyRowRenderProps,
