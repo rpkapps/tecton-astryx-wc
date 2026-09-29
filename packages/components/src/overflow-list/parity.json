@@ -127,6 +127,11 @@
           "file": "tools/eslint-plugin-tct/rules/no-create-tct-element.ts",
           "reason": "The rule flags every `new Tct*()`, including the library event classes (`new TctOverflowChangeEvent(...)`, which A§7.6 requires), so this element imports them under an alias. Exclude class names ending in `Event`.",
           "diff": "if (node.callee.type === 'Identifier' && /^Tct[A-Z]/.test(node.callee.name) && !node.callee.name.endsWith('Event')) { ... }"
+        },
+        {
+          "file": "packages/locales/src/catalogs.node.test.ts",
+          "reason": "'English namespace modules > partition the English catalog by namespace' compares the merged dist/en modules to the upstream English catalog, so any first-party @tct.* message fails it (@tct.overflow-list.overflow here, and @tct.field.* from WP-F). Compare only the @astryx.* ids, and assert the @tct.* ids sit in the module named after their namespace.",
+          "diff": "expect(merged).toEqual(english) -> expect(Object.fromEntries(Object.entries(merged).filter(([id]) => id.startsWith('@astryx.')))).toEqual(english)"
         }
       ],
       "sizeBudgetKb": null,
