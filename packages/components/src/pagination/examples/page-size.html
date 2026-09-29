@@ -1,0 +1,17 @@
+<!-- title: Page size; description: page-size-options shows an "Items per page" selector. Choosing a size fires tct-page-size-change, applies it, and returns to page 1 with a tct-page-change. Prevent either event to keep the current value. -->
+<div id="page-size-root">
+  <tct-vstack gap="3">
+    <tct-text as="p" data-status>Page 1, 10 per page</tct-text>
+    <tct-pagination variant="count" page="1" total-items="480" page-size="10" page-size-options="10, 25, 50"></tct-pagination>
+  </tct-vstack>
+  <script type="module">
+    const root = document.getElementById('page-size-root');
+    const pagination = root.querySelector('tct-pagination');
+    const status = root.querySelector('[data-status]');
+    const update = () => {
+      status.textContent = `Page ${pagination.page}, ${pagination.pageSize} per page`;
+    };
+    pagination.addEventListener('tct-page-change', () => queueMicrotask(update));
+    pagination.addEventListener('tct-page-size-change', () => queueMicrotask(update));
+  </script>
+</div>

@@ -1,0 +1,13 @@
+<!-- title: Basic; description: Page numbers with ellipses between previous and next. The element applies the page itself when someone chooses one; listen to tct-page-change to load the content, and read page and oldPage from the event. -->
+<div id="basic-root">
+  <tct-vstack gap="3">
+    <tct-text as="p">Showing page <tct-text as="span" weight="medium" data-page>3</tct-text>.</tct-text>
+    <tct-pagination page="3" total-items="200" page-size="10"></tct-pagination>
+  </tct-vstack>
+  <script type="module">
+    const root = document.getElementById('basic-root');
+    root.querySelector('tct-pagination').addEventListener('tct-page-change', (event) => {
+      root.querySelector('[data-page]').textContent = event.page;
+    });
+  </script>
+</div>

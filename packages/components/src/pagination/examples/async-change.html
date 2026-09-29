@@ -1,0 +1,16 @@
+<!-- title: Async change; description: changeAction runs after the page changes; while its promise is pending the paginator is busy (aria-busy) and clicks are not blocked. If it rejects, the previous page returns. -->
+<div id="async-change-root">
+  <tct-vstack gap="3">
+    <tct-text as="p" data-status>Loaded page 1</tct-text>
+    <tct-pagination page="1" total-pages="9"></tct-pagination>
+  </tct-vstack>
+  <script type="module">
+    const root = document.getElementById('async-change-root');
+    const status = root.querySelector('[data-status]');
+    root.querySelector('tct-pagination').changeAction = async (page) => {
+      status.textContent = `Loading page ${page}...`;
+      await new Promise((resolve) => setTimeout(resolve, 600));
+      status.textContent = `Loaded page ${page}`;
+    };
+  </script>
+</div>

@@ -1,0 +1,16 @@
+<!-- title: Cursor paging; description: Without a total, has-more says whether a next page exists. Numbered, count, compact and dots readouts need a total and render nothing; the input variant disables its box. -->
+<div id="cursor-root">
+  <tct-vstack gap="3">
+    <tct-text as="p" data-status>Page 1</tct-text>
+    <tct-pagination variant="none" page="1" has-more></tct-pagination>
+  </tct-vstack>
+  <script type="module">
+    const root = document.getElementById('cursor-root');
+    const pagination = root.querySelector('tct-pagination');
+    pagination.addEventListener('tct-page-change', (event) => {
+      // Pretend the source runs out after page 4.
+      pagination.hasMore = event.page < 4;
+      root.querySelector('[data-status]').textContent = `Page ${event.page}`;
+    });
+  </script>
+</div>
