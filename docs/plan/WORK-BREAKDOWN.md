@@ -108,8 +108,8 @@ exists so far.
 
 - Copy inputs + `inputs.lock.json` (A§5.1); normaliser, resolver (A§5.2, D-001 export-first, overrides
   file with the accent-ink rebinds), generator for `tokens.css`, `palette.css`, `fonts.css` (Capsize
-  metrics), `tokens.{js,d.ts,json}`, `fallbacks.json`, `[data-media-theme]` blocks, provisional status
-  (D-002).
+  metrics), `tokens.{js,d.ts,json}`, `fallbacks.json`, `[data-media-theme]` blocks, provisional and
+  astryx-retained status (D-002, D-013).
 - `tokens:check` (A§5.6) incl. contrast matrix with `contrast.allow.json`, token-name snapshot,
   Astryx coverage (258 names), Tailwind collision list.
 
@@ -125,7 +125,8 @@ Files (fixed paths, A§9): `tct-element.ts`, `define.ts`, `features.ts`, `events
 - `packages/locales`: copy the 30 upstream catalogs with hashes, generate per-locale modules, English
   namespace modules, pseudo locale, alias table (A§9.15).
 - `packages/icons`: `tools/icons/extract-lucide.ts` generates Lucide data modules; default set = Astryx role
-  names mapped to Lucide glyphs (A§12, D-009).
+  names mapped to Lucide glyphs (A§12, D-009); `tools/icons/extract-tecton.ts` converts the owner's Tecton
+  domain icons (`packages/icons/src/tecton/glyphs`, D-013 Q-02) and the default set registers them.
 
 ### M4 — Test harness (`packages/testing`)
 

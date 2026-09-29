@@ -14,8 +14,15 @@ export interface IconDefinition {
   strokeWidth?: number;
   /** Mirror in right-to-left contexts (chevrons, arrows). */
   mirrorInRtl?: boolean;
-  /** Does not inherit `currentColor`. */
+  /** Carries colours of its own (does not fully inherit `currentColor`). */
   colored?: boolean;
+  /**
+   * Optional raw SVG body (inner markup, no `<svg>` wrapper) for glyphs `paths` cannot express
+   * (D-013 Q-02; e.g. the Tecton `strata` glyph). `paths` stays the single-colour fallback outline.
+   * Renderers must pass it through `sanitizeHtml(..., {svg: true})` once and clone the result per
+   * instance; it is never trusted as-is.
+   */
+  svg?: string;
 }
 
 export type IconLoader = () => Promise<IconDefinition>;

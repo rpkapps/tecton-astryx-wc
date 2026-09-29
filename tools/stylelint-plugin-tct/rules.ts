@@ -242,21 +242,102 @@ const NAMED_COLORS = [
   'yellowgreen',
 ];
 const NAMED_COLOR = new RegExp(`(?<![\\w-])(?:${NAMED_COLORS.join('|')})(?![\\w-]|\\()`, 'i');
-const COLOR_FUNCTION = /(?<![\w-])(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color)\(/i;
-const HEX_COLOR = /#(?:[0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{4}|[0-9a-f]{3})(?![\w-])/i;
-const COLOR_PROPERTY =
-  /(?:^|-)(?:color|background|border|outline|shadow|fill|stroke|decoration|filter)(?:-|$)/;
 
-export function findColorLiteral(prop: string, value: string): string | undefined {
+/**
+ * CSS system colours (css-color-4, plus the deprecated ones browsers still honour). They follow the
+ * user's forced-colours palette, so they are only allowed inside `@media (forced-colors: active)`
+ * (A§6.6). In any other context they would hard-code a colour outside the Tecton tokens.
+ */
+const SYSTEM_COLORS = [
+  'AccentColor',
+  'AccentColorText',
+  'ActiveText',
+  'ButtonBorder',
+  'ButtonFace',
+  'ButtonText',
+  'Canvas',
+  'CanvasText',
+  'Field',
+  'FieldText',
+  'GrayText',
+  'Highlight',
+  'HighlightText',
+  'LinkText',
+  'Mark',
+  'MarkText',
+  'SelectedItem',
+  'SelectedItemText',
+  'VisitedText',
+  // Deprecated system colours.
+  'ActiveBorder',
+  'ActiveCaption',
+  'AppWorkspace',
+  'Background',
+  'ButtonHighlight',
+  'ButtonShadow',
+  'CaptionText',
+  'InactiveBorder',
+  'InactiveCaption',
+  'InactiveCaptionText',
+  'InfoBackground',
+  'InfoText',
+  'Menu',
+  'MenuText',
+  'Scrollbar',
+  'ThreeDDarkShadow',
+  'ThreeDFace',
+  'ThreeDHighlight',
+  'ThreeDLightShadow',
+  'ThreeDShadow',
+  'Window',
+  'WindowFrame',
+  'WindowText',
+];
+const SYSTEM_COLOR = new RegExp(`(?<![\\w-])(?:${SYSTEM_COLORS.join('|')})(?![\\w-]|\\()`, 'i');
+const COLOR_FUNCTION = /(?<![\w-])(?:rgba?|hsla?|hwb|lab|lch|oklab|oklch|color|device-cmyk)\(/i;
+const HEX_COLOR = /#(?:[0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{4}|[0-9a-f]{3})(?![\w-])/i;
+
+/**
+ * Properties whose values are author-defined identifiers or keywords, never colours: scanning them
+ * for colour words (`animation-name: red-flash`, `font-family: Orange Sans`, `grid-area: tan`) would
+ * only produce false positives. Every other property is scanned for named and system colours, so a
+ * colour in `mask`, `caret`, `column-rule`, `text-emphasis`, `scrollbar-color`, ... cannot slip through.
+ */
+const IDENTIFIER_PROPERTY =
+  /^(?:-webkit-)?(?:font(?:-family|-variant(?:-.+)?|-feature-settings|-variation-settings)?|animation(?:-.+)?|transition(?:-.+)?|will-change|grid(?:-.+)?|container(?:-.+)?|view-transition-.+|anchor-name|position-anchor|position-try(?:-.+)?|counter-.+|list-style(?:-.+)?|content|quotes|src|unicode-range|timeline-scope|scroll-timeline(?:-.+)?|view-timeline(?:-.+)?|cursor)$/;
+
+/** True when `node` sits inside `@media (forced-colors: active)` (system colours are allowed there). */
+export function inForcedColors(node: CssDecl): boolean {
+  return ancestors(node).some(
+    (container) =>
+      isAtRule(container, 'media') &&
+      /(?<!not\s)\(\s*forced-colors\s*:\s*active\s*\)/i.test(normalizeParams(container.params)),
+  );
+}
+
+/**
+ * The first colour literal in a declaration: hex, colour functions and named colours (anywhere), and
+ * system colours unless `forcedColors` says the declaration is inside `@media (forced-colors: active)`.
+ * `transparent`, `currentColor`, `inherit` and friends are keywords, not literals, and pass.
+ */
+export function findColorLiteral(
+  prop: string,
+  value: string,
+  forcedColors = false,
+): string | undefined {
   const masked = maskValue(value);
   const hex = HEX_COLOR.exec(masked);
   if (hex) return hex[0];
   const fn = COLOR_FUNCTION.exec(masked);
   if (fn) return fn[0];
-  if (prop.startsWith('--') || COLOR_PROPERTY.test(prop.toLowerCase())) {
-    // Custom property *names* inside var() are not colours.
+  if (prop.startsWith('--') || !IDENTIFIER_PROPERTY.test(prop.toLowerCase())) {
+    // Custom property *names* inside var() are not colours: the lookbehind skips `--color-red`.
     const named = NAMED_COLOR.exec(masked);
     if (named) return named[0];
+    if (!forcedColors) {
+      const system = SYSTEM_COLOR.exec(masked);
+      if (system) return system[0];
+    }
   }
   return undefined;
 }
@@ -265,11 +346,11 @@ export const noColorLiterals = plugin(
   'no-color-literals',
   {
     rejected: (literal) =>
-      `Colour literal "${literal}" is not allowed in component CSS; use a semantic token (var(--color-...)) or a system colour keyword.`,
+      `Colour literal "${literal}" is not allowed in component CSS; every colour resolves to a Tecton token (var(--color-...), D-013). Only transparent, currentColor and inherit are allowed, plus CSS system colours inside @media (forced-colors: active).`,
   },
   (_options, emit) => (root) => {
     root.walkDecls((decl) => {
-      const found = findColorLiteral(decl.prop, decl.value);
+      const found = findColorLiteral(decl.prop, decl.value, inForcedColors(decl));
       if (found) emit(decl, 'rejected', found);
     });
   },

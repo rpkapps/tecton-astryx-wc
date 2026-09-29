@@ -1,13 +1,9 @@
 {
-  "$comment": "Authored (WP-F). The exact provisional set (D-002). `tokens:check` fails when the emitted provisional tokens differ from categories + names + the pipeline-defined extras, so adding or removing one is a reviewed change. `nonTokens` are D-002 items that have no custom property; they are listed in the docs' 'Differences and open items' page.",
+  "$comment": "Authored (WP-F; revised for D-013 Q-06). Three disjoint groups, each enforced exactly by `tokens:check` (checkProvisional): (1) `provisional`: no Tecton decision, values are proposals (D-002; data-viz stays a proposed mapping from palette colours, D-013); (2) `astryxRetained`: not brand tokens, Tecton has none, so the Astryx values are kept on purpose (motion, breakpoints, z-index; D-013 Q-06); (3) `tectonDerived`: settled by D-013 Q-06 as Tecton-derived, never provisional (headings 3-6, letter-spacing, the destructive button). `nonTokens` items have no custom property; they are exported from tokens.js / tokens.json and listed on the docs' 'Differences and open items' page. The pipeline-defined extras (extra-tokens.json) are provisional too.",
   "categories": [
     {
       "category": "data",
-      "reason": "Data-viz colours: Tecton documents none. Proposed from the accent fill stops (categorical) and the onLight ramp (sequential); the teal/brown/indigo slots borrow lime/yellow/orchid (docs/research/tecton-theme.md 3.8)."
-    },
-    {
-      "category": "motion",
-      "reason": "Motion: Tecton has no source; the upstream Astryx durations and easing are kept."
+      "reason": "Data-viz colours: Tecton documents none. Proposed mapping from Tecton accent hues and status roles, palette colours only (D-013 Q-06): the accent fill stops (categorical) and the onLight ramp (sequential); the teal/brown/indigo slots borrow lime/yellow/orchid (docs/research/tecton-theme.md 3.8)."
     }
   ],
   "names": [
@@ -18,24 +14,101 @@
   ],
   "nonTokens": [
     {
-      "name": "breakpoints",
-      "reason": "sm 640, md 768, lg 1024, xl 1280, 2xl 1536: upstream DEFAULT_WIDTH_BREAKPOINTS, no Tecton source. Exported from tokens.js / tokens.json (not custom properties: they cannot be used in media queries)."
-    },
-    {
-      "name": "z-index",
-      "reason": "Astryx defines no z-index tokens; overlays use the top layer. Nothing to map."
-    },
-    {
-      "name": "letter-spacing",
-      "reason": "Tecton has no letter-spacing anywhere; components use `normal`. Astryx has no tracking tokens either."
-    },
-    {
-      "name": "destructive button",
-      "reason": "No Tecton source; painted from the --tecton-color-status-error-filled-* roles (component work packages)."
-    },
-    {
       "name": "icons: chevronsLeft, chevronsRight, calendar, clock, checkDouble, stop",
-      "reason": "Six roles without a Tecton glyph; covered by the Lucide default set (D-009)."
+      "reason": "Six roles without a Tecton glyph; covered by the Lucide default set (D-009, D-013 Q-02)."
     }
-  ]
+  ],
+  "astryxRetained": {
+    "categories": [
+      {
+        "category": "motion",
+        "reason": "Motion is not a brand token and Tecton has none: the upstream Astryx durations and easing are kept on purpose (D-013 Q-06)."
+      }
+    ],
+    "names": [],
+    "nonTokens": [
+      {
+        "name": "breakpoints",
+        "reason": "sm 640, md 768, lg 1024, xl 1280, 2xl 1536: upstream DEFAULT_WIDTH_BREAKPOINTS, kept on purpose (not a brand token, Tecton has none; D-013 Q-06). Exported from tokens.js / tokens.json (not custom properties: they cannot be used in media queries)."
+      },
+      {
+        "name": "z-index",
+        "reason": "Astryx defines no z-index tokens; overlays use the top layer, and the few hard-coded upstream layers (Toast 500, BottomSheet 1000, skip link 9999) are kept on purpose (D-013 Q-06). Nothing to map."
+      }
+    ]
+  },
+  "tectonDerived": {
+    "names": [
+      {
+        "name": "--text-heading-3-size",
+        "reason": "Heading 3 is Tecton's `large` (16px), D-013 Q-06."
+      },
+      {
+        "name": "--text-heading-3-weight",
+        "reason": "Heading 3 is Tecton's `large` (weight 500), D-013 Q-06."
+      },
+      {
+        "name": "--text-heading-3-leading",
+        "reason": "Heading 3 is Tecton's `large` (line height 20px), D-013 Q-06."
+      },
+      {
+        "name": "--text-heading-4-size",
+        "reason": "Heading 4 is Tecton's `medium` (14px), D-013 Q-06."
+      },
+      {
+        "name": "--text-heading-4-weight",
+        "reason": "Heading 4 keeps the heading weight 500 on Tecton's `medium` size (14px); the `medium` body variant itself is 400. D-013 Q-06."
+      },
+      {
+        "name": "--text-heading-4-leading",
+        "reason": "Heading 4 is Tecton's `medium` (line height 18px), D-013 Q-06."
+      },
+      {
+        "name": "--text-heading-5-size",
+        "reason": "Heading 5 is Tecton's `small` (12px), D-013 Q-06."
+      },
+      {
+        "name": "--text-heading-5-weight",
+        "reason": "Heading 5 keeps the heading weight 500 on Tecton's `small` size (12px); the `small` body variant itself is 400. D-013 Q-06."
+      },
+      {
+        "name": "--text-heading-5-leading",
+        "reason": "Heading 5 is Tecton's `small` (line height 16px), D-013 Q-06."
+      },
+      {
+        "name": "--text-heading-6-size",
+        "reason": "Heading 6 is Tecton's `tiny` (10px), D-013 Q-06."
+      },
+      {
+        "name": "--text-heading-6-weight",
+        "reason": "Heading 6 is Tecton's `tiny` (weight 500), D-013 Q-06."
+      },
+      {
+        "name": "--text-heading-6-leading",
+        "reason": "Heading 6 is Tecton's `tiny` (line height 14px), D-013 Q-06."
+      }
+    ],
+    "nonTokens": [
+      {
+        "name": "letter-spacing",
+        "value": "normal",
+        "reason": "Tecton specifies no letter-spacing anywhere (design/components/button.md, the export, tecton-astryx), so it resolves to `normal` for every text style; Astryx has no tracking tokens either (D-013 Q-06). tokens:check asserts every typography variant in the semantic map says `normal`."
+      },
+      {
+        "name": "destructive button",
+        "binds": {
+          "background": "--tecton-color-status-error-filled-bg",
+          "background-hover": "--tecton-color-status-error-filled-bg-hover",
+          "background-focus": "--tecton-color-status-error-filled-bg-focus",
+          "background-press": "--tecton-color-status-error-filled-bg-press",
+          "background-active": "--tecton-color-status-error-filled-bg-active",
+          "text": "--tecton-color-status-error-filled-text",
+          "adornment": "--tecton-color-status-error-filled-adornment",
+          "outline-text": "--tecton-color-status-error-outline-text",
+          "outline-border": "--tecton-color-status-error-outline-border-strong"
+        },
+        "reason": "Tecton has no destructive button. The Astryx `destructive` variant is kept and styled only from Tecton --tecton-color-status-error-* roles (D-013 Q-06): filled roles for the button, outline roles where it sits on a ghost/tertiary surface. The disabled state uses the shared Tecton disabled roles, and the focus ring stays hot pink (D-005). The component layer reads these roles directly; no extra tokens are needed."
+      }
+    ]
+  }
 }

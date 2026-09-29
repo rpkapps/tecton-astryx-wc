@@ -1,0 +1,12 @@
+/* Fixture: palette variables are never referenced by component CSS (D-005). */
+@layer component {
+  .value {
+    color: var(--tecton-palette-purple-500);
+  }
+  .fallback {
+    color: var(--color-text, var(--tecton-palette-gray-900));
+  }
+  .redeclared {
+    --tecton-palette-purple-500: 1;
+  }
+}

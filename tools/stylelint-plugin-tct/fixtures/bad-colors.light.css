@@ -1,0 +1,15 @@
+/* Fixture: light-DOM sheets follow the same colour rules as shadow-root sheets. */
+@layer tecton.light-dom {
+  :where(tct-x) :where(.hex) {
+    color: #abc;
+  }
+  :where(tct-x) :where(.named) {
+    background: navy;
+  }
+  :where(tct-x) :where(.palette) {
+    color: var(--tecton-palette-purple-500);
+  }
+  :where(tct-x) :where(.system) {
+    border-color: ButtonText;
+  }
+}

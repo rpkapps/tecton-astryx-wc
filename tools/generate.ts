@@ -37,6 +37,7 @@ export const EXTERNAL_STEPS_BEFORE_BARRELS: readonly ExternalStep[] = [
   {name: 'tokens', script: 'packages/tokens/scripts/generate.ts', milestone: 'M2'},
   {name: 'locales', script: 'packages/locales/scripts/generate.ts', milestone: 'M3'},
   {name: 'icons (Lucide extraction)', script: 'tools/icons/extract-lucide.ts', milestone: 'M3'},
+  {name: 'icons (Tecton domain set)', script: 'tools/icons/extract-tecton.ts', milestone: 'D-013'},
 ];
 
 export const EXTERNAL_STEPS_AFTER_BARRELS: readonly ExternalStep[] = [

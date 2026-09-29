@@ -4,6 +4,6 @@
  * no-host-context, host-box-props, host-selectors, layers-required, forced-colors-in-a11y-layer,
  * hover-in-media, logical-properties, known-custom-properties.
  */
-export {plugins, DEFAULT_TOKEN_NAMES_FILE, findColorLiteral} from './rules.ts';
+export {plugins, DEFAULT_TOKEN_NAMES_FILE, findColorLiteral, inForcedColors} from './rules.ts';
 import {plugins} from './rules.ts';
 export default {plugins};

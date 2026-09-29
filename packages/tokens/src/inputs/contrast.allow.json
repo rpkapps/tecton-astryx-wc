@@ -66,7 +66,7 @@
       "measured": {
         "light": 4
       },
-      "reason": "Tecton export design value: black at 50% on the white top-nav band (light mode) is 4.0:1. The tecton-astryx derivation (white text on black) passed but left primary text at 1.2:1 on the band, so the export was adopted (D-001). Large nav labels only; owner sign-off pending."
+      "reason": "Tecton export design value: black at 50% on the white top-nav band (light mode) is 4.0:1. The tecton-astryx derivation (white text on black) passed but left primary text at 1.2:1 on the band, so the export was adopted (D-001). Large nav labels only; owner accepted (D-013)."
     },
     {
       "pair": "--color-icon-secondary on --tecton-color-table-header-bg",
@@ -81,21 +81,21 @@
         "light": 2.2,
         "dark": 2.21
       },
-      "reason": "Inherited from the Tecton design (divider medium, 2.2:1 in both modes; tecton-astryx pins it with a test). Not a sole boundary indicator; use --tecton-color-divider-strong (3.1:1, in this matrix) where a boundary must be perceived."
+      "reason": "Inherited from the Tecton design (divider medium, 2.2:1 in both modes; tecton-astryx pins it with a test). Allowed for decorative separation only (D-013 Q-05): a component whose border is the sole indicator of a control boundary or of state (WCAG 1.4.11) must use a border token that measures 3:1 or more on its surface, e.g. --tecton-color-divider-strong (3.1:1, in this matrix). Component review enforces this."
     },
     {
       "pair": "--tecton-color-input-outlined-border on --color-background-body",
       "measured": {
         "dark": 2.21
       },
-      "reason": "Tecton export dark value (graphite.onDark.220 #57515c): 2.2-2.4:1. The light value passes (3.1:1). The field label, value and focus state also identify the control (WCAG 1.4.11 applies to a sole indicator); components may use --tecton-color-divider-strong for a stronger rule. Owner sign-off pending."
+      "reason": "Tecton export dark value (graphite.onDark.220 #57515c): 2.2-2.4:1. The light value passes (3.1:1). The field label, value and focus state also identify the control (WCAG 1.4.11 applies to a sole indicator); components may use --tecton-color-divider-strong for a stronger rule; owner accepted (D-013)."
     },
     {
       "pair": "--tecton-color-input-outlined-border on --color-background-surface",
       "measured": {
         "dark": 2.43
       },
-      "reason": "Tecton export dark value (graphite.onDark.220 #57515c): 2.2-2.4:1. The light value passes (3.1:1). The field label, value and focus state also identify the control (WCAG 1.4.11 applies to a sole indicator); components may use --tecton-color-divider-strong for a stronger rule. Owner sign-off pending."
+      "reason": "Tecton export dark value (graphite.onDark.220 #57515c): 2.2-2.4:1. The light value passes (3.1:1). The field label, value and focus state also identify the control (WCAG 1.4.11 applies to a sole indicator); components may use --tecton-color-divider-strong for a stronger rule; owner accepted (D-013)."
     },
     {
       "pair": "--focus-outline-color on --tecton-color-table-cell-bg-hover",

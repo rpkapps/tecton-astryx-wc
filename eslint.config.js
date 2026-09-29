@@ -77,6 +77,9 @@ export default defineConfig([
     // Generated Lucide data (tools/icons/extract-lucide.ts): 1,854 machine-written modules
     'packages/icons/src/lucide/**',
     'packages/icons/src/lucide.ts',
+    // Generated Tecton icon modules (tools/icons/extract-tecton.ts); the authored data is in tecton/glyphs/
+    'packages/icons/src/tecton/*.ts',
+    'packages/icons/src/tecton.ts',
     '**/fixtures/**',
   ]),
 

@@ -1,0 +1,71 @@
+/* Fixture (tools/stylelint-plugin-tct): every declaration below must be reported. Lines are asserted. */
+@layer component {
+  .hex {
+    color: #fff;
+  }
+  .hex-alpha {
+    background: #12345680;
+  }
+  .rgb {
+    background-color: rgb(0 0 0 / 50%);
+  }
+  .rgba {
+    border-color: rgba(0, 0, 0, 0.5);
+  }
+  .hsl {
+    outline-color: hsl(210 50% 40%);
+  }
+  .oklch {
+    fill: oklch(0.5 0.1 200);
+  }
+  .named {
+    color: red;
+  }
+  .named-border {
+    border: 1px solid rebeccapurple;
+  }
+  .named-shadow {
+    box-shadow: 0 0 2px black;
+  }
+  .named-in-fallback {
+    color: var(--color-text, white);
+  }
+  .named-gradient {
+    background-image: linear-gradient(gold, var(--color-surface));
+  }
+  .named-mask {
+    mask-image: linear-gradient(black, transparent);
+  }
+  .named-caret {
+    caret-color: hotpink;
+  }
+  .named-column-rule {
+    column-rule: 1px solid tomato;
+  }
+  .named-custom-property {
+    --_bg: teal;
+  }
+  .named-mixed-case {
+    color: ReD;
+  }
+  .color-mix-literal {
+    background: color-mix(in oklab, #fff 20%, transparent);
+  }
+  .color-function {
+    color: color(display-p3 1 0 0);
+  }
+  .system-outside-forced-colors {
+    border-color: CanvasText;
+    color: GrayText;
+  }
+  @media (prefers-color-scheme: dark) {
+    .system-in-other-media {
+      background: Canvas;
+    }
+  }
+  @media not (forced-colors: active) {
+    .system-when-not-forced {
+      color: LinkText;
+    }
+  }
+}

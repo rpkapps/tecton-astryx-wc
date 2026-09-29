@@ -431,22 +431,56 @@ function applyOverrides(overrides: OverrideEntry[], byName: Map<string, Token>, 
   }
 }
 
+/**
+ * Applies `provisional.json` (D-002, D-013). Every token falls into at most one group: an explicit
+ * `tectonDerived` entry (never provisional), `astryx-retained` names/categories, or provisional
+ * names/categories (plus the pipeline extras, which carry their own reason). Overlaps are an error.
+ */
 function applyProvisional(inputs: Inputs, tokens: Token[]) {
-  const categories = new Map(
-    inputs.provisional.categories.map((entry) => [entry.category, entry.reason]),
+  const {provisional} = inputs;
+  const categories = new Map(provisional.categories.map((entry) => [entry.category, entry.reason]));
+  const names = new Map(provisional.names.map((entry) => [entry.name, entry.reason]));
+  const retainedCategories = new Map(
+    provisional.astryxRetained.categories.map((entry) => [entry.category, entry.reason]),
   );
-  const names = new Map(inputs.provisional.names.map((entry) => [entry.name, entry.reason]));
+  const retainedNames = new Map(
+    provisional.astryxRetained.names.map((entry) => [entry.name, entry.reason]),
+  );
+  const derived = new Map(
+    provisional.tectonDerived.names.map((entry) => [entry.name, entry.reason]),
+  );
+
   for (const token of tokens) {
-    const reason =
-      token.provisional ??
-      names.get(token.name) ??
-      categories.get(token.category) ??
-      (token.status === 'provisional'
-        ? 'proposed value: no Tecton decision (semantic map)'
-        : undefined);
-    if (reason !== undefined) {
-      token.status = 'provisional';
-      token.provisional = reason;
+    const isDerived = derived.has(token.name);
+    const isRetained = retainedNames.has(token.name) || retainedCategories.has(token.category);
+    const isProvisional =
+      token.provisional !== undefined || names.has(token.name) || categories.has(token.category);
+    if (Number(isDerived) + Number(isRetained) + Number(isProvisional) > 1)
+      throw new Error(
+        `provisional.json: ${token.name} is listed in more than one of provisional, astryxRetained and tectonDerived`,
+      );
+
+    if (isDerived) {
+      if (token.status === 'provisional')
+        throw new Error(
+          `provisional.json: tectonDerived ${token.name} resolves to a provisional status`,
+        );
+      token.derived = derived.get(token.name)!;
+    } else if (isRetained) {
+      token.status = 'astryx-retained';
+      token.retained = retainedNames.get(token.name) ?? retainedCategories.get(token.category)!;
+    } else {
+      const reason =
+        token.provisional ??
+        names.get(token.name) ??
+        categories.get(token.category) ??
+        (token.status === 'provisional'
+          ? 'proposed value: no Tecton decision (semantic map)'
+          : undefined);
+      if (reason !== undefined) {
+        token.status = 'provisional';
+        token.provisional = reason;
+      }
     }
   }
 }

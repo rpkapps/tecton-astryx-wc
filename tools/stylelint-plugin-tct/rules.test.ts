@@ -1,9 +1,162 @@
-import {mkdirSync, mkdtempSync, writeFileSync} from 'node:fs';
+import {mkdirSync, mkdtempSync, readFileSync, writeFileSync} from 'node:fs';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
+import {fileURLToPath} from 'node:url';
 import stylelint from 'stylelint';
 import {describe, expect, it} from 'vitest';
 import tct, {findColorLiteral} from './index.ts';
+
+/** All 148 CSS named colours (css-color-4), independent of the plugin's own list. */
+const NAMED_COLOR_NAMES = [
+  'aliceblue',
+  'antiquewhite',
+  'aqua',
+  'aquamarine',
+  'azure',
+  'beige',
+  'bisque',
+  'black',
+  'blanchedalmond',
+  'blue',
+  'blueviolet',
+  'brown',
+  'burlywood',
+  'cadetblue',
+  'chartreuse',
+  'chocolate',
+  'coral',
+  'cornflowerblue',
+  'cornsilk',
+  'crimson',
+  'cyan',
+  'darkblue',
+  'darkcyan',
+  'darkgoldenrod',
+  'darkgray',
+  'darkgreen',
+  'darkgrey',
+  'darkkhaki',
+  'darkmagenta',
+  'darkolivegreen',
+  'darkorange',
+  'darkorchid',
+  'darkred',
+  'darksalmon',
+  'darkseagreen',
+  'darkslateblue',
+  'darkslategray',
+  'darkslategrey',
+  'darkturquoise',
+  'darkviolet',
+  'deeppink',
+  'deepskyblue',
+  'dimgray',
+  'dimgrey',
+  'dodgerblue',
+  'firebrick',
+  'floralwhite',
+  'forestgreen',
+  'fuchsia',
+  'gainsboro',
+  'ghostwhite',
+  'gold',
+  'goldenrod',
+  'gray',
+  'green',
+  'greenyellow',
+  'grey',
+  'honeydew',
+  'hotpink',
+  'indianred',
+  'indigo',
+  'ivory',
+  'khaki',
+  'lavender',
+  'lavenderblush',
+  'lawngreen',
+  'lemonchiffon',
+  'lightblue',
+  'lightcoral',
+  'lightcyan',
+  'lightgoldenrodyellow',
+  'lightgray',
+  'lightgreen',
+  'lightgrey',
+  'lightpink',
+  'lightsalmon',
+  'lightseagreen',
+  'lightskyblue',
+  'lightslategray',
+  'lightslategrey',
+  'lightsteelblue',
+  'lightyellow',
+  'lime',
+  'limegreen',
+  'linen',
+  'magenta',
+  'maroon',
+  'mediumaquamarine',
+  'mediumblue',
+  'mediumorchid',
+  'mediumpurple',
+  'mediumseagreen',
+  'mediumslateblue',
+  'mediumspringgreen',
+  'mediumturquoise',
+  'mediumvioletred',
+  'midnightblue',
+  'mintcream',
+  'mistyrose',
+  'moccasin',
+  'navajowhite',
+  'navy',
+  'oldlace',
+  'olive',
+  'olivedrab',
+  'orange',
+  'orangered',
+  'orchid',
+  'palegoldenrod',
+  'palegreen',
+  'paleturquoise',
+  'palevioletred',
+  'papayawhip',
+  'peachpuff',
+  'peru',
+  'pink',
+  'plum',
+  'powderblue',
+  'purple',
+  'rebeccapurple',
+  'red',
+  'rosybrown',
+  'royalblue',
+  'saddlebrown',
+  'salmon',
+  'sandybrown',
+  'seagreen',
+  'seashell',
+  'sienna',
+  'silver',
+  'skyblue',
+  'slateblue',
+  'slategray',
+  'slategrey',
+  'snow',
+  'springgreen',
+  'steelblue',
+  'tan',
+  'teal',
+  'thistle',
+  'tomato',
+  'turquoise',
+  'violet',
+  'wheat',
+  'white',
+  'whitesmoke',
+  'yellow',
+  'yellowgreen',
+];
 
 async function lint(
   code: string,
@@ -45,6 +198,7 @@ describe('tct/no-color-literals', () => {
   it('rejects hex, colour functions and named colours', async () => {
     expect(await lint('a { color: #fff; }', rules)).toHaveLength(1);
     expect(await lint('a { background: rgb(0 0 0 / 50%); }', rules)).toHaveLength(1);
+    expect(await lint('a { background: hsl(210 50% 40%); }', rules)).toHaveLength(1);
     expect(await lint('a { border-color: oklch(0.5 0.1 200); }', rules)).toHaveLength(1);
     expect(await lint('a { outline: 2px solid red; }', rules)).toHaveLength(1);
     expect(await lint('a { --_x: #123456; }', rules)).toHaveLength(1);
@@ -52,16 +206,18 @@ describe('tct/no-color-literals', () => {
       await lint('a { color: color-mix(in srgb, #fff 50%, transparent); }', rules),
     ).toHaveLength(1);
   });
-  it('allows tokens, keywords, system colours and identifiers containing colour words', async () => {
+  it('rejects named colours in properties beyond the colour ones (mask, caret, column-rule)', async () => {
+    expect(
+      await lint('a { mask-image: linear-gradient(black, transparent); }', rules),
+    ).toHaveLength(1);
+    expect(await lint('a { caret-color: hotpink; }', rules)).toHaveLength(1);
+    expect(await lint('a { column-rule: 1px solid tomato; }', rules)).toHaveLength(1);
+    expect(await lint('a { text-emphasis: filled gold; }', rules)).toHaveLength(1);
+  });
+  it('allows tokens, transparent, currentColor, inherit and identifiers containing colour words', async () => {
     expect(
       await lint(
-        'a { color: var(--color-text); background: transparent; border-color: currentcolor; }',
-        rules,
-      ),
-    ).toEqual([]);
-    expect(
-      await lint(
-        'a { forced-color-adjust: none; border-color: CanvasText; color: LinkText; }',
+        'a { color: var(--color-text); background: transparent; border-color: currentcolor; outline-color: CurrentColor; fill: inherit; }',
         rules,
       ),
     ).toEqual([]);
@@ -72,11 +228,120 @@ describe('tct/no-color-literals', () => {
         rules,
       ),
     ).toEqual([]);
-    expect(await lint('a { animation-name: red-flash; }', rules)).toEqual([]);
+    expect(await lint('a { animation-name: red-flash; grid-area: teal; }', rules)).toEqual([]);
+  });
+  it('allows system colours only inside @media (forced-colors: active)', async () => {
+    const decl = 'a { border-color: CanvasText; color: LinkText; }';
+    expect(await lint(decl, rules)).toHaveLength(2);
+    expect(await lint(`@media (forced-colors: active) { ${decl} }`, rules)).toEqual([]);
+    expect(
+      await lint(
+        `@layer a11y { @media (forced-colors: active) and (prefers-color-scheme: dark) { ${decl} } }`,
+        rules,
+      ),
+    ).toEqual([]);
+    expect(await lint(`@media (prefers-color-scheme: dark) { ${decl} }`, rules)).toHaveLength(2);
+    expect(await lint(`@media not (forced-colors: active) { ${decl} }`, rules)).toHaveLength(2);
+    expect(await lint(`@media (forced-colors: none) { ${decl} }`, rules)).toHaveLength(2);
+    // Named colours are never allowed, forced colours or not.
+    expect(await lint('@media (forced-colors: active) { a { color: red; } }', rules)).toHaveLength(
+      1,
+    );
   });
   it('exposes the finder', () => {
     expect(findColorLiteral('color', '#abc')).toBe('#abc');
-    expect(findColorLiteral('margin', 'red')).toBeUndefined();
+    expect(findColorLiteral('animation-name', 'red')).toBeUndefined();
+    expect(findColorLiteral('color', 'Canvas')).toBe('Canvas');
+    expect(findColorLiteral('color', 'Canvas', true)).toBeUndefined();
+    expect(findColorLiteral('color', 'red', true)).toBe('red');
+  });
+  it.each(NAMED_COLOR_NAMES)('rejects the CSS named colour "%s"', async (name) => {
+    expect(await lint(`a { color: ${name}; }`, rules)).toHaveLength(1);
+  });
+});
+
+/**
+ * Fixture files (tools/stylelint-plugin-tct/fixtures), linted with the repository's own
+ * stylelint.config.js under a component path, so the test proves the config wires the D-013 Q-06 rule
+ * ("every colour a component paints resolves to a Tecton token") for both `*.styles.css` and
+ * `*.light.css`.
+ */
+describe('component CSS colour rule (fixtures, repository config)', () => {
+  const FIXTURES = fileURLToPath(new URL('./fixtures/', import.meta.url));
+  const ROOT = fileURLToPath(new URL('../../', import.meta.url));
+
+  async function lintFixture(file: string, asFile = file) {
+    const code = readFileSync(join(FIXTURES, file), 'utf8');
+    const result = await stylelint.lint({
+      code,
+      codeFilename: join(ROOT, 'packages/components/src/fixture', asFile),
+      configFile: join(ROOT, 'stylelint.config.js'),
+    });
+    return result.results[0]!.warnings;
+  }
+  /** Source lines (1-based) whose declaration a fixture puts under a `.selector` starting with `prefix`. */
+  const lineOf = (file: string, needle: string) =>
+    readFileSync(join(FIXTURES, file), 'utf8')
+      .split('\n')
+      .findIndex((line) => line.includes(needle)) + 1;
+
+  it('reports every declaration of bad-colors.styles.css', async () => {
+    const warnings = (await lintFixture('bad-colors.styles.css')).filter(
+      (w) => w.rule === 'tct/no-color-literals',
+    );
+    const source = readFileSync(join(FIXTURES, 'bad-colors.styles.css'), 'utf8')
+      .split('\n')
+      .flatMap((line, index) => (/^\s+[\w-]+: .+;$/.test(line) ? [index + 1] : []));
+    expect(warnings.map((w) => w.line)).toEqual(source);
+    expect(warnings[0]).toMatchObject({line: lineOf('bad-colors.styles.css', 'color: #fff')});
+    expect(
+      warnings.find((w) => w.line === lineOf('bad-colors.styles.css', 'color: ReD')),
+    ).toBeDefined();
+  });
+
+  it('reports palette variables, including in fallbacks and as declarations', async () => {
+    const warnings = (await lintFixture('bad-palette.styles.css')).filter(
+      (w) => w.rule === 'tct/no-palette-vars',
+    );
+    expect(warnings.map((w) => [w.rule, w.line])).toEqual([
+      [
+        'tct/no-palette-vars',
+        lineOf('bad-palette.styles.css', 'color: var(--tecton-palette-purple'),
+      ],
+      ['tct/no-palette-vars', lineOf('bad-palette.styles.css', 'gray-900')],
+      ['tct/no-palette-vars', lineOf('bad-palette.styles.css', '--tecton-palette-purple-500: 1')],
+    ]);
+  });
+
+  it('applies the same rules to *.light.css', async () => {
+    const warnings = (await lintFixture('bad-colors.light.css')).filter((w) =>
+      /^tct\/no-(color-literals|palette-vars)$/.test(w.rule),
+    );
+    expect(
+      warnings.map((w) => [w.rule, w.line]).sort((a, b) => Number(a[1]) - Number(b[1])),
+    ).toEqual([
+      ['tct/no-color-literals', lineOf('bad-colors.light.css', '#abc')],
+      ['tct/no-color-literals', lineOf('bad-colors.light.css', 'navy')],
+      ['tct/no-palette-vars', lineOf('bad-colors.light.css', 'palette-purple')],
+      ['tct/no-color-literals', lineOf('bad-colors.light.css', 'ButtonText')],
+    ]);
+  });
+
+  it('accepts token-only CSS (transparent, currentColor, inherit, colour words in identifiers)', async () => {
+    expect(await lintFixture('good-tokens.styles.css')).toEqual([]);
+  });
+
+  it('accepts system colours inside @media (forced-colors: active)', async () => {
+    expect(await lintFixture('good-forced-colors.styles.css')).toEqual([]);
+  });
+
+  it('does not apply to other stylesheets (docs site, tokens)', async () => {
+    const result = await stylelint.lint({
+      code: 'a { color: #fff; }',
+      codeFilename: join(ROOT, 'apps/docs/src/styles/x.css'),
+      configFile: join(ROOT, 'stylelint.config.js'),
+    });
+    expect(result.results[0]!.warnings).toEqual([]);
   });
 });
 

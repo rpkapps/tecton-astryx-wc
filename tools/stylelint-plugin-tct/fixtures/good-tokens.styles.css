@@ -1,0 +1,37 @@
+/* Fixture: nothing here may be reported. */
+@layer component {
+  .tokens {
+    color: var(--color-text-primary);
+    background: var(--color-background-surface);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-high);
+  }
+  .keywords {
+    background: transparent;
+    border-color: currentcolor;
+    outline-color: CurrentColor;
+    color: inherit;
+    fill: currentColor;
+    accent-color: auto;
+  }
+  .gradient-of-tokens {
+    background-image: linear-gradient(to right, var(--color-accent), transparent);
+    mask-image: linear-gradient(to bottom, currentcolor, transparent);
+  }
+  .names-that-are-not-colours {
+    color-scheme: light dark;
+    animation-name: red-flash;
+    transition-property: background-color, color;
+    content: "red #fff rgb(0 0 0)";
+    background-image: url("red.png");
+    fill: url(#gold);
+    font-family: "Orange Sans", system-ui, Menu, sans-serif;
+    grid-area: teal;
+    container-name: gold;
+    view-transition-name: tan;
+  }
+  .token-names-with-colour-words {
+    border-color: var(--color-border-blue);
+    outline-color: var(--color-border-gray, var(--color-border-cyan));
+  }
+}
