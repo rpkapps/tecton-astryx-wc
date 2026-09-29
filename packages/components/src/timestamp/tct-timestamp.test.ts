@@ -215,9 +215,7 @@ describe('tct-timestamp', () => {
     it('timezone-shown appends the abbreviation to date_time and time only', async () => {
       const dateTime = await make(`value="${ISO}" format="date_time" timezone-shown`);
       const bare = await make(`value="${ISO}" format="date_time"`);
-      expect(timeOf(dateTime).textContent.length).toBeGreaterThan(
-        timeOf(bare).textContent.length,
-      );
+      expect(timeOf(dateTime).textContent.length).toBeGreaterThan(timeOf(bare).textContent.length);
       expect(timeOf(dateTime).textContent.startsWith(timeOf(bare).textContent)).toBe(true);
       const time = await make(`value="${ISO}" format="time" timezone-shown`);
       const plain = await make(`value="${ISO}" format="time"`);
