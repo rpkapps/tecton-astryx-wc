@@ -1,0 +1,44 @@
+/*
+ * Shared base (A§6.1). First in every component's `static styles`. Declares the one layer order every
+ * sheet uses (`reset, component, state, a11y`); everything a component paints lives in a layer, because
+ * unlayered rules beat every layer. Layers inside a shadow root do not interact with page layers.
+ * [mwg:css] [mwg:styling-web-components]
+ */
+@layer reset, component, state, a11y;
+
+@layer reset {
+  :host {
+    box-sizing: border-box;
+  }
+
+  /*
+   * `!important` so an application rule such as `tct-button { display: inline-flex }` (or a component
+   * `:host { display }`) can never un-hide a `hidden` host; important declarations of the shadow tree
+   * beat those of the outer tree.
+   */
+  :host([hidden]),
+  [hidden] {
+    display: none !important;
+  }
+
+  /* A `*` reset is fine inside a shadow root; the "no global resets" advice is about the document. */
+  *,
+  ::before,
+  ::after {
+    box-sizing: inherit;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+    letter-spacing: inherit;
+    margin: 0;
+  }
+
+  svg {
+    flex-shrink: 0;
+  }
+}

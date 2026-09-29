@@ -1,0 +1,37 @@
+/*
+ * Scrollbar tokens for component-owned scroll containers (A§6.1, styling.md §10).
+ * `scrollbar-color` / `scrollbar-width` are the standard properties (Safari 26.2+); the WebKit
+ * pseudo-elements are a fallback inside `@supports not`, so engines that know both never mix them.
+ * [mwg:customize-scrollbar-color-and-thickness] [mwg:adapt-scrollbar-to-contrast-preferences]
+ *
+ *   .scrollbar   put on the scrolling element; `--_scrollbar-thumb` / `--_scrollbar-track` may be
+ *                overridden on the same element (private; a component re-points them).
+ * Forced colours ignore author scrollbar colours automatically.
+ */
+@layer component {
+  .scrollbar {
+    --_scrollbar-thumb: var(--tecton-color-scrollbar-thumb);
+    --_scrollbar-track: var(--tecton-color-scrollbar-track);
+
+    scrollbar-color: var(--_scrollbar-thumb) var(--_scrollbar-track);
+    scrollbar-width: thin;
+  }
+
+  @supports not (scrollbar-color: auto) {
+    .scrollbar::-webkit-scrollbar {
+      /* physical: ::-webkit-scrollbar only understands width and height */
+      width: var(--spacing-2);
+      /* physical: ::-webkit-scrollbar only understands width and height */
+      height: var(--spacing-2);
+    }
+
+    .scrollbar::-webkit-scrollbar-thumb {
+      border-radius: var(--radius-full);
+      background: var(--_scrollbar-thumb);
+    }
+
+    .scrollbar::-webkit-scrollbar-track {
+      background: var(--_scrollbar-track);
+    }
+  }
+}

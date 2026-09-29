@@ -1,0 +1,27 @@
+/*
+ * Icons projected into a component (A§6.3: `::slotted()` only sets icon sizing and removes stray margins).
+ * The component sets `--_icon-size` on the element that owns the slots (from its size scale); a slotted
+ * `<svg>` or `<tct-icon>` then matches the label's rhythm, and the wrapper for a named icon slot is
+ * centred and never shrinks. [mwg:styling-web-components] [mwg:shadow-dom]
+ *
+ *   .icon-slot   wrapper around `<slot name="icon">` / `<slot name="end">`
+ */
+@layer component {
+  .icon-slot {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: var(--_icon-size, 1em);
+    min-block-size: var(--_icon-size, 1em);
+  }
+
+  ::slotted(svg),
+  ::slotted(tct-icon) {
+    display: block;
+    flex-shrink: 0;
+    inline-size: var(--_icon-size, 1em);
+    block-size: var(--_icon-size, 1em);
+    margin: 0;
+  }
+}
