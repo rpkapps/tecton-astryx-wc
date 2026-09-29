@@ -1,0 +1,22 @@
+{
+  "//": "Declarations for `pnpm build` (tools/build.ts): shipped sources only, resolved the way a consumer resolves them (no tct-source condition, dependencies through their built dist).",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "composite": false,
+    "incremental": false,
+    "declarationMap": false,
+    "customConditions": [],
+    "outDir": "dist",
+    "rootDir": "src"
+  },
+  "include": ["src"],
+  "exclude": [
+    "dist",
+    "src/**/__snapshots__",
+    "src/**/*.test.ts",
+    "src/**/*.node.test.ts",
+    "src/**/fixtures",
+    "src/**/examples"
+  ],
+  "references": []
+}

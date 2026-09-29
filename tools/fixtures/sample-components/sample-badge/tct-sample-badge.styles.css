@@ -1,0 +1,66 @@
+@layer reset, component, state, a11y;
+
+@layer reset {
+  :host {
+    display: inline-flex;
+  }
+
+  :host([hidden]) {
+    display: none;
+  }
+}
+
+@layer component {
+  .badge {
+    --_bg: var(--color-neutral);
+    --_fg: var(--color-text-primary);
+
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    padding-block: var(--spacing-1);
+    padding-inline: var(--spacing-2);
+    border-radius: var(--sample-badge-radius, var(--radius-full));
+    background: var(--_bg);
+    color: var(--_fg);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+  }
+
+  :host([size='sm']) .badge {
+    font-size: var(--font-size-xs);
+  }
+
+  :host([variant='info']) .badge {
+    --_fg: var(--color-text-blue);
+  }
+
+  :host([variant='success']) .badge {
+    --_fg: var(--color-text-green);
+  }
+
+  :host([variant='warning']) .badge {
+    --_fg: var(--color-text-orange);
+  }
+
+  :host([variant='error']) .badge {
+    --_fg: var(--color-text-red);
+  }
+
+  .remove {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .badge {
+      border: var(--border-width) solid CanvasText;
+    }
+  }
+}

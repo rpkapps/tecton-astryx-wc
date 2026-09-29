@@ -1,0 +1,8 @@
+<!-- title: Group label; description: group-label labels a group of controls (a radio group) with aria-labelledby instead of a for association. -->
+<tct-field label="Notify me by" description="Choose one." group-label status-variant="detached">
+  <div role="radiogroup" style="display: flex; flex-direction: column; gap: var(--spacing-2)">
+    <label><input type="radio" name="notify" value="email" checked /> Email</label>
+    <label><input type="radio" name="notify" value="sms" /> Text message</label>
+    <label><input type="radio" name="notify" value="none" /> Do not notify me</label>
+  </div>
+</tct-field>

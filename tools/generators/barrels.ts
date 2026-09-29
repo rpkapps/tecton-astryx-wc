@@ -4,8 +4,11 @@
  *
  *  - `packages/components/src/generated/index.ts`         class + type barrel, no registration
  *  - `packages/components/src/generated/define-all.ts`    registers every family
- *  - `packages/components/src/generated/autoloader-map.ts` tag -> folder map for the autoloader
  *  - `packages/core/src/generated/index.ts`               core barrel
+ *
+ * The autoloader map (`generated/autoloader-map.ts`) is derived from the Custom Elements Manifest by
+ * tools/cem/generate.ts (see tools/generators/autoloader-map.ts); this file still rejects duplicate
+ * tags found by scanning `static tagName`.
  *
  * Pure functions: they return file contents; `tools/generate.ts` writes them.
  */
@@ -94,7 +97,6 @@ export function generateComponentsBarrels(componentsSrc: string): GeneratedFile[
 
   const indexLines: string[] = [];
   const defineLines: string[] = [];
-  const mapEntries: [string, string][] = [];
 
   for (const folder of folders) {
     const folderPath = join(componentsSrc, folder);
@@ -110,7 +112,6 @@ export function generateComponentsBarrels(componentsSrc: string): GeneratedFile[
       const tag = scanTagName(readFileSync(file, 'utf8'));
       if (tag !== undefined) {
         tags.add(tag, `${folder}/${basename(file)}`);
-        mapEntries.push([tag, folder]);
       }
     }
 
@@ -126,7 +127,6 @@ export function generateComponentsBarrels(componentsSrc: string): GeneratedFile[
 
   const outDir = join(componentsSrc, 'generated');
   const emptyNote = folders.length === 0 ? '// No component families yet.\n' : '';
-  const sortedMap = mapEntries.sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0));
 
   return [
     {
@@ -136,14 +136,6 @@ export function generateComponentsBarrels(componentsSrc: string): GeneratedFile[
     {
       path: join(outDir, 'define-all.ts'),
       content: `${GENERATED_BANNER}${emptyNote}${defineLines.join('\n')}${defineLines.length ? '\n' : ''}export {};\n`,
-    },
-    {
-      path: join(outDir, 'autoloader-map.ts'),
-      content:
-        `${GENERATED_BANNER}// tag name -> component family folder (derived from \`static tagName\`).\n` +
-        `export const autoloaderMap: Readonly<Record<string, string>> = {\n` +
-        sortedMap.map(([tag, folder]) => `  '${tag}': '${folder}',`).join('\n') +
-        `${sortedMap.length ? '\n' : ''}};\n`,
     },
   ];
 }

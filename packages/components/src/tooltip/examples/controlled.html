@@ -1,0 +1,13 @@
+<!-- title: Controlled; description: open is the state. Hover, focus and Escape ask with a cancelable tct-open-change; preventDefault() and set open yourself to control it. -->
+<div id="controlled-example">
+  <tct-tooltip content="Only Escape closes me" open>
+    <tct-button>Open by attribute</tct-button>
+  </tct-tooltip>
+</div>
+<script type="module">
+  const tooltip = document.querySelector('#controlled-example tct-tooltip');
+  tooltip.addEventListener('tct-open-change', (event) => {
+    // Hovering away and blurring would close it; only Escape may.
+    if (!event.open && event.reason !== 'escape') event.preventDefault();
+  });
+</script>

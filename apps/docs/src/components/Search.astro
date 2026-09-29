@@ -1,0 +1,41 @@
+---
+/**
+ * Wraps Starlight's Pagefind search and adds what it lacks (A§16.5): the result count is announced.
+ * Pagefind writes "17 results for components" into a plain <p>, which a screen reader never hears
+ * while focus stays in the input, so the count is mirrored into a polite live region that lives
+ * inside the modal <dialog> (content outside an open modal dialog is inert). One live region, updated
+ * after typing pauses. [mwg:accessibility]
+ */
+import Default from '@astrojs/starlight/components/Search.astro';
+---
+
+<Default {...Astro.props}><slot /></Default>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('site-search dialog');
+  if (dialog) {
+    const region = document.createElement('div');
+    region.className = 'tct-visually-hidden';
+    region.setAttribute('role', 'status');
+    dialog.append(region);
+
+    let timer: number | undefined;
+    let last = '';
+    new MutationObserver(() => {
+      clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        const message = dialog.querySelector('.pagefind-ui__message')?.textContent?.trim() ?? '';
+        if (message !== '' && message !== last) {
+          last = message;
+          region.textContent = message;
+        }
+      }, 400);
+    }).observe(dialog, {childList: true, subtree: true, characterData: true});
+
+    // A fresh search session starts from a clean announcement.
+    dialog.addEventListener('close', () => {
+      last = '';
+      region.textContent = '';
+    });
+  }
+</script>

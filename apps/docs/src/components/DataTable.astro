@@ -1,0 +1,135 @@
+---
+/**
+ * `<DataTable>`: the one table used by every generated API, keyboard, mapping, parity and token
+ * table. Semantic `<table>` with a caption, column headers and a row header, inside a keyboard
+ * focusable scroll region so wide tables stay reachable at any width. [mwg:responsive-table]
+ * [mwg:accessibility]
+ *
+ * Cell kinds (`column.kind`):
+ *   text    string, with `inline code` rendered (default)
+ *   code    string rendered as <code>
+ *   codes   string[] rendered as a row of <code>
+ *   kbd     "Enter, Space" -> one <kbd> per comma separated key
+ *   badge   string in a pill; `row[<key>Tone]` = success | warning | info picks the colour
+ *   swatch  CSS colour string shown as a swatch plus <code>
+ *   link    { text, href } or string
+ */
+export interface Column {
+  key: string;
+  label: string;
+  kind?: 'text' | 'code' | 'codes' | 'kbd' | 'badge' | 'swatch' | 'link';
+  /** Render the cell as a row header (first column by default). */
+  rowHeader?: boolean;
+}
+
+interface Props {
+  caption: string;
+  columns: Column[];
+  rows: Record<string, unknown>[];
+  /** Shown instead of the table when there are no rows. */
+  empty?: string;
+}
+
+const {caption, columns, rows, empty = 'None.'} = Astro.props;
+
+const SAFE_COLOR = /^[#a-zA-Z0-9(),.%\s/-]+$/;
+const escapeHtml = (text: string) =>
+  text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+/** Escapes text, then turns `code` spans into <code>. */
+const inline = (text: string) =>
+  escapeHtml(text).replace(/`([^`]+)`/g, (_match, code: string) => `<code>${code}</code>`);
+
+const asText = (value: unknown): string =>
+  value === undefined || value === null ? '' : typeof value === 'string' ? value : String(value);
+const asList = (value: unknown): string[] =>
+  Array.isArray(value) ? value.map((item) => asText(item)) : value ? [asText(value)] : [];
+---
+
+{
+  rows.length === 0 ? (
+    <p>{empty}</p>
+  ) : (
+    <div class="tct-table-wrap not-content" role="group" aria-label={caption} data-tct-scroll>
+      <table>
+        <caption>{caption}</caption>
+        <thead>
+          <tr>
+            {columns.map((column) => (
+              <th scope="col">{column.label}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => (
+            <tr>
+              {columns.map((column, index) => {
+                const value = row[column.key];
+                const kind = column.kind ?? 'text';
+                const Cell = column.rowHeader ?? index === 0 ? 'th' : 'td';
+                const scope = Cell === 'th' ? 'row' : undefined;
+                return (
+                  <Cell scope={scope}>
+                    {kind === 'code' && asText(value) !== '' && <code>{asText(value)}</code>}
+                    {kind === 'codes' && asList(value).length > 0 && (
+                      <span class="tct-codes">
+                        {asList(value).map((item) => (
+                          <code>{item}</code>
+                        ))}
+                      </span>
+                    )}
+                    {kind === 'kbd' &&
+                      asText(value)
+                        .split(/,\s*/)
+                        .filter(Boolean)
+                        .map((key, keyIndex) => (
+                          <Fragment>
+                            {keyIndex > 0 && ' '}
+                            <kbd>{key}</kbd>
+                          </Fragment>
+                        ))}
+                    {kind === 'badge' && asText(value) !== '' && (
+                      <span class="tct-badge" data-tone={asText(row[`${column.key}Tone`]) || undefined}>
+                        {asText(value)}
+                      </span>
+                    )}
+                    {kind === 'swatch' && asText(value) !== '' && (
+                      <Fragment>
+                        {SAFE_COLOR.test(asText(value)) && (
+                          <span class="tct-swatch" style={`background: ${asText(value)}`} aria-hidden="true" />
+                        )}
+                        <code>{asText(value)}</code>
+                      </Fragment>
+                    )}
+                    {kind === 'link' &&
+                      (typeof value === 'object' && value !== null ? (
+                        <a href={(value as {href: string}).href}>{(value as {text: string}).text}</a>
+                      ) : (
+                        asText(value)
+                      ))}
+                    {kind === 'text' && <Fragment set:html={inline(asText(value))} />}
+                  </Cell>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
+<script>
+  // A scrollable region must be reachable by keyboard, but a table that fits should not add a tab stop.
+  const wraps = document.querySelectorAll<HTMLElement>('[data-tct-scroll]');
+  const update = (wrap: HTMLElement) => {
+    if (wrap.scrollWidth > wrap.clientWidth) wrap.tabIndex = 0;
+    else wrap.removeAttribute('tabindex');
+  };
+  const observer = new ResizeObserver((entries) => {
+    for (const entry of entries) update(entry.target as HTMLElement);
+  });
+  for (const wrap of wraps) {
+    update(wrap);
+    observer.observe(wrap);
+  }
+</script>

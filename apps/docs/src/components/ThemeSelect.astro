@@ -1,0 +1,109 @@
+---
+/**
+ * Colour scheme control (overrides Starlight's ThemeSelect). Follows modern-web-guidance `dark-mode`:
+ * the default is the system scheme; the control has two states, "system" and "the opposite of the
+ * system scheme, pinned"; the choice persists in localStorage under Starlight's own key so its inline
+ * ThemeProvider (which prevents a flash of the wrong scheme) keeps working; the system scheme is
+ * re-read when the OS changes it. A§16.5 asks for a system/light/dark control; the guide advises against
+ * a three-state control (two of its states always look the same), so this is the deliberate reading.
+ */
+---
+
+<theme-toggle class="tct-theme-toggle-host">
+  <button type="button" class="tct-theme-toggle" data-toggle hidden>
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+      <g data-icon="sun">
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+      </g>
+      <path data-icon="moon" d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z"></path>
+    </svg>
+    <span data-label>Theme</span>
+  </button>
+  <span class="tct-visually-hidden" role="status" data-status></span>
+  <noscript><span>Follows your system colour scheme.</span></noscript>
+</theme-toggle>
+
+<script>
+  type Scheme = 'light' | 'dark';
+  const STORAGE_KEY = 'starlight-theme';
+
+  const systemQuery = matchMedia('(prefers-color-scheme: light)');
+  const system = (): Scheme => (systemQuery.matches ? 'light' : 'dark');
+  const opposite = (scheme: Scheme): Scheme => (scheme === 'light' ? 'dark' : 'light');
+
+  function readPinned(): Scheme | null {
+    try {
+      const value = localStorage.getItem(STORAGE_KEY);
+      return value === 'light' || value === 'dark' ? value : null;
+    } catch {
+      return null; // storage blocked: behave as "system"
+    }
+  }
+
+  function writePinned(scheme: Scheme | null): void {
+    try {
+      if (scheme) localStorage.setItem(STORAGE_KEY, scheme);
+      else localStorage.removeItem(STORAGE_KEY);
+    } catch {
+      // Nothing to persist to; the choice still applies to this page view.
+    }
+  }
+
+  /** Applies the effective scheme to the document and to <meta name="color-scheme">. */
+  function apply(pinned: Scheme | null): void {
+    document.documentElement.dataset.theme = pinned ?? system();
+    const meta = document.querySelector('meta[name="color-scheme"]');
+    if (meta) meta.setAttribute('content', pinned ?? 'light dark');
+  }
+
+  class ThemeToggle extends HTMLElement {
+    #pinned: Scheme | null = readPinned();
+
+    connectedCallback(): void {
+      const button = this.querySelector<HTMLButtonElement>('[data-toggle]');
+      if (!button) return;
+      button.hidden = false;
+      button.addEventListener('click', () => {
+        this.#pinned = this.#pinned ? null : opposite(system());
+        writePinned(this.#pinned);
+        apply(this.#pinned);
+        this.#render(true);
+      });
+      // The OS scheme can change at any time; CSS follows it, the data-theme attribute needs help.
+      systemQuery.addEventListener('change', () => {
+        this.#pinned = readPinned();
+        apply(this.#pinned);
+        this.#render(false);
+      });
+      // Another tab changed the choice.
+      addEventListener('storage', (event) => {
+        if (event.key !== STORAGE_KEY) return;
+        this.#pinned = readPinned();
+        apply(this.#pinned);
+        this.#render(false);
+      });
+      apply(this.#pinned);
+      this.#render(false);
+    }
+
+    #render(announce: boolean): void {
+      const label = this.querySelector('[data-label]');
+      const status = this.querySelector('[data-status]');
+      const effective = this.#pinned ?? system();
+      const target = this.#pinned ? null : opposite(system());
+      if (label) {
+        label.textContent = target ? `Switch to ${target} theme` : 'Follow system theme';
+      }
+      this.querySelector('[data-icon="sun"]')?.toggleAttribute('hidden', effective === 'dark');
+      this.querySelector('[data-icon="moon"]')?.toggleAttribute('hidden', effective === 'light');
+      if (announce && status) {
+        status.textContent = this.#pinned
+          ? `${effective === 'dark' ? 'Dark' : 'Light'} theme on.`
+          : 'Following the system colour scheme.';
+      }
+    }
+  }
+
+  if (!customElements.get('theme-toggle')) customElements.define('theme-toggle', ThemeToggle);
+</script>

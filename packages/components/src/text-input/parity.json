@@ -1,0 +1,272 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "text-input",
+  "workPackage": "WP-F",
+  "entries": {
+    "core.text-input": {
+      "tag": "tct-text-input",
+      "status": "implemented",
+      "upstream": {
+        "name": "TextInput",
+        "path": "packages/core/src/TextInput/TextInput.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "type",
+          "kind": "prop",
+          "target": "type",
+          "as": "attribute",
+          "reflect": true,
+          "default": "text",
+          "notes": "text, password, email, and also search, tel and url (the native input types that need no extra chrome)."
+        },
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "property",
+          "notes": "The `value` attribute is the default (form reset restores it); the property is the current value. In slotted-input mode it reads and writes the author's input."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "input",
+          "as": "native-event",
+          "notes": "Upstream onChange runs on every edit, which is the native `input` event; the native `change` fires once when the edit is committed (blur or Enter). Neither fires on property writes."
+        },
+        {
+          "upstream": "changeAction",
+          "kind": "prop",
+          "target": "changeAction",
+          "as": "property",
+          "notes": "`(value, event) => void | Promise<void>` after each user edit; busy (:state(busy), aria-busy, spinner) while a returned promise is pending."
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md",
+          "notes": "Unset takes the nearest size provider, else md."
+        },
+        {
+          "upstream": "isLabelHidden",
+          "kind": "prop",
+          "target": "label-hidden",
+          "as": "attribute",
+          "reflect": true
+        },
+        {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute"},
+        {"upstream": "isOptional", "kind": "prop", "target": "optional", "as": "attribute"},
+        {
+          "upstream": "isRequired",
+          "kind": "prop",
+          "target": "required",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Also a validity constraint (valueMissing) and `aria-required`."
+        },
+        {
+          "upstream": "onEnter",
+          "kind": "event",
+          "target": "tct-enter",
+          "as": "event",
+          "notes": "Cancelable; never fires for the Enter that commits an IME conversion. Preventing it stops the form's implicit submission."
+        },
+        {"upstream": "onKeyDown", "kind": "event", "target": "keydown", "as": "native-event"},
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Also through <fieldset disabled>."
+        },
+        {
+          "upstream": "isReadOnly",
+          "kind": "prop",
+          "target": "readonly",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "disabledMessage",
+          "kind": "prop",
+          "target": "disabled-message",
+          "as": "attribute",
+          "notes": "A tooltip on a disabled field that says why."
+        },
+        {
+          "upstream": "isLoading",
+          "kind": "prop",
+          "target": "loading",
+          "as": "attribute",
+          "reflect": true
+        },
+        {"upstream": "placeholder", "kind": "prop", "target": "placeholder", "as": "attribute"},
+        {"upstream": "labelTooltip", "kind": "prop", "target": "label-tooltip", "as": "attribute"},
+        {
+          "upstream": "startIcon",
+          "kind": "slot",
+          "target": "start-icon",
+          "as": "attribute",
+          "notes": "An icon name; the `start` slot takes your own content (an adornment) instead."
+        },
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "target": "status",
+          "as": "property",
+          "notes": "Object `{type, message?}`, or the `status-type` and `status-message` attributes."
+        },
+        {
+          "upstream": "statusVariant",
+          "kind": "prop",
+          "target": "status-variant",
+          "as": "attribute",
+          "default": "attached",
+          "notes": "attached, detached or tooltip (a focusable button in the box that reveals the message)."
+        },
+        {
+          "upstream": "hasClear",
+          "kind": "prop",
+          "target": "has-clear",
+          "as": "attribute",
+          "default": false
+        },
+        {
+          "upstream": "hasAutoFocus",
+          "kind": "prop",
+          "target": "autofocus",
+          "as": "attribute",
+          "notes": "The global `autofocus` attribute (A§7.2); the element focuses its input once it has rendered."
+        },
+        {
+          "upstream": "htmlName",
+          "kind": "prop",
+          "target": "name",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "target": "width",
+          "as": "attribute",
+          "notes": "A number is px, a string a CSS length. Not reflected."
+        },
+        {"upstream": "autoComplete", "kind": "prop", "target": "autocomplete", "as": "attribute"}
+      ],
+      "hooks": [
+        {
+          "upstream": "useInputContainer",
+          "target": "FieldChromeController",
+          "as": "controller",
+          "notes": "Shadow mode for the field's own tree, light mode (satellites) in slotted-input mode."
+        },
+        {
+          "upstream": "useInputStatusIcon",
+          "as": "waived",
+          "reason": "Internal render helper; the status glyph and the tooltip button are part of the element's template."
+        },
+        {
+          "upstream": "useResolvedRequired",
+          "target": "formLayoutContext",
+          "as": "context",
+          "notes": "The form layout's optionality default; the indicator follows it."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Enter",
+          "action": "Fires tct-enter, then submits the form once (implicit submission) unless prevented; ignored while an IME composes.",
+          "when": "in the field, not composing"
+        },
+        {
+          "keys": "Tab from the field",
+          "action": "Reaches the clear button (its tooltip opens on keyboard focus) and the tooltip-variant status button, which are real focusable buttons."
+        },
+        {
+          "keys": "Enter or Space on the clear button",
+          "action": "Clears, fires tct-clear (cancelable), input and change, and restores focus to the input synchronously."
+        }
+      ],
+      "form": {
+        "formAssociated": true,
+        "notes": "Form-associated (ElementInternals): submits `name=value`, resets to the `value` attribute, restores on navigation, joins <fieldset disabled>, works with form= and label for. Validation shows after a commit, a blur after an edit or a submit attempt, never on form.checkValidity(). Slotted-input mode submits the author's own <input> exactly once and adds no entry of its own."
+      },
+      "differences": [
+        {
+          "id": "TEXTINPUT-01",
+          "type": "approved-api-difference",
+          "text": "Uncontrolled by default: `value` is a property with the `value` attribute as its default, and the native `input`/`change` events report edits, instead of a controlled value plus onChange. Set the property to control it."
+        },
+        {
+          "id": "TEXTINPUT-02",
+          "type": "approved-api-difference",
+          "text": "Slotted-input mode (`<input slot=\"input\">`) lets password managers, autofill and browser form restoration see a native field; label, description and status are light-DOM satellites wired with ids. The input owns name, value, type, required, disabled and autocomplete there."
+        },
+        {
+          "id": "TEXTINPUT-03",
+          "type": "approved-api-difference",
+          "text": "`minlength`, `maxlength` and `pattern` are additions (native constraints that take part in validity). `type` also accepts search, tel and url."
+        },
+        {
+          "id": "TEXTINPUT-04",
+          "type": "a11y-improvement",
+          "text": "Invalidity shows only after user interaction, on one clock: `:state(user-invalid)` and `aria-invalid` flip together, the browser's message becomes the status (frozen while typing, announced once), and a failed submit focuses the field."
+        },
+        {
+          "id": "TEXTINPUT-05",
+          "type": "a11y-improvement",
+          "text": "The tooltip status variant is a focusable button with a name (\"Error details\", \"Warning details\"...) rather than a hover-only icon."
+        },
+        {
+          "id": "TEXTINPUT-06",
+          "type": "tecton-visual",
+          "text": "Outlined field from the Tecton input tokens (border, hover, focus ring in hot pink through the shared focus-ring module, 4px element radius); the label does not change colour on focus and status messages are ink without a wash (tecton-astryx components.ts, textfield.md)."
+        },
+        {
+          "id": "TEXTINPUT-07",
+          "type": "approved-api-difference",
+          "text": "The `input-group` label context (a label shown once for a group of fields) needs an element from WP-7 and is not wired: inside a group the field only drops its own box chrome (`data-in-group`)."
+        },
+        {
+          "id": "TEXTINPUT-08",
+          "type": "approved-api-difference",
+          "text": "Tier 2 (no element reflection): a host `aria-describedby` is not merged into a shadow input's description; label, description and status are still exposed by text fallback."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [
+        "Adornment sizes, and the status tooltip variant's glyph position, follow the Tecton field tokens but were not compared with a Tecton design frame (textfield.md gives no adornment spec)."
+      ],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "tools/lib/parity.ts",
+          "reason": "The CEM target check should accept global attributes as targets (`autofocus` for hasAutoFocus); the CEM does not list them for the element."
+        },
+        {
+          "file": "packages/testing/src/forms.ts",
+          "reason": "formData()/entries()/values() read `new FormData(form)` after the submit; a tct-button submitter is a temporary native button, so its entry is not in it. The contract tests capture `new FormData(form, event.submitter)` inside the submit event. Consider a harness helper (`submissions()`)."
+        }
+      ],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:form-associated-custom-elements] ElementInternals value, validity, reset and restore; [mwg:validate-input-after-interaction] user-invalid timing; [mwg:required-field-feedback] indicators are text; [mwg:accessible-error-announcement] the status is announced once; [mwg:ime-safe-enter-submit] Enter is ignored while composing; [mwg:custom-button-actions] the clear button restores focus."
+    }
+  }
+}

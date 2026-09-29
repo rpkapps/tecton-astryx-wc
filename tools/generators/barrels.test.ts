@@ -24,13 +24,8 @@ describe('generateComponentsBarrels', () => {
   it('produces valid empty barrels with zero components', () => {
     const src = tree({'styles/base.styles.css': ''});
     const files = generateComponentsBarrels(src);
-    expect(files.map((f) => f.path.split('/').pop())).toEqual([
-      'index.ts',
-      'define-all.ts',
-      'autoloader-map.ts',
-    ]);
+    expect(files.map((f) => f.path.split('/').pop())).toEqual(['index.ts', 'define-all.ts']);
     expect(byName(files, 'index.ts')).toContain('export {};');
-    expect(byName(files, 'autoloader-map.ts')).toContain('autoloaderMap');
   });
 
   it('globs folders with a define.ts and re-exports by name', () => {
@@ -63,10 +58,6 @@ describe('generateComponentsBarrels', () => {
         'TctHeading, TctText',
       ),
     );
-    const map = byName(files, 'autoloader-map.ts');
-    expect(map).toContain("'tct-button': 'button',");
-    expect(map).toContain("'tct-heading': 'text',");
-    expect(map).toContain("'tct-text': 'text',");
   });
 
   it('fails on duplicate export names across folders', () => {

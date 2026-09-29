@@ -18,6 +18,12 @@
  * `submitWithSubmitter`. The mark lasts one task, which covers the synchronous validation that follows.
  *
  * Implicit submission and the Enter/click bridge live in `implicit-submit.ts`.
+ *
+ * **Rule for every submitter.** An element that carries the {@link SUBMITTER} marker must call
+ * `installFormBridge()` (idempotent) from its `connectedCallback`. `FormControlMixin` does it for
+ * controls, but a submitter without the mixin (`tct-button`) is the only thing in a form of native fields;
+ * without the bridge Enter in those fields runs the browser's implicit submission with no submitter
+ * (the `name=value` entry is lost, and with two fields nothing happens at all).
  */
 /** Marker property on elements that act as submit/reset buttons for their form (`tct-button`). */
 export const SUBMITTER = Symbol.for('tct.submitter');
