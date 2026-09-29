@@ -1,0 +1,26 @@
+<!-- title: Indeterminate select-all; description: A select-all checkbox shows the mixed state while only some options are checked. Clicking it checks every option; the script keeps the two in step. -->
+<!-- layout: pending tct-stack -->
+<div id="indeterminate-example">
+  <tct-checkbox-input label="Select all" data-role="all"></tct-checkbox-input>
+  <tct-checkbox-input label="Email" data-role="option" checked></tct-checkbox-input>
+  <tct-checkbox-input label="SMS" data-role="option"></tct-checkbox-input>
+  <tct-checkbox-input label="Push" data-role="option"></tct-checkbox-input>
+</div>
+<script type="module">
+  const root = document.getElementById('indeterminate-example');
+  const all = root.querySelector('[data-role=all]');
+  const options = [...root.querySelectorAll('[data-role=option]')];
+  const sync = () => {
+    const on = options.filter((option) => option.checked).length;
+    all.checked = on === options.length;
+    all.indeterminate = on > 0 && on < options.length;
+  };
+  customElements.whenDefined('tct-checkbox-input').then(() => {
+    sync();
+    all.addEventListener('change', () => {
+      for (const option of options) option.checked = all.checked;
+      sync();
+    });
+    for (const option of options) option.addEventListener('change', sync);
+  });
+</script>

@@ -29,9 +29,9 @@ const cellOf = (text: TctInputGroupText): HTMLElement =>
 /** Waits for every running animation (a message fading in) so axe measures settled colours. */
 async function motionDone(root: Element): Promise<void> {
   await nextFrame();
-  const running = deepQueryAll(root.parentElement ?? root, () => true).flatMap((element) =>
-    element.getAnimations(),
-  );
+  const running = deepQueryAll(root.parentElement ?? root, () => true)
+    .flatMap((element) => element.getAnimations())
+    .filter((animation) => animation.effect?.getComputedTiming().iterations !== Infinity);
   await Promise.allSettled(running.map((animation) => animation.finished));
 }
 

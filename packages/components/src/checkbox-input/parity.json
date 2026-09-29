@@ -1,0 +1,461 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "checkbox-input",
+  "workPackage": "WP-7",
+  "entries": {
+    "core.checkbox-input": {
+      "tag": "tct-checkbox-input",
+      "status": "implemented",
+      "upstream": {
+        "name": "CheckboxInput",
+        "path": "packages/core/src/CheckboxInput/CheckboxInput.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "target": "control",
+          "as": "property",
+          "notes": "The native input inside (read-only getter)."
+        },
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
+        {
+          "upstream": "isLabelHidden",
+          "kind": "prop",
+          "target": "label-hidden",
+          "as": "attribute",
+          "reflect": true
+        },
+        {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute"},
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "checked",
+          "as": "attribute",
+          "notes": "Upstream is controlled-only (`value` boolean or 'indeterminate' + onChange). `checked` is the default (attribute) and the current state (property); `indeterminate` is the mixed state. The `value` attribute is the submitted value (default `on`)."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "change",
+          "as": "native-event",
+          "notes": "The native `input` fires on every user toggle and `change` once after it (composed, from the host). Neither fires on property writes. Cancel the `click` to keep the old state."
+        },
+        {"upstream": "changeAction", "kind": "prop", "target": "changeAction", "as": "property"},
+        {
+          "upstream": "isLoading",
+          "kind": "prop",
+          "target": "loading",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Also through <fieldset disabled>."
+        },
+        {
+          "upstream": "htmlName",
+          "kind": "prop",
+          "target": "name",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "disabledMessage",
+          "kind": "prop",
+          "target": "disabled-message",
+          "as": "attribute"
+        },
+        {
+          "upstream": "isReadOnly",
+          "kind": "prop",
+          "target": "readonly",
+          "as": "attribute",
+          "reflect": true
+        },
+        {"upstream": "isOptional", "kind": "prop", "target": "optional", "as": "attribute"},
+        {
+          "upstream": "isRequired",
+          "kind": "prop",
+          "target": "required",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "A constraint (valueMissing while unchecked) and `aria-required`."
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md"
+        },
+        {"upstream": "onFocus", "kind": "event", "target": "focus", "as": "native-event"},
+        {"upstream": "onBlur", "kind": "event", "target": "blur", "as": "native-event"},
+        {"upstream": "labelIcon", "kind": "prop", "target": "label-icon", "as": "attribute"},
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "target": "status",
+          "as": "property",
+          "notes": "Object `{type, message}`, or the `status-type` and `status-message` attributes. Always shown detached."
+        },
+        {"upstream": "width", "kind": "prop", "target": "width", "as": "attribute"}
+      ],
+      "hooks": [
+        {
+          "upstream": "useIndicatorFocusRing",
+          "as": "waived",
+          "reason": "The ring is drawn on the box wrapper with the shared focus-ring module (`:has(:focus-visible)`), which is the indicator's own shape."
+        },
+        {
+          "upstream": "useResolvedRequired",
+          "target": "formLayoutContext",
+          "as": "context",
+          "notes": "A form layout that says \"required by default\" is announced (aria-required) without blocking the form."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Space",
+          "action": "Toggles the checkbox",
+          "when": "focused, not disabled, read-only or busy"
+        },
+        {
+          "keys": "Tab",
+          "action": "Moves through the checkbox and the label's info button in reading order"
+        }
+      ],
+      "form": {
+        "formAssociated": true,
+        "notes": "Form-associated (ElementInternals): submits `name=value` (`on` by default) only while checked, resets to the `checked` attribute, restores on navigation, joins <fieldset disabled>, works with form= and label for. `required` blocks the submit while unchecked; the error is shown after a change, a blur after an edit or a submit attempt, never on form.checkValidity(). A read-only or disabled checkbox is barred from validation."
+      },
+      "differences": [
+        {
+          "id": "CHECKBOX-01",
+          "type": "approved-api-difference",
+          "text": "Uncontrolled by default (D-006): `checked` is a property with the `checked` attribute as its default, and native `input`/`change` events report user toggles, instead of a controlled `value` plus onChange. Cancel the `click` to veto a toggle."
+        },
+        {
+          "id": "CHECKBOX-02",
+          "type": "approved-api-difference",
+          "text": "`value: 'indeterminate'` is a separate `indeterminate` attribute/property. A user click clears it and checks the box, as a native checkbox does; the form does not reset it (the native property has no reset either)."
+        },
+        {
+          "id": "CHECKBOX-03",
+          "type": "approved-api-difference",
+          "text": "`changeAction` runs after each user toggle with the new state and the `input` event; the control is busy meanwhile and returns to its previous state if the promise rejects (upstream's optimistic value reverts the same way)."
+        },
+        {
+          "id": "CHECKBOX-04",
+          "type": "a11y-improvement",
+          "text": "The browser's own message (\"Please check this box\") is displayed as the detached status after user interaction, on the same clock as `aria-invalid` and `:state(user-invalid)`, announced once; a failed submit focuses the checkbox."
+        },
+        {
+          "id": "CHECKBOX-05",
+          "type": "a11y-improvement",
+          "text": "The label's info button is a focusable button with a name (`label-tooltip` is an addition here; upstream Switch has it). The touch target is at least 24px on coarse pointers."
+        },
+        {
+          "id": "CHECKBOX-06",
+          "type": "approved-api-difference",
+          "text": "The checkbox draws the shared `tct-checkbox-indicator` directly. Upstream resolves the visual through the indicator registry (`useIndicator('checkbox')`) so a theme can replace it; rendering an arbitrary registered tag needs `unsafeStatic`, which is only allowed in core/security. See `requests`."
+        },
+        {
+          "id": "CHECKBOX-07",
+          "type": "tecton-visual",
+          "text": "Selection is a bright chip, not an accent (checkbox.md): border, checked fill, glyph and disabled border come from the Tecton checkbox roles through the indicator, all >= 3:1 (D-013 Q-05). The pressed overlay is drawn by the owner over the indicator."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/core/src/indicators/registry.ts",
+          "reason": "CheckboxInput, RadioListItem and Switch render their visual by tag. To honour `defineIndicators()` replacements, core needs a helper that renders a registry-resolved tag (a `staticHtml` template with `unsafeStatic`, allowed only in core/security), e.g. `renderIndicator(tag, {state, size, disabled}, content)`. Until then the default tags are rendered."
+        }
+      ],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:form-associated-custom-elements] value, validity, reset and restore through ElementInternals; [mwg:brand-consistent-forms] native checkbox under a branded indicator; [mwg:validate-input-after-interaction] user-invalid timing; [mwg:required-field-feedback] indicators are text; [mwg:accessible-error-announcement] the status is announced once; [mwg:accessible-web-components] the label, description and status share the control's shadow root."
+    },
+    "core.checkbox-list": {
+      "tag": "tct-checkbox-list",
+      "status": "implemented",
+      "upstream": {
+        "name": "CheckboxList",
+        "path": "packages/core/src/CheckboxList/CheckboxList.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "values",
+          "as": "property",
+          "notes": "The values of the checked options. Until set (or the user toggles), the options carrying the `checked` attribute."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "change",
+          "as": "native-event",
+          "notes": "Native `input` then `change`, composed, from the toggled option's checkbox; the list reads them. Neither fires when `values` is written."
+        },
+        {"upstream": "changeAction", "kind": "prop", "target": "changeAction", "as": "property"},
+        {
+          "upstream": "isLabelHidden",
+          "kind": "prop",
+          "target": "label-hidden",
+          "as": "attribute",
+          "reflect": true
+        },
+        {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute"},
+        {
+          "upstream": "density",
+          "kind": "prop",
+          "target": "density",
+          "as": "attribute",
+          "reflect": true,
+          "default": "balanced"
+        },
+        {
+          "upstream": "hasDividers",
+          "kind": "prop",
+          "target": "has-dividers",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "disabledMessage",
+          "kind": "prop",
+          "target": "disabled-message",
+          "as": "attribute"
+        },
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "target": "status",
+          "as": "property",
+          "notes": "Object `{type, message}`, or the `status-type` and `status-message` attributes. Always shown detached."
+        },
+        {"upstream": "width", "kind": "prop", "target": "width", "as": "attribute"},
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style/::part/custom properties"
+        },
+        {
+          "upstream": "isReadOnly",
+          "kind": "prop",
+          "target": "readonly",
+          "as": "attribute",
+          "reflect": true
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "CheckboxListContext",
+          "target": "checkboxListContext",
+          "as": "context",
+          "notes": "Family-private context: values, disabled, hasDisabledMessage, readonly, loadingValue."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "One tab stop per option: the option's checkbox. The row is not focusable and there is no second stop."
+        },
+        {
+          "keys": "Space",
+          "action": "Toggles the focused option",
+          "when": "not disabled, read-only or busy"
+        }
+      ],
+      "form": {
+        "formAssociated": true,
+        "notes": "Multi-value form control: submits one `name=value` entry for each checked option, resets to the options marked `checked`, restores a FormData, joins <fieldset disabled>. `required` means at least one option is checked. The group is the role element (`group`); a blocked submit focuses the first enabled option's checkbox."
+      },
+      "differences": [
+        {
+          "id": "CHECKBOXLIST-01",
+          "type": "approved-api-difference",
+          "text": "Uncontrolled by default (D-006): `values` is a property whose default is the options marked `checked`; upstream's optional `value` array + onChange (collection mode) is the same model with the state owned by the caller. Set `values` from the `change` handler to control it."
+        },
+        {
+          "id": "CHECKBOXLIST-02",
+          "type": "approved-api-difference",
+          "text": "The list is form-associated (an addition): one entry per checked option under `name`, a `required` constraint, reset and restore. Upstream's list has no `htmlName`."
+        },
+        {
+          "id": "CHECKBOXLIST-03",
+          "type": "approved-api-difference",
+          "text": "An item without a `value` is standalone (a select-all row) instead of throwing inside a list with values; an item with a value is always an option."
+        },
+        {
+          "id": "CHECKBOXLIST-04",
+          "type": "approved-api-difference",
+          "text": "The list answers the density and dividers context of its rows itself (`listContext`) instead of rendering a `tct-list`: the options are its light-DOM children, and a provider inside its shadow root is not found by a slotted consumer that connected first. The rows draw their own dividers for the same reason (the inner row is always the last of its root)."
+        },
+        {
+          "id": "CHECKBOXLIST-05",
+          "type": "a11y-improvement",
+          "text": "Validation is displayed after user interaction: the browser's message becomes the detached status, `aria-invalid` on the group and `:state(user-invalid)` flip together."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": false,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:form-associated-custom-elements] a multi-value control submits a FormData; [mwg:accessible-web-components] the group role and its label live in one shadow root; [mwg:required-field-feedback]."
+    },
+    "core.checkbox-list-item": {
+      "tag": "tct-checkbox-list-item",
+      "status": "implemented",
+      "upstream": {
+        "name": "CheckboxListItem",
+        "path": "packages/core/src/CheckboxList/CheckboxListItem.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
+        {
+          "upstream": "aria-label",
+          "kind": "prop",
+          "target": "aria-label",
+          "as": "attribute",
+          "notes": "A host aria-label names the checkbox (not the row)."
+        },
+        {"upstream": "value", "kind": "prop", "target": "value", "as": "attribute"},
+        {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute"},
+        {"upstream": "endContent", "kind": "slot", "target": "end", "as": "slot"},
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "isLoading",
+          "kind": "prop",
+          "target": "loading",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "isChecked",
+          "kind": "prop",
+          "target": "checked",
+          "as": "attribute",
+          "notes": "Standalone mode: the default (attribute) and current state (property). `indeterminate` is the mixed state."
+        },
+        {
+          "upstream": "onCheck",
+          "kind": "event",
+          "target": "change",
+          "as": "native-event",
+          "notes": "The native `input` then `change` from the item's checkbox (composed); the state is the item's `checked`."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style/::part/custom properties"
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "ItemDescriptionContext",
+          "as": "waived",
+          "reason": "The row's description reaches the checkbox as a hidden copy of its text in the checkbox's own shadow root (`data-row-description`): a consumer slotted into a row cannot rely on a provider that renders after it."
+        },
+        {
+          "upstream": "CheckboxListContext",
+          "target": "checkboxListContext",
+          "as": "context"
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Space",
+          "action": "Toggles the option (see the list)",
+          "when": "the checkbox is focused"
+        }
+      ],
+      "form": {
+        "formAssociated": false,
+        "notes": "Inside a checkbox list the list submits the option's value; a standalone item takes no part in a form."
+      },
+      "differences": [
+        {
+          "id": "CHECKBOXLISTITEM-01",
+          "type": "approved-api-difference",
+          "text": "`label`, `description` and `end` are attributes and slots: a rich label or description is `slot=\"label\"` / `slot=\"description\"`. A rich label names the checkbox through `aria-labelledby` (the hidden name is the localised word \"Checkbox\"); a host `aria-label` replaces it."
+        },
+        {
+          "id": "CHECKBOXLISTITEM-02",
+          "type": "approved-api-difference",
+          "text": "Checked state comes from the list's `values` for an item with a `value`; `checked` on such an item is ignored (upstream ignores `isChecked` there too)."
+        },
+        {
+          "id": "CHECKBOXLISTITEM-03",
+          "type": "tecton-visual",
+          "text": "A checked option tints its whole row with the accent wash (`--color-accent-muted`) through the row's exported part, without `aria-current` on the row (the checkbox carries the state)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": false,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null
+    }
+  }
+}
