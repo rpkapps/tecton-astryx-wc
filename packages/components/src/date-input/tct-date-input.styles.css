@@ -1,0 +1,50 @@
+/*
+ * tct-date-input: the box, the label chrome, the toggle button and the typed input come from the shared
+ * field module and the shared picker sheet; this sheet adds the native surface: a real
+ * `<input type="date">` with the field's own text painted over it while it is not focused (so `format` and
+ * the placeholder apply), and the calendar in the picker. [mwg:css] [mwg:styling-web-components]
+ */
+@layer component {
+  .native-slot {
+    position: relative;
+    display: flex;
+    flex: 1;
+    min-inline-size: 0;
+  }
+
+  .native-slot .input {
+    inline-size: 100%;
+    color: inherit;
+  }
+
+  .native-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+    color: inherit;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
+    background-color: var(--tecton-color-input-outlined-bg);
+  }
+
+  .native-overlay[data-placeholder] {
+    color: var(--tecton-color-input-outlined-text-placeholder);
+  }
+
+  /* On focus the platform's editable segments (or its picker) show through. */
+  .native-slot:focus-within .native-overlay {
+    display: none;
+  }
+}
+
+@layer state {
+  .input-wrapper[data-disabled] .native-overlay {
+    color: var(--tecton-color-disabled-outline-text);
+  }
+}

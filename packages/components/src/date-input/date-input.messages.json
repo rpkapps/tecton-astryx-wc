@@ -1,0 +1,6 @@
+{
+  "@tct.date-input.dateUnavailable": {
+    "defaultMessage": "This date is not available",
+    "description": "Assertive announcement and validation message when the date typed into a DateInput is a real date that its min, max or date constraints rule out. The value returns to the last available date when the field is left."
+  }
+}

@@ -1,0 +1,94 @@
+/*
+ * The picker surface shared by the date and time fields (see picker-surface.ts): the positioned top-layer
+ * `.picker` paints nothing, the inner `.picker-surface` is the painted box. Tecton surface: a 1px rule on a
+ * recessed (popover) fill, no drop shadow (D-013, design/components/menu.md). Entry is a fade and a small
+ * slide away from the field; exit runs from JS (WAAPI) before hidePopover(). Include after `layer`.
+ * [mwg:css] [mwg:animate-to-from-top-layer] [mwg:position-aware-tooltips]
+ */
+@layer component {
+  /* Without the Popover API (Tier 2) the attribute is inert: hide until LayerController shows it. */
+  @supports not selector(:popover-open) {
+    .picker {
+      position: fixed;
+      display: none;
+    }
+  }
+
+  .picker-surface {
+    --_bg: var(--color-background-popover);
+    --_border: var(--color-border);
+
+    position: relative;
+    box-sizing: border-box;
+    max-inline-size: calc(100vi - var(--spacing-8));
+    max-block-size: calc(100dvb - var(--spacing-8));
+    padding: 0;
+    overflow: auto;
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+    color: var(--color-text-primary);
+    overscroll-behavior: contain;
+    background: var(--_bg);
+    border: var(--border-width) solid var(--_border);
+    border-radius: var(--radius-container);
+  }
+
+  .picker-surface:focus-visible {
+    outline: none;
+  }
+
+  /* Fallback close button: revealed by :focus-within, drawn below the surface, centred on the inline axis. */
+  .picker-close {
+    position: absolute;
+    inset-block-end: 0;
+    inset-inline-start: 50%;
+    z-index: 1;
+    padding-block-start: var(--spacing-1);
+    translate: -50% 100%;
+  }
+
+  :host(:dir(rtl)) .picker-close {
+    translate: 50% 100%;
+  }
+
+  .picker:popover-open {
+    opacity: 1;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+}
+
+@layer state {
+  @media (prefers-reduced-motion: no-preference) {
+    .picker:popover-open {
+      translate: 0 0;
+      transition:
+        opacity var(--duration-fast) var(--ease-standard),
+        translate var(--duration-fast) var(--ease-standard);
+
+      @starting-style {
+        translate: 0 calc(-1 * var(--spacing-1));
+      }
+    }
+
+    .picker[data-placement='above']:popover-open {
+      @starting-style {
+        translate: 0 var(--spacing-1);
+      }
+    }
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .picker-surface {
+      color: CanvasText;
+      background: Canvas;
+      border-color: CanvasText;
+    }
+  }
+}

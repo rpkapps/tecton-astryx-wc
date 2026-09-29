@@ -1,0 +1,87 @@
+/*
+ * What the date and time fields add to the shared outlined box: the calendar toggle button, the typed input
+ * (a text control that reads dates or times), the trigger of the range field, the muted text of an entry that
+ * is not a value yet, and the picker layers that take no place in the layout. The box, the label chrome and
+ * the sizes are the shared field module and the shared box sheet. [mwg:css] [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  /* The sheet element loads lazily: hidden until it is defined, so nothing flashes. */
+  .sheet:not(:defined) {
+    display: none;
+  }
+
+  .toggle {
+    --_focus-offset: 1px;
+
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin: 0;
+    color: var(--color-icon-secondary);
+    cursor: pointer;
+    background: none;
+    border: 0;
+    border-radius: var(--radius-element);
+  }
+
+  .toggle[disabled],
+  .toggle[aria-disabled='true'] {
+    color: var(--tecton-color-disabled-outline-adornment);
+    cursor: default;
+  }
+
+  .input {
+    text-align: start;
+    text-overflow: ellipsis;
+  }
+
+  /* An entry that is not a value yet reads as muted; the muted text is not the only cue: aria-invalid. */
+  .input[aria-invalid='true'] {
+    color: var(--color-text-secondary);
+  }
+
+  .input[readonly]:not([aria-disabled='true']) {
+    cursor: pointer;
+  }
+
+  /* A date control's height comes from its edit fields, not its line-height: one line box, as a text field. */
+  .native {
+    block-size: 1lh;
+  }
+
+  .clock,
+  .start-icon {
+    flex-shrink: 0;
+  }
+}
+
+@layer state {
+  .input-wrapper[data-disabled] .toggle {
+    cursor: default;
+  }
+
+  .input-wrapper[data-disabled] .input,
+  .input-wrapper[data-disabled] .trigger {
+    cursor: default;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .toggle {
+      color: ButtonText;
+    }
+
+    .toggle[disabled],
+    .toggle[aria-disabled='true'] {
+      color: GrayText;
+    }
+  }
+}
