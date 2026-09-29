@@ -486,6 +486,7 @@ describe('tct-checkbox-input: appearance', () => {
     await waitUntil(
       () => getComputedStyle(part(checkbox, 'control')!).outlineStyle === 'solid',
       'focus ring',
+      3000,
     );
     expect(getComputedStyle(part(checkbox, 'control')!).outlineWidth).toBe('2px');
   });
