@@ -40,7 +40,8 @@ describe('tct-chat-send-button: states', () => {
     expect(control.getAttribute('icon')).toBe('arrowUp');
     expect(control.hasAttribute('icon-only')).toBe(true);
     expect(native(button).disabled).toBe(false);
-    if (isChromium) expect(await axNode(native(button))).toMatchObject({role: 'button', name: 'Send'});
+    if (isChromium)
+      expect(await axNode(native(button))).toMatchObject({role: 'button', name: 'Send'});
     await expectAccessible(button);
   });
 
@@ -51,7 +52,8 @@ describe('tct-chat-send-button: states', () => {
     expect(control.getAttribute('label')).toBe('Stop');
     expect(control.getAttribute('icon')).toBe('stop');
     expect(native(button).disabled).toBe(false);
-    if (isChromium) expect(await axNode(native(button))).toMatchObject({role: 'button', name: 'Stop'});
+    if (isChromium)
+      expect(await axNode(native(button))).toMatchObject({role: 'button', name: 'Stop'});
   });
 
   it('disabled disables the send state, and assigning false forces it enabled', async () => {
@@ -178,7 +180,10 @@ describe('tct-chat-send-button: text contrast, states and locales', () => {
       `<div lang="de-DE"><tct-chat-send-button></tct-chat-send-button></div>`,
     );
     const button = german.querySelector<TctChatSendButton>('tct-chat-send-button')!;
-    await waitUntil(() => inner(button).getAttribute('label') !== 'Send', 'the German catalog loads');
+    await waitUntil(
+      () => inner(button).getAttribute('label') !== 'Send',
+      'the German catalog loads',
+    );
     const arabic = await fixture<HTMLElement>(
       `<div lang="ar-SA" dir="rtl"><tct-chat-send-button stop-shown></tct-chat-send-button></div>`,
     );

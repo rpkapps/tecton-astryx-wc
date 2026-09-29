@@ -274,7 +274,8 @@ export class TctChatComposerInput extends TctElement implements ChatComposerInpu
   clearInterimText(): void {
     this.#interim?.remove();
     this.#interim = null;
-    this.isEmptyDraft = this.#draft() === '' && this.#editable?.querySelector(`[${TOKEN_ATTRIBUTE}]`) === null;
+    this.isEmptyDraft =
+      this.#draft() === '' && this.#editable?.querySelector(`[${TOKEN_ATTRIBUTE}]`) === null;
   }
 
   // ---------------------------------------------------------------------------------- internals
@@ -335,8 +336,7 @@ export class TctChatComposerInput extends TctElement implements ChatComposerInpu
     if (!editable) return;
     const next = this.#draft();
     this.#publishCount++;
-    this.isEmptyDraft =
-      next === '' && editable.querySelector(`[${INTERIM_ATTRIBUTE}]`) === null;
+    this.isEmptyDraft = next === '' && editable.querySelector(`[${INTERIM_ATTRIBUTE}]`) === null;
     if (next !== this.value) this.value = next;
     this.#composer.value?.setValue(next);
     this.#tokens.prune();
@@ -486,7 +486,9 @@ export class TctChatComposerInput extends TctElement implements ChatComposerInpu
     const selected = this.#selectedExpandableToken();
     if (selected) {
       event.preventDefault();
-      selected.dispatchEvent(new TctChatTokenExpandEvent(selected.getAttribute('data-tct-token-value') ?? ''));
+      selected.dispatchEvent(
+        new TctChatTokenExpandEvent(selected.getAttribute('data-tct-token-value') ?? ''),
+      );
       return;
     }
     const text = this.#draft().trim();

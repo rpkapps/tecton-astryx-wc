@@ -180,7 +180,9 @@ function isBoundaryAtEdge(
 /** Whether the selection starts at the very beginning of the draft (history recall's ArrowUp). */
 export function isSelectionAtStart(editable: HTMLElement): boolean {
   const range = getSelectionRange(editable);
-  return range !== null && isBoundaryAtEdge(editable, range.startContainer, range.startOffset, 'start');
+  return (
+    range !== null && isBoundaryAtEdge(editable, range.startContainer, range.startOffset, 'start')
+  );
 }
 
 /** Whether the selection ends at the very end of the draft (history recall's ArrowDown). */

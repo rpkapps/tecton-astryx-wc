@@ -90,7 +90,13 @@ export class TctChatComposerDrawer extends TctElement {
               )}
               @click=${this.#onToggle}
             >
-              <span class="summary" part="summary" aria-hidden="true" inert ?data-hidden=${!collapsed}>
+              <span
+                class="summary"
+                part="summary"
+                aria-hidden="true"
+                inert
+                ?data-hidden=${!collapsed}
+              >
                 ${
                   this.#slots.has('collapsed-summary')
                     ? html`<slot name="collapsed-summary"></slot>`

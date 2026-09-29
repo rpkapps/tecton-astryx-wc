@@ -19,7 +19,10 @@ const editableOf = (input: Element): HTMLElement =>
   input.shadowRoot!.querySelector<HTMLElement>('.editable')!;
 
 /** A `paste` with plain text and/or files, as the browser would deliver it. */
-function paste(target: Element, data: {text?: string; html?: string; files?: File[]}): ClipboardEvent {
+function paste(
+  target: Element,
+  data: {text?: string; html?: string; files?: File[]},
+): ClipboardEvent {
   const clipboardData = new DataTransfer();
   if (data.text !== undefined) clipboardData.setData('text/plain', data.text);
   if (data.html !== undefined) clipboardData.setData('text/html', data.html);
@@ -37,7 +40,12 @@ function paste(target: Element, data: {text?: string; html?: string; files?: Fil
 function drop(target: Element, files: File[], type: 'dragover' | 'drop' = 'drop'): DragEvent {
   const dataTransfer = new DataTransfer();
   for (const file of files) dataTransfer.items.add(file);
-  const event = new DragEvent(type, {dataTransfer, bubbles: true, cancelable: true, composed: true});
+  const event = new DragEvent(type, {
+    dataTransfer,
+    bubbles: true,
+    cancelable: true,
+    composed: true,
+  });
   target.dispatchEvent(event);
   return event;
 }
@@ -62,7 +70,12 @@ afterEach(() => {
 runElementSuite({
   tag: 'tct-chat-composer-input',
   properties: {maxRows: 4, debounceMs: 0, noHistory: true, label: 'Compose'},
-  attributes: {maxRows: 'max-rows', debounceMs: 'debounce-ms', noHistory: 'no-history', label: 'label'},
+  attributes: {
+    maxRows: 'max-rows',
+    debounceMs: 'debounce-ms',
+    noHistory: 'no-history',
+    label: 'label',
+  },
   events: ['tct-chat-submit', 'tct-chat-files', 'tct-chat-paste'],
   // The default render is a named textbox; axe runs on it in the states below.
 });
@@ -151,7 +164,8 @@ describe('tct-chat-composer-input: disabled', () => {
     await userEvent.keyboard('nope');
     expect(input.value).toBe('');
     expect(editable.textContent).toBe('');
-    if (isChromium) expect(await axNode(editable)).toMatchObject({role: 'textbox', disabled: 'true'});
+    if (isChromium)
+      expect(await axNode(editable)).toMatchObject({role: 'textbox', disabled: 'true'});
     await expectAccessible(input);
   });
 
@@ -292,7 +306,9 @@ describe('tct-chat-composer-input: Enter, Shift+Enter and IME', () => {
     const submits = recordEvents(input, ['tct-chat-submit']);
     const editable = editableOf(input);
     await type(input, 'draft');
-    editable.dispatchEvent(new CompositionEvent('compositionstart', {bubbles: true, composed: true}));
+    editable.dispatchEvent(
+      new CompositionEvent('compositionstart', {bubbles: true, composed: true}),
+    );
     const composing = new KeyboardEvent('keydown', {
       key: 'Enter',
       isComposing: true,
@@ -340,7 +356,11 @@ describe('tct-chat-composer-input: Enter, Shift+Enter and IME', () => {
       );
       await type(input, 'a');
       const session = cdp();
-      await session.send('Input.imeSetComposition', {text: 'に', selectionStart: 1, selectionEnd: 1});
+      await session.send('Input.imeSetComposition', {
+        text: 'に',
+        selectionStart: 1,
+        selectionEnd: 1,
+      });
       expect(input.value).toBe('aに');
       await userEvent.keyboard('{Enter}');
       expect(keys.at(-1)).toBe(true);
@@ -357,7 +377,9 @@ describe('tct-chat-composer-input: Enter, Shift+Enter and IME', () => {
     await type(input, 'first');
     await userEvent.keyboard('{Enter}');
     const editable = editableOf(input);
-    editable.dispatchEvent(new CompositionEvent('compositionstart', {bubbles: true, composed: true}));
+    editable.dispatchEvent(
+      new CompositionEvent('compositionstart', {bubbles: true, composed: true}),
+    );
     const arrow = new KeyboardEvent('keydown', {
       key: 'ArrowUp',
       isComposing: true,
@@ -534,7 +556,9 @@ describe('tct-chat-composer-input: paste, files and drops', () => {
   });
 
   it('a paste claimed by an ancestor in the capture phase is left alone', async () => {
-    const root = await fixture<HTMLElement>('<div><tct-chat-composer-input></tct-chat-composer-input></div>');
+    const root = await fixture<HTMLElement>(
+      '<div><tct-chat-composer-input></tct-chat-composer-input></div>',
+    );
     const input = root.querySelector<TctChatComposerInput>('tct-chat-composer-input')!;
     root.addEventListener('paste', (event) => event.preventDefault(), true);
     paste(editableOf(input), {text: 'mine'});
@@ -728,7 +752,9 @@ describe('tct-chat-composer-input: right to left, forced colours and localisatio
       () => editableOf(input).getAttribute('aria-label') !== 'Message input',
       'the German catalog loads',
     );
-    expect(input.shadowRoot!.querySelector('.placeholder')!.textContent).not.toContain('Type a message');
+    expect(input.shadowRoot!.querySelector('.placeholder')!.textContent).not.toContain(
+      'Type a message',
+    );
     input.label = 'Eigener Name';
     await input.updateComplete;
     expect(editableOf(input).getAttribute('aria-label')).toBe('Eigener Name');

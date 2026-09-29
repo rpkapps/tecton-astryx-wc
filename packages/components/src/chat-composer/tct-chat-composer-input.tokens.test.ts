@@ -16,7 +16,9 @@ import type {TctChatComposerTokenElement} from './tct-chat-composer-token-elemen
 const editableOf = (input: Element): HTMLElement =>
   input.shadowRoot!.querySelector<HTMLElement>('.editable')!;
 const tokensOf = (input: Element): TctChatComposerTokenElement[] => [
-  ...editableOf(input).querySelectorAll<TctChatComposerTokenElement>('tct-chat-composer-token-element'),
+  ...editableOf(input).querySelectorAll<TctChatComposerTokenElement>(
+    'tct-chat-composer-token-element',
+  ),
 ];
 
 async function make(attributes = ''): Promise<TctChatComposerInput> {
@@ -113,7 +115,9 @@ describe('inline tokens: insertion', () => {
     input.insertToken({value: '/tpl', render: () => html`<i>template</i>`});
     input.insertToken({value: '/node', render: () => node});
     await input.updateComplete;
-    const rendered = tokensOf(input).map((token) => token.shadowRoot!.querySelector('.base')!.textContent.trim());
+    const rendered = tokensOf(input).map((token) =>
+      token.shadowRoot!.querySelector('.base')!.textContent.trim(),
+    );
     expect(rendered).toEqual(['plain text', 'template', 'node']);
     expect(input.value).toBe('/plain /tpl /node ');
   });
@@ -187,7 +191,9 @@ describe('inline tokens: deleting as a unit', () => {
     await input.updateComplete;
     expect(tokensOf(input)).toHaveLength(2);
     await userEvent.keyboard('{Backspace}');
-    expect(tokensOf(input).map((token) => token.getAttribute('data-tct-token-value'))).toEqual(['@a']);
+    expect(tokensOf(input).map((token) => token.getAttribute('data-tct-token-value'))).toEqual([
+      '@a',
+    ]);
     await userEvent.keyboard('{Backspace}');
     expect(tokensOf(input)).toHaveLength(0);
   });
@@ -230,25 +236,31 @@ describe('inline tokens: deleting as a unit', () => {
 });
 
 describe('inline tokens: named for screen readers', () => {
-  it.skipIf(!isChromium)('is an image named by its label, so the draft reads "hello, Ada Lovelace"', async () => {
-    const input = await make();
-    await type(input, 'hello ');
-    input.insertToken(ada);
-    await input.updateComplete;
-    const token = tokensOf(input)[0]!;
-    expect(token.accessibleName).toBe('Ada Lovelace');
-    expect(await axNode(chip(token))).toMatchObject({role: 'image', name: 'Ada Lovelace'});
-  });
+  it.skipIf(!isChromium)(
+    'is an image named by its label, so the draft reads "hello, Ada Lovelace"',
+    async () => {
+      const input = await make();
+      await type(input, 'hello ');
+      input.insertToken(ada);
+      await input.updateComplete;
+      const token = tokensOf(input)[0]!;
+      expect(token.accessibleName).toBe('Ada Lovelace');
+      expect(await axNode(chip(token))).toMatchObject({role: 'image', name: 'Ada Lovelace'});
+    },
+  );
 
-  it.skipIf(!isChromium)('a token without a label is named by its value; a custom token too', async () => {
-    const input = await make();
-    input.insertToken({value: '#topic'});
-    input.insertToken({value: '/command', render: () => 'run'});
-    await input.updateComplete;
-    const [structured, custom] = tokensOf(input);
-    expect(await axNode(chip(structured!))).toMatchObject({role: 'image', name: '#topic'});
-    expect(await axNode(chip(custom!))).toMatchObject({role: 'image', name: '/command'});
-  });
+  it.skipIf(!isChromium)(
+    'a token without a label is named by its value; a custom token too',
+    async () => {
+      const input = await make();
+      input.insertToken({value: '#topic'});
+      input.insertToken({value: '/command', render: () => 'run'});
+      await input.updateComplete;
+      const [structured, custom] = tokensOf(input);
+      expect(await axNode(chip(structured!))).toMatchObject({role: 'image', name: '#topic'});
+      expect(await axNode(chip(custom!))).toMatchObject({role: 'image', name: '/command'});
+    },
+  );
 
   it('an expandable pasted token is named by its counts (localised)', async () => {
     const input = await make();
@@ -299,7 +311,9 @@ describe('inline tokens: expanding a pasted text', () => {
     input.insertToken({value: 'm'.repeat(260)});
     await input.updateComplete;
     const token = tokensOf(input)[0]!;
-    const card = token.shadowRoot!.querySelector<HTMLElement & {show(): Promise<void>}>('tct-hover-card')!;
+    const card = token.shadowRoot!.querySelector<HTMLElement & {show(): Promise<void>}>(
+      'tct-hover-card',
+    )!;
     await card.show();
     const expand = token.shadowRoot!.querySelector<HTMLElement>('tct-button')!;
     expect(expand.getAttribute('label')).toBe('Expand');
@@ -341,7 +355,9 @@ describe('inline tokens: expanding a pasted text', () => {
     await input.updateComplete;
     input.addEventListener('tct-chat-token-expand', (event) => event.preventDefault());
     const token = tokensOf(input)[0]!;
-    const card = token.shadowRoot!.querySelector<HTMLElement & {show(): Promise<void>}>('tct-hover-card')!;
+    const card = token.shadowRoot!.querySelector<HTMLElement & {show(): Promise<void>}>(
+      'tct-hover-card',
+    )!;
     await card.show();
     await userEvent.click(token.shadowRoot!.querySelector<HTMLElement>('tct-button')!);
     await new Promise((resolve) => setTimeout(resolve, 0));
@@ -363,7 +379,10 @@ describe('inline tokens: writing a value that contains them', () => {
     ];
     input.value = 'ping @ada and @bob now';
     await input.updateComplete;
-    expect(tokensOf(input).map((token) => token.getAttribute('data-tct-token-value'))).toEqual(['@ada', '@bob']);
+    expect(tokensOf(input).map((token) => token.getAttribute('data-tct-token-value'))).toEqual([
+      '@ada',
+      '@bob',
+    ]);
     // The round trip is exact: no space is added or lost.
     expect(input.getValue()).toBe('ping @ada and @bob now');
     expect(input.value).toBe('ping @ada and @bob now');

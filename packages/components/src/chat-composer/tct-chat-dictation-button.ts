@@ -135,8 +135,7 @@ export class TctChatDictationButton extends TctElement {
     const size = (CHAT_COMPOSER_BUTTON_SIZES as readonly string[]).includes(this.size)
       ? this.size
       : 'md';
-    const name =
-      this.label ?? this.#locale.t(listening ? 'stopDictation' : 'startDictation');
+    const name = this.label ?? this.#locale.t(listening ? 'stopDictation' : 'startDictation');
     return html`<span class="base" part="base">
       ${listening ? this.#renderBars(dictation!, size) : nothing}
       <tct-button

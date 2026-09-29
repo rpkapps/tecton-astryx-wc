@@ -15,10 +15,7 @@ import {
 import type {ChatScrollToBottomOptions} from '../chat-message-list/chat-message-list.types.js';
 import {TctChatLayoutScrollButton} from '../chat-message-list/tct-chat-layout-scroll-button.js';
 import {warnInvalidValue} from '../text/text.types.js';
-import {
-  CHAT_LAYOUT_DENSITIES,
-  type ChatLayoutDensity,
-} from './chat-layout.types.js';
+import {CHAT_LAYOUT_DENSITIES, type ChatLayoutDensity} from './chat-layout.types.js';
 import styles from './tct-chat-layout.styles.css';
 import {isViewportScroller, viewportScroller} from './viewport-scroller.js';
 
@@ -93,7 +90,12 @@ export class TctChatLayout extends TctElement {
     namespace: 'chatLayout',
     defaults: english,
   });
-  readonly #slots: SlotController = new SlotController(this, 'default', 'empty-state', 'scroll-button');
+  readonly #slots: SlotController = new SlotController(
+    this,
+    'default',
+    'empty-state',
+    'scroll-button',
+  );
   readonly #follow: ChatStreamScrollController = new ChatStreamScrollController(this, {
     scroller: () => this.#scroller,
   });
@@ -146,7 +148,8 @@ export class TctChatLayout extends TctElement {
     if (this.scrollTarget) return this.scrollTarget;
     const selector = this.scrollTargetSelector?.trim();
     if (!selector) return null;
-    if (selector === 'document') return (this.ownerDocument.scrollingElement as HTMLElement | null) ?? null;
+    if (selector === 'document')
+      return (this.ownerDocument.scrollingElement as HTMLElement | null) ?? null;
     try {
       return this.ownerDocument.querySelector<HTMLElement>(selector);
     } catch {
@@ -162,7 +165,8 @@ export class TctChatLayout extends TctElement {
 
   protected override updated(changed: PropertyValues<this>): void {
     // The controller re-reads its scroller after every update; a changed target needs one more.
-    if (changed.has('scrollTarget') || changed.has('scrollTargetSelector')) this.#provider.setValue({...this.#context}, true);
+    if (changed.has('scrollTarget') || changed.has('scrollTargetSelector'))
+      this.#provider.setValue({...this.#context}, true);
   }
 
   override render(): TemplateResult {
@@ -171,7 +175,12 @@ export class TctChatLayout extends TctElement {
       : 'balanced';
     const selfScroll = this.#external === null;
     const showEmpty = !this.#slots.has('default') && this.#slots.has('empty-state');
-    return html`<div class="root" part="base" data-density=${density} ?data-self-scroll=${selfScroll}>
+    return html`<div
+      class="root"
+      part="base"
+      data-density=${density}
+      ?data-self-scroll=${selfScroll}
+    >
       <div class="messages" part="messages">
         ${
           showEmpty

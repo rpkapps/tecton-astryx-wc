@@ -150,16 +150,18 @@ export class ChatComposerTokensController implements ReactiveController {
    * Returns whether it did. Composition, and any deletion of a range selection, are the browser's.
    */
   handleBeforeInput(event: InputEvent): boolean {
-    const backward = /^delete(Content|Word|SoftLine|HardLine|Entire\w*)?Backward$/.test(event.inputType);
-    const forward = /^delete(Content|Word|SoftLine|HardLine|Entire\w*)?Forward$/.test(event.inputType);
+    const backward = /^delete(Content|Word|SoftLine|HardLine|Entire\w*)?Backward$/.test(
+      event.inputType,
+    );
+    const forward = /^delete(Content|Word|SoftLine|HardLine|Entire\w*)?Forward$/.test(
+      event.inputType,
+    );
     if ((!backward && !forward) || event.isComposing) return false;
     const editable = this.#options.editable();
     if (!editable) return false;
     const range = getSelectionRange(editable);
     if (!range?.collapsed) return false;
-    const token = backward
-      ? this.#tokenBefore(range, editable)
-      : this.#tokenAfter(range, editable);
+    const token = backward ? this.#tokenBefore(range, editable) : this.#tokenAfter(range, editable);
     if (!token) return false;
     event.preventDefault();
     this.#remove(token);

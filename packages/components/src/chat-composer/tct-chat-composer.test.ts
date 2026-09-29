@@ -63,10 +63,9 @@ afterEach(() => {
 function spyOnAnnouncements(): {message: string; priority: string | undefined}[] {
   const messages: {message: string; priority: string | undefined}[] = [];
   const restore = overrideFeature('ariaNotify', true);
-  (document.body as unknown as {ariaNotify: (m: string, o?: {priority?: string}) => void}).ariaNotify = (
-    message,
-    options,
-  ) => {
+  (
+    document.body as unknown as {ariaNotify: (m: string, o?: {priority?: string}) => void}
+  ).ariaNotify = (message, options) => {
     messages.push({message, priority: options?.priority});
   };
   cleanups.push(() => {
@@ -301,7 +300,9 @@ describe('tct-chat-composer: slots', () => {
     );
     expect(composer.shadowRoot!.querySelector('tct-chat-composer-input')).toBeNull();
     const input = composer.querySelector<TctChatComposerInput>('tct-chat-composer-input')!;
-    expect(input.shadowRoot!.querySelector('.placeholder')!.textContent).toContain('Custom placeholder');
+    expect(input.shadowRoot!.querySelector('.placeholder')!.textContent).toContain(
+      'Custom placeholder',
+    );
     expect(composer.querySelector<TctChatSendButton>('tct-chat-send-button')!.size).toBe('sm');
     // The slotted input is wired to the composer like the default one.
     const submits = recordEvents(composer, ['tct-chat-submit']);
@@ -432,11 +433,15 @@ describe('tct-chat-composer: status strip', () => {
     expect(strip.hasAttribute('role')).toBe(false);
     expect(strip.hasAttribute('aria-live')).toBe(false);
     expect(strip.querySelector('tct-icon')!.getAttribute('name')).toBe('error');
-    expect(strip.getBoundingClientRect().top).toBeGreaterThan(body(composer).getBoundingClientRect().top);
+    expect(strip.getBoundingClientRect().top).toBeGreaterThan(
+      body(composer).getBoundingClientRect().top,
+    );
     composer.statusPosition = 'top';
     await composer.updateComplete;
     const top = composer.shadowRoot!.querySelector<HTMLElement>('.status')!;
-    expect(top.getBoundingClientRect().top).toBeLessThan(body(composer).getBoundingClientRect().top);
+    expect(top.getBoundingClientRect().top).toBeLessThan(
+      body(composer).getBoundingClientRect().top,
+    );
     composer.statusType = undefined;
     await composer.updateComplete;
     expect(composer.shadowRoot!.querySelector('.status')).toBeNull();
@@ -486,7 +491,9 @@ describe('tct-chat-composer: elevation and density', () => {
 
   it('the border of a flat composer is an input border role, not the decorative separator', async () => {
     const flat = await make('elevation="none"');
-    const expected = getComputedStyle(flat).getPropertyValue('--tecton-color-input-outlined-border').trim();
+    const expected = getComputedStyle(flat)
+      .getPropertyValue('--tecton-color-input-outlined-border')
+      .trim();
     expect(expected).not.toBe('');
     const swatch = document.createElement('div');
     swatch.style.color = expected;
@@ -503,7 +510,9 @@ describe('tct-chat-composer: elevation and density', () => {
       parseFloat(getComputedStyle(body(balanced)).paddingTop),
     );
     const invalid = await make('density="huge"');
-    expect(getComputedStyle(body(invalid)).paddingTop).toBe(getComputedStyle(body(balanced)).paddingTop);
+    expect(getComputedStyle(body(invalid)).paddingTop).toBe(
+      getComputedStyle(body(balanced)).paddingTop,
+    );
   });
 
   it('buttons in the footer follow the shell concentrically: never squarer than the element radius', async () => {
@@ -511,12 +520,15 @@ describe('tct-chat-composer: elevation and density', () => {
       '',
       `<tct-button slot="footer-actions" size="md" label="Tools"></tct-button>`,
     );
-    const radius = getComputedStyle(composer.querySelector('tct-button')!.shadowRoot!.querySelector('.button')!)
-      .borderStartStartRadius;
+    const radius = getComputedStyle(
+      composer.querySelector('tct-button')!.shadowRoot!.querySelector('.button')!,
+    ).borderStartStartRadius;
     const element = getComputedStyle(composer).getPropertyValue('--radius-element').trim();
     expect(parseFloat(radius)).toBeGreaterThanOrEqual(parseFloat(element));
     const send = getComputedStyle(
-      sendOf(composer).shadowRoot!.querySelector('tct-button')!.shadowRoot!.querySelector('.button')!,
+      sendOf(composer)
+        .shadowRoot!.querySelector('tct-button')!
+        .shadowRoot!.querySelector('.button')!,
     ).borderStartStartRadius;
     expect(send).toBe(radius);
   });
@@ -578,13 +590,25 @@ async function whilePressed(element: Element, check: () => Promise<void>): Promi
   const y = rect.top + rect.height / 2;
   const session = cdp();
   await session.send('Input.dispatchMouseEvent', {type: 'mouseMoved', x, y});
-  await session.send('Input.dispatchMouseEvent', {type: 'mousePressed', x, y, button: 'left', clickCount: 1});
+  await session.send('Input.dispatchMouseEvent', {
+    type: 'mousePressed',
+    x,
+    y,
+    button: 'left',
+    clickCount: 1,
+  });
   try {
     await check();
   } finally {
     // Released away from the element, so the press never becomes a click.
     await session.send('Input.dispatchMouseEvent', {type: 'mouseMoved', x: 0, y: 0});
-    await session.send('Input.dispatchMouseEvent', {type: 'mouseReleased', x: 0, y: 0, button: 'left', clickCount: 1});
+    await session.send('Input.dispatchMouseEvent', {
+      type: 'mouseReleased',
+      x: 0,
+      y: 0,
+      button: 'left',
+      clickCount: 1,
+    });
   }
 }
 
@@ -596,7 +620,9 @@ async function settled(...roots: Element[]): Promise<void> {
     ),
   );
   await Promise.all(
-    [...root2(roots)].flatMap((node) => node.getAnimations().map((animation) => animation.finished)),
+    [...root2(roots)].flatMap((node) =>
+      node.getAnimations().map((animation) => animation.finished),
+    ),
   );
 }
 
@@ -719,7 +745,10 @@ describe('tct-chat-composer: right to left and localisation', () => {
     );
     const composer = german.querySelector<TctChatComposer>('tct-chat-composer')!;
     await waitUntil(
-      () => !inputOf(composer).shadowRoot!.querySelector('.placeholder')!.textContent.includes('Type a message'),
+      () =>
+        !inputOf(composer)
+          .shadowRoot!.querySelector('.placeholder')!
+          .textContent.includes('Type a message'),
       'the German catalog loads',
     );
     const label = editableOf(inputOf(composer)).getAttribute('aria-label')!;
@@ -729,13 +758,22 @@ describe('tct-chat-composer: right to left and localisation', () => {
     );
     const rtl = arabic.querySelector<TctChatComposer>('tct-chat-composer')!;
     await waitUntil(
-      () => !inputOf(rtl).shadowRoot!.querySelector('.placeholder')!.textContent.includes('Type a message'),
+      () =>
+        !inputOf(rtl)
+          .shadowRoot!.querySelector('.placeholder')!
+          .textContent.includes('Type a message'),
       'the Arabic catalog loads',
     );
     const overridden = await make('placeholder="Mine"');
-    expect(inputOf(overridden).shadowRoot!.querySelector('.placeholder')!.textContent).toContain('Mine');
+    expect(inputOf(overridden).shadowRoot!.querySelector('.placeholder')!.textContent).toContain(
+      'Mine',
+    );
     if (isChromium) {
-      expect(await axNode(sendOf(rtl).shadowRoot!.querySelector('tct-button')!.shadowRoot!.querySelector('button')!)).toMatchObject({
+      expect(
+        await axNode(
+          sendOf(rtl).shadowRoot!.querySelector('tct-button')!.shadowRoot!.querySelector('button')!,
+        ),
+      ).toMatchObject({
         role: 'button',
       });
     }

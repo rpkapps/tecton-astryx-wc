@@ -111,7 +111,8 @@ export class ChatDictationController extends SpeechRecognitionController {
     const history = this.#history;
     const average =
       history.length > 0 ? history.reduce((sum, level) => sum + level, 0) / history.length : 0;
-    if (average >= CAPS_LEVEL && history.length >= HISTORY_MIN_FRAMES) result = result.toUpperCase();
+    if (average >= CAPS_LEVEL && history.length >= HISTORY_MIN_FRAMES)
+      result = result.toUpperCase();
     return result;
   }
 

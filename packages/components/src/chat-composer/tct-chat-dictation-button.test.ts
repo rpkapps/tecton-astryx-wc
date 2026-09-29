@@ -78,7 +78,9 @@ describe('tct-chat-dictation-button: unsupported engines', () => {
     expect(button.shadowRoot!.querySelector('tct-button')).toBeNull();
     expect(button.getBoundingClientRect().width).toBe(0);
     // A neighbour is not pushed away by a gap for it.
-    expect(button.nextElementSibling!.getBoundingClientRect().left).toBe(button.parentElement!.getBoundingClientRect().left);
+    expect(button.nextElementSibling!.getBoundingClientRect().left).toBe(
+      button.parentElement!.getBoundingClientRect().left,
+    );
   });
 
   it('is hidden without any dictation source at all', async () => {
@@ -92,7 +94,8 @@ describe('tct-chat-dictation-button: unsupported engines', () => {
     const button = await make(source, 'show-unsupported');
     expect(getComputedStyle(button).display).not.toBe('none');
     expect(native(button).disabled).toBe(true);
-    if (isChromium) expect(await axNode(native(button))).toMatchObject({role: 'button', name: 'Start dictation'});
+    if (isChromium)
+      expect(await axNode(native(button))).toMatchObject({role: 'button', name: 'Start dictation'});
     await userEvent.click(native(button), {force: true});
     expect(source.toggles).toBe(0);
   });
@@ -117,10 +120,14 @@ describe('tct-chat-dictation-button: toggling', () => {
     expect(control.getAttribute('icon')).toBe('microphone');
     expect(control.hasAttribute('icon-only')).toBe(true);
     expect(native(button).disabled).toBe(false);
-    if (isChromium) expect(await axNode(native(button))).toMatchObject({role: 'button', name: 'Start dictation'});
+    if (isChromium)
+      expect(await axNode(native(button))).toMatchObject({role: 'button', name: 'Start dictation'});
     await userEvent.click(native(button));
     expect(source.toggles).toBe(1);
-    await waitUntil(() => control.getAttribute('label') === 'Stop dictation', 'the label follows the state');
+    await waitUntil(
+      () => control.getAttribute('label') === 'Stop dictation',
+      'the label follows the state',
+    );
     if (isChromium) expect(await axNode(native(button))).toMatchObject({name: 'Stop dictation'});
   });
 
@@ -168,10 +175,13 @@ describe('tct-chat-dictation-button: the equalizer', () => {
     source.volume = 0.05;
     source.emit();
     await button.updateComplete;
-    const scales = bars(button).map((bar) => Number(/scaleY\(([\d.]+)\)/.exec(bar.style.transform)![1]));
+    const scales = bars(button).map((bar) =>
+      Number(/scaleY\(([\d.]+)\)/.exec(bar.style.transform)![1]),
+    );
     expect(scales[0]).toBeCloseTo(0.08, 2);
     expect(scales[4]).toBeCloseTo(1, 2);
-    for (let i = 1; i < scales.length; i++) expect(scales[i]!).toBeGreaterThanOrEqual(scales[i - 1]!);
+    for (let i = 1; i < scales.length; i++)
+      expect(scales[i]!).toBeGreaterThanOrEqual(scales[i - 1]!);
   });
 
   it('blends toward the error colour as the voice clips, and back', async () => {
@@ -198,10 +208,12 @@ describe('tct-chat-dictation-button: the equalizer', () => {
     source.isListening = true;
     const sm = await make(source, 'size="sm"');
     const md = await make(source);
-    expect(parseFloat(bars(sm)[0]!.style.inlineSize)).toBeLessThan(parseFloat(bars(md)[0]!.style.inlineSize));
-    expect(parseFloat(sm.shadowRoot!.querySelector<HTMLElement>('.bars')!.style.blockSize)).toBeLessThan(
-      parseFloat(md.shadowRoot!.querySelector<HTMLElement>('.bars')!.style.blockSize),
+    expect(parseFloat(bars(sm)[0]!.style.inlineSize)).toBeLessThan(
+      parseFloat(bars(md)[0]!.style.inlineSize),
     );
+    expect(
+      parseFloat(sm.shadowRoot!.querySelector<HTMLElement>('.bars')!.style.blockSize),
+    ).toBeLessThan(parseFloat(md.shadowRoot!.querySelector<HTMLElement>('.bars')!.style.blockSize));
   });
 
   it('paints the bars in the button text colour in forced colours, even while clipping', async () => {
@@ -287,7 +299,11 @@ describe('tct-chat-dictation-button: text contrast, states and locales', () => {
       await button.updateComplete;
       await expectAccessible(root);
       await userEvent.hover(native(button));
-      await Promise.all(native(button).getAnimations().map((a) => a.finished));
+      await Promise.all(
+        native(button)
+          .getAnimations()
+          .map((a) => a.finished),
+      );
       await expectAccessible(root);
       await userEvent.hover(document.body, {position: {x: 0, y: 0}});
       root.querySelector('button')!.focus();
@@ -310,6 +326,9 @@ describe('tct-chat-dictation-button: text contrast, states and locales', () => {
     const button = root.querySelector<TctChatDictationButton>('tct-chat-dictation-button')!;
     button.dictation = source;
     await button.updateComplete;
-    await waitUntil(() => inner(button).getAttribute('label') !== 'Start dictation', 'the German catalog loads');
+    await waitUntil(
+      () => inner(button).getAttribute('label') !== 'Start dictation',
+      'the German catalog loads',
+    );
   });
 });

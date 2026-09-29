@@ -79,7 +79,9 @@ async function mountExample(source: string, theme: 'light' | 'dark'): Promise<HT
 /** Waits until nothing is transitioning, so axe reads settled colours. */
 async function settle(): Promise<void> {
   await nextFrame();
-  await Promise.all(document.getAnimations().map((animation) => animation.finished.catch(() => {})));
+  await Promise.all(
+    document.getAnimations().map((animation) => animation.finished.catch(() => {})),
+  );
 }
 
 const example = (id: string): string => examples[`./examples/${id}.html`]!;
@@ -89,7 +91,8 @@ describe('example scripts', () => {
     const root = await mountExample(example('basic'), 'light');
     const composer = root.querySelector<TctChatComposer>('#basic-composer')!;
     composer.value = 'Hello there';
-    const input = composer.shadowRoot!.querySelector<TctChatComposerInput>('tct-chat-composer-input')!;
+    const input =
+      composer.shadowRoot!.querySelector<TctChatComposerInput>('tct-chat-composer-input')!;
     await composer.updateComplete;
     await input.updateComplete;
     input.submit();
@@ -109,7 +112,10 @@ describe('example scripts', () => {
     const root = await mountExample(example('paste'), 'light');
     root.querySelector<HTMLElement>('#paste-snippet')!.click();
     const input = root.querySelector<TctChatComposerInput>('#paste-input')!;
-    await waitUntil(() => input.shadowRoot!.querySelector('[data-tct-token][expandable]') !== null, 'a chip');
+    await waitUntil(
+      () => input.shadowRoot!.querySelector('[data-tct-token][expandable]') !== null,
+      'a chip',
+    );
     expect(input.getValue()).toContain('compressor trip');
     cleanupFixtures();
   });
@@ -128,7 +134,9 @@ describe('example scripts', () => {
     const root = await mountExample(example('dictation'), 'light');
     const demo = root.querySelector<LitElement>('dictation-demo')!;
     await demo.updateComplete;
-    const button = demo.shadowRoot!.querySelector<TctChatDictationButton>('tct-chat-dictation-button')!;
+    const button = demo.shadowRoot!.querySelector<TctChatDictationButton>(
+      'tct-chat-dictation-button',
+    )!;
     expect(button.dictation).toBeInstanceOf(ChatDictationController);
     cleanupFixtures();
   });

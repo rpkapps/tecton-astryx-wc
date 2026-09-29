@@ -134,7 +134,12 @@ export class TctChatComposerTokenElement extends TctElement {
     // also stops the hover card copying the whole pasted text into `aria-description`.
     return html`<span class="base" part="base"
       ><tct-hover-card placement="above" alignment="start" hover-indication="never">
-        <span class="chip" part="chip" role="img" aria-label=${name} aria-describedby=${this.#metaId}
+        <span
+          class="chip"
+          part="chip"
+          role="img"
+          aria-label=${name}
+          aria-describedby=${this.#metaId}
           >${badge}</span
         >
         <div slot="content" class="card">

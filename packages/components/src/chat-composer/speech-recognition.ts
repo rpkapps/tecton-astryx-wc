@@ -27,7 +27,10 @@
  */
 import type {ReactiveController, ReactiveControllerHost} from 'lit';
 import english from '@tecton-wc/locales/en/chat.js';
-import {speechRecognitionConstructor, type SpeechRecognitionLike} from './chat-composer.platform.js';
+import {
+  speechRecognitionConstructor,
+  type SpeechRecognitionLike,
+} from './chat-composer.platform.js';
 
 /** How many frequency bands the meter reports. */
 export const SPEECH_BAND_COUNT = 5;

@@ -15,9 +15,13 @@ import type {TctChatComposerDrawer} from './tct-chat-composer-drawer.js';
 
 const toggleOf = (drawer: Element): HTMLButtonElement =>
   drawer.shadowRoot!.querySelector<HTMLButtonElement>('.toggle')!;
-const gridOf = (drawer: Element): HTMLElement => drawer.shadowRoot!.querySelector<HTMLElement>('.grid')!;
+const gridOf = (drawer: Element): HTMLElement =>
+  drawer.shadowRoot!.querySelector<HTMLElement>('.grid')!;
 
-async function make(attributes = '', content = '<button type="button">one.png</button><button type="button">two.png</button>'): Promise<TctChatComposerDrawer> {
+async function make(
+  attributes = '',
+  content = '<button type="button">one.png</button><button type="button">two.png</button>',
+): Promise<TctChatComposerDrawer> {
   const root = await fixture<HTMLElement>(
     `<div style="inline-size: 420px"><tct-chat-composer-drawer ${attributes}>${content}</tct-chat-composer-drawer></div>`,
   );
@@ -63,7 +67,11 @@ describe('tct-chat-composer-drawer: the toggle', () => {
     expect(toggle.getAttribute('aria-label')).toBe('Collapse Attachments');
     expect(toggle.getAttribute('aria-controls')).toBe(gridOf(drawer).id);
     if (isChromium) {
-      expect(await axNode(toggle)).toMatchObject({role: 'button', name: 'Collapse Attachments', expanded: 'true'});
+      expect(await axNode(toggle)).toMatchObject({
+        role: 'button',
+        name: 'Collapse Attachments',
+        expanded: 'true',
+      });
     }
     drawer.collapsed = true;
     await drawer.updateComplete;
@@ -99,7 +107,10 @@ describe('tct-chat-composer-drawer: the toggle', () => {
     expect(drawer.collapsed).toBe(true);
     await pressKeys(' ');
     expect(drawer.collapsed).toBe(false);
-    expect(events.events.map((event) => (event as unknown as {reason: string}).reason)).toEqual(['keyboard', 'keyboard']);
+    expect(events.events.map((event) => (event as unknown as {reason: string}).reason)).toEqual([
+      'keyboard',
+      'keyboard',
+    ]);
   });
 
   it('preventDefault keeps the state, so a page can own it', async () => {
@@ -172,7 +183,9 @@ describe('tct-chat-composer-drawer: the collapsed state', () => {
       'count="2" collapsed',
       '<span slot="collapsed-summary" id="mine">2 files ready</span><span>content</span>',
     );
-    const slot = drawer.shadowRoot!.querySelector<HTMLSlotElement>('slot[name="collapsed-summary"]')!;
+    const slot = drawer.shadowRoot!.querySelector<HTMLSlotElement>(
+      'slot[name="collapsed-summary"]',
+    )!;
     expect(slot.assignedElements()[0]!.id).toBe('mine');
     expect(drawer.shadowRoot!.querySelector('tct-badge')).toBeNull();
   });
@@ -248,7 +261,9 @@ describe('tct-chat-composer-drawer: accessibility and text contrast', () => {
     const restore = await emulateMedia({forcedColors: 'active'});
     try {
       const drawer = await make('count="1"');
-      expect(getComputedStyle(drawer.shadowRoot!.querySelector('.base')!).borderTopStyle).toBe('solid');
+      expect(getComputedStyle(drawer.shadowRoot!.querySelector('.base')!).borderTopStyle).toBe(
+        'solid',
+      );
     } finally {
       await restore();
     }
@@ -259,7 +274,10 @@ describe('tct-chat-composer-drawer: accessibility and text contrast', () => {
       `<div lang="de-DE"><tct-chat-composer-drawer count="1" label="Anhänge"><span>x</span></tct-chat-composer-drawer></div>`,
     );
     const drawer = german.querySelector<TctChatComposerDrawer>('tct-chat-composer-drawer')!;
-    await waitUntil(() => !toggleOf(drawer).getAttribute('aria-label')!.startsWith('Collapse'), 'German loads');
+    await waitUntil(
+      () => !toggleOf(drawer).getAttribute('aria-label')!.startsWith('Collapse'),
+      'German loads',
+    );
     expect(toggleOf(drawer).getAttribute('aria-label')).toContain('Anhänge');
     const rtl = await fixture<HTMLElement>(
       `<div dir="rtl" style="inline-size: 420px"><tct-chat-composer-drawer count="2" label="x" collapsed><span>x</span></tct-chat-composer-drawer></div>`,

@@ -31,8 +31,10 @@ const message = (text: string, sender = 'assistant') =>
     ><tct-chat-message-bubble>${text}</tct-chat-message-bubble></tct-chat-message
   >`;
 
-const rootOf = (layout: Element): HTMLElement => layout.shadowRoot!.querySelector<HTMLElement>('.root')!;
-const areaOf = (layout: Element): HTMLElement => layout.shadowRoot!.querySelector<HTMLElement>('.messages')!;
+const rootOf = (layout: Element): HTMLElement =>
+  layout.shadowRoot!.querySelector<HTMLElement>('.root')!;
+const areaOf = (layout: Element): HTMLElement =>
+  layout.shadowRoot!.querySelector<HTMLElement>('.messages')!;
 const dockOf = (layout: Element): HTMLElement =>
   layout.shadowRoot!.querySelector<HTMLElement>('.dock-container')!;
 const buttonOf = (layout: Element): TctChatLayoutScrollButton =>
@@ -84,7 +86,10 @@ function addMessage(list: TctChatMessageList, text: string, sender = 'assistant'
 
 /** The first fill positions the view at the bottom (a frame later). */
 const filled = async (chat: Chat): Promise<void> => {
-  await waitUntil(() => chat.scroller.scrollHeight > chat.scroller.clientHeight, 'content overflows');
+  await waitUntil(
+    () => chat.scroller.scrollHeight > chat.scroller.clientHeight,
+    'content overflows',
+  );
   await waitUntil(() => distanceFromBottom(chat.scroller) < 2, 'initial fill at the bottom');
 };
 
@@ -121,7 +126,9 @@ describe('tct-chat-layout: the layout contract', () => {
     await filled(chat);
     expect(getComputedStyle(chat.scroller).overflowY).toBe('auto');
     expect(getComputedStyle(chat.scroller).overflowX).toBe('hidden');
-    expect(areaOf(chat.layout).getBoundingClientRect().height).toBeGreaterThan(chat.scroller.clientHeight);
+    expect(areaOf(chat.layout).getBoundingClientRect().height).toBeGreaterThan(
+      chat.scroller.clientHeight,
+    );
   });
 
   it('docks the composer at the bottom, sticky, above the transcript', async () => {
@@ -146,7 +153,9 @@ describe('tct-chat-layout: the layout contract', () => {
     expect(blur.pointerEvents).toBe('none');
     expect(blur.maskImage).toContain('linear-gradient');
     expect(getComputedStyle(dockOf(chat.layout)).pointerEvents).toBe('none');
-    expect(getComputedStyle(chat.layout.shadowRoot!.querySelector('.dock')!).pointerEvents).toBe('auto');
+    expect(getComputedStyle(chat.layout.shadowRoot!.querySelector('.dock')!).pointerEvents).toBe(
+      'auto',
+    );
   });
 
   it('honours the reduced-transparency-free forced colours setting (no blur layer)', async () => {
@@ -154,7 +163,9 @@ describe('tct-chat-layout: the layout contract', () => {
     const restore = await emulateMedia({forcedColors: 'active'});
     try {
       const chat = await makeChat(3);
-      expect(getComputedStyle(chat.layout.shadowRoot!.querySelector('.blur')!).display).toBe('none');
+      expect(getComputedStyle(chat.layout.shadowRoot!.querySelector('.blur')!).display).toBe(
+        'none',
+      );
     } finally {
       await restore();
     }
@@ -185,7 +196,10 @@ describe('tct-chat-layout: the empty state', () => {
     await chat.layout.updateComplete;
     expect(chat.layout.shadowRoot!.querySelector('.empty')).toBeNull();
     chat.list.remove();
-    await waitUntil(() => chat.layout.shadowRoot!.querySelector('.empty') !== null, 'the empty state appears');
+    await waitUntil(
+      () => chat.layout.shadowRoot!.querySelector('.empty') !== null,
+      'the empty state appears',
+    );
     expect(chat.layout.shadowRoot!.querySelector('slot:not([name])')).toBeNull();
   });
 
@@ -213,7 +227,9 @@ describe('tct-chat-layout: density', () => {
     expect(blurHeight(spacious)).toBe(120);
     expect(getComputedStyle(areaOf(compact.layout)).maxWidth).toBe('100%');
     expect(getComputedStyle(areaOf(spacious.layout)).maxWidth).toBe('800px');
-    expect(parseFloat(getComputedStyle(areaOf(spacious.layout)).paddingInlineStart)).toBeGreaterThan(0);
+    expect(
+      parseFloat(getComputedStyle(areaOf(spacious.layout)).paddingInlineStart),
+    ).toBeGreaterThan(0);
     expect(parseFloat(getComputedStyle(areaOf(balanced.layout)).paddingInlineStart)).toBe(0);
     expect(compact.layout.getAttribute('density')).toBe('compact');
     expect(balanced.layout.getAttribute('density')).toBe('balanced');
@@ -221,7 +237,9 @@ describe('tct-chat-layout: density', () => {
 
   it('falls back to balanced for an unknown value', async () => {
     const chat = await makeChat(2, 'density=huge');
-    expect(chat.layout.shadowRoot!.querySelector('.blur')!.getBoundingClientRect().height).toBe(100);
+    expect(chat.layout.shadowRoot!.querySelector('.blur')!.getBoundingClientRect().height).toBe(
+      100,
+    );
   });
 
   it('centres a spacious column and caps it at 800px on a wide container', async () => {
@@ -284,7 +302,11 @@ describe('tct-chat-layout: stick to bottom and the scroll button', () => {
     await waitUntil(() => button.label === 'New messages', 'the button is labelled');
     expect(button.visible).toBe(true);
     button.shadowRoot!.querySelector('tct-button')!.shadowRoot!.querySelector('button')!.click();
-    await waitUntil(() => distanceFromBottom(chat.scroller) < 2, 'scrolled to the bottom', ARRIVE_MS);
+    await waitUntil(
+      () => distanceFromBottom(chat.scroller) < 2,
+      'scrolled to the bottom',
+      ARRIVE_MS,
+    );
     expect(chat.layout.hasNewMessages).toBe(false);
     await waitUntil(() => !button.visible, 'the button hides');
     expect(button.label ?? undefined).toBeUndefined();
@@ -296,9 +318,13 @@ describe('tct-chat-layout: stick to bottom and the scroll button', () => {
     await filled(chat);
     chat.scroller.scrollTop = 0;
     await waitUntil(() => buttonOf(chat.layout).visible, 'the button shows');
-    const native = buttonOf(chat.layout).shadowRoot!.querySelector('tct-button')!.shadowRoot!.querySelector('button')!;
+    const native = buttonOf(chat.layout)
+      .shadowRoot!.querySelector('tct-button')!
+      .shadowRoot!.querySelector('button')!;
     await waitUntil(
-      () => getComputedStyle(buttonOf(chat.layout).shadowRoot!.querySelector('.pill')!).visibility === 'visible',
+      () =>
+        getComputedStyle(buttonOf(chat.layout).shadowRoot!.querySelector('.pill')!).visibility ===
+        'visible',
       'the pill is visible',
     );
     native.focus();
@@ -307,7 +333,10 @@ describe('tct-chat-layout: stick to bottom and the scroll button', () => {
     await waitUntil(() => !buttonOf(chat.layout).visible, 'hidden');
     const active = deepActiveElement();
     expect(active).not.toBe(document.body);
-    expect(chat.list.querySelector('tct-chat-message:last-of-type')!.contains(active) || active === chat.list.querySelector('tct-chat-message:last-of-type')).toBe(true);
+    expect(
+      chat.list.querySelector('tct-chat-message:last-of-type')!.contains(active) ||
+        active === chat.list.querySelector('tct-chat-message:last-of-type'),
+    ).toBe(true);
   });
 
   it('scrollToBottom() jumps or springs, follows again and dismisses the hint', async () => {
@@ -341,7 +370,10 @@ describe('tct-chat-layout: stick to bottom and the scroll button', () => {
       await filled(chat);
       const {bubble} = addMessage(chat.list, '');
       bubble.append('tall '.repeat(400));
-      await waitUntil(() => chat.scroller.scrollHeight > chat.scroller.clientHeight + 600, 'tall message');
+      await waitUntil(
+        () => chat.scroller.scrollHeight > chat.scroller.clientHeight + 600,
+        'tall message',
+      );
       await nextFrame();
       await nextFrame();
       await nextFrame();
@@ -359,7 +391,9 @@ describe('tct-chat-layout: the scroll button slot', () => {
     );
     const layout = frame.querySelector<TctChatLayout>('tct-chat-layout')!;
     expect(layout.shadowRoot!.querySelector('tct-chat-layout-scroll-button')).toBeNull();
-    expect(layout.querySelector<HTMLElement>('#mine')!.getBoundingClientRect().height).toBeGreaterThan(0);
+    expect(
+      layout.querySelector<HTMLElement>('#mine')!.getBoundingClientRect().height,
+    ).toBeGreaterThan(0);
   });
 
   it('no-scroll-button renders no button at all', async () => {
@@ -377,7 +411,10 @@ describe('tct-chat-layout: the scroll button slot', () => {
 describe('tct-chat-layout: an external scroller', () => {
   it('scrolls another element, docks the composer fixed, and does not scroll itself', async () => {
     const outer = await fixture<HTMLElement>(html`
-      <div id="outer" style="block-size: 360px; inline-size: 480px; overflow: auto; position: relative; transform: translateZ(0)">
+      <div
+        id="outer"
+        style="block-size: 360px; inline-size: 480px; overflow: auto; position: relative; transform: translateZ(0)"
+      >
         <tct-chat-layout style="flex: none">
           <tct-chat-message-list no-announce>
             ${Array.from({length: 30}, (_, index) => message(`Message number ${index}`))}
@@ -392,7 +429,11 @@ describe('tct-chat-layout: an external scroller', () => {
     expect(getComputedStyle(dockOf(layout)).position).toBe('fixed');
     expect(getComputedStyle(rootOf(layout)).overflowY).toBe('visible');
     await waitUntil(() => outer.scrollHeight > outer.clientHeight, 'the outer element overflows');
-    await waitUntil(() => distanceFromBottom(outer) < 2, 'lands at the bottom of the outer scroller', ARRIVE_MS);
+    await waitUntil(
+      () => distanceFromBottom(outer) < 2,
+      'lands at the bottom of the outer scroller',
+      ARRIVE_MS,
+    );
     outer.scrollTop = 0;
     await waitUntil(() => buttonOf(layout).visible, 'the button follows the outer scroller');
     layout.scrollToBottom({behavior: 'instant'});
@@ -401,7 +442,10 @@ describe('tct-chat-layout: an external scroller', () => {
 
   it('a selector in scroll-target names the scroller', async () => {
     const outer = await fixture<HTMLElement>(html`
-      <div id="chat-outer" style="block-size: 300px; inline-size: 480px; overflow: auto; transform: translateZ(0)">
+      <div
+        id="chat-outer"
+        style="block-size: 300px; inline-size: 480px; overflow: auto; transform: translateZ(0)"
+      >
         <tct-chat-layout scroll-target="#chat-outer" style="flex: none">
           <tct-chat-message-list no-announce>
             ${Array.from({length: 30}, (_, index) => message(`Message number ${index}`))}
@@ -412,7 +456,11 @@ describe('tct-chat-layout: an external scroller', () => {
     `);
     const layout = outer.querySelector<TctChatLayout>('tct-chat-layout')!;
     await layout.updateComplete;
-    await waitUntil(() => distanceFromBottom(outer) < 2, 'the selected element is followed', ARRIVE_MS);
+    await waitUntil(
+      () => distanceFromBottom(outer) < 2,
+      'the selected element is followed',
+      ARRIVE_MS,
+    );
     expect(getComputedStyle(dockOf(layout)).position).toBe('fixed');
   });
 
@@ -452,10 +500,15 @@ describe('tct-chat-layout: composing with the composer', () => {
     chat.composer.addEventListener('tct-chat-submit', (event) => {
       addMessage(chat.list, event.value, 'user');
     });
-    const editable = chat.composer.shadowRoot!.querySelector('tct-chat-composer-input')!.shadowRoot!.querySelector<HTMLElement>('.editable')!;
+    const editable = chat.composer
+      .shadowRoot!.querySelector('tct-chat-composer-input')!
+      .shadowRoot!.querySelector<HTMLElement>('.editable')!;
     editable.focus();
     await userEvent.keyboard('hello from the composer{Enter}');
-    await waitUntil(() => chat.list.textContent.includes('hello from the composer'), 'the message arrived');
+    await waitUntil(
+      () => chat.list.textContent.includes('hello from the composer'),
+      'the message arrived',
+    );
     await waitUntil(() => distanceFromBottom(chat.scroller) < 2, 'followed', ARRIVE_MS);
     expect(chat.composer.value).toBe('');
   });
@@ -480,23 +533,27 @@ describe('tct-chat-layout: composing with the composer', () => {
 describe('tct-chat-layout: accessibility, localisation and direction', () => {
   it('passes axe in light and dark, with a transcript, a composer and a visible scroll button', async () => {
     for (const theme of ['light', 'dark'] as const) {
-      const frame = await fixture<HTMLElement>(html`
-        <div style="display: flex; flex-direction: column; block-size: 420px; inline-size: 480px">
-          <tct-chat-layout>
-            <tct-chat-message-list no-announce>
-              ${Array.from({length: 20}, (_, index) => message(`Message number ${index}`, index % 2 ? 'user' : 'assistant'))}
-            </tct-chat-message-list>
-            <tct-chat-composer slot="composer"></tct-chat-composer>
-          </tct-chat-layout>
-        </div>
-      `, {theme});
+      const frame = await fixture<HTMLElement>(
+        html`
+          <div style="display: flex; flex-direction: column; block-size: 420px; inline-size: 480px">
+            <tct-chat-layout>
+              <tct-chat-message-list no-announce>
+                ${Array.from({length: 20}, (_, index) => message(`Message number ${index}`, index % 2 ? 'user' : 'assistant'))}
+              </tct-chat-message-list>
+              <tct-chat-composer slot="composer"></tct-chat-composer>
+            </tct-chat-layout>
+          </div>
+        `,
+        {theme},
+      );
       const layout = frame.querySelector<TctChatLayout>('tct-chat-layout')!;
       await waitUntil(() => distanceFromBottom(rootOf(layout)) < 2, 'at the bottom', ARRIVE_MS);
       await expectAccessible(frame);
       rootOf(layout).scrollTop = 0;
       await waitUntil(() => buttonOf(layout).visible, 'the button shows');
       await waitUntil(
-        () => getComputedStyle(buttonOf(layout).shadowRoot!.querySelector('.pill')!).opacity === '1',
+        () =>
+          getComputedStyle(buttonOf(layout).shadowRoot!.querySelector('.pill')!).opacity === '1',
         'the fade finished',
       );
       await expectAccessible(frame);
@@ -505,7 +562,10 @@ describe('tct-chat-layout: accessibility, localisation and direction', () => {
 
   it('labels the new-messages hint in German', async () => {
     const frame = await fixture<HTMLElement>(html`
-      <div lang="de-DE" style="display: flex; flex-direction: column; block-size: 300px; inline-size: 480px">
+      <div
+        lang="de-DE"
+        style="display: flex; flex-direction: column; block-size: 300px; inline-size: 480px"
+      >
         <tct-chat-layout>
           <tct-chat-message-list no-announce>
             ${Array.from({length: 20}, (_, index) => message(`Nachricht ${index}`))}
@@ -528,7 +588,14 @@ describe('tct-chat-layout: accessibility, localisation and direction', () => {
 
   it('mirrors in right-to-left: the dock stays at the bottom, the column stays centred', async () => {
     const frame = await fixture<HTMLElement>(
-      html`<div style="display: flex; flex-direction: column; block-size: 300px; inline-size: 480px"><tct-chat-layout density="spacious"><tct-chat-message-list no-announce></tct-chat-message-list><tct-chat-composer slot="composer"></tct-chat-composer></tct-chat-layout></div>`,
+      html`<div
+        style="display: flex; flex-direction: column; block-size: 300px; inline-size: 480px"
+      >
+        <tct-chat-layout density="spacious"
+          ><tct-chat-message-list no-announce></tct-chat-message-list
+          ><tct-chat-composer slot="composer"></tct-chat-composer
+        ></tct-chat-layout>
+      </div>`,
       {dir: 'rtl'},
     );
     const layout = frame.querySelector<TctChatLayout>('tct-chat-layout')!;

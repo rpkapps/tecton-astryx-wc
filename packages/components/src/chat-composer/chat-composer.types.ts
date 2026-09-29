@@ -51,7 +51,9 @@ export interface ChatComposerSearchItem<TAuxiliary = unknown> {
  * synchronous or asynchronous, `cancel` aborts an in-flight search. `bootstrap` is accepted (it is part
  * of the shared shape) and unused by the composer.
  */
-export interface ChatComposerSearchSource<T extends ChatComposerSearchItem = ChatComposerSearchItem> {
+export interface ChatComposerSearchSource<
+  T extends ChatComposerSearchItem = ChatComposerSearchItem,
+> {
   search(query: string): Promise<T[]> | T[];
   bootstrap?(): Promise<T[]> | T[];
   cancel?(): void;

@@ -28,9 +28,16 @@ async function make(attributes = ''): Promise<TctChatComposerTokenElement> {
 
 runElementSuite({
   tag: 'tct-chat-composer-token-element',
-  render: () => `<tct-chat-composer-token-element value="@ada" label="Ada"></tct-chat-composer-token-element>`,
+  render: () =>
+    `<tct-chat-composer-token-element value="@ada" label="Ada"></tct-chat-composer-token-element>`,
   properties: {value: '@grace', label: 'Grace', variant: 'info', icon: 'user', expandable: true},
-  attributes: {value: 'value', label: 'label', variant: 'variant', icon: 'icon', expandable: 'expandable'},
+  attributes: {
+    value: 'value',
+    label: 'label',
+    variant: 'variant',
+    icon: 'icon',
+    expandable: 'expandable',
+  },
   events: ['tct-chat-token-expand'],
 });
 
@@ -119,7 +126,9 @@ describe('tct-chat-composer-token-element: named for assistive technology', () =
     const root = await fixture<HTMLElement>(
       `<div lang="de-DE"><tct-chat-composer-token-element expandable value="${'x'.repeat(300)}"></tct-chat-composer-token-element></div>`,
     );
-    const token = root.querySelector<TctChatComposerTokenElement>('tct-chat-composer-token-element')!;
+    const token = root.querySelector<TctChatComposerTokenElement>(
+      'tct-chat-composer-token-element',
+    )!;
     // English defaults follow English plural rules; a translated catalog (when one ships the id) would replace them.
     await waitUntil(() => token.accessibleName.length > 0, 'a name');
     expect(token.accessibleName).toContain('300');
@@ -132,7 +141,9 @@ describe('tct-chat-composer-token-element: right to left and forced colours', ()
       `<div style="inline-size: 300px; padding-block-start: 140px"><span>שלום <tct-chat-composer-token-element value="@ada" label="Ada"></tct-chat-composer-token-element></span></div>`,
       {dir: 'rtl'},
     );
-    const token = root.querySelector<TctChatComposerTokenElement>('tct-chat-composer-token-element')!;
+    const token = root.querySelector<TctChatComposerTokenElement>(
+      'tct-chat-composer-token-element',
+    )!;
     const word = root.querySelector('span')!.getBoundingClientRect();
     // The word comes first at the inline start (right), the chip after it toward the left.
     expect(token.getBoundingClientRect().right).toBeLessThanOrEqual(word.right);
@@ -158,7 +169,9 @@ describe('tct-chat-composer-token-element: right to left and forced colours', ()
 describe('tct-chat-composer-token-element: an expandable token', () => {
   it('previews the text in a hover card with the counts and an Expand button', async () => {
     const token = await make(`expandable value="${'w'.repeat(40)}\nsecond line"`);
-    const card = token.shadowRoot!.querySelector<HTMLElement & {show(): Promise<void>}>('tct-hover-card')!;
+    const card = token.shadowRoot!.querySelector<HTMLElement & {show(): Promise<void>}>(
+      'tct-hover-card',
+    )!;
     await card.show();
     const preview = token.shadowRoot!.querySelector<HTMLElement>('.preview')!;
     expect(preview.textContent).toBe(`${'w'.repeat(40)}\nsecond line`);
@@ -170,9 +183,13 @@ describe('tct-chat-composer-token-element: an expandable token', () => {
   it('fires a cancelable tct-chat-token-expand with the value, once, when Expand is activated', async () => {
     const token = await make(`expandable value="${'q'.repeat(30)}"`);
     const events = recordEvents(token, ['tct-chat-token-expand']);
-    const card = token.shadowRoot!.querySelector<HTMLElement & {show(): Promise<void>}>('tct-hover-card')!;
+    const card = token.shadowRoot!.querySelector<HTMLElement & {show(): Promise<void>}>(
+      'tct-hover-card',
+    )!;
     await card.show();
-    await animationsFinished(token.shadowRoot!.querySelector('tct-hover-card')!.shadowRoot!.querySelector('.layer')!);
+    await animationsFinished(
+      token.shadowRoot!.querySelector('tct-hover-card')!.shadowRoot!.querySelector('.layer')!,
+    );
     await userEvent.click(token.shadowRoot!.querySelector('tct-button')!);
     expectEventCounts(events, {'tct-chat-token-expand': 1});
     expectEventFlags(events.events[0]!, {bubbles: true, composed: true, cancelable: true});
@@ -190,10 +207,16 @@ describe('tct-chat-composer-token-element: an expandable token', () => {
         `<div style="padding-block-start: 200px"><tct-chat-composer-token-element expandable value="${'z'.repeat(80)}"></tct-chat-composer-token-element><tct-chat-composer-token-element value="@a" label="Ada" variant="success"></tct-chat-composer-token-element></div>`,
         {theme},
       );
-      const token = root.querySelector<TctChatComposerTokenElement>('tct-chat-composer-token-element')!;
-      const card = token.shadowRoot!.querySelector<HTMLElement & {show(): Promise<void>}>('tct-hover-card')!;
+      const token = root.querySelector<TctChatComposerTokenElement>(
+        'tct-chat-composer-token-element',
+      )!;
+      const card = token.shadowRoot!.querySelector<HTMLElement & {show(): Promise<void>}>(
+        'tct-hover-card',
+      )!;
       await card.show();
-      await animationsFinished(token.shadowRoot!.querySelector('tct-hover-card')!.shadowRoot!.querySelector('.layer')!);
+      await animationsFinished(
+        token.shadowRoot!.querySelector('tct-hover-card')!.shadowRoot!.querySelector('.layer')!,
+      );
       await expectAccessible(root);
     }
   });

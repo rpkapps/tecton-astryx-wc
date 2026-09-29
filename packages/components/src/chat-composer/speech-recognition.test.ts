@@ -210,7 +210,10 @@ describe('SpeechRecognitionController: a session', () => {
     await waitUntil(() => controller.isListening, 'listening');
     const first = last();
     controller.start();
-    await waitUntil(() => FakeRecognition.instances.length === 2 && last().started === 1, 'restarted');
+    await waitUntil(
+      () => FakeRecognition.instances.length === 2 && last().started === 1,
+      'restarted',
+    );
     expect(first.aborted).toBe(1);
     await waitUntil(() => controller.isListening, 'the new recognition is listening');
     controller.dispose();
@@ -343,7 +346,12 @@ describe('ChatDictationController', () => {
     await waitUntil(() => controller.isListening, 'listening');
     last().say([['open the', false]]);
     last().say([['open the pod bay doors', true]]);
-    expect(input.calls).toEqual(['interim:open the', 'clear', 'focus', 'insert:open the pod bay doors ']);
+    expect(input.calls).toEqual([
+      'interim:open the',
+      'clear',
+      'focus',
+      'insert:open the pod bay doors ',
+    ]);
     expect(results).toEqual(['open the pod bay doors']);
     controller.stop();
     await waitUntil(() => !controller.isListening, 'stopped');
@@ -383,7 +391,7 @@ describe('ChatDictationController', () => {
     other.dispose();
   });
 
-  it('applies the caller\'s transform before the caps rule', async () => {
+  it("applies the caller's transform before the caps rule", async () => {
     stubMicrophone();
     const seen: string[] = [];
     const controller = new Loud(null, {

@@ -21,7 +21,8 @@ const PEOPLE: ChatComposerSearchItem[] = [
 const people = (items = PEOPLE): ChatComposerTrigger => ({
   character: '@',
   searchSource: {
-    search: (query) => items.filter((item) => item.label.toLowerCase().includes(query.toLowerCase())),
+    search: (query) =>
+      items.filter((item) => item.label.toLowerCase().includes(query.toLowerCase())),
   },
   onSelect: (item) => ({value: `@${item.id}`, label: item.label}),
 });
@@ -60,7 +61,8 @@ async function type(input: TctChatComposerInput, text: string): Promise<void> {
 const opened = async (input: TctChatComposerInput, count?: number): Promise<void> => {
   await waitUntil(() => isOpen(input), 'the menu opens');
   await input.updateComplete;
-  if (count !== undefined) await waitUntil(() => optionsOf(input).length === count, `${count} options`);
+  if (count !== undefined)
+    await waitUntil(() => optionsOf(input).length === count, `${count} options`);
 };
 
 describe('trigger menu: roles and opening', () => {
@@ -76,7 +78,8 @@ describe('trigger menu: roles and opening', () => {
     expect(editable.getAttribute('aria-expanded')).toBe('false');
     // aria-multiline is not allowed on a combobox.
     expect(editable.hasAttribute('aria-multiline')).toBe(false);
-    if (isChromium) expect(await axNode(editable)).toMatchObject({role: 'combobox', expanded: 'false'});
+    if (isChromium)
+      expect(await axNode(editable)).toMatchObject({role: 'combobox', expanded: 'false'});
     await expectAccessible(box);
   });
 
@@ -131,7 +134,9 @@ describe('trigger menu: roles and opening', () => {
     const input = await make();
     const editable = editableOf(input);
     editable.focus();
-    editable.dispatchEvent(new CompositionEvent('compositionstart', {bubbles: true, composed: true}));
+    editable.dispatchEvent(
+      new CompositionEvent('compositionstart', {bubbles: true, composed: true}),
+    );
     input.insertText('@');
     await input.updateComplete;
     expect(isOpen(input)).toBe(false);
@@ -158,12 +163,14 @@ describe('trigger menu: keyboard', () => {
     await type(input, '@');
     await opened(input, 3);
     const editable = editableOf(input);
-    const highlighted = (): number => optionsOf(input).findIndex((o) => o.getAttribute('aria-selected') === 'true');
+    const highlighted = (): number =>
+      optionsOf(input).findIndex((o) => o.getAttribute('aria-selected') === 'true');
     await userEvent.keyboard('{ArrowDown}');
     expect(highlighted()).toBe(1);
     await input.updateComplete;
     expect(editable.getAttribute('aria-activedescendant')).toBe(optionsOf(input)[1]!.id);
-    if (isChromium) expect(await axActiveDescendant(editable, optionsOf(input))).toBe(optionsOf(input)[1]);
+    if (isChromium)
+      expect(await axActiveDescendant(editable, optionsOf(input))).toBe(optionsOf(input)[1]);
     await userEvent.keyboard('{ArrowDown}{ArrowDown}');
     expect(highlighted()).toBe(0);
     await userEvent.keyboard('{ArrowUp}');
@@ -236,17 +243,21 @@ describe('trigger menu: keyboard', () => {
     expect(submits.events[0]!.value).toBe('x @zzz');
   });
 
-  it('shows the localised empty text, or the trigger\'s own', async () => {
+  it("shows the localised empty text, or the trigger's own", async () => {
     const input = await make();
     await type(input, '@zzz');
     await waitUntil(() => input.shadowRoot!.querySelector('.status') !== null, 'empty message');
     expect(input.shadowRoot!.querySelector('.status')!.textContent.trim()).toBe('No results');
     expect(input.shadowRoot!.querySelector('.status')!.getAttribute('role')).toBe('status');
-    const custom = await make([{...people(), emptySearchResultsText: 'Nobody found', menuLabel: 'People'}]);
+    const custom = await make([
+      {...people(), emptySearchResultsText: 'Nobody found', menuLabel: 'People'},
+    ]);
     await type(custom, '@zzz');
     await waitUntil(() => custom.shadowRoot!.querySelector('.status') !== null, 'empty message');
     expect(custom.shadowRoot!.querySelector('.status')!.textContent.trim()).toBe('Nobody found');
-    expect(custom.shadowRoot!.querySelector('[role="listbox"]')!.getAttribute('aria-label')).toBe('People');
+    expect(custom.shadowRoot!.querySelector('[role="listbox"]')!.getAttribute('aria-label')).toBe(
+      'People',
+    );
   });
 });
 
@@ -266,7 +277,10 @@ describe('trigger menu: pointer and dismissal', () => {
     await type(input, '@');
     await opened(input, 3);
     await userEvent.hover(optionsOf(input)[1]!);
-    await waitUntil(() => optionsOf(input)[1]!.getAttribute('aria-selected') === 'true', 'hover highlights');
+    await waitUntil(
+      () => optionsOf(input)[1]!.getAttribute('aria-selected') === 'true',
+      'hover highlights',
+    );
     expect(input.value).toBe('@');
   });
 
@@ -331,13 +345,20 @@ describe('trigger menu: searching', () => {
     const input = await make([trigger], 'debounce-ms="0"');
     await type(input, '@');
     await waitUntil(() => calls.length === 1, 'a search started');
-    await waitUntil(() => input.shadowRoot!.querySelector('.status') !== null, 'the loading status');
+    await waitUntil(
+      () => input.shadowRoot!.querySelector('.status') !== null,
+      'the loading status',
+    );
     expect(input.shadowRoot!.querySelector('.status')!.textContent.trim()).toBe('Looking…');
-    expect(input.shadowRoot!.querySelector('[role="listbox"]')!.getAttribute('aria-busy')).toBe('true');
+    expect(input.shadowRoot!.querySelector('[role="listbox"]')!.getAttribute('aria-busy')).toBe(
+      'true',
+    );
     calls[0]!.resolve([PEOPLE[0]!]);
     await waitUntil(() => optionsOf(input).length === 1, 'the result');
     expect(input.shadowRoot!.querySelector('.status')).toBeNull();
-    expect(input.shadowRoot!.querySelector('[role="listbox"]')!.hasAttribute('aria-busy')).toBe(false);
+    expect(input.shadowRoot!.querySelector('[role="listbox"]')!.hasAttribute('aria-busy')).toBe(
+      false,
+    );
   });
 
   it('cancels the search it supersedes and drops a stale answer', async () => {
@@ -374,7 +395,10 @@ describe('trigger menu: searching', () => {
     await type(input, '@');
     await waitUntil(() => calls.length === 1, 'search');
     calls[0]!.reject();
-    await waitUntil(() => input.shadowRoot!.querySelector('.status')?.textContent?.trim() === 'No results', 'empty');
+    await waitUntil(
+      () => input.shadowRoot!.querySelector('.status')?.textContent?.trim() === 'No results',
+      'empty',
+    );
   });
 
   it('a synchronous source answers within the same keystroke', async () => {
@@ -397,7 +421,10 @@ describe('trigger menu: rendering items', () => {
     await type(input, '@');
     await opened(input, 4);
     const groups = [...input.shadowRoot!.querySelectorAll<HTMLElement>('[role="group"]')];
-    expect(groups.map((group) => group.getAttribute('aria-label'))).toEqual(['Navigation', 'Preferences']);
+    expect(groups.map((group) => group.getAttribute('aria-label'))).toEqual([
+      'Navigation',
+      'Preferences',
+    ]);
     expect(optionsOf(input).map((option) => option.textContent.trim())).toEqual([
       'Home',
       'Settings',
@@ -441,7 +468,9 @@ describe('trigger menu: rendering items', () => {
         {theme},
       );
       const input = root.querySelector<TctChatComposerInput>('tct-chat-composer-input')!;
-      input.triggers = [people([...PEOPLE, {id: 'x', label: 'Grouped', auxiliaryData: {group: 'Group'}}])];
+      input.triggers = [
+        people([...PEOPLE, {id: 'x', label: 'Grouped', auxiliaryData: {group: 'Group'}}]),
+      ];
       await input.updateComplete;
       await type(input, '@');
       await opened(input, 4);

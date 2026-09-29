@@ -121,7 +121,8 @@ export class TctChatComposer extends TctElement {
   @property({reflect: true}) elevation: ChatComposerElevation = 'low';
 
   /** Severity of the status strip: `error` or `warning`. Unset: no strip. (Upstream `status.type`.) */
-  @property({reflect: true, attribute: 'status-type'}) statusType: ChatComposerStatusType | undefined;
+  @property({reflect: true, attribute: 'status-type'}) statusType:
+    ChatComposerStatusType | undefined;
 
   /** Text of the status strip (upstream `status.message`). */
   @property({attribute: 'status-message'}) statusMessage: string | undefined;
@@ -242,9 +243,9 @@ export class TctChatComposer extends TctElement {
     return html`<div
       class="base"
       part="base"
-      data-density=${(CHAT_DENSITIES as readonly string[]).includes(this.density)
-        ? this.density
-        : 'balanced'}
+      data-density=${
+        (CHAT_DENSITIES as readonly string[]).includes(this.density) ? this.density : 'balanced'
+      }
       ?data-disabled=${this.disabled}
       ?data-stop=${this.stopShown}
     >
@@ -311,7 +312,9 @@ export class TctChatComposer extends TctElement {
       this.#inputControl.focus();
       return;
     }
-    this.querySelector<HTMLElement>('[contenteditable="true"], [contenteditable="plaintext-only"], textarea')?.focus();
+    this.querySelector<HTMLElement>(
+      '[contenteditable="true"], [contenteditable="plaintext-only"], textarea',
+    )?.focus();
   };
 
   readonly #onBodyPointerDown = (): void => {

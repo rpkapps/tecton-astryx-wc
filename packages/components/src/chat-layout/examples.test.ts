@@ -63,7 +63,9 @@ async function mountExample(source: string, theme: 'light' | 'dark'): Promise<HT
 /** Waits until nothing is transitioning, so axe reads settled colours. */
 async function settle(): Promise<void> {
   await nextFrame();
-  await Promise.all(document.getAnimations().map((animation) => animation.finished.catch(() => {})));
+  await Promise.all(
+    document.getAnimations().map((animation) => animation.finished.catch(() => {})),
+  );
 }
 
 describe('example scripts', () => {
@@ -74,17 +76,22 @@ describe('example scripts', () => {
     const layout = root.querySelector<TctChatLayout>('#follow-layout')!;
     expect(list.querySelectorAll('tct-chat-message')).toHaveLength(6);
     await composer.updateComplete;
-    const editable = composer.shadowRoot!
-      .querySelector('tct-chat-composer-input')!
+    const editable = composer
+      .shadowRoot!.querySelector('tct-chat-composer-input')!
       .shadowRoot!.querySelector<HTMLElement>('.editable')!;
     editable.focus();
     await userEvent.keyboard('How is C-19?{Enter}');
-    await waitUntil(() => list.querySelectorAll('tct-chat-message').length === 8, 'the message and the reply');
+    await waitUntil(
+      () => list.querySelectorAll('tct-chat-message').length === 8,
+      'the message and the reply',
+    );
     expect(composer.stopShown).toBe(true);
     expect(layout.isFollowing).toBe(true);
     // Stop ends the reply: the composer offers Send again.
     const send = composer.shadowRoot!.querySelector('tct-chat-send-button')!;
-    await userEvent.click(send.shadowRoot!.querySelector('tct-button')!.shadowRoot!.querySelector('button')!);
+    await userEvent.click(
+      send.shadowRoot!.querySelector('tct-button')!.shadowRoot!.querySelector('button')!,
+    );
     await waitUntil(() => !composer.stopShown, 'the reply is stopped');
     expect(list.streaming).toBe(false);
     cleanupFixtures();

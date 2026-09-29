@@ -441,27 +441,28 @@ export class ChatTriggerMenuController implements ReactiveController {
                   const options = repeat(
                     section.items,
                     ({item}) => item.id,
-                    ({item, index}) => html`<div
-                      class=${classMap({option: true, highlighted: index === highlighted})}
-                      id=${this.#optionId(index)}
-                      role="option"
-                      tabindex="-1"
-                      aria-selected=${index === highlighted ? 'true' : 'false'}
-                      @mousedown=${(event: MouseEvent) => {
-                        // Focus stays in the editable: the choice is made without a blur.
-                        event.preventDefault();
-                        this.#select(item);
-                      }}
-                      @mouseenter=${() => {
-                        if (index === this.#state.highlighted) return;
-                        // Hovering highlights only; scrolling here would move the next option under a
-                        // still pointer and start a runaway scroll.
-                        this.#state = {...this.#state, highlighted: index};
-                        this.#host.requestUpdate();
-                      }}
-                    >
-                      ${trigger?.renderItem ? trigger.renderItem(item) : html`<span class="label">${item.label}</span>`}
-                    </div>`,
+                    ({item, index}) =>
+                      html`<div
+                        class=${classMap({option: true, highlighted: index === highlighted})}
+                        id=${this.#optionId(index)}
+                        role="option"
+                        tabindex="-1"
+                        aria-selected=${index === highlighted ? 'true' : 'false'}
+                        @mousedown=${(event: MouseEvent) => {
+                          // Focus stays in the editable: the choice is made without a blur.
+                          event.preventDefault();
+                          this.#select(item);
+                        }}
+                        @mouseenter=${() => {
+                          if (index === this.#state.highlighted) return;
+                          // Hovering highlights only; scrolling here would move the next option under a
+                          // still pointer and start a runaway scroll.
+                          this.#state = {...this.#state, highlighted: index};
+                          this.#host.requestUpdate();
+                        }}
+                      >
+                        ${trigger?.renderItem ? trigger.renderItem(item) : html`<span class="label">${item.label}</span>`}
+                      </div>`,
                   );
                   return section.heading === null
                     ? options

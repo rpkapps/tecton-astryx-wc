@@ -14,7 +14,9 @@
 /** Whether `element` is what scrolls the page (the document's scrolling element, or `<body>` in quirks mode). */
 export function isViewportScroller(element: Element): boolean {
   const doc = element.ownerDocument;
-  return element === doc.scrollingElement || element === doc.documentElement || element === doc.body;
+  return (
+    element === doc.scrollingElement || element === doc.documentElement || element === doc.body
+  );
 }
 
 const cache = new WeakMap<HTMLElement, HTMLElement>();
@@ -35,11 +37,7 @@ export function viewportScroller(element: HTMLElement): HTMLElement {
           listener: EventListenerOrEventListenerObject | null,
           options?: boolean | AddEventListenerOptions,
         ) => {
-          (isViewportEvent(type) ? doc : target).addEventListener(
-            type,
-            listener!,
-            options,
-          );
+          (isViewportEvent(type) ? doc : target).addEventListener(type, listener!, options);
         };
       }
       if (property === 'removeEventListener') {
@@ -48,11 +46,7 @@ export function viewportScroller(element: HTMLElement): HTMLElement {
           listener: EventListenerOrEventListenerObject | null,
           options?: boolean | EventListenerOptions,
         ) => {
-          (isViewportEvent(type) ? doc : target).removeEventListener(
-            type,
-            listener!,
-            options,
-          );
+          (isViewportEvent(type) ? doc : target).removeEventListener(type, listener!, options);
         };
       }
       const value: unknown = Reflect.get(target, property, target);
