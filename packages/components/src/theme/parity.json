@@ -1,0 +1,96 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "theme",
+  "workPackage": "WP-F",
+  "entries": {
+    "core.theme": {
+      "tag": "tct-theme",
+      "status": "implemented",
+      "upstream": {
+        "name": "Theme",
+        "path": "packages/core/src/theme/Theme.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "theme",
+          "kind": "prop",
+          "target": "theme",
+          "as": "property",
+          "default": "tecton",
+          "notes": "A theme name, or an object with a name (also the theme attribute, as a string). Only the name is used until core/theme (WP-1) wires a DefinedTheme to it."
+        },
+        {
+          "upstream": "mode",
+          "kind": "prop",
+          "target": "mode",
+          "as": "attribute",
+          "reflect": true,
+          "default": "system"
+        },
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"}
+      ],
+      "hooks": [
+        {
+          "upstream": "ThemeContext",
+          "target": "themeContext",
+          "as": "context",
+          "notes": "@tecton-astryx/core/context/keys.js: {name, mode}, mode already resolved to light or dark."
+        },
+        {
+          "upstream": "useTheme",
+          "target": "themeContext",
+          "as": "context",
+          "notes": "Consume themeContext with a ContextConsumer for name and resolved mode; read token values with getComputedStyle(host).getPropertyValue(). The upstream token() resolver arrives with core/theme (WP-1)."
+        },
+        {
+          "upstream": "useThemeName",
+          "target": "themeContext",
+          "as": "context",
+          "notes": "themeContext value .name."
+        },
+        {
+          "upstream": "useMediaQuery",
+          "target": "MediaQueryController",
+          "as": "controller",
+          "notes": "Theme used it to resolve system mode; tct-theme listens to (prefers-color-scheme: dark) itself and only while system mode is live."
+        }
+      ],
+      "differences": [
+        {
+          "id": "THEME-01",
+          "type": "approved-api-difference",
+          "text": "Only the theme name is used. Runtime defineTheme() token overrides, component overrides and style injection belong to core/theme (WP-1), which wires a DefinedTheme to the theme property; the Tecton token set comes from tokens.css."
+        },
+        {
+          "id": "THEME-02",
+          "type": "tecton-visual",
+          "text": "The wrapper is a block that paints the page surface (--color-background-body) and text colour, not display: contents (theme-island rule, A§8.1), so a nested island is visible on its own. It uses the token blocks keyed by data-theme; data-astryx-theme is data-tct-theme."
+        },
+        {
+          "id": "THEME-03",
+          "type": "approved-api-difference",
+          "text": "The root synchronisation also restores the previous <html data-theme> and data-tct-theme values when the last root theme disconnects (upstream removed them), and several roots do not fight: the first owns <html> and the next takes over when it leaves."
+        },
+        {
+          "id": "THEME-04",
+          "type": "approved-api-difference",
+          "text": "mode is reflected and drives the island's color-scheme through attribute selectors, and system inside a forced island follows the operating system (color-scheme: light dark), as upstream's system class did."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:dark-mode] color-scheme on the root through data-theme, system default, media-query change listener; [mwg:component-specific-light-dark-theme] color-scheme on an island so light-dark() tokens resolve per subtree; [mwg:custom-elements] provider without a shadow root; [mwg:styling-web-components] light-DOM sheet adopted once per root."
+    }
+  }
+}

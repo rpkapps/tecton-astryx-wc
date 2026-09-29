@@ -1,0 +1,9 @@
+/*
+ * tct-size-provider: no shadow root, no box of its own. Light-DOM sheet delivered by
+ * TctProviderElement (adoptLightDomStyles) and by the static light-dom.css build (A§6.7).
+ */
+@layer tecton.light-dom {
+  :where(tct-size-provider:not([hidden])) {
+    display: contents;
+  }
+}
