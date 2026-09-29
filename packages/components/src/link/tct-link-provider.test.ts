@@ -7,6 +7,7 @@ import {html} from 'lit';
 import {userEvent} from 'vitest/browser';
 import {afterEach, describe, expect, it, vi} from 'vitest';
 import {fixture} from '@tecton-astryx/testing/fixture.js';
+import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
 import '../avatar/define.js';
 import '../button/define.js';
 import './define.js';
@@ -15,50 +16,13 @@ import type {TctButton} from '../button/tct-button.js';
 import type {TctLink} from './tct-link.js';
 import type {LinkNavigate, TctLinkProvider} from './tct-link-provider.js';
 
-// `runElementSuite` asserts a shadow root after reconnecting, which a light-DOM provider by design has not
-// (ARCHITECTURE §8: providers render nothing into the light DOM); the lifecycle checks it makes are
-// repeated here without that assertion. Requested: a `shadow: false` option in the suite.
-describe('tct-link-provider: element lifecycle', () => {
-  it('is registered under its tag, and registering again is a no-op without warnings', async () => {
-    const constructor = customElements.get('tct-link-provider')!;
-    expect(constructor).toBeDefined();
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
-    try {
-      const {defineElement} = await import('@tecton-astryx/core/define.js');
-      defineElement(constructor as Parameters<typeof defineElement>[0]);
-      expect(warn).not.toHaveBeenCalled();
-    } finally {
-      warn.mockRestore();
-    }
-  });
-
-  it('keeps navigate across reconnect', async () => {
-    const navigate: LinkNavigate = () => true;
-    const provider = document.createElement('tct-link-provider');
-    provider.navigate = navigate;
-    const wrapper = await fixture<HTMLElement>(html`<div></div>`);
-    wrapper.append(provider);
-    await provider.updateComplete;
-    provider.remove();
-    wrapper.append(provider);
-    await provider.updateComplete;
-    expect(provider.navigate).toBe(navigate);
-    expect(provider.isConnected).toBe(true);
-    expect(provider.shadowRoot).toBeNull();
-  });
-
-  it('fires no events on property writes and carries no box or semantics', async () => {
-    const {provider} = await mount(() => true);
-    const events: string[] = [];
-    for (const type of ['input', 'change', 'tct-change']) {
-      provider.addEventListener(type, () => events.push(type));
-    }
-    provider.navigate = () => false;
-    await provider.updateComplete;
-    expect(events).toEqual([]);
-    expect(provider.getAttribute('role')).toBeNull();
-    expect(provider.hasAttribute('tabindex')).toBe(false);
-  });
+runElementSuite({
+  tag: 'tct-link-provider',
+  render: () => html`<tct-link-provider><tct-link href="/docs">Docs</tct-link></tct-link-provider>`,
+  properties: {navigate: () => true},
+  // A provider is transparent to layout (display: contents) and draws no box; it has no shadow root.
+  hostBox: false,
+  shadow: false,
 });
 
 const anchorOf = (link: TctLink): HTMLAnchorElement => link.control as HTMLAnchorElement;
@@ -90,6 +54,8 @@ describe('tct-link-provider (LinkProvider.test.tsx / useLinkComponent.test.tsx)'
     expect(provider.shadowRoot).toBeNull();
     expect(link.parentElement).toBe(provider);
     expect(provider.children).toHaveLength(1);
+    expect(provider.getAttribute('role')).toBeNull();
+    expect(provider.hasAttribute('tabindex')).toBe(false);
   });
 
   it('offers a plain click on an internal link to navigate and cancels the native navigation', async () => {

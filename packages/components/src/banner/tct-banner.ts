@@ -1,4 +1,12 @@
-import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
+import {
+  html,
+  nothing,
+  unsafeCSS,
+  type CSSResult,
+  type CSSResultGroup,
+  type PropertyValues,
+  type TemplateResult,
+} from 'lit';
 import {property} from 'lit/decorators.js';
 import english from '@tecton-astryx/locales/en/banner.js';
 import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
@@ -6,6 +14,7 @@ import {TctDismissEvent} from '@tecton-astryx/core/events/tct-dismiss.js';
 import {TctAfterOpenChangeEvent} from '@tecton-astryx/core/events/tct-after-open-change.js';
 import {TctOpenChangeEvent} from '@tecton-astryx/core/events/tct-open-change.js';
 import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
+import {adoptLightDomStyles} from '@tecton-astryx/core/styles/light-dom.js';
 import {TctElement} from '@tecton-astryx/core/tct-element.js';
 import {devWarn} from '@tecton-astryx/core/utils/dev.js';
 import {IdController} from '@tecton-astryx/core/utils/id.js';
@@ -15,6 +24,7 @@ import {TctIcon} from '../icon/tct-icon.js';
 import base from '../styles/base.styles.css';
 import motion from '../styles/motion.styles.css';
 import styles from './tct-banner.styles.css';
+import lightStyles from './tct-banner.light.css?inline';
 import {
   BANNER_CONTAINERS,
   BANNER_ELEVATIONS,
@@ -113,6 +123,7 @@ export class TctBanner extends TctElement {
     },
     requestChange: (open) => this.dispatch(new TctOpenChangeEvent(open, 'trigger')),
   });
+  static #lightSheet: CSSResult | undefined;
   #focusOrigin: HTMLElement | null = null;
   #lastOpen: boolean | undefined;
 
@@ -129,6 +140,12 @@ export class TctBanner extends TctElement {
       },
       {capture: true},
     );
+  }
+
+  override connectedCallback(): void {
+    super.connectedCallback();
+    // Slotted links are light DOM: their sheet goes to the root that contains the banner (A§6.7).
+    adoptLightDomStyles(this, (TctBanner.#lightSheet ??= unsafeCSS(lightStyles)));
   }
 
   #remember(candidate: EventTarget | null): void {

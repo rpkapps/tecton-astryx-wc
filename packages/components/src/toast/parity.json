@@ -180,10 +180,6 @@
         {
           "file": "packages/components/src/button/tct-button.styles.css",
           "reason": "An inverted-surface hook for a ghost icon-only button (for example `--button-fg` / `--button-bg-hover` or a `data-surface=inverted` variant) would let the toast dismiss button become a tct-button; today the private `--_fg`/`--_bg` tokens cannot be reached from outside the shadow root."
-        },
-        {
-          "file": "packages/core/src/events/events.test.ts",
-          "reason": "Two new core event classes, `tct-toast-dismiss` and `tct-toast-hide`, were added in packages/core/src/events/ (flags and payload are asserted in toast/tct-toast.test.ts); add them to the shared events test if the orchestrator wants them listed there."
         }
       ],
       "sizeBudgetKb": 48,

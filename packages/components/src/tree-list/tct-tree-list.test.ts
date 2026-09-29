@@ -14,6 +14,7 @@ import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
 import {runKeyboardSuite, type KeyboardRow} from '@tecton-astryx/testing/suites/keyboard.js';
 import {isChromium} from '@tecton-astryx/testing/tier.js';
 import {nextFrame, waitUntil} from '@tecton-astryx/testing/timing.js';
+import '../text/define.js';
 import './define.js';
 import type {TctTreeList} from './tct-tree-list.js';
 import type {TreeListItemData} from './tree-list.types.js';
@@ -231,6 +232,47 @@ describe('tct-tree-list: rendering and semantics (TreeList.test.tsx)', () => {
       await expectAccessible(element.parentElement!);
     }
   });
+
+  // Regression: the description and the consumer's secondary end content are the secondary text role,
+  // which measured 3.54:1 on the dark selected-row fill (--tecton-color-table-row-selected).
+  it.skipIf(!isChromium).each(['light', 'dark'] as const)(
+    'keeps the description and secondary end content readable on a selected row (%s, axe color-contrast)',
+    async (colorScheme) => {
+      await emulateMedia({colorScheme});
+      // Consumer end content painted with the secondary text role, once as a tct-text, once as a span.
+      const secondary = document.createElement('tct-text');
+      secondary.color = 'secondary';
+      secondary.textContent = 'healthy';
+      const element = await make(
+        [
+          {
+            id: 'a',
+            label: 'Production',
+            description: '3 services',
+            isExpanded: true,
+            children: [
+              {
+                id: 'a1',
+                label: 'API',
+                description: 'v2.4.1',
+                isSelected: true,
+                endContent: secondary,
+              },
+            ],
+          },
+        ],
+        'aria-label="Deployments"',
+      );
+      const wrapper = element.parentElement!;
+      // The fixture page has no themed background of its own: give it the body surface of the mode.
+      wrapper.style.colorScheme = colorScheme;
+      wrapper.style.backgroundColor = 'var(--color-background-body)';
+      const results = await expectAccessible(wrapper, {runOnly: ['color-contrast']});
+      // The selected row's text was actually measured, not skipped as "incomplete".
+      expect(results.passes.some((rule) => rule.id === 'color-contrast')).toBe(true);
+      expect(rowOf(element, 'a1').hasAttribute('data-selected')).toBe(true);
+    },
+  );
 });
 
 describe('tct-tree-list: expansion', () => {

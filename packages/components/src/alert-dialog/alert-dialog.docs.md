@@ -59,7 +59,7 @@ the page behind it is inert, focus stays inside, and it cannot be dismissed by a
 
 ## Anatomy
 
-- The **dialog surface**, backdrop and motion come from `tct-dialog` (purpose `required`).
+- The **dialog surface**, backdrop and motion come from `tct-dialog` (`purpose="form"` with `alert`).
 - The **heading** (level 2, `part="content"`) names the dialog; the **description** describes it, so a
   screen reader announces both when it opens.
 - An optional **extra content** slot sits under the description.
