@@ -1,0 +1,73 @@
+/*
+ * tct-stepper. The list is a flex row or column of steps; the steps abut in the on-track arrangement so
+ * their connector segments read as one line, and gap by one connector width otherwise. The collapsed
+ * summary is a row: the previous and next buttons bracket the active step's name. [mwg:css-layout]
+ */
+@layer component {
+  :host {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  .frame {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    inline-size: 100%;
+  }
+
+  .list {
+    display: flex;
+    inline-size: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .list[data-orientation='horizontal'] {
+    flex-direction: row;
+    align-items: flex-start;
+    /* the gap between steps is the break between connector segments: one connector thick */
+    gap: var(--spacing-1);
+  }
+
+  .list[data-orientation='vertical'] {
+    flex-direction: column;
+    gap: var(--spacing-1);
+  }
+
+  /* On-track steps abut so their connector segments form one continuous line. */
+  .list[data-position='on-track'] {
+    gap: 0;
+  }
+
+  .list[data-orientation='horizontal'] ::slotted(tct-step) {
+    flex: 1;
+    min-inline-size: 0;
+  }
+
+  .summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-2);
+    min-inline-size: 0;
+  }
+
+  /* Centred, so the name sits under the middle of the track rather than drifting toward a control. */
+  .summary-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-inline-size: 0;
+    text-align: center;
+  }
+
+  .summary-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-0-5);
+    min-inline-size: 0;
+  }
+}

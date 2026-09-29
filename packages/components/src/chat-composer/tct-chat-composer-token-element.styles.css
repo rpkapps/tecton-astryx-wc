@@ -1,0 +1,55 @@
+/*
+ * tct-chat-composer-token-element. The host is layout only (an inline flex box that sits on the text
+ * baseline like a word); the chip is the badge, which paints itself. The card of an expandable token
+ * previews the pasted text in the code face, scrolling past a design cap. [mwg:css] [mwg:shadow-dom]
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+    max-inline-size: 100%;
+    vertical-align: middle;
+  }
+
+  .base {
+    display: inline-flex;
+    max-inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  .chip {
+    display: inline-flex;
+    max-inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+    max-inline-size: 30rem; /* design: the preview card is 480px wide at most */
+  }
+
+  .preview {
+    max-block-size: 15rem; /* design: the preview scrolls past 240px */
+    /* physical: overflow-block is not available in every Tier-2 engine */
+    overflow-y: auto;
+    color: var(--color-text-primary);
+    font-family: var(--font-family-code);
+    font-size: var(--text-supporting-size);
+    line-height: var(--text-supporting-leading);
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-2);
+  }
+
+  .meta {
+    color: var(--color-text-secondary);
+    font-size: var(--text-supporting-size);
+  }
+}

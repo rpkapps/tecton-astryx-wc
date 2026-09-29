@@ -1,0 +1,21 @@
+<!-- title: Sections and descriptions; description: Options can carry descriptions and be grouped under titled sections. Rows you have chosen are listed first in their group while the list is open. -->
+<div id="sections-root">
+  <tct-vstack max-width="360">
+    <tct-multi-selector label="Notifications" trigger-display="labels"></tct-multi-selector>
+  </tct-vstack>
+  <script type="module">
+    const selector = document.querySelector('#sections-root tct-multi-selector');
+    selector.options = [
+      {type: 'section', title: 'Activity', options: [
+        {value: 'mentions', label: 'Mentions', description: 'When someone mentions you'},
+        {value: 'replies', label: 'Replies', description: 'When someone replies to you'},
+      ]},
+      {type: 'divider'},
+      {type: 'section', title: 'Digest', options: [
+        {value: 'weekly', label: 'Weekly summary'},
+        {value: 'billing', label: 'Billing notices', disabled: true},
+      ]},
+    ];
+    selector.values = ['mentions'];
+  </script>
+</div>

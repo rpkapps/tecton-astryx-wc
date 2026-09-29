@@ -1,0 +1,9 @@
+<!-- title: Basic; description: Choose one value from a list. The trigger is a select-only combobox: Enter, Space and the arrow keys open it, the arrows move a highlight, Enter chooses, Escape closes. -->
+<div id="basic-root">
+  <tct-vstack max-width="360">
+    <tct-selector label="Fruit" placeholder="Choose a fruit" value="Banana"></tct-selector>
+  </tct-vstack>
+  <script type="module">
+    document.querySelector('#basic-root tct-selector').options = ['Apple', 'Banana', 'Cherry', 'Dragon fruit', 'Elderberry'];
+  </script>
+</div>

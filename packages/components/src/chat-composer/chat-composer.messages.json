@@ -1,0 +1,14 @@
+{
+  "@tct.chat-composer.pastedText": {
+    "defaultMessage": "{lines, plural, one {{chars, plural, one {# char} other {# chars}}} other {# lines, {chars, plural, one {# char} other {# chars}}}}",
+    "description": "Label of the chip that stands for a long pasted text in the chat composer: how many lines and characters it holds. `{lines}` is the number of lines and `{chars}` the number of characters. A single line reads `812 chars`; several read `3 lines, 812 chars`. Also the chip's accessible name."
+  },
+  "@tct.chat-composer.noResults": {
+    "defaultMessage": "No results",
+    "description": "Text in the suggestion popup of the chat composer when a trigger character (`@`, `/`) matched nothing. Short, neutral."
+  },
+  "@tct.chat-composer.searching": {
+    "defaultMessage": "Searching…",
+    "description": "Text in the suggestion popup of the chat composer while an asynchronous search is running. Present progressive; the trailing `…` is one character."
+  }
+}

@@ -1,0 +1,37 @@
+<!-- title: Row status and row numbers; description: A narrow leading status column (semantic outcomes or a custom colour and icon, each named for assistive technology) and a numbered row index column. -->
+<div id="table-row-status">
+  <tct-table label="Jobs"></tct-table>
+  <script type="module">
+    import {TableRowIndexController, TableRowStatusController} from '@tecton-wc/components/table/define.js';
+
+    const rows = [
+      {id: 'j1', job: 'Nightly backup', duration: '4m 12s', result: 'success'},
+      {id: 'j2', job: 'Index rebuild', duration: '19m 03s', result: 'warning'},
+      {id: 'j3', job: 'Invoice export', duration: '0m 41s', result: 'error'},
+      {id: 'j4', job: 'Cache warm-up', duration: 'running', result: 'running'},
+    ];
+    const table = document.querySelector('#table-row-status tct-table');
+    const status = new TableRowStatusController(table, {
+      getStatus: (row) => {
+        switch (row.result) {
+          case 'success':
+            return {status: 'success', label: 'Succeeded'};
+          case 'warning':
+            return {status: 'warning', label: 'Finished with warnings'};
+          case 'error':
+            return {status: 'error', label: 'Failed'};
+          default:
+            return {color: 'blue', label: 'Running'};
+        }
+      },
+    });
+    const index = new TableRowIndexController(table, {data: rows});
+    table.idKey = 'id';
+    table.columns = [
+      {key: 'job', header: 'Job'},
+      {key: 'duration', header: 'Duration', align: 'end'},
+    ];
+    table.data = rows;
+    table.plugins = {status, index};
+  </script>
+</div>

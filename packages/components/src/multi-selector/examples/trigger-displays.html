@@ -1,0 +1,17 @@
+<!-- title: Trigger displays; description: The closed trigger shows the choice as a count, as the first labels, or as badges (max-badges sets how many before "+N"). formatValue writes the text of the count and labels displays. -->
+<div id="trigger-displays-root">
+  <tct-vstack max-width="360" gap="4">
+    <tct-multi-selector label="Count" trigger-display="count"></tct-multi-selector>
+    <tct-multi-selector label="Labels" trigger-display="labels"></tct-multi-selector>
+    <tct-multi-selector label="Badges" trigger-display="badges" max-badges="2"></tct-multi-selector>
+    <tct-multi-selector label="Custom format" trigger-display="count"></tct-multi-selector>
+  </tct-vstack>
+  <script type="module">
+    const selectors = document.querySelectorAll('#trigger-displays-root tct-multi-selector');
+    for (const selector of selectors) {
+      selector.options = ['Design', 'Engineering', 'Research', 'Support', 'Sales'];
+      selector.values = ['Design', 'Research', 'Sales'];
+    }
+    selectors[3].formatValue = (items) => `${items.length} of 5 teams`;
+  </script>
+</div>

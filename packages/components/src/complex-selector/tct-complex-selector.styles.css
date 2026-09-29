@@ -1,0 +1,35 @@
+/*
+ * tct-complex-selector: what the complex selector adds to the shared selector sheet: the popover surface
+ * is a dialog holding the author's content, so it scrolls as a whole and pads the content instead of
+ * being a list panel. The box, the trigger and the entry motion are the shared sheet.
+ * [mwg:styling-web-components] [mwg:animate-to-from-top-layer]
+ */
+@layer component {
+  .surface {
+    display: block;
+    max-block-size: min(
+      480px /* design: upstream complex selector content height cap */,
+      calc(100dvb - var(--spacing-8))
+    );
+
+    /* physical: overflow-block is not available in every Tier-2 engine */
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-user-select: text;
+    user-select: text;
+
+    /* An internal focus target (the popover's own entry when its content has no control), not a control. */
+    outline: none;
+  }
+
+  .content {
+    box-sizing: border-box;
+    padding: var(--spacing-3);
+  }
+
+  .start-slot {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+  }
+}

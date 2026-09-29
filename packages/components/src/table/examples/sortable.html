@@ -1,0 +1,30 @@
+<!-- title: Sortable columns; description: A sort state controller owns the sort and hands the table its sorted rows; the sort plugin adds the header buttons, aria-sort and the announcement. -->
+<div id="table-sortable">
+  <tct-table label="People, sortable"></tct-table>
+  <script type="module">
+    import {TableSortableController, TableSortableStateController} from '@tecton-wc/components/table/define.js';
+
+    const table = document.querySelector('#table-sortable tct-table');
+    const sort = new TableSortableStateController(table, {
+      data: [
+        {id: 'e1', name: 'Alice Chen', role: 'Engineer', age: 31},
+        {id: 'e2', name: 'Bob Smith', role: 'Designer', age: 27},
+        {id: 'e3', name: 'Carol Wu', role: 'Product manager', age: 45},
+        {id: 'e4', name: 'Dmitri Volkov', role: 'Engineer', age: 38},
+        {id: 'e5', name: 'Emma Rossi', role: 'Designer', age: 29},
+      ],
+      defaultSort: [{sortKey: 'age', direction: 'ascending'}],
+    });
+    sort.subscribe(() => {
+      table.data = sort.sortedData;
+    });
+    table.idKey = 'id';
+    table.columns = [
+      {key: 'name', header: 'Name', sortable: true},
+      {key: 'role', header: 'Role', sortable: true},
+      {key: 'age', header: 'Age', sortable: true, align: 'end'},
+    ];
+    table.plugins = {sort: new TableSortableController(table, sort.sortConfig)};
+    table.data = sort.sortedData;
+  </script>
+</div>

@@ -1,0 +1,23 @@
+/*
+ * tct-breadcrumbs: the labelled <nav> and the ordered list the items sit in. Tecton breadcrumbs have no
+ * container, background or border: they sit directly on the page. [mwg:css-layout]
+ */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .root {
+    display: block;
+  }
+
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--spacing-1);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+}

@@ -211,8 +211,11 @@ describe('tct-app-shell: skip link', () => {
 
   it('moves focus on a click too', async () => {
     const element = await shell();
-    await userEvent.click(skip(element)).catch(() => undefined);
-    skip(element).click();
+    // The skip link is visually hidden until it has focus, so a pointer can only reach it once Tab has
+    // revealed it (a click on the hidden link waited out Playwright's action timeout).
+    await pressKeys('Tab');
+    expect(deepActiveElement()).toBe(skip(element));
+    await userEvent.click(skip(element));
     expect(deepActiveElement()).toBe(mainBox(element));
   });
 

@@ -1,0 +1,131 @@
+/*
+ * tct-breadcrumb-item. Tecton: ancestors are dimmed (secondary text), the current crumb is the primary text
+ * colour and one step heavier, the separator is decorative. The crumb is a tct-link, a button dressed as a
+ * link, or plain text; links underline on hover, the underline being the only affordance. Sizes come from the
+ * trail's variant. [mwg:css] [mwg:accessible-web-components]
+ */
+@layer component {
+  :host {
+    display: flex;
+    align-items: center;
+    min-inline-size: 0;
+  }
+
+  /* Collapsed into the ellipsis menu (the first collapsed item renders the ellipsis). */
+  :host([data-tct-collapsed]) {
+    display: none;
+  }
+
+  .item {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    min-inline-size: 0;
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+  }
+
+  .item[data-variant='supporting'] {
+    font-size: var(--text-supporting-size);
+    line-height: var(--text-supporting-leading);
+  }
+
+  .separator {
+    display: flex;
+    align-items: center;
+    padding-block: var(--spacing-1);
+    color: var(--color-text-secondary);
+    user-select: none;
+  }
+
+  :host(:first-child) .separator {
+    display: none;
+  }
+
+  /* The built-in slash mirrors in right-to-left; an icon mirrors through its own definition. */
+  :host(:dir(rtl)) .separator[data-slash] {
+    scale: -1 1;
+  }
+
+  .crumb {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+    min-inline-size: 0;
+    padding-block: var(--spacing-1);
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    font-weight: var(--font-weight-normal);
+  }
+
+  .crumb[data-current] {
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-medium);
+  }
+
+  /* A button dressed as a link (action crumb, menu trigger, ellipsis). */
+  button.crumb {
+    margin: 0;
+    padding-inline: 0;
+    border: 0;
+    border-radius: var(--radius-inner);
+    background: none;
+    font: inherit;
+    font-weight: inherit;
+    cursor: pointer;
+  }
+
+  button.crumb[data-current] {
+    font-weight: var(--font-weight-medium);
+  }
+
+  .icon-slot {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  .chevron {
+    flex-shrink: 0;
+  }
+
+  .menu {
+    display: inline-flex;
+  }
+}
+
+@layer state {
+  @media (hover: hover) {
+    button.crumb:hover {
+      color: var(--color-text-primary);
+      text-decoration: underline;
+    }
+  }
+
+  button.crumb:active {
+    background-color: var(--color-overlay-pressed);
+  }
+
+  button.crumb:focus-visible {
+    outline-width: var(--focus-outline-width);
+    outline-style: var(--focus-outline-style);
+    outline-color: var(--focus-outline-color);
+    outline-offset: var(--focus-outline-offset);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .crumb {
+      color: ButtonText;
+    }
+
+    .crumb[data-current] {
+      color: CanvasText;
+    }
+
+    button.crumb:focus-visible {
+      outline-color: Highlight;
+    }
+  }
+}

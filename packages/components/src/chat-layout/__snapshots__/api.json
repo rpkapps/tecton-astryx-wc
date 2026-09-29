@@ -1,0 +1,82 @@
+{
+  "folder": "chat-layout",
+  "elements": {
+    "tct-chat-layout": {
+      "class": "TctChatLayout",
+      "attributes": [
+        {
+          "name": "density",
+          "property": "density",
+          "type": "ChatLayoutDensity",
+          "values": [
+            "compact",
+            "balanced",
+            "spacious"
+          ],
+          "default": "'balanced'",
+          "reflects": true
+        },
+        {
+          "name": "no-scroll-button",
+          "property": "noScrollButton",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "scroll-target",
+          "property": "scrollTargetSelector",
+          "type": "string | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "hasNewMessages",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "isFollowing",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "isScrolledUp",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "scrollTarget",
+          "type": "HTMLElement | null",
+          "default": "null",
+          "readonly": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "scrollToBottom",
+          "signature": "(options?: ChatScrollToBottomOptions) => void"
+        }
+      ],
+      "slots": [
+        "(default)",
+        "composer",
+        "empty-state",
+        "scroll-button"
+      ],
+      "events": [],
+      "cssParts": [
+        "base",
+        "blur",
+        "dock",
+        "dock-inner",
+        "empty",
+        "messages",
+        "scroll-button"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

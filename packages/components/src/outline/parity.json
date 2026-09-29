@@ -1,0 +1,174 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "outline",
+  "workPackage": "WP-10",
+  "entries": {
+    "core.outline": {
+      "tag": "tct-outline",
+      "status": "implemented",
+      "upstream": {
+        "name": "Outline",
+        "path": "packages/core/src/Outline/Outline.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "items",
+          "kind": "prop",
+          "target": "items",
+          "as": "property",
+          "notes": "`{id, label, level}[]`: property only. Or `source`, a selector of a container whose headings become the items (upstream `useOutlineFromDOM`)."
+        },
+        {
+          "upstream": "activeId",
+          "kind": "prop",
+          "target": "activeId",
+          "as": "property",
+          "notes": "Attribute `active-id`. When set, built-in scroll tracking is off and the id is the state; unset (default) it follows the scroll position."
+        },
+        {
+          "upstream": "onActiveIdChange",
+          "kind": "event",
+          "target": "tct-active-change",
+          "as": "event",
+          "notes": "Notification after the active item changed because the page scrolled or the user chose one (`id`, `reason`: scroll, click or keyboard). Not cancelable; property writes fire nothing. Also fires in controlled mode when the user chooses an item."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Default the localized `@tct.outline.label`; a host aria-label wins."
+        },
+        {
+          "upstream": "density",
+          "kind": "prop",
+          "target": "density",
+          "as": "attribute",
+          "reflect": true,
+          "default": "default"
+        },
+        {
+          "upstream": "onNavigateStart",
+          "kind": "event",
+          "target": "tct-navigate-start",
+          "as": "event",
+          "notes": "When navigation to an item begins, before the scroll (`id`)."
+        },
+        {
+          "upstream": "onNavigateEnd",
+          "kind": "event",
+          "target": "tct-navigate-end",
+          "as": "event",
+          "notes": "Exactly once per start, when the scroll settles or the user interrupts it (`id`); not fired if the element is removed mid-scroll."
+        },
+        {
+          "upstream": "offset",
+          "kind": "prop",
+          "target": "offset",
+          "as": "attribute",
+          "default": 0,
+          "notes": "px of a fixed header; shifts the activation line and the scroll landing."
+        },
+        {
+          "upstream": "scrollContainerRef",
+          "kind": "prop",
+          "target": "scrollContainer",
+          "as": "property",
+          "notes": "An element (property) or a selector (attribute `scroll-container`, resolved in the outline's tree then the document); instead of the nearest scrollable ancestor."
+        },
+        {
+          "upstream": "hasScrollOnClick",
+          "kind": "prop",
+          "target": "no-scroll-on-click",
+          "as": "attribute",
+          "default": false,
+          "notes": "Inverted (upstream default true): the presence of `no-scroll-on-click` skips the scroll; the active item, the hash and the navigate events still happen."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base), ::part(item), ::part(indicator) and custom properties."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "Any data-* attribute on the host is kept as authored."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useOutlineFromDOM",
+          "target": "collectOutlineItems / watchOutlineItems (outline.api.ts) and the `source` attribute",
+          "as": "module-function"
+        },
+        {"upstream": "useListFocus", "target": "RovingTabindexController", "as": "controller"},
+        {
+          "upstream": "useScrollSpy",
+          "target": "outline.scroll.ts (resolveActiveId, scrollToTarget) and TctOutline.navigateTo",
+          "as": "module-function"
+        },
+        {
+          "upstream": "useOutlineFromMarkdown",
+          "as": "waived",
+          "reason": "Belongs to WP-17 (markdown), which owns parseOutlineFromMarkdown and the markdown hook; the outline takes its items."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Enters the list at the active heading; the next Tab leaves it",
+          "when": "one tab stop"
+        },
+        {"keys": "ArrowDown", "action": "Moves focus to the next item, wrapping"},
+        {"keys": "ArrowUp", "action": "Moves focus to the previous item, wrapping"},
+        {"keys": "Home, End", "action": "Move focus to the first and last item"},
+        {
+          "keys": "Enter, Space",
+          "action": "Navigates to the heading of the focused item",
+          "when": "modifier chords are left to the browser"
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "OUTLINE-01",
+          "type": "approved-api-difference",
+          "text": "The scroll position, not CSS anchor positioning, drives everything: the sliding bar is measured from the active link (top and height, transitioned), because anchor positioning is not in every Tier-1 engine (D-014), and the active heading is the last one whose top passed the activation line, recomputed from live positions on every scroll and on layout changes, so it is right on load and when scrolling up (mwg:scrollspy; scroll-target-group is Chromium only). A page that does not scroll at all keeps the first item active."
+        },
+        {
+          "id": "OUTLINE-02",
+          "type": "approved-api-difference",
+          "text": "Links are native anchors in the outline's shadow root (in-page fragment links need no router, so the Link dependency is not used); a missing target is left to the browser. Headings are found by id in the outline's own tree, then the document."
+        },
+        {
+          "id": "OUTLINE-03",
+          "type": "approved-api-difference",
+          "text": "Upstream is controlled through `activeId` + `onActiveIdChange`; here `activeId` set means controlled and `tct-active-change` reports every change. The other callbacks are events: tct-navigate-start and tct-navigate-end. Three new core events carry them (core/src/events)."
+        },
+        {
+          "id": "OUTLINE-04",
+          "type": "tecton-visual",
+          "text": "Links are secondary text; the active one is primary text one weight heavier, with the 2px bar in the primary icon colour on a 2px track. Hover, keyboard focus and pressed use the tertiary action fills each paired with its own text role."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 35,
+      "notes": "Guides: [mwg:scrollspy] (aria-current mirrored with the visual state; a position-based fallback because scroll-target-group is not available everywhere) [mwg:anchor-positioning-tab-underline] (the bar is decorative; measured position instead of anchor positioning) [mwg:accessibility] (nav landmark, one roving tab stop) [mwg:spatial-navigation] (arrow keys and Home/End)."
+    }
+  }
+}

@@ -1,0 +1,48 @@
+<!-- title: Column settings; description: The column settings plugin shows the active columns in their order. The state controller owns the active keys, toggles and resets; any control can drive it. -->
+<tct-vstack id="table-column-settings" gap="3">
+  <tct-hstack gap="4" wrap="wrap" data-role="toggles"></tct-hstack>
+  <tct-table label="People, choose columns"></tct-table>
+  <script type="module">
+    import {
+      TableColumnSettingsController,
+      TableColumnSettingsStateController,
+    } from '@tecton-wc/components/table/define.js';
+
+    const root = document.querySelector('#table-column-settings');
+    const table = root.querySelector('tct-table');
+    const OPTIONS = [
+      {key: 'name', label: 'Name', alwaysVisible: true},
+      {key: 'role', label: 'Role'},
+      {key: 'team', label: 'Team'},
+      {key: 'age', label: 'Age'},
+    ];
+    const settings = new TableColumnSettingsStateController(table, {
+      columns: OPTIONS,
+      defaultActiveColumnKeys: ['name', 'role', 'age'],
+    });
+
+    const toggles = root.querySelector('[data-role="toggles"]');
+    for (const option of OPTIONS) {
+      const box = document.createElement('tct-checkbox-input');
+      box.label = option.label;
+      box.checked = settings.isColumnActive(option.key);
+      box.disabled = !settings.isColumnToggleable(option.key);
+      box.addEventListener('change', () => settings.toggleColumn(option.key));
+      toggles.append(box);
+    }
+
+    table.idKey = 'id';
+    table.columns = [
+      {key: 'name', header: 'Name'},
+      {key: 'role', header: 'Role'},
+      {key: 'team', header: 'Team'},
+      {key: 'age', header: 'Age', align: 'end'},
+    ];
+    table.data = [
+      {id: 'e1', name: 'Alice Chen', role: 'Engineer', team: 'Platform', age: 31},
+      {id: 'e2', name: 'Bob Smith', role: 'Designer', team: 'Product', age: 27},
+      {id: 'e3', name: 'Carol Wu', role: 'Product manager', team: 'Product', age: 45},
+    ];
+    table.plugins = {columnSettings: new TableColumnSettingsController(table, settings.columnSettingsConfig)};
+  </script>
+</tct-vstack>

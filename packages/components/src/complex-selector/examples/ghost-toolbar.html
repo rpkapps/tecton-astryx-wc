@@ -1,0 +1,20 @@
+<!-- title: Ghost trigger; description: variant="ghost" is the borderless trigger for toolbars and headers. placement and alignment position the popover; a start icon leads the trigger. -->
+<div id="ghost-toolbar-root">
+  <tct-hstack gap="2">
+    <tct-complex-selector label="Filters" variant="ghost" start-icon="funnel" trigger-label="Filters" alignment="start" size="sm">
+      <tct-vstack gap="1">
+        <tct-button variant="ghost" data-value="open">Open</tct-button>
+        <tct-button variant="ghost" data-value="closed">Closed</tct-button>
+      </tct-vstack>
+    </tct-complex-selector>
+  </tct-hstack>
+  <script type="module">
+    const selector = document.querySelector('#ghost-toolbar-root tct-complex-selector');
+    selector.addEventListener('click', (event) => {
+      const choice = event.target.closest('[data-value]');
+      if (!choice) return;
+      selector.commit(choice.dataset.value);
+      selector.hide();
+    });
+  </script>
+</div>

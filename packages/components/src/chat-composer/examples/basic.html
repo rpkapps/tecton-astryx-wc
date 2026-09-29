@@ -1,0 +1,12 @@
+<!-- title: A message composer; description: With no slots the composer is complete: a multi-line input and a send button. Enter sends (not while an input method is composing a word), Shift+Enter starts a new line, and the draft is cleared once it is sent. -->
+<tct-vstack id="basic-root" gap="3" max-width="520">
+  <tct-chat-composer id="basic-composer"></tct-chat-composer>
+  <tct-text id="basic-output" type="supporting" color="secondary">Nothing sent yet.</tct-text>
+</tct-vstack>
+<script type="module">
+  const composer = document.getElementById('basic-composer');
+  const output = document.getElementById('basic-output');
+  composer.addEventListener('tct-chat-submit', (event) => {
+    output.textContent = `Sent: ${event.value}`;
+  });
+</script>

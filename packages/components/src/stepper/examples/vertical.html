@@ -1,0 +1,11 @@
+<!-- title: Vertical with content; description: A vertical stepper gives every label a row. A step can hold content (form fields for that step) below its label, in the default slot. -->
+<tct-stepper active-step="1" orientation="vertical">
+  <tct-step label="Account" description="jane@example.com"></tct-step>
+  <tct-step label="Shipping address">
+    <tct-card variant="muted" padding="3">
+      <tct-text>Fields for the address go here.</tct-text>
+    </tct-card>
+  </tct-step>
+  <tct-step label="Payment" optional></tct-step>
+  <tct-step label="Review"></tct-step>
+</tct-stepper>

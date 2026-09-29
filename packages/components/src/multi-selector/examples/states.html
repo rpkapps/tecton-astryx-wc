@@ -1,0 +1,19 @@
+<!-- title: States; description: Required (at least one value), a status message, a disabled selector that explains itself, read-only, busy, and an option source that is still loading. -->
+<div id="states-root">
+  <tct-vstack max-width="360" gap="4">
+    <tct-multi-selector label="Required" required description="Choose at least one."></tct-multi-selector>
+    <tct-multi-selector label="With a warning" status-type="warning" status-message="Some teams are archived."></tct-multi-selector>
+    <tct-multi-selector label="Disabled" disabled disabled-message="Ask an admin to change this."></tct-multi-selector>
+    <tct-multi-selector label="Read-only" readonly></tct-multi-selector>
+    <tct-multi-selector label="Saving" loading></tct-multi-selector>
+    <tct-multi-selector label="Loading options" options-state="loading" placeholder="Choose teams"></tct-multi-selector>
+  </tct-vstack>
+  <script type="module">
+    const selectors = [...document.querySelectorAll('#states-root tct-multi-selector')];
+    for (const selector of selectors.slice(0, 5)) {
+      selector.options = ['Design', 'Engineering', 'Research'];
+      selector.values = ['Design'];
+    }
+    selectors[0].values = [];
+  </script>
+</div>

@@ -1,0 +1,52 @@
+<!-- title: Context menu actions; description: A plugin adds right-click actions to rows or cells. The table opens one shared menu at the pointer, on the ContextMenu key and on Shift+F10 at the focused control; keep every action reachable another way too. -->
+<tct-vstack id="table-context-menu" gap="3">
+  <tct-table label="Documents"></tct-table>
+  <tct-text type="supporting" data-role="log">Right-click a row, or focus a chevron and press the ContextMenu key.</tct-text>
+  <script type="module">
+    import {TableRowExpansionController} from '@tecton-wc/components/table/define.js';
+
+    const root = document.querySelector('#table-context-menu');
+    const table = root.querySelector('tct-table');
+    const log = root.querySelector('[data-role="log"]');
+
+    // A plugin is any object with transform methods; this one only adds row actions.
+    const actions = {
+      contributesContextActions: true,
+      transformBodyRow(props, row) {
+        const prior = props.contextMenuActions;
+        props.contextMenuActions = () => [
+          ...(typeof prior === 'function' ? prior() : (prior ?? [])),
+          {id: 'copy', label: 'Copy link', icon: 'copy', onSelect: () => (log.textContent = `Copied the link to ${row.title}`)},
+          {id: 'archive', label: 'Archive', group: 'danger', variant: 'destructive', onSelect: () => (log.textContent = `Archived ${row.title}`)},
+        ];
+        return props;
+      },
+    };
+
+    let expanded = new Set();
+    const expansion = new TableRowExpansionController(table, {
+      get expandedKeys() {
+        return expanded;
+      },
+      onToggle: (key) => {
+        expanded = new Set(expanded);
+        if (!expanded.delete(key)) expanded.add(key);
+        expansion.refresh();
+      },
+      getRowKey: (row) => row.id,
+      renderExpanded: (row) => `Last edited by ${row.editor}.`,
+    });
+
+    table.idKey = 'id';
+    table.columns = [
+      {key: 'title', header: 'Title'},
+      {key: 'editor', header: 'Editor'},
+    ];
+    table.data = [
+      {id: 'doc1', title: 'Q3 planning', editor: 'Alice Chen'},
+      {id: 'doc2', title: 'Launch checklist', editor: 'Bob Smith'},
+      {id: 'doc3', title: 'Security review', editor: 'Carol Wu'},
+    ];
+    table.plugins = {expansion, actions};
+  </script>
+</tct-vstack>

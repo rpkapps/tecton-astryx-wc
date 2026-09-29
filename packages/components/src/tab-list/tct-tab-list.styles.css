@@ -1,0 +1,229 @@
+/*
+ * tct-tab-list. `.root` is the outer box (a `<nav>` in the navigation pattern); `.strip` scrolls when the
+ * tabs are wider than it. A scroll container clips at its padding box, and two things a tab paints sit
+ * outside its own box: the focus ring and the selected indicator (pushed further down when a divider
+ * rail is reserved). The strip pads by that much and takes it straight back with a negative margin, so
+ * nothing is clipped and the tabs stay where they were; the ring's share is taken only while focus is
+ * inside (`:host(:focus-within)`), so at rest the strip is exactly the box's size.
+ * Edge compensation reads `--_container-padding-inline-start|end` from a padded container.
+ * [mwg:css-layout] [mwg:anchor-positioning-tab-underline] [mwg:accessibility]
+ */
+@layer component {
+  :host {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  .root {
+    /* design: a stop's own inline padding (spacing 3), restated for the edge-compensation arithmetic */
+    --_stop-padding: var(--spacing-3);
+    --_ring-bleed: 0px;
+    --_fade-width: var(--spacing-8);
+
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    gap: var(--spacing-0-5);
+    max-inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  .root[data-layout='fill'] {
+    inline-size: 100%;
+  }
+
+  /* A divided strip reserves a gap above the rail so the hover fill never touches it. */
+  .root[data-divider] {
+    padding-block-end: var(--spacing-1);
+    border-block-end: var(--border-width) solid var(--color-border);
+    --_tab-indicator-bottom: calc(-1 * (var(--spacing-1) + var(--border-width)));
+  }
+
+  /* Edge compensation: the box reaches the container's content edges (the strip pads back below). */
+  .root[data-edge='inline'] {
+    inline-size: calc(
+      100% + var(--_container-padding-inline-start, 0px) + var(--_container-padding-inline-end, 0px)
+    );
+    max-inline-size: none;
+    margin-inline-start: calc(-1 * var(--_container-padding-inline-start, 0px));
+    margin-inline-end: calc(-1 * var(--_container-padding-inline-end, 0px));
+  }
+
+  .strip {
+    /* Content-height, not stretched: the bleed padding is inside the strip's own height. */
+    align-self: flex-start;
+    display: flex;
+    flex: 1 1 0;
+    align-items: stretch;
+    gap: inherit;
+    min-inline-size: 0;
+  }
+
+  .strip[data-scroll] {
+    --_inset: calc(var(--_ring-bleed) + var(--_fade-width));
+    --_indicator-bleed: calc(-1 * var(--_tab-indicator-bottom, -1px));
+    --_block-end-bleed: max(var(--_ring-bleed), var(--_indicator-bleed));
+
+    /* physical: the strip scrolls horizontally in both directions; overflow-inline is newer than the Tier-2 floor */
+    overflow-x: auto;
+    /* physical: see above */
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-padding-inline: var(--_inset);
+    scrollbar-width: none;
+    padding-block-start: var(--_ring-bleed);
+    margin-block-start: calc(-1 * var(--_ring-bleed));
+    padding-block-end: var(--_block-end-bleed);
+    margin-block-end: calc(-1 * var(--_block-end-bleed));
+    padding-inline: var(--_ring-bleed);
+    margin-inline: calc(-1 * var(--_ring-bleed));
+    mask-image: none;
+  }
+
+  .strip[data-scroll]::-webkit-scrollbar {
+    display: none;
+  }
+
+  .root[data-edge='inline'] .strip {
+    padding-inline-start: calc(
+      var(--_ring-bleed) +
+        max(var(--_container-padding-inline-start, 0px) - var(--_stop-padding), 0px)
+    );
+    padding-inline-end: calc(
+      var(--_ring-bleed) +
+        max(var(--_container-padding-inline-end, 0px) - var(--_stop-padding), 0px)
+    );
+  }
+
+  /* The fade reaches transparent at the strip's own edge, not at the bleed edge. */
+  .strip[data-fade='start'] {
+    mask-image: linear-gradient(
+      to right,
+      transparent var(--_ring-bleed),
+      currentColor var(--_inset)
+    );
+  }
+
+  .strip[data-fade='end'] {
+    mask-image: linear-gradient(
+      to left,
+      transparent var(--_ring-bleed),
+      currentColor var(--_inset)
+    );
+  }
+
+  .strip[data-fade='both'] {
+    mask-image: linear-gradient(
+      to right,
+      transparent var(--_ring-bleed),
+      currentColor var(--_inset),
+      currentColor calc(100% - var(--_inset)),
+      transparent calc(100% - var(--_ring-bleed))
+    );
+  }
+
+  :host(:dir(rtl)) .strip[data-fade='start'] {
+    mask-image: linear-gradient(
+      to left,
+      transparent var(--_ring-bleed),
+      currentColor var(--_inset)
+    );
+  }
+
+  :host(:dir(rtl)) .strip[data-fade='end'] {
+    mask-image: linear-gradient(
+      to right,
+      transparent var(--_ring-bleed),
+      currentColor var(--_inset)
+    );
+  }
+
+  /* Fill: the tabs share the strip equally (and may shrink so labels truncate). */
+  .root[data-layout='fill'] ::slotted(*) {
+    flex: 1;
+    min-inline-size: 0;
+  }
+
+  .arrow {
+    position: absolute;
+    inset-block-start: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    inline-size: var(--size-element-md);
+    block-size: var(--size-element-md);
+    padding: 0;
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-full);
+    /* Opaque: it sits over the tabs it scrolls; Tecton popovers carry a border and no shadow. */
+    background-color: var(--color-background-popover);
+    color: var(--color-text-secondary);
+    cursor: pointer;
+  }
+
+  .root[data-size='sm'] .arrow {
+    inline-size: var(--size-element-sm);
+    block-size: var(--size-element-sm);
+  }
+
+  .root[data-size='lg'] .arrow {
+    inline-size: var(--size-element-lg);
+    block-size: var(--size-element-lg);
+  }
+
+  .arrow[data-direction='start'] {
+    inset-inline-start: 0;
+  }
+
+  .arrow[data-direction='end'] {
+    inset-inline-end: 0;
+  }
+
+  /* A pointer-only affordance. */
+  @media (hover: hover) {
+    .arrow {
+      display: flex;
+    }
+  }
+}
+
+@layer state {
+  :host(:focus-within) .root {
+    --_ring-bleed: calc(var(--focus-outline-width) + var(--focus-outline-offset));
+  }
+
+  @media (hover: hover) {
+    .arrow:hover {
+      color: var(--color-text-primary);
+    }
+  }
+
+  .arrow:focus-visible {
+    outline-width: var(--focus-outline-width);
+    outline-style: var(--focus-outline-style);
+    outline-color: var(--focus-outline-color);
+    outline-offset: var(--focus-outline-offset);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .strip[data-scroll] {
+      scroll-behavior: smooth;
+      transition: mask-image var(--duration-medium) var(--ease-standard);
+    }
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .arrow {
+      color: ButtonText;
+      border-color: ButtonText;
+      background-color: ButtonFace;
+    }
+
+    .root[data-divider] {
+      border-block-end-color: CanvasText;
+    }
+  }
+}
