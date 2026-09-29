@@ -1,0 +1,161 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "banner",
+  "workPackage": "WP-3",
+  "entries": {
+    "core.banner": {
+      "tag": "tct-banner",
+      "status": "implemented",
+      "upstream": {
+        "name": "Banner",
+        "path": "packages/core/src/Banner/Banner.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "target": "status",
+          "as": "attribute",
+          "reflect": true,
+          "default": "info",
+          "notes": "Upstream requires it; the WC defaults to info. Adds Tecton's fifth severity, neutral."
+        },
+        {
+          "upstream": "title",
+          "kind": "slot",
+          "target": "heading",
+          "as": "slot",
+          "notes": "`title` is a global HTML attribute and is never shadowed (A§7.1): the text form is the `heading` attribute, rich content goes in slot=\"heading\"."
+        },
+        {
+          "upstream": "description",
+          "kind": "prop",
+          "target": "description",
+          "as": "attribute",
+          "notes": "Or slot=\"description\" for rich content."
+        },
+        {
+          "upstream": "icon",
+          "kind": "slot",
+          "target": "icon",
+          "as": "slot",
+          "notes": "Slot a custom icon, or set the `icon` attribute to a registered icon name."
+        },
+        {
+          "upstream": "isDismissable",
+          "kind": "prop",
+          "target": "dismissable",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "onDismiss",
+          "kind": "event",
+          "target": "tct-dismiss",
+          "as": "event",
+          "notes": "Cancelable, before the banner hides itself; the banner hides even without a listener."
+        },
+        {
+          "upstream": "dismissLabel",
+          "kind": "prop",
+          "target": "dismissLabel",
+          "as": "attribute",
+          "notes": "Attribute `dismiss-label`."
+        },
+        {"upstream": "endContent", "kind": "slot", "target": "end", "as": "slot"},
+        {
+          "upstream": "container",
+          "kind": "prop",
+          "target": "container",
+          "as": "attribute",
+          "reflect": true,
+          "default": "card"
+        },
+        {
+          "upstream": "elevation",
+          "kind": "prop",
+          "target": "elevation",
+          "as": "attribute",
+          "reflect": true,
+          "default": "none"
+        },
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "collapsible",
+          "kind": "prop",
+          "target": "noCollapse",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "`collapsible={false}` is the boolean attribute `no-collapse` (a boolean defaulting to true is inverted, A§7.2). The config object form maps to `open` (defaultIsOpen/isOpen) and the tct-open-change event (onOpenChange)."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(frame|header|icon|description|content) and custom properties."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useCollapsible",
+          "target": "CollapsibleController",
+          "as": "controller",
+          "notes": "The disclosure state machine from the collapsible family, so the banner's toggle is configured exactly like a collapsible's."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Enter",
+          "action": "Activates the focused control: the expand toggle, an action, or dismiss"
+        },
+        {"keys": "Space", "action": "Activates the focused control, like Enter"},
+        {
+          "keys": "Tab",
+          "action": "Moves through the actions, the expand toggle and the dismiss button in order; dismissing returns focus to where it came from"
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "BANNER-01",
+          "type": "approved-api-difference",
+          "text": "The status message is announced through ElementInternals on the host (role=alert for warning and error, role=status otherwise); a host role attribute would win. The heading is the `heading` attribute or slot=\"heading\", never a `title` property."
+        },
+        {
+          "id": "BANNER-02",
+          "type": "approved-api-difference",
+          "text": "The disclosure follows the collapsible family's model: `open` is the initial and current state (starts collapsed, as upstream Banner does), `no-collapse` pins the content open, and a user toggle fires the cancelable tct-open-change and tct-after-open-change. Property and attribute writes fire no intent event."
+        },
+        {
+          "id": "BANNER-03",
+          "type": "tecton-visual",
+          "text": "Tecton's alert is a saturated status fill with dark ink: the header re-points text, icon, the ghost buttons' ink and the focus ring colour to the fill's ink roles (status-*-filled-text and -adornment), which measure at least 4.8:1 on every fill where the page's hot pink ring does not reach 3:1. Card banners use the 4px element radius; a neutral status is added."
+        },
+        {
+          "id": "BANNER-04",
+          "type": "a11y-improvement",
+          "text": "Dismiss returns focus to the element that had it before focus entered the banner (or the pointer press that started inside it), before the banner hides, so a keyboard user never lands on the body. Collapsed content is not rendered (aria-controls is set only while it is)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components] (roles and state through ElementInternals; aria-controls within one tree) [mwg:accessible-error-announcement] (alert versus status roles) [mwg:accessibility] (focus hand-off on removal). Strings: @astryx.banner.{collapse,expand,dismiss,dismissTitled}."
+    }
+  }
+}
