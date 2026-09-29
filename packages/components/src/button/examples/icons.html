@@ -1,0 +1,10 @@
+<!-- title: Icons and end content; description: A leading icon (icon attribute or slot), trailing content, and icon-only buttons whose label is the name and the tooltip. -->
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: var(--spacing-3); padding-block-start: var(--spacing-8)">
+  <tct-button label="Search" icon="search"></tct-button>
+  <tct-button label="Filter" variant="outlined"><tct-icon slot="icon" name="funnel"></tct-icon></tct-button>
+  <tct-button label="Messages" variant="primary"><span slot="end">3</span></tct-button>
+  <tct-button label="Open" variant="secondary" icon="externalLink"><tct-icon slot="end" name="chevronDown"></tct-icon></tct-button>
+  <tct-button label="Settings" icon="wrench" icon-only></tct-button>
+  <tct-button label="More" icon="moreHorizontal" icon-only variant="ghost"></tct-button>
+  <tct-button label="Close" icon="close" icon-only variant="text-only" size="sm"></tct-button>
+</div>

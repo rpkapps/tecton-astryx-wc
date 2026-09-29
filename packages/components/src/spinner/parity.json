@@ -1,0 +1,98 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "spinner",
+  "workPackage": "WP-F",
+  "entries": {
+    "core.spinner": {
+      "tag": "tct-spinner",
+      "status": "implemented",
+      "upstream": {
+        "name": "Spinner",
+        "path": "packages/core/src/Spinner/Spinner.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md"
+        },
+        {
+          "upstream": "shade",
+          "kind": "prop",
+          "target": "shade",
+          "as": "attribute",
+          "reflect": true,
+          "default": "default",
+          "notes": "The value `onMedia` is `on-media`."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "String labels; rich ReactNode labels go in the default slot."
+        },
+        {"upstream": "label", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "aria-label",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "The host's own aria-label attribute is native and wins over the default name set through ElementInternals."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(spinner), and the --spinner-* custom properties."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "Any attribute can be set on the host; not component API."
+        }
+      ],
+      "hooks": [],
+      "differences": [
+        {
+          "id": "SPINNER-01",
+          "type": "approved-api-difference",
+          "text": "The host is an indeterminate progressbar (role via ElementInternals, name from aria-label, the label text, or the localised 'Loading') instead of a role=status span; nothing announces on its own, the owning component announces (A§9.16)."
+        },
+        {
+          "id": "SPINNER-02",
+          "type": "tecton-visual",
+          "text": "The default shade paints from the Tecton progress roles (--tecton-color-progress-primary and -track) like the owner's progress components, not --color-accent (a fill in Tecton)."
+        },
+        {
+          "id": "SPINNER-03",
+          "type": "approved-api-difference",
+          "text": "The shade value `onMedia` is `on-media` (kebab-case attribute values)."
+        },
+        {
+          "id": "SPINNER-04",
+          "type": "approved-api-difference",
+          "text": "The private geometry properties are not registered with CSS.registerProperty (@property is document-level, A§5.4); the --spinner-* lengths therefore need a unit (0px, not 0)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components] progressbar role and name through ElementInternals; [mwg:css] reduced motion slows instead of stopping, forced colours; [mwg:shadow-dom] slot fallback content for the label; [mwg:styling-web-components] admitted custom properties read through private aliases."
+    }
+  }
+}

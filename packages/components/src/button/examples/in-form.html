@@ -1,0 +1,21 @@
+<!-- title: In a form; description: type=submit submits the form with the button's name and value; Enter in a field activates it; type=reset resets. -->
+<form id="in-form-demo" style="display: flex; flex-direction: column; gap: var(--spacing-3); max-inline-size: 320px">
+  <label style="display: flex; flex-direction: column; gap: var(--spacing-1)">
+    Name
+    <input name="name" value="Ada" required />
+  </label>
+  <div style="display: flex; gap: var(--spacing-2)">
+    <tct-button type="submit" name="action" value="save" variant="primary" label="Save"></tct-button>
+    <tct-button type="submit" name="action" value="draft" formnovalidate label="Save draft"></tct-button>
+    <tct-button type="reset" variant="text-only" label="Reset"></tct-button>
+  </div>
+  <output id="in-form-demo-result" style="color: var(--color-text-secondary)">Submit to see the data.</output>
+</form>
+<script type="module">
+  const form = document.querySelector('#in-form-demo');
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const data = new FormData(form, event.submitter);
+    document.querySelector('#in-form-demo-result').textContent = JSON.stringify(Object.fromEntries(data));
+  });
+</script>
