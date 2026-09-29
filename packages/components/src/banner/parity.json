@@ -155,7 +155,7 @@
       "tokenRequests": [],
       "requests": [],
       "sizeBudgetKb": null,
-      "notes": "Guides: [mwg:accessible-web-components] (roles and state through ElementInternals; aria-controls within one tree) [mwg:accessible-error-announcement] (alert versus status roles) [mwg:accessibility] (focus hand-off on removal). Strings: @astryx.banner.{collapse,expand,dismiss,dismissTitled}."
+      "notes": "Guides: [mwg:accessible-web-components] (roles and state through ElementInternals; aria-controls within one tree) [mwg:accessible-error-announcement] (alert versus status roles) [mwg:accessibility] (focus hand-off on removal). Strings: @tct.banner.{collapse,expand,dismiss,dismissTitled}."
     }
   }
 }

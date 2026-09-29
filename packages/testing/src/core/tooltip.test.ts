@@ -6,9 +6,9 @@
 import {html} from 'lit';
 import {userEvent} from 'vitest/browser';
 import {beforeAll, beforeEach, describe, expect, it} from 'vitest';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {isActionTrigger} from '@tecton-astryx/core/controllers/hover-intent.js';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {isActionTrigger} from '@tecton-wc/core/controllers/hover-intent.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import {axNode} from '../a11y.js';
 import {fixture} from '../fixture.js';
 import {recordEvents} from '../events.js';

@@ -13,7 +13,7 @@ Eighteen oil & gas / subsurface glyphs, each with an `outlined` and a `filled` v
 - **Origin.** `rpkapps/tecton-webcomponents`, branch `claude/busy-johnson-0wz57h`,
   `packages/wc/src/icons/`, commit `8b119b84ec4b912eceebb9f220218346596c6407` (recorded in
   [`glyphs/SOURCE-COMMIT`](glyphs/SOURCE-COMMIT); a read-only copy lives at `/home/user/refs/tecton-icons`).
-- The larger 131-glyph set of `tecton-astryx` is **not** used (D-013). Lucide stays the general-purpose set
+- The larger 131-glyph set of the owner's earlier React theme is **not** used (D-013). Lucide stays the general-purpose set
   and the source of the Astryx role names (D-009).
 
 ## Layout
@@ -30,13 +30,13 @@ each file's header, and regenerate.
 
 ## Use
 
-The default icon set (`@tecton-astryx/icons/default.js`) registers all 36 names, so
+The default icon set (`@tecton-wc/icons/default.js`) registers all 36 names, so
 `<tct-icon name="well">` and `<tct-icon name="well-filled">` work with no registration. Per-icon modules are
 importable on their own:
 
 ```ts
-import well, {filled as wellFilled} from '@tecton-astryx/icons/tecton/well.js';
-import {tectonIcons} from '@tecton-astryx/icons/tecton.js'; // lazy loaders, e.g. for a namespace
+import well, {filled as wellFilled} from '@tecton-wc/icons/tecton/well.js';
+import {tectonIcons} from '@tecton-wc/icons/tecton.js'; // lazy loaders, e.g. for a namespace
 ```
 
 ## Conversion

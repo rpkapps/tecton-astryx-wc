@@ -1,11 +1,11 @@
 import {html, type CSSResultGroup, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import defaults from '@tecton-astryx/locales/en/avatarGroup.js';
+import {ContextConsumer} from '@tecton-wc/core/context/protocol.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import defaults from '@tecton-wc/locales/en/avatarGroup.js';
 import base from '../styles/base.styles.css';
 import focusRing from '../styles/focus-ring.styles.css';
 import {avatarGroupContext} from './avatar.context.js';

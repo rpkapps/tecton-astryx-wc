@@ -1,4 +1,4 @@
-import {defineElement} from '@tecton-astryx/core/define.js';
+import {defineElement} from '@tecton-wc/core/define.js';
 import {TctList} from './tct-list.js';
 import {TctListItem} from './tct-list-item.js';
 

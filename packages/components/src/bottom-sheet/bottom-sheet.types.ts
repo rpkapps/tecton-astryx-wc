@@ -1,4 +1,4 @@
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import {isValidSnapPoint, type BottomSheetSnapPoint} from './snap-offsets.js';
 
 export type {BottomSheetSnapPoint} from './snap-offsets.js';

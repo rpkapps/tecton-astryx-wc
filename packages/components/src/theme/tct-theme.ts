@@ -1,7 +1,7 @@
 import {property} from 'lit/decorators.js';
-import {ContextConsumer, ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {themeContext, type ThemeContextValue} from '@tecton-astryx/core/context/keys.js';
-import {TctProviderElement} from '@tecton-astryx/core/provider-element.js';
+import {ContextConsumer, ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {themeContext, type ThemeContextValue} from '@tecton-wc/core/context/keys.js';
+import {TctProviderElement} from '@tecton-wc/core/provider-element.js';
 import {warnInvalidValue} from '../text/text.types.js';
 import lightStyles from './tct-theme.light.css?inline';
 import {

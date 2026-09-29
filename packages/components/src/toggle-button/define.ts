@@ -1,4 +1,4 @@
-import {defineElement} from '@tecton-astryx/core/define.js';
+import {defineElement} from '@tecton-wc/core/define.js';
 import {TctToggleButton} from './tct-toggle-button.js';
 import {TctToggleButtonGroup} from './tct-toggle-button-group.js';
 

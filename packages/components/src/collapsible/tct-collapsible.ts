@@ -1,11 +1,11 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
-import {TctAfterOpenChangeEvent} from '@tecton-astryx/core/events/tct-after-open-change.js';
-import {TctOpenChangeEvent} from '@tecton-astryx/core/events/tct-open-change.js';
-import {features} from '@tecton-astryx/core/features.js';
-import {IdController} from '@tecton-astryx/core/utils/id.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {TctAfterOpenChangeEvent} from '@tecton-wc/core/events/tct-after-open-change.js';
+import {TctOpenChangeEvent} from '@tecton-wc/core/events/tct-open-change.js';
+import {features} from '@tecton-wc/core/features.js';
+import {IdController} from '@tecton-wc/core/utils/id.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import {TctIcon} from '../icon/tct-icon.js';
 import focusRing from '../styles/focus-ring.styles.css';
 import styles from './tct-collapsible.styles.css';
@@ -31,10 +31,10 @@ import {
  * @upstream Collapsible
  * @slot - The content that collapses.
  * @slot trigger - Rich trigger content (replaces the `trigger` text).
- * @csspart collapsible - The root box (Astryx target `astryx-collapsible`).
- * @csspart trigger - The trigger button (Astryx target `astryx-collapsible-trigger`).
+ * @csspart collapsible - The root box.
+ * @csspart trigger - The trigger button.
  * @csspart chevron - The disclosure chevron.
- * @csspart content - The content region (Astryx target `astryx-collapsible-content`); hidden until found while collapsed.
+ * @csspart content - The content region; hidden until found while collapsed.
  * @csspart body - Padding and typography of the content, inside the region.
  * @fires tct-open-change - A user asked to open or close; cancelable. Not fired inside a group (the group fires `tct-value-change`).
  * @fires tct-after-open-change - The open state changed, for any reason (including code, a group, and find in page).

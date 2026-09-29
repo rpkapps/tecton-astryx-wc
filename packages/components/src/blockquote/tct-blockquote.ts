@@ -1,8 +1,8 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
-import {AriaDelegateController} from '@tecton-astryx/core/controllers/aria-delegate.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+import {AriaDelegateController} from '@tecton-wc/core/controllers/aria-delegate.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import base from '../styles/base.styles.css';
 import styles from './tct-blockquote.styles.css';
 

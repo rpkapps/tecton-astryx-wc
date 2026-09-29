@@ -1,4 +1,4 @@
-import type {Alignment, Placement} from '@tecton-astryx/core/layer/position.js';
+import type {Alignment, Placement} from '@tecton-wc/core/layer/position.js';
 
 export const TOOLTIP_SIDES = [
   'above',

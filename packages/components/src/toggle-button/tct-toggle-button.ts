@@ -1,12 +1,12 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
-import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
-import type {ElementSize} from '@tecton-astryx/core/context/keys.js';
-import {SlotController} from '@tecton-astryx/core/controllers/slot.js';
-import {TctPressedChangeEvent} from '@tecton-astryx/core/events/tct-pressed-change.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {ContextConsumer} from '@tecton-wc/core/context/protocol.js';
+import type {ElementSize} from '@tecton-wc/core/context/keys.js';
+import {SlotController} from '@tecton-wc/core/controllers/slot.js';
+import {TctPressedChangeEvent} from '@tecton-wc/core/events/tct-pressed-change.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import {TctButton} from '../button/tct-button.js';
 import {warnInvalidValue} from '../text/text.types.js';
 import base from '../styles/base.styles.css';
@@ -34,7 +34,7 @@ import {TOGGLE_BUTTON_ELEVATIONS, type ToggleButtonElevation} from './toggle-but
  * @slot - Visible label text (replaces `label` as the visible text).
  * @slot icon - Icon shown before the label.
  * @slot pressed-icon - Icon shown instead of `icon` while pressed.
- * @csspart button - The inner `tct-button` (Astryx target `astryx-toggle-button`).
+ * @csspart button - The inner `tct-button`.
  * @fires tct-pressed-change - A user toggled the button; cancelable. Not fired for a group member (the group fires `tct-value-change`).
  * @cssstate pressed - The button is pressed.
  * @cloakDisplay inline-flex

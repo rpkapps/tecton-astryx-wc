@@ -1,4 +1,4 @@
-import {defineElement} from '@tecton-astryx/core/define.js';
+import {defineElement} from '@tecton-wc/core/define.js';
 import {TctAvatar} from './tct-avatar.js';
 import {TctAvatarGroup} from './tct-avatar-group.js';
 import {TctAvatarGroupOverflow} from './tct-avatar-group-overflow.js';

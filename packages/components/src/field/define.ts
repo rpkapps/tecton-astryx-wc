@@ -1,4 +1,4 @@
-import {defineElement} from '@tecton-astryx/core/define.js';
+import {defineElement} from '@tecton-wc/core/define.js';
 import {TctField} from './tct-field.js';
 import {TctFieldDescription} from './tct-field-description.js';
 import {TctFieldLabel} from './tct-field-label.js';

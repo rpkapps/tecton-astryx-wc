@@ -6,7 +6,7 @@
 import {html} from 'lit';
 import {userEvent} from 'vitest/browser';
 import {afterEach, describe, expect, it, vi} from 'vitest';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
 import '../avatar/define.js';
 import '../button/define.js';
 import './define.js';
@@ -24,7 +24,7 @@ describe('tct-link-provider: element lifecycle', () => {
     expect(constructor).toBeDefined();
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined);
     try {
-      const {defineElement} = await import('@tecton-astryx/core/define.js');
+      const {defineElement} = await import('@tecton-wc/core/define.js');
       defineElement(constructor as Parameters<typeof defineElement>[0]);
       expect(warn).not.toHaveBeenCalled();
     } finally {

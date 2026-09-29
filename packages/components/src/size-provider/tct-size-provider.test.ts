@@ -4,14 +4,14 @@
  */
 import {html} from 'lit';
 import {afterEach, describe, expect, it, vi} from 'vitest';
-import {expectAccessible} from '@tecton-astryx/testing/a11y.js';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
-import {aTimeout} from '@tecton-astryx/testing/timing.js';
-import {ContextConsumer} from '@tecton-astryx/core/context/protocol.js';
-import {sizeContext} from '@tecton-astryx/core/context/keys.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {defineElement} from '@tecton-astryx/core/define.js';
+import {expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
+import {aTimeout} from '@tecton-wc/testing/timing.js';
+import {ContextConsumer} from '@tecton-wc/core/context/protocol.js';
+import {sizeContext} from '@tecton-wc/core/context/keys.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {defineElement} from '@tecton-wc/core/define.js';
 import '../button/define.js';
 import './define.js';
 import type {TctButton} from '../button/tct-button.js';

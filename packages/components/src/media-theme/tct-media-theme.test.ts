@@ -5,18 +5,18 @@
  */
 import {html, LitElement} from 'lit';
 import {afterEach, beforeAll, describe, expect, it, onTestFinished, vi} from 'vitest';
-import {themeContext} from '@tecton-astryx/core/context/keys.js';
-import {ContextConsumer, ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {features} from '@tecton-astryx/core/features.js';
-import {resetDevWarnings} from '@tecton-astryx/core/utils/dev.js';
-import {expectAccessible} from '@tecton-astryx/testing/a11y.js';
-import {emulateMedia} from '@tecton-astryx/testing/emulate.js';
-import {fixture} from '@tecton-astryx/testing/fixture.js';
-import {waitUntil} from '@tecton-astryx/testing/timing.js';
+import {themeContext} from '@tecton-wc/core/context/keys.js';
+import {ContextConsumer, ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {features} from '@tecton-wc/core/features.js';
+import {resetDevWarnings} from '@tecton-wc/core/utils/dev.js';
+import {expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {emulateMedia} from '@tecton-wc/testing/emulate.js';
+import {fixture} from '@tecton-wc/testing/fixture.js';
+import {waitUntil} from '@tecton-wc/testing/timing.js';
 import '../button/define.js';
-import {defineTheme} from '@tecton-astryx/core/theme/define-theme.js';
-import {generateThemeCSS} from '@tecton-astryx/core/theme/generate-theme-rules.js';
+import {defineTheme} from '@tecton-wc/core/theme/define-theme.js';
+import {generateThemeCSS} from '@tecton-wc/core/theme/generate-theme-rules.js';
 import './define.js';
 import type {TctMediaTheme} from './tct-media-theme.js';
 

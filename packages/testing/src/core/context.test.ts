@@ -12,11 +12,11 @@ import {
   ContextRequestEvent,
   createContext,
   pendingContextRequestCount,
-} from '@tecton-astryx/core/context/protocol.js';
-import {sizeContext, type ElementSize} from '@tecton-astryx/core/context/keys.js';
-import {SizeController} from '@tecton-astryx/core/controllers/size.js';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
+} from '@tecton-wc/core/context/protocol.js';
+import {sizeContext, type ElementSize} from '@tecton-wc/core/context/keys.js';
+import {SizeController} from '@tecton-wc/core/controllers/size.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
 import {fixture} from '../fixture.js';
 import {nextFrame} from '../timing.js';
 

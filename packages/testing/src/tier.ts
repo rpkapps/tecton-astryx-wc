@@ -6,7 +6,7 @@
  * `describe.skipIf(isTier2)`; Tier-2-specific tests use `withFeature` explicitly and run everywhere.
  */
 import {server} from 'vitest/browser';
-import {overrideFeature, type FeatureName} from '@tecton-astryx/core/features.js';
+import {overrideFeature, type FeatureName} from '@tecton-wc/core/features.js';
 
 /** Features `TCT_TIER2=1` forces off (A§18.5). */
 export const TIER2_DISABLED: readonly FeatureName[] = [

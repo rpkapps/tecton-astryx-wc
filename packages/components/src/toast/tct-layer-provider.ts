@@ -1,8 +1,8 @@
 import {html, nothing, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
 import {createRef, ref} from 'lit/directives/ref.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {adoptLightDomStyles} from '@tecton-astryx/core/styles/light-dom.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {adoptLightDomStyles} from '@tecton-wc/core/styles/light-dom.js';
 import {TctToastViewport} from './tct-toast-viewport.js';
 import {registerToastProvider} from './toaster.js';
 import {

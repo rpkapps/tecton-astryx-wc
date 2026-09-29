@@ -1,10 +1,10 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import {LocaleController} from '@tecton-astryx/core/i18n/locale-controller.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
-import {IdController} from '@tecton-astryx/core/utils/id.js';
+import {LocaleController} from '@tecton-wc/core/i18n/locale-controller.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
+import {IdController} from '@tecton-wc/core/utils/id.js';
 import base from '../styles/base.styles.css';
 import motion from '../styles/motion.styles.css';
 import visuallyHidden from '../styles/visually-hidden.styles.css';

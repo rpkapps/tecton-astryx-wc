@@ -1,7 +1,7 @@
 import {property} from 'lit/decorators.js';
-import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {linkContext, type LinkContextValue} from '@tecton-astryx/core/context/keys.js';
-import {TctProviderElement} from '@tecton-astryx/core/provider-element.js';
+import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {linkContext, type LinkContextValue} from '@tecton-wc/core/context/keys.js';
+import {TctProviderElement} from '@tecton-wc/core/provider-element.js';
 import lightStyles from './tct-link-provider.light.css?inline';
 
 /** The router hook of `tct-link-provider`: `(href, event) => boolean`; `true` means "handled". */

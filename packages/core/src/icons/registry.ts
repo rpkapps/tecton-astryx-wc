@@ -1,7 +1,7 @@
 /**
  * Icon registry (A§12, A-13): names to icon data. `tct-icon` renders `IconDefinition`s through Lit
  * `svg` templates (never `unsafeSVG`); this module only stores them. Sets are data modules
- * (`@tecton-astryx/icons/...`), registered by the application or, for the default set, by `tct-icon`
+ * (`@tecton-wc/icons/...`), registered by the application or, for the default set, by `tct-icon`
  * on its first connect at the lowest priority so consumer registrations always win.
  */
 

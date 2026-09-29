@@ -122,7 +122,7 @@
           "upstream": "useDevWarning",
           "target": "devWarn",
           "as": "module-function",
-          "notes": "@tecton-astryx/core/utils/dev.js: warns once when an interactive avatar has no accessible name."
+          "notes": "@tecton-wc/core/utils/dev.js: warns once when an interactive avatar has no accessible name."
         },
         {
           "upstream": "AvatarSizeContext",
@@ -334,7 +334,7 @@
           "upstream": "useListFocus",
           "target": "RovingTabindexController",
           "as": "controller",
-          "notes": "@tecton-astryx/core/controllers/roving-tabindex.js over the interactive members' inner controls."
+          "notes": "@tecton-wc/core/controllers/roving-tabindex.js over the interactive members' inner controls."
         },
         {
           "upstream": "useAvatarGroup",

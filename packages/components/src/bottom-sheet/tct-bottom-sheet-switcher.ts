@@ -1,17 +1,17 @@
 import {html, nothing, type CSSResultGroup, type PropertyValues, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
-import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import {TctAfterOpenChangeEvent} from '@tecton-astryx/core/events/tct-after-open-change.js';
-import {TctOpenChangeEvent} from '@tecton-astryx/core/events/tct-open-change.js';
-import type {ChangeReason} from '@tecton-astryx/core/events/tct-event.js';
+import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import {TctAfterOpenChangeEvent} from '@tecton-wc/core/events/tct-after-open-change.js';
+import {TctOpenChangeEvent} from '@tecton-wc/core/events/tct-open-change.js';
+import type {ChangeReason} from '@tecton-wc/core/events/tct-event.js';
 import {
   LayerController,
   type EscapeBehavior,
   type LayerOptions,
-} from '@tecton-astryx/core/layer/layer-controller.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
-import {deepActiveElement} from '@tecton-astryx/core/utils/focus.js';
+} from '@tecton-wc/core/layer/layer-controller.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
+import {deepActiveElement} from '@tecton-wc/core/utils/focus.js';
 import base from '../styles/base.styles.css';
 import type {BottomSheetPurpose} from './bottom-sheet.types.js';
 import {

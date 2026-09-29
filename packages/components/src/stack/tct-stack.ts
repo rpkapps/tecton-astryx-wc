@@ -3,14 +3,10 @@ import {property} from 'lit/decorators.js';
 import {html as staticHtml} from 'lit/static-html.js';
 import {ifDefined} from 'lit/directives/if-defined.js';
 import {styleMap} from 'lit/directives/style-map.js';
-import {AriaDelegateController} from '@tecton-astryx/core/controllers/aria-delegate.js';
-import {
-  BoxPropsMixin,
-  SPACING_STEPS,
-  type SpacingStep,
-} from '@tecton-astryx/core/mixins/box-props.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {AriaDelegateController} from '@tecton-wc/core/controllers/aria-delegate.js';
+import {BoxPropsMixin, SPACING_STEPS, type SpacingStep} from '@tecton-wc/core/mixins/box-props.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import base from '../styles/base.styles.css';
 import focusRing from '../styles/focus-ring.styles.css';
 import {ScrollFocusController} from './scroll-focus.js';

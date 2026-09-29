@@ -1,11 +1,11 @@
 import {html, type CSSResultGroup, type PropertyValues} from 'lit';
 import {property} from 'lit/decorators.js';
-import {ContextProvider} from '@tecton-astryx/core/context/protocol.js';
-import type {ElementSize} from '@tecton-astryx/core/context/keys.js';
-import {SizeController} from '@tecton-astryx/core/controllers/size.js';
-import {TctValueChangeEvent} from '@tecton-astryx/core/events/tct-value-change.js';
-import {TctElement} from '@tecton-astryx/core/tct-element.js';
-import {devWarn} from '@tecton-astryx/core/utils/dev.js';
+import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
+import type {ElementSize} from '@tecton-wc/core/context/keys.js';
+import {SizeController} from '@tecton-wc/core/controllers/size.js';
+import {TctValueChangeEvent} from '@tecton-wc/core/events/tct-value-change.js';
+import {TctElement} from '@tecton-wc/core/tct-element.js';
+import {devWarn} from '@tecton-wc/core/utils/dev.js';
 import base from '../styles/base.styles.css';
 import styles from './tct-toggle-button-group.styles.css';
 import {
@@ -36,7 +36,7 @@ const tokens = (value: string): string[] => value.split(/\s+/).filter(Boolean);
  * @tag tct-toggle-button-group
  * @upstream ToggleButtonGroup
  * @slot - `tct-toggle-button` children.
- * @csspart group - The layout box that holds the buttons (Astryx target `astryx-toggle-button-group`).
+ * @csspart group - The layout box that holds the buttons.
  * @fires tct-value-change - A user toggled a button; cancelable. `value` is the requested selection (string or null for `single`).
  * @cssstate disabled - The whole group is disabled.
  * @cloakDisplay inline-flex

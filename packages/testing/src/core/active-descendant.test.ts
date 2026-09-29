@@ -5,9 +5,9 @@
  */
 import {userEvent} from 'vitest/browser';
 import {beforeAll, describe, expect, it, vi} from 'vitest';
-import {getAnnouncerRegions} from '@tecton-astryx/core/a11y/announcer.js';
-import {defineElement} from '@tecton-astryx/core/define.js';
-import {features} from '@tecton-astryx/core/features.js';
+import {getAnnouncerRegions} from '@tecton-wc/core/a11y/announcer.js';
+import {defineElement} from '@tecton-wc/core/define.js';
+import {features} from '@tecton-wc/core/features.js';
 import {axActiveDescendant} from '../a11y.js';
 import {fixture} from '../fixture.js';
 import {TctTestCombobox} from '../fixtures/test-combobox.js';

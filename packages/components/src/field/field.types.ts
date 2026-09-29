@@ -1,7 +1,7 @@
 /** Shared vocabulary of the field family: status types and variants, label indicators. */
 
 export const INPUT_STATUS_TYPES = ['error', 'warning', 'success', 'info'] as const;
-/** Validation status of a control. `info` is the neutral message a field may show (Astryx: error, warning, success). */
+/** Validation status of a control. `info` is the neutral message a field may show (the base set is error, warning, success). */
 export type InputStatusType = (typeof INPUT_STATUS_TYPES)[number];
 
 /** Status of a control: the type and an optional message. */

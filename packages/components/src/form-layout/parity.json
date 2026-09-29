@@ -51,7 +51,7 @@
           "upstream": "FormLayoutContext",
           "target": "formLayoutContext",
           "as": "context",
-          "notes": "@tecton-astryx/core/context/keys.js (WP-F): {direction, optionality}. Provided by ContextProvider on the host; the nearest layout wins, so nesting overrides."
+          "notes": "@tecton-wc/core/context/keys.js (WP-F): {direction, optionality}. Provided by ContextProvider on the host; the nearest layout wins, so nesting overrides."
         }
       ],
       "keyboard": [],
