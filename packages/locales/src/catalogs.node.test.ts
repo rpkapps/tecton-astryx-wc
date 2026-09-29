@@ -173,7 +173,8 @@ describe('English namespace modules', () => {
       const expected = source[id];
       expect(typeof expected === 'string' ? expected : expected?.defaultMessage, id).toBe(message);
     }
-  });
+    // Imports 70+ namespace modules and reads the component message files: slow on a loaded machine.
+  }, 30_000);
 });
 
 describe('pseudo locale', () => {

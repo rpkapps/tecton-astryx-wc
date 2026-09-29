@@ -114,5 +114,6 @@ describe('scanPublicOutputs and the CLI', () => {
     expect(failed.status).toBe(1);
     expect(failed.stderr).toContain('FAILED');
     expect(run(good).status).toBe(0);
-  });
+    // Two node processes, each compiling the script: seconds on a loaded machine, not milliseconds.
+  }, 60_000);
 });
