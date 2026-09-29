@@ -82,7 +82,10 @@ export class TctTabMenu extends TctElement {
       );
     }
     if (!this.label) {
-      devWarn('tab-menu:label', '<tct-tab-menu> needs a `label`: it is the trigger text and the name of the menu.');
+      devWarn(
+        'tab-menu:label',
+        '<tct-tab-menu> needs a `label`: it is the trigger text and the name of the menu.',
+      );
     }
   }
 
@@ -148,11 +151,12 @@ export class TctTabMenu extends TctElement {
         @tct-value-change=${this.#onValueChange}
       >
         ${this.options.map(
-          (option) => html`<tct-dropdown-menu-radio-item
-            value=${option.value}
-            label=${option.label}
-            icon=${option.icon ?? ''}
-          ></tct-dropdown-menu-radio-item>`,
+          (option) =>
+            html`<tct-dropdown-menu-radio-item
+              value=${option.value}
+              label=${option.label}
+              icon=${option.icon ?? ''}
+            ></tct-dropdown-menu-radio-item>`,
         )}
       </tct-dropdown-menu-radio-group>
     </tct-dropdown-menu>`;

@@ -210,7 +210,8 @@ export class TctTab extends TctElement {
     const isTab = pattern === 'tabs';
     const isLink = this.#isLink;
     const tag = isLink ? literal`a` : literal`button`;
-    const href = isLink && !this.disabled && this.href ? safeUrl(this.href, {allowData: true}) : null;
+    const href =
+      isLink && !this.disabled && this.href ? safeUrl(this.href, {allowData: true}) : null;
     const hasLabel = !this.labelHidden && this.label !== '';
     const ariaLabel = this.labelHidden ? this.label : null;
 

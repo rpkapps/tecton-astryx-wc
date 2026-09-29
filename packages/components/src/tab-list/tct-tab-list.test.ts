@@ -91,8 +91,8 @@ runElementSuite({
   tag: 'tct-tab',
   render: () =>
     html`<tct-tab-list value="a"
-      ><tct-tab id="under-test" value="a" label="A"></tct-tab></tct-tab-list
-    >`,
+      ><tct-tab id="under-test" value="a" label="A"></tct-tab
+    ></tct-tab-list>`,
   properties: {value: 'b', label: 'B', labelHidden: true, disabled: true, href: '/x', panelId: 'p'},
   attributes: {value: 'value', label: 'label'},
   skip: ['a11y', 'hostBox'],
@@ -252,7 +252,8 @@ describe('tct-tab-list: selecting', () => {
        <tct-tab value="b" label="B"><tct-icon slot="icon" name="close"></tct-icon><tct-icon slot="selected-icon" name="check"></tct-icon></tct-tab>`,
     );
     const slotName = (value: string): string | null =>
-      tab(element, value).shadowRoot!.querySelector('.icon-slot slot')?.getAttribute('name') ?? null;
+      tab(element, value).shadowRoot!.querySelector('.icon-slot slot')?.getAttribute('name') ??
+      null;
     expect(slotName('a')).toBe('selected-icon');
     expect(slotName('b')).toBe('icon');
     expect(tab(element, 'a').shadowRoot!.querySelector('.end slot')).not.toBeNull();
@@ -287,7 +288,10 @@ describe('tct-tab-list: keyboard navigation (roving tabindex)', () => {
     const element = await tabList('value="activity"');
     expect(tabindexes(element)).toEqual(['-1', '0', '-1']);
     const sequence = await tabSequence(element, {start: document.getElementById('before')!});
-    expect(sequence.map((el) => el.id || (el as HTMLElement).getAttribute('part'))).toEqual(['tab', 'after']);
+    expect(sequence.map((el) => el.id || (el as HTMLElement).getAttribute('part'))).toEqual([
+      'tab',
+      'after',
+    ]);
   });
 
   it('makes the first tab tabbable when the selected value matches no tab', async () => {

@@ -46,7 +46,9 @@ export function renderIndicator(input: IndicatorInput): TemplateResult | typeof 
       ? status
       : null;
   const showNumber =
-    !useCustom && statusGlyph === null && (preset === 'number' || (preset === 'auto' && progress === 'not-started'));
+    !useCustom &&
+    statusGlyph === null &&
+    (preset === 'number' || (preset === 'auto' && progress === 'not-started'));
   const attributes = {progress, status: status ?? '', disabled};
 
   if (showNumber) {

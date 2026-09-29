@@ -116,7 +116,9 @@ export class TctStep extends TctElement {
   /** The step's index: `step`, else its position among the stepper's steps. */
   get index(): number {
     if (this.step !== undefined && Number.isFinite(this.step)) return this.step;
-    const steps = [...(this.parentElement?.children ?? [])].filter((child) => child.localName === 'tct-step');
+    const steps = [...(this.parentElement?.children ?? [])].filter(
+      (child) => child.localName === 'tct-step',
+    );
     return Math.max(0, steps.indexOf(this));
   }
 
@@ -154,7 +156,8 @@ export class TctStep extends TctElement {
     const status = this.#resolvedStatus;
     if (status === 'error') return this.#locale.t('status.error');
     if (status === 'warning') return this.#locale.t('status.warning');
-    if (status === 'success' || this.#progress === 'completed') return this.#locale.t('status.completed');
+    if (status === 'success' || this.#progress === 'completed')
+      return this.#locale.t('status.completed');
     return null;
   }
 
@@ -179,7 +182,11 @@ export class TctStep extends TctElement {
       ['indicator', this.indicator, STEP_INDICATORS],
       ['density', this.density, STEPPER_DENSITIES],
     ] as const) {
-      if (changed.has(name) && value !== undefined && !(allowed as readonly string[]).includes(value)) {
+      if (
+        changed.has(name) &&
+        value !== undefined &&
+        !(allowed as readonly string[]).includes(value)
+      ) {
         devWarn(
           `step:${name}:${value}`,
           `<tct-step ${name}="${value}"> is not one of ${allowed.join(', ')}.`,
@@ -228,7 +235,11 @@ export class TctStep extends TctElement {
   }
 
   #label(): TemplateResult {
-    return html`<span class="label" part="label" data-progress=${this.#progress} ?data-disabled=${this.disabled}
+    return html`<span
+      class="label"
+      part="label"
+      data-progress=${this.#progress}
+      ?data-disabled=${this.disabled}
       >${this.label}</span
     >`;
   }
@@ -247,7 +258,9 @@ export class TctStep extends TctElement {
 
   #description(): TemplateResult | typeof nothing {
     return this.description
-      ? html`<span class="description" part="description" data-progress=${this.#progress}>${this.description}</span>`
+      ? html`<span class="description" part="description" data-progress=${this.#progress}
+          >${this.description}</span
+        >`
       : nothing;
   }
 
@@ -282,7 +295,14 @@ export class TctStep extends TctElement {
   /** Wraps the interactive area: a button in a navigable stepper, a plain block otherwise. */
   #interactive(kind: string, inner: TemplateResult): TemplateResult {
     return this.#clickable
-      ? html`<button type="button" class=${kind} aria-label=${this.#buttonName()} @click=${this.#onClick}>${inner}</button>`
+      ? html`<button
+          type="button"
+          class=${kind}
+          aria-label=${this.#buttonName()}
+          @click=${this.#onClick}
+        >
+          ${inner}
+        </button>`
       : html`<div class=${kind}>${inner}</div>`;
   }
 
@@ -290,7 +310,8 @@ export class TctStep extends TctElement {
   #timing(spanIndex: number, offset: number, share: number): Record<string, string> {
     const ctx = this.#ctx;
     const single = !!ctx && ctx.activeStep === ctx.previousActiveStep + 1;
-    if (!single || spanIndex !== ctx.previousActiveStep) return {'--_fill-duration': '0s', '--_fill-delay': '0s'};
+    if (!single || spanIndex !== ctx.previousActiveStep)
+      return {'--_fill-duration': '0s', '--_fill-delay': '0s'};
     const span = 'var(--duration-medium)';
     return {'--_fill-duration': timeSlice(span, share), '--_fill-delay': timeSlice(span, offset)};
   }
@@ -318,14 +339,17 @@ export class TctStep extends TctElement {
       : this.#interactive(
           'header',
           html`${this.#labelRow(true)}${
-            description === nothing ? nothing : html`<span class="description-row">${description}</span>`
+            description === nothing
+              ? nothing
+              : html`<span class="description-row">${description}</span>`
           }`,
         );
     const content = this.#hasContent()
       ? html`<div class="content" ?hidden=${compact}><slot></slot></div>`
       : nothing;
     return vertical
-      ? html`${bar}<div class="body">${header}${content}</div>`
+      ? html`${bar}
+          <div class="body">${header}${content}</div>`
       : html`${bar}${header}${content}`;
   }
 
@@ -353,29 +377,27 @@ export class TctStep extends TctElement {
 
     if (vertical) {
       const content = this.#hasContent()
-        ? html`<div class="ot-content-wrap"
-            >${this.#segment('content', afterFilled, this.#timing(index, railShare, contentShare))}<div class="content"
-              ><slot></slot></div
-          ></div>`
+        ? html`<div class="ot-content-wrap">
+            ${this.#segment('content', afterFilled, this.#timing(index, railShare, contentShare))}
+            <div class="content"><slot></slot></div>
+          </div>`
         : nothing;
       return html`${this.#interactive(
-          'ot-wrap',
-          html`<span class="ot-column">${lead}${indicator}${rail}</span
-            ><span class="ot-body">${labelLine}${this.#description()}</span>`,
-        )}${content}`;
+        'ot-wrap',
+        html`<span class="ot-column">${lead}${indicator}${rail}</span
+          ><span class="ot-body">${labelLine}${this.#description()}</span>`,
+      )}${content}`;
     }
     return html`${this.#interactive(
-        'ot-wrap',
-        html`<span class="track-row">${lead}${indicator}${rail}</span>${
-          compact
-            ? nothing
-            : html`<span class="ot-label">${labelLine}${this.#description()}</span>`
+      'ot-wrap',
+      html`<span class="track-row">${lead}${indicator}${rail}</span>${
+          compact ? nothing : html`<span class="ot-label">${labelLine}${this.#description()}</span>`
         }`,
-      )}${compact ? html`<span class="visually-hidden">${this.label}</span>${this.#statusWord()}` : nothing}${
-        this.#hasContent()
-          ? html`<div class="content" ?hidden=${compact}><slot></slot></div>`
-          : nothing
-      }`;
+    )}${compact ? html`<span class="visually-hidden">${this.label}</span>${this.#statusWord()}` : nothing}${
+      this.#hasContent()
+        ? html`<div class="content" ?hidden=${compact}><slot></slot></div>`
+        : nothing
+    }`;
   }
 
   /**

@@ -149,7 +149,9 @@ export class TctStepper extends TctElement {
   /** A horizontal stepper collapses when the width each step gets falls below `minimum-step-width`. */
   get #compact(): boolean {
     const count = this.#steps().length;
-    const minimum = Number.isFinite(this.minimumStepWidth) ? this.minimumStepWidth : DEFAULT_MINIMUM_STEP_WIDTH;
+    const minimum = Number.isFinite(this.minimumStepWidth)
+      ? this.minimumStepWidth
+      : DEFAULT_MINIMUM_STEP_WIDTH;
     return this.#horizontal && this._width > 0 && count > 0 && this._width / count < minimum;
   }
 
@@ -218,8 +220,14 @@ export class TctStepper extends TctElement {
       ['collapsed-variant', this.collapsedVariant, STEPPER_COLLAPSED_VARIANTS],
     ] as const) {
       const property = name.replace(/-(\w)/g, (_, letter: string) => letter.toUpperCase());
-      if (changed.has(property as keyof TctStepper) && !(allowed as readonly string[]).includes(value)) {
-        devWarn(`stepper:${name}:${value}`, `<tct-stepper ${name}="${value}"> is not one of ${allowed.join(', ')}.`);
+      if (
+        changed.has(property as keyof TctStepper) &&
+        !(allowed as readonly string[]).includes(value)
+      ) {
+        devWarn(
+          `stepper:${name}:${value}`,
+          `<tct-stepper ${name}="${value}"> is not one of ${allowed.join(', ')}.`,
+        );
       }
     }
   }
@@ -280,7 +288,11 @@ export class TctStepper extends TctElement {
     for (const step of this.#steps()) {
       if (step.disabled) continue;
       const index = step.index;
-      if (delta === -1 ? index < this.activeStep && (target === null || index > target) : index > this.activeStep && (target === null || index < target)) {
+      if (
+        delta === -1
+          ? index < this.activeStep && (target === null || index > target)
+          : index > this.activeStep && (target === null || index < target)
+      ) {
         target = index;
       }
     }
@@ -305,7 +317,9 @@ export class TctStepper extends TctElement {
   }
 
   #renderSummary(): TemplateResult | typeof nothing {
-    const variant = STEPPER_COLLAPSED_VARIANTS.includes(this.collapsedVariant) ? this.collapsedVariant : 'with-label-and-controls';
+    const variant = STEPPER_COLLAPSED_VARIANTS.includes(this.collapsedVariant)
+      ? this.collapsedVariant
+      : 'with-label-and-controls';
     if (!this.#compact || variant === 'hidden-label') return nothing;
     const showsControls = variant === 'with-label-and-controls' && this.navigable;
     const active = this.#steps().find((step) => step.index === this.activeStep);
@@ -313,13 +327,19 @@ export class TctStepper extends TctElement {
     // technology so the current step is not announced twice.
     return html`<div class="summary" part="summary">
       ${showsControls ? this.#renderControl(-1) : nothing}
-      <div class="summary-body" aria-hidden="true">${active ? active.renderSummary() : nothing}</div>
+      <div class="summary-body" aria-hidden="true">
+        ${active ? active.renderSummary() : nothing}
+      </div>
       ${showsControls ? this.#renderControl(1) : nothing}
     </div>`;
   }
 
   override render(): TemplateResult {
-    return html`<div class="frame" part="frame" data-orientation=${this.#horizontal ? 'horizontal' : 'vertical'}>
+    return html`<div
+      class="frame"
+      part="frame"
+      data-orientation=${this.#horizontal ? 'horizontal' : 'vertical'}
+    >
       <ol
         class="list"
         part="list"

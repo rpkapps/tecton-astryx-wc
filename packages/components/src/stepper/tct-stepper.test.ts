@@ -48,17 +48,21 @@ async function settleSteps(element: Element): Promise<void> {
 
 const steps = (element: Element): TctStep[] => [...element.children] as TctStep[];
 const root = (step: TctStep): HTMLElement => step.shadowRoot!.querySelector<HTMLElement>('.step')!;
-const indicator = (step: TctStep): HTMLElement | null => step.shadowRoot!.querySelector<HTMLElement>('.indicator');
-const button = (step: TctStep): HTMLButtonElement | null => step.shadowRoot!.querySelector<HTMLButtonElement>('button');
-const list = (element: TctStepper): HTMLElement => element.shadowRoot!.querySelector<HTMLElement>('.list')!;
-const summary = (element: TctStepper): HTMLElement | null => element.shadowRoot!.querySelector<HTMLElement>('.summary');
+const indicator = (step: TctStep): HTMLElement | null =>
+  step.shadowRoot!.querySelector<HTMLElement>('.indicator');
+const button = (step: TctStep): HTMLButtonElement | null =>
+  step.shadowRoot!.querySelector<HTMLButtonElement>('button');
+const list = (element: TctStepper): HTMLElement =>
+  element.shadowRoot!.querySelector<HTMLElement>('.list')!;
+const summary = (element: TctStepper): HTMLElement | null =>
+  element.shadowRoot!.querySelector<HTMLElement>('.summary');
 
 runElementSuite({
   tag: 'tct-stepper',
   render: () =>
     html`<tct-stepper active-step="1"
-      ><tct-step label="One"></tct-step><tct-step label="Two"></tct-step></tct-stepper
-    >`,
+      ><tct-step label="One"></tct-step><tct-step label="Two"></tct-step
+    ></tct-stepper>`,
   properties: {
     activeStep: 1,
     orientation: 'vertical',
@@ -82,8 +86,8 @@ runElementSuite({
   tag: 'tct-step',
   render: () =>
     html`<tct-stepper active-step="0"
-      ><tct-step id="under-test" label="One"></tct-step><tct-step label="Two"></tct-step></tct-stepper
-    >`,
+      ><tct-step id="under-test" label="One"></tct-step><tct-step label="Two"></tct-step
+    ></tct-stepper>`,
   properties: {
     step: 3,
     label: 'Other',
@@ -125,7 +129,8 @@ describe('tct-stepper: semantics', () => {
     expect(first!.matches(':state(completed)')).toBe(true);
     expect(third!.matches(':state(completed)')).toBe(false);
     // The state is ElementInternals ARIA on the host (Chromium's AX helper does not surface `current`).
-    const current = (step: TctStep): string | null => (step as unknown as {internals: ElementInternals}).internals.ariaCurrent;
+    const current = (step: TctStep): string | null =>
+      (step as unknown as {internals: ElementInternals}).internals.ariaCurrent;
     expect(steps(element).map(current)).toEqual([null, 'step', null]);
     expect(await axNode(second!)).toMatchObject({role: 'listitem'});
   });
@@ -137,7 +142,9 @@ describe('tct-stepper: semantics', () => {
 
   it('renders descriptions when provided', async () => {
     const element = await stepper();
-    expect(steps(element)[1]!.shadowRoot!.querySelector('.description')!.textContent).toBe('Tell us about you');
+    expect(steps(element)[1]!.shadowRoot!.querySelector('.description')!.textContent).toBe(
+      'Tell us about you',
+    );
     expect(steps(element)[0]!.shadowRoot!.querySelector('.description')).toBeNull();
   });
 
@@ -163,8 +170,13 @@ describe('tct-stepper: semantics', () => {
     globalThis.tctDevMode = true;
     resetDevWarnings();
     try {
-      await stepper('active-step="0"', '<tct-step label="A" step="1"></tct-step><tct-step label="B" step="1"></tct-step>');
-      expect(warn.mock.calls.some((call) => String(call[0]).includes('Duplicate step index 1'))).toBe(true);
+      await stepper(
+        'active-step="0"',
+        '<tct-step label="A" step="1"></tct-step><tct-step label="B" step="1"></tct-step>',
+      );
+      expect(
+        warn.mock.calls.some((call) => String(call[0]).includes('Duplicate step index 1')),
+      ).toBe(true);
     } finally {
       globalThis.tctDevMode = undefined;
       warn.mockRestore();
@@ -185,7 +197,9 @@ describe('tct-step: status and indicators', () => {
       'active-step="3"',
       '<tct-step label="Done"></tct-step><tct-step label="Bad" status="error"></tct-step><tct-step label="Careful" status="warning"></tct-step><tct-step label="Now"></tct-step>',
     );
-    const words = steps(element).map((step) => step.shadowRoot!.querySelector('.visually-hidden')?.textContent ?? null);
+    const words = steps(element).map(
+      (step) => step.shadowRoot!.querySelector('.visually-hidden')?.textContent ?? null,
+    );
     expect(words).toEqual(['completed', 'error', 'warning', null]);
     expect(indicator(steps(element)[1]!)!.getAttribute('aria-hidden')).toBe('true');
   });
@@ -195,12 +209,17 @@ describe('tct-step: status and indicators', () => {
       'active-step="0"',
       '<tct-step label="Now"></tct-step><tct-step label="A" status="success"></tct-step><tct-step label="B" status="warning"></tct-step><tct-step label="C" status="error"></tct-step>',
     );
-    const names = steps(element).slice(1).map((step) => indicator(step)!.querySelector('tct-icon')?.getAttribute('name'));
+    const names = steps(element)
+      .slice(1)
+      .map((step) => indicator(step)!.querySelector('tct-icon')?.getAttribute('name'));
     expect(names).toEqual(['success', 'warning', 'error']);
   });
 
   it('lets the current step keep its ring regardless of status', async () => {
-    const element = await stepper('active-step="0"', '<tct-step label="Now" status="error"></tct-step>');
+    const element = await stepper(
+      'active-step="0"',
+      '<tct-step label="Now" status="error"></tct-step>',
+    );
     const ind = indicator(steps(element)[0]!)!;
     expect(ind.dataset.kind).toBe('progress');
     expect(ind.querySelector('svg')).not.toBeNull();
@@ -237,8 +256,13 @@ describe('tct-step: status and indicators', () => {
   });
 
   it('keeps status colour out of the connector: the bar follows progress only', async () => {
-    const element = await stepper('active-step="1"', '<tct-step label="A" status="error"></tct-step><tct-step label="B"></tct-step>');
-    expect(steps(element)[0]!.shadowRoot!.querySelector('.seg')!.hasAttribute('data-filled')).toBe(true);
+    const element = await stepper(
+      'active-step="1"',
+      '<tct-step label="A" status="error"></tct-step><tct-step label="B"></tct-step>',
+    );
+    expect(steps(element)[0]!.shadowRoot!.querySelector('.seg')!.hasAttribute('data-filled')).toBe(
+      true,
+    );
     expect(root(steps(element)[0]!).dataset.status).toBe('error');
   });
 });
@@ -262,7 +286,10 @@ describe('tct-step: clickable steps (navigable)', () => {
       'active-step="1" navigable',
       '<tct-step label="Account"></tct-step><tct-step label="Payment" status="error"></tct-step><tct-step label="Review"></tct-step>',
     );
-    expect(await axNode(button(steps(element)[0]!)!)).toMatchObject({role: 'button', name: 'Go to step 1: Account, completed'});
+    expect(await axNode(button(steps(element)[0]!)!)).toMatchObject({
+      role: 'button',
+      name: 'Go to step 1: Account, completed',
+    });
     expect((await axNode(button(steps(element)[1]!)!)).name).toBe('Go to step 2: Payment, error');
     expect((await axNode(button(steps(element)[2]!)!)).name).toBe('Go to step 3: Review');
   });
@@ -338,14 +365,24 @@ describe('tct-stepper: connector fill', () => {
 
   it('fills the bar of every step up to the active one, along the inline axis when horizontal', async () => {
     const element = await stepper('active-step="1"');
-    expect(steps(element).map((step) => bar(step).hasAttribute('data-filled'))).toEqual([true, true, false]);
-    expect(getComputedStyle(bar(steps(element)[2]!), '::before').transform).toBe('matrix(0, 0, 0, 1, 0, 0)');
-    expect(getComputedStyle(bar(steps(element)[0]!), '::before').transform).toBe('matrix(1, 0, 0, 1, 0, 0)');
+    expect(steps(element).map((step) => bar(step).hasAttribute('data-filled'))).toEqual([
+      true,
+      true,
+      false,
+    ]);
+    expect(getComputedStyle(bar(steps(element)[2]!), '::before').transform).toBe(
+      'matrix(0, 0, 0, 1, 0, 0)',
+    );
+    expect(getComputedStyle(bar(steps(element)[0]!), '::before').transform).toBe(
+      'matrix(1, 0, 0, 1, 0, 0)',
+    );
   });
 
   it('scales along the block axis when vertical', async () => {
     const element = await stepper('active-step="0" orientation="vertical"');
-    expect(getComputedStyle(bar(steps(element)[2]!), '::before').transform).toBe('matrix(1, 0, 0, 0, 0, 0)');
+    expect(getComputedStyle(bar(steps(element)[2]!), '::before').transform).toBe(
+      'matrix(1, 0, 0, 0, 0, 0)',
+    );
   });
 
   it('leaves every segment instant on mount', async () => {
@@ -357,7 +394,11 @@ describe('tct-stepper: connector fill', () => {
     const element = await stepper('active-step="0"');
     element.activeStep = 1;
     await settleSteps(element);
-    expect(steps(element).map((step) => duration(step))).toEqual(['0s', 'var(--duration-medium)', '0s']);
+    expect(steps(element).map((step) => duration(step))).toEqual([
+      '0s',
+      'var(--duration-medium)',
+      '0s',
+    ]);
   });
 
   it('lands a forward jump of more than one step at once', async () => {
@@ -388,7 +429,9 @@ describe('tct-stepper: connector fill', () => {
 
   it('does not run the fill under reduced motion', async () => {
     const session = cdp();
-    await session.send('Emulation.setEmulatedMedia', {features: [{name: 'prefers-reduced-motion', value: 'reduce'}]});
+    await session.send('Emulation.setEmulatedMedia', {
+      features: [{name: 'prefers-reduced-motion', value: 'reduce'}],
+    });
     try {
       const element = await stepper('active-step="0"');
       element.activeStep = 1;
@@ -404,14 +447,17 @@ describe('tct-stepper: on-track arrangement', () => {
   it('draws the indicator on the rail with a segment before and after it', async () => {
     const element = await stepper('active-step="1" indicator-position="on-track"');
     const middle = steps(element)[1]!;
-    const kinds = [...middle.shadowRoot!.querySelectorAll('.seg')].map((seg) => (seg as HTMLElement).dataset.kind);
+    const kinds = [...middle.shadowRoot!.querySelectorAll('.seg')].map(
+      (seg) => (seg as HTMLElement).dataset.kind,
+    );
     expect(kinds).toEqual(['lead', 'rail']);
     expect(middle.shadowRoot!.querySelector('.track-row .indicator')).not.toBeNull();
   });
 
   it('hides the segment before the first step and after the last', async () => {
     const element = await stepper('active-step="1" indicator-position="on-track"');
-    const seg = (step: TctStep, kind: string): HTMLElement => step.shadowRoot!.querySelector<HTMLElement>(`.seg[data-kind="${kind}"]`)!;
+    const seg = (step: TctStep, kind: string): HTMLElement =>
+      step.shadowRoot!.querySelector<HTMLElement>(`.seg[data-kind="${kind}"]`)!;
     expect(getComputedStyle(seg(steps(element)[0]!, 'lead')).visibility).toBe('hidden');
     expect(getComputedStyle(seg(steps(element)[1]!, 'lead')).visibility).toBe('visible');
     expect(getComputedStyle(seg(steps(element)[2]!, 'rail')).visibility).toBe('hidden');
@@ -422,14 +468,23 @@ describe('tct-stepper: on-track arrangement', () => {
       'active-step="2" orientation="vertical" indicator-position="on-track"',
       '<tct-step label="A"><p>Content</p></tct-step><tct-step label="B"></tct-step><tct-step label="C"></tct-step>',
     );
-    const kinds = [...steps(element)[0]!.shadowRoot!.querySelectorAll('.seg')].map((seg) => (seg as HTMLElement).dataset.kind);
+    const kinds = [...steps(element)[0]!.shadowRoot!.querySelectorAll('.seg')].map(
+      (seg) => (seg as HTMLElement).dataset.kind,
+    );
     expect(kinds).toEqual(['lead', 'rail', 'content']);
   });
 
   it('exposes hidden status text in the on-track layout too', async () => {
-    const element = await stepper('active-step="1" indicator-position="on-track"', '<tct-step label="A"></tct-step><tct-step label="B" status="error"></tct-step>');
-    expect(steps(element)[0]!.shadowRoot!.querySelector('.visually-hidden')!.textContent).toBe('completed');
-    expect(steps(element)[1]!.shadowRoot!.querySelector('.visually-hidden')!.textContent).toBe('error');
+    const element = await stepper(
+      'active-step="1" indicator-position="on-track"',
+      '<tct-step label="A"></tct-step><tct-step label="B" status="error"></tct-step>',
+    );
+    expect(steps(element)[0]!.shadowRoot!.querySelector('.visually-hidden')!.textContent).toBe(
+      'completed',
+    );
+    expect(steps(element)[1]!.shadowRoot!.querySelector('.visually-hidden')!.textContent).toBe(
+      'error',
+    );
   });
 
   it('supports keyboard activation in the on-track layout', async () => {
@@ -443,9 +498,15 @@ describe('tct-stepper: on-track arrangement', () => {
 describe('tct-stepper: collapse (narrow containers)', () => {
   const FOUR =
     '<tct-step label="Account"></tct-step><tct-step label="Profile" description="About you"></tct-step><tct-step label="Payment"></tct-step><tct-step label="Review"></tct-step>';
-  const collapsed = async (attributes = 'active-step="1"', width = 'width: 300px'): Promise<TctStepper> => {
+  const collapsed = async (
+    attributes = 'active-step="1"',
+    width = 'width: 300px',
+  ): Promise<TctStepper> => {
     const element = await stepper(attributes, FOUR, width);
-    await waitUntil(() => steps(element).every((step) => root(step).hasAttribute('data-compact')), 'collapsed');
+    await waitUntil(
+      () => steps(element).every((step) => root(step).hasAttribute('data-compact')),
+      'collapsed',
+    );
     await settleSteps(element);
     return element;
   };
@@ -477,9 +538,13 @@ describe('tct-stepper: collapse (narrow containers)', () => {
 
   it('keeps the sequence whole for a screen reader after collapsing', async () => {
     const element = await collapsed();
-    const names = steps(element).map((step) => step.shadowRoot!.querySelector('.visually-hidden')?.textContent);
+    const names = steps(element).map(
+      (step) => step.shadowRoot!.querySelector('.visually-hidden')?.textContent,
+    );
     expect(names.slice(0, 4)).toEqual(['Account', 'Profile', 'Payment', 'Review']);
-    expect(summary(element)!.querySelector('.summary-body')!.getAttribute('aria-hidden')).toBe('true');
+    expect(summary(element)!.querySelector('.summary-body')!.getAttribute('aria-hidden')).toBe(
+      'true',
+    );
   });
 
   it('offers no step controls on a stepper that cannot be navigated', async () => {
@@ -489,7 +554,9 @@ describe('tct-stepper: collapse (narrow containers)', () => {
 
   it('moves a step at a time through the controls when navigable, and stops at the ends', async () => {
     const element = await collapsed('active-step="0" navigable');
-    const controls = () => [...element.shadowRoot!.querySelectorAll<HTMLElement>('tct-icon-button')];
+    const controls = () => [
+      ...element.shadowRoot!.querySelectorAll<HTMLElement>('tct-icon-button'),
+    ];
     expect(controls()).toHaveLength(2);
     expect(controls()[0]!.hasAttribute('disabled')).toBe(true);
     const events = recordEvents(element, 'tct-value-change');
@@ -508,18 +575,24 @@ describe('tct-stepper: collapse (narrow containers)', () => {
       'width: 300px',
     );
     await waitUntil(() => summary(element), 'summary');
-    const [previous, next] = [...element.shadowRoot!.querySelectorAll<HTMLElement>('tct-icon-button')];
+    const [previous, next] = [
+      ...element.shadowRoot!.querySelectorAll<HTMLElement>('tct-icon-button'),
+    ];
     await userEvent.click(next!);
     expect(element.activeStep).toBe(3);
     await settleSteps(element);
-    await userEvent.click([...element.shadowRoot!.querySelectorAll<HTMLElement>('tct-icon-button')][0]!);
+    await userEvent.click(
+      [...element.shadowRoot!.querySelectorAll<HTMLElement>('tct-icon-button')][0]!,
+    );
     expect(element.activeStep).toBe(1);
     expect(previous).toBeDefined();
   });
 
   it('names the controls "Previous step" and "Next step"', async () => {
     const element = await collapsed('active-step="1" navigable');
-    const names = [...element.shadowRoot!.querySelectorAll('tct-icon-button')].map((control) => control.getAttribute('label'));
+    const names = [...element.shadowRoot!.querySelectorAll('tct-icon-button')].map((control) =>
+      control.getAttribute('label'),
+    );
     expect(names).toEqual(['Previous step', 'Next step']);
   });
 
@@ -548,7 +621,9 @@ describe('tct-stepper: collapse (narrow containers)', () => {
     );
     await waitUntil(() => root(steps(element)[0]!).hasAttribute('data-compact'), 'collapsed');
     expect(element.querySelector('#kept')).not.toBeNull();
-    expect(steps(element)[0]!.shadowRoot!.querySelector('.content')!.hasAttribute('hidden')).toBe(true);
+    expect(steps(element)[0]!.shadowRoot!.querySelector('.content')!.hasAttribute('hidden')).toBe(
+      true,
+    );
   });
 });
 
@@ -558,13 +633,19 @@ describe('tct-stepper: localisation and RTL', () => {
       `<div lang="de-DE"><tct-stepper active-step="1" navigable>${STEPS}</tct-stepper></div>`,
     );
     const element = wrapper.querySelector('tct-stepper')!;
-    await waitUntil(() => list(element).getAttribute('aria-label') === 'Fortschritt', 'German list name', 4000);
+    await waitUntil(
+      () => list(element).getAttribute('aria-label') === 'Fortschritt',
+      'German list name',
+      4000,
+    );
     await waitUntil(
       () => button(steps(element)[2]!)?.getAttribute('aria-label') === 'Zu Schritt 3: Review',
       'German step name',
       4000,
     );
-    expect(button(steps(element)[0]!)!.getAttribute('aria-label')).toBe('Zu Schritt 1: Account, abgeschlossen');
+    expect(button(steps(element)[0]!)!.getAttribute('aria-label')).toBe(
+      'Zu Schritt 1: Account, abgeschlossen',
+    );
   });
 
   it('names the list in Arabic and runs the steps from the right (ar-SA)', async () => {
@@ -572,18 +653,31 @@ describe('tct-stepper: localisation and RTL', () => {
       `<div lang="ar-SA" dir="rtl"><tct-stepper active-step="1">${STEPS}</tct-stepper></div>`,
     );
     const element = wrapper.querySelector('tct-stepper')!;
-    await waitUntil(() => list(element).getAttribute('aria-label') === 'التقدّم', 'Arabic name', 4000);
+    await waitUntil(
+      () => list(element).getAttribute('aria-label') === 'التقدّم',
+      'Arabic name',
+      4000,
+    );
     await settleSteps(element);
     const [first, second] = steps(element);
-    expect(first!.getBoundingClientRect().left).toBeGreaterThan(second!.getBoundingClientRect().left);
+    expect(first!.getBoundingClientRect().left).toBeGreaterThan(
+      second!.getBoundingClientRect().left,
+    );
   });
 
   it('fills the bar from the right in right-to-left', async () => {
-    const wrapper = await fixture<HTMLDivElement>(`<div dir="rtl" style="width: 480px"><tct-stepper active-step="1">${STEPS}</tct-stepper></div>`);
+    const wrapper = await fixture<HTMLDivElement>(
+      `<div dir="rtl" style="width: 480px"><tct-stepper active-step="1">${STEPS}</tct-stepper></div>`,
+    );
     const element = wrapper.querySelector('tct-stepper')!;
     await settleSteps(element);
-    const fill = getComputedStyle(steps(element)[2]!.shadowRoot!.querySelector('.seg')!, '::before');
-    expect(fill.transformOrigin.startsWith('100%') || parseFloat(fill.transformOrigin) > 0).toBe(true);
+    const fill = getComputedStyle(
+      steps(element)[2]!.shadowRoot!.querySelector('.seg')!,
+      '::before',
+    );
+    expect(fill.transformOrigin.startsWith('100%') || parseFloat(fill.transformOrigin) > 0).toBe(
+      true,
+    );
   });
 });
 
@@ -626,7 +720,9 @@ async function settledStepper(_element: TctStepper): Promise<void> {
 
 afterEach(async () => {
   await userEvent.hover(document.body, {position: {x: 0, y: 0}}).catch(() => undefined);
-  await cdp().send('Input.dispatchMouseEvent', {type: 'mouseReleased', x: 0, y: 0, button: 'left'}).catch(() => undefined);
+  await cdp()
+    .send('Input.dispatchMouseEvent', {type: 'mouseReleased', x: 0, y: 0, button: 'left'})
+    .catch(() => undefined);
 });
 
 describe('tct-step: text contrast in every state', () => {
@@ -675,12 +771,22 @@ describe('tct-step: text contrast in every state', () => {
         const point = {x: box.left + box.width / 2, y: box.top + box.height / 2};
         const session = cdp();
         await session.send('Input.dispatchMouseEvent', {type: 'mouseMoved', ...point});
-        await session.send('Input.dispatchMouseEvent', {type: 'mousePressed', ...point, button: 'left', clickCount: 1});
+        await session.send('Input.dispatchMouseEvent', {
+          type: 'mousePressed',
+          ...point,
+          button: 'left',
+          clickCount: 1,
+        });
         await settledStepper(element);
         try {
           await expectAccessible(wrapper, contrastOnly);
         } finally {
-          await session.send('Input.dispatchMouseEvent', {type: 'mouseReleased', ...point, button: 'left', clickCount: 1});
+          await session.send('Input.dispatchMouseEvent', {
+            type: 'mouseReleased',
+            ...point,
+            button: 'left',
+            clickCount: 1,
+          });
         }
       });
     }

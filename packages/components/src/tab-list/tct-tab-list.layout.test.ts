@@ -14,8 +14,19 @@ import './define.js';
 import type {TctTab} from './tct-tab.js';
 import type {TctTabList} from './tct-tab-list.js';
 
-const MANY = ['Overview', 'Activity', 'Settings', 'Billing', 'Integrations', 'Permissions', 'Audit log']
-  .map((label) => `<tct-tab value="${label.toLowerCase().replace(' ', '-')}" label="${label}"></tct-tab>`)
+const MANY = [
+  'Overview',
+  'Activity',
+  'Settings',
+  'Billing',
+  'Integrations',
+  'Permissions',
+  'Audit log',
+]
+  .map(
+    (label) =>
+      `<tct-tab value="${label.toLowerCase().replace(' ', '-')}" label="${label}"></tct-tab>`,
+  )
   .join('');
 
 async function make(
@@ -123,7 +134,10 @@ describe('tct-tab-list: overflow (scroll)', () => {
     await pressKeys('End');
     const stripBox = strip(element).getBoundingClientRect();
     const tabBox = tab(element, 'audit-log').control!.getBoundingClientRect();
-    await waitUntil(() => tab(element, 'audit-log').control!.getBoundingClientRect().right <= stripBox.right + 1, 'in view');
+    await waitUntil(
+      () => tab(element, 'audit-log').control!.getBoundingClientRect().right <= stripBox.right + 1,
+      'in view',
+    );
     expect(tabBox).toBeDefined();
   });
 
@@ -177,12 +191,18 @@ describe('tct-tab-list: divider and edge compensation', () => {
     'style="width: 400px; --_container-padding-inline-start: 16px; --_container-padding-inline-end: 16px"';
 
   it('edge-compensation="inline" pulls the box through the container padding and lands the first label on the content edge', async () => {
-    const element = await make('value="overview" edge-compensation="inline" has-divider', TABS(), PADDED);
+    const element = await make(
+      'value="overview" edge-compensation="inline" has-divider',
+      TABS(),
+      PADDED,
+    );
     const container = element.parentElement!.getBoundingClientRect();
     const root = element.shadowRoot!.querySelector('.root')!.getBoundingClientRect();
     expect(root.left).toBeCloseTo(container.left - 16, 0);
     expect(root.width).toBeCloseTo(432, 0);
-    const label = tab(element, 'overview').shadowRoot!.querySelector('.label')!.getBoundingClientRect();
+    const label = tab(element, 'overview')
+      .shadowRoot!.querySelector('.label')!
+      .getBoundingClientRect();
     expect(label.left).toBeCloseTo(container.left, 0);
   });
 
@@ -194,7 +214,11 @@ describe('tct-tab-list: divider and edge compensation', () => {
 
   it('changes nothing outside a padded container', async () => {
     const plain = await make('value="overview"', TABS(), 'style="width: 400px"');
-    const compensated = await make('value="overview" edge-compensation="inline"', TABS(), 'style="width: 400px"');
+    const compensated = await make(
+      'value="overview" edge-compensation="inline"',
+      TABS(),
+      'style="width: 400px"',
+    );
     const box = (e: TctTabList) => e.shadowRoot!.querySelector('.root')!.getBoundingClientRect();
     expect(box(compensated).width).toBe(box(plain).width);
     expect(box(compensated).left).toBe(box(plain).left);
@@ -236,7 +260,9 @@ describe('tct-tab-list: keyboard hint', () => {
     const element = await make('value="overview"', TABS(), 'style="width: 480px"');
     await userEvent.click(tab(element, 'activity').control!);
     await nextFrame();
-    expect(element.shadowRoot!.querySelector('[data-tct-keyboard-hint]')!.matches(':popover-open')).toBe(false);
+    expect(
+      element.shadowRoot!.querySelector('[data-tct-keyboard-hint]')!.matches(':popover-open'),
+    ).toBe(false);
   });
 });
 
@@ -247,7 +273,8 @@ describe('tct-tab-list: localisation and RTL', () => {
     );
     const element = wrapper.querySelector('tct-tab-list')!;
     await waitUntil(
-      () => element.shadowRoot!.querySelector('nav')?.getAttribute('aria-label') === 'Registerkarten',
+      () =>
+        element.shadowRoot!.querySelector('nav')?.getAttribute('aria-label') === 'Registerkarten',
       'German name',
       4000,
     );
@@ -259,16 +286,23 @@ describe('tct-tab-list: localisation and RTL', () => {
     );
     const element = wrapper.querySelector('tct-tab-list')!;
     await waitUntil(
-      () => element.shadowRoot!.querySelector('nav')?.getAttribute('aria-label') === 'علامات التبويب',
+      () =>
+        element.shadowRoot!.querySelector('nav')?.getAttribute('aria-label') === 'علامات التبويب',
       'Arabic name',
       4000,
     );
     const [first, second] = tabs(element);
-    expect(first!.getBoundingClientRect().left).toBeGreaterThan(second!.getBoundingClientRect().left);
+    expect(first!.getBoundingClientRect().left).toBeGreaterThan(
+      second!.getBoundingClientRect().left,
+    );
   });
 
   it('the label attribute wins over the catalog', async () => {
-    const element = await make('value="overview" label="Project views"', TABS(), 'style="width: 480px"');
+    const element = await make(
+      'value="overview" label="Project views"',
+      TABS(),
+      'style="width: 480px"',
+    );
     expect(await axNode(element.shadowRoot!.querySelector('nav')!)).toMatchObject({
       role: 'navigation',
       name: 'Project views',
@@ -276,7 +310,11 @@ describe('tct-tab-list: localisation and RTL', () => {
   });
 
   it('the label attribute names the tablist under the tabs pattern', async () => {
-    const element = await make('value="overview" pattern="tabs" label="Project views"', TABS(), 'style="width: 480px"');
+    const element = await make(
+      'value="overview" pattern="tabs" label="Project views"',
+      TABS(),
+      'style="width: 480px"',
+    );
     expect(await axNode(element)).toMatchObject({role: 'tablist', name: 'Project views'});
   });
 });
@@ -301,7 +339,11 @@ describe('tct-tab-list: forced colours and reduced motion', () => {
   });
 
   it('has no axe violations in the default, divided and overflowing configurations', async () => {
-    const element = await make('value="overview" has-divider', MANY, 'style="width: 260px; background: var(--color-background-body)"');
+    const element = await make(
+      'value="overview" has-divider',
+      MANY,
+      'style="width: 260px; background: var(--color-background-body)"',
+    );
     await expectAccessible(element.parentElement!);
   });
 });

@@ -33,8 +33,21 @@
           "as": "event",
           "notes": "Notification after the active item changed because the page scrolled or the user chose one (`id`, `reason`: scroll, click or keyboard). Not cancelable; property writes fire nothing. Also fires in controlled mode when the user chooses an item."
         },
-        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute", "notes": "Default the localized `@tct.outline.label`; a host aria-label wins."},
-        {"upstream": "density", "kind": "prop", "target": "density", "as": "attribute", "reflect": true, "default": "default"},
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Default the localized `@tct.outline.label`; a host aria-label wins."
+        },
+        {
+          "upstream": "density",
+          "kind": "prop",
+          "target": "density",
+          "as": "attribute",
+          "reflect": true,
+          "default": "default"
+        },
         {
           "upstream": "onNavigateStart",
           "kind": "event",
@@ -49,7 +62,14 @@
           "as": "event",
           "notes": "Exactly once per start, when the scroll settles or the user interrupts it (`id`); not fired if the element is removed mid-scroll."
         },
-        {"upstream": "offset", "kind": "prop", "target": "offset", "as": "attribute", "default": 0, "notes": "px of a fixed header; shifts the activation line and the scroll landing."},
+        {
+          "upstream": "offset",
+          "kind": "prop",
+          "target": "offset",
+          "as": "attribute",
+          "default": 0,
+          "notes": "px of a fixed header; shifts the activation line and the scroll landing."
+        },
         {
           "upstream": "scrollContainerRef",
           "kind": "prop",
@@ -65,8 +85,18 @@
           "default": false,
           "notes": "Inverted (upstream default true): the presence of `no-scroll-on-click` skips the scroll; the active item, the hash and the navigate events still happen."
         },
-        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style, ::part(base), ::part(item), ::part(indicator) and custom properties."},
-        {"upstream": "data-testid", "kind": "prop", "as": "waived", "reason": "Any data-* attribute on the host is kept as authored."}
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base), ::part(item), ::part(indicator) and custom properties."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "Any data-* attribute on the host is kept as authored."
+        }
       ],
       "hooks": [
         {
@@ -87,11 +117,19 @@
         }
       ],
       "keyboard": [
-        {"keys": "Tab", "action": "Enters the list at the active heading; the next Tab leaves it", "when": "one tab stop"},
+        {
+          "keys": "Tab",
+          "action": "Enters the list at the active heading; the next Tab leaves it",
+          "when": "one tab stop"
+        },
         {"keys": "ArrowDown", "action": "Moves focus to the next item, wrapping"},
         {"keys": "ArrowUp", "action": "Moves focus to the previous item, wrapping"},
         {"keys": "Home, End", "action": "Move focus to the first and last item"},
-        {"keys": "Enter, Space", "action": "Navigates to the heading of the focused item", "when": "modifier chords are left to the browser"}
+        {
+          "keys": "Enter, Space",
+          "action": "Navigates to the heading of the focused item",
+          "when": "modifier chords are left to the browser"
+        }
       ],
       "form": {"formAssociated": false},
       "differences": [

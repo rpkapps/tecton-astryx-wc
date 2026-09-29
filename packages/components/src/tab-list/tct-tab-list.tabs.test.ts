@@ -132,7 +132,9 @@ describe('tct-tab-list: tabs pattern (upstream: TabList ARIA pattern, role="tabl
       const inner = control(element, 'a');
       expect(inner.localName).toBe('button');
       expect(inner.hasAttribute('href')).toBe(false);
-      expect(warn.mock.calls.some((call) => String(call[0]).includes('href is ignored'))).toBe(true);
+      expect(warn.mock.calls.some((call) => String(call[0]).includes('href is ignored'))).toBe(
+        true,
+      );
     } finally {
       globalThis.tctDevMode = undefined;
       warn.mockRestore();
@@ -167,7 +169,12 @@ describe('tct-tab-list: tabs pattern, automatic activation (default)', () => {
   it('leaves ArrowDown and ArrowUp to the page', async () => {
     const element = await tabsFixture();
     control(element, 'overview').focus();
-    const event = new KeyboardEvent('keydown', {key: 'ArrowDown', bubbles: true, cancelable: true, composed: true});
+    const event = new KeyboardEvent('keydown', {
+      key: 'ArrowDown',
+      bubbles: true,
+      cancelable: true,
+      composed: true,
+    });
     control(element, 'overview').dispatchEvent(event);
     expect(event.defaultPrevented).toBe(false);
     expect(focusedValue(element)).toBe('overview');

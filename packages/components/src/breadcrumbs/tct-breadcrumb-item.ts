@@ -130,13 +130,17 @@ export class TctBreadcrumbItem extends TctElement {
     const collapsed = this.#context.value?.collapsed ?? [];
     // The first collapsed item stands for all of them (an ellipsis menu); the others vanish.
     this.toggleAttribute('data-tct-collapsed', collapsed.includes(this) && collapsed[0] !== this);
-    if (changed.has('menuSize') && this.menuSize && !BREADCRUMB_MENU_SIZES.includes(this.menuSize)) {
+    if (
+      changed.has('menuSize') &&
+      this.menuSize &&
+      !BREADCRUMB_MENU_SIZES.includes(this.menuSize)
+    ) {
       devWarn(
         `breadcrumb-item:menu-size:${this.menuSize}`,
         `<tct-breadcrumb-item menu-size="${this.menuSize}"> is not one of ${BREADCRUMB_MENU_SIZES.join(', ')}.`,
       );
     }
-    if (this.#hasMenu && (this.href !== undefined)) {
+    if (this.#hasMenu && this.href !== undefined) {
       devWarn(
         'breadcrumb-item:menu-href',
         '`menu` and `href` are mutually exclusive on <tct-breadcrumb-item>: `menu` takes precedence and `href` is ignored.',
@@ -178,7 +182,11 @@ export class TctBreadcrumbItem extends TctElement {
     const context = this.#context.value;
     const icon = context?.separatorIcon ?? '';
     const text = context?.separator ?? '/';
-    return html`<span class="separator" part="separator" aria-hidden="true" data-slash=${text === '/' && !icon ? '' : nothing}
+    return html`<span
+      class="separator"
+      part="separator"
+      aria-hidden="true"
+      data-slash=${text === '/' && !icon ? '' : nothing}
       >${icon ? html`<tct-icon name=${icon} size="xsm" color="inherit"></tct-icon>` : text}</span
     >`;
   }
@@ -201,7 +209,14 @@ export class TctBreadcrumbItem extends TctElement {
       .items=${rows}
       exportparts="menu"
     >
-      <button slot="trigger" type="button" class="crumb trigger" part="overflow-trigger" aria-label=${name} data-overflow>
+      <button
+        slot="trigger"
+        type="button"
+        class="crumb trigger"
+        part="overflow-trigger"
+        aria-label=${name}
+        data-overflow
+      >
         <tct-icon name="moreHorizontal" size="sm" color="inherit"></tct-icon>
       </button>
     </tct-dropdown-menu>`;
@@ -256,7 +271,9 @@ export class TctBreadcrumbItem extends TctElement {
         >${this.#renderIcon()}<slot></slot
       ></tct-link>`;
     }
-    return html`<button type="button" class="crumb button" part="crumb">${this.#renderIcon()}<slot></slot></button>`;
+    return html`<button type="button" class="crumb button" part="crumb">
+      ${this.#renderIcon()}<slot></slot>
+    </button>`;
   }
 
   override render(): TemplateResult {

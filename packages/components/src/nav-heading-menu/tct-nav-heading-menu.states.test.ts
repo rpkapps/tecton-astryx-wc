@@ -22,7 +22,9 @@ async function settled(): Promise<void> {
 
 afterEach(async () => {
   await userEvent.hover(document.body, {position: {x: 0, y: 0}}).catch(() => undefined);
-  await cdp().send('Input.dispatchMouseEvent', {type: 'mouseReleased', x: 0, y: 0, button: 'left'}).catch(() => undefined);
+  await cdp()
+    .send('Input.dispatchMouseEvent', {type: 'mouseReleased', x: 0, y: 0, button: 'left'})
+    .catch(() => undefined);
 });
 
 describe('tct-nav-heading-menu-item: text contrast in every state', () => {
@@ -73,12 +75,22 @@ describe('tct-nav-heading-menu-item: text contrast in every state', () => {
       const point = {x: box.left + box.width / 2, y: box.top + box.height / 2};
       const session = cdp();
       await session.send('Input.dispatchMouseEvent', {type: 'mouseMoved', ...point});
-      await session.send('Input.dispatchMouseEvent', {type: 'mousePressed', ...point, button: 'left', clickCount: 1});
+      await session.send('Input.dispatchMouseEvent', {
+        type: 'mousePressed',
+        ...point,
+        button: 'left',
+        clickCount: 1,
+      });
       await settled();
       try {
         await expectAccessible(wrapper, contrastOnly);
       } finally {
-        await session.send('Input.dispatchMouseEvent', {type: 'mouseReleased', ...point, button: 'left', clickCount: 1});
+        await session.send('Input.dispatchMouseEvent', {
+          type: 'mouseReleased',
+          ...point,
+          button: 'left',
+          clickCount: 1,
+        });
       }
     });
   }

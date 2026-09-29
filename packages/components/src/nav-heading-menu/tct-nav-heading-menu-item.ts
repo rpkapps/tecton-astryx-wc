@@ -74,8 +74,7 @@ export class TctNavHeadingMenuItem extends TctElement {
    */
   get menuLabel(): string {
     return (
-      this.label.trim() ||
-      (this.querySelector(':scope > [slot="label"]')?.textContent ?? '').trim()
+      this.label.trim() || (this.querySelector(':scope > [slot="label"]')?.textContent ?? '').trim()
     );
   }
 
@@ -115,7 +114,8 @@ export class TctNavHeadingMenuItem extends TctElement {
 
   /** Space activates a menu item; a native anchor does not do it on its own. */
   readonly #onKeyDown = (event: KeyboardEvent): void => {
-    if (event.key !== ' ' || event.defaultPrevented || this.disabled || this.href === undefined) return;
+    if (event.key !== ' ' || event.defaultPrevented || this.disabled || this.href === undefined)
+      return;
     if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
     event.preventDefault();
     this.control?.click();
@@ -132,7 +132,8 @@ export class TctNavHeadingMenuItem extends TctElement {
     const size = this.#context.value?.size ?? 'md';
     const isLink = this.href !== undefined;
     const tag = isLink ? literal`a` : literal`div`;
-    const href = isLink && !this.disabled && this.href ? safeUrl(this.href, {allowData: true}) : null;
+    const href =
+      isLink && !this.disabled && this.href ? safeUrl(this.href, {allowData: true}) : null;
     return staticHtml`<${tag}
       class="item"
       part="item"

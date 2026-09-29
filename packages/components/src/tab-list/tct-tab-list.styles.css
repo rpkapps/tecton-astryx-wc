@@ -86,10 +86,12 @@
 
   .root[data-edge='inline'] .strip {
     padding-inline-start: calc(
-      var(--_ring-bleed) + max(var(--_container-padding-inline-start, 0px) - var(--_stop-padding), 0px)
+      var(--_ring-bleed) +
+        max(var(--_container-padding-inline-start, 0px) - var(--_stop-padding), 0px)
     );
     padding-inline-end: calc(
-      var(--_ring-bleed) + max(var(--_container-padding-inline-end, 0px) - var(--_stop-padding), 0px)
+      var(--_ring-bleed) +
+        max(var(--_container-padding-inline-end, 0px) - var(--_stop-padding), 0px)
     );
   }
 

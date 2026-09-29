@@ -41,7 +41,8 @@ async function menuList(value = 'overview'): Promise<{list: TctTabList; menu: Tc
 }
 
 const trigger = (menu: TctTabMenu): HTMLButtonElement => menu.control!;
-const dropdown = (menu: TctTabMenu): HTMLElement => menu.shadowRoot!.querySelector('tct-dropdown-menu')!;
+const dropdown = (menu: TctTabMenu): HTMLElement =>
+  menu.shadowRoot!.querySelector('tct-dropdown-menu')!;
 const surface = (menu: TctTabMenu): HTMLElement =>
   dropdown(menu).shadowRoot!.querySelector<HTMLElement>('[role="menu"]')!;
 const layer = (menu: TctTabMenu): HTMLElement =>
@@ -93,18 +94,20 @@ describe('tct-tab-menu: trigger', () => {
 
   it('is a roving stop of the strip: the selected option makes the menu the tab stop', async () => {
     const {list, menu} = await menuList('reports');
-    const stops = [...list.querySelectorAll('tct-tab')].map((tab) => (tab).control!.getAttribute('tabindex'));
+    const stops = [...list.querySelectorAll('tct-tab')].map((tab) =>
+      tab.control!.getAttribute('tabindex'),
+    );
     expect(stops).toEqual(['-1', '-1']);
     expect(trigger(menu).getAttribute('tabindex')).toBe('0');
   });
 
   it('arrow keys move between the tabs and the menu trigger', async () => {
     const {list, menu} = await menuList();
-    (list.querySelector('tct-tab')!).control!.focus();
+    list.querySelector('tct-tab')!.control!.focus();
     await pressKeys('End');
     expect(deepActiveElement()).toBe(trigger(menu));
     await pressKeys('ArrowLeft');
-    expect(deepActiveElement()).toBe((list.querySelectorAll('tct-tab')[1]!).control);
+    expect(deepActiveElement()).toBe(list.querySelectorAll('tct-tab')[1]!.control);
   });
 });
 
@@ -115,7 +118,11 @@ describe('tct-tab-menu: menu', () => {
     expect(trigger(menu).getAttribute('aria-expanded')).toBe('true');
     expect(await axNode(surface(menu))).toMatchObject({role: 'menu', name: 'More'});
     const nodes = await Promise.all(rows(menu).map((row) => axNode(row)));
-    expect(nodes.map((node) => node.role)).toEqual(['menuitemradio', 'menuitemradio', 'menuitemradio']);
+    expect(nodes.map((node) => node.role)).toEqual([
+      'menuitemradio',
+      'menuitemradio',
+      'menuitemradio',
+    ]);
     expect(nodes.map((node) => node.checked)).toEqual(['false', 'true', 'false']);
     expect(menu.shadowRoot!.querySelector('.menu-heading')!.textContent).toBe('More');
   });
@@ -127,7 +134,10 @@ describe('tct-tab-menu: menu', () => {
     await userEvent.click(rows(menu)[2]!);
     await waitUntil(() => !isOpen(menu), 'menu closed');
     expect(events.named('tct-value-change')).toHaveLength(1);
-    expect(events.named('tct-value-change')[0]).toMatchObject({value: 'exports', oldValue: 'overview'});
+    expect(events.named('tct-value-change')[0]).toMatchObject({
+      value: 'exports',
+      oldValue: 'overview',
+    });
     expect(list.value).toBe('exports');
     expect(inner(menu)).toBe('Exports');
     await waitUntil(() => deepActiveElement() === trigger(menu), 'focus back on the trigger');
@@ -198,10 +208,10 @@ describe('tct-tab-menu: menu', () => {
     trigger(menu).focus();
     await pressKeys('Enter');
     await waitUntil(() => deepActiveElement() === rows(menu)[0], 'first row focused');
-    const before = (list.querySelector('tct-tab')!).control!.getAttribute('tabindex');
+    const before = list.querySelector('tct-tab')!.control!.getAttribute('tabindex');
     await pressKeys('ArrowLeft', 'ArrowRight');
     expect(rows(menu).includes(deepActiveElement() as HTMLElement)).toBe(true);
-    expect((list.querySelector('tct-tab')!).control!.getAttribute('tabindex')).toBe(before);
+    expect(list.querySelector('tct-tab')!.control!.getAttribute('tabindex')).toBe(before);
   });
 
   it('has no axe violations closed and open', async () => {

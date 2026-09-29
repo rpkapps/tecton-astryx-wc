@@ -16,7 +16,10 @@ import {fixture} from '@tecton-wc/testing/fixture.js';
 import {deepActiveElement, pressKeys, tabSequence} from '@tecton-wc/testing/keyboard.js';
 import {runElementSuite} from '@tecton-wc/testing/suites/element.js';
 import {nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
-import {navHeadingCloseContext, type NavHeadingCloseContextValue} from './nav-heading-menu.context.js';
+import {
+  navHeadingCloseContext,
+  type NavHeadingCloseContextValue,
+} from './nav-heading-menu.context.js';
 import './define.js';
 import type {TctNavHeadingMenu} from './tct-nav-heading-menu.js';
 import type {TctNavHeadingMenuItem} from './tct-nav-heading-menu-item.js';
@@ -58,12 +61,15 @@ async function menu(attributes = '', inner = ROWS, wrap = false): Promise<TctNav
 }
 
 async function settle(element: Element): Promise<void> {
-  await Promise.all([...element.children].map((child) => (child as TctNavHeadingMenuItem).updateComplete));
+  await Promise.all(
+    [...element.children].map((child) => (child as TctNavHeadingMenuItem).updateComplete),
+  );
   await nextFrame();
   await nextFrame();
 }
 
-const rows = (element: Element): TctNavHeadingMenuItem[] => [...element.children] as TctNavHeadingMenuItem[];
+const rows = (element: Element): TctNavHeadingMenuItem[] =>
+  [...element.children] as TctNavHeadingMenuItem[];
 const control = (row: TctNavHeadingMenuItem): HTMLElement => row.control!;
 const focusedIndex = (element: Element): number =>
   rows(element).findIndex((row) => row.control === deepActiveElement());
@@ -93,13 +99,18 @@ describe('tct-nav-heading-menu', () => {
   it('is a menu whose rows are menuitems', async () => {
     const element = await menu();
     expect(await axNode(element)).toMatchObject({role: 'menu'});
-    for (const row of rows(element)) expect(await axNode(control(row))).toMatchObject({role: 'menuitem'});
+    for (const row of rows(element))
+      expect(await axNode(control(row))).toMatchObject({role: 'menuitem'});
     expect(await axNode(control(rows(element)[0]!))).toMatchObject({name: 'Dashboard'});
   });
 
   it('sizes the menu by size and lets min-width override it', async () => {
     const width = async (attributes: string): Promise<number> =>
-      Math.round((await menu(`style="display: inline-block" ${attributes}`)).shadowRoot!.querySelector('.menu')!.getBoundingClientRect().width);
+      Math.round(
+        (await menu(`style="display: inline-block" ${attributes}`))
+          .shadowRoot!.querySelector('.menu')!
+          .getBoundingClientRect().width,
+      );
     expect(await width('size="sm"')).toBe(160);
     expect(await width('')).toBe(200);
     expect(await width('size="lg"')).toBe(240);
@@ -110,7 +121,9 @@ describe('tct-nav-heading-menu', () => {
   it('passes the size to the rows', async () => {
     const small = await menu('size="sm"');
     const large = await menu('size="lg"');
-    expect(rows(large)[0]!.getBoundingClientRect().height).toBeGreaterThan(rows(small)[0]!.getBoundingClientRect().height);
+    expect(rows(large)[0]!.getBoundingClientRect().height).toBeGreaterThan(
+      rows(small)[0]!.getBoundingClientRect().height,
+    );
   });
 });
 
@@ -130,7 +143,9 @@ describe('tct-nav-heading-menu-item', () => {
         '<tct-nav-heading-menu-item><b slot="label">Rich</b><span slot="description">Desc</span><tct-icon slot="icon" name="close"></tct-icon></tct-nav-heading-menu-item>',
     );
     const [plain, rich] = rows(element);
-    expect(plain!.shadowRoot!.querySelector('tct-text[type="supporting"]')!.textContent).toBe('Trends');
+    expect(plain!.shadowRoot!.querySelector('tct-text[type="supporting"]')!.textContent).toBe(
+      'Trends',
+    );
     expect(plain!.shadowRoot!.querySelector('tct-icon')!.getAttribute('name')).toBe('check');
     expect(rich!.shadowRoot!.querySelector('slot[name="label"]')).not.toBeNull();
     expect(rich!.shadowRoot!.querySelector('slot[name="description"]')).not.toBeNull();
@@ -146,7 +161,10 @@ describe('tct-nav-heading-menu-item', () => {
   });
 
   it('does not fire click when disabled, and sets aria-disabled', async () => {
-    const element = await menu('', '<tct-nav-heading-menu-item label="Off" disabled></tct-nav-heading-menu-item>');
+    const element = await menu(
+      '',
+      '<tct-nav-heading-menu-item label="Off" disabled></tct-nav-heading-menu-item>',
+    );
     const row = rows(element)[0]!;
     const events = recordEvents(row, 'click');
     await userEvent.click(control(row), {force: true});
@@ -158,7 +176,10 @@ describe('tct-nav-heading-menu-item', () => {
   });
 
   it('a disabled link has no href', async () => {
-    const element = await menu('', '<tct-nav-heading-menu-item label="Off" href="#x" disabled></tct-nav-heading-menu-item>');
+    const element = await menu(
+      '',
+      '<tct-nav-heading-menu-item label="Off" href="#x" disabled></tct-nav-heading-menu-item>',
+    );
     expect(control(rows(element)[0]!).hasAttribute('href')).toBe(false);
   });
 });
@@ -166,7 +187,11 @@ describe('tct-nav-heading-menu-item', () => {
 describe('tct-nav-heading-menu: keyboard navigation', () => {
   it('is a single tab stop', async () => {
     const element = await menu();
-    expect(rows(element).map((row) => control(row).getAttribute('tabindex'))).toEqual(['0', '-1', '-1']);
+    expect(rows(element).map((row) => control(row).getAttribute('tabindex'))).toEqual([
+      '0',
+      '-1',
+      '-1',
+    ]);
     const sequence = await tabSequence(element, {start: document.getElementById('before')!});
     expect(sequence.map((el) => el.id || 'row')).toEqual(['row', 'after']);
   });
@@ -222,7 +247,10 @@ describe('tct-nav-heading-menu: keyboard navigation', () => {
   });
 
   it('does not activate a disabled row with Enter', async () => {
-    const element = await menu('', '<tct-nav-heading-menu-item label="Off" disabled></tct-nav-heading-menu-item>');
+    const element = await menu(
+      '',
+      '<tct-nav-heading-menu-item label="Off" disabled></tct-nav-heading-menu-item>',
+    );
     const events = recordEvents(rows(element)[0]!, 'click');
     await pressKeys('Enter');
     expect(events.events).toHaveLength(0);
@@ -256,7 +284,11 @@ describe('tct-nav-heading-menu: context forwarding', () => {
   });
 
   it('does not close it for a disabled row', async () => {
-    const element = await menu('', '<tct-nav-heading-menu-item label="Off" disabled></tct-nav-heading-menu-item>', true);
+    const element = await menu(
+      '',
+      '<tct-nav-heading-menu-item label="Off" disabled></tct-nav-heading-menu-item>',
+      true,
+    );
     const popover = element.closest<TestHeadingPopover>('test-heading-popover')!;
     await userEvent.click(control(rows(element)[0]!), {force: true});
     await nextFrame();
@@ -306,7 +338,11 @@ describe('tct-nav-heading-menu: forced colours and right-to-left', () => {
     const element = await menu();
     control(rows(element)[0]!).focus();
     await pressKeys('ArrowDown');
-    await Promise.all(control(rows(element)[1]!).getAnimations().map((animation) => animation.finished));
+    await Promise.all(
+      control(rows(element)[1]!)
+        .getAnimations()
+        .map((animation) => animation.finished),
+    );
     const row = getComputedStyle(control(rows(element)[1]!));
     expect(row.backgroundColor).toBe(systemColor('Highlight'));
     expect(row.color).toBe(systemColor('HighlightText'));

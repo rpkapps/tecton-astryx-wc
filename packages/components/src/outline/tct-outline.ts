@@ -4,7 +4,10 @@ import {ifDefined} from 'lit/directives/if-defined.js';
 import {AriaDelegateController} from '@tecton-wc/core/controllers/aria-delegate.js';
 import {observeResize} from '@tecton-wc/core/controllers/resize.js';
 import {RovingTabindexController} from '@tecton-wc/core/controllers/roving-tabindex.js';
-import {TctActiveChangeEvent, type ActiveChangeReason} from '@tecton-wc/core/events/tct-active-change.js';
+import {
+  TctActiveChangeEvent,
+  type ActiveChangeReason,
+} from '@tecton-wc/core/events/tct-active-change.js';
 import {TctNavigateEndEvent} from '@tecton-wc/core/events/tct-navigate-end.js';
 import {TctNavigateStartEvent} from '@tecton-wc/core/events/tct-navigate-start.js';
 import {prefersReducedMotion} from '@tecton-wc/core/features.js';
@@ -148,13 +151,17 @@ export class TctOutline extends TctElement {
   /** Finds a heading by id in the outline's own tree, then the document. */
   #lookup = (id: string): HTMLElement | null => {
     const root = this.getRootNode();
-    const scoped = root instanceof Document || root instanceof ShadowRoot ? root.getElementById(id) : null;
+    const scoped =
+      root instanceof Document || root instanceof ShadowRoot ? root.getElementById(id) : null;
     return scoped ?? document.getElementById(id);
   };
 
   #resolveIn(selector: string): HTMLElement | null {
     const root = this.getRootNode();
-    const scoped = root instanceof Document || root instanceof ShadowRoot ? root.querySelector<HTMLElement>(selector) : null;
+    const scoped =
+      root instanceof Document || root instanceof ShadowRoot
+        ? root.querySelector<HTMLElement>(selector)
+        : null;
     return scoped ?? document.querySelector<HTMLElement>(selector);
   }
 
@@ -248,7 +255,9 @@ export class TctOutline extends TctElement {
   /** (Re)binds the scroll listeners when what they depend on changed. */
   #startSpy(): void {
     const controlled = this.activeId !== undefined;
-    const ids = this.#effectiveItems().map((item) => item.id).join('\n');
+    const ids = this.#effectiveItems()
+      .map((item) => item.id)
+      .join('\n');
     const root = controlled ? null : this.#scrollRoot();
     const key = `${controlled}|${ids}|${this.offset}|${this.scrollContainerSelector ?? ''}`;
     // A scroll root that changed identity (a container that scrolls later) is found again next update.
@@ -285,7 +294,12 @@ export class TctOutline extends TctElement {
   /** Reads live heading positions and adopts the resolved item (unless a navigation owns the indicator). */
   #syncFromScroll(): void {
     if (this.#suppress || this.activeId !== undefined || !this.isConnected) return;
-    const next = resolveActiveId(this.#effectiveItems(), this.#lookup, this.#scrollRoot(), this.offset);
+    const next = resolveActiveId(
+      this.#effectiveItems(),
+      this.#lookup,
+      this.#scrollRoot(),
+      this.offset,
+    );
     if (next !== undefined && next !== this._active) {
       this._active = next;
       this.dispatch(new TctActiveChangeEvent(next, 'scroll'));

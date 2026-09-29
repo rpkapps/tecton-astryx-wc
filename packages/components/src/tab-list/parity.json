@@ -100,7 +100,11 @@
         }
       ],
       "hooks": [
-        {"upstream": "useTabListContext", "target": "tabListContext (family-private)", "as": "context"},
+        {
+          "upstream": "useTabListContext",
+          "target": "tabListContext (family-private)",
+          "as": "context"
+        },
         {"upstream": "useKeyboardHint", "target": "KeyboardHintController", "as": "controller"},
         {"upstream": "useListFocus", "target": "RovingTabindexController", "as": "controller"},
         {
@@ -131,9 +135,20 @@
           "action": "Moves focus to the previous enabled tab, wrapping; in the tabs pattern with automatic activation it also selects",
           "when": "ArrowRight in RTL; ArrowUp too in the navigation pattern"
         },
-        {"keys": "ArrowDown, ArrowUp", "action": "Move focus forward and backward", "when": "navigation pattern only; left to the page in the tabs pattern"},
-        {"keys": "Home, End", "action": "Move focus to the first and last enabled tab (and select with automatic activation)"},
-        {"keys": "Enter, Space", "action": "Selects the focused tab", "when": "navigation pattern, or activation=\"manual\""}
+        {
+          "keys": "ArrowDown, ArrowUp",
+          "action": "Move focus forward and backward",
+          "when": "navigation pattern only; left to the page in the tabs pattern"
+        },
+        {
+          "keys": "Home, End",
+          "action": "Move focus to the first and last enabled tab (and select with automatic activation)"
+        },
+        {
+          "keys": "Enter, Space",
+          "action": "Selects the focused tab",
+          "when": "navigation pattern, or activation=\"manual\""
+        }
       ],
       "form": {"formAssociated": false},
       "differences": [
@@ -199,8 +214,20 @@
         "commit": "ca632c6"
       },
       "api": [
-        {"upstream": "value", "kind": "prop", "target": "value", "as": "attribute", "notes": "Compared with the tab list's value."},
-        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute", "notes": "Visible text; the accessible name when label-hidden."},
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "attribute",
+          "notes": "Compared with the tab list's value."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Visible text; the accessible name when label-hidden."
+        },
         {
           "upstream": "isLabelHidden",
           "kind": "prop",
@@ -250,10 +277,19 @@
       ],
       "hooks": [
         {"upstream": "useDevWarning", "target": "devWarn", "as": "module-function"},
-        {"upstream": "EDGE_COMP_ATTR", "target": "data-tct-edge-comp", "as": "css", "notes": "The tab reflects the passive marker on its host so a padded container can pull an edge tab to its edge (layout/layout.types.ts)."}
+        {
+          "upstream": "EDGE_COMP_ATTR",
+          "target": "data-tct-edge-comp",
+          "as": "css",
+          "notes": "The tab reflects the passive marker on its host so a padded container can pull an edge tab to its edge (layout/layout.types.ts)."
+        }
       ],
       "keyboard": [
-        {"keys": "Enter, Space", "action": "Selects this tab", "when": "focused, enabled (a link tab also navigates)"}
+        {
+          "keys": "Enter, Space",
+          "action": "Selects this tab",
+          "when": "focused, enabled (a link tab also navigates)"
+        }
       ],
       "form": {"formAssociated": false},
       "differences": [
@@ -292,7 +328,13 @@
         "commit": "ca632c6"
       },
       "api": [
-        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute", "notes": "Trigger text while no option is selected, the menu's heading and its accessible name."},
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Trigger text while no option is selected, the menu's heading and its accessible name."
+        },
         {
           "upstream": "options",
           "kind": "prop",
@@ -300,21 +342,68 @@
           "as": "property",
           "notes": "`{value, label, icon?}[]`: property only. Each option is a radio row of the shared dropdown menu."
         },
-        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style, ::part(trigger), ::part(menu) and custom properties."},
-        {"upstream": "className", "kind": "prop", "as": "waived", "reason": "Not an API of a custom element: use class on the host."},
-        {"upstream": "style", "kind": "prop", "as": "waived", "reason": "Not an API of a custom element: use style on the host."}
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(trigger), ::part(menu) and custom properties."
+        },
+        {
+          "upstream": "className",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "Not an API of a custom element: use class on the host."
+        },
+        {
+          "upstream": "style",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "Not an API of a custom element: use style on the host."
+        }
       ],
       "hooks": [
-        {"upstream": "useListFocus", "target": "MenuKeyboardController (through tct-dropdown-menu)", "as": "controller"},
-        {"upstream": "usePopover", "target": "tct-dropdown-menu (LayerController, PositionController)", "as": "controller"}
+        {
+          "upstream": "useListFocus",
+          "target": "MenuKeyboardController (through tct-dropdown-menu)",
+          "as": "controller"
+        },
+        {
+          "upstream": "usePopover",
+          "target": "tct-dropdown-menu (LayerController, PositionController)",
+          "as": "controller"
+        }
       ],
       "keyboard": [
-        {"keys": "Enter, Space, ArrowDown", "action": "Opens the menu and focuses the first option", "when": "trigger focused"},
-        {"keys": "ArrowDown, ArrowUp", "action": "Move between options; Home and End jump", "when": "menu open"},
-        {"keys": "Enter, Space", "action": "Chooses the focused option (selects that tab value) and closes the menu", "when": "option focused"},
-        {"keys": "Escape", "action": "Closes the menu and returns focus to the trigger", "when": "menu open"},
-        {"keys": "Tab", "action": "Closes the menu and continues from the trigger", "when": "menu open"},
-        {"keys": "ArrowLeft, ArrowRight", "action": "Move to the previous or next tab of the strip", "when": "trigger focused"}
+        {
+          "keys": "Enter, Space, ArrowDown",
+          "action": "Opens the menu and focuses the first option",
+          "when": "trigger focused"
+        },
+        {
+          "keys": "ArrowDown, ArrowUp",
+          "action": "Move between options; Home and End jump",
+          "when": "menu open"
+        },
+        {
+          "keys": "Enter, Space",
+          "action": "Chooses the focused option (selects that tab value) and closes the menu",
+          "when": "option focused"
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes the menu and returns focus to the trigger",
+          "when": "menu open"
+        },
+        {
+          "keys": "Tab",
+          "action": "Closes the menu and continues from the trigger",
+          "when": "menu open"
+        },
+        {
+          "keys": "ArrowLeft, ArrowRight",
+          "action": "Move to the previous or next tab of the strip",
+          "when": "trigger focused"
+        }
       ],
       "form": {"formAssociated": false},
       "differences": [

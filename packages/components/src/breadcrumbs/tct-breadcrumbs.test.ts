@@ -38,16 +38,22 @@ async function trail(
 }
 
 async function settleItems(element: Element): Promise<void> {
-  await Promise.all([...element.children].map((child) => (child as TctBreadcrumbItem).updateComplete));
+  await Promise.all(
+    [...element.children].map((child) => (child as TctBreadcrumbItem).updateComplete),
+  );
   await nextFrame();
-  await Promise.all([...element.children].map((child) => (child as TctBreadcrumbItem).updateComplete));
+  await Promise.all(
+    [...element.children].map((child) => (child as TctBreadcrumbItem).updateComplete),
+  );
   await nextFrame();
 }
 
 const items = (element: Element): TctBreadcrumbItem[] =>
   [...element.children] as TctBreadcrumbItem[];
-const crumb = (item: TctBreadcrumbItem): HTMLElement => item.shadowRoot!.querySelector<HTMLElement>('.crumb')!;
-const separator = (item: TctBreadcrumbItem): HTMLElement => item.shadowRoot!.querySelector<HTMLElement>('.separator')!;
+const crumb = (item: TctBreadcrumbItem): HTMLElement =>
+  item.shadowRoot!.querySelector<HTMLElement>('.crumb')!;
+const separator = (item: TctBreadcrumbItem): HTMLElement =>
+  item.shadowRoot!.querySelector<HTMLElement>('.separator')!;
 /** The native anchor inside a crumb's `tct-link`. */
 const anchor = (item: TctBreadcrumbItem): HTMLAnchorElement =>
   crumb(item).shadowRoot!.querySelector<HTMLAnchorElement>('a')!;
@@ -59,7 +65,13 @@ runElementSuite({
       ><tct-breadcrumb-item href="/">Home</tct-breadcrumb-item
       ><tct-breadcrumb-item>Page</tct-breadcrumb-item></tct-breadcrumbs
     >`,
-  properties: {variant: 'supporting', label: 'Path', separator: '>', separatorIcon: 'chevronRight', maxItems: 3},
+  properties: {
+    variant: 'supporting',
+    label: 'Path',
+    separator: '>',
+    separatorIcon: 'chevronRight',
+    maxItems: 3,
+  },
   attributes: {variant: 'variant', label: 'label', separator: 'separator', maxItems: 'max-items'},
 });
 
@@ -84,9 +96,13 @@ describe('tct-breadcrumbs', () => {
 
   it('supports a custom label and a host aria-label', async () => {
     const custom = await trail('label="You are here"');
-    expect(await axNode(custom.shadowRoot!.querySelector('nav')!)).toMatchObject({name: 'You are here'});
+    expect(await axNode(custom.shadowRoot!.querySelector('nav')!)).toMatchObject({
+      name: 'You are here',
+    });
     const host = await trail('aria-label="Where you are"');
-    expect(await axNode(host.shadowRoot!.querySelector('nav')!)).toMatchObject({name: 'Where you are'});
+    expect(await axNode(host.shadowRoot!.querySelector('nav')!)).toMatchObject({
+      name: 'Where you are',
+    });
   });
 
   it('renders items in an ordered list of list items', async () => {
@@ -111,7 +127,9 @@ describe('tct-breadcrumbs', () => {
     const text = await trail('separator="›"');
     expect(separator(items(text)[1]!).textContent?.trim()).toBe('›');
     const icon = await trail('separator-icon="chevronRight"');
-    expect(separator(items(icon)[1]!).querySelector('tct-icon')!.getAttribute('name')).toBe('chevronRight');
+    expect(separator(items(icon)[1]!).querySelector('tct-icon')!.getAttribute('name')).toBe(
+      'chevronRight',
+    );
   });
 
   it('mirrors the built-in slash in right-to-left, not a custom separator', async () => {
@@ -126,14 +144,21 @@ describe('tct-breadcrumbs', () => {
     expect(element.variant).toBe('default');
     const smallFont = async (attributes: string): Promise<number> => {
       const el = await trail(attributes);
-      return parseFloat(getComputedStyle(items(el)[0]!.shadowRoot!.querySelector('.item')!).fontSize);
+      return parseFloat(
+        getComputedStyle(items(el)[0]!.shadowRoot!.querySelector('.item')!).fontSize,
+      );
     };
     expect(await smallFont('variant="supporting"')).toBeLessThan(await smallFont(''));
   });
 
   it('keeps every crumb in a supporting trail', async () => {
     const element = await trail('variant="supporting"');
-    expect(items(element).every((item) => item.shadowRoot!.querySelector('.item')!.getAttribute('data-variant') === 'supporting')).toBe(true);
+    expect(
+      items(element).every(
+        (item) =>
+          item.shadowRoot!.querySelector('.item')!.getAttribute('data-variant') === 'supporting',
+      ),
+    ).toBe(true);
   });
 });
 
@@ -146,7 +171,10 @@ describe('tct-breadcrumb-item', () => {
   });
 
   it('renders the current item as text with aria-current="page"', async () => {
-    const element = await trail('', '<tct-breadcrumb-item href="/">Home</tct-breadcrumb-item><tct-breadcrumb-item current href="/x">Now</tct-breadcrumb-item>');
+    const element = await trail(
+      '',
+      '<tct-breadcrumb-item href="/">Home</tct-breadcrumb-item><tct-breadcrumb-item current href="/x">Now</tct-breadcrumb-item>',
+    );
     const current = crumb(items(element)[1]!);
     expect(current.localName).toBe('span');
     expect(current.getAttribute('aria-current')).toBe('page');
@@ -161,7 +189,10 @@ describe('tct-breadcrumb-item', () => {
   });
 
   it('auto-detects aria-current on the anchor when the last item is a link', async () => {
-    const element = await trail('', '<tct-breadcrumb-item href="/">Home</tct-breadcrumb-item><tct-breadcrumb-item href="/here">Here</tct-breadcrumb-item>');
+    const element = await trail(
+      '',
+      '<tct-breadcrumb-item href="/">Home</tct-breadcrumb-item><tct-breadcrumb-item href="/here">Here</tct-breadcrumb-item>',
+    );
     const link = items(element)[1]!;
     expect(anchor(link).getAttribute('aria-current')).toBe('page');
     expect(await axNode(anchor(link))).toMatchObject({role: 'link', name: 'Here'});
@@ -201,7 +232,10 @@ describe('tct-breadcrumb-item', () => {
   });
 
   it('renders click-only items as buttons that fire click', async () => {
-    const element = await trail('', '<tct-breadcrumb-item id="act">Action</tct-breadcrumb-item><tct-breadcrumb-item>Now</tct-breadcrumb-item>');
+    const element = await trail(
+      '',
+      '<tct-breadcrumb-item id="act">Action</tct-breadcrumb-item><tct-breadcrumb-item>Now</tct-breadcrumb-item>',
+    );
     const item = items(element)[0]!;
     expect(crumb(item).localName).toBe('button');
     const events = recordEvents(item, 'click');
@@ -211,7 +245,10 @@ describe('tct-breadcrumb-item', () => {
   });
 
   it('fires click on a link crumb', async () => {
-    const element = await trail('', '<tct-breadcrumb-item href="#x">Go</tct-breadcrumb-item><tct-breadcrumb-item>Now</tct-breadcrumb-item>');
+    const element = await trail(
+      '',
+      '<tct-breadcrumb-item href="#x">Go</tct-breadcrumb-item><tct-breadcrumb-item>Now</tct-breadcrumb-item>',
+    );
     const item = items(element)[0]!;
     const events = recordEvents(item, 'click');
     await userEvent.click(anchor(item));
@@ -223,14 +260,20 @@ describe('tct-breadcrumb-item', () => {
       '',
       '<tct-breadcrumb-item href="/" icon="check">Home</tct-breadcrumb-item><tct-breadcrumb-item><tct-icon slot="icon" name="close"></tct-icon>Now</tct-breadcrumb-item>',
     );
-    expect(items(element)[0]!.shadowRoot!.querySelector('tct-icon.icon')!.getAttribute('name')).toBe('check');
-    expect(items(element)[1]!.shadowRoot!.querySelector('.icon-slot slot[name="icon"]')).not.toBeNull();
+    expect(
+      items(element)[0]!.shadowRoot!.querySelector('tct-icon.icon')!.getAttribute('name'),
+    ).toBe('check');
+    expect(
+      items(element)[1]!.shadowRoot!.querySelector('.icon-slot slot[name="icon"]'),
+    ).not.toBeNull();
   });
 });
 
 describe('tct-breadcrumb-item: menu crumb', () => {
   const MENU = [{label: 'Alpha'}, {label: 'Beta'}, {label: 'Gamma'}];
-  const menuTrail = async (extra = ''): Promise<{element: TctBreadcrumbs; item: TctBreadcrumbItem}> => {
+  const menuTrail = async (
+    extra = '',
+  ): Promise<{element: TctBreadcrumbs; item: TctBreadcrumbItem}> => {
     const element = await trail(
       '',
       `<tct-breadcrumb-item href="/">Home</tct-breadcrumb-item><tct-breadcrumb-item id="m" ${extra}>Projects</tct-breadcrumb-item><tct-breadcrumb-item>Now</tct-breadcrumb-item>`,
@@ -241,9 +284,12 @@ describe('tct-breadcrumb-item: menu crumb', () => {
     await settleItems(element);
     return {element, item};
   };
-  const triggerOf = (item: TctBreadcrumbItem): HTMLButtonElement => crumb(item) as HTMLButtonElement;
-  const dropdown = (item: TctBreadcrumbItem): HTMLElement => item.shadowRoot!.querySelector('tct-dropdown-menu')!;
-  const layer = (item: TctBreadcrumbItem): HTMLElement => dropdown(item).shadowRoot!.querySelector<HTMLElement>('.layer')!;
+  const triggerOf = (item: TctBreadcrumbItem): HTMLButtonElement =>
+    crumb(item) as HTMLButtonElement;
+  const dropdown = (item: TctBreadcrumbItem): HTMLElement =>
+    item.shadowRoot!.querySelector('tct-dropdown-menu')!;
+  const layer = (item: TctBreadcrumbItem): HTMLElement =>
+    dropdown(item).shadowRoot!.querySelector<HTMLElement>('.layer')!;
   const isOpen = (item: TctBreadcrumbItem): boolean => layer(item).matches(':popover-open');
 
   it('renders as a menu trigger button with aria-haspopup="menu" and a chevron', async () => {
@@ -253,7 +299,11 @@ describe('tct-breadcrumb-item: menu crumb', () => {
     expect(trigger.getAttribute('aria-haspopup')).toBe('menu');
     expect(trigger.getAttribute('aria-expanded')).toBe('false');
     expect(trigger.querySelector('.chevron')).not.toBeNull();
-    expect(await axNode(trigger)).toMatchObject({role: 'button', name: 'Projects', hasPopup: 'menu'});
+    expect(await axNode(trigger)).toMatchObject({
+      role: 'button',
+      name: 'Projects',
+      hasPopup: 'menu',
+    });
   });
 
   it('opens the menu rows on click, fires the row action and closes', async () => {
@@ -282,7 +332,9 @@ describe('tct-breadcrumb-item: menu crumb', () => {
     expect(triggerOf(item).getAttribute('aria-haspopup')).toBe('menu');
     await userEvent.click(triggerOf(item));
     await waitUntil(() => isOpen(item), 'opened');
-    const labels = [...item.querySelectorAll('tct-dropdown-menu-item')].map((row) => row.getAttribute('label'));
+    const labels = [...item.querySelectorAll('tct-dropdown-menu-item')].map((row) =>
+      row.getAttribute('label'),
+    );
     expect(labels).toEqual(['Guides', 'API']);
   });
 
@@ -313,7 +365,9 @@ describe('tct-breadcrumb-item: menu crumb', () => {
     try {
       const {item} = await menuTrail('href="/nope"');
       expect(triggerOf(item).localName).toBe('button');
-      expect(warn.mock.calls.some((call) => String(call[0]).includes('mutually exclusive'))).toBe(true);
+      expect(warn.mock.calls.some((call) => String(call[0]).includes('mutually exclusive'))).toBe(
+        true,
+      );
     } finally {
       globalThis.tctDevMode = undefined;
       warn.mockRestore();
@@ -337,11 +391,17 @@ describe('tct-breadcrumbs: collapsed trail (max-items)', () => {
   const visible = (element: TctBreadcrumbs): string[] =>
     items(element)
       .filter((item) => getComputedStyle(item).display !== 'none')
-      .map((item) => (item.shadowRoot!.querySelector('[data-overflow]') ? 'ellipsis' : item.textContent.trim()));
+      .map((item) =>
+        item.shadowRoot!.querySelector('[data-overflow]') ? 'ellipsis' : item.textContent.trim(),
+      );
   const overflowButton = (element: TctBreadcrumbs): HTMLButtonElement | null =>
     element.querySelector<HTMLButtonElement>('tct-breadcrumb-item')
       ? ([...element.children]
-          .map((item) => (item as TctBreadcrumbItem).shadowRoot!.querySelector<HTMLButtonElement>('[data-overflow]'))
+          .map((item) =>
+            (item as TctBreadcrumbItem).shadowRoot!.querySelector<HTMLButtonElement>(
+              '[data-overflow]',
+            ),
+          )
           .find(Boolean) ?? null)
       : null;
 
@@ -367,7 +427,10 @@ describe('tct-breadcrumbs: collapsed trail (max-items)', () => {
     const host = items(element)[1]!;
     await userEvent.click(overflowButton(element)!);
     const dropdown = host.shadowRoot!.querySelector('tct-dropdown-menu')!;
-    await waitUntil(() => dropdown.shadowRoot!.querySelector('.layer')!.matches(':popover-open'), 'opened');
+    await waitUntil(
+      () => dropdown.shadowRoot!.querySelector('.layer')!.matches(':popover-open'),
+      'opened',
+    );
     const rows = [...dropdown.shadowRoot!.querySelectorAll('tct-dropdown-menu-item')];
     expect(rows.map((row) => row.getAttribute('label'))).toEqual(['Alpha', 'Beta', 'Gamma']);
   });
@@ -390,7 +453,10 @@ describe('tct-breadcrumbs: collapsed trail (max-items)', () => {
     await userEvent.click(overflowButton(element)!);
     const host = items(element)[1]!;
     const dropdown = host.shadowRoot!.querySelector('tct-dropdown-menu')!;
-    await waitUntil(() => dropdown.shadowRoot!.querySelector('.layer')!.matches(':popover-open'), 'opened');
+    await waitUntil(
+      () => dropdown.shadowRoot!.querySelector('.layer')!.matches(':popover-open'),
+      'opened',
+    );
     await userEvent.click(dropdown.shadowRoot!.querySelector('tct-dropdown-menu-item')!);
     expect(onClick).toHaveBeenCalled();
   });
@@ -403,10 +469,14 @@ describe('tct-breadcrumbs: collapsed trail (max-items)', () => {
 
 describe('tct-breadcrumbs: localisation and accessibility', () => {
   it('names the landmark from the nearest lang (de-DE)', async () => {
-    const wrapper = await fixture<HTMLDivElement>(`<div lang="de-DE"><tct-breadcrumbs>${TRAIL}</tct-breadcrumbs></div>`);
+    const wrapper = await fixture<HTMLDivElement>(
+      `<div lang="de-DE"><tct-breadcrumbs>${TRAIL}</tct-breadcrumbs></div>`,
+    );
     const element = wrapper.querySelector('tct-breadcrumbs')!;
     await waitUntil(
-      () => element.shadowRoot!.querySelector('nav')?.getAttribute('aria-label') === 'Brotkrümelnavigation',
+      () =>
+        element.shadowRoot!.querySelector('nav')?.getAttribute('aria-label') ===
+        'Brotkrümelnavigation',
       'German label',
       4000,
     );
@@ -424,11 +494,16 @@ describe('tct-breadcrumbs: localisation and accessibility', () => {
     );
     await settleItems(element);
     const [first, second] = items(element);
-    expect(first!.getBoundingClientRect().left).toBeGreaterThan(second!.getBoundingClientRect().left);
+    expect(first!.getBoundingClientRect().left).toBeGreaterThan(
+      second!.getBoundingClientRect().left,
+    );
   });
 
   it('has no axe violations for the trail, a menu crumb and a collapsed trail', async () => {
-    const element = await trail('max-items="2"', TRAIL + '<tct-breadcrumb-item>Extra</tct-breadcrumb-item>');
+    const element = await trail(
+      'max-items="2"',
+      TRAIL + '<tct-breadcrumb-item>Extra</tct-breadcrumb-item>',
+    );
     await settleItems(element);
     await expectAccessible(element.parentElement!);
   });
@@ -442,7 +517,9 @@ async function settled(_item: TctBreadcrumbItem): Promise<void> {
 
 afterEach(async () => {
   await userEvent.hover(document.body, {position: {x: 0, y: 0}}).catch(() => undefined);
-  await cdp().send('Input.dispatchMouseEvent', {type: 'mouseReleased', x: 0, y: 0, button: 'left'}).catch(() => undefined);
+  await cdp()
+    .send('Input.dispatchMouseEvent', {type: 'mouseReleased', x: 0, y: 0, button: 'left'})
+    .catch(() => undefined);
 });
 
 describe('tct-breadcrumb-item: text contrast in every state', () => {
@@ -503,7 +580,10 @@ function systemColor(name: string): string {
 describe('tct-breadcrumbs: forced colours', () => {
   it('keeps the focus ring on a link crumb and an action crumb, in the system highlight colour', async () => {
     await emulateMedia({forcedColors: 'active'});
-    const element = await trail('', '<tct-breadcrumb-item href="/">Home</tct-breadcrumb-item><tct-breadcrumb-item>Action</tct-breadcrumb-item><tct-breadcrumb-item>Now</tct-breadcrumb-item>');
+    const element = await trail(
+      '',
+      '<tct-breadcrumb-item href="/">Home</tct-breadcrumb-item><tct-breadcrumb-item>Action</tct-breadcrumb-item><tct-breadcrumb-item>Now</tct-breadcrumb-item>',
+    );
     const [home, action] = items(element);
     anchor(home!).focus({focusVisible: true});
     expect(getComputedStyle(anchor(home!)).outlineStyle).not.toBe('none');

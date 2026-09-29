@@ -95,7 +95,8 @@ export function resolveActiveId(
     const element = lookup(item.id);
     if (!element) continue;
     // 1px of tolerance absorbs sub-pixel rounding after a scroll lands.
-    if (element.getBoundingClientRect().top <= getRestingTop(element, root, offset) + 1) active = item.id;
+    if (element.getBoundingClientRect().top <= getRestingTop(element, root, offset) + 1)
+      active = item.id;
     else break;
   }
   return active;

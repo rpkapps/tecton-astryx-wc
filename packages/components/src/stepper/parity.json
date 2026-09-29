@@ -20,7 +20,14 @@
           "notes": "Attribute `active-step`, zero-based. The element applies a user-requested step itself unless the request is prevented (D-006); upstream is controlled-only."
         },
         {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
-        {"upstream": "orientation", "kind": "prop", "target": "orientation", "as": "attribute", "reflect": true, "default": "horizontal"},
+        {
+          "upstream": "orientation",
+          "kind": "prop",
+          "target": "orientation",
+          "as": "attribute",
+          "reflect": true,
+          "default": "horizontal"
+        },
         {
           "upstream": "onStepClick",
           "kind": "event",
@@ -44,8 +51,22 @@
           "as": "attribute",
           "notes": "Accessible name of the list; default the localized `@tct.stepper.label`. A host aria-label wins."
         },
-        {"upstream": "density", "kind": "prop", "target": "density", "as": "attribute", "reflect": true, "default": "balanced"},
-        {"upstream": "indicatorPosition", "kind": "prop", "target": "indicator-position", "as": "attribute", "reflect": true, "default": "separated"},
+        {
+          "upstream": "density",
+          "kind": "prop",
+          "target": "density",
+          "as": "attribute",
+          "reflect": true,
+          "default": "balanced"
+        },
+        {
+          "upstream": "indicatorPosition",
+          "kind": "prop",
+          "target": "indicator-position",
+          "as": "attribute",
+          "reflect": true,
+          "default": "separated"
+        },
         {
           "upstream": "horizontalOptions",
           "kind": "prop",
@@ -62,10 +83,19 @@
           "reflect": true,
           "default": "with-label-and-controls"
         },
-        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style, ::part(frame), ::part(list), ::part(summary) and custom properties."}
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(frame), ::part(list), ::part(summary) and custom properties."
+        }
       ],
       "hooks": [
-        {"upstream": "useStepperContext", "target": "stepperContext (family-private)", "as": "context"},
+        {
+          "upstream": "useStepperContext",
+          "target": "stepperContext (family-private)",
+          "as": "context"
+        },
         {
           "upstream": "registerStep",
           "as": "waived",
@@ -73,8 +103,16 @@
         }
       ],
       "keyboard": [
-        {"keys": "Tab", "action": "Moves through the enabled steps in document order (buttons in a navigable stepper); disabled and collapsed steps are skipped", "when": "navigable"},
-        {"keys": "Enter, Space", "action": "Activates the focused step (asks to make it the active step)", "when": "navigable, step enabled"}
+        {
+          "keys": "Tab",
+          "action": "Moves through the enabled steps in document order (buttons in a navigable stepper); disabled and collapsed steps are skipped",
+          "when": "navigable"
+        },
+        {
+          "keys": "Enter, Space",
+          "action": "Activates the focused step (asks to make it the active step)",
+          "when": "navigable, step enabled"
+        }
       ],
       "form": {"formAssociated": false},
       "differences": [
@@ -124,11 +162,29 @@
         "commit": "ca632c6"
       },
       "api": [
-        {"upstream": "step", "kind": "prop", "target": "step", "as": "attribute", "notes": "Zero-based index; unset, the step's position among its siblings."},
+        {
+          "upstream": "step",
+          "kind": "prop",
+          "target": "step",
+          "as": "attribute",
+          "notes": "Zero-based index; unset, the step's position among its siblings."
+        },
         {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
         {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute"},
-        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot", "notes": "Content below the label; stays mounted, hidden, in a compact horizontal stepper."},
-        {"upstream": "status", "kind": "prop", "target": "status", "as": "attribute", "reflect": true},
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "Content below the label; stays mounted, hidden, in a compact horizontal stepper."
+        },
+        {
+          "upstream": "status",
+          "kind": "prop",
+          "target": "status",
+          "as": "attribute",
+          "reflect": true
+        },
         {
           "upstream": "indicator",
           "kind": "prop",
@@ -138,15 +194,44 @@
           "default": "auto",
           "notes": "The presets `auto`, `number`, `none`; a custom indicator (upstream: any ReactNode) is `slot=\"indicator\"`."
         },
-        {"upstream": "isDisabled", "kind": "prop", "target": "disabled", "as": "attribute", "reflect": true, "default": false},
-        {"upstream": "isOptional", "kind": "prop", "target": "optional", "as": "attribute", "reflect": true, "default": false},
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "isOptional",
+          "kind": "prop",
+          "target": "optional",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
         {"upstream": "endContent", "kind": "slot", "target": "end", "as": "slot"},
-        {"upstream": "density", "kind": "prop", "target": "density", "as": "attribute", "reflect": true},
-        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style, ::part(step), ::part(indicator), ::part(label), ::part(description) and custom properties."}
+        {
+          "upstream": "density",
+          "kind": "prop",
+          "target": "density",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(step), ::part(indicator), ::part(label), ::part(description) and custom properties."
+        }
       ],
       "hooks": [],
       "keyboard": [
-        {"keys": "Enter, Space", "action": "Asks the stepper to activate this step", "when": "navigable stepper, step enabled and not collapsed"}
+        {
+          "keys": "Enter, Space",
+          "action": "Asks the stepper to activate this step",
+          "when": "navigable stepper, step enabled and not collapsed"
+        }
       ],
       "form": {"formAssociated": false},
       "differences": [

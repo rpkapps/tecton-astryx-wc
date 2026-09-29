@@ -5,7 +5,11 @@
  */
 import {createContext} from '@tecton-wc/core/context/protocol.js';
 import type {ChangeReason} from '@tecton-wc/core/events/tct-event.js';
-import type {StepperDensity, StepperIndicatorPosition, StepperOrientation} from './stepper.types.js';
+import type {
+  StepperDensity,
+  StepperIndicatorPosition,
+  StepperOrientation,
+} from './stepper.types.js';
 
 /** State and coordination a step reads from its stepper. */
 export interface StepperContextValue {

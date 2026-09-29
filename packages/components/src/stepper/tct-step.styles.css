@@ -17,7 +17,9 @@
     --_pad-block: var(--spacing-2);
     --_pad-inline: var(--spacing-2);
     --_space: var(--spacing-2);
-    --_gutter: var(--spacing-6); /* design: indicator (16px) + the row gap (8px): what indents a description */
+    --_gutter: var(
+      --spacing-6
+    ); /* design: indicator (16px) + the row gap (8px): what indents a description */
     --_gap: max(0px, min(var(--step-connector-gap, 0px), var(--spacing-2)));
 
     box-sizing: border-box;
@@ -312,12 +314,16 @@
   }
 
   /* On a state fill the text is the state's role: labels and descriptions inherit it. */
-  .step[data-clickable] :is(.header, .ot-wrap):is(:focus-visible, :active) :is(.label, .description, .optional, .optional-dot) {
+  .step[data-clickable]
+    :is(.header, .ot-wrap):is(:focus-visible, :active)
+    :is(.label, .description, .optional, .optional-dot) {
     color: inherit;
   }
 
   @media (hover: hover) {
-    .step[data-clickable] :is(.header, .ot-wrap):hover :is(.label, .description, .optional, .optional-dot) {
+    .step[data-clickable]
+      :is(.header, .ot-wrap):hover
+      :is(.label, .description, .optional, .optional-dot) {
       color: inherit;
     }
   }

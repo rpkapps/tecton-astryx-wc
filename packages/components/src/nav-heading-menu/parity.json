@@ -13,7 +13,14 @@
       },
       "api": [
         {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
-        {"upstream": "size", "kind": "prop", "target": "size", "as": "attribute", "reflect": true, "default": "md"},
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md"
+        },
         {
           "upstream": "minWidth",
           "kind": "prop",
@@ -21,24 +28,68 @@
           "as": "attribute",
           "notes": "A number is px, a string any CSS length; applied through a private custom property."
         },
-        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style, ::part(menu) and custom properties."}
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(menu) and custom properties."
+        }
       ],
       "hooks": [
-        {"upstream": "NavHeadingMenuContext", "target": "navHeadingMenuContext", "as": "context", "notes": "nav-heading-menu.context.ts: size and closeMenu for the rows."},
-        {"upstream": "useNavHeadingMenuContext", "target": "navHeadingMenuContext", "as": "context", "notes": "Read it with a ContextConsumer."},
-        {"upstream": "NavHeadingCloseContext", "target": "navHeadingCloseContext", "as": "context", "notes": "Provided by the popover of a navigation heading (WP-14); the menu closes it on a chosen row and on Escape."},
-        {"upstream": "useNavHeadingCloseContext", "target": "navHeadingCloseContext", "as": "context", "notes": "Read it with a ContextConsumer."},
+        {
+          "upstream": "NavHeadingMenuContext",
+          "target": "navHeadingMenuContext",
+          "as": "context",
+          "notes": "nav-heading-menu.context.ts: size and closeMenu for the rows."
+        },
+        {
+          "upstream": "useNavHeadingMenuContext",
+          "target": "navHeadingMenuContext",
+          "as": "context",
+          "notes": "Read it with a ContextConsumer."
+        },
+        {
+          "upstream": "NavHeadingCloseContext",
+          "target": "navHeadingCloseContext",
+          "as": "context",
+          "notes": "Provided by the popover of a navigation heading (WP-14); the menu closes it on a chosen row and on Escape."
+        },
+        {
+          "upstream": "useNavHeadingCloseContext",
+          "target": "navHeadingCloseContext",
+          "as": "context",
+          "notes": "Read it with a ContextConsumer."
+        },
         {"upstream": "useListFocus", "target": "RovingTabindexController", "as": "controller"},
-        {"upstream": "useTypeahead", "target": "RovingTabindexController (typeahead option, TypeaheadController)", "as": "controller"}
+        {
+          "upstream": "useTypeahead",
+          "target": "RovingTabindexController (typeahead option, TypeaheadController)",
+          "as": "controller"
+        }
       ],
       "keyboard": [
-        {"keys": "Tab", "action": "Enters the menu at its first enabled row; the next Tab leaves it", "when": "one tab stop"},
+        {
+          "keys": "Tab",
+          "action": "Enters the menu at its first enabled row; the next Tab leaves it",
+          "when": "one tab stop"
+        },
         {"keys": "ArrowDown", "action": "Moves focus to the next enabled row, wrapping"},
         {"keys": "ArrowUp", "action": "Moves focus to the previous enabled row, wrapping"},
         {"keys": "Home, End", "action": "Move focus to the first and last enabled row"},
-        {"keys": "A-Z", "action": "Moves focus to the next enabled row whose label starts with the typed character(s)", "when": "typeahead"},
-        {"keys": "Enter, Space", "action": "Activates the focused row (click, then the heading popover closes)"},
-        {"keys": "Escape", "action": "Asks the enclosing heading popover to close", "when": "inside a heading popover"}
+        {
+          "keys": "A-Z",
+          "action": "Moves focus to the next enabled row whose label starts with the typed character(s)",
+          "when": "typeahead"
+        },
+        {
+          "keys": "Enter, Space",
+          "action": "Activates the focused row (click, then the heading popover closes)"
+        },
+        {
+          "keys": "Escape",
+          "action": "Asks the enclosing heading popover to close",
+          "when": "inside a heading popover"
+        }
       ],
       "form": {"formAssociated": false},
       "differences": [
@@ -78,16 +129,57 @@
         "commit": "ca632c6"
       },
       "api": [
-        {"upstream": "icon", "kind": "slot", "target": "icon", "as": "slot", "notes": "Or the `icon` attribute, a registered icon name."},
-        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute", "notes": "Rich labels go through slot=\"label\"."},
-        {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute", "notes": "Rich descriptions go through slot=\"description\"."},
-        {"upstream": "href", "kind": "prop", "target": "href", "as": "attribute", "notes": "Renders <a role=\"menuitem\">; routed through tct-link-provider for an unmodified internal click."},
-        {"upstream": "onClick", "kind": "event", "target": "click", "as": "native-event", "notes": "Native click once per activation; not fired while disabled. The heading popover closes after it."},
-        {"upstream": "isDisabled", "kind": "prop", "target": "disabled", "as": "attribute", "reflect": true, "default": false}
+        {
+          "upstream": "icon",
+          "kind": "slot",
+          "target": "icon",
+          "as": "slot",
+          "notes": "Or the `icon` attribute, a registered icon name."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Rich labels go through slot=\"label\"."
+        },
+        {
+          "upstream": "description",
+          "kind": "prop",
+          "target": "description",
+          "as": "attribute",
+          "notes": "Rich descriptions go through slot=\"description\"."
+        },
+        {
+          "upstream": "href",
+          "kind": "prop",
+          "target": "href",
+          "as": "attribute",
+          "notes": "Renders <a role=\"menuitem\">; routed through tct-link-provider for an unmodified internal click."
+        },
+        {
+          "upstream": "onClick",
+          "kind": "event",
+          "target": "click",
+          "as": "native-event",
+          "notes": "Native click once per activation; not fired while disabled. The heading popover closes after it."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        }
       ],
       "hooks": [],
       "keyboard": [
-        {"keys": "Enter, Space", "action": "Activates the row", "when": "focused, enabled (Space also on a link row)"}
+        {
+          "keys": "Enter, Space",
+          "action": "Activates the row",
+          "when": "focused, enabled (Space also on a link row)"
+        }
       ],
       "form": {"formAssociated": false},
       "differences": [

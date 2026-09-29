@@ -21,7 +21,14 @@
           "default": "/",
           "notes": "Text separator. An icon separator (upstream: an Icon element) is the `separator-icon` attribute, a registered icon name."
         },
-        {"upstream": "variant", "kind": "prop", "target": "variant", "as": "attribute", "reflect": true, "default": "default"},
+        {
+          "upstream": "variant",
+          "kind": "prop",
+          "target": "variant",
+          "as": "attribute",
+          "reflect": true,
+          "default": "default"
+        },
         {
           "upstream": "label",
           "kind": "prop",
@@ -37,13 +44,26 @@
           "default": 0,
           "notes": "Addition: collapses a long trail into an ellipsis menu (Tecton's overflow crumb)."
         },
-        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style, ::part(base), ::part(list) and custom properties."}
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base), ::part(list) and custom properties."
+        }
       ],
       "hooks": [
-        {"upstream": "BreadcrumbContext", "target": "breadcrumbsContext (family-private)", "as": "context"}
+        {
+          "upstream": "BreadcrumbContext",
+          "target": "breadcrumbsContext (family-private)",
+          "as": "context"
+        }
       ],
       "keyboard": [
-        {"keys": "Tab", "action": "Moves through the crumbs that are links, buttons or menu triggers, in order", "when": "each is a tab stop; a plain current crumb is not"}
+        {
+          "keys": "Tab",
+          "action": "Moves through the crumbs that are links, buttons or menu triggers, in order",
+          "when": "each is a tab stop; a plain current crumb is not"
+        }
       ],
       "form": {"formAssociated": false},
       "differences": [
@@ -88,9 +108,27 @@
         "commit": "ca632c6"
       },
       "api": [
-        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot", "notes": "The label."},
-        {"upstream": "href", "kind": "prop", "target": "href", "as": "attribute", "notes": "Renders a tct-link. Ignored when `menu` is set (a development warning says so)."},
-        {"upstream": "onClick", "kind": "event", "target": "click", "as": "native-event", "notes": "Native click on a link crumb or an action crumb (a crumb without href or menu is a button)."},
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "The label."
+        },
+        {
+          "upstream": "href",
+          "kind": "prop",
+          "target": "href",
+          "as": "attribute",
+          "notes": "Renders a tct-link. Ignored when `menu` is set (a development warning says so)."
+        },
+        {
+          "upstream": "onClick",
+          "kind": "event",
+          "target": "click",
+          "as": "native-event",
+          "notes": "Native click on a link crumb or an action crumb (a crumb without href or menu is a button)."
+        },
         {
           "upstream": "isCurrent",
           "kind": "prop",
@@ -98,7 +136,13 @@
           "as": "attribute",
           "notes": "Tri-state like upstream: absent lets the trail choose the last item, `current` (or `current=\"true\"`) is the current page, `current=\"false\"` opts out of the automatic choice."
         },
-        {"upstream": "startIcon", "kind": "slot", "target": "icon", "as": "slot", "notes": "Or the `icon` attribute, a registered icon name."},
+        {
+          "upstream": "startIcon",
+          "kind": "slot",
+          "target": "icon",
+          "as": "slot",
+          "notes": "Or the `icon` attribute, a registered icon name."
+        },
         {
           "upstream": "menu",
           "kind": "prop",
@@ -106,26 +150,69 @@
           "as": "property",
           "notes": "Data rows (`DropdownMenuOption[]`) as the property; composed rows as `slot=\"menu\"` children (`tct-dropdown-menu-item` etc.)."
         },
-        {"upstream": "menuSize", "kind": "prop", "target": "menu-size", "as": "attribute", "notes": "Default sm in a supporting trail, else md."},
+        {
+          "upstream": "menuSize",
+          "kind": "prop",
+          "target": "menu-size",
+          "as": "attribute",
+          "notes": "Default sm in a supporting trail, else md."
+        },
         {
           "upstream": "as",
           "kind": "prop",
           "as": "waived",
           "reason": "A-router: link components map to a tct-link-provider ancestor (linkContext), which the tct-link inside the crumb consumes."
         },
-        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style, ::part(item), ::part(crumb) and custom properties."}
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(item), ::part(crumb) and custom properties."
+        }
       ],
       "hooks": [
-        {"upstream": "useListFocus", "target": "MenuKeyboardController (through tct-dropdown-menu)", "as": "controller"},
-        {"upstream": "useTypeahead", "target": "TypeaheadController (through tct-dropdown-menu)", "as": "controller"},
-        {"upstream": "usePopover", "target": "tct-dropdown-menu (LayerController, PositionController)", "as": "controller"}
+        {
+          "upstream": "useListFocus",
+          "target": "MenuKeyboardController (through tct-dropdown-menu)",
+          "as": "controller"
+        },
+        {
+          "upstream": "useTypeahead",
+          "target": "TypeaheadController (through tct-dropdown-menu)",
+          "as": "controller"
+        },
+        {
+          "upstream": "usePopover",
+          "target": "tct-dropdown-menu (LayerController, PositionController)",
+          "as": "controller"
+        }
       ],
       "keyboard": [
-        {"keys": "Enter", "action": "Follows the link, runs the action or opens the menu", "when": "crumb focused"},
-        {"keys": "Space", "action": "Runs the action or opens the menu", "when": "button or menu crumb focused"},
-        {"keys": "ArrowDown", "action": "Opens the menu and focuses its first row", "when": "menu crumb or ellipsis focused"},
-        {"keys": "ArrowDown, ArrowUp", "action": "Move between menu rows; Home and End jump", "when": "menu open"},
-        {"keys": "Escape", "action": "Closes the menu and returns focus to the trigger", "when": "menu open"}
+        {
+          "keys": "Enter",
+          "action": "Follows the link, runs the action or opens the menu",
+          "when": "crumb focused"
+        },
+        {
+          "keys": "Space",
+          "action": "Runs the action or opens the menu",
+          "when": "button or menu crumb focused"
+        },
+        {
+          "keys": "ArrowDown",
+          "action": "Opens the menu and focuses its first row",
+          "when": "menu crumb or ellipsis focused"
+        },
+        {
+          "keys": "ArrowDown, ArrowUp",
+          "action": "Move between menu rows; Home and End jump",
+          "when": "menu open"
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes the menu and returns focus to the trigger",
+          "when": "menu open"
+        }
       ],
       "form": {"formAssociated": false},
       "differences": [

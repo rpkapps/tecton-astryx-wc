@@ -19,7 +19,11 @@ export type StepperIndicatorPosition = (typeof STEPPER_INDICATOR_POSITIONS)[numb
  * `with-label-and-controls`: the current step's label with previous and next buttons (buttons only
  * when the stepper is `navigable`). `with-label`: the label alone. `hidden-label`: the bare track.
  */
-export const STEPPER_COLLAPSED_VARIANTS = ['with-label-and-controls', 'with-label', 'hidden-label'] as const;
+export const STEPPER_COLLAPSED_VARIANTS = [
+  'with-label-and-controls',
+  'with-label',
+  'hidden-label',
+] as const;
 export type StepperCollapsedVariant = (typeof STEPPER_COLLAPSED_VARIANTS)[number];
 
 /**

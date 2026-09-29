@@ -56,11 +56,15 @@ async function page(attributes = '', scrollTop = 0, extra = ''): Promise<Page> {
   return {outline, pane};
 }
 
-const links = (outline: TctOutline): HTMLAnchorElement[] => [...outline.shadowRoot!.querySelectorAll<HTMLAnchorElement>('a.link')];
+const links = (outline: TctOutline): HTMLAnchorElement[] => [
+  ...outline.shadowRoot!.querySelectorAll<HTMLAnchorElement>('a.link'),
+];
 const activeLabel = (outline: TctOutline): string | undefined =>
-  links(outline).find((link) => link.getAttribute('aria-current') === 'location')?.textContent?.trim();
+  links(outline)
+    .find((link) => link.getAttribute('aria-current') === 'location')
+    ?.textContent?.trim();
 const scrollHeading = (pane: HTMLElement, id: string): void => {
-  pane.scrollTop = (pane.querySelector<HTMLElement>(`#${id}`)!.parentElement!).offsetTop;
+  pane.scrollTop = pane.querySelector<HTMLElement>(`#${id}`)!.parentElement!.offsetTop;
 };
 
 afterEach(() => {
@@ -71,8 +75,21 @@ afterEach(() => {
 runElementSuite({
   tag: 'tct-outline',
   render: () => '<tct-outline></tct-outline>',
-  properties: {density: 'compact', offset: 40, label: 'On this page', noScrollOnClick: true, activeId: 'a', source: 'main'},
-  attributes: {density: 'density', offset: 'offset', label: 'label', activeId: 'active-id', source: 'source'},
+  properties: {
+    density: 'compact',
+    offset: 40,
+    label: 'On this page',
+    noScrollOnClick: true,
+    activeId: 'a',
+    source: 'main',
+  },
+  attributes: {
+    density: 'density',
+    offset: 'offset',
+    label: 'label',
+    activeId: 'active-id',
+    source: 'source',
+  },
   events: ['tct-active-change', 'tct-navigate-start', 'tct-navigate-end'],
 });
 
@@ -81,27 +98,37 @@ describe('tct-outline: rendering', () => {
     const {outline} = await page();
     const nav = outline.shadowRoot!.querySelector('nav')!;
     expect(await axNode(nav)).toMatchObject({role: 'navigation', name: 'Table of contents'});
-    expect(links(outline).map((link) => link.getAttribute('href'))).toEqual(ITEMS.map((item) => `#${item.id}`));
+    expect(links(outline).map((link) => link.getAttribute('href'))).toEqual(
+      ITEMS.map((item) => `#${item.id}`),
+    );
     expect(await axNode(links(outline)[0]!)).toMatchObject({role: 'link', name: 'Introduction'});
     expect(outline.shadowRoot!.querySelector('ul')!.getAttribute('role')).toBe('list');
   });
 
   it('supports a custom label and a host aria-label', async () => {
     const custom = await page('label="On this page"');
-    expect(await axNode(custom.outline.shadowRoot!.querySelector('nav')!)).toMatchObject({name: 'On this page'});
+    expect(await axNode(custom.outline.shadowRoot!.querySelector('nav')!)).toMatchObject({
+      name: 'On this page',
+    });
     const host = await page('aria-label="Sections"');
-    expect(await axNode(host.outline.shadowRoot!.querySelector('nav')!)).toMatchObject({name: 'Sections'});
+    expect(await axNode(host.outline.shadowRoot!.querySelector('nav')!)).toMatchObject({
+      name: 'Sections',
+    });
   });
 
   it('indents by heading level and applies density', async () => {
     const {outline} = await page('density="compact"');
-    const padding = (index: number): number => parseFloat(getComputedStyle(links(outline)[index]!).paddingInlineStart);
+    const padding = (index: number): number =>
+      parseFloat(getComputedStyle(links(outline)[index]!).paddingInlineStart);
     // Levels 1 and 2 share the first step; level 3 indents one step further.
     expect(padding(0)).toBe(padding(1));
     expect(padding(3)).toBe(padding(0));
     expect(padding(4)).toBeGreaterThan(padding(1));
     const compact = parseFloat(getComputedStyle(links(outline)[0]!).paddingBlockStart);
-    const regular = parseFloat(getComputedStyle((await page()).outline.shadowRoot!.querySelector('a.link')!).paddingBlockStart);
+    const regular = parseFloat(
+      getComputedStyle((await page()).outline.shadowRoot!.querySelector('a.link')!)
+        .paddingBlockStart,
+    );
     expect(compact).toBeLessThan(regular);
   });
 
@@ -110,7 +137,10 @@ describe('tct-outline: rendering', () => {
     const indicator = outline.shadowRoot!.querySelector<HTMLElement>('.indicator')!;
     expect(indicator.getAttribute('aria-hidden')).toBe('true');
     const link = links(outline)[0]!;
-    await waitUntil(() => indicator.style.getPropertyValue('--_indicator-height') === `${link.offsetHeight}px`, 'indicator sized');
+    await waitUntil(
+      () => indicator.style.getPropertyValue('--_indicator-height') === `${link.offsetHeight}px`,
+      'indicator sized',
+    );
     expect(indicator.style.getPropertyValue('--_indicator-top')).toBe(`${link.offsetTop}px`);
   });
 
@@ -138,16 +168,29 @@ describe('tct-outline: scrollspy', () => {
     const seen: string[] = [];
     for (const id of ['install', 'usage', 'api']) {
       scrollHeading(pane, id);
-      await waitUntil(() => activeLabel(outline) === ITEMS.find((item) => item.id === id)!.label, `active ${id}`);
+      await waitUntil(
+        () => activeLabel(outline) === ITEMS.find((item) => item.id === id)!.label,
+        `active ${id}`,
+      );
       seen.push(activeLabel(outline)!);
     }
     // Scrolling UP: the previous sections take the highlight back (the earlier project got this wrong).
     for (const id of ['usage', 'install', 'intro']) {
       scrollHeading(pane, id);
-      await waitUntil(() => activeLabel(outline) === ITEMS.find((item) => item.id === id)!.label, `active ${id} scrolling up`);
+      await waitUntil(
+        () => activeLabel(outline) === ITEMS.find((item) => item.id === id)!.label,
+        `active ${id} scrolling up`,
+      );
       seen.push(activeLabel(outline)!);
     }
-    expect(seen).toEqual(['Installation', 'Usage', 'API reference', 'Usage', 'Installation', 'Introduction']);
+    expect(seen).toEqual([
+      'Installation',
+      'Usage',
+      'API reference',
+      'Usage',
+      'Installation',
+      'Introduction',
+    ]);
   });
 
   it('keeps the section whose heading is above the line active while its body is on screen', async () => {
@@ -212,7 +255,9 @@ describe('tct-outline: scrollspy', () => {
   });
 
   it('tracks the viewport when nothing scrolls inside', async () => {
-    const wrapper = await fixture<HTMLDivElement>(`<div><tct-outline></tct-outline><div>${SECTIONS.replaceAll('400px', '900px')}</div></div>`);
+    const wrapper = await fixture<HTMLDivElement>(
+      `<div><tct-outline></tct-outline><div>${SECTIONS.replaceAll('400px', '900px')}</div></div>`,
+    );
     const outline = wrapper.querySelector('tct-outline')!;
     outline.items = ITEMS;
     await outline.updateComplete;
@@ -236,7 +281,11 @@ describe('tct-outline: scrollspy', () => {
 describe('tct-outline: navigating', () => {
   it('smooth-scrolls on click, fires start then end once, and lands the active item when the scroll settles', async () => {
     const {outline, pane} = await page();
-    const events = recordEvents(outline, ['tct-navigate-start', 'tct-navigate-end', 'tct-active-change']);
+    const events = recordEvents(outline, [
+      'tct-navigate-start',
+      'tct-navigate-end',
+      'tct-active-change',
+    ]);
     await userEvent.click(links(outline)[2]!);
     await waitUntil(() => events.named('tct-navigate-end').length === 1, 'navigation ended', 4000);
     expect(events.named('tct-navigate-start')).toHaveLength(1);
@@ -244,10 +293,18 @@ describe('tct-outline: navigating', () => {
     expect(events.named('tct-navigate-end')[0]).toMatchObject({id: 'usage'});
     expect(events.events.map((event) => event.type)[0]).toBe('tct-navigate-start');
     expect(activeLabel(outline)).toBe('Usage');
-    expect(Math.abs(pane.scrollTop - pane.querySelector<HTMLElement>('#usage')!.parentElement!.offsetTop)).toBeLessThanOrEqual(2);
+    expect(
+      Math.abs(
+        pane.scrollTop - pane.querySelector<HTMLElement>('#usage')!.parentElement!.offsetTop,
+      ),
+    ).toBeLessThanOrEqual(2);
     expect(location.hash).toBe('#usage');
     await nextFrame();
-    expectEventCounts(events, {'tct-navigate-start': 1, 'tct-navigate-end': 1, 'tct-active-change': events.named('tct-active-change').length});
+    expectEventCounts(events, {
+      'tct-navigate-start': 1,
+      'tct-navigate-end': 1,
+      'tct-active-change': events.named('tct-active-change').length,
+    });
   });
 
   it('does not chase the scroll: the indicator stays until the navigation lands', async () => {
@@ -263,7 +320,11 @@ describe('tct-outline: navigating', () => {
 
   it('reports the chosen id when controlled, and the consumer owns the state', async () => {
     const {outline} = await page('active-id="intro"');
-    const events = recordEvents(outline, ['tct-active-change', 'tct-navigate-start', 'tct-navigate-end']);
+    const events = recordEvents(outline, [
+      'tct-active-change',
+      'tct-navigate-start',
+      'tct-navigate-end',
+    ]);
     await userEvent.click(links(outline)[1]!);
     await waitUntil(() => events.named('tct-navigate-end').length === 1, 'ended', 4000);
     expect(events.named('tct-active-change')[0]).toMatchObject({id: 'install', reason: 'click'});
@@ -279,7 +340,12 @@ describe('tct-outline: navigating', () => {
     await waitUntil(() => activeLabel(outline) === 'Installation', 'second target', 4000);
     expect(events.named('tct-navigate-start')).toHaveLength(2);
     await waitUntil(() => events.named('tct-navigate-end').length === 2, 'both ended', 4000);
-    expect(events.named('tct-navigate-end').map((event) => (event as unknown as TctNavigateEndEvent).id).sort()).toEqual(['faq', 'install']);
+    expect(
+      events
+        .named('tct-navigate-end')
+        .map((event) => (event as unknown as TctNavigateEndEvent).id)
+        .sort(),
+    ).toEqual(['faq', 'install']);
   });
 
   it('a manual scroll mid-flight ends the navigation exactly once', async () => {
@@ -308,14 +374,21 @@ describe('tct-outline: navigating', () => {
     const done = recordEvents(outline, 'tct-navigate-end');
     await userEvent.click(links(outline)[2]!);
     await waitUntil(() => done.events.length === 1, 'landed', 4000);
-    const gap = pane.querySelector<HTMLElement>('#usage')!.getBoundingClientRect().top - pane.getBoundingClientRect().top;
+    const gap =
+      pane.querySelector<HTMLElement>('#usage')!.getBoundingClientRect().top -
+      pane.getBoundingClientRect().top;
     expect(Math.round(gap)).toBe(48);
   });
 
   it('leaves modifier clicks to the browser', async () => {
     const {outline} = await page();
     const events = recordEvents(outline, 'tct-navigate-start');
-    const event = new MouseEvent('click', {bubbles: true, cancelable: true, composed: true, metaKey: true});
+    const event = new MouseEvent('click', {
+      bubbles: true,
+      cancelable: true,
+      composed: true,
+      metaKey: true,
+    });
     links(outline)[1]!.dispatchEvent(event);
     expect(events.events).toHaveLength(0);
     expect(event.defaultPrevented).toBe(false);
@@ -347,14 +420,26 @@ describe('tct-outline: keyboard (one roving tab stop)', () => {
   it('exposes a single tab stop, seated on the active heading', async () => {
     const {outline} = await page('', 800);
     await waitUntil(() => activeLabel(outline) === 'Usage', 'usage active');
-    await waitUntil(() => links(outline)[2]!.getAttribute('tabindex') === '0', 'tab stop on the active link');
-    expect(links(outline).map((link) => link.getAttribute('tabindex'))).toEqual(['-1', '-1', '0', '-1', '-1']);
+    await waitUntil(
+      () => links(outline)[2]!.getAttribute('tabindex') === '0',
+      'tab stop on the active link',
+    );
+    expect(links(outline).map((link) => link.getAttribute('tabindex'))).toEqual([
+      '-1',
+      '-1',
+      '0',
+      '-1',
+      '-1',
+    ]);
   });
 
   it('moves the tab stop as the active heading changes', async () => {
     const {outline, pane} = await page();
     scrollHeading(pane, 'api');
-    await waitUntil(() => links(outline)[3]!.getAttribute('tabindex') === '0', 'stop moved with the active heading');
+    await waitUntil(
+      () => links(outline)[3]!.getAttribute('tabindex') === '0',
+      'stop moved with the active heading',
+    );
   });
 
   it('does not yank the tab stop away from the item the user arrowed to', async () => {
@@ -461,16 +546,31 @@ describe('tct-outline: items from the document (source)', () => {
 
 describe('tct-outline: localisation and RTL', () => {
   it('names the landmark from the nearest lang (de-DE)', async () => {
-    const wrapper = await fixture<HTMLDivElement>('<div lang="de-DE"><tct-outline></tct-outline></div>');
+    const wrapper = await fixture<HTMLDivElement>(
+      '<div lang="de-DE"><tct-outline></tct-outline></div>',
+    );
     const outline = wrapper.querySelector('tct-outline')!;
-    await waitUntil(() => outline.shadowRoot!.querySelector('nav')?.getAttribute('aria-label') === 'Inhaltsverzeichnis', 'German label', 4000);
+    await waitUntil(
+      () =>
+        outline.shadowRoot!.querySelector('nav')?.getAttribute('aria-label') ===
+        'Inhaltsverzeichnis',
+      'German label',
+      4000,
+    );
   });
 
   it('names the landmark in Arabic and puts the track on the right (ar-SA)', async () => {
-    const wrapper = await fixture<HTMLDivElement>('<div lang="ar-SA" dir="rtl"><tct-outline></tct-outline></div>');
+    const wrapper = await fixture<HTMLDivElement>(
+      '<div lang="ar-SA" dir="rtl"><tct-outline></tct-outline></div>',
+    );
     const outline = wrapper.querySelector('tct-outline')!;
     outline.items = ITEMS;
-    await waitUntil(() => outline.shadowRoot!.querySelector('nav')?.getAttribute('aria-label') === 'جدول المحتويات', 'Arabic label', 4000);
+    await waitUntil(
+      () =>
+        outline.shadowRoot!.querySelector('nav')?.getAttribute('aria-label') === 'جدول المحتويات',
+      'Arabic label',
+      4000,
+    );
     await nextFrame();
     const track = outline.shadowRoot!.querySelector('.track')!.getBoundingClientRect();
     const link = links(outline)[0]!.getBoundingClientRect();
@@ -540,12 +640,22 @@ describe('tct-outline: text contrast in every state', () => {
       const point = {x: box.left + box.width / 2, y: box.top + box.height / 2};
       const session = cdp();
       await session.send('Input.dispatchMouseEvent', {type: 'mouseMoved', ...point});
-      await session.send('Input.dispatchMouseEvent', {type: 'mousePressed', ...point, button: 'left', clickCount: 1});
+      await session.send('Input.dispatchMouseEvent', {
+        type: 'mousePressed',
+        ...point,
+        button: 'left',
+        clickCount: 1,
+      });
       await settled();
       try {
         await expectAccessible(wrapper, contrastOnly);
       } finally {
-        await session.send('Input.dispatchMouseEvent', {type: 'mouseReleased', ...point, button: 'left', clickCount: 1});
+        await session.send('Input.dispatchMouseEvent', {
+          type: 'mouseReleased',
+          ...point,
+          button: 'left',
+          clickCount: 1,
+        });
       }
     });
   }
@@ -553,10 +663,18 @@ describe('tct-outline: text contrast in every state', () => {
 
 describe('the outline events', () => {
   it('are notifications that bubble and compose', () => {
-    for (const event of [new TctActiveChangeEvent('a', 'scroll'), new TctNavigateStartEvent('a'), new TctNavigateEndEvent('a')]) {
+    for (const event of [
+      new TctActiveChangeEvent('a', 'scroll'),
+      new TctNavigateStartEvent('a'),
+      new TctNavigateEndEvent('a'),
+    ]) {
       expect([event.bubbles, event.composed, event.cancelable]).toEqual([true, true, false]);
     }
-    expect(new TctActiveChangeEvent('a', 'click')).toMatchObject({type: 'tct-active-change', id: 'a', reason: 'click'});
+    expect(new TctActiveChangeEvent('a', 'click')).toMatchObject({
+      type: 'tct-active-change',
+      id: 'a',
+      reason: 'click',
+    });
   });
 });
 
@@ -579,7 +697,11 @@ describe('tct-outline: forced colours', () => {
     expect(getComputedStyle(links(outline)[0]!).color).toBe(systemColor('Highlight'));
     links(outline)[0]!.focus();
     await pressKeys('ArrowDown');
-    await Promise.all(links(outline)[1]!.getAnimations().map((animation) => animation.finished));
+    await Promise.all(
+      links(outline)[1]!
+        .getAnimations()
+        .map((animation) => animation.finished),
+    );
     expect(deepActiveElement()).toBe(links(outline)[1]);
     expect(getComputedStyle(links(outline)[1]!).outlineStyle).not.toBe('none');
   });

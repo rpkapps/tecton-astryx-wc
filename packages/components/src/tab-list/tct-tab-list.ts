@@ -107,8 +107,7 @@ export class TctTabList extends TctElement {
    * containers; outside one it changes nothing.
    */
   @property({reflect: true, attribute: 'edge-compensation'}) edgeCompensation:
-    | TabListEdgeCompensation
-    | undefined;
+    TabListEdgeCompensation | undefined;
 
   /** Deprecated alias of `edge-compensation="inline"` (upstream `isFullBleed`); the explicit attribute wins. */
   @property({type: Boolean, attribute: 'full-bleed', reflect: true}) fullBleed = false;
@@ -227,7 +226,9 @@ export class TctTabList extends TctElement {
   }
 
   get #edgeCompensated(): boolean {
-    return this.edgeCompensation === 'inline' || (this.edgeCompensation === undefined && this.fullBleed);
+    return (
+      this.edgeCompensation === 'inline' || (this.edgeCompensation === undefined && this.fullBleed)
+    );
   }
 
   /** Tabs and tab menus, in DOM order. */
@@ -255,7 +256,8 @@ export class TctTabList extends TctElement {
     return (
       this.#selectedTab() ??
       this.#stops().find(
-        (stop) => stop.localName === 'tct-tab-menu' && (stop as TctTabMenu).selectedOption !== undefined,
+        (stop) =>
+          stop.localName === 'tct-tab-menu' && (stop as TctTabMenu).selectedOption !== undefined,
       )
     );
   }
@@ -307,7 +309,9 @@ export class TctTabList extends TctElement {
     // The host is the tablist under the tabs pattern (A§8.1); a host `aria-label`/`-labelledby` wins.
     const tabs = this.#isTabs;
     this.internals.role = tabs ? 'tablist' : null;
-    this.internals.ariaLabel = tabs ? this.label || this.#locale.t('label', undefined, 'label') : null;
+    this.internals.ariaLabel = tabs
+      ? this.label || this.#locale.t('label', undefined, 'label')
+      : null;
     this.toggleState('tabs', tabs);
   }
 
@@ -438,7 +442,15 @@ export class TctTabList extends TctElement {
     const pastStart = stopBox.left - (stripBox.left + inset);
     const rtl = getComputedStyle(strip).direction === 'rtl';
     const tooWide = stopBox.width > stripBox.width - 2 * inset;
-    const delta = tooWide ? (rtl ? pastEnd : pastStart) : pastEnd > 0 ? pastEnd : pastStart < 0 ? pastStart : 0;
+    const delta = tooWide
+      ? rtl
+        ? pastEnd
+        : pastStart
+      : pastEnd > 0
+        ? pastEnd
+        : pastStart < 0
+          ? pastStart
+          : 0;
     if (delta !== 0) strip.scrollBy({left: delta, behavior: 'instant'});
   }
 
@@ -463,7 +475,9 @@ export class TctTabList extends TctElement {
   /** The browser scrolls a focused element into view only when it is entirely outside: finish the job. */
   readonly #onFocusIn = (event: FocusEvent): void => {
     const target = event.composedPath()[0];
-    const stop = this.#stops().find((candidate) => candidate === target || containsFlat(candidate, target as Node));
+    const stop = this.#stops().find(
+      (candidate) => candidate === target || containsFlat(candidate, target as Node),
+    );
     if (stop) this.#reveal(stop);
   };
 
@@ -485,7 +499,11 @@ export class TctTabList extends TctElement {
         this.#scrollByPage(direction === 'start' ? -1 : 1);
       }}
     >
-      <tct-icon name=${direction === 'start' ? 'chevronLeft' : 'chevronRight'} size="sm" color="inherit"></tct-icon>
+      <tct-icon
+        name=${direction === 'start' ? 'chevronLeft' : 'chevronRight'}
+        size="sm"
+        color="inherit"
+      ></tct-icon>
     </button>`;
   }
 

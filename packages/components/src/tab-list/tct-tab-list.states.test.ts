@@ -30,7 +30,13 @@ const center = (element: Element): {x: number; y: number} => {
 
 afterEach(async () => {
   await cdp()
-    .send('Input.dispatchMouseEvent', {type: 'mouseReleased', x: 0, y: 0, button: 'left', clickCount: 1})
+    .send('Input.dispatchMouseEvent', {
+      type: 'mouseReleased',
+      x: 0,
+      y: 0,
+      button: 'left',
+      clickCount: 1,
+    })
     .catch(() => undefined);
   await userEvent.hover(document.body, {position: {x: 0, y: 0}}).catch(() => undefined);
 });
@@ -49,7 +55,11 @@ async function mount(theme: 'light' | 'dark', pattern: 'nav' | 'tabs'): Promise<
   );
   const list = wrapper.querySelector('tct-tab-list')!;
   const menu = list.querySelector('tct-tab-menu');
-  if (menu) menu.options = [{value: 'reports', label: 'Reports'}, {value: 'exports', label: 'Exports'}];
+  if (menu)
+    menu.options = [
+      {value: 'reports', label: 'Reports'},
+      {value: 'exports', label: 'Exports'},
+    ];
   await list.updateComplete;
   await Promise.all([...list.children].map((child) => (child as TctTab).updateComplete));
   await nextFrame();
