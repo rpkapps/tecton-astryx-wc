@@ -444,7 +444,7 @@ system fonts; this is a safety net, not a mode (styling.md §4.2).
   backdrop): text roles ≥ 4.5:1, icon/boundary roles and the focus ring ≥ 3:1 on every surface, both
   modes. Known design shortfalls live in `contrast.allow.json` with a reason (e.g.
   `--color-border-emphasized` 2.2:1). D-005 inverted-surface double ring is checked here.
-- The **provisional** set (data-viz 56, `--size-element-lg`, the 6 pipeline extras) and the
+- The **provisional** set (data-viz 56, `--size-element-lg`, the 7 pipeline extras) and the
   **astryx-retained** set (motion 10; non-tokens: breakpoints, z-index) are exact and disjoint (D-013); the
   Tecton-derived items are checked (headings 3-6 follow the export's large/medium/small/tiny sizes,
   letter-spacing is `normal` everywhere, the destructive button binds only emitted
