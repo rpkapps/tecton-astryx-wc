@@ -1,0 +1,35 @@
+/* Fixture: system colours are allowed only inside @media (forced-colors: active). */
+@layer component {
+  .control {
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .control {
+      border-color: ButtonBorder;
+      color: ButtonText;
+      background: Canvas;
+    }
+    .control[aria-selected="true"] {
+      background: Highlight;
+      color: HighlightText;
+    }
+    .control:disabled {
+      color: GrayText;
+    }
+    .link {
+      color: LinkText;
+    }
+    .focus {
+      outline-color: Highlight;
+    }
+  }
+  @media (forced-colors: active) and (prefers-color-scheme: dark) {
+    .control {
+      border-color: CanvasText;
+    }
+  }
+}
