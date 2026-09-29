@@ -196,7 +196,7 @@ export function differencesReport(input: DifferencesInput): string {
   );
 
   // 4. Astryx-retained.
-  const retained = (tokens?.tokens ?? []).filter((token) => token.status === 'astryx-retained');
+  const retained = (tokens?.tokens ?? []).filter((token) => token.status === 'retained-default');
   out.push(
     '## Astryx-retained values',
     '',
@@ -216,7 +216,7 @@ export function differencesReport(input: DifferencesInput): string {
         light: token.light,
         description: token.description,
       })),
-      'No astryx-retained tokens.',
+      'No retained-default tokens.',
     ),
     '',
     table(
@@ -225,7 +225,7 @@ export function differencesReport(input: DifferencesInput): string {
         {key: 'name', label: 'Item', kind: 'code'},
         {key: 'reason', label: 'Reason'},
       ],
-      (tokens?.astryxRetainedNonTokens ?? []).map((item) => ({name: item.name, reason: item.reason})),
+      (tokens?.retainedNonTokens ?? []).map((item) => ({name: item.name, reason: item.reason})),
       'None.',
     ),
     '',
@@ -233,7 +233,7 @@ export function differencesReport(input: DifferencesInput): string {
   if (tokens?.breakpoints) {
     out.push(
       table(
-        'Breakpoints (astryx-retained)',
+        'Breakpoints (retained-default)',
         [
           {key: 'name', label: 'Name', kind: 'code'},
           {key: 'width', label: 'Minimum width (px)', kind: 'code'},

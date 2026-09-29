@@ -146,7 +146,7 @@ describe('component page', () => {
     expect(page).not.toMatch(/Astryx|Upstream mapping|Differences from/);
     expect(page).not.toContain('SAMPLEBADGE-01');
     expect(page).toContain('Enter, Space');
-    expect(page).toContain("import '@tecton-astryx/components/sample-badge';");
+    expect(page).toContain("import '@tecton-wc/components/sample-badge';");
     // authored text with an unclosed tag must not reach MDX raw
     expect(page).toContain('Remove &lt;label>');
     expect(page).not.toContain('Remove <label>');
@@ -226,12 +226,16 @@ describe('public site never names the upstream design system', () => {
     );
     expect(publicText('muted (tecton-astryx name)')).toBe('muted');
     expect(publicText('the default Astryx border maps to Tecton')).toBe('the default border maps to Tecton');
-    // package names and message ids are technical identifiers, not prose
-    expect(publicText('import x from "@tecton-astryx/core/x.js"; id `@astryx.button.loading`')).toContain(
-      '@tecton-astryx/core',
+    // package names and message ids are technical identifiers, not prose, and pass through untouched
+    const identifiers = 'import x from "@tecton-wc/core/x.js"; id `@tct.button.loading`';
+    expect(publicText(identifiers)).toBe(identifiers);
+    // the owner's reference theme, cited in parity notes, and upstream data attributes
+    expect(publicText('as in tecton-astryx components.ts `item`; tecton-astryx\'s avatar')).toBe(
+      "as in the Tecton reference theme's components.ts `item`; the Tecton reference theme's avatar",
     );
-    expect(tokenStatusLabel('astryx-retained')).toBe('retained default');
-    expect(tokenStatusLabel('tecton-astryx')).not.toMatch(/astryx/i);
+    expect(publicText('keyed on data-astryx-media')).toBe('keyed on data-upstream-media');
+    expect(tokenStatusLabel('retained-default')).toBe('retained default');
+    expect(tokenStatusLabel('tecton-binding')).toBe('Tecton (bound)');
   });
 
   it('scrubs element API text', () => {
@@ -248,12 +252,12 @@ describe('public site never names the upstream design system', () => {
     const category = categoryPage('Feedback & Status', pages);
     const empty = categoryPage('Action', pages);
     const tokens = tokensPage({
-      counts: {tokens: 1, palette: 1, byStatus: {'astryx-retained': 1}},
+      counts: {tokens: 1, palette: 1, byStatus: {'retained-default': 1}},
       provisionalNonTokens: [],
-      astryxRetainedNonTokens: [],
+      retainedNonTokens: [],
       tectonDerivedNonTokens: [],
       tokens: [
-        {name: '--x', category: 'motion', light: '1s', dark: '1s', source: 's', status: 'astryx-retained', description: 'Kept (tecton-astryx name)'},
+        {name: '--x', category: 'motion', light: '1s', dark: '1s', source: 's', status: 'retained-default', description: 'Kept (tecton-astryx name)'},
       ],
     });
     for (const page of [overview, category, empty, tokens]) expect(page).not.toMatch(/astryx/i);

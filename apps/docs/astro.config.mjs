@@ -1,7 +1,7 @@
 /**
  * Docs site (A§16): Astro + Starlight, static output, Tecton-skinned.
  *
- *  - Tokens and fonts: `@tecton-astryx/tokens/tecton.css` (tokens + Figtree Variable + IBM Plex Mono),
+ *  - Tokens and fonts: `@tecton-wc/tokens/tecton.css` (tokens + Figtree Variable + IBM Plex Mono),
  *    then `src/styles/docs.css` maps Starlight's `--sl-*` variables onto the tokens (A§16.1).
  *  - Components load from source through the `tct-source` export condition (A§2.3) so `docs:dev` and
  *    `docs:build` need no prior library build; the in-house Vite plugin compiles `*.styles.css`.
@@ -105,12 +105,14 @@ export default defineConfig({
       description:
         'Framework-independent Web Components in the Tecton visual system.',
       favicon: '/favicon.svg',
-      customCss: ['@tecton-astryx/tokens/tecton.css', './src/styles/docs.css'],
+      customCss: ['@tecton-wc/tokens/tecton.css', './src/styles/docs.css'],
       components: {
         // Two-state colour scheme control: system or the pinned opposite. [mwg:dark-mode]
         ThemeSelect: './src/components/ThemeSelect.astro',
         // Pagefind search plus an announced result count (A§16.5).
         Search: './src/components/Search.astro',
+        // The default footer plus a link to the third-party notices page (licence notice, D-015).
+        Footer: './src/components/Footer.astro',
       },
       lastUpdated: false,
       pagination: true,

@@ -1,10 +1,12 @@
 /**
  * `pnpm generate` step (D-011 prerequisite for WP-AI): writes
  *
- *   packages/components/agent-registry.json     the registry (gitignored; a request asks the orchestrator to
- *                                               export it as `@tecton-astryx/components/agent-registry.json`)
+ *   packages/components/agent-registry.json     the public registry, exported as
+ *                                               `@tecton-wc/components/agent-registry.json` (gitignored)
  *   apps/docs/public/agent-registry.json        the same file, served by the docs site (MCP HTTP route, CLI)
  *   apps/docs/public/llms.txt, llms-full.txt    the llms.txt pair, copied into the docs build
+ *   reports/agent-registry.internal.json        the full registry with the upstream mapping (internal, never
+ *                                               shipped; D-015)
  */
 import {existsSync, readFileSync, readdirSync} from 'node:fs';
 import {join} from 'node:path';
@@ -61,10 +63,11 @@ const registry = buildRegistry({
 
 const publicRegistry = toPublicRegistry(registry);
 const outputs: [string, string][] = [
-  // Internal (full): the CLI and MCP server read this one, with the upstream mapping.
-  [join(PATHS.components, 'agent-registry.json'), `${JSON.stringify(registry, null, 2)}\n`],
-  // Public: served by the docs site; never names the upstream design system.
+  // Public: the package export and the docs site; never names the upstream design system (D-015).
+  [join(PATHS.components, 'agent-registry.json'), `${JSON.stringify(publicRegistry, null, 2)}\n`],
   [join(DOCS_PUBLIC, 'agent-registry.json'), `${JSON.stringify(publicRegistry, null, 2)}\n`],
+  // Internal (full): with the upstream mapping, kept with the other internal reports.
+  [join(PATHS.reports, 'agent-registry.internal.json'), `${JSON.stringify(registry, null, 2)}\n`],
   [join(DOCS_PUBLIC, 'llms.txt'), renderLlmsTxt(publicRegistry)],
   [join(DOCS_PUBLIC, 'llms-full.txt'), renderLlmsFull(publicRegistry)],
 ];
