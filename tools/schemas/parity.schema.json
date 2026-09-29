@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tecton-astryx-wc.invalid/schemas/parity.schema.json",
+  "title": "Component folder parity record",
+  "description": "One parity.json per component folder (ARCHITECTURE §4.1, CONVENTIONS §8). tools/check-parity.ts adds the rules a schema cannot express (manifest coverage, CEM targets, status vs test/docs presence).",
+  "type": "object",
+  "required": ["folder", "workPackage", "entries"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {"type": "string"},
+    "folder": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+      "description": "Kebab-case folder name; must equal the directory name."
+    },
+    "workPackage": {"type": "string", "pattern": "^WP-[A-Z0-9]+$"},
+    "entries": {
+      "type": "object",
+      "description": "One record per upstream manifest id the folder implements (docs/research/astryx-parity-manifest.json).",
+      "propertyNames": {"pattern": "^(core|lab|charts|richtext|vega)\\.[a-z0-9]+(-[a-z0-9]+)*$"},
+      "additionalProperties": {"$ref": "#/$defs/entry"}
+    }
+  },
+  "$defs": {
+    "status": {"enum": ["not-started", "in-progress", "implemented", "verified"]},
+    "apiAs": {
+      "enum": [
+        "attribute",
+        "property",
+        "slot",
+        "native-event",
+        "event",
+        "method",
+        "context",
+        "controller",
+        "module-function",
+        "css",
+        "waived"
+      ]
+    },
+    "entry": {
+      "type": "object",
+      "required": ["status", "upstream", "api"],
+      "additionalProperties": false,
+      "properties": {
+        "tag": {
+          "type": ["string", "null"],
+          "pattern": "^tct-[a-z0-9]+(-[a-z0-9]+)*$",
+          "description": "Custom element tag; null for hook-only or provider-less entries."
+        },
+        "status": {
+          "$ref": "#/$defs/status",
+          "description": "Only the orchestrator sets 'verified'."
+        },
+        "upstream": {
+          "type": "object",
+          "required": ["name", "path", "commit"],
+          "additionalProperties": false,
+          "properties": {
+            "name": {"type": "string", "minLength": 1},
+            "path": {"type": "string", "minLength": 1},
+            "commit": {"type": "string", "pattern": "^[0-9a-f]{7,40}$"}
+          }
+        },
+        "api": {"type": "array", "items": {"$ref": "#/$defs/apiRow"}},
+        "hooks": {"type": "array", "items": {"$ref": "#/$defs/hookRow"}},
+        "keyboard": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["keys", "action"],
+            "additionalProperties": false,
+            "properties": {
+              "keys": {"type": "string", "minLength": 1},
+              "action": {"type": "string", "minLength": 1},
+              "when": {"type": "string"}
+            }
+          }
+        },
+        "form": {
+          "type": "object",
+          "required": ["formAssociated"],
+          "additionalProperties": false,
+          "properties": {"formAssociated": {"type": "boolean"}, "notes": {"type": "string"}}
+        },
+        "differences": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "type", "text"],
+            "additionalProperties": false,
+            "properties": {
+              "id": {"type": "string", "pattern": "^[A-Z][A-Z0-9]*(-[A-Z0-9]+)*-[0-9]{2,}$"},
+              "type": {
+                "enum": ["approved-api-difference", "a11y-improvement", "tecton-visual", "waiver"]
+              },
+              "text": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "tests": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "render": {"type": "boolean"},
+            "a11y": {"type": "boolean"},
+            "api": {"type": "boolean"},
+            "keyboard": {"type": "boolean"},
+            "form": {"type": "boolean"},
+            "events": {"type": "boolean"},
+            "rtl": {"type": "boolean"},
+            "forcedColors": {"type": "boolean"},
+            "i18n": {"type": "boolean"}
+          }
+        },
+        "provisional": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "tokenRequests": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "reason"],
+            "additionalProperties": false,
+            "properties": {
+              "name": {"type": "string", "pattern": "^--"},
+              "reason": {"type": "string", "minLength": 1},
+              "light": {"type": "string"},
+              "dark": {"type": "string"}
+            }
+          }
+        },
+        "requests": {
+          "type": "array",
+          "description": "Changes needed in shared files (ARCHITECTURE §3); the orchestrator applies them.",
+          "items": {
+            "type": "object",
+            "required": ["file", "reason"],
+            "properties": {
+              "file": {"type": "string", "minLength": 1},
+              "reason": {"type": "string", "minLength": 1},
+              "diff": {"type": "string"}
+            }
+          }
+        },
+        "sizeBudgetKb": {"type": ["number", "null"], "minimum": 0},
+        "notes": {
+          "type": ["string", "array"],
+          "description": "Free notes, e.g. guide ids [mwg:<id>] that drove a decision."
+        }
+      }
+    },
+    "apiRow": {
+      "type": "object",
+      "required": ["upstream", "kind", "as"],
+      "additionalProperties": false,
+      "properties": {
+        "upstream": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Upstream prop, callback, slot/content prop or ref name (must cover the manifest entry)."
+        },
+        "kind": {"enum": ["prop", "event", "slot", "ref", "hook", "method", "other"]},
+        "as": {"$ref": "#/$defs/apiAs"},
+        "target": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The WC API the row maps to (attribute, property, slot, event name, ...)."
+        },
+        "reflect": {"type": "boolean"},
+        "default": {},
+        "reason": {"type": "string", "minLength": 1},
+        "notes": {"type": "string"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"as": {"const": "waived"}}, "required": ["as"]},
+          "then": {"required": ["reason"]},
+          "else": {"required": ["target"]}
+        }
+      ]
+    },
+    "hookRow": {
+      "type": "object",
+      "required": ["upstream", "as"],
+      "additionalProperties": false,
+      "properties": {
+        "upstream": {"type": "string", "minLength": 1},
+        "target": {"type": "string", "minLength": 1},
+        "as": {"$ref": "#/$defs/apiAs"},
+        "reason": {"type": "string", "minLength": 1},
+        "notes": {"type": "string"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"as": {"const": "waived"}}, "required": ["as"]},
+          "then": {"required": ["reason"]},
+          "else": {"required": ["target"]}
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://tecton-astryx-wc.invalid/schemas/docs-frontmatter.schema.json",
+  "title": "Component docs frontmatter",
+  "description": "Frontmatter of <folder>.docs.md (CONVENTIONS §7, D-011). tools/check-parity.ts adds the cross-file rules: folder name, category, examples on disk, entries vs parity.json, dense.properties vs the CEM.",
+  "type": "object",
+  "required": [
+    "title",
+    "folder",
+    "category",
+    "entries",
+    "summary",
+    "examples",
+    "keywords",
+    "dense"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Display name (upstream displayName)."
+    },
+    "folder": {"type": "string", "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$"},
+    "category": {
+      "type": "string",
+      "minLength": 1,
+      "description": "One of the 11 upstream categories."
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1},
+      "description": "Upstream names documented on this page (incl. subcomponents)."
+    },
+    "summary": {"type": "string", "minLength": 1},
+    "examples": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"},
+      "description": "Example ids in page order; each is examples/<id>.html."
+    },
+    "keywords": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1},
+      "description": "Agent/search index (D-011); start from upstream keywords."
+    },
+    "dense": {
+      "type": "object",
+      "description": "Agent-facing dense doc (D-011); port of upstream docsDense adapted to Web Components.",
+      "required": ["description", "usage", "bestPractices", "properties"],
+      "additionalProperties": false,
+      "properties": {
+        "description": {"type": "string", "minLength": 1},
+        "usage": {"type": "string", "minLength": 1},
+        "bestPractices": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["do", "text"],
+            "additionalProperties": false,
+            "properties": {"do": {"type": "boolean"}, "text": {"type": "string", "minLength": 1}}
+          }
+        },
+        "properties": {
+          "type": "object",
+          "description": "One line per public attribute/property/slot/event name.",
+          "additionalProperties": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "related": {
+      "type": "array",
+      "items": {"type": "string", "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$"},
+      "description": "Compound/related folders for agent 'get' results."
+    }
+  }
+}
