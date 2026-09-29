@@ -28,7 +28,7 @@ import {
   type TctBottomSheetSwitcher,
 } from './tct-bottom-sheet-switcher.js';
 import type {TctBottomSheet} from './tct-bottom-sheet.js';
-import {drag, handleOf, pointer} from './sheet-test-utils.js';
+import {drag, handleOf, pointer} from './fixtures/sheet-test-utils.js';
 
 const flow = (attributes = '', tail = '') => `<tct-bottom-sheet-switcher label="" ${attributes}>
   <tct-bottom-sheet sheet-id="a" label="First" height="hug" snap-points="0.3">

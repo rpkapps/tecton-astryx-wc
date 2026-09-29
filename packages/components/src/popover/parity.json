@@ -228,7 +228,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 63,
       "notes": "Guides: [mwg:declarative-dialog-popover-control] [mwg:animate-to-from-top-layer] [mwg:position-aware-tooltips] [mwg:persistent-top-layer-ui] [mwg:platform-controls-dismiss-dialog]. The fallback close button is a tct-button (secondary); the UA popover reset is the shared .layer-surface."
     }
   }

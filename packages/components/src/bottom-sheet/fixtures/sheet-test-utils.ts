@@ -4,7 +4,7 @@
  * pointer to capture, which the sheet tolerates).
  */
 import {animationsFinished, aTimeout, nextFrame, waitUntil} from '@tecton-astryx/testing/index.js';
-import type {TctBottomSheet} from './tct-bottom-sheet.js';
+import type {TctBottomSheet} from '../tct-bottom-sheet.js';
 
 export const dialogOf = (el: TctBottomSheet): HTMLDialogElement =>
   el.shadowRoot!.querySelector<HTMLDialogElement>('.dialog')!;

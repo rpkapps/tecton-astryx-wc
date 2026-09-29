@@ -253,7 +253,7 @@
           "reason": "New core event class `tct-snap-change` (bottom sheet) was added in packages/core/src/events/; its flags and payload are asserted in the bottom-sheet tests; list it in the shared events test if wanted."
         }
       ],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 46,
       "notes": "Guides: [mwg:navigation-drawer] [mwg:light-dismiss-a-dialog] [mwg:swipe-to-remove] [mwg:animate-to-from-top-layer] [mwg:platform-controls-dismiss-dialog] [mwg:persistent-top-layer-ui]. The handle name is the existing localized `resizable.handle.label`; the value text is a percent formatted for the locale, so no new message id."
     },
     "core.bottom-sheet-switcher": {
@@ -406,7 +406,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 46,
       "notes": "Guides: [mwg:persistent-top-layer-ui] [mwg:platform-controls-dismiss-dialog]. The keyboard, RTL, forced-colours and i18n behaviour of the panels is the bottom sheet's (tct-bottom-sheet tests)."
     }
   }

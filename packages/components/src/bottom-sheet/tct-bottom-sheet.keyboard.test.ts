@@ -8,7 +8,7 @@ import {runKeyboardSuite, waitUntil} from '@tecton-astryx/testing/index.js';
 import './define.js';
 import type {TctBottomSheetSwitcher} from './tct-bottom-sheet-switcher.js';
 import type {TctBottomSheet} from './tct-bottom-sheet.js';
-import {handleOf, openSheet, sheetOf} from './sheet-test-utils.js';
+import {handleOf, openSheet, sheetOf} from './fixtures/sheet-test-utils.js';
 
 // `import.meta.glob` keeps parity.json (not part of the TypeScript project) out of the program.
 const parity = Object.values(

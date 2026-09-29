@@ -35,7 +35,7 @@ import {
   pointer,
   settled,
   sheetOf,
-} from './sheet-test-utils.js';
+} from './fixtures/sheet-test-utils.js';
 
 beforeAll(() => {
   defineElement(TctTestLayer);

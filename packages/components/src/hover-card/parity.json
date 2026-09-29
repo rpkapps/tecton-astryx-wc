@@ -206,7 +206,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 24,
       "notes": "Guides: [mwg:interest-triggered-tooltips] [mwg:animate-to-from-top-layer] [mwg:position-aware-tooltips]. Has no localisable strings (upstream has none). The layer is kind 'hint' so the controller sets no trigger ARIA and the card owns it."
     }
   }

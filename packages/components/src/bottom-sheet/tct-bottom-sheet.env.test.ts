@@ -35,7 +35,7 @@ import {
   pointer,
   settled,
   sheetOf,
-} from './sheet-test-utils.js';
+} from './fixtures/sheet-test-utils.js';
 
 const form = `<form style="display:grid;gap:60px;padding:16px">
   ${Array.from({length: 8}, (_, i) => `<input id="f${i}" aria-label="Field ${i}" style="block-size:40px" />`).join('')}

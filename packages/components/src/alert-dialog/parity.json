@@ -199,7 +199,7 @@
           "reason": "New core event classes `tct-action` (alert dialog), `tct-snap-change` (bottom sheet), `tct-toast-dismiss` and `tct-toast-hide` (toast) were added in packages/core/src/events/; their flags and payloads are asserted in the component tests; list them in the shared events test if wanted."
         }
       ],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 67,
       "notes": "Guides: [mwg:platform-controls-dismiss-dialog] [mwg:light-dismiss-a-dialog]. Composes tct-dialog, tct-heading, tct-text and tct-button."
     }
   }

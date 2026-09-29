@@ -40,6 +40,7 @@ dense:
     tct-after-open-change: an open or close settled after the animation; every actual change
     tct-snap-change: the user moved it to another stop (index, height, reason pointer or keyboard)
     activeSheet: sheet-id of the interactive sheet in a switcher; no attribute closes the flow; attribute active-sheet
+    settled: promise on the switcher that resolves once the shared dialog finished opening or closing
 related: [popover, dialog, alert-dialog, toast]
 ---
 

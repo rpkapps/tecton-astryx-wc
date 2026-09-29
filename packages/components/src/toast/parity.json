@@ -186,7 +186,7 @@
           "reason": "Two new core event classes, `tct-toast-dismiss` and `tct-toast-hide`, were added in packages/core/src/events/ (flags and payload are asserted in toast/tct-toast.test.ts); add them to the shared events test if the orchestrator wants them listed there."
         }
       ],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 48,
       "notes": "Guides: [mwg:persistent-toast-notifications] [mwg:persistent-top-layer-ui] [mwg:animate-to-from-top-layer]. The close button stays a native <button> around tct-icon: it sits on the inverted card and tct-button has no colour hooks for inverted surfaces (see requests). The viewport host is itself the popover, so the shared .layer-surface class does not apply."
     },
     "core.layer-provider": {
@@ -247,7 +247,7 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
+      "sizeBudgetKb": 48,
       "notes": "Provider: no shadow root and no box (A§8.1); the light-dom rule ships in tct-layer-provider.light.css and is adopted at runtime."
     }
   }

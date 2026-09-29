@@ -32,7 +32,7 @@ import {
   settled,
   sheetOf,
   touch,
-} from './sheet-test-utils.js';
+} from './fixtures/sheet-test-utils.js';
 
 async function mount(attributes = '', content = '<p>Sheet content</p>'): Promise<TctBottomSheet> {
   const root = await fixture<HTMLElement>(
