@@ -19,7 +19,8 @@
  *   [part='description']        helper text
  *   .input-wrapper              the painted box around the control; `data-size`, `data-status`,
  *                               `data-disabled`, `data-readonly`; add `.focus-within-ring` (focus-ring module)
- *   .input                      the inner native <input>, or the slotted author <input slot="input">
+ *   .input                      the inner native <input>, or the slotted author <input slot="input"> (only the
+ *                               named `input` slot is reset; a control in a default slot keeps its own box)
  *
  * Private custom properties the component may set on `.input-wrapper`: `--_field-radius` (concentric
  * corners inside an input group), `--_field-border-color`. The field width is `--_field-width` on `.field`.
@@ -178,9 +179,14 @@
     --_field-border-color: var(--tecton-color-status-info-outline-border-strong);
   }
 
-  /* The native input and the slotted author input draw nothing of their own: the wrapper is the box. */
+  /*
+   * The native input and the slotted author input draw nothing of their own: the wrapper is the box.
+   * The slotted rule is keyed to the named `input` slot (tct-text-input's slotted-input mode) and never
+   * to a default slot: upstream Field leaves a native control it wraps exactly as the author wrote it,
+   * so `<tct-field><input></tct-field>` keeps the browser's own visible box.
+   */
   .input,
-  ::slotted(input) {
+  slot[name='input']::slotted(input) {
     display: block;
     flex: 1;
     min-inline-size: 0;
@@ -202,14 +208,14 @@
   @media (pointer: coarse) {
     @supports (-webkit-touch-callout: none) {
       .input,
-      ::slotted(input) {
+      slot[name='input']::slotted(input) {
         font-size: max(1rem, var(--text-body-size));
       }
     }
   }
 
   .input::placeholder,
-  ::slotted(input)::placeholder {
+  slot[name='input']::slotted(input)::placeholder {
     color: var(--tecton-color-input-outlined-text-placeholder);
     opacity: 1;
   }
@@ -246,7 +252,7 @@
   }
 
   .input-wrapper[data-disabled] .input::placeholder,
-  .input-wrapper[data-disabled] ::slotted(input)::placeholder {
+  .input-wrapper[data-disabled] slot[name='input']::slotted(input)::placeholder {
     color: var(--tecton-color-disabled-outline-text);
   }
 }
