@@ -9,6 +9,9 @@ apps/docs/src/content/docs/components/
 # Lucide icon data (D-009): one module per glyph plus the registry helper, from tools/icons/extract-lucide.ts
 packages/icons/src/lucide/
 packages/icons/src/lucide.ts
+# Tecton domain icon modules (D-013): generated from packages/icons/src/tecton/glyphs by tools/icons/extract-tecton.ts
+packages/icons/src/tecton/*.ts
+packages/icons/src/tecton.ts
 apps/docs/.astro/
 reports/
 

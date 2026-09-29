@@ -7,6 +7,8 @@
 custom-elements.json
 packages/icons/src/lucide/
 packages/icons/src/lucide.ts
+packages/icons/src/tecton/*.ts
+packages/icons/src/tecton.ts
 reports/
 apps/docs/src/content/docs/components/
 .astro/
