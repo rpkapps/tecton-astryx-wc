@@ -177,12 +177,17 @@ export class TctCalendar extends TctElement {
   /** First day of the week: 0 (Sunday, default) to 6, or `sun` to `sat`. */
   @property({attribute: 'week-starts-on'}) weekStartsOn: DayOfWeek | string = 0;
 
-  /** Shows the month of `date` (`YYYY-MM-DD`) without an intent event (upstream `handleRef.navigateTo`). */
+  /**
+   * Shows the month of `date` (`YYYY-MM-DD`) without an intent event (upstream `handleRef.navigateTo`) and
+   * makes that day the tab stop, so a calendar that is reopened starts on it, not where focus was left.
+   */
   navigateTo(date: string): void {
     const parsed = tryPlainDateFromISO(date);
     if (!parsed) return;
     this.#nav.set(parsed);
+    this.#stopRequest = plainDateToISO(parsed);
     this.focusDate = plainDateToISO(parsed);
+    this.requestUpdate();
   }
 
   /** Focuses the day that is the tab stop: the selected day, else today, else the first available one. */
@@ -239,6 +244,8 @@ export class TctCalendar extends TctElement {
   #rangeAnchor: ISODateString | null = null;
   #hovered: ISODateString | null = null;
   #lastMonthLabel: string | undefined;
+  /** The day `navigateTo` asked to be the tab stop, applied after the next render. */
+  #stopRequest: ISODateString | null = null;
   /** What the next focus-date intent event reports as its reason. */
   #reason: ChangeReason = 'trigger';
 
@@ -372,6 +379,17 @@ export class TctCalendar extends TctElement {
       announce(label, {element: this});
     }
     this.#lastMonthLabel = label;
+
+    if (this.#stopRequest) {
+      const wanted = this.renderRoot.querySelector<HTMLElement>(
+        `.day[data-date="${this.#stopRequest}"]:not([data-outside], [data-unavailable])`,
+      );
+      this.#stopRequest = null;
+      if (wanted) {
+        for (const grid of this.#grids) grid.resetTabStop();
+        for (const grid of this.#grids) grid.setTabStop(wanted);
+      }
+    }
 
     const pending = this.#nav.pendingFocus;
     if (pending) {

@@ -55,11 +55,7 @@ export class CalendarNavigationController implements ReactiveController {
   set(date: PlainDate): void {
     const current = this.#focusDate;
     this.#focusDate = date;
-    if (
-      current?.year !== date.year ||
-      current.month !== date.month ||
-      current.day !== date.day
-    ) {
+    if (current?.year !== date.year || current.month !== date.month || current.day !== date.day) {
       this.#host.requestUpdate();
     }
   }

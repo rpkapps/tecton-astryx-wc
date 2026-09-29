@@ -198,6 +198,18 @@ describe('tct-date-input: the calendar popover', () => {
     expect(field.value).toBe('2026-03-21');
   });
 
+  it('reopens on the selected day, not where focus was left the last time', async () => {
+    const field = await make('label="Event date" value="2026-03-21"');
+    await openByToggle(field);
+    await waitUntil(() => focusedDate() === '2026-03-21', 'focus in the calendar');
+    await pressKeys('ArrowRight', 'ArrowRight', 'PageDown');
+    expect(focusedDate()).toBe('2026-04-23');
+    await pressKeys('Escape');
+    await waitUntil(() => !field.open && !isShown(field), 'closed');
+    await openByToggle(field);
+    await waitUntil(() => focusedDate() === '2026-03-21', 'focus back on the selected day');
+  });
+
   it('keyboard: the calendar grid keys work inside the picker, and Tab stays in the surface', async () => {
     const field = await make('label="Event date" value="2026-03-21"');
     await openByToggle(field);

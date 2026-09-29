@@ -34,7 +34,7 @@ import {
   type DateInputFormat,
   type DateInputFormatter,
 } from './date-input.types.js';
-import {PICKER_PRESENTATIONS} from './picker-presentation.js';
+import {PICKER_PRESENTATIONS, type LegacyNativePicker} from './picker-presentation.js';
 import {TctPickerField} from './tct-picker-field.js';
 import styles from './tct-date-input.styles.css';
 
@@ -67,7 +67,7 @@ type DraftIssue = 'unreadable' | 'unavailable';
  * the language of the element in the `format` you choose and is stored, submitted and read back as
  * `YYYY-MM-DD`, whatever the locale, calendar or time zone.
  *
- * It is a form-associated element that submits the ISO date (`2026-01-25`, or nothing for an empty field),
+ * It is a form-associated element that submits the ISO date (`2026-01-25`, or an empty string for an empty field),
  * resets to its `value` attribute and restores like a native input. The value is a string, like a native
  * `<input type="date">`'s. `input` fires when the committed date changes (typing a complete date, a pick,
  * a clear), `change` once when the edit is committed (Enter, leaving the field, a pick); nothing fires for a
@@ -118,6 +118,15 @@ export class TctDateInput extends TctPickerField {
     TctCalendar,
   ];
   static override styles: CSSResultGroup = [TctPickerField.styles, styles];
+
+  /** Shows a clear (x) button while there is a value; it clears, fires `tct-clear` and returns focus. */
+  @property({type: Boolean, attribute: 'has-clear'}) hasClear = false;
+
+  /**
+   * Deprecated: use `presentation` (`touch` is `adaptive-native`, `always` is `native`, `never` is
+   * `adaptive-bottom-sheet`). `presentation` wins when both are set.
+   */
+  @property({attribute: 'native-picker'}) nativePicker: LegacyNativePicker | undefined;
 
   /** Earliest selectable date, `YYYY-MM-DD`. A native constraint: an earlier value is `rangeUnderflow`. */
   @property() min: string | undefined;
@@ -179,6 +188,10 @@ export class TctDateInput extends TctPickerField {
 
   protected override get pickerKind(): 'date' {
     return 'date';
+  }
+
+  protected override get legacyNativePicker(): LegacyNativePicker | undefined {
+    return this.nativePicker;
   }
 
   protected override get formControl(): HTMLInputElement | null {

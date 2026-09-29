@@ -48,7 +48,10 @@ const grids = (calendar: TctCalendar): HTMLElement[] => [
 const activeDate = (): string | undefined =>
   (deepActiveElement() as HTMLElement | null)?.dataset.date;
 
-async function make(attributes = '', options: {dir?: 'rtl'; lang?: string} = {}): Promise<TctCalendar> {
+async function make(
+  attributes = '',
+  options: {dir?: 'rtl'; lang?: string} = {},
+): Promise<TctCalendar> {
   const calendar = await fixture<TctCalendar>(
     `<tct-calendar focus-date="2026-01-01" ${attributes}></tct-calendar>`,
     options,
@@ -91,8 +94,12 @@ runElementSuite({
 describe('tct-calendar: pure helpers (ported)', () => {
   it('builds a fixed six-row grid, or as many rows as the month needs', () => {
     expect(getCalendarDays({year: 2026, month: 1}).days).toHaveLength(42);
-    expect(getCalendarDays({year: 2026, month: 2, hasVariableRowCount: true}).days).toHaveLength(28);
-    expect(getCalendarDays({year: 2026, month: 1, hasVariableRowCount: true}).weeks).toHaveLength(5);
+    expect(getCalendarDays({year: 2026, month: 2, hasVariableRowCount: true}).days).toHaveLength(
+      28,
+    );
+    expect(getCalendarDays({year: 2026, month: 1, hasVariableRowCount: true}).weeks).toHaveLength(
+      5,
+    );
   });
 
   it('fills the first week with the previous month and marks outside days', () => {
@@ -106,7 +113,9 @@ describe('tct-calendar: pure helpers (ported)', () => {
     ]);
     expect(days.slice(0, 4).every((entry) => entry.isOutside)).toBe(true);
     expect(days[4]).toMatchObject({iso: '2026-01-01', isOutside: false, dayNumber: 1});
-    expect(getCalendarDays({year: 2026, month: 1, weekStartsOn: 1}).days[0]!.iso).toBe('2025-12-29');
+    expect(getCalendarDays({year: 2026, month: 1, weekStartsOn: 1}).days[0]!.iso).toBe(
+      '2025-12-29',
+    );
   });
 
   it('rotates weekday headers to the week start, per locale', () => {
@@ -155,7 +164,11 @@ describe('tct-calendar: pure helpers (ported)', () => {
       month: 3,
       day: 1,
     });
-    expect(open({max: '2019-03-20', focusDate: '2030-05-05'})).toEqual({year: 2030, month: 5, day: 5});
+    expect(open({max: '2019-03-20', focusDate: '2030-05-05'})).toEqual({
+      year: 2030,
+      month: 5,
+      day: 5,
+    });
     expect(open({max: '2019-03-20', value: '2031-07-07'})).toEqual({year: 2031, month: 7, day: 7});
     expect(open({focusDate: 'not a date'})).toEqual(today);
   });
@@ -175,7 +188,12 @@ describe('tct-calendar: pure helpers (ported)', () => {
       isDisabled: false,
       isOutside: false,
     });
-    expect(state).toMatchObject({isRangeStart: true, isRangeEnd: false, isInRange: true, isToday: false});
+    expect(state).toMatchObject({
+      isRangeStart: true,
+      isRangeEnd: false,
+      isInRange: true,
+      isToday: false,
+    });
     expect(computeRangeRounding(state, {prevInRange: false, nextInRange: true})).toEqual({
       roundStart: true,
       roundEnd: false,
@@ -237,7 +255,9 @@ describe('tct-calendar: structure and semantics', () => {
       expect(row.querySelectorAll(':scope > [role="gridcell"]')).toHaveLength(7);
     }
     expect(grid!.querySelectorAll('.day[data-date]')).toHaveLength(42);
-    expect(day(calendar, '2026-01-15').getAttribute('aria-label')).toBe('Thursday, January 15, 2026');
+    expect(day(calendar, '2026-01-15').getAttribute('aria-label')).toBe(
+      'Thursday, January 15, 2026',
+    );
   });
 
   it("marks today's cell with aria-current='date'", async () => {
@@ -251,7 +271,14 @@ describe('tct-calendar: structure and semantics', () => {
     const headers = root(calendar).querySelectorAll('[role="rowheader"]');
     expect(headers).toHaveLength(6);
     // A row is numbered by its first day of the month; Sunday 2026-01-04 still belongs to ISO week 1.
-    expect([...headers].map((header) => header.textContent.trim())).toEqual(['1', '1', '2', '3', '4', '5']);
+    expect([...headers].map((header) => header.textContent.trim())).toEqual([
+      '1',
+      '1',
+      '2',
+      '3',
+      '4',
+      '5',
+    ]);
   });
 
   it('renders two months side by side with their own grid names, and clamps other counts to one', async () => {
@@ -350,8 +377,16 @@ describe('tct-calendar: single selection', () => {
     const events = recordEvents(calendar, ['tct-value-change', 'input', 'change']);
     await userEvent.click(day(calendar, '2026-01-20'));
     await calendar.updateComplete;
-    expect(events.events.map((event) => event.type)).toEqual(['tct-value-change', 'input', 'change']);
-    expect(events.events[0]).toMatchObject({value: '2026-01-20', oldValue: undefined, reason: 'selection'});
+    expect(events.events.map((event) => event.type)).toEqual([
+      'tct-value-change',
+      'input',
+      'change',
+    ]);
+    expect(events.events[0]).toMatchObject({
+      value: '2026-01-20',
+      oldValue: undefined,
+      reason: 'selection',
+    });
     expect(events.events.map((event) => [event.bubbles, event.composed])).toEqual([
       [true, true],
       [true, true],
@@ -384,7 +419,12 @@ describe('tct-calendar: single selection', () => {
 
   it('never fires an event for a property or attribute write', async () => {
     const calendar = await make();
-    const events = recordEvents(calendar, ['tct-value-change', 'input', 'change', 'tct-focus-date-change']);
+    const events = recordEvents(calendar, [
+      'tct-value-change',
+      'input',
+      'change',
+      'tct-focus-date-change',
+    ]);
     calendar.value = '2026-01-03';
     calendar.setAttribute('focus-date', '2026-03-01');
     calendar.navigateTo('2026-05-05');
@@ -396,7 +436,9 @@ describe('tct-calendar: single selection', () => {
   it('ignores clicks on outside and unavailable days', async () => {
     const calendar = await make('min="2026-01-10"');
     const events = recordEvents(calendar, ['tct-value-change']);
-    await userEvent.click(root(calendar).querySelector<HTMLElement>('.day[data-outside]')!, {force: true});
+    await userEvent.click(root(calendar).querySelector<HTMLElement>('.day[data-outside]')!, {
+      force: true,
+    });
     await userEvent.click(day(calendar, '2026-01-05'), {force: true});
     expect(events.events).toHaveLength(0);
     expect(calendar.value).toBeUndefined();
@@ -453,7 +495,9 @@ describe('tct-calendar: range selection', () => {
 
   it('marks the grid multiselectable in range mode only', async () => {
     const calendar = await make('mode="range" number-of-months="2"');
-    expect(grids(calendar).every((grid) => grid.getAttribute('aria-multiselectable') === 'true')).toBe(true);
+    expect(
+      grids(calendar).every((grid) => grid.getAttribute('aria-multiselectable') === 'true'),
+    ).toBe(true);
     calendar.mode = 'single';
     await calendar.updateComplete;
     expect(grids(calendar).some((grid) => grid.hasAttribute('aria-multiselectable'))).toBe(false);
@@ -527,11 +571,15 @@ describe('tct-calendar: range selection', () => {
       await pressKeys('Escape');
       await calendar.updateComplete;
       expect(day(calendar, '2026-01-10').getAttribute('aria-label')).not.toContain('range start');
-      const cancelled = outer.mock.calls.filter(([event]) => (event as KeyboardEvent).key === 'Escape');
+      const cancelled = outer.mock.calls.filter(
+        ([event]) => (event as KeyboardEvent).key === 'Escape',
+      );
       expect(cancelled).toHaveLength(0);
       // With nothing in progress, Escape passes through (a popover around the calendar closes on it).
       await pressKeys('Escape');
-      expect(outer.mock.calls.filter(([event]) => (event as KeyboardEvent).key === 'Escape')).toHaveLength(1);
+      expect(
+        outer.mock.calls.filter(([event]) => (event as KeyboardEvent).key === 'Escape'),
+      ).toHaveLength(1);
     } finally {
       document.removeEventListener('keydown', outer);
     }
@@ -543,7 +591,9 @@ describe('tct-calendar: range selection', () => {
       const calendar = await make('mode="range"');
       await userEvent.click(day(calendar, '2026-01-20'));
       await waitUntil(
-        () => getAnnouncerRegions().polite?.textContent === 'Start date Tuesday, January 20, 2026. Select an end date.',
+        () =>
+          getAnnouncerRegions().polite?.textContent ===
+          'Start date Tuesday, January 20, 2026. Select an end date.',
         'start announced',
         3000,
       );
@@ -620,9 +670,17 @@ describe('tct-calendar: month navigation', () => {
       await nextFrame();
       expect(getAnnouncerRegions().polite?.textContent ?? '').toBe('');
       await userEvent.click(root(calendar).querySelector<HTMLElement>('[data-nav="next"]')!);
-      await waitUntil(() => getAnnouncerRegions().polite?.textContent === 'February 2026', 'February announced', 3000);
+      await waitUntil(
+        () => getAnnouncerRegions().polite?.textContent === 'February 2026',
+        'February announced',
+        3000,
+      );
       calendar.navigateTo('2026-04-01');
-      await waitUntil(() => getAnnouncerRegions().polite?.textContent === 'April 2026', 'April announced', 3000);
+      await waitUntil(
+        () => getAnnouncerRegions().polite?.textContent === 'April 2026',
+        'April announced',
+        3000,
+      );
     } finally {
       restore();
     }
@@ -815,8 +873,8 @@ describe('tct-calendar: right-to-left', () => {
     const prev = root(calendar).querySelector('[data-nav="prev"]')!.getBoundingClientRect();
     const next = root(calendar).querySelector('[data-nav="next"]')!.getBoundingClientRect();
     expect(prev.left).toBeGreaterThan(next.left);
-    const [first, last] = [...root(calendar).querySelectorAll('[role="columnheader"]')].map((cell) =>
-      cell.getBoundingClientRect(),
+    const [first, last] = [...root(calendar).querySelectorAll('[role="columnheader"]')].map(
+      (cell) => cell.getBoundingClientRect(),
     ) as [DOMRect, DOMRect];
     expect(first.left).toBeGreaterThan(last.left);
   });
@@ -849,7 +907,9 @@ describe('tct-calendar: locales', () => {
   it('translates the navigation and the selection state (de-DE)', async () => {
     const calendar = await make('value="2026-01-20"', {lang: 'de-DE'});
     await vi.waitFor(() => {
-      expect(root(calendar).querySelector('[data-nav="prev"]')!.getAttribute('label')).toBe('Vorheriger Monat');
+      expect(root(calendar).querySelector('[data-nav="prev"]')!.getAttribute('label')).toBe(
+        'Vorheriger Monat',
+      );
     });
     expect(root(calendar).querySelector('.month-year')!.textContent).toBe('Januar 2026');
     expect(day(calendar, '2026-01-20').getAttribute('aria-label')).toContain('ausgewählt');
@@ -943,7 +1003,9 @@ describe('tct-calendar: accessibility and contrast in every state', () => {
         `${scheme} outside day`,
       ).toBeGreaterThanOrEqual(4.5);
       // The today ring is the day's only visual marker beside its name: 3:1 against the surface.
-      const ring = /rgba?\([^)]*\)/.exec(getComputedStyle(day(calendar, '2026-01-15')).boxShadow)![0];
+      const ring = /rgba?\([^)]*\)/.exec(
+        getComputedStyle(day(calendar, '2026-01-15')).boxShadow,
+      )![0];
       expect(contrast(parseColor(ring), surface), `${scheme} today ring`).toBeGreaterThanOrEqual(3);
       // An unavailable day keeps the disabled role colour, not a second layer of opacity.
       const unavailable = getComputedStyle(day(calendar, '2026-01-02'));
@@ -986,7 +1048,10 @@ interface Rgba {
 function parseColor(text: string): Rgba {
   const match = /rgba?\(([^)]+)\)/.exec(text) ?? /color\(srgb ([^)]+)\)/.exec(text);
   if (!match) throw new Error(`unreadable colour: ${text}`);
-  const parts = match[1]!.split(/[\s,/]+/).filter(Boolean).map(Number);
+  const parts = match[1]!
+    .split(/[\s,/]+/)
+    .filter(Boolean)
+    .map(Number);
   const scale = text.startsWith('color(') ? 255 : 1;
   return {r: parts[0]! * scale, g: parts[1]! * scale, b: parts[2]! * scale, a: parts[3] ?? 1};
 }
@@ -998,7 +1063,12 @@ function over(top: Rgba, bottom: Rgba): Rgba {
 }
 
 function backgroundOf(element: HTMLElement): Rgba {
-  return over(parseColor(getComputedStyle(element).backgroundColor), {r: 255, g: 255, b: 255, a: 1});
+  return over(parseColor(getComputedStyle(element).backgroundColor), {
+    r: 255,
+    g: 255,
+    b: 255,
+    a: 1,
+  });
 }
 
 function luminance({r, g, b}: Rgba): number {
@@ -1011,6 +1081,9 @@ function luminance({r, g, b}: Rgba): number {
 
 function contrast(foreground: Rgba, background: Rgba): number {
   const composed = over(foreground, background);
-  const [light, dark] = [luminance(composed), luminance(background)].sort((x, y) => y - x) as [number, number];
+  const [light, dark] = [luminance(composed), luminance(background)].sort((x, y) => y - x) as [
+    number,
+    number,
+  ];
   return (light + 0.05) / (dark + 0.05);
 }

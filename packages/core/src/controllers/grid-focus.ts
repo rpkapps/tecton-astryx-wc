@@ -130,6 +130,23 @@ export class GridFocusController implements ReactiveController {
       GridFocusController.#setTabIndex(element, element === tabbable ? 0 : -1);
   }
 
+  /**
+   * Puts the roving stop on `target` without focusing it, when it is one of this grid's targets (the way a
+   * calendar reopens on the selected day instead of wherever focus was last left).
+   */
+  setTabStop(target: HTMLElement): boolean {
+    if (!this.#options.hasRovingTabIndex || !this.#targets().includes(target)) return false;
+    this.#focusTargetSilently(target);
+    return true;
+  }
+
+  /** Forgets where the roving stop was: it goes back to the seed (`initialTabStop`, else the first target). */
+  resetTabStop(): void {
+    if (!this.#options.hasRovingTabIndex) return;
+    for (const element of this.#targets()) GridFocusController.#setTabIndex(element, -1);
+    this.syncTabStops();
+  }
+
   /** Moves the roving stop to `target` (when enabled) and focuses it. */
   #focusTarget(target: HTMLElement | null): void {
     if (!target) return;

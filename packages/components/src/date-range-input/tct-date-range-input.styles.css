@@ -1,0 +1,128 @@
+/*
+ * tct-date-range-input: the box, the label chrome and the picker layers come from the shared field module and
+ * the shared picker sheet; this sheet adds the trigger button that shows the range, the calendar icon, and the
+ * preset group beside the calendar. State fills pair with their own Tecton state text roles.
+ * [mwg:css] [mwg:styling-web-components]
+ */
+@layer component {
+  .toggle-icon {
+    flex-shrink: 0;
+  }
+
+  /* The trigger is a button drawn as the box's text: one line, start-aligned, cut with an ellipsis. */
+  .trigger {
+    overflow: hidden;
+    text-align: start;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .trigger[data-placeholder] {
+    color: var(--tecton-color-input-outlined-text-placeholder);
+  }
+
+  .trigger[aria-disabled='true'] {
+    cursor: default;
+  }
+
+  .layout {
+    display: flex;
+  }
+
+  .presets {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+    min-inline-size: 8.75rem;
+    padding: var(--spacing-3);
+    border-inline-end: var(--border-width) solid var(--color-border-emphasized);
+  }
+
+  .preset {
+    --_preset-bg: transparent;
+    --_preset-fg: var(--color-text-primary);
+
+    display: block;
+    inline-size: 100%;
+    padding-block: var(--spacing-1);
+    padding-inline: var(--spacing-2);
+    margin: 0;
+    font-family: var(--font-family-body);
+    font-size: var(--text-label-size);
+    line-height: var(--text-label-leading);
+    color: var(--_preset-fg);
+    text-align: start;
+    cursor: pointer;
+    background-color: var(--_preset-bg);
+    border: 0;
+    border-radius: var(--radius-element);
+  }
+
+  /* The applied preset: the muted accent wash and the primary text, and a heavier weight so colour is not the only cue. */
+  .preset[aria-current='true'] {
+    --_preset-bg: var(--color-accent-muted);
+    --_preset-fg: var(--color-text-primary);
+
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .preset:disabled {
+    --_preset-bg: transparent;
+    --_preset-fg: var(--tecton-color-disabled-text-only-text);
+
+    cursor: default;
+  }
+
+  /* On a compact touch device the sheet stacks the presets above the calendar as a wrapping row. */
+  .layout[data-surface='sheet'] {
+    flex-direction: column;
+  }
+
+  .layout[data-surface='sheet'] .presets {
+    flex-flow: row wrap;
+    border-block-end: var(--border-width) solid var(--color-border-emphasized);
+    border-inline-end: 0;
+  }
+
+  .layout[data-surface='sheet'] .preset {
+    inline-size: auto;
+  }
+}
+
+@layer state {
+  @media (hover: hover) {
+    .preset:hover:not(:disabled, [aria-current='true']) {
+      --_preset-bg: var(--tecton-color-action-tertiary-bg-hover);
+      --_preset-fg: var(--tecton-color-action-tertiary-text-hover);
+    }
+  }
+
+  .preset:focus-visible:not(:disabled, [aria-current='true']) {
+    --_preset-bg: var(--tecton-color-action-tertiary-bg-focus);
+    --_preset-fg: var(--tecton-color-action-tertiary-text-focus);
+  }
+
+  .preset:active:not(:disabled, [aria-current='true']) {
+    --_preset-bg: var(--tecton-color-action-tertiary-bg-press);
+    --_preset-fg: var(--tecton-color-action-tertiary-text-press);
+  }
+
+  .input-wrapper[data-disabled] .toggle-icon {
+    color: var(--tecton-color-disabled-outline-adornment);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .preset[aria-current='true'] {
+      color: HighlightText;
+      background-color: Highlight;
+      forced-color-adjust: none;
+    }
+
+    .preset:disabled {
+      color: GrayText;
+    }
+  }
+}

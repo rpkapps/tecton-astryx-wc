@@ -64,9 +64,6 @@ export abstract class TctPickerField extends TctBoxControl {
     pickerFieldStyles,
   ];
 
-  /** Shows a clear (x) button while there is a value; it clears, fires `tct-clear` and returns focus. */
-  @property({type: Boolean, attribute: 'has-clear'}) hasClear = false;
-
   /**
    * Whether the picker (the popover under the field, or the bottom sheet) is open. Writing it never fires
    * an event; a user opening or closing it fires the cancelable `tct-open-change` first.
@@ -77,15 +74,9 @@ export abstract class TctPickerField extends TctBoxControl {
    * Which surface collects the value: `popover`, `bottom-sheet`, `native` (the browser's own
    * `<input type="date|time">`), `adaptive-bottom-sheet` (popover, or bottom sheet on a compact touch
    * device) or `adaptive-native` (default: popover, or the browser's picker with a coarse pointer). A time
-   * field also takes `text-input`. Unset, `native-picker` decides, then the default.
+   * field also takes `text-input`. Unset, the default applies.
    */
   @property() presentation: TimePresentation | undefined;
-
-  /**
-   * Deprecated: use `presentation` (`touch` is `adaptive-native`, `always` is `native`, `never` is
-   * `adaptive-bottom-sheet`, or `text-input` for a time). `presentation` wins when both are set.
-   */
-  @property({attribute: 'native-picker'}) nativePicker: LegacyNativePicker | undefined;
 
   /**
    * Async action run after every user change, with the new value and the event. While its promise is
@@ -207,9 +198,14 @@ export abstract class TctPickerField extends TctBoxControl {
     return this.renderRoot.querySelector<HTMLElement>('.toggle');
   }
 
+  /** The deprecated `native-picker` of a field that has one. */
+  protected get legacyNativePicker(): LegacyNativePicker | undefined {
+    return undefined;
+  }
+
   /** The policy in effect: `presentation`, else the deprecated `native-picker`, else the default. */
   protected get presentationPolicy(): TimePresentation {
-    return effectivePresentation(this.presentation, this.nativePicker, this.pickerKind);
+    return effectivePresentation(this.presentation, this.legacyNativePicker, this.pickerKind);
   }
 
   /** The surface in effect now (see {@link resolveSurface}). */
