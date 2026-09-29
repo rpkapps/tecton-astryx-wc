@@ -1,8 +1,8 @@
 <!-- title: Vertical; description: The default: fields stack top to bottom with a spacing-4 gap. -->
 <form id="vertical" onsubmit="return false" style="max-inline-size: 320px">
   <tct-form-layout>
-    <div style="display: grid; gap: var(--spacing-1)"><label for="vertical-name">Name</label><input id="vertical-name" name="name" autocomplete="name" /></div>
-    <div style="display: grid; gap: var(--spacing-1)"><label for="vertical-email">Email</label><input id="vertical-email" name="email" type="email" autocomplete="email" /></div>
-    <div style="display: grid; gap: var(--spacing-1)"><label for="vertical-notes">Notes</label><input id="vertical-notes" name="notes" /></div>
+    <tct-text-input label="Name" name="name" autocomplete="name"></tct-text-input>
+    <tct-text-input label="Email" name="email" type="email" autocomplete="email"></tct-text-input>
+    <tct-text-input label="Notes" name="notes" optional></tct-text-input>
   </tct-form-layout>
 </form>

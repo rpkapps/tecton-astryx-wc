@@ -12,6 +12,7 @@ import {emulateMedia} from '@tecton-astryx/testing/emulate.js';
 import {fixture} from '@tecton-astryx/testing/fixture.js';
 import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
 import {isChromium} from '@tecton-astryx/testing/tier.js';
+import '../text-input/define.js';
 import './define.js';
 import type {TctFormLayout} from './tct-form-layout.js';
 
@@ -326,5 +327,79 @@ describe('tct-form-layout: accessibility, RTL, forced colours', () => {
     const element = await layout('direction="horizontal"', '<div>a</div><div>b</div>');
     expect(css(element).display).toBe('grid');
     await expectAccessible(element);
+  });
+});
+
+describe('tct-form-layout with tct-text-input (WP-1 acceptance)', () => {
+  async function form(direction: string) {
+    await page.viewport(800, 800);
+    const root = await fixture<HTMLElement>(
+      `<div style="inline-size: 600px"><tct-form-layout direction="${direction}">
+        <tct-text-input id="a" label="Name"></tct-text-input>
+        <tct-text-input id="b" label="Email address" type="email"></tct-text-input>
+      </tct-form-layout></div>`,
+    );
+    const inputs = [...root.querySelectorAll<HTMLElement>('tct-text-input')];
+    await Promise.all(
+      inputs.map(
+        (input) => (input as HTMLElement & {updateComplete: Promise<unknown>}).updateComplete,
+      ),
+    );
+    return inputs;
+  }
+
+  const labelOf = (input: HTMLElement): HTMLElement =>
+    input.shadowRoot!.querySelector<HTMLElement>('[part~="label"]')!;
+  const boxOf = (input: HTMLElement): HTMLElement =>
+    input.shadowRoot!.querySelector<HTMLElement>('[part~="input"]')!;
+
+  it('stacks label above control in a vertical layout', async () => {
+    const [input] = await form('vertical');
+    expect(input!.hasAttribute('data-horizontal-labels')).toBe(false);
+    expect(boxOf(input!).getBoundingClientRect().top).toBeGreaterThan(
+      labelOf(input!).getBoundingClientRect().bottom - 1,
+    );
+  });
+
+  it('puts the label in the first column and the control in the second with horizontal-labels', async () => {
+    const [first, second] = await form('horizontal-labels');
+    expect(first!.hasAttribute('data-horizontal-labels')).toBe(true);
+    for (const input of [first!, second!]) {
+      const label = labelOf(input).getBoundingClientRect();
+      const box = boxOf(input).getBoundingClientRect();
+      // side by side on one row
+      expect(box.left).toBeGreaterThanOrEqual(label.right - 1);
+      expect(Math.abs(box.top + box.height / 2 - (label.top + label.height / 2))).toBeLessThan(
+        box.height,
+      );
+    }
+    // the two rows share their columns: labels start together and so do controls
+    expect(
+      Math.abs(
+        labelOf(first!).getBoundingClientRect().left -
+          labelOf(second!).getBoundingClientRect().left,
+      ),
+    ).toBeLessThan(1);
+    expect(
+      Math.abs(
+        boxOf(first!).getBoundingClientRect().left - boxOf(second!).getBoundingClientRect().left,
+      ),
+    ).toBeLessThan(1);
+    expect(boxOf(second!).getBoundingClientRect().top).toBeGreaterThan(
+      boxOf(first!).getBoundingClientRect().bottom - 1,
+    );
+  });
+
+  it('follows a direction change on the layout', async () => {
+    const [input] = await form('vertical');
+    const layout = input!.closest('tct-form-layout')!;
+    layout.direction = 'horizontal-labels';
+    await layout.updateComplete;
+    await (input as HTMLElement & {updateComplete: Promise<unknown>}).updateComplete;
+    expect(input!.hasAttribute('data-horizontal-labels')).toBe(true);
+    layout.direction = 'vertical';
+    await layout.updateComplete;
+    await (input as HTMLElement & {updateComplete: Promise<unknown>}).updateComplete;
+    expect(input!.hasAttribute('data-horizontal-labels')).toBe(false);
   });
 });
