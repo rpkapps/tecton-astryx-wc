@@ -1,0 +1,16 @@
+<!-- title: In an assistant message; description: Tool calls sit in an assistant message, in a ghost bubble so they line up with the text of the bubbles around them. -->
+<tct-vstack id="tool-message-root" max-width="520">
+  <tct-chat-message sender="assistant">
+    <tct-avatar slot="avatar" name="Navi" size="sm"></tct-avatar>
+    <tct-chat-message-bubble variant="ghost" width="100%">
+      <tct-chat-tool-calls id="tool-message"></tct-chat-tool-calls>
+    </tct-chat-message-bubble>
+    <tct-chat-message-bubble>C-19 has logged the same compressor fault four times since Tuesday.</tct-chat-message-bubble>
+  </tct-chat-message>
+</tct-vstack>
+<script type="module">
+  document.getElementById('tool-message').calls = [
+    {name: 'query_alarms', target: 'C-19, last 7 days', duration: '210ms'},
+    {name: 'read_manual', target: 'compressor fault codes', duration: '90ms'},
+  ];
+</script>

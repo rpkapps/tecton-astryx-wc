@@ -1,0 +1,15 @@
+<!-- title: Side navigation only; description: Without a top navigation the shell shows the side navigation beside the content. Below the mobile breakpoint the side navigation moves into a drawer that a top bar with the toggle opens. -->
+<tct-app-shell no-landmarks style="--app-shell-height: 300px">
+  <nav slot="side-nav" aria-label="Sections, side navigation only">
+    <tct-vstack gap="1" padding="2">
+      <a href="#overview">Overview</a>
+      <a href="#projects">Projects</a>
+      <a href="#reports">Reports</a>
+      <a href="#settings">Settings</a>
+    </tct-vstack>
+  </nav>
+  <tct-vstack padding="4" gap="2">
+    <tct-text type="medium-strong">Overview</tct-text>
+    <tct-text as="p">The main content. The skip link in front of the page moves focus here.</tct-text>
+  </tct-vstack>
+</tct-app-shell>

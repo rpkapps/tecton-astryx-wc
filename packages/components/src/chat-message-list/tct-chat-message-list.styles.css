@@ -1,0 +1,89 @@
+/*
+ * tct-chat-message-list. The host is the `log`: a flex column that fills its container (`flex: 1`,
+ * `min-block-size: 0`, so it never forces its parent taller). `.base` (part "base", the upstream
+ * `chat-message-list` target) is the padded column of rows; density picks a gap and padding, and
+ * `gap` overrides only the gap through `--_gap`. The spacer eats the free space of a short list
+ * (`align="bottom"`). The focus ring is drawn inset on `.base`: the list may sit in a clipped scroller.
+ * [mwg:css-layout]
+ */
+@layer component {
+  :host {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-block-size: 0;
+  }
+
+  .base {
+    --_density-gap: var(--spacing-4);
+    --_pad-block: var(--spacing-4);
+    --_pad-inline: var(--spacing-4);
+
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--_gap, var(--_density-gap));
+    min-block-size: 0;
+    padding-block: var(--_pad-block);
+    padding-inline: var(--_pad-inline);
+  }
+
+  .base[data-density='compact'] {
+    --_density-gap: var(--spacing-2);
+    --_pad-block: var(--spacing-2);
+    --_pad-inline: var(--spacing-3);
+  }
+
+  .base[data-density='spacious'] {
+    --_density-gap: var(--spacing-6);
+    --_pad-block: var(--spacing-6);
+    --_pad-inline: var(--spacing-6);
+  }
+
+  /*
+   * The spacer is a flex item, so the row gap follows it. It cancels that gap with a negative margin,
+   * so a list that fills its container starts at the same place with either alignment (upstream leaves
+   * one extra gap above the first row in `bottom` mode).
+   */
+  .spacer {
+    flex: 1;
+    min-block-size: 0;
+    margin-block-end: calc(-1 * var(--_gap, var(--_density-gap)));
+  }
+
+  .loading {
+    display: flex;
+    justify-content: center;
+    padding-block: var(--spacing-3);
+  }
+
+  .empty {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    min-block-size: 0;
+  }
+
+  /* The sentinel takes no space of its own (the flex gap still applies, as upstream). */
+  .sentinel {
+    block-size: 0;
+  }
+}
+
+@layer state {
+  :host(:focus-visible) .base {
+    outline-width: var(--focus-outline-width);
+    outline-style: var(--focus-outline-style);
+    outline-color: var(--focus-outline-color);
+    outline-offset: calc(-1 * var(--focus-outline-width));
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    :host(:focus-visible) .base {
+      outline-color: Highlight;
+    }
+  }
+}

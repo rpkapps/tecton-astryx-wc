@@ -1,0 +1,23 @@
+<!-- title: Scrolling content; description: The content scrolls inside the layout while the header and the footer stay put. While it overflows and holds nothing focusable, the content is a tab stop, so the keyboard can scroll it: Tab to it, then the arrow keys. -->
+<tct-card padding="0" height="240">
+  <tct-layout padding="4">
+    <tct-layout-header slot="header" has-divider><tct-text type="medium-strong">Log</tct-text></tct-layout-header>
+    <tct-layout-content>
+      <tct-vstack gap="2">
+        <tct-text as="p">Entry 1</tct-text>
+        <tct-text as="p">Entry 2</tct-text>
+        <tct-text as="p">Entry 3</tct-text>
+        <tct-text as="p">Entry 4</tct-text>
+        <tct-text as="p">Entry 5</tct-text>
+        <tct-text as="p">Entry 6</tct-text>
+        <tct-text as="p">Entry 7</tct-text>
+        <tct-text as="p">Entry 8</tct-text>
+        <tct-text as="p">Entry 9</tct-text>
+        <tct-text as="p">Entry 10</tct-text>
+        <tct-text as="p">Entry 11</tct-text>
+        <tct-text as="p">Entry 12</tct-text>
+      </tct-vstack>
+    </tct-layout-content>
+    <tct-layout-footer slot="footer" has-divider><tct-text>12 entries</tct-text></tct-layout-footer>
+  </tct-layout>
+</tct-card>

@@ -1,0 +1,15 @@
+<!-- title: Avatar and name; description: The avatar slot puts a tct-avatar beside the message (last for the user). name is the sender name above the body, and it names the message for screen readers; without one the message is "Message from {sender}". -->
+<tct-vstack max-width="520" gap="4">
+  <tct-chat-message sender="assistant" name="Navi">
+    <tct-avatar slot="avatar" name="Navi" size="sm"></tct-avatar>
+    <tct-chat-message-bubble>The name comes from the message and sits above the bubble.</tct-chat-message-bubble>
+  </tct-chat-message>
+  <tct-chat-message sender="user" name="Ana">
+    <tct-avatar slot="avatar" name="Ana" size="sm"></tct-avatar>
+    <tct-chat-message-bubble>The user's avatar is last.</tct-chat-message-bubble>
+  </tct-chat-message>
+  <tct-chat-message sender="assistant">
+    <tct-avatar slot="avatar" name="Navi" size="sm"></tct-avatar>
+    <tct-chat-message-bubble name="Navi">With bubbles, put the name on the first bubble: it lines up with the text and the avatar drops to meet it.</tct-chat-message-bubble>
+  </tct-chat-message>
+</tct-vstack>

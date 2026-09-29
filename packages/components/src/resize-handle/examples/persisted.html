@@ -1,0 +1,10 @@
+<!-- title: Remembered size; description: auto-save-id stores the size in local storage under that id and restores it the next time the page loads. Resize the panel, then reload the page. -->
+<tct-card padding="0" height="220">
+  <tct-layout padding="4">
+    <tct-layout-panel slot="start" resizable default-size="200" min-size="120" max-size="320" auto-save-id="docs-resize-handle-persisted">
+      <tct-text>The size is remembered.</tct-text>
+    </tct-layout-panel>
+    <tct-resize-handle slot="start" has-divider label="Resize sidebar"></tct-resize-handle>
+    <tct-layout-content><tct-text>Content</tct-text></tct-layout-content>
+  </tct-layout>
+</tct-card>

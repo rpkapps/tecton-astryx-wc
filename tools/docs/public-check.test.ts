@@ -8,7 +8,14 @@ import {tmpdir} from 'node:os';
 import {join} from 'node:path';
 import {afterAll, beforeAll, describe, expect, it} from 'vitest';
 import {publicData, publicText, upstreamLeaks} from '../lib/public-text.ts';
-import {authoredPages, distFiles, packageMetadataFiles, scanPublicOutputs} from './public-check.ts';
+import {
+  authoredPages,
+  cliGeneratedTexts,
+  distFiles,
+  packageMetadataFiles,
+  scanGeneratedTexts,
+  scanPublicOutputs,
+} from './public-check.ts';
 
 let root: string;
 beforeAll(() => {
@@ -126,5 +133,31 @@ describe('scanPublicOutputs and the CLI', () => {
     expect(failed.stderr).toContain('FAILED');
     expect(run(good).status).toBe(0);
     // Two node processes, each compiling the script: seconds on a loaded machine, not milliseconds.
+  }, 60_000);
+});
+
+describe('CLI-generated text', () => {
+  it('flags a leak in generated agent docs by the command that produced it', () => {
+    const leaks = scanGeneratedTexts([
+      {name: 'tct init --dry-run', text: 'Use the Astryx tokens.'},
+      {name: 'tct layout grammar', text: 'clean'},
+    ]);
+    expect(leaks.map((leak) => leak.file)).toEqual(['<tct init --dry-run>']);
+  });
+
+  it('is empty when there is no registry to run against', async () => {
+    expect(await cliGeneratedTexts(join(root, 'missing-registry.json'))).toEqual([]);
+  });
+
+  it('covers the agent-docs block, every command help and the MCP tool definitions, and they are clean', async () => {
+    const texts = await cliGeneratedTexts();
+    const names = texts.map((entry) => entry.name);
+    expect(names).toContain('tct init --agent all --dry-run');
+    expect(names).toContain('tct search --help');
+    expect(names).toContain('mcp tool definitions');
+    expect(texts.find((entry) => entry.name === 'tct init --agent all --dry-run')?.text).toContain(
+      '<!-- TCT:START -->',
+    );
+    expect(scanGeneratedTexts(texts)).toEqual([]);
   }, 60_000);
 });

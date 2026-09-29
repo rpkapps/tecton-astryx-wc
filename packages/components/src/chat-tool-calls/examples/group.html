@@ -1,0 +1,12 @@
+<!-- title: A group of calls; description: Several calls collapse into the latest call and a count. The header discloses the whole list; collapsed rows are inert. Diff stats, a node badge and durations show in the expanded rows. -->
+<tct-vstack id="tool-group-root" max-width="520">
+  <tct-chat-tool-calls id="tool-group"></tct-chat-tool-calls>
+</tct-vstack>
+<script type="module">
+  document.getElementById('tool-group').calls = [
+    {name: 'read_file', target: 'forecast/model.py', duration: '120ms'},
+    {name: 'edit', target: 'forecast/model.py', duration: '340ms', additions: 12, deletions: 3},
+    {name: 'run_tests', target: 'pytest forecast/', duration: '4.2s', node: 'sandbox'},
+    {name: 'web_search', status: 'running', target: 'decline curve fitting'},
+  ];
+</script>

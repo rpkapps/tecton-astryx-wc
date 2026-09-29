@@ -1,0 +1,41 @@
+<!-- title: Streaming a reply; description: Set streaming while a reply arrives: the list is aria-busy and silent, then announces the finished message once. Append to the bubble's text as tokens arrive; nothing here moves focus. -->
+<tct-vstack id="list-streaming-root" gap="3" max-width="520">
+  <tct-hstack h-align="start">
+    <tct-button id="list-streaming-send">Ask for a summary</tct-button>
+  </tct-hstack>
+  <tct-vstack height="260">
+    <tct-chat-message-list id="list-streaming"></tct-chat-message-list>
+  </tct-vstack>
+</tct-vstack>
+<script type="module">
+  const list = document.getElementById('list-streaming');
+  const send = document.getElementById('list-streaming-send');
+  const reply = 'Revenue is up 12% quarter over quarter, driven by the three new wells that came online in March. Churn is flat, and the forecast for the next quarter has not changed.'.split(' ');
+
+  const message = (sender, text) => {
+    const row = document.createElement('tct-chat-message');
+    row.setAttribute('sender', sender);
+    const bubble = document.createElement('tct-chat-message-bubble');
+    bubble.textContent = text;
+    row.append(bubble);
+    list.append(row);
+    return bubble;
+  };
+
+  send.addEventListener('click', () => {
+    send.disabled = true;
+    message('user', 'Can you summarize this report?');
+    list.streaming = true;
+    const bubble = message('assistant', '');
+    let index = 0;
+    const timer = setInterval(() => {
+      bubble.append(`${reply[index]} `);
+      index += 1;
+      if (index === reply.length) {
+        clearInterval(timer);
+        list.streaming = false;
+        send.disabled = false;
+      }
+    }, 90);
+  });
+</script>

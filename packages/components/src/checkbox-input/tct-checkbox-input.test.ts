@@ -391,7 +391,9 @@ describe('tct-checkbox-input: disabled, disabled reason, loading and changeActio
     const checkbox = await make('label="Terms" disabled');
     expect(inner(checkbox).disabled).toBe(true);
     expect(indicator(checkbox).hasAttribute('disabled')).toBe(true);
-    await userEvent.click(part(checkbox, 'label')!).catch(() => undefined);
+    // force: a user can click a disabled control; without it Playwright waits for the label to become
+    // enabled until its action timeout, which collided with the test timeout under load.
+    await userEvent.click(part(checkbox, 'label')!, {force: true});
     expect(checkbox.checked).toBe(false);
   });
 

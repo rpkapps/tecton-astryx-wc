@@ -1,0 +1,32 @@
+<!-- title: Scroll to bottom; description: The button fades in when the reader scrolls up, scrolls to the latest message when pressed and hands focus to it. Here a few lines of script play the part of the chat layout: bind visible to the scroll position and scroll on click. -->
+<tct-vstack id="list-scroll-root" max-width="520">
+  <div id="list-scroll-scroller" style="block-size: 240px; overflow: auto">
+    <tct-chat-message-list id="list-scroll" align="top" no-announce></tct-chat-message-list>
+  </div>
+  <tct-chat-layout-scroll-button id="list-scroll-button"></tct-chat-layout-scroll-button>
+</tct-vstack>
+<script type="module">
+  const list = document.getElementById('list-scroll');
+  const scroller = document.getElementById('list-scroll-scroller');
+  const button = document.getElementById('list-scroll-button');
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+
+  for (let n = 1; n <= 24; n++) {
+    const row = document.createElement('tct-chat-message');
+    row.setAttribute('sender', n % 2 ? 'user' : 'assistant');
+    const bubble = document.createElement('tct-chat-message-bubble');
+    bubble.textContent = `Message ${n}`;
+    row.append(bubble);
+    list.append(row);
+  }
+  requestAnimationFrame(() => {
+    scroller.scrollTop = scroller.scrollHeight;
+  });
+
+  scroller.addEventListener('scroll', () => {
+    button.visible = scroller.scrollHeight - scroller.scrollTop - scroller.clientHeight > 100;
+  });
+  button.addEventListener('click', () => {
+    scroller.scrollTo({top: scroller.scrollHeight, behavior: reduced.matches ? 'instant' : 'smooth'});
+  });
+</script>

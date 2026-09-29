@@ -1,6 +1,6 @@
 <!-- title: With an icon; description: An icon gives the status a non-colour mark. Use a different icon per status, painted in the variant's ink. -->
-<div style="display: flex; align-items: center; gap: var(--spacing-4)">
+<tct-hstack gap="4" v-align="center">
   <tct-status-dot variant="success" label="Verified"><tct-icon slot="icon" name="check"></tct-icon></tct-status-dot>
   <tct-status-dot variant="warning" label="Needs review"><tct-icon slot="icon" name="warning"></tct-icon></tct-status-dot>
   <tct-status-dot variant="error" label="Failed"><tct-icon slot="icon" name="close"></tct-icon></tct-status-dot>
-</div>
+</tct-hstack>

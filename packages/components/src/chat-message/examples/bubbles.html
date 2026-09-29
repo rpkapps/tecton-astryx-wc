@@ -1,0 +1,10 @@
+<!-- title: Bubble variants; description: filled paints the sender colour. ghost keeps the padding without the fill, for content that needs the same alignment: add width="100%" to let custom content span the message column. -->
+<tct-vstack max-width="520" gap="4">
+  <tct-chat-message sender="assistant">
+    <tct-chat-message-bubble>A filled bubble is the default.</tct-chat-message-bubble>
+    <tct-chat-message-bubble variant="ghost">A ghost bubble: no fill, same text column.</tct-chat-message-bubble>
+    <tct-chat-message-bubble variant="ghost" width="100%">
+      <tct-card padding="3">A card in a full-width ghost bubble, aligned with the text above.</tct-card>
+    </tct-chat-message-bubble>
+  </tct-chat-message>
+</tct-vstack>

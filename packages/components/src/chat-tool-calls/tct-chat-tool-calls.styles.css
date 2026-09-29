@@ -1,0 +1,229 @@
+/*
+ * tct-chat-tool-calls. The host is layout only; `.base` (part "base", the upstream `chat-tool-calls`
+ * theme target) is the list. Every row is 24px tall at least (a target). Status inks are the Tecton
+ * *text* hues (`--color-text-green` / `--color-text-red`), not the filled `--color-success` /
+ * `--color-error`: a hovered row's wash took the fills under 4.5:1 (React theme `chat-tool-calls`
+ * override, tecton-theme.md §7). A group opens with `grid-template-rows` (0fr to 1fr) inside
+ * `no-preference`; collapsed content is `inert`. [mwg:animate-to-intrinsic-sizes] rejected for
+ * `interpolate-size` (Chrome only): the grid technique works in every engine.
+ */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .base {
+    display: flex;
+    flex-direction: column;
+    margin-block-start: var(--spacing-2);
+    font-size: var(--text-supporting-size);
+    line-height: var(--text-supporting-leading);
+  }
+
+  .row {
+    /* design: a row is at least a 24px target */
+    min-block-size: 24px;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1-5);
+    padding-block: var(--spacing-0-5);
+    color: var(--color-text-secondary);
+  }
+
+  /* Buttons (the group header and a row with detail) take the row's layout; reset the native look. */
+  button.row {
+    inline-size: 100%;
+    margin: 0;
+    padding-inline: 0;
+    border: 0;
+    border-radius: var(--radius-element);
+    background: transparent;
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  button.row[data-inset] {
+    /* The ring would be clipped by the group's overflow: draw it inside the row. */
+    --_focus-offset: calc(-1 * var(--focus-outline-width));
+  }
+
+  button.disclosure {
+    padding-inline: var(--spacing-1);
+    margin-inline: calc(-1 * var(--spacing-1));
+    inline-size: calc(100% + var(--spacing-2));
+  }
+
+  .status {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    inline-size: 16px; /* design: the status mark box, matching the group icon */
+    block-size: 16px;
+    border-radius: var(--radius-full);
+  }
+
+  .status[data-status='pending'] {
+    color: var(--color-text-disabled);
+  }
+
+  .status[data-status='complete'] {
+    color: var(--color-text-green);
+  }
+
+  .status[data-status='error'] {
+    color: var(--color-text-red);
+  }
+
+  .name {
+    min-inline-size: 4ch;
+    flex-shrink: 1;
+    overflow: hidden;
+    font-family: var(--font-family-code);
+    font-weight: var(--font-weight-medium);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .target {
+    min-inline-size: 0;
+    flex-shrink: 10;
+    overflow: hidden;
+    font-family: var(--font-family-body);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .node {
+    flex-shrink: 0;
+  }
+
+  .stats {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: var(--spacing-1);
+  }
+
+  .additions {
+    color: var(--color-text-green);
+  }
+
+  .deletions {
+    color: var(--color-text-red);
+  }
+
+  .duration {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .group-icon,
+  .chevron,
+  .detail-chevron {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    inline-size: 14px; /* design: matches the xsm icon */
+    block-size: 14px;
+  }
+
+  .group-icon {
+    inline-size: 16px;
+    block-size: 16px;
+  }
+
+  .group-label {
+    font-weight: var(--font-weight-medium);
+  }
+
+  .detail-chevron {
+    margin-inline-start: auto;
+  }
+
+  .count {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: var(--spacing-0-5);
+    /* Pushes the count and the chevron to the inline end of the header. */
+    margin-inline-start: auto;
+  }
+
+  .header .count + .chevron {
+    margin-inline-start: 0;
+  }
+
+  .chevron[data-expanded],
+  .detail-chevron[data-expanded] {
+    rotate: 180deg;
+  }
+
+  .detail {
+    padding-inline-start: calc(16px + var(--spacing-1-5));
+    padding-block-end: var(--spacing-2);
+  }
+
+  /* The group content: 0fr to 1fr keeps the height animation off `height: auto`. */
+  .group {
+    display: grid;
+    grid-template-rows: 0fr;
+  }
+
+  .group[data-expanded] {
+    grid-template-rows: 1fr;
+  }
+
+  /*
+   * The list overhangs its own box by one step on each inline edge (so a row's hover wash can extend
+   * past the text column); this clip box mirrors that overhang, so it is not clipped.
+   */
+  .group-inner {
+    min-block-size: 0;
+    overflow: hidden;
+    padding-inline: var(--spacing-1);
+    margin-inline: calc(-1 * var(--spacing-1));
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .group {
+      transition: grid-template-rows var(--duration-medium) var(--ease-standard);
+    }
+
+    .chevron,
+    .detail-chevron {
+      transition: rotate var(--duration-fast) var(--ease-standard);
+    }
+  }
+}
+
+@layer state {
+  @media (hover: hover) {
+    button.disclosure:hover {
+      background-color: var(--color-overlay-hover);
+    }
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .status,
+    .additions,
+    .deletions {
+      color: CanvasText;
+    }
+
+    button.row {
+      border: var(--border-width) solid transparent;
+    }
+  }
+}

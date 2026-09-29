@@ -1,0 +1,223 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "scrollable-area",
+  "workPackage": "WP-8",
+  "entries": {
+    "core.scrollable-area": {
+      "tag": "tct-scrollable-area",
+      "status": "implemented",
+      "upstream": {
+        "name": "ScrollableArea",
+        "path": "packages/core/src/ScrollableArea/ScrollableArea.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "axis",
+          "kind": "prop",
+          "target": "axis",
+          "as": "attribute",
+          "reflect": true,
+          "default": "block"
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Required. The accessible name of the scroll region; a development warning fires when it is empty."
+        },
+        {
+          "upstream": "role",
+          "kind": "prop",
+          "target": "viewport-role",
+          "as": "attribute",
+          "reflect": true,
+          "default": "group",
+          "notes": "`group` or `region`; renamed so the host keeps its own `role` attribute."
+        },
+        {
+          "upstream": "overscroll",
+          "kind": "prop",
+          "target": "overscroll",
+          "as": "attribute",
+          "reflect": true,
+          "default": "allow"
+        },
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "target": "width",
+          "as": "attribute"
+        },
+        {
+          "upstream": "height",
+          "kind": "prop",
+          "target": "height",
+          "as": "attribute"
+        },
+        {
+          "upstream": "maxWidth",
+          "kind": "prop",
+          "target": "max-width",
+          "as": "attribute"
+        },
+        {
+          "upstream": "minHeight",
+          "kind": "prop",
+          "target": "min-height",
+          "as": "attribute"
+        },
+        {
+          "upstream": "stickyContainment",
+          "kind": "prop",
+          "target": "sticky-containment",
+          "as": "attribute",
+          "reflect": true,
+          "default": "when-scrollable",
+          "notes": "`when-scrollable` or `always`; see SCROLLABLE-AREA-04."
+        },
+        {
+          "upstream": "padding",
+          "kind": "prop",
+          "target": "padding",
+          "as": "attribute",
+          "default": 0
+        },
+        {
+          "upstream": "paddingInline",
+          "kind": "prop",
+          "target": "padding-inline",
+          "as": "attribute"
+        },
+        {
+          "upstream": "paddingInlineStart",
+          "kind": "prop",
+          "target": "padding-inline-start",
+          "as": "attribute"
+        },
+        {
+          "upstream": "paddingInlineEnd",
+          "kind": "prop",
+          "target": "padding-inline-end",
+          "as": "attribute"
+        },
+        {
+          "upstream": "paddingBlock",
+          "kind": "prop",
+          "target": "padding-block",
+          "as": "attribute"
+        },
+        {
+          "upstream": "paddingBlockStart",
+          "kind": "prop",
+          "target": "padding-block-start",
+          "as": "attribute"
+        },
+        {
+          "upstream": "paddingBlockEnd",
+          "kind": "prop",
+          "target": "padding-block-end",
+          "as": "attribute"
+        },
+        {
+          "upstream": "isFullBleed",
+          "kind": "prop",
+          "target": "full-bleed",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: style the host, `::part(base)` or the documented attributes and custom properties."
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "The element itself is the handle."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useScrollableArea",
+          "target": "ScrollableAreaController",
+          "as": "controller",
+          "notes": "packages/core/src/controllers/scrollable-area.ts, with the owners `content`, `viewport`, `content-or-viewport` and `implicit`, and the scroll keyboard delegation."
+        },
+        {
+          "upstream": "useScrollOverflow",
+          "target": "ScrollOverflowController",
+          "as": "controller",
+          "notes": "packages/core/src/controllers/scroll-overflow.ts."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Moves focus to the scroll viewport",
+          "when": "the requested axis overflows and nothing tabbable is inside"
+        },
+        {
+          "keys": "Arrow keys, Page Up, Page Down, Home, End",
+          "action": "Scroll the viewport along the active axis (native scrolling, logical axes in RTL and vertical writing modes)"
+        }
+      ],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "SCROLLABLE-AREA-01",
+          "type": "approved-api-difference",
+          "text": "`viewport-role` replaces `role` (a host `role` attribute would shadow the element role). The role and the accessible name sit on the inner viewport, the element that scrolls."
+        },
+        {
+          "id": "SCROLLABLE-AREA-02",
+          "type": "approved-api-difference",
+          "text": "The `keyboard-owner` attribute (`viewport` by default, `content`, `content-or-viewport`) is additive: it exposes the upstream keyboard-access owner option so a consumer can hand the tab stop to a composite inside."
+        },
+        {
+          "id": "SCROLLABLE-AREA-04",
+          "type": "approved-api-difference",
+          "text": "The `sticky-containment` value is spelled `when-scrollable` (upstream `whenScrollable`): attribute values are kebab-case."
+        },
+        {
+          "id": "SCROLLABLE-AREA-03",
+          "type": "approved-api-difference",
+          "text": "The scroll state is `scrollState` (property) and `:state(scrollable)`; `container-type: scroll-state` is applied only where supported. [mwg:scrollability-affordance-hints]"
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": false,
+        "rtl": true,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/components/src/stack/scroll-focus.ts",
+          "reason": "Replace ScrollFocusController (used by tct-stack and tct-card) with the core ScrollableAreaController `{owner: 'implicit'}`, which generalises it (same tab-stop rule, plus keyboard delegation and release on disconnect), then delete scroll-focus.ts."
+        }
+      ],
+      "sizeBudgetKb": 18,
+      "notes": "Guides: [mwg:scrollability-affordance-hints] focusable scrollers and overscroll; [mwg:css-layout] logical overflow axes; [mwg:accessibility] named scroll regions; [mwg:styling-web-components] part=viewport. Size: the budget (18 kB gzip) covers the bundled dependency closure (base class, controllers, locale catalogs), not the folder alone."
+    }
+  }
+}

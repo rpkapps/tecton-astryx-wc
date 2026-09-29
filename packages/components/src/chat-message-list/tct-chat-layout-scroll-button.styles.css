@@ -1,0 +1,75 @@
+/*
+ * tct-chat-layout-scroll-button. Two boxes, two jobs (upstream): `.wrapper` centres the pill and holds the
+ * gap above the composer (spacing outside the pill's border box); `.pill` (part "pill", the theme target)
+ * is what a reader sees, so it carries the surface. The host lets clicks through to what is beneath it (the
+ * dock row is wider than the pill); only a visible pill takes them. Hidden means `visibility: hidden` (it
+ * rides the transition, so the fade-out plays) plus `inert` from the class: no paint, no focus, no AT.
+ * Movement (the width growth) is inside `no-preference`; the fade stays under `reduce`, shortened.
+ * [mwg:css-layout] [mwg:scroll-position-aware-elements]
+ */
+@layer component {
+  :host {
+    display: block;
+    pointer-events: none;
+  }
+
+  .wrapper {
+    display: flex;
+    justify-content: center;
+    padding-block-end: var(--spacing-3);
+  }
+
+  .pill {
+    --_width: var(--size-element-md);
+
+    /* Paints and clips as one round surface; sized to the md button it holds (a literal would clip
+       that button under a theme that retunes the element scale). */
+    overflow: hidden;
+    contain: layout style;
+    block-size: var(--size-element-md);
+    max-inline-size: var(--_width);
+    border-radius: var(--radius-full);
+    background-color: var(--color-background-popover);
+    box-shadow: var(--shadow-med);
+    /* Hidden: the pill paints nothing, so focus landing on it would have no visible indicator. */
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+    transition-property: opacity, visibility;
+    transition-timing-function: var(--ease-standard);
+    transition-duration: var(--duration-fast);
+  }
+
+  .pill[data-visible] {
+    opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
+  }
+
+  .pill[data-label] {
+    /* design: the label pill grows to at most 200px */
+    --_width: 200px;
+  }
+
+  .button {
+    --radius-element: var(--radius-full);
+
+    white-space: nowrap;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .pill {
+      transition-property: opacity, visibility, max-inline-size;
+    }
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .pill {
+      /* The shadow and the fill are dropped in forced colours: keep the pill's edge. */
+      border: var(--border-width) solid ButtonBorder;
+      background-color: Canvas;
+    }
+  }
+}

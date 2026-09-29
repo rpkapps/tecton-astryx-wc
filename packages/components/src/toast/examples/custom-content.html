@@ -4,11 +4,18 @@
   <script type="module">
     import {toast} from '@tecton-wc/components/toast/toast.api.js';
     import {html} from 'lit';
+    // The toast renders this content in its own shadow root, which the autoloader does not watch: register what it uses.
+    import '@tecton-wc/components/hstack';
+    import '@tecton-wc/components/link';
     document.getElementById('toast-custom-show').addEventListener('click', () => {
       toast({
         body: 'Export ready',
         autoHide: false,
-        renderContent: ({body, dismiss}) => html`<div style="display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-3)"><strong>${body}</strong><button type="button" style="color: inherit; background: transparent; border: var(--border-width) solid; border-radius: var(--radius-element)" @click=${dismiss}>Done</button></div>`,
+        renderContent: ({body, dismiss}) => html`
+          <tct-hstack h-align="between" v-align="center" gap="3">
+            <strong>${body}</strong>
+            <tct-link color="inherit" has-underline @click=${dismiss}>Done</tct-link>
+          </tct-hstack>`,
       });
     });
   </script>
