@@ -1,0 +1,22 @@
+<!-- title: Tab menu; description: A tab-menu holds a curated group of extra tabs. The trigger reads as a tab and shows the selected option; choosing an option selects that value like any tab. -->
+<div id="tab-menu-root">
+  <tct-vstack gap="3">
+    <tct-tab-list value="overview" label="Project sections">
+      <tct-tab value="overview" label="Overview"></tct-tab>
+      <tct-tab value="activity" label="Activity"></tct-tab>
+      <tct-tab-menu label="More"></tct-tab-menu>
+    </tct-tab-list>
+    <tct-text color="secondary" data-output>Showing: overview</tct-text>
+  </tct-vstack>
+  <script type="module">
+    const root = document.querySelector('#tab-menu-root');
+    root.querySelector('tct-tab-menu').options = [
+      {value: 'analytics', label: 'Analytics'},
+      {value: 'reports', label: 'Reports'},
+      {value: 'exports', label: 'Exports'},
+    ];
+    root.querySelector('tct-tab-list').addEventListener('tct-value-change', (event) => {
+      root.querySelector('[data-output]').textContent = `Showing: ${event.value}`;
+    });
+  </script>
+</div>

@@ -1,0 +1,348 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "tab-list",
+  "workPackage": "WP-10",
+  "entries": {
+    "core.tab-list": {
+      "tag": "tct-tab-list",
+      "status": "implemented",
+      "upstream": {
+        "name": "TabList",
+        "path": "packages/core/src/TabList/TabList.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "value",
+          "kind": "prop",
+          "target": "value",
+          "as": "property",
+          "notes": "The current tab. The `value` attribute is the initial selection; the property is the current one. Upstream is controlled-only; the WC supports both (D-006)."
+        },
+        {
+          "upstream": "onChange",
+          "kind": "event",
+          "target": "tct-value-change",
+          "as": "event",
+          "notes": "Cancelable intent event before a user selects a tab (`value`, `oldValue`, `reason`); the strip applies the value unless prevented. Property and attribute writes fire nothing. Non-form selection never uses `change` (A§7.6)."
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md (explicit, then a size provider, then md)"
+        },
+        {
+          "upstream": "layout",
+          "kind": "prop",
+          "target": "layout",
+          "as": "attribute",
+          "reflect": true,
+          "default": "hug"
+        },
+        {
+          "upstream": "hasDivider",
+          "kind": "prop",
+          "target": "has-divider",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "isFullBleed",
+          "kind": "prop",
+          "target": "full-bleed",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Deprecated alias of `edge-compensation=\"inline\"` upstream too (the spec renames it); the explicit attribute wins."
+        },
+        {
+          "upstream": "edgeCompensation",
+          "kind": "prop",
+          "target": "edge-compensation",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Canonical spelling (upstream spec AST TabList DEC-1): `inline` only."
+        },
+        {
+          "upstream": "role",
+          "kind": "prop",
+          "target": "pattern",
+          "as": "attribute",
+          "reflect": true,
+          "default": "nav",
+          "notes": "`pattern=\"tabs\"` (or `role=\"tablist\"` on the element) asks for the WAI-ARIA tabs pattern; left unset the strip is a nav landmark. Any other upstream role passthrough is not supported (a host role attribute is the consumer's own)."
+        },
+        {
+          "upstream": "overflow",
+          "kind": "prop",
+          "target": "overflow",
+          "as": "attribute",
+          "reflect": true,
+          "default": "auto"
+        },
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "aria-label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "The accessible name: `label`, or a host `aria-label` / `aria-labelledby` (which win). Default: the localized `@tct.tabList.label`."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base), ::part(strip) and custom properties."
+        }
+      ],
+      "hooks": [
+        {"upstream": "useTabListContext", "target": "tabListContext (family-private)", "as": "context"},
+        {"upstream": "useKeyboardHint", "target": "KeyboardHintController", "as": "controller"},
+        {"upstream": "useListFocus", "target": "RovingTabindexController", "as": "controller"},
+        {
+          "upstream": "useScrollOverflow",
+          "target": "TctTabList (scroll and resize listeners on the strip)",
+          "as": "controller",
+          "notes": "The strip measures its own scroll position and size; nothing else uses it in this family."
+        },
+        {
+          "upstream": "isRtlElement",
+          "as": "waived",
+          "reason": "The strip reads getComputedStyle(...).direction directly; there is no shared helper to port."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Enters the strip at the selected tab (the first enabled stop when none is selected); the next Tab leaves it",
+          "when": "one tab stop"
+        },
+        {
+          "keys": "ArrowRight",
+          "action": "Moves focus to the next enabled tab, wrapping; in the tabs pattern with automatic activation it also selects",
+          "when": "ArrowLeft in RTL; ArrowDown too in the navigation pattern"
+        },
+        {
+          "keys": "ArrowLeft",
+          "action": "Moves focus to the previous enabled tab, wrapping; in the tabs pattern with automatic activation it also selects",
+          "when": "ArrowRight in RTL; ArrowUp too in the navigation pattern"
+        },
+        {"keys": "ArrowDown, ArrowUp", "action": "Move focus forward and backward", "when": "navigation pattern only; left to the page in the tabs pattern"},
+        {"keys": "Home, End", "action": "Move focus to the first and last enabled tab (and select with automatic activation)"},
+        {"keys": "Enter, Space", "action": "Selects the focused tab", "when": "navigation pattern, or activation=\"manual\""}
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "TABLIST-01",
+          "type": "approved-api-difference",
+          "text": "Upstream is controlled-only (value + onChange). The strip owns its value like a native element (D-006): a user selection fires the cancelable tct-value-change and applies the value unless prevented; a controlled framework binding sets `value` back from the event (preventDefault first, or not)."
+        },
+        {
+          "id": "TABLIST-02",
+          "type": "approved-api-difference",
+          "text": "`role=\"tablist\"` is expressed as `pattern=\"tabs\"` (the attribute `role=\"tablist\"` on the element is accepted as the same request). In the tabs pattern the host is the tablist through ElementInternals and the strip renders a div; in the navigation pattern the nav landmark is an inner element (host aria-label / aria-labelledby are delegated to it). The tab items are custom-element children."
+        },
+        {
+          "id": "TABLIST-03",
+          "type": "a11y-improvement",
+          "text": "The tabs pattern selects on arrow keys by default (APG automatic activation) and offers `activation=\"manual\"` (arrows move focus, Enter or Space select) for panels that are costly to show. Upstream's tablist mode never selects on focus. The navigation pattern stays manual (a link tab must not navigate on focus)."
+        },
+        {
+          "id": "TABLIST-04",
+          "type": "approved-api-difference",
+          "text": "Edge compensation reads the container padding from the private custom properties --_container-padding-inline-start and --_container-padding-inline-end (upstream --container-padding-inline-*, published by Layout containers), like tct-list (LIST-02). Outside a padded container it changes nothing."
+        },
+        {
+          "id": "TABLIST-05",
+          "type": "approved-api-difference",
+          "text": "The roving tabindex is written on each tab's inner native control, never on the tab host (tabindex=-1 on a shadow host removes its subtree from sequential navigation). A tab list nested in a toolbar keeps its own tab stop (the toolbar's roving skips it)."
+        },
+        {
+          "id": "TABLIST-06",
+          "type": "tecton-visual",
+          "text": "Tecton tabs are text with a 2px underline in the selected-text ink; rest text is the tab role, hover, keyboard focus and press use the tertiary action fills each paired with its own text role (measured light and dark), and the selected tab keeps its ink over every fill. The scroll arrows are bordered circles with no shadow (Tecton popovers carry a border and no shadow), and the edge fade is a mask (no colour)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/components/src/layout/*, packages/components/src/section/*, other padded containers (WP-8, WP-1)",
+          "reason": "edge-compensation needs the container padding published as inherited private custom properties (TABLIST-04, same request as LIST-02).",
+          "diff": "On the padded inner box of Layout content/panel/section: `--_container-padding-inline-start: <padding-inline-start>; --_container-padding-inline-end: <padding-inline-end>;`."
+        }
+      ],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components] (ElementInternals role on the tablist host, inner native controls, element reflection for aria-controls pointing outward) [mwg:accessibility] (tabs keyboard model, roving tabindex) [mwg:spatial-navigation] (arrows and Home/End) [mwg:anchor-positioning-tab-underline] (the indicator is a decorative bar; state is aria-selected / aria-current). The keyboard hint text is the upstream `@tct.keyboardHint.toNavigate` message."
+    },
+    "core.tab": {
+      "tag": "tct-tab",
+      "status": "implemented",
+      "upstream": {
+        "name": "Tab",
+        "path": "packages/core/src/TabList/Tab.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "value", "kind": "prop", "target": "value", "as": "attribute", "notes": "Compared with the tab list's value."},
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute", "notes": "Visible text; the accessible name when label-hidden."},
+        {
+          "upstream": "isLabelHidden",
+          "kind": "prop",
+          "target": "label-hidden",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "href",
+          "kind": "prop",
+          "target": "href",
+          "as": "attribute",
+          "notes": "Renders an inner <a>. Ignored in the tabs pattern (with a development warning)."
+        },
+        {
+          "upstream": "panelId",
+          "kind": "prop",
+          "target": "panel-id",
+          "as": "attribute",
+          "notes": "Wired as aria-controls on the inner control through element reflection (the panel is outside the shadow root). Tier 2 without reflection leaves it unset."
+        },
+        {
+          "upstream": "as",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-router: a custom link component maps to a tct-link-provider ancestor (linkContext); an unmodified internal click is offered to its navigate()."
+        },
+        {"upstream": "icon", "kind": "slot", "target": "icon", "as": "slot"},
+        {"upstream": "selectedIcon", "kind": "slot", "target": "selected-icon", "as": "slot"},
+        {"upstream": "endContent", "kind": "slot", "target": "end", "as": "slot"},
+        {
+          "upstream": "aria-disabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Upstream disables through `aria-disabled`. The WC has a `disabled` attribute that sets aria-disabled on the inner control, skips the tab in arrow navigation and removes a link's href."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(tab), ::part(indicator) and custom properties."
+        }
+      ],
+      "hooks": [
+        {"upstream": "useDevWarning", "target": "devWarn", "as": "module-function"},
+        {"upstream": "EDGE_COMP_ATTR", "target": "data-tct-edge-comp", "as": "css", "notes": "The tab reflects the passive marker on its host so a padded container can pull an edge tab to its edge (layout/layout.types.ts)."}
+      ],
+      "keyboard": [
+        {"keys": "Enter, Space", "action": "Selects this tab", "when": "focused, enabled (a link tab also navigates)"}
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "TAB-01",
+          "type": "approved-api-difference",
+          "text": "The tab is a custom element that renders the native <button> or <a> in its own shadow root; in the tabs pattern that inner control is role=tab with aria-selected, in the navigation pattern the current tab is aria-current=\"true\" (generic, not \"page\": the strip switches views in place as often as it navigates)."
+        },
+        {
+          "id": "TAB-02",
+          "type": "approved-api-difference",
+          "text": "`icon` and `selectedIcon` are the `icon` and `selected-icon` slots; the selected icon shows only while the tab is selected and falls back to `icon`. `endContent` is the `end` slot."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null
+    },
+    "core.tab-menu": {
+      "tag": "tct-tab-menu",
+      "status": "implemented",
+      "upstream": {
+        "name": "TabMenu",
+        "path": "packages/core/src/TabList/TabMenu.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute", "notes": "Trigger text while no option is selected, the menu's heading and its accessible name."},
+        {
+          "upstream": "options",
+          "kind": "prop",
+          "target": "options",
+          "as": "property",
+          "notes": "`{value, label, icon?}[]`: property only. Each option is a radio row of the shared dropdown menu."
+        },
+        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style, ::part(trigger), ::part(menu) and custom properties."},
+        {"upstream": "className", "kind": "prop", "as": "waived", "reason": "Not an API of a custom element: use class on the host."},
+        {"upstream": "style", "kind": "prop", "as": "waived", "reason": "Not an API of a custom element: use style on the host."}
+      ],
+      "hooks": [
+        {"upstream": "useListFocus", "target": "MenuKeyboardController (through tct-dropdown-menu)", "as": "controller"},
+        {"upstream": "usePopover", "target": "tct-dropdown-menu (LayerController, PositionController)", "as": "controller"}
+      ],
+      "keyboard": [
+        {"keys": "Enter, Space, ArrowDown", "action": "Opens the menu and focuses the first option", "when": "trigger focused"},
+        {"keys": "ArrowDown, ArrowUp", "action": "Move between options; Home and End jump", "when": "menu open"},
+        {"keys": "Enter, Space", "action": "Chooses the focused option (selects that tab value) and closes the menu", "when": "option focused"},
+        {"keys": "Escape", "action": "Closes the menu and returns focus to the trigger", "when": "menu open"},
+        {"keys": "Tab", "action": "Closes the menu and continues from the trigger", "when": "menu open"},
+        {"keys": "ArrowLeft, ArrowRight", "action": "Move to the previous or next tab of the strip", "when": "trigger focused"}
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "TABMENU-01",
+          "type": "approved-api-difference",
+          "text": "The menu is the shared tct-dropdown-menu (a slotted tab-styled trigger, a heading and a radio group of options), not a separate popover implementation: it gets the same menu-button behaviour, layer stack and positioning as every other menu."
+        },
+        {
+          "id": "TABMENU-02",
+          "type": "a11y-improvement",
+          "text": "ArrowDown on the trigger opens the menu (APG menu button), which upstream's TabMenu does not do; with the roving strip this means ArrowDown on the trigger no longer moves to the next stop (arrows Left and Right still do)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": false,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null
+    }
+  }
+}

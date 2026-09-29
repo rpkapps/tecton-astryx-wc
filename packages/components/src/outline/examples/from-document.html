@@ -1,0 +1,35 @@
+<!-- title: Items from the document; description: source names a container: its h1 to h6 headings with an id become the items, and the outline follows headings added, removed or retitled. -->
+<div id="from-document-root">
+  <tct-hstack gap="6" v-align="start">
+    <tct-stack-item size="fill">
+      <div id="from-document-pane" style="block-size: 240px; overflow: auto" tabindex="0" aria-label="Guide">
+        <article id="from-document-article">
+          <tct-vstack gap="3" padding="2">
+            <h2 id="from-document-one">Getting started</h2>
+            <tct-aspect-ratio ratio="16/6"><tct-card variant="muted" padding="0" height="100%"></tct-card></tct-aspect-ratio>
+            <h3 id="from-document-two">Requirements</h3>
+            <tct-aspect-ratio ratio="16/6"><tct-card variant="muted" padding="0" height="100%"></tct-card></tct-aspect-ratio>
+            <h2 id="from-document-three">Going further</h2>
+            <tct-aspect-ratio ratio="16/6"><tct-card variant="muted" padding="0" height="100%"></tct-card></tct-aspect-ratio>
+          </tct-vstack>
+        </article>
+      </div>
+    </tct-stack-item>
+    <tct-vstack gap="3">
+      <tct-outline source="#from-document-article" scroll-container="#from-document-pane"></tct-outline>
+      <tct-button variant="secondary" label="Add a section" data-add></tct-button>
+    </tct-vstack>
+  </tct-hstack>
+  <script type="module">
+    const root = document.querySelector('#from-document-root');
+    const stack = root.querySelector('#from-document-article tct-vstack');
+    let count = 3;
+    root.querySelector('[data-add]').addEventListener('click', () => {
+      count += 1;
+      const heading = document.createElement('h2');
+      heading.id = `from-document-added-${count}`;
+      heading.textContent = `Added section ${count - 3}`;
+      stack.append(heading);
+    });
+  </script>
+</div>

@@ -1,0 +1,33 @@
+<!-- title: Tabs with panels; description: pattern="tabs" is the WAI-ARIA tabs pattern. Each tab names its panel with panel-id; arrows move focus and select together. The panels are your elements: show the one the value asks for. -->
+<div id="tabs-pattern-root">
+  <tct-vstack gap="3">
+    <tct-tab-list pattern="tabs" value="overview" label="Project views">
+      <tct-tab value="overview" label="Overview" panel-id="tabs-pattern-overview"></tct-tab>
+      <tct-tab value="activity" label="Activity" panel-id="tabs-pattern-activity"></tct-tab>
+      <tct-tab value="settings" label="Settings" panel-id="tabs-pattern-settings"></tct-tab>
+    </tct-tab-list>
+    <tct-card id="tabs-pattern-overview" role="tabpanel" variant="muted" padding="3">
+      <tct-text>A summary of the project.</tct-text>
+    </tct-card>
+    <tct-card id="tabs-pattern-activity" role="tabpanel" variant="muted" padding="3" hidden>
+      <tct-text>Recent changes by everyone on the team.</tct-text>
+    </tct-card>
+    <tct-card id="tabs-pattern-settings" role="tabpanel" variant="muted" padding="3" hidden>
+      <tct-text>Project name, members and permissions.</tct-text>
+    </tct-card>
+  </tct-vstack>
+  <script type="module">
+    const root = document.querySelector('#tabs-pattern-root');
+    const list = root.querySelector('tct-tab-list');
+    const panels = [...root.querySelectorAll('[role="tabpanel"]')];
+    for (const panel of panels) {
+      // Name each panel by its tab (same tree: the tab list and the panels share this page).
+      const tab = list.querySelector(`tct-tab[panel-id="${panel.id}"]`);
+      tab.id = `${panel.id}-tab`;
+      panel.setAttribute('aria-labelledby', tab.id);
+    }
+    list.addEventListener('tct-value-change', (event) => {
+      for (const panel of panels) panel.hidden = panel.id !== `tabs-pattern-${event.value}`;
+    });
+  </script>
+</div>

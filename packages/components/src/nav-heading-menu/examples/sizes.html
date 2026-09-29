@@ -1,0 +1,21 @@
+<!-- title: Sizes; description: size sets the minimum width (160, 200, 240 px) and the padding of the rows; min-width overrides the width. -->
+<tct-hstack gap="4" v-align="start">
+  <tct-card padding="1">
+    <tct-nav-heading-menu size="sm">
+      <tct-nav-heading-menu-item label="Small" href="#s"></tct-nav-heading-menu-item>
+      <tct-nav-heading-menu-item label="Menu" href="#m"></tct-nav-heading-menu-item>
+    </tct-nav-heading-menu>
+  </tct-card>
+  <tct-card padding="1">
+    <tct-nav-heading-menu size="md">
+      <tct-nav-heading-menu-item label="Medium" href="#s"></tct-nav-heading-menu-item>
+      <tct-nav-heading-menu-item label="Menu" href="#m"></tct-nav-heading-menu-item>
+    </tct-nav-heading-menu>
+  </tct-card>
+  <tct-card padding="1">
+    <tct-nav-heading-menu size="lg" min-width="280">
+      <tct-nav-heading-menu-item label="Large, 280px" href="#s"></tct-nav-heading-menu-item>
+      <tct-nav-heading-menu-item label="Menu" href="#m"></tct-nav-heading-menu-item>
+    </tct-nav-heading-menu>
+  </tct-card>
+</tct-hstack>

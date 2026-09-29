@@ -60,7 +60,7 @@ const links = (outline: TctOutline): HTMLAnchorElement[] => [...outline.shadowRo
 const activeLabel = (outline: TctOutline): string | undefined =>
   links(outline).find((link) => link.getAttribute('aria-current') === 'location')?.textContent?.trim();
 const scrollHeading = (pane: HTMLElement, id: string): void => {
-  pane.scrollTop = (pane.querySelector<HTMLElement>(`#${id}`)!.parentElement as HTMLElement).offsetTop;
+  pane.scrollTop = (pane.querySelector<HTMLElement>(`#${id}`)!.parentElement!).offsetTop;
 };
 
 afterEach(() => {
@@ -448,14 +448,14 @@ describe('tct-outline: items from the document (source)', () => {
     );
     const outline = wrapper.querySelector('tct-outline')!;
     await waitUntil(() => links(outline).length === 2, 'two items');
-    expect(links(outline).map((link) => link.textContent!.trim())).toEqual(['One', 'Two']);
+    expect(links(outline).map((link) => link.textContent.trim())).toEqual(['One', 'Two']);
     const heading = document.createElement('h2');
     heading.id = 'three';
     heading.textContent = 'Three';
     wrapper.querySelector('#doc')!.append(heading);
     await waitUntil(() => links(outline).length === 3, 'three items after a heading was added');
     wrapper.querySelector('#one')!.textContent = 'Uno';
-    await waitUntil(() => links(outline)[0]!.textContent!.trim() === 'Uno', 'retitled');
+    await waitUntil(() => links(outline)[0]!.textContent.trim() === 'Uno', 'retitled');
   });
 });
 

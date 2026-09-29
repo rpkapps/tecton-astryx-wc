@@ -336,7 +336,7 @@ describe('tct-breadcrumbs: collapsed trail (max-items)', () => {
   const visible = (element: TctBreadcrumbs): string[] =>
     items(element)
       .filter((item) => getComputedStyle(item).display !== 'none')
-      .map((item) => (item.shadowRoot!.querySelector('[data-overflow]') ? 'ellipsis' : item.textContent!.trim()));
+      .map((item) => (item.shadowRoot!.querySelector('[data-overflow]') ? 'ellipsis' : item.textContent.trim()));
   const overflowButton = (element: TctBreadcrumbs): HTMLButtonElement | null =>
     element.querySelector<HTMLButtonElement>('tct-breadcrumb-item')
       ? ([...element.children]
@@ -375,7 +375,7 @@ describe('tct-breadcrumbs: collapsed trail (max-items)', () => {
     const element = await trail('max-items="3"', LONG);
     await waitUntil(() => overflowButton(element), 'ellipsis');
     const hidden = items(element).filter((item) => getComputedStyle(item).display === 'none');
-    expect(hidden.map((item) => item.textContent!.trim())).toEqual(['Beta']);
+    expect(hidden.map((item) => item.textContent.trim())).toEqual(['Beta']);
   });
 
   it('runs an action crumb through its own click', async () => {

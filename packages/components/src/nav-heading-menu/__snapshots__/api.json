@@ -1,0 +1,113 @@
+{
+  "folder": "nav-heading-menu",
+  "elements": {
+    "tct-nav-heading-menu": {
+      "class": "TctNavHeadingMenu",
+      "attributes": [
+        {
+          "name": "min-width",
+          "property": "minWidth",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "NavHeadingMenuSize",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "default": "'md'",
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "name": "focusFirst",
+          "signature": "() => boolean"
+        },
+        {
+          "name": "focusLast",
+          "signature": "() => boolean"
+        }
+      ],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "menu"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-nav-heading-menu-item": {
+      "class": "TctNavHeadingMenuItem",
+      "attributes": [
+        {
+          "name": "description",
+          "property": "description",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "href",
+          "property": "href",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "icon",
+          "property": "icon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "control",
+          "type": "HTMLElement | null",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "description",
+        "icon",
+        "label"
+      ],
+      "events": [
+        {
+          "name": "click",
+          "native": true
+        }
+      ],
+      "cssParts": [
+        "item"
+      ],
+      "cssStates": [
+        "disabled"
+      ],
+      "cssProperties": []
+    }
+  }
+}

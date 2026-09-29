@@ -1,0 +1,22 @@
+<!-- title: Controlled and navigation events; description: With active-id set the outline stops tracking and only reports (tct-active-change); you own the state. tct-navigate-start and tct-navigate-end frame the scroll, for an arrival effect on the target. -->
+<div id="controlled-root">
+  <tct-vstack gap="3">
+    <tct-outline active-id="controlled-one" no-scroll-on-click></tct-outline>
+    <tct-text color="secondary" data-output>Choose an item.</tct-text>
+  </tct-vstack>
+  <script type="module">
+    const root = document.querySelector('#controlled-root');
+    const outline = root.querySelector('tct-outline');
+    const output = root.querySelector('[data-output]');
+    outline.items = [
+      {id: 'controlled-one', label: 'One', level: 1},
+      {id: 'controlled-two', label: 'Two', level: 1},
+      {id: 'controlled-three', label: 'Three', level: 2},
+    ];
+    // The headings are not on this page: no-scroll-on-click still reports the choice.
+    outline.addEventListener('tct-active-change', (event) => {
+      outline.activeId = event.id;
+      output.textContent = `Active: ${event.id} (${event.reason})`;
+    });
+  </script>
+</div>

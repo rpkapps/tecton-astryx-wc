@@ -66,7 +66,10 @@ export class TctTabMenu extends TctElement {
     return value === '' ? undefined : this.options.find((option) => option.value === value);
   }
 
-  /** The menu's own disabled state does not exist: it is always a roving stop. */
+  /**
+   * The menu's own disabled state does not exist: it is always a roving stop.
+   * @internal
+   */
   get disabled(): boolean {
     return false;
   }

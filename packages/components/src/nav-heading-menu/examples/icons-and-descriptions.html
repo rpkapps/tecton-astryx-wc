@@ -1,0 +1,11 @@
+<!-- title: Icons and descriptions; description: A row takes an icon and a description under its label; the label and description are one line each, truncated with a tooltip. Rich content goes through the label, description and icon slots. -->
+<tct-card padding="1">
+  <tct-nav-heading-menu size="lg">
+    <tct-nav-heading-menu-item label="Dashboard" description="Everything at a glance" icon="check" href="#dashboard"></tct-nav-heading-menu-item>
+    <tct-nav-heading-menu-item label="Search" description="Find any page or person" icon="search" href="#search"></tct-nav-heading-menu-item>
+    <tct-nav-heading-menu-item description="Slotted content">
+      <tct-text slot="label" weight="medium">Rich label</tct-text>
+      <tct-icon slot="icon" name="close"></tct-icon>
+    </tct-nav-heading-menu-item>
+  </tct-nav-heading-menu>
+</tct-card>

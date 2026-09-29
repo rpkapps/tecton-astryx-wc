@@ -285,10 +285,10 @@ describe('tct-tab-list: forced colours and reduced motion', () => {
   it('keeps the focus ring and paints the selected indicator in a system colour', async () => {
     await emulateMedia({forcedColors: 'active'});
     const element = await make('value="overview"', TABS(), 'style="width: 480px"');
-    tab(element, 'activity').control!.focus({focusVisible: true} as FocusOptions);
+    tab(element, 'activity').control!.focus({focusVisible: true});
     await userEvent.keyboard('{Shift>}{/Shift}');
     const focused = tab(element, 'overview').control!;
-    focused.focus({focusVisible: true} as FocusOptions);
+    focused.focus({focusVisible: true});
     expect(getComputedStyle(focused).outlineStyle).not.toBe('none');
     const indicator = tab(element, 'overview').shadowRoot!.querySelector('.indicator')!;
     expect(getComputedStyle(indicator).backgroundColor).not.toBe('rgba(0, 0, 0, 0)');

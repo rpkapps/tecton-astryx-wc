@@ -141,13 +141,14 @@ export class TctTab extends TctElement {
    * `aria-controls` is an element reference: the panel lives outside this shadow root, in the tree of
    * the tab list (a shadow element may point outward, A§8.2). Called after every update and by the tab
    * list once its panels can exist.
+   * @internal
    */
   syncControls(): void {
     const control = this.control;
     if (!control) return;
     const panel = this.#pattern === 'tabs' ? this.#panel : null;
     if (panel && features.elementReflection) {
-      control.ariaControlsElements = [panel as HTMLElement];
+      control.ariaControlsElements = [panel];
       return;
     }
     if (control.ariaControlsElements) control.ariaControlsElements = null;

@@ -68,7 +68,10 @@ export class TctNavHeadingMenuItem extends TctElement {
     return this.renderRoot.querySelector<HTMLElement>('.item');
   }
 
-  /** The row's text, for typeahead. */
+  /**
+   * The row's text, for typeahead.
+   * @internal
+   */
   get menuLabel(): string {
     return (
       this.label.trim() ||

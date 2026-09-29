@@ -96,7 +96,10 @@ export class TctBreadcrumbItem extends TctElement {
     this.internals.role = 'listitem';
   }
 
-  /** The item's text, for the menu of collapsed crumbs. */
+  /**
+   * The item's text, for the menu of collapsed crumbs.
+   * @internal
+   */
   get labelText(): string {
     return this.#labelText();
   }

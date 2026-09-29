@@ -24,7 +24,9 @@ import type {TctNavHeadingMenuItem} from './tct-nav-heading-menu-item.js';
 class TestHeadingPopover extends TctElement {
   static override readonly tagName = 'test-heading-popover';
   closed = 0;
-  readonly provider = new ContextProvider(this, {
+  readonly provider: ContextProvider<typeof navHeadingCloseContext> = new ContextProvider<
+    typeof navHeadingCloseContext
+  >(this, {
     context: navHeadingCloseContext,
     initialValue: {
       closeMenu: () => {
@@ -36,7 +38,7 @@ class TestHeadingPopover extends TctElement {
     return html`<slot></slot>`;
   }
 }
-defineElement(TestHeadingPopover as never);
+defineElement(TestHeadingPopover);
 
 const ROWS =
   '<tct-nav-heading-menu-item label="Dashboard" href="#dashboard"></tct-nav-heading-menu-item>' +

@@ -1,0 +1,12 @@
+<!-- title: Status and indicators; description: status recolours the indicator and, on steps that are not current, swaps in a glyph; the word reaches assistive technology as text. indicator picks a number, none, or slot your own. -->
+<tct-stepper active-step="1" orientation="vertical">
+  <tct-step label="Uploaded" status="success"></tct-step>
+  <tct-step label="Validating"></tct-step>
+  <tct-step label="Needs attention" status="warning" description="Two rows have a missing value"></tct-step>
+  <tct-step label="Import failed" status="error"></tct-step>
+  <tct-step label="Always a number" indicator="number"></tct-step>
+  <tct-step label="No indicator" indicator="none"></tct-step>
+  <tct-step label="Custom icon">
+    <tct-icon slot="indicator" name="search"></tct-icon>
+  </tct-step>
+</tct-stepper>

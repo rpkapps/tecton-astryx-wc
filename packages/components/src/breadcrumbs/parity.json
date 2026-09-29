@@ -1,0 +1,164 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "breadcrumbs",
+  "workPackage": "WP-10",
+  "entries": {
+    "core.breadcrumbs": {
+      "tag": "tct-breadcrumbs",
+      "status": "implemented",
+      "upstream": {
+        "name": "Breadcrumbs",
+        "path": "packages/core/src/Breadcrumbs/Breadcrumbs.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "separator",
+          "kind": "prop",
+          "target": "separator",
+          "as": "attribute",
+          "default": "/",
+          "notes": "Text separator. An icon separator (upstream: an Icon element) is the `separator-icon` attribute, a registered icon name."
+        },
+        {"upstream": "variant", "kind": "prop", "target": "variant", "as": "attribute", "reflect": true, "default": "default"},
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Accessible name of the nav landmark; default the localized `@tct.breadcrumbs.label`. A host aria-label wins."
+        },
+        {
+          "upstream": "maxItems",
+          "kind": "prop",
+          "target": "max-items",
+          "as": "attribute",
+          "default": 0,
+          "notes": "Addition: collapses a long trail into an ellipsis menu (Tecton's overflow crumb)."
+        },
+        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style, ::part(base), ::part(list) and custom properties."}
+      ],
+      "hooks": [
+        {"upstream": "BreadcrumbContext", "target": "breadcrumbsContext (family-private)", "as": "context"}
+      ],
+      "keyboard": [
+        {"keys": "Tab", "action": "Moves through the crumbs that are links, buttons or menu triggers, in order", "when": "each is a tab stop; a plain current crumb is not"}
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "BREADCRUMBS-01",
+          "type": "approved-api-difference",
+          "text": "The list is an inner <ol role=\"list\"> in the shadow root and the crumbs are slotted custom elements whose hosts are list items (ElementInternals), as tct-list does (LIST-01); a host aria-label is delegated to the inner <nav>. The trail resolves the automatic current page and the collapsed set from its children and tells them through context; upstream did it with a DOM effect in each item."
+        },
+        {
+          "id": "BREADCRUMBS-02",
+          "type": "approved-api-difference",
+          "text": "`max-items` is an addition. With more items than max-items the first item and the last max-items - 1 stay and the ones between fold into one ellipsis button that opens a menu of the hidden crumbs (links keep navigating, actions keep their click). Upstream has no built-in collapse; the same shape is possible there with a menu crumb."
+        },
+        {
+          "id": "BREADCRUMBS-03",
+          "type": "tecton-visual",
+          "text": "Tecton breadcrumbs sit directly on the page with no container: ancestors are the secondary text colour, the current crumb the primary text colour and one step heavier, separators are decorative and the built-in slash mirrors in right-to-left. Links underline on hover, the underline being the only affordance."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": false,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components] (list semantics on the item hosts, nav in the shadow root) [mwg:accessibility] (breadcrumb pattern, aria-current=\"page\") [mwg:resilient-context-menus-and-nested-dropdowns] (the crumb menus are the shared dropdown menu)."
+    },
+    "core.breadcrumb-item": {
+      "tag": "tct-breadcrumb-item",
+      "status": "implemented",
+      "upstream": {
+        "name": "BreadcrumbItem",
+        "path": "packages/core/src/Breadcrumbs/BreadcrumbItem.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot", "notes": "The label."},
+        {"upstream": "href", "kind": "prop", "target": "href", "as": "attribute", "notes": "Renders a tct-link. Ignored when `menu` is set (a development warning says so)."},
+        {"upstream": "onClick", "kind": "event", "target": "click", "as": "native-event", "notes": "Native click on a link crumb or an action crumb (a crumb without href or menu is a button)."},
+        {
+          "upstream": "isCurrent",
+          "kind": "prop",
+          "target": "current",
+          "as": "attribute",
+          "notes": "Tri-state like upstream: absent lets the trail choose the last item, `current` (or `current=\"true\"`) is the current page, `current=\"false\"` opts out of the automatic choice."
+        },
+        {"upstream": "startIcon", "kind": "slot", "target": "icon", "as": "slot", "notes": "Or the `icon` attribute, a registered icon name."},
+        {
+          "upstream": "menu",
+          "kind": "prop",
+          "target": "menu",
+          "as": "property",
+          "notes": "Data rows (`DropdownMenuOption[]`) as the property; composed rows as `slot=\"menu\"` children (`tct-dropdown-menu-item` etc.)."
+        },
+        {"upstream": "menuSize", "kind": "prop", "target": "menu-size", "as": "attribute", "notes": "Default sm in a supporting trail, else md."},
+        {
+          "upstream": "as",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-router: link components map to a tct-link-provider ancestor (linkContext), which the tct-link inside the crumb consumes."
+        },
+        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style, ::part(item), ::part(crumb) and custom properties."}
+      ],
+      "hooks": [
+        {"upstream": "useListFocus", "target": "MenuKeyboardController (through tct-dropdown-menu)", "as": "controller"},
+        {"upstream": "useTypeahead", "target": "TypeaheadController (through tct-dropdown-menu)", "as": "controller"},
+        {"upstream": "usePopover", "target": "tct-dropdown-menu (LayerController, PositionController)", "as": "controller"}
+      ],
+      "keyboard": [
+        {"keys": "Enter", "action": "Follows the link, runs the action or opens the menu", "when": "crumb focused"},
+        {"keys": "Space", "action": "Runs the action or opens the menu", "when": "button or menu crumb focused"},
+        {"keys": "ArrowDown", "action": "Opens the menu and focuses its first row", "when": "menu crumb or ellipsis focused"},
+        {"keys": "ArrowDown, ArrowUp", "action": "Move between menu rows; Home and End jump", "when": "menu open"},
+        {"keys": "Escape", "action": "Closes the menu and returns focus to the trigger", "when": "menu open"}
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "BREADCRUMBITEM-01",
+          "type": "approved-api-difference",
+          "text": "The item renders its own separator (hidden on the first item with :host(:first-child)) as upstream does. A crumb with neither `href` nor `menu` is a <button> that fires click; upstream rendered a plain span for that shape unless an onClick was given, which a custom element cannot detect. To show static text mark the crumb `current`."
+        },
+        {
+          "id": "BREADCRUMBITEM-02",
+          "type": "approved-api-difference",
+          "text": "Menu rows are the shared dropdown menu items: `BreadcrumbMenuItem` and its siblings are `tct-dropdown-menu-item`, `-checkbox-item`, `-radio-group` and `-sub-menu` in slot=\"menu\", or data rows in `menu`. Data rows have no `href`; a row's onClick navigates."
+        },
+        {
+          "id": "BREADCRUMBITEM-03",
+          "type": "approved-api-difference",
+          "text": "Automatic current page: the trail marks the last item when no item is explicitly current, on the crumb's own link, button or text (aria-current=\"page\"), never on the list item."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null
+    }
+  }
+}

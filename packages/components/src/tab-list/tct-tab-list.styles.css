@@ -64,7 +64,9 @@
     --_indicator-bleed: calc(-1 * var(--_tab-indicator-bottom, -1px));
     --_block-end-bleed: max(var(--_ring-bleed), var(--_indicator-bleed));
 
+    /* physical: the strip scrolls horizontally in both directions; overflow-inline is newer than the Tier-2 floor */
     overflow-x: auto;
+    /* physical: see above */
     overflow-y: hidden;
     overscroll-behavior-x: contain;
     scroll-padding-inline: var(--_inset);
@@ -96,7 +98,7 @@
     mask-image: linear-gradient(
       to right,
       transparent var(--_ring-bleed),
-      black var(--_inset)
+      currentColor var(--_inset)
     );
   }
 
@@ -104,7 +106,7 @@
     mask-image: linear-gradient(
       to left,
       transparent var(--_ring-bleed),
-      black var(--_inset)
+      currentColor var(--_inset)
     );
   }
 
@@ -112,8 +114,8 @@
     mask-image: linear-gradient(
       to right,
       transparent var(--_ring-bleed),
-      black var(--_inset),
-      black calc(100% - var(--_inset)),
+      currentColor var(--_inset),
+      currentColor calc(100% - var(--_inset)),
       transparent calc(100% - var(--_ring-bleed))
     );
   }
@@ -122,7 +124,7 @@
     mask-image: linear-gradient(
       to left,
       transparent var(--_ring-bleed),
-      black var(--_inset)
+      currentColor var(--_inset)
     );
   }
 
@@ -130,7 +132,7 @@
     mask-image: linear-gradient(
       to right,
       transparent var(--_ring-bleed),
-      black var(--_inset)
+      currentColor var(--_inset)
     );
   }
 

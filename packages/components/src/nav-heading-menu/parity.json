@@ -1,0 +1,121 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "nav-heading-menu",
+  "workPackage": "WP-10",
+  "entries": {
+    "core.nav-heading-menu": {
+      "tag": "tct-nav-heading-menu",
+      "status": "implemented",
+      "upstream": {
+        "name": "NavHeadingMenu",
+        "path": "packages/core/src/NavMenu/NavHeadingMenu.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {"upstream": "size", "kind": "prop", "target": "size", "as": "attribute", "reflect": true, "default": "md"},
+        {
+          "upstream": "minWidth",
+          "kind": "prop",
+          "target": "min-width",
+          "as": "attribute",
+          "notes": "A number is px, a string any CSS length; applied through a private custom property."
+        },
+        {"upstream": "xstyle", "kind": "prop", "as": "waived", "reason": "A-xstyle: use class/style, ::part(menu) and custom properties."}
+      ],
+      "hooks": [
+        {"upstream": "NavHeadingMenuContext", "target": "navHeadingMenuContext", "as": "context", "notes": "nav-heading-menu.context.ts: size and closeMenu for the rows."},
+        {"upstream": "useNavHeadingMenuContext", "target": "navHeadingMenuContext", "as": "context", "notes": "Read it with a ContextConsumer."},
+        {"upstream": "NavHeadingCloseContext", "target": "navHeadingCloseContext", "as": "context", "notes": "Provided by the popover of a navigation heading (WP-14); the menu closes it on a chosen row and on Escape."},
+        {"upstream": "useNavHeadingCloseContext", "target": "navHeadingCloseContext", "as": "context", "notes": "Read it with a ContextConsumer."},
+        {"upstream": "useListFocus", "target": "RovingTabindexController", "as": "controller"},
+        {"upstream": "useTypeahead", "target": "RovingTabindexController (typeahead option, TypeaheadController)", "as": "controller"}
+      ],
+      "keyboard": [
+        {"keys": "Tab", "action": "Enters the menu at its first enabled row; the next Tab leaves it", "when": "one tab stop"},
+        {"keys": "ArrowDown", "action": "Moves focus to the next enabled row, wrapping"},
+        {"keys": "ArrowUp", "action": "Moves focus to the previous enabled row, wrapping"},
+        {"keys": "Home, End", "action": "Move focus to the first and last enabled row"},
+        {"keys": "A-Z", "action": "Moves focus to the next enabled row whose label starts with the typed character(s)", "when": "typeahead"},
+        {"keys": "Enter, Space", "action": "Activates the focused row (click, then the heading popover closes)"},
+        {"keys": "Escape", "action": "Asks the enclosing heading popover to close", "when": "inside a heading popover"}
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "NAVHEADINGMENU-01",
+          "type": "approved-api-difference",
+          "text": "The host is the menu (role=\"menu\" through ElementInternals) and the rows are slotted custom elements; each row's inner menuitem is the roving focus target (the host never takes tabindex). Disabled rows are skipped by arrows and typeahead, as upstream (unlike the dropdown menu, which keeps them focusable per APG)."
+        },
+        {
+          "id": "NAVHEADINGMENU-02",
+          "type": "approved-api-difference",
+          "text": "Upstream passed the close callback with a React context that `SideNavHeading` and `TopNavHeading` provide. The WC context keys are `navHeadingCloseContext` (provided by the heading popover, WP-14) and `navHeadingMenuContext` (provided by this menu). Used outside a heading the menu closes nothing and throws nothing."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": false,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessible-web-components] (menu role on the host, menuitem on the inner control) [mwg:accessibility] (menu keyboard model, roving tabindex)."
+    },
+    "core.nav-heading-menu-item": {
+      "tag": "tct-nav-heading-menu-item",
+      "status": "implemented",
+      "upstream": {
+        "name": "NavHeadingMenuItem",
+        "path": "packages/core/src/NavMenu/NavHeadingMenuItem.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "icon", "kind": "slot", "target": "icon", "as": "slot", "notes": "Or the `icon` attribute, a registered icon name."},
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute", "notes": "Rich labels go through slot=\"label\"."},
+        {"upstream": "description", "kind": "prop", "target": "description", "as": "attribute", "notes": "Rich descriptions go through slot=\"description\"."},
+        {"upstream": "href", "kind": "prop", "target": "href", "as": "attribute", "notes": "Renders <a role=\"menuitem\">; routed through tct-link-provider for an unmodified internal click."},
+        {"upstream": "onClick", "kind": "event", "target": "click", "as": "native-event", "notes": "Native click once per activation; not fired while disabled. The heading popover closes after it."},
+        {"upstream": "isDisabled", "kind": "prop", "target": "disabled", "as": "attribute", "reflect": true, "default": false}
+      ],
+      "hooks": [],
+      "keyboard": [
+        {"keys": "Enter, Space", "action": "Activates the row", "when": "focused, enabled (Space also on a link row)"}
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "NAVHEADINGMENUITEM-01",
+          "type": "approved-api-difference",
+          "text": "The row is a custom element that renders an <a role=\"menuitem\"> or <div role=\"menuitem\"> in its shadow root; the label and description are one line each through tct-text (truncated with a tooltip). The close callback runs in a microtask after the click, so a consumer click listener on the host sees the row still in the tree."
+        },
+        {
+          "id": "NAVHEADINGMENUITEM-02",
+          "type": "tecton-visual",
+          "text": "Rows highlight with the Tecton table-row hover fill under the primary text, DOM focus is the highlight, and the ring is drawn inset on the row so a scrolling popover never clips it (as the dropdown menu's rows)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": false,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null
+    }
+  }
+}

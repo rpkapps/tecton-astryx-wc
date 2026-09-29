@@ -172,8 +172,7 @@ export class TctStepper extends TctElement {
     const last = this.#lastContext;
     // Keep the identity while nothing changed: every change re-renders every step.
     if (
-      last &&
-      last.activeStep === next.activeStep &&
+      last?.activeStep === next.activeStep &&
       last.previousActiveStep === next.previousActiveStep &&
       last.orientation === next.orientation &&
       last.isNonLinear === next.isNonLinear &&

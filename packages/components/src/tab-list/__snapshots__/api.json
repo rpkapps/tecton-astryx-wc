@@ -1,0 +1,271 @@
+{
+  "folder": "tab-list",
+  "elements": {
+    "tct-tab": {
+      "class": "TctTab",
+      "attributes": [
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "href",
+          "property": "href",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "label-hidden",
+          "property": "labelHidden",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "panel-id",
+          "property": "panelId",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "value",
+          "property": "value",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "control",
+          "type": "HTMLButtonElement | HTMLAnchorElement | null",
+          "readonly": true
+        },
+        {
+          "name": "selected",
+          "type": "boolean",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "end",
+        "icon",
+        "selected-icon"
+      ],
+      "events": [
+        {
+          "name": "click",
+          "native": true
+        }
+      ],
+      "cssParts": [
+        "indicator",
+        "label",
+        "tab"
+      ],
+      "cssStates": [
+        "disabled",
+        "selected"
+      ],
+      "cssProperties": []
+    },
+    "tct-tab-list": {
+      "class": "TctTabList",
+      "attributes": [
+        {
+          "name": "activation",
+          "property": "activation",
+          "type": "TabListActivation",
+          "values": [
+            "automatic",
+            "manual"
+          ],
+          "default": "'automatic'",
+          "reflects": true
+        },
+        {
+          "name": "edge-compensation",
+          "property": "edgeCompensation",
+          "type": "| TabListEdgeCompensation\n    | undefined",
+          "values": [
+            "inline"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "full-bleed",
+          "property": "fullBleed",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "has-divider",
+          "property": "hasDivider",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "layout",
+          "property": "layout",
+          "type": "TabListLayout",
+          "values": [
+            "hug",
+            "fill"
+          ],
+          "default": "'hug'",
+          "reflects": true
+        },
+        {
+          "name": "overflow",
+          "property": "overflow",
+          "type": "TabListOverflow",
+          "values": [
+            "auto",
+            "scroll",
+            "visible"
+          ],
+          "default": "'auto'",
+          "reflects": true
+        },
+        {
+          "name": "pattern",
+          "property": "pattern",
+          "type": "TabListPattern",
+          "values": [
+            "nav",
+            "tabs"
+          ],
+          "default": "'nav'",
+          "reflects": true
+        },
+        {
+          "name": "role",
+          "property": "role",
+          "type": "unknown",
+          "reflects": false
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "ElementSize | undefined",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "value",
+          "property": "value",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [
+        {
+          "name": "tct-value-change",
+          "class": "TctValueChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "base",
+        "keyboard-hint",
+        "scroll-button",
+        "strip"
+      ],
+      "cssStates": [
+        "tabs"
+      ],
+      "cssProperties": []
+    },
+    "tct-tab-menu": {
+      "class": "TctTabMenu",
+      "attributes": [
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "control",
+          "type": "HTMLButtonElement | null",
+          "readonly": true
+        },
+        {
+          "name": "options",
+          "type": "TabMenuOption[]",
+          "default": "[]",
+          "readonly": false
+        },
+        {
+          "name": "selectedOption",
+          "type": "TabMenuOption | undefined",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [],
+      "events": [
+        {
+          "name": "tct-after-open-change",
+          "class": "TctAfterOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "indicator",
+        "menu",
+        "menu-heading",
+        "trigger"
+      ],
+      "cssStates": [
+        "open",
+        "selected"
+      ],
+      "cssProperties": []
+    }
+  }
+}

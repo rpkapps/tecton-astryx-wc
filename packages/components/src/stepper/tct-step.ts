@@ -58,6 +58,7 @@ function timeSlice(time: string, factor: number): string {
  * @csspart indicator - The indicator (upstream theming target `step-indicator`).
  * @csspart label - The label text (upstream theming target `step-label`).
  * @csspart description - The description text (upstream theming target `step-description`).
+ * @cssprop --step-connector-gap - Set on the stepper: how far a connector stops short of the indicator. Default 0px.
  * @cssstate active - This is the active step.
  * @cssstate completed - This step is before the active one.
  * @cssstate disabled - The step cannot be clicked.
@@ -162,7 +163,10 @@ export class TctStep extends TctElement {
     return !!ctx && ctx.isNonLinear && !this.disabled && !ctx.isCompact;
   }
 
-  /** Whether the step is currently a clickable button (a stepper reads it to decide about its controls). */
+  /**
+   * Whether the step is currently a clickable button (a stepper reads it to decide about its controls).
+   * @internal
+   */
   get isClickable(): boolean {
     return this.#clickable;
   }

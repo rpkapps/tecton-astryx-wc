@@ -119,8 +119,7 @@ export class TctBreadcrumbs extends TctElement {
     const last = this.#lastContext;
     // Keep the identity while nothing changed: every change re-renders every item.
     if (
-      last &&
-      last.variant === next.variant &&
+      last?.variant === next.variant &&
       last.separator === next.separator &&
       last.separatorIcon === next.separatorIcon &&
       last.autoCurrent === next.autoCurrent &&
