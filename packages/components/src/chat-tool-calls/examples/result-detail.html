@@ -1,0 +1,19 @@
+<!-- title: Result detail; description: A call with resultDetail becomes a disclosure: a diff, command output, any node or template. A string is shown as text, never as markup. -->
+<tct-vstack id="tool-detail-root" max-width="520">
+  <tct-chat-tool-calls id="tool-detail"></tct-chat-tool-calls>
+</tct-vstack>
+<script type="module">
+  const output = document.createElement('pre');
+  output.textContent = '3 passed, 0 failed in 4.2s';
+  document.getElementById('tool-detail').calls = [
+    {
+      name: 'edit',
+      key: 'edit-1',
+      target: 'forecast/model.py',
+      additions: 12,
+      deletions: 3,
+      resultDetail: '@@ -10,3 +10,12 @@ def fit(curve):\n+    return decline(curve)',
+    },
+    {name: 'run_tests', key: 'tests-1', target: 'pytest', duration: '4.2s', resultDetail: output},
+  ];
+</script>

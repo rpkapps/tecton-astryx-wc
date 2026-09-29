@@ -1,0 +1,26 @@
+<!-- title: Custom header; description: The header slot replaces the plain text header, next to the close button. label names the dialog for screen readers; without it the header text is used. -->
+<div id="mobile-nav-custom-header-root">
+  <tct-button id="mobile-nav-custom-header-open" label="Open navigation"></tct-button>
+  <tct-mobile-nav id="mobile-nav-custom-header-drawer" label="Main navigation" close-label="Close the menu">
+    <tct-hstack slot="header" gap="2" v-align="center">
+      <tct-text type="medium-strong">Acme</tct-text>
+      <tct-text color="secondary">Workspace</tct-text>
+    </tct-hstack>
+      <tct-vstack gap="1" padding="2">
+        <a href="#overview">Overview</a>
+        <a href="#projects">Projects</a>
+        <a href="#reports">Reports</a>
+        <a href="#settings">Settings</a>
+      </tct-vstack>
+  </tct-mobile-nav>
+</div>
+<script type="module">
+  const root = document.getElementById('mobile-nav-custom-header-root');
+  const drawer = root.querySelector('#mobile-nav-custom-header-drawer');
+  root.querySelector('#mobile-nav-custom-header-open').addEventListener('click', () => {
+    drawer.open = true;
+  });
+  drawer.addEventListener('tct-open-change', (event) => {
+    drawer.open = event.open;
+  });
+</script>

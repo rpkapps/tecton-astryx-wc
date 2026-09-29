@@ -1,0 +1,579 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "layout",
+  "workPackage": "WP-8",
+  "entries": {
+    "core.layout": {
+      "tag": "tct-layout",
+      "status": "implemented",
+      "upstream": {
+        "name": "Layout",
+        "path": "packages/core/src/Layout/Layout.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "content",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "The default slot is the main content region; a `tct-layout-content` in it is the scrolling body."
+        },
+        {
+          "upstream": "header",
+          "kind": "slot",
+          "target": "header",
+          "as": "slot"
+        },
+        {
+          "upstream": "footer",
+          "kind": "slot",
+          "target": "footer",
+          "as": "slot"
+        },
+        {
+          "upstream": "start",
+          "kind": "slot",
+          "target": "start",
+          "as": "slot"
+        },
+        {
+          "upstream": "end",
+          "kind": "slot",
+          "target": "end",
+          "as": "slot"
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "height",
+          "kind": "prop",
+          "target": "height",
+          "as": "attribute",
+          "reflect": true,
+          "default": "fill"
+        },
+        {
+          "upstream": "contentWidth",
+          "kind": "prop",
+          "target": "content-width",
+          "as": "attribute",
+          "notes": "A CSS length or a number in px. Aligns the header, footer and content lanes to one width."
+        },
+        {
+          "upstream": "padding",
+          "kind": "prop",
+          "target": "padding",
+          "as": "attribute",
+          "notes": "Spacing step, applied at the outer edge of the regions."
+        },
+        {
+          "upstream": "defaultHasDividers",
+          "kind": "prop",
+          "target": "default-has-dividers",
+          "as": "attribute",
+          "notes": "Tri-state: unset passes the parent layout default on. A header or footer that sets `has-divider` wins."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "LayoutAreaContext",
+          "target": "layoutAreaContext",
+          "as": "context",
+          "notes": "Answered per slot (start | end) by handlers on the slot wrappers of the layout shadow root; `tct-layout-panel` reads it."
+        },
+        {
+          "upstream": "LayoutSlotsContext",
+          "target": "layoutSlotsContext",
+          "as": "context",
+          "notes": "In layout/layout.context.ts. Which slots are filled and whether the header and footer are flush."
+        },
+        {
+          "upstream": "LayoutDividerContext",
+          "target": "layoutDividerContext",
+          "as": "context",
+          "notes": "In layout/layout.context.ts. The divider default passed to headers and footers."
+        },
+        {
+          "upstream": "container",
+          "target": "--container-padding-*",
+          "as": "css",
+          "notes": "The layout and its regions publish the same `--container-padding-*` custom properties as section and card, so a nested section bleeds correctly."
+        },
+        {
+          "upstream": "overlayPaddingReset",
+          "target": "--layout-padding-*",
+          "as": "css",
+          "notes": "Overlays (tct-mobile-nav) reset the layout and container padding custom properties at their boundary."
+        },
+        {
+          "upstream": "edgeCompSlot",
+          "as": "waived",
+          "reason": "Container-side CSS; each container (toolbar, banner, tab list) owns a `::slotted([data-tct-edge-comp]:first-child)` rule. There is no shared helper to port."
+        },
+        {
+          "upstream": "EDGE_COMP_ATTR",
+          "target": "EDGE_COMP_ATTR",
+          "as": "module-function",
+          "notes": "Exported from layout/layout.types.ts as 'data-tct-edge-comp'."
+        }
+      ],
+      "keyboard": [],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "LAYOUT-01",
+          "type": "approved-api-difference",
+          "text": "The five content props (`content`, `header`, `footer`, `start`, `end`) are slots; `children` and `content` are the default slot. The regions are `tct-layout-header`, `-footer`, `-panel` and `-content` elements placed in those slots."
+        },
+        {
+          "id": "LAYOUT-02",
+          "type": "approved-api-difference",
+          "text": "The area (start or end) of a panel comes from the slot it sits in, answered by handlers on the slot wrappers through the context protocol, because one provider cannot answer differently per slot. A region that connected before the layout rendered asks again when the layout announces itself in `firstUpdated`."
+        },
+        {
+          "id": "LAYOUT-03",
+          "type": "approved-api-difference",
+          "text": "`data-tct-edge-comp` replaces the upstream edge compensation attribute; ghost buttons and tabs should reflect it (shared-file request)."
+        },
+        {
+          "id": "LAYOUT-04",
+          "type": "approved-api-difference",
+          "text": "`content-width` resolves with `100cqi` alignment arithmetic on a size container that exists only when a region needs it (`data-width-mode` none, constrained or internal). A number in the property is px."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": false,
+        "rtl": true,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/components/src/button/tct-button.ts (and the tab component when it lands)",
+          "reason": "Ghost buttons and tabs should reflect the passive attribute `data-tct-edge-comp` (EDGE_COMP_ATTR in layout/layout.types.ts) so containers (toolbar, banner, tab list) can pull them to the edge with `::slotted([data-tct-edge-comp]:first-child)`; the toolbar already reads it."
+        }
+      ],
+      "sizeBudgetKb": 27,
+      "notes": "Guides: [mwg:css-layout] grid/flex regions, container query units (cqi), negative-margin collapse; [mwg:styling-web-components] host rules, part=base; [mwg:size-aware-styling] container-type only when a width is set. Size: the budget (27 kB gzip) covers the bundled dependency closure (base class, controllers, locale catalogs), not the folder alone."
+    },
+    "core.layout-content": {
+      "tag": "tct-layout-content",
+      "status": "implemented",
+      "upstream": {
+        "name": "LayoutContent",
+        "path": "packages/core/src/Layout/LayoutContent.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "padding",
+          "kind": "prop",
+          "target": "padding",
+          "as": "attribute"
+        },
+        {
+          "upstream": "isScrollable",
+          "kind": "prop",
+          "target": "no-scroll",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Inverted boolean: `no-scroll` turns the scrolling off (upstream `isScrollable={false}`)."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Names the region; an unnamed content region is not exposed as a landmark."
+        },
+        {
+          "upstream": "role",
+          "kind": "prop",
+          "target": "landmark",
+          "as": "attribute",
+          "notes": "Named `landmark`; see LAYOUT-05."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: style the host, `::part(base)` or the documented attributes and custom properties."
+        }
+      ],
+      "hooks": [],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Moves focus to the content region",
+          "when": "it overflows (a scroll container with nothing focusable inside); the `focusable` attribute keeps it programmatically focusable otherwise"
+        },
+        {
+          "keys": "Arrow keys, Page Up, Page Down, Home, End, Space",
+          "action": "Scroll the region (native scrolling)",
+          "when": "the region has focus"
+        }
+      ],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "LAYOUT-05",
+          "type": "approved-api-difference",
+          "text": "`landmark` replaces `role` (a host `role` attribute would shadow the element role) and `label` names the inner scroller, which carries the role and the tab stop."
+        },
+        {
+          "id": "LAYOUT-06",
+          "type": "approved-api-difference",
+          "text": "`no-scroll` replaces `isScrollable` (the default is scrolling on, so the attribute states the exception)."
+        },
+        {
+          "id": "LAYOUT-07",
+          "type": "a11y-improvement",
+          "text": "The scroller is keyboard reachable exactly while it overflows and nothing tabbable is inside (the core scrollable-area controller, owner `implicit`), instead of always. `focus()` on the host focuses the inner scroller."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": false,
+        "rtl": true,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:scrollability-affordance-hints] scroll containers are keyboard focusable while they overflow; [mwg:accessibility] named landmarks."
+    },
+    "core.layout-header": {
+      "tag": "tct-layout-header",
+      "status": "implemented",
+      "upstream": {
+        "name": "LayoutHeader",
+        "path": "packages/core/src/Layout/LayoutHeader.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "hasDivider",
+          "kind": "prop",
+          "target": "has-divider",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Tri-state: unset follows the layout default (`default-has-dividers`)."
+        },
+        {
+          "upstream": "height",
+          "kind": "prop",
+          "target": "height",
+          "as": "attribute",
+          "notes": "Number is px, string a CSS length."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute"
+        },
+        {
+          "upstream": "paddingBlockEnd",
+          "kind": "prop",
+          "target": "padding-block-end",
+          "as": "attribute"
+        },
+        {
+          "upstream": "role",
+          "kind": "prop",
+          "target": "landmark",
+          "as": "attribute",
+          "notes": "Named `landmark`; see LAYOUT-05."
+        },
+        {
+          "upstream": "padding",
+          "kind": "prop",
+          "target": "padding",
+          "as": "attribute"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: style the host, `::part(base)` or the documented attributes and custom properties."
+        }
+      ],
+      "hooks": [],
+      "keyboard": [],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "LAYOUT-HEADER-01",
+          "type": "approved-api-difference",
+          "text": "Must be placed in `slot=\"header\"` of a `tct-layout` (a development warning says so otherwise). It publishes its divider state as `data-divider` on the host, which the layout reads to make the content run flush into it."
+        },
+        {
+          "id": "LAYOUT-HEADER-02",
+          "type": "tecton-visual",
+          "text": "The divider is one border-width in --color-border and is repainted in forced colours."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": false,
+        "rtl": true,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:css-layout] logical padding and negative-margin collapse; [mwg:styling-web-components] part=base."
+    },
+    "core.layout-footer": {
+      "tag": "tct-layout-footer",
+      "status": "implemented",
+      "upstream": {
+        "name": "LayoutFooter",
+        "path": "packages/core/src/Layout/LayoutFooter.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "hasDivider",
+          "kind": "prop",
+          "target": "has-divider",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Tri-state: unset follows the layout default (`default-has-dividers`)."
+        },
+        {
+          "upstream": "height",
+          "kind": "prop",
+          "target": "height",
+          "as": "attribute",
+          "notes": "Number is px, string a CSS length."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute"
+        },
+        {
+          "upstream": "role",
+          "kind": "prop",
+          "target": "landmark",
+          "as": "attribute",
+          "notes": "Named `landmark`; see LAYOUT-05."
+        },
+        {
+          "upstream": "padding",
+          "kind": "prop",
+          "target": "padding",
+          "as": "attribute"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: style the host, `::part(base)` or the documented attributes and custom properties."
+        }
+      ],
+      "hooks": [],
+      "keyboard": [],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "LAYOUT-FOOTER-01",
+          "type": "approved-api-difference",
+          "text": "Must be placed in `slot=\"footer\"` of a `tct-layout` (a development warning says so otherwise). It publishes its divider state as `data-divider` on the host, which the layout reads to make the content run flush into it."
+        },
+        {
+          "id": "LAYOUT-FOOTER-02",
+          "type": "tecton-visual",
+          "text": "The divider is one border-width in --color-border and is repainted in forced colours."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": false,
+        "rtl": true,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:css-layout] logical padding and negative-margin collapse; [mwg:styling-web-components] part=base."
+    },
+    "core.layout-panel": {
+      "tag": "tct-layout-panel",
+      "status": "implemented",
+      "upstream": {
+        "name": "LayoutPanel",
+        "path": "packages/core/src/Layout/LayoutPanel.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "hasDivider",
+          "kind": "prop",
+          "target": "has-divider",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "padding",
+          "kind": "prop",
+          "target": "padding",
+          "as": "attribute"
+        },
+        {
+          "upstream": "isScrollable",
+          "kind": "prop",
+          "target": "no-scroll",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Inverted; see LAYOUT-06."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute"
+        },
+        {
+          "upstream": "role",
+          "kind": "prop",
+          "target": "landmark",
+          "as": "attribute",
+          "notes": "Named `landmark`; see LAYOUT-05."
+        },
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "target": "width",
+          "as": "attribute",
+          "notes": "Number is px, string a CSS length. Sizes the inner box so a panel with no divider keeps its width when it collapses its padding."
+        },
+        {
+          "upstream": "resizable",
+          "kind": "prop",
+          "target": "resizable",
+          "as": "attribute",
+          "notes": "A boolean attribute plus the configuration attributes `default-size`, `min-size`, `max-size`, `collapsible`, `collapsed-size`, `snaps`, `auto-save-id`, `container`, `collapsed`. The `region` property takes an external ResizableProps (a ResizableController) instead."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: style the host, `::part(base)` or the documented attributes and custom properties."
+        }
+      ],
+      "hooks": [],
+      "keyboard": [],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "LAYOUT-PANEL-01",
+          "type": "approved-api-difference",
+          "text": "The `resizable` object prop is the boolean attribute `resizable` plus configuration attributes; the state lives in a controller the panel owns, and `region` (property) accepts an external one. A `tct-resize-handle` next to the panel (or with `for=<panel id>`) operates it."
+        },
+        {
+          "id": "LAYOUT-PANEL-02",
+          "type": "approved-api-difference",
+          "text": "`tct-size-change` (non-cancelable notification, `size`, `reason`) and `tct-collapse-change` (cancelable intent, `collapsed`, `reason`) replace the resize callbacks. They fire for pointer, keyboard and request changes and never for a programmatic `resize()` or `collapsed` write."
+        },
+        {
+          "id": "LAYOUT-PANEL-03",
+          "type": "approved-api-difference",
+          "text": "A collapsed panel is `visibility: hidden` with a zero inline size, so its content leaves the tab order and the accessibility tree (`:state(collapsed)`); upstream keeps a collapsed-width strip with clipped content."
+        },
+        {
+          "id": "LAYOUT-PANEL-04",
+          "type": "approved-api-difference",
+          "text": "The persisted size uses the `tct-resizable:` local-storage prefix."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:css-layout] inline-size on the inner box, logical edges; [mwg:size-aware-styling] container basis for percentage sizes."
+    }
+  }
+}

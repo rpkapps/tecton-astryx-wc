@@ -1,0 +1,275 @@
+{
+  "folder": "scrollable-area",
+  "elements": {
+    "tct-scrollable-area": {
+      "class": "TctScrollableArea",
+      "attributes": [
+        {
+          "name": "axis",
+          "property": "axis",
+          "type": "ScrollableAxis",
+          "values": [
+            "inline",
+            "block",
+            "both"
+          ],
+          "default": "'block'",
+          "reflects": true
+        },
+        {
+          "name": "full-bleed",
+          "property": "fullBleed",
+          "type": "boolean",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "height",
+          "property": "height",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "keyboard-owner",
+          "property": "keyboardOwner",
+          "type": "ScrollableKeyboardOwner",
+          "values": [
+            "viewport",
+            "content",
+            "content-or-viewport"
+          ],
+          "default": "'viewport'",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "max-width",
+          "property": "maxWidth",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "min-height",
+          "property": "minHeight",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        },
+        {
+          "name": "overscroll",
+          "property": "overscroll",
+          "type": "ScrollableOverscroll",
+          "values": [
+            "allow",
+            "contain"
+          ],
+          "default": "'allow'",
+          "reflects": true
+        },
+        {
+          "name": "padding",
+          "property": "padding",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block",
+          "property": "paddingBlock",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block-end",
+          "property": "paddingBlockEnd",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-block-start",
+          "property": "paddingBlockStart",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline",
+          "property": "paddingInline",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline-end",
+          "property": "paddingInlineEnd",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "padding-inline-start",
+          "property": "paddingInlineStart",
+          "type": "SpacingStep | undefined",
+          "values": [
+            "0",
+            "0.5",
+            "1",
+            "1.5",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "8",
+            "10"
+          ],
+          "reflects": false
+        },
+        {
+          "name": "sticky-containment",
+          "property": "stickyContainment",
+          "type": "ScrollableStickyContainment",
+          "values": [
+            "when-scrollable",
+            "always"
+          ],
+          "default": "'when-scrollable'",
+          "reflects": false
+        },
+        {
+          "name": "viewport-role",
+          "property": "viewportRole",
+          "type": "ScrollableViewportRole",
+          "values": [
+            "group",
+            "region"
+          ],
+          "default": "'group'",
+          "reflects": false
+        },
+        {
+          "name": "width",
+          "property": "width",
+          "type": "BoxSize | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "scrollState",
+          "type": "ScrollableAreaState",
+          "readonly": true
+        },
+        {
+          "name": "viewport",
+          "type": "HTMLElement | null",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "viewport"
+      ],
+      "cssStates": [
+        "scrollable"
+      ],
+      "cssProperties": [
+        {
+          "name": "--container-padding-block-end"
+        },
+        {
+          "name": "--container-padding-block-start"
+        },
+        {
+          "name": "--container-padding-inline-end"
+        },
+        {
+          "name": "--container-padding-inline-start"
+        }
+      ]
+    }
+  }
+}

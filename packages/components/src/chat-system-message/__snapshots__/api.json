@@ -1,0 +1,36 @@
+{
+  "folder": "chat-system-message",
+  "elements": {
+    "tct-chat-system-message": {
+      "class": "TctChatSystemMessage",
+      "attributes": [
+        {
+          "name": "variant",
+          "property": "variant",
+          "type": "ChatSystemMessageVariant",
+          "values": [
+            "default",
+            "divider"
+          ],
+          "default": "'default'",
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)",
+        "icon"
+      ],
+      "events": [],
+      "cssParts": [
+        "base",
+        "content",
+        "divider",
+        "icon"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

@@ -1,5 +1,5 @@
 <!-- title: Density and guide lines; description: Row spacing (compact, balanced, spacious) is independent of the guide variant (lineGuides, noGuides); the indent and row gap are themeable levers. -->
-<div id="density-variant-root" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); gap: var(--spacing-6)">
+<tct-grid id="density-variant-root" column-min-width="224" column-repeat="fit" gap="6">
   <tct-tree-list header="Compact, line guides" density="compact"></tct-tree-list>
   <tct-tree-list header="Balanced, no guides" variant="noGuides"></tct-tree-list>
   <tct-tree-list header="Spacious, wide indent" density="spacious" style="--tree-list-indent: var(--spacing-6)"></tct-tree-list>
@@ -18,4 +18,4 @@
     ];
     for (const tree of document.querySelectorAll('#density-variant-root tct-tree-list')) tree.items = items();
   </script>
-</div>
+</tct-grid>

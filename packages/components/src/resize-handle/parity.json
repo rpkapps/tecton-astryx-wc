@@ -1,0 +1,192 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "resize-handle",
+  "workPackage": "WP-8",
+  "entries": {
+    "core.resize-handle": {
+      "tag": "tct-resize-handle",
+      "status": "implemented",
+      "upstream": {
+        "name": "ResizeHandle",
+        "path": "packages/core/src/Resizable/ResizeHandle.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "direction",
+          "kind": "prop",
+          "target": "direction",
+          "as": "attribute",
+          "reflect": true,
+          "default": "horizontal"
+        },
+        {
+          "upstream": "isReversed",
+          "kind": "prop",
+          "target": "reversed",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Set for a handle that resizes the panel after it (an end panel)."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "hasDivider",
+          "kind": "prop",
+          "target": "has-divider",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "isAlwaysVisible",
+          "kind": "prop",
+          "target": "no-always-visible",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Inverted: `no-always-visible` shows the pill only on hover and focus."
+        },
+        {
+          "upstream": "pillPlacement",
+          "kind": "prop",
+          "target": "pill-placement",
+          "as": "attribute",
+          "reflect": true,
+          "default": "auto"
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "default": "Resize handle",
+          "notes": "Localised default (the `resizable` namespace)."
+        },
+        {
+          "upstream": "resizable",
+          "kind": "prop",
+          "target": "resizable",
+          "as": "property",
+          "notes": "A ResizableProps (the `region` of a `tct-layout-panel`, or a ResizableController from core). Without it the handle finds the panel next to it, or the one named by `for`."
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "Replaces the default grip pill."
+        },
+        {
+          "upstream": "position",
+          "kind": "prop",
+          "target": "position",
+          "as": "attribute",
+          "reflect": true,
+          "default": "inline"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: style the host, `::part(base)` or the documented attributes and custom properties."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useResizable",
+          "target": "ResizableController",
+          "as": "controller",
+          "notes": "packages/core/src/controllers/resizable.ts (size, bounds, snaps, collapse, storage, direction-aware basis)."
+        },
+        {
+          "upstream": "percent",
+          "target": "percent",
+          "as": "module-function",
+          "notes": "Exported from the resizable controller module with `pixel` and `parseResizableSize`."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "ArrowLeft, ArrowRight",
+          "action": "Resize by 10 px (horizontal handle); the sign follows the direction, `reversed` and RTL"
+        },
+        {
+          "keys": "ArrowUp, ArrowDown",
+          "action": "Resize by 10 px (vertical handle)"
+        },
+        {
+          "keys": "Shift + arrow",
+          "action": "Resize by 50 px"
+        },
+        {
+          "keys": "Home, End",
+          "action": "Go to the minimum or maximum size"
+        },
+        {
+          "keys": "Enter",
+          "action": "Collapse or expand",
+          "when": "the panel is collapsible"
+        },
+        {
+          "keys": "Double click",
+          "action": "Collapse or expand",
+          "when": "the panel is collapsible"
+        }
+      ],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "RESIZE-HANDLE-01",
+          "type": "approved-api-difference",
+          "text": "The host is the separator (`role=separator`, `aria-orientation`, `aria-valuenow/min/max/valuetext`, `aria-label`, `aria-disabled`) through ElementInternals, with `tabindex=0` unless the author sets one. The value text is localised (\"{size} px\"). The non-drag alternative is the keyboard, plus `stepBy`, `stepToMin` and `stepToMax` methods that a button set can call."
+        },
+        {
+          "id": "RESIZE-HANDLE-02",
+          "type": "approved-api-difference",
+          "text": "The `resizable` object prop is a property (`resizable`) that takes a ResizableProps; the declarative wiring is the sibling panel or `for=<panel id>`. `no-always-visible` replaces `isAlwaysVisible`."
+        },
+        {
+          "id": "RESIZE-HANDLE-03",
+          "type": "approved-api-difference",
+          "text": "The pill placement (`start`, `end`) is logical and mirrors in RTL; upstream places it physically."
+        },
+        {
+          "id": "RESIZE-HANDLE-04",
+          "type": "a11y-improvement",
+          "text": "The pill grip is painted with --tecton-color-divider-strong (3:1 against the surface) while the divider line keeps --color-border. Pointer capture failures never throw, and the body cursor and user-select are restored on cancel and lost capture."
+        },
+        {
+          "id": "RESIZE-HANDLE-05",
+          "type": "approved-api-difference",
+          "text": "The percentage basis is direction aware: a viewport-based size measures the width for a horizontal handle and the height for a vertical one; a container basis is the observed content box."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": false,
+        "rtl": true,
+        "forcedColors": false,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 31,
+      "notes": "Guides: [mwg:accessibility] focusable separator with value semantics; [mwg:styling-web-components] parts base and pill; [mwg:css-layout] hit area larger than the visible line. Size: the budget (31 kB gzip) covers the bundled dependency closure (base class, controllers, locale catalogs), not the folder alone."
+    }
+  }
+}

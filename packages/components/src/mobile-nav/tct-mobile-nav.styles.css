@@ -1,0 +1,175 @@
+/*
+ * tct-mobile-nav. The host is layout only (`display: contents`): the surface is the native <dialog>,
+ * which lives in the top layer. The dialog is a full-viewport transparent surface (so a press on the dimmed
+ * area lands on the dialog itself: that is the light dismiss) and the drawer is absolutely positioned on
+ * one edge inside it. A closed <dialog> is `display: none` from the UA sheet, so `display: flex` is only
+ * ever set on `[open]`. Entry slides the drawer in from its edge (a fade under reduced motion); exit runs
+ * through WAAPI before `close()` (the `overlay` property is never used). The slide is logical: the sign of
+ * the offset flips in RTL. [mwg:animate-to-from-top-layer] entry and exit of top-layer elements;
+ * [mwg:navigation-drawer] off-canvas drawer anatomy (native dialog instead of the guide's popover, per the
+ * architecture's modal-surface rule); [mwg:accessibility] modals and native dialogs
+ */
+@layer component {
+  :host {
+    display: contents;
+  }
+
+  .dialog {
+    --_rtl: 1;
+
+    /*
+     * The overlay leaves the padded page's box: reset the container and layout padding the page
+     * publishes, so nothing inside compensates against padding that is not there.
+     */
+    --container-padding-inline-start: 0px;
+    --container-padding-inline-end: 0px;
+    --container-padding-block-start: 0px;
+    --container-padding-block-end: 0px;
+    --layout-padding-outer-x: initial;
+    --layout-padding-outer-y: initial;
+    --layout-padding-inner-x: initial;
+    --layout-padding-inner-y: initial;
+    --_section-padding-propagated: initial;
+
+    box-sizing: border-box;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100dvh;
+    max-inline-size: none;
+    max-block-size: none;
+    margin: 0;
+    padding: 0;
+    color: inherit;
+    background-color: transparent;
+    border: 0;
+    outline: none;
+    overflow: clip;
+    overscroll-behavior: contain;
+
+    /* No pull-to-refresh or background scroll through the dimmed area. */
+    touch-action: none;
+  }
+
+  :host(:dir(rtl)) .dialog {
+    --_rtl: -1;
+  }
+
+  .dialog[open] {
+    display: flex;
+  }
+
+  .dialog::backdrop {
+    background-color: var(--color-overlay);
+    backdrop-filter: blur(2px); /* design: upstream's 2px backdrop blur */
+  }
+
+  .drawer {
+    --_side: 1;
+
+    position: absolute;
+    inset-block: 0;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    inline-size: 100%;
+    max-inline-size: var(--_width, 320px); /* design: upstream's default drawer width */
+    color: var(--color-text-primary);
+    background-color: var(--color-background-surface);
+    outline: none;
+    overflow: hidden;
+  }
+
+  .drawer[data-side='start'] {
+    --_side: -1;
+
+    inset-inline-start: 0;
+    border-inline-end: var(--border-width) solid var(--color-border);
+  }
+
+  .drawer[data-side='end'] {
+    --_side: 1;
+
+    inset-inline-end: 0;
+    border-inline-start: var(--border-width) solid var(--color-border);
+  }
+
+  .header {
+    display: flex;
+    flex: none;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    block-size: var(--spacing-12);
+    padding-inline: var(--spacing-2);
+    border-block-end: var(--border-width) solid var(--color-border);
+  }
+
+  .header[data-no-title] {
+    justify-content: flex-end;
+  }
+
+  .title {
+    margin-inline-start: var(--spacing-1);
+  }
+
+  .content {
+    flex: 1 1 auto;
+    box-sizing: border-box;
+    padding: var(--spacing-2);
+    /* physical: the drawer scrolls vertically; overflow-block is not in every Tier-2 engine */
+    overflow-x: hidden;
+
+    /* physical: as above */
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    /* Vertical touch scrolling comes back inside the content (the dialog itself blocks it). */
+    touch-action: pan-y;
+  }
+
+  @keyframes tct-drawer-in {
+    from {
+      translate: calc(var(--_side) * var(--_rtl) * 100%) 0;
+    }
+  }
+}
+
+@layer state {
+  @media (prefers-reduced-motion: no-preference) {
+    .dialog[open] .drawer {
+      animation: tct-drawer-in var(--duration-medium) var(--ease-standard) backwards;
+    }
+
+    .dialog[open]::backdrop {
+      animation: tct-fade-in var(--duration-medium) var(--ease-standard);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    /* A fade stays under reduced motion, shortened; the slide does not. */
+    .dialog[open] .drawer {
+      --_animation-reduced: tct-fade-in var(--duration-medium-min) var(--ease-standard);
+    }
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .drawer {
+      color: CanvasText;
+      background-color: Canvas;
+    }
+
+    .drawer[data-side='start'] {
+      border-inline-end-color: ButtonBorder;
+    }
+
+    .drawer[data-side='end'] {
+      border-inline-start-color: ButtonBorder;
+    }
+
+    .header {
+      border-block-end-color: ButtonBorder;
+    }
+  }
+}

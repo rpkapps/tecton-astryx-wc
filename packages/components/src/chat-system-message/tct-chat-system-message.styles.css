@@ -1,0 +1,41 @@
+/*
+ * tct-chat-system-message. The host is layout only. The default variant is one centred, muted line
+ * (`.base`, part "base", the upstream `chat-system-message` target); the divider variant hands the
+ * whole row to tct-divider. [mwg:css-layout]
+ */
+@layer component {
+  :host {
+    display: block;
+    inline-size: 100%;
+  }
+
+  .base {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-2);
+    padding-block: var(--spacing-1);
+    color: var(--color-text-secondary);
+    font-family: var(--font-family-body);
+    font-size: var(--text-supporting-size);
+    font-weight: var(--font-weight-normal);
+    text-align: center;
+  }
+
+  .content {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--spacing-1-5);
+  }
+
+  /* One flex item for all the text, so inline runs (text, <strong>) do not get the gap between them. */
+  .text {
+    min-inline-size: 0;
+  }
+
+  .icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+  }
+}

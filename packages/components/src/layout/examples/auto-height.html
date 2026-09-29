@@ -1,0 +1,13 @@
+<!-- title: Auto height; description: With height="auto" the layout grows with its content instead of filling its container, and no-scroll on the content leaves the scrolling to the page. -->
+<tct-card padding="0">
+  <tct-layout padding="4" height="auto">
+    <tct-layout-header slot="header" has-divider><tct-text type="medium-strong">Grows with its content</tct-text></tct-layout-header>
+    <tct-layout-content no-scroll>
+      <tct-vstack gap="3">
+        <tct-text as="p">The layout is as tall as its regions.</tct-text>
+        <tct-text as="p">Nothing scrolls inside it.</tct-text>
+      </tct-vstack>
+    </tct-layout-content>
+    <tct-layout-footer slot="footer" has-divider><tct-text>Footer</tct-text></tct-layout-footer>
+  </tct-layout>
+</tct-card>

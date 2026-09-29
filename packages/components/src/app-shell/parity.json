@@ -1,0 +1,165 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "app-shell",
+  "workPackage": "WP-8",
+  "entries": {
+    "core.app-shell": {
+      "tag": "tct-app-shell",
+      "status": "implemented",
+      "upstream": {
+        "name": "AppShell",
+        "path": "packages/core/src/AppShell/AppShell.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "The main region (`role=main`, the skip link target)."
+        },
+        {
+          "upstream": "contentPadding",
+          "kind": "prop",
+          "target": "content-padding",
+          "as": "attribute",
+          "default": 0
+        },
+        {
+          "upstream": "topNav",
+          "kind": "slot",
+          "target": "top-nav",
+          "as": "slot"
+        },
+        {
+          "upstream": "sideNav",
+          "kind": "slot",
+          "target": "side-nav",
+          "as": "slot",
+          "notes": "Inline start panel above the breakpoint, the mobile drawer content below it."
+        },
+        {
+          "upstream": "mobileNav",
+          "kind": "slot",
+          "target": "mobile-nav",
+          "as": "slot",
+          "notes": "A custom `tct-mobile-nav` that replaces the automatic drawer."
+        },
+        {
+          "upstream": "banner",
+          "kind": "slot",
+          "target": "banner",
+          "as": "slot"
+        },
+        {
+          "upstream": "height",
+          "kind": "prop",
+          "target": "height",
+          "as": "attribute",
+          "reflect": true,
+          "default": "fill"
+        },
+        {
+          "upstream": "variant",
+          "kind": "prop",
+          "target": "variant",
+          "as": "attribute",
+          "reflect": true,
+          "default": "elevated"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: style the host, `::part(base)` or the documented attributes and custom properties."
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "The element itself is the handle."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useAppShellMobile",
+          "target": "AppShellMobileController",
+          "as": "controller",
+          "notes": "In app-shell/app-shell-mobile.context.ts. `.value` is never undefined (an inert value outside a shell) and `.isInShell` tells the two apart."
+        },
+        {
+          "upstream": "AppShellMobileContext",
+          "target": "appShellMobileContext",
+          "as": "context",
+          "notes": "Value: isMobile, isMobileNavOpen, mobileNavId, toggleMobileNav, openMobileNav, closeMobileNav, isMobileNavEnabled, hasAutoToggle, hasTopNav, hasSideNav, sideNavPlacement (inline | drawer | none). WP-14 consumes it."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "The first stop is the skip link; it shows on focus"
+        },
+        {
+          "keys": "Enter",
+          "action": "On the skip link: moves focus to the main region"
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes the mobile drawer and returns focus to the toggle"
+        }
+      ],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "APP-SHELL-01",
+          "type": "approved-api-difference",
+          "text": "The skip link has `href=\"#\"` and moves focus to the main region itself: a fragment target inside a shadow root cannot be resolved by fragment navigation or by the axe `skip-link` rule."
+        },
+        {
+          "id": "APP-SHELL-02",
+          "type": "approved-api-difference",
+          "text": "The mobile breakpoint comes from the registered theme (`widthBreakpoints`) when it declares one, else from the default set (sm 640, md 768, lg 1024, xl 1280, 2xl 1536); `mobile-nav-breakpoint` picks the key (default md). The media query is `(width < Npx)`, so the edge belongs to the wider layout. There are no breakpoint tokens."
+        },
+        {
+          "id": "APP-SHELL-03",
+          "type": "approved-api-difference",
+          "text": "A consumer `tct-mobile-nav` in the `mobile-nav` slot replaces the automatic drawer and the toggle stays enabled; upstream disables the toggle then."
+        },
+        {
+          "id": "APP-SHELL-04",
+          "type": "approved-api-difference",
+          "text": "Additive API: `no-mobile-nav`, `no-mobile-toggle`, `mobile-nav-open`, `default-is-mobile` (first paint and server rendering), `no-landmarks` (a shell inside a page that already has banner and main landmarks, for previews and embedded apps), the `--app-shell-height` custom property (a shell in a bounded frame), the `drawer` and `mobile-bar` slots, and the methods `openMobileNav`, `closeMobileNav` and `focusMain`. `tct-open-change` reports the drawer."
+        },
+        {
+          "id": "APP-SHELL-05",
+          "type": "tecton-visual",
+          "text": "The variants paint --color-background-body (wash) and --color-background-surface; the elevated variant draws a rounded start corner with --radius-page behind a transparent main region."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/components/src/**",
+          "reason": "WP-14 (top nav, side nav) consumes appShellMobileContext (app-shell/app-shell-mobile.context.ts) through AppShellMobileController, and provides the `drawer` and `mobile-bar` slot content when it needs to replace the automatic ones."
+        }
+      ],
+      "sizeBudgetKb": 82,
+      "notes": "Guides: [mwg:accessibility] skip link and focusable main; [mwg:css-layout] sticky header and side nav, dvh units; [mwg:styling-web-components] part=base and ::part of child regions. Size: the budget (82 kB gzip) covers the bundled dependency closure (base class, controllers, locale catalogs, tct-button, tct-heading and their icons and tooltip), not the folder alone."
+    }
+  }
+}

@@ -1,0 +1,22 @@
+<!-- title: Default; description: A slide-out modal drawer. Open it with open (or show()); Escape, the close button and a press on the dimmed area ask to close it, and focus returns to the button that opened it. On its own you control it with open. -->
+<div id="mobile-nav-default-root">
+  <tct-button id="mobile-nav-default-open" label="Open navigation"></tct-button>
+  <tct-mobile-nav id="mobile-nav-default-drawer" header="Navigation">
+      <tct-vstack gap="1" padding="2">
+        <a href="#overview">Overview</a>
+        <a href="#projects">Projects</a>
+        <a href="#reports">Reports</a>
+        <a href="#settings">Settings</a>
+      </tct-vstack>
+  </tct-mobile-nav>
+</div>
+<script type="module">
+  const root = document.getElementById('mobile-nav-default-root');
+  const drawer = root.querySelector('#mobile-nav-default-drawer');
+  root.querySelector('#mobile-nav-default-open').addEventListener('click', () => {
+    drawer.open = true;
+  });
+  drawer.addEventListener('tct-open-change', (event) => {
+    drawer.open = event.open;
+  });
+</script>

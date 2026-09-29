@@ -1,0 +1,101 @@
+/*
+ * tct-scrollable-area. The host carries the sizes (a percentage resolves against the parent) and is a
+ * one-item column, so a `max-block-size` bound by the parent makes the viewport, not the host, the
+ * thing that shrinks and scrolls. `.viewport` (part "viewport") is the one native scroller: while it
+ * fits it clips (`overflow: clip` keeps the paint contained without becoming a scroll container that
+ * would capture sticky positioning); ScrollableAreaController writes the `auto`/`hidden` pair inline as
+ * soon as an axis really overflows. `.content` is the real content box: 100% minimum size, and
+ * max-content inline size when inline scrolling is requested. It carries the (default 0) padding and
+ * publishes it as `--container-padding-*`.
+ * [mwg:css-layout] overflow tracking, overscroll; [mwg:scrollability-affordance-hints] scroll-state
+ * containers as a progressive enhancement; [mwg:styling-web-components] host rules, part
+ */
+@layer component {
+  :host {
+    display: flex;
+    flex-direction: column;
+    inline-size: var(--_box-width, auto);
+    block-size: var(--_box-height, auto);
+    max-inline-size: var(--_box-max-width, 100%);
+    max-block-size: 100%;
+    min-block-size: var(--_box-min-height, 0);
+
+    /* Custom properties inherit through the flat tree; a nested box must not read its parent's. */
+    --_box-padding-inline-start: initial;
+    --_box-padding-inline-end: initial;
+    --_box-padding-block-start: initial;
+    --_box-padding-block-end: initial;
+    --_box-width: initial;
+    --_box-height: initial;
+    --_box-max-width: initial;
+    --_box-min-height: initial;
+  }
+
+  .viewport {
+    box-sizing: border-box;
+    flex: 1 1 auto;
+    min-block-size: 0;
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    max-block-size: 100%;
+    overflow: clip;
+  }
+
+  /* Scroll-state container queries for descendants (stuck and edge presentation), where supported. */
+  @supports (container-type: scroll-state) {
+    .viewport {
+      container-type: scroll-state;
+    }
+  }
+
+  /* The viewport itself escapes the padding of an enclosing padded container. */
+  .viewport[data-full-bleed] {
+    margin-inline-start: calc(-1 * var(--container-padding-inline-start, 0px));
+    margin-inline-end: calc(-1 * var(--container-padding-inline-end, 0px));
+    max-inline-size: calc(
+      100% + var(--container-padding-inline-start, 0px) + var(--container-padding-inline-end, 0px)
+    );
+  }
+
+  :host(:first-child) .viewport[data-full-bleed] {
+    margin-block-start: calc(-1 * var(--container-padding-block-start, 0px));
+  }
+
+  :host(:last-child) .viewport[data-full-bleed] {
+    margin-block-end: calc(-1 * var(--container-padding-block-end, 0px));
+  }
+
+  .content {
+    --_pis: var(--_box-padding-inline-start, 0px);
+    --_pie: var(--_box-padding-inline-end, 0px);
+    --_pbs: var(--_box-padding-block-start, 0px);
+    --_pbe: var(--_box-padding-block-end, 0px);
+
+    /* Published so nested bleed components inset to match the real padding (zero by default). */
+    --container-padding-inline-start: var(--_pis);
+    --container-padding-inline-end: var(--_pie);
+    --container-padding-block-start: var(--_pbs);
+    --container-padding-block-end: var(--_pbe);
+
+    box-sizing: border-box;
+    min-inline-size: 100%;
+    min-block-size: 100%;
+    padding-inline-start: var(--_pis);
+    padding-inline-end: var(--_pie);
+    padding-block-start: var(--_pbs);
+    padding-block-end: var(--_pbe);
+  }
+
+  .viewport:is([data-axis='inline'], [data-axis='both']) .content {
+    inline-size: max-content;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    /* The platform scrollbar presentation is restored (author scrollbar colours are ignored anyway). */
+    .viewport {
+      scrollbar-color: auto;
+    }
+  }
+}
