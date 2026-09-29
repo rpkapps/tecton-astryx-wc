@@ -173,11 +173,9 @@ describe('tct-number-input: rendering', () => {
     expect(inner(field).getAttribute('aria-valuetext')).toBe('1.5 GB');
     expect(inner(field).getAttribute('aria-valuenow')).toBe('1500');
     await userEvent.click(inner(field));
-    await field.updateComplete;
-    expect(inner(field).value).toBe('1500');
+    await waitUntil(() => inner(field).value === '1500', 'the editable number while focused');
     await pressKeys('Tab');
-    await field.updateComplete;
-    expect(inner(field).value).toBe('1.5 GB');
+    await waitUntil(() => inner(field).value === '1.5 GB', 'the formatted text at rest');
   });
 
   it('shows a label icon before the label text, unless the label is hidden', async () => {
