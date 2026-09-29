@@ -52,7 +52,7 @@ export function parseSnapPoints(value: string | null): BottomSheetSnapPoint[] {
 }
 
 /** Warns (once per distinct set) about snap points the sheet cannot honour. */
-export function warnIgnoredSnapPoints(points: ReadonlyArray<BottomSheetSnapPoint>): void {
+export function warnIgnoredSnapPoints(points: readonly BottomSheetSnapPoint[]): void {
   const ignored = points.filter((point) => !isValidSnapPoint(point));
   if (ignored.length === 0) return;
   devWarn(

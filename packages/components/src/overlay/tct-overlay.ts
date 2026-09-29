@@ -35,8 +35,8 @@ import {
  * @upstream Overlay
  * @slot - The base content (image, video, card).
  * @slot content - The content shown on top of the base content, inside the scrim.
- * @csspart overlay - The clipping container (Astryx target `astryx-overlay`).
- * @csspart scrim - The scrim that carries the content (Astryx target `astryx-overlay-scrim`).
+ * @csspart overlay - The clipping container.
+ * @csspart scrim - The scrim that carries the content.
  * @cssstate open - The scrim content is currently shown.
  * @cloakDisplay block
  */

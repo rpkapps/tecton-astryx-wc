@@ -65,7 +65,7 @@ function stubCompactTouch(initial: boolean): {set: (value: boolean) => void; res
     Object.defineProperty(list, 'matches', {get: () => current});
     lists.add(list);
     return list as unknown as MediaQueryList;
-  }) as typeof window.matchMedia;
+  });
   return {
     set(value) {
       current = value;

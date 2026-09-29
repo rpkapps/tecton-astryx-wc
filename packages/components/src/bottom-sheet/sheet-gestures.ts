@@ -142,12 +142,14 @@ export function whenTransitionSettled(
   property: 'translate' | 'opacity',
   complete: () => void,
 ): () => void {
-  let done = false;
-  let timer: ReturnType<typeof setTimeout> | undefined;
+  const state: {done: boolean; timer: ReturnType<typeof setTimeout> | undefined} = {
+    done: false,
+    timer: undefined,
+  };
   const finish = (): void => {
-    if (done) return;
-    done = true;
-    if (timer !== undefined) clearTimeout(timer);
+    if (state.done) return;
+    state.done = true;
+    if (state.timer !== undefined) clearTimeout(state.timer);
     element.removeEventListener('transitionend', onEnd);
     element.removeEventListener('transitioncancel', onEnd);
     complete();
@@ -174,10 +176,10 @@ export function whenTransitionSettled(
     finish();
     return () => undefined;
   }
-  timer = setTimeout(finish, total + TRANSITION_BACKSTOP_BUFFER_MS);
+  state.timer = setTimeout(finish, total + TRANSITION_BACKSTOP_BUFFER_MS);
   return () => {
-    done = true;
-    if (timer !== undefined) clearTimeout(timer);
+    state.done = true;
+    if (state.timer !== undefined) clearTimeout(state.timer);
     element.removeEventListener('transitionend', onEnd);
     element.removeEventListener('transitioncancel', onEnd);
   };
@@ -305,7 +307,7 @@ export class SheetGestureController implements ReactiveController {
 
   #observe(): void {
     const sheet = this.#o.sheet();
-    if (!sheet || sheet === this.#observed || typeof ResizeObserver === 'undefined') return;
+    if (!sheet || sheet === this.#observed) return;
     this.#observer?.disconnect();
     this.#observed = sheet;
     this.#lastHeight = sheet.getBoundingClientRect().height;
@@ -500,13 +502,7 @@ export class SheetGestureController implements ReactiveController {
 
   // ------------------------------------------------------------------------------------- drag
 
-  #begin(
-    kind: Drag['kind'],
-    id: number,
-    y: number,
-    time: number,
-    startY: number = y,
-  ): void {
+  #begin(kind: Drag['kind'], id: number, y: number, time: number, startY: number = y): void {
     const detents = this.#resolve();
     this.#cancelSettle?.();
     this.#cancelSettle = undefined;
@@ -617,7 +613,7 @@ export class SheetGestureController implements ReactiveController {
 
   // ------------------------------------------------------------------------- handle (pointer)
 
-  readonly onHandlePointerDown = (event: PointerEvent): void => {
+  readonly handlePointerDown = (event: PointerEvent): void => {
     if (event.button !== 0 || !event.isPrimary) return;
     // The handle has no native focus action here: a press must not pull focus off a field.
     event.preventDefault();
@@ -631,16 +627,16 @@ export class SheetGestureController implements ReactiveController {
     this.#moved = false;
   };
 
-  readonly onHandlePointerMove = (event: PointerEvent): void => {
+  readonly handlePointerMove = (event: PointerEvent): void => {
     const drag = this.#drag;
-    if (!drag || drag.kind !== 'pointer' || drag.id !== event.pointerId) return;
+    if (drag?.kind !== 'pointer' || drag.id !== event.pointerId) return;
     if (Math.abs(event.clientY - drag.startY) > 3) this.#moved = true;
     this.#move(event.clientY, event.timeStamp);
   };
 
-  readonly onHandlePointerUp = (event: PointerEvent): void => {
+  readonly handlePointerUp = (event: PointerEvent): void => {
     const drag = this.#drag;
-    if (!drag || drag.kind !== 'pointer' || drag.id !== event.pointerId) return;
+    if (drag?.kind !== 'pointer' || drag.id !== event.pointerId) return;
     try {
       (event.currentTarget as HTMLElement).releasePointerCapture(event.pointerId);
     } catch {
@@ -657,32 +653,32 @@ export class SheetGestureController implements ReactiveController {
     this.#end(event.clientY);
   };
 
-  readonly onHandlePointerCancel = (event: PointerEvent): void => {
+  readonly handlePointerCancel = (event: PointerEvent): void => {
     const drag = this.#drag;
-    if (!drag || drag.kind !== 'pointer' || drag.id !== event.pointerId) return;
+    if (drag?.kind !== 'pointer' || drag.id !== event.pointerId) return;
     this.#cancel();
   };
 
-  readonly onHandleLostCapture = (event: PointerEvent): void => {
+  readonly handleLostCapture = (event: PointerEvent): void => {
     const drag = this.#drag;
     if (drag?.kind === 'pointer' && drag.id === event.pointerId) this.#cancel();
   };
 
-  readonly onContextMenu = (event: Event): void => {
+  readonly handleContextMenu = (event: Event): void => {
     if (!this.#drag) return;
     event.preventDefault();
     this.#cancel();
   };
 
   /** Called for a press on the handle that never moved: the owner cycles the detent. */
-  set onTap(callback: (() => void) | undefined) {
+  setTapHandler(callback: (() => void) | undefined): void {
     this.#tap = callback;
   }
 
   // -------------------------------------------------------------------------- body (pointer)
 
   /** Mouse and pen pull-down at the top of the body (touch uses the touch path below). */
-  readonly onBodyPointerDown = (event: PointerEvent): void => {
+  readonly bodyPointerDown = (event: PointerEvent): void => {
     if (event.pointerType === 'touch' || event.button !== 0 || !event.isPrimary) return;
     const scroller = event.currentTarget as HTMLElement;
     if (scroller.scrollTop > 0) {
@@ -692,7 +688,7 @@ export class SheetGestureController implements ReactiveController {
     this.#armed = {id: event.pointerId, startY: event.clientY, scroller};
   };
 
-  readonly onBodyPointerMove = (event: PointerEvent): void => {
+  readonly bodyPointerMove = (event: PointerEvent): void => {
     if (event.pointerType === 'touch') return;
     if (this.#drag) {
       if (this.#drag.kind === 'pointer' && this.#drag.id === event.pointerId) {
@@ -701,7 +697,7 @@ export class SheetGestureController implements ReactiveController {
       return;
     }
     const armed = this.#armed;
-    if (!armed || armed.id !== event.pointerId) return;
+    if (armed?.id !== event.pointerId) return;
     const delta = event.clientY - armed.startY;
     if (delta > DRAG_PROMOTION_SLOP && armed.scroller.scrollTop <= 0) {
       // A downward pull at the top promotes to a sheet drag, anchored at the pointer-down position
@@ -721,11 +717,11 @@ export class SheetGestureController implements ReactiveController {
     }
   };
 
-  readonly onBodyPointerEnd = (event: PointerEvent): void => {
+  readonly bodyPointerEnd = (event: PointerEvent): void => {
     if (event.pointerType === 'touch') return;
     this.#armed = null;
     const drag = this.#drag;
-    if (!drag || drag.kind !== 'pointer' || drag.id !== event.pointerId) return;
+    if (drag?.kind !== 'pointer' || drag.id !== event.pointerId) return;
     try {
       (event.currentTarget as HTMLElement).releasePointerCapture(event.pointerId);
     } catch {

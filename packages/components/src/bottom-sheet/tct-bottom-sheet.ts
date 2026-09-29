@@ -14,7 +14,7 @@ import {
 } from '@tecton-astryx/core/layer/layer-controller.js';
 import {TctElement} from '@tecton-astryx/core/tct-element.js';
 import {devWarn} from '@tecton-astryx/core/utils/dev.js';
-import {deepActiveElement, getTabbables} from '@tecton-astryx/core/utils/focus.js';
+import {deepActiveElement, getTabbables, isFocusDetached} from '@tecton-astryx/core/utils/focus.js';
 import defaultMessages from '@tecton-astryx/locales/en/resizable.js';
 import base from '../styles/base.styles.css';
 import focusRing from '../styles/focus-ring.styles.css';
@@ -27,7 +27,11 @@ import {
   warnIgnoredSnapPoints,
   type BottomSheetPurpose,
 } from './bottom-sheet.types.js';
-import {SheetGestureController, whenTransitionSettled, type SheetMoveSource} from './sheet-gestures.js';
+import {
+  SheetGestureController,
+  whenTransitionSettled,
+  type SheetMoveSource,
+} from './sheet-gestures.js';
 import {SheetKeyboardController} from './sheet-keyboard.js';
 import {
   sheetSwitcherContext,
@@ -60,7 +64,7 @@ import styles from './tct-bottom-sheet.styles.css';
  * @tag tct-bottom-sheet
  * @upstream BottomSheet
  * @slot - The sheet content, in a scrolling area below the grab handle.
- * @csspart sheet - The painted panel (Astryx target `astryx-bottom-sheet`).
+ * @csspart sheet - The painted panel.
  * @csspart handle - The grab handle: a slider when the sheet has snap points.
  * @csspart body - The scrolling area.
  * @csspart dialog - The native dialog shell of a standalone sheet.
@@ -95,7 +99,7 @@ export class TctBottomSheet extends TctElement implements SwitcherSheet {
     attribute: 'snap-points',
     converter: {fromAttribute: (value: string | null) => parseSnapPoints(value)},
   })
-  snapPoints: ReadonlyArray<BottomSheetSnapPoint> = [];
+  snapPoints: readonly BottomSheetSnapPoint[] = [];
   /** Implicit dismissal, as for `tct-dialog`: `info` (default), `form` or `required`. */
   @property({reflect: true}) purpose: BottomSheetPurpose = 'info';
   /** A standalone sheet without the scrim: non-modal, and the page behind stays interactive and scrollable. */
@@ -239,6 +243,7 @@ export class TctBottomSheet extends TctElement implements SwitcherSheet {
       this.open = false;
     },
     onHidden: () => {
+      this.#focusFinalTarget();
       this.#exiting = false;
       this.#gestures.deactivate();
       this.requestUpdate();
@@ -252,9 +257,9 @@ export class TctBottomSheet extends TctElement implements SwitcherSheet {
     // A sheet nested in this sheet's content is standalone unless it sits in a switcher of its own.
     new ContextProvider(this, {context: sheetSwitcherContext, initialValue: null});
     // A press on the handle that never moved is the single-pointer way to resize (WCAG 2.5.7).
-    this.#gestures.onTap = () => {
+    this.#gestures.setTapHandler(() => {
       this.#gestures.cycle('pointer');
-    };
+    });
   }
 
   get #switcher() {
@@ -335,6 +340,18 @@ export class TctBottomSheet extends TctElement implements SwitcherSheet {
     return null;
   }
 
+  /**
+   * Closing a native dialog restores focus to the element that had it before `showModal()`, and the layer
+   * leaves focus alone when it is somewhere the user put it: so an explicit final target is applied here,
+   * unless focus went somewhere of the user's own choosing in the meantime.
+   */
+  #focusFinalTarget(): void {
+    const target = this.#finalFocusTarget();
+    if (!target) return;
+    const active = deepActiveElement();
+    if (isFocusDetached() || active === this.#previousFocus) target.focus({preventScroll: true});
+  }
+
   #finalFocusTarget(): HTMLElement | null {
     if (this.finalFocusElement?.isConnected) return this.finalFocusElement;
     if (!this.finalFocus) return null;
@@ -361,7 +378,10 @@ export class TctBottomSheet extends TctElement implements SwitcherSheet {
   protected override willUpdate(changed: PropertyValues<this>): void {
     if (changed.has('snapPoints')) warnIgnoredSnapPoints(this.snapPoints);
     if (changed.has('purpose') && !BOTTOM_SHEET_PURPOSES.includes(this.purpose)) {
-      devWarn('tct-bottom-sheet:purpose', `Invalid purpose "${this.purpose}"; use required, form or info.`);
+      devWarn(
+        'tct-bottom-sheet:purpose',
+        `Invalid purpose "${this.purpose}"; use required, form or info.`,
+      );
     }
   }
 
@@ -383,10 +403,10 @@ export class TctBottomSheet extends TctElement implements SwitcherSheet {
     if (changed.has('sheetId') || this.#switcher) this.#warnMisuse();
     if (this.#switcher) {
       if (changed.has('phase') || changed.has('alignmentOffset')) {
-        this.#syncPhase(changed.get('phase') as SheetPhase | undefined);
+        this.#syncPhase(changed.get('phase'));
       }
     } else if (changed.has('open')) {
-      this.#syncOpen(changed.get('open') as boolean | undefined);
+      this.#syncOpen(changed.get('open'));
     }
   }
 
@@ -465,7 +485,8 @@ export class TctBottomSheet extends TctElement implements SwitcherSheet {
     const switcher = this.#switcher;
     if (!switcher) return;
     if (interactive && !wasInteractive) {
-      const reactivated = previous === 'covered' || previous === 'aligning' || previous === 'fading';
+      const reactivated =
+        previous === 'covered' || previous === 'aligning' || previous === 'fading';
       if (!reactivated) this.#gestures.reset();
       this.#reportedIndex = this.#gestures.index;
       this.#gestures.activate();
@@ -486,7 +507,10 @@ export class TctBottomSheet extends TctElement implements SwitcherSheet {
     const motion = motionOf[phase];
     if (!motion || previous === phase) return;
     switcher.motionStart(this, motion);
-    if (motion === 'entering' && (previous === 'covered' || previous === 'aligning' || previous === 'fading')) {
+    if (
+      motion === 'entering' &&
+      (previous === 'covered' || previous === 'aligning' || previous === 'fading')
+    ) {
       // Already on screen under the sheet that just left: there is nothing to slide in.
       queueMicrotask(() => {
         if (this.phase === 'entering') switcher.motionComplete(this, 'entering');
@@ -523,7 +547,7 @@ export class TctBottomSheet extends TctElement implements SwitcherSheet {
 
   #observeBody(): void {
     const body = this.#body;
-    if (!body || body === this.#bodyObserved || typeof ResizeObserver === 'undefined') return;
+    if (!body || body === this.#bodyObserved) return;
     this.#bodyObserver?.disconnect();
     this.#bodyObserved = body;
     this.#bodyObserver = new ResizeObserver(() => {
@@ -613,9 +637,11 @@ export class TctBottomSheet extends TctElement implements SwitcherSheet {
       role=${resizable ? 'slider' : nothing}
       tabindex=${resizable ? '0' : nothing}
       aria-hidden=${resizable ? nothing : 'true'}
-      aria-label=${resizable
-        ? (this.handleLabel ?? this.#locale.t('handle.label', undefined, 'handle-label'))
-        : nothing}
+      aria-label=${
+        resizable
+          ? (this.handleLabel ?? this.#locale.t('handle.label', undefined, 'handle-label'))
+          : nothing
+      }
       aria-orientation=${resizable ? 'vertical' : nothing}
       aria-valuemin=${resizable ? '0' : nothing}
       aria-valuemax=${resizable ? String(count - 1) : nothing}
@@ -623,12 +649,12 @@ export class TctBottomSheet extends TctElement implements SwitcherSheet {
       aria-valuetext=${resizable ? this.#valueText(count) : nothing}
       data-resizable=${resizable ? '' : nothing}
       @keydown=${resizable ? this.#onHandleKeyDown : nothing}
-      @pointerdown=${draggable ? g.onHandlePointerDown : nothing}
-      @pointermove=${draggable ? g.onHandlePointerMove : nothing}
-      @pointerup=${draggable ? g.onHandlePointerUp : nothing}
-      @pointercancel=${draggable ? g.onHandlePointerCancel : nothing}
-      @lostpointercapture=${draggable ? g.onHandleLostCapture : nothing}
-      @contextmenu=${g.onContextMenu}
+      @pointerdown=${draggable ? g.handlePointerDown : nothing}
+      @pointermove=${draggable ? g.handlePointerMove : nothing}
+      @pointerup=${draggable ? g.handlePointerUp : nothing}
+      @pointercancel=${draggable ? g.handlePointerCancel : nothing}
+      @lostpointercapture=${draggable ? g.handleLostCapture : nothing}
+      @contextmenu=${g.handleContextMenu}
     >
       <span class="pill"></span>
     </div>`;
@@ -640,14 +666,13 @@ export class TctBottomSheet extends TctElement implements SwitcherSheet {
     const switcher = this.#switcher;
     const phase: SheetPhase = switcher ? this.phase : this.#exiting ? 'exiting' : 'active';
     const retained = phase === 'covered' || phase === 'aligning' || phase === 'fading';
-    const inactive = switcher
-      ? retained || phase === 'exiting'
-      : this.#exiting;
+    const inactive = switcher ? retained || phase === 'exiting' : this.#exiting;
     const budget = heightBudget(this.height);
     const hug = this.height === 'hug';
     const sheetStyle = styleMap({
       '--_sheet-budget': budget,
-      '--_sheet-align': retained && this.alignmentOffset > 0 ? `${this.alignmentOffset}px` : undefined,
+      '--_sheet-align':
+        retained && this.alignmentOffset > 0 ? `${this.alignmentOffset}px` : undefined,
     });
     const panel = html`<div
       class="positioner"
@@ -663,18 +688,18 @@ export class TctBottomSheet extends TctElement implements SwitcherSheet {
         data-height=${hug ? 'hug' : isNamedHeight(this.height) ? this.height : 'custom'}
         ?data-tall=${this.height === 'tall'}
         style=${sheetStyle}
-        @focusin=${this.#keyboard.onFocusIn}
-        @focusout=${this.#keyboard.onFocusOut}
+        @focusin=${this.#keyboard.handleFocusIn}
+        @focusout=${this.#keyboard.handleFocusOut}
       >
         ${this.#renderHandle()}
         <div
           class="body focus-ring"
           part="body"
-          @pointerdown=${this.#gestures.onBodyPointerDown}
-          @pointermove=${this.#gestures.onBodyPointerMove}
-          @pointerup=${this.#gestures.onBodyPointerEnd}
-          @pointercancel=${this.#gestures.onBodyPointerEnd}
-          @contextmenu=${this.#gestures.onContextMenu}
+          @pointerdown=${this.#gestures.bodyPointerDown}
+          @pointermove=${this.#gestures.bodyPointerMove}
+          @pointerup=${this.#gestures.bodyPointerEnd}
+          @pointercancel=${this.#gestures.bodyPointerEnd}
+          @contextmenu=${this.#gestures.handleContextMenu}
         >
           <div class="content"><slot @slotchange=${() => this.#scheduleBodyAccess()}></slot></div>
         </div>

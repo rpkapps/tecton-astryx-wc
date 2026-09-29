@@ -154,10 +154,10 @@ export class TctBottomSheetSwitcher extends TctElement {
 
   constructor() {
     super();
-    const owner = this;
+    const hasScrim = (): boolean => !this.noScrim;
     this.#api = {
       get hasScrim(): boolean {
-        return !owner.noScrim;
+        return hasScrim();
       },
       register: (sheet) => this.#register(sheet),
       requestDismiss: (sheet, reason) => this.#requestFromSheet(sheet, reason),
@@ -207,7 +207,10 @@ export class TctBottomSheetSwitcher extends TctElement {
     this.requestUpdate();
     return () => {
       this.#sheets.delete(sheet);
-      if (this.#transition.retainedSheet !== null && this.#sheetById(this.#transition.retainedSheet) === undefined) {
+      if (
+        this.#transition.retainedSheet !== null &&
+        this.#sheetById(this.#transition.retainedSheet) === undefined
+      ) {
         this.#transition = IDLE_TRANSITION;
       }
       this.#applyPhases();
@@ -366,7 +369,8 @@ export class TctBottomSheetSwitcher extends TctElement {
 
   #labelOf(): string | undefined {
     if (this.label) return this.label;
-    const showing = this.#sheetById(this.activeSheet) ?? this.#sheetById(this.#transition.retainedSheet);
+    const showing =
+      this.#sheetById(this.activeSheet) ?? this.#sheetById(this.#transition.retainedSheet);
     return showing?.label || undefined;
   }
 

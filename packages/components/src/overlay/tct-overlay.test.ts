@@ -307,7 +307,7 @@ describe('touch', () => {
   /** A hover-less device: the controller reads `(hover: none)`. (CDP touch emulation cannot be undone.) */
   async function coarse(): Promise<() => Promise<void>> {
     const original = window.matchMedia.bind(window);
-    window.matchMedia = ((query: string): MediaQueryList => {
+    window.matchMedia = (query: string): MediaQueryList => {
       if (query !== '(hover: none)') return original(query);
       return Object.assign(new EventTarget(), {
         matches: true,
@@ -316,7 +316,7 @@ describe('touch', () => {
         addListener: () => undefined,
         removeListener: () => undefined,
       });
-    });
+    };
     await nextFrame();
     return () => {
       window.matchMedia = original;

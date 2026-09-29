@@ -24,7 +24,7 @@
     pointer-events: none;
     outline: none;
     /* Only reachable when the popover API is missing (Tier 2), where nothing else layers it. */
-    z-index: 500; /* design: astryx-retained toast layer */
+    z-index: 500; /* design: the upstream toast layer */
   }
 
   /* stylelint-enable tct/host-box-props */

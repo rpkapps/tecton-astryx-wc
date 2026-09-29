@@ -50,7 +50,7 @@ const SWIPE_IGNORED = `${INTERACTIVE_SELECTORS},[tabindex],[contenteditable]:not
  * @upstream Toast
  * @slot - The message.
  * @slot end - Trailing content such as an Undo button or a link. Keep action labels short.
- * @csspart toast - The painted card (Astryx target `astryx-toast`).
+ * @csspart toast - The painted card.
  * @csspart content - The message area.
  * @csspart end - The trailing area (the `end` slot and the close button).
  * @csspart dismiss-button - The close button.

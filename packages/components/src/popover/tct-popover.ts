@@ -69,7 +69,7 @@ interface InvokerCommandEvent extends Event {
  * @slot - The trigger: a button, a `role="button"` element, or a library element that renders one.
  * @slot content - The content shown in the popover surface.
  * @csspart anchor - The inline-flex wrapper the surface is anchored to (stable under pressed-state transforms).
- * @csspart popover - The painted surface (Astryx target `astryx-popover`).
+ * @csspart popover - The painted surface.
  * @csspart close-button - The fallback close button, revealed only when keyboard focus reaches it.
  * @cssstate open - The popover is open.
  * @fires {TctOpenChangeEvent} tct-open-change - Before the user (trigger, Escape, outside press, focus-out) or `requestClose()` opens or closes it; cancelable.

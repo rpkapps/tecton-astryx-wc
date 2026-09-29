@@ -26,7 +26,7 @@
 
   /* Without a scrim the dialog is not in the top layer: sit above the page. */
   .dialog:not(:modal) {
-    z-index: 1000; /* design: astryx-retained non-modal sheet layer */
+    z-index: 1000; /* design: the upstream non-modal sheet layer */
   }
 
   .dialog::backdrop {

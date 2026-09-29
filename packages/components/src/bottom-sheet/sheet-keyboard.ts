@@ -75,7 +75,9 @@ export function isTextEntryControl(element: Element | null): element is HTMLElem
 /** The text-entry control an event landed on (through a `<label>`), or `null`. Crosses open shadow roots. */
 export function findTextEntryControl(target: EventTarget | null): HTMLElement | null {
   if (!(target instanceof Element)) return null;
-  const direct = target.closest('input, textarea, [contenteditable]:not([contenteditable="false"])');
+  const direct = target.closest(
+    'input, textarea, [contenteditable]:not([contenteditable="false"])',
+  );
   if (isTextEntryControl(direct)) return direct;
   const label = target.closest('label');
   const control = label instanceof HTMLLabelElement ? label.control : null;
@@ -120,7 +122,7 @@ export class SheetKeyboardController implements ReactiveController {
   }
 
   /** `focusin` on the sheet: a text field in an accommodated sheet gets revealed above the keyboard. */
-  readonly onFocusIn = (event: FocusEvent): void => {
+  readonly handleFocusIn = (event: FocusEvent): void => {
     if (!this.#o.enabled()) return;
     const control = findTextEntryControl(event.composedPath()[0] ?? event.target);
     if (!control) return;
@@ -129,7 +131,7 @@ export class SheetKeyboardController implements ReactiveController {
   };
 
   /** `focusout` from the sheet: the keyboard is going away with the field. */
-  readonly onFocusOut = (): void => {
+  readonly handleFocusOut = (): void => {
     this.#control = null;
     // A moment later: focus moving between two fields must not collapse and re-open the spacer.
     requestAnimationFrame(() => {

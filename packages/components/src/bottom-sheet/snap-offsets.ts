@@ -79,7 +79,7 @@ export function isValidSnapPoint(point: BottomSheetSnapPoint): boolean {
  * silent because it runs on every drag frame.
  */
 export function resolveSnapPoints(
-  points: ReadonlyArray<BottomSheetSnapPoint>,
+  points: readonly BottomSheetSnapPoint[],
   viewportPx: number,
 ): number[] {
   const heights: number[] = [];
@@ -105,7 +105,7 @@ export function resolveSnapPoints(
  */
 export function computeDetentOffsets(
   sheetHeight: number,
-  detentHeights: ReadonlyArray<number>,
+  detentHeights: readonly number[],
   dedupPx: number = DETENT_DEDUP_PX,
 ): number[] {
   const collapsed = detentHeights
@@ -124,7 +124,7 @@ export function computeDetentOffsets(
 }
 
 /** Nearest value in `offsets` to `value` (offsets must be non-empty). */
-export function nearestOffset(value: number, offsets: ReadonlyArray<number>): number {
+export function nearestOffset(value: number, offsets: readonly number[]): number {
   return offsets.reduce(
     (best, o) => (Math.abs(o - value) < Math.abs(best - value) ? o : best),
     offsets[0] ?? 0,
@@ -154,7 +154,7 @@ export const MIN_PEEK_SCRIM_OPACITY = 0.3;
  * a scrim that thinned there would read as a dismissed sheet.
  */
 export function peekOffsetFor(
-  offsets: ReadonlyArray<number>,
+  offsets: readonly number[],
   visibleSheetHeight: number,
 ): number | null {
   if (offsets.length < 2 || visibleSheetHeight <= 0) {
@@ -179,7 +179,7 @@ export function peekOffsetFor(
  */
 export function scrimOpacityForOffset(
   offset: number,
-  offsets: ReadonlyArray<number>,
+  offsets: readonly number[],
   dismissOffset: number,
   peekOffset: number | null,
 ): number {
@@ -206,7 +206,7 @@ export function scrimOpacityForOffset(
  */
 export function resolveSettleOffset(
   value: number,
-  offsets: ReadonlyArray<number>,
+  offsets: readonly number[],
   dir: number,
   baseOffset: number,
 ): number {

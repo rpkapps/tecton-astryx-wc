@@ -90,11 +90,7 @@
     justify-content: center;
     block-size: var(--spacing-6);
     /* Keeps the pill legible over content that scrolls under it, fading out across the lower half. */
-    background-image: linear-gradient(
-      to bottom,
-      var(--color-background-surface) 60%,
-      transparent
-    );
+    background-image: linear-gradient(to bottom, var(--color-background-surface) 60%, transparent);
     touch-action: none;
     cursor: grab;
     outline-offset: calc(-1 * var(--focus-outline-width));
@@ -140,7 +136,6 @@
     block-size: 100%;
     min-block-size: min-content;
   }
-
 }
 
 @layer state {

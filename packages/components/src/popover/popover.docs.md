@@ -111,7 +111,7 @@ form; its controls are in the light DOM.
 
 ## Localisation
 
-The close button label is the localized `@astryx.popover.close` ("Close popover") in all 30 shipped
+The close button label is localized ("Close popover") in all 30 shipped
 locales; `close-label` overrides it. Write `label` in the user's language. Placement mirrors in
 right-to-left contexts.
 

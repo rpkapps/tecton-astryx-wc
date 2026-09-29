@@ -94,7 +94,7 @@ const mergeTokens = (existing: string | null, token: string): string =>
  * @slot - The trigger: an element (a button, link, avatar) or plain text.
  * @slot content - The content of the card.
  * @csspart trigger - The wrapper of the trigger; painted (focusable, underlined) only for a text trigger.
- * @csspart hover-card - The painted card (Astryx target `astryx-hover-card`).
+ * @csspart hover-card - The painted card.
  * @cssstate open - The card is open.
  * @fires {TctOpenChangeEvent} tct-open-change - Before hover, focus, a tap, Escape or an outside press opens or closes it; cancelable.
  * @fires {TctAfterOpenChangeEvent} tct-after-open-change - After an open or close settled; every actual change.

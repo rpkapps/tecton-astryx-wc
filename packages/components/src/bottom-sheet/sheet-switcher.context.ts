@@ -14,13 +14,7 @@ import type {BottomSheetPurpose} from './bottom-sheet.types.js';
  * - `hidden`: not presented
  */
 export type SheetPhase =
-  | 'entering'
-  | 'active'
-  | 'covered'
-  | 'aligning'
-  | 'fading'
-  | 'exiting'
-  | 'hidden';
+  'entering' | 'active' | 'covered' | 'aligning' | 'fading' | 'exiting' | 'hidden';
 
 /** Motions a sheet reports to its switcher when they start and finish. */
 export type SheetMotion = 'entering' | 'aligning' | 'fading' | 'exiting';
