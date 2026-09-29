@@ -25,6 +25,22 @@ export interface FormHarness {
   reset(): void;
 }
 
+/** Whether `element` currently matches `:state(name)`; false where custom states are unsupported. */
+export function hasCustomState(element: Element, name: string): boolean {
+  try {
+    return element.matches(`:state(${name})`);
+  } catch {
+    return false;
+  }
+}
+
+/** The inner native control a form-associated fixture renders in its shadow root. */
+export function innerControl<T extends HTMLElement = HTMLInputElement>(host: Element): T {
+  const control = host.shadowRoot?.querySelector<T>('input, button, select, textarea');
+  if (!control) throw new Error(`${host.localName} has no inner control`);
+  return control;
+}
+
 /** Renders `<form>${content}</form>` and returns the harness. */
 export async function formHarness(
   content: TemplateResult | string,

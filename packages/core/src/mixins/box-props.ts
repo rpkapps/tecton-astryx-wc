@@ -89,7 +89,7 @@ export type {BoxPropsShape as BoxProps};
 export function BoxPropsMixin<T extends Constructor<TctElement>>(
   Base: T,
 ): Constructor<BoxPropsShape> & T {
-  class BoxPropsElement extends Base {
+  abstract class BoxPropsElement extends Base {
     @property({attribute: 'padding', type: Number}) padding: SpacingStep | undefined;
     @property({attribute: 'padding-inline', type: Number}) paddingInline: SpacingStep | undefined;
     @property({attribute: 'padding-inline-start', type: Number}) paddingInlineStart:

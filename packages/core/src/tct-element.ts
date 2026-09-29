@@ -21,7 +21,7 @@ export type TctElementConstructor = (new () => TctElement) & typeof TctElement;
 
 /** A class constructor, for mixins (`Constructor<TctElement>`). */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- the mixin constraint TypeScript requires
-export type Constructor<T = object> = new (...args: any[]) => T;
+export type Constructor<T = object> = abstract new (...args: any[]) => T;
 
 // Replaced by the build (`define`); the dev/test fallback keeps duplicate-definition warnings useful.
 declare const __TCT_VERSION__: string | undefined;

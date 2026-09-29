@@ -189,7 +189,7 @@ export type {FormControlShape as FormControl};
 export function FormControlMixin<T extends Constructor<TctElement>>(
   Base: T,
 ): Constructor<FormControlShape> & T {
-  class FormControlElement extends Base {
+  abstract class FormControlElement extends Base {
     static formAssociated = true;
 
     @property({reflect: true}) name = '';
