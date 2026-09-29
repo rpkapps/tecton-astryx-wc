@@ -27,6 +27,7 @@ dense:
     position: object {top, bottom, start, end} that places a standard dialog; start and end mirror in RTL; property only
     variant: standard or fullscreen
     purpose: what may dismiss it (required nothing, form Escape only, info Escape and the backdrop); default info
+    alert: gives the dialog role alertdialog whatever its purpose; purpose still decides dismissal (form plus alert is a confirmation Escape cancels)
     padding: content padding as a spacing step (0, 0.5, 1, 1.5, 2, 3, 4, 5, 6, 8, 10)
     heading: title; shorthand for a tct-dialog-header; names the dialog and takes focus on open
     subtitle: text under the heading
@@ -86,6 +87,8 @@ area, a title block (heading and subtitle), and an end area with your end conten
 - `variant` `standard` (centred, `width` and `max-height`, optional `position`) or `fullscreen`.
 - `purpose`: `info` (Escape and the backdrop close it), `form` (Escape only, so a stray click cannot lose
   input), `required` (nothing does, it is an `alertdialog`, and it has no close button).
+- `alert`: the `alertdialog` role for any purpose. `purpose="form"` with `alert` is a confirmation that
+  Escape cancels and a backdrop press never dismisses (it is what `tct-alert-dialog` uses).
 - `padding` as a step of the spacing scale, or `--dialog-padding`.
 - Closing asks first: the close button, Escape, the backdrop and `requestClose()` fire a cancelable
   `tct-open-change` with a `reason`; `preventDefault()` keeps it open. `tct-after-open-change` follows
@@ -108,7 +111,7 @@ form as usual.
 
 ## Screen-reader expectations
 
-- The `<dialog>` has role `dialog` (`alertdialog` for `purpose="required"`), `aria-modal`, and is named
+- The `<dialog>` has role `dialog` (`alertdialog` for `purpose="required"` or with `alert`), `aria-modal`, and is named
   by the heading. An `aria-label` or `aria-labelledby` on the host wins; a dialog without any name warns
   once in development.
 - The heading takes focus on open, so the user hears where they are; an element of yours with `autofocus`
