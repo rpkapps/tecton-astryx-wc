@@ -11,12 +11,12 @@ import {
   TOOLTIP_ALIGNMENTS,
   TOOLTIP_FOCUS_TRIGGERS,
   TOOLTIP_HOVER_INDICATIONS,
-  TOOLTIP_PLACEMENTS,
+  TOOLTIP_SIDES,
   TOOLTIP_TOUCH_TRIGGERS,
   type TooltipAlignment,
   type TooltipFocusTrigger,
   type TooltipHoverIndication,
-  type TooltipPlacement,
+  type TooltipSide,
   type TooltipTouchTrigger,
 } from './tooltip.types.js';
 import {TctTooltipSurface} from './tct-tooltip-surface.js';
@@ -61,7 +61,7 @@ export class TctTooltip extends TctElement {
   @property() content = '';
 
   /** Side of the trigger the popup prefers; it flips when there is no room. */
-  @property({reflect: true}) placement: TooltipPlacement = 'above';
+  @property({reflect: true}) placement: TooltipSide = 'above';
 
   /** Alignment along the placement axis. */
   @property({reflect: true}) alignment: TooltipAlignment = 'center';
@@ -99,7 +99,7 @@ export class TctTooltip extends TctElement {
     trigger: () => this.#trigger(),
     content: () => this.content,
     placement: () => ({
-      placement: oneOf(this.placement, TOOLTIP_PLACEMENTS, 'above'),
+      placement: oneOf(this.placement, TOOLTIP_SIDES, 'above'),
       alignment: oneOf(this.alignment, TOOLTIP_ALIGNMENTS, 'center'),
       offset: 'var(--spacing-1)',
     }),

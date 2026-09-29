@@ -1,6 +1,6 @@
 import type {Alignment, Placement} from '@tecton-astryx/core/layer/position.js';
 
-export const TOOLTIP_PLACEMENTS = [
+export const TOOLTIP_SIDES = [
   'above',
   'below',
   'start',
@@ -20,4 +20,4 @@ export type TooltipTouchTrigger = (typeof TOOLTIP_TOUCH_TRIGGERS)[number];
 /** The dashed underline that marks a text-only trigger: `auto` for text-only triggers, or always/never. */
 export const TOOLTIP_HOVER_INDICATIONS = ['auto', 'always', 'never'] as const;
 export type TooltipHoverIndication = (typeof TOOLTIP_HOVER_INDICATIONS)[number];
-export type {Alignment as TooltipAlignment, Placement as TooltipPlacement};
+export type {Alignment as TooltipAlignment, Placement as TooltipSide};
