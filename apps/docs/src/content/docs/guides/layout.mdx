@@ -1,0 +1,368 @@
+---
+title: Layout
+description: Build an app layout outside-in - scaffold the regions, structure the content, tune the spacing, then adapt across widths.
+sidebar:
+  order: 5
+---
+
+:::caution[Planned elements]
+The layout elements (`tct-app-shell`, `tct-layout`, `tct-section`, `tct-card`, `tct-stack` and friends) are delivered in the layout work packages. The examples below show the target API from the architecture's mapping rules (`hasX` becomes `has-x`, `isX` becomes `x`, ReactNode content props become named slots). Attribute and slot names on the generated element pages are authoritative; in particular, how a region attaches to `tct-layout` (a named slot, as shown here, or a child element) is fixed on that page.
+:::
+
+## Overview
+
+Build a layout outside-in. Settle the shell and its region budgets before any content exists, then work inward. Content-first layouts drift into a padded column of cards, because every section ends up inventing its own container.
+
+1. **Scaffold:** pick the shell, budget each region, and choose navigation.
+2. **Structure:** rank the content in each region, then pick the weakest container that groups it.
+3. **Spacing:** hold one content line per region, then tune gaps and density.
+4. **Breakpoints:** decide what each region does as width changes.
+
+This guide decides layout, not element APIs. Read an element's generated page (or run `tct component <tag>`, _planned_) for its attributes, slots and events. The `tct layout` command (_planned_, WP-AI) generates and checks layouts from a compressed expression and outputs `tct-*` markup.
+
+## Scaffold
+
+### Shell
+
+Pick the shell and budget its regions before any content exists. Structural widths are the one place raw pixel values belong; everything inside them uses the spacing scale.
+
+1. Pick the frame: `tct-app-shell` for navigation apps, `tct-layout` with a `tct-layout-panel` in the `start` or `end` slot for multi-pane tools, or a plain content column for documents and forms.
+2. Give every fixed region a width budget, so no region has to negotiate for space at render time.
+3. Read the content to set fill or capped: tables, charts and boards fill their region; prose, forms and lists cap with `content-width` so lines never over-stretch.
+4. Set each region's container policy, rows or card grid, before writing content.
+
+```html title="A three-region tool frame"
+<!-- Recommended budgets: side nav 240-280, icon rail 64-72,
+     side panel 340-420, filter rail 220-260. -->
+<tct-app-shell>
+  <tct-side-nav slot="side-nav"><!-- nav items --></tct-side-nav>
+
+  <tct-layout>
+    <tct-layout-content slot="content"><!-- a table fills its region --></tct-layout-content>
+    <tct-layout-panel slot="end" width="380" has-divider><!-- detail --></tct-layout-panel>
+  </tct-layout>
+</tct-app-shell>
+
+<!-- Capped instead: 640 suits text and forms, 960 mixed content.
+     Dividers stay full-bleed. -->
+<tct-layout content-width="640">
+  <tct-layout-content slot="content"><!-- settings form --></tct-layout-content>
+</tct-layout>
+```
+
+**Verify:** every region has a width budget, a fill-or-capped decision, and a container policy written down before any content exists.
+
+### Navigation
+
+When the frame leaves navigation open, default to `tct-side-nav`: it absorbs destinations you have not planned yet. App type and destination count are guiding indicators, not determining rules.
+
+- **Side navigation, the default:** grouping needed, customisable navigation, items with secondary actions, or navigation that collapses. Trackers, consoles and settings usually start here.
+- **Top navigation:** a shallow navigation you expect to stay shallow, context that must stay visible, or a control- and filter-heavy page; add a `tct-tab-list` for a second level. Media libraries often sit here, over grid content.
+- **Both:** a genuine suite, where `tct-top-nav` carries ecosystem-wide concerns (a context switcher, global search) and `tct-side-nav` carries product navigation.
+- **Neither:** messaging and feeds use a column frame of rail, navigation, stream and panel.
+
+```html title="Navigation slotted into the shell"
+<!-- Default: product navigation on the side. -->
+<tct-app-shell><tct-side-nav slot="side-nav"><!-- items --></tct-side-nav></tct-app-shell>
+
+<!-- Shallow, stable navigation on a control-heavy page. -->
+<tct-app-shell><tct-top-nav slot="top-nav"><!-- items --></tct-top-nav></tct-app-shell>
+
+<!-- Suite: ecosystem concerns on top, product navigation on the side. -->
+<tct-app-shell>
+  <tct-top-nav slot="top-nav"></tct-top-nav>
+  <tct-side-nav slot="side-nav"></tct-side-nav>
+</tct-app-shell>
+```
+
+**Verify:** you can state the reason in one sentence, and the choice still holds if the navigation doubles in size.
+
+### Best practices
+
+**Do:**
+
+- Decide the frame, region width budgets, and fill or capped before any content exists.
+- State the reason for the navigation choice.
+- Reserve raw pixel values for structural widths; interior spacing uses tokens.
+
+**Don't:**
+
+- Build content-first and wrap each section in a card, producing a padded scroll column.
+- Stretch prose, forms or lists across a wide region instead of capping with `content-width`.
+- Use side navigation when the navigation is really filters or controls, or must hold wide elements like breadcrumbs.
+- Use top navigation when top-slot ownership is unclear, or the hierarchy is deep or still growing.
+- Use both bars when the ecosystem layer is thin, so the second only wastes space.
+
+## Structure
+
+### Type hierarchy
+
+Give every region one lead, then rank the rest with weight and colour rather than size. Content uses two text colours, primary and secondary, and nothing dimmer: body copy needs no attributes at all.
+
+- **Body, the default:** plain `tct-text` with no `type`, `color` or `size`.
+- **Lead:** `tct-heading` at the level that matches page depth, or body text at a heavier weight.
+- **Support:** step to the secondary colour, not to a smaller size.
+- **Metadata:** the `supporting` type, or a `tct-status-dot` or `tct-token` instead of prose.
+
+```html title="Body copy, then one row of four ranks"
+<!-- Body copy takes no attributes. tct-text already defaults to the body
+     size in the primary colour. -->
+<tct-text>Credentials rotate every 90 days</tct-text>
+
+<tct-hstack gap="2">
+  <tct-text weight="semibold">Payments API</tct-text>
+  <tct-status-dot variant="success" label="Healthy"></tct-status-dot>
+  <tct-text color="secondary">v2.14</tct-text>
+  <tct-text type="supporting">edited 3h ago</tct-text>
+</tct-hstack>
+```
+
+**Squint test:** blurred, you read lead, then support, then groups, in that order. If everything reads at once, raise contrast with weight and colour, not borders and not smaller text.
+
+The Tecton type scale has only two weights in use, 400 and 500 (`semibold` resolves to 500 here), so hierarchy relies on colour and the size ladder more than on heavy weights. See [Typography](../typography/).
+
+### Containers
+
+Reach for the weakest container that reads as a group, and escalate only when it fails. Weakest to strongest:
+
+1. **Spacing and gap:** related items inside one group. The default rhythm.
+2. **Divider:** peers in a dense list or toolbar, or fencing a header from a scrollable body.
+3. **Section:** the default page-structure unit, related content under a heading. No border.
+4. **Card:** a self-contained widget (a KPI tile, a chart, a gallery entry), or a hard boundary around critical content.
+
+```html title="Section as the default unit"
+<!-- Records are rows in one Section, not one Card each.
+     Recommended row height: 32-40px. -->
+<tct-section padding="0">
+  <tct-list has-dividers>
+    <tct-heading slot="header" level="3">Members</tct-heading>
+    <!-- a tct-list-item per member -->
+  </tct-list>
+</tct-section>
+```
+
+**Decision test:** records render as rows, `tct-table` for columnar and `tct-list` for single-line; a self-contained widget or hard boundary is a `tct-card`; everything else is a `tct-section`.
+
+Tecton separates depth with a one-pixel rule and by getting darker, not with shadows, so a card or section reads as flat, bordered surfaces. See [Elevation](../elevation/).
+
+### Headers and footers
+
+A region can pin a header or footer while its body scrolls. Both are `tct-layout` slots, and padding set once on `tct-layout` reaches all three, so header, body and footer share one content line.
+
+- `tct-layout-header` in the `header` slot: the region title and its primary action.
+- `tct-toolbar` instead of `tct-layout-header` when the header carries interactive controls.
+- `tct-layout-footer` in the `footer` slot: actions that commit the work and must stay reachable.
+- Dividers on the layout fence both at once, rather than a divider per slot.
+
+```html title="Pinned header and footer around a scrolling body"
+<!-- padding on the layout reaches every slot, so all three align. -->
+<tct-layout padding="4">
+  <tct-layout-header slot="header"><!-- title + primary action --></tct-layout-header>
+  <tct-layout-content slot="content"><!-- rows --></tct-layout-content>
+  <tct-layout-footer slot="footer"><!-- Save and Cancel --></tct-layout-footer>
+</tct-layout>
+```
+
+**Verify:** scroll the body. The header and footer stay put, their dividers run full-bleed, and all three still share one left content line.
+
+### Side panels
+
+Master-detail: selecting a row opens a fixed-width side panel instead of navigating away.
+
+- `tct-layout-panel` in the `start` or `end` slot of `tct-layout`, holding a fixed width budget.
+- `has-divider` fences it from the content region; `scrollable` lets long detail scroll on its own.
+- For user-adjustable width, pair a `tct-resize-handle` on the panel's inner edge with the panel: after the panel in a `start` slot, before it in an `end` slot with `reversed`.
+- The handle then owns the divider, so the panel drops its own.
+- Render a `tct-empty-state` when nothing is selected, so the region never collapses.
+
+```html title="Fixed panel"
+<!-- Recommended panel width: 340-420. -->
+<tct-layout>
+  <tct-layout-content slot="content"><!-- rows --></tct-layout-content>
+  <tct-layout-panel slot="end" width="380" has-divider scrollable label="Details">
+    <!-- detail fields, or a tct-empty-state when nothing is selected -->
+  </tct-layout-panel>
+</tct-layout>
+```
+
+Resizable panels use the resize handle element and its keyboard and pointer contract; see the `tct-resize-handle` page for the exact attributes.
+
+**Verify:** at narrow widths the panel yields width instead of squeezing content (see Breakpoints), and only one element between the regions draws a border.
+
+### Best practices
+
+**Do:**
+
+- One lead per region; rank with weight and colour; one primary action.
+- Leave body copy at its defaults; demote by weight and colour, not size.
+- Default to a section; use the weakest container that reads as a group.
+- Render collections as rows (`tct-table` or `tct-list`), edge to edge with dividers.
+- Open a fixed-width side panel on select; let it yield width at narrow sizes.
+
+**Don't:**
+
+- Grey and shrink body copy, so a whole region reads as secondary metadata.
+- Use the disabled colour for content; it fails contrast and is for disabled controls.
+- Card soup: each record wrapped in its own card instead of rendered as rows.
+- Cards inside cards, or full-width cards stacked as page structure.
+- A header or footer rebuilt inside the body, where it scrolls away with the rows.
+- Flexbox soup: nested ad-hoc flexboxes instead of `tct-grid`, `tct-layout`, `tct-section` or `tct-form-layout`.
+- Two competing primary actions in one region.
+- Badge as decoration; use a status dot or token for status and metadata.
+
+## Spacing
+
+### Alignment
+
+The container owns padding and child gaps; children zero their margins, and interior spacing is always a token. Pick one content line per region and hold it constant, not the padding: `container_inset = content_line - component_intrinsic_inset`.
+
+- `tct-text` and `tct-heading` carry no inset, so the container takes the full padding.
+- List, tab, menu and navigation items carry a small inset, so the container gives up its padding and the element owns the line.
+- Table cells carry a larger inset, so the container gives up its padding and the cell owns the line.
+
+```html title="One content line, two inset owners"
+<!-- Target content line = 16px.
+     A heading has 0 inset, so the section takes the full padding. -->
+<tct-section padding="4"><tct-heading level="3">Members</tct-heading></tct-section>
+
+<!-- A list has ~8px built in, table cells 12-16px, so the section
+     gives up its padding and the element owns the inset. -->
+<tct-section padding="0"><tct-list><!-- items --></tct-list></tct-section>
+```
+
+**Verify:** draw one vertical line down the left of the region. Every label touches it; only hover and selected backgrounds cross it.
+
+### Rhythm
+
+Grouping comes from contrast between tight and generous gaps, not one repeated value. If every gap is the same step, proximity does no work.
+
+- Tight gaps bind: the smallest steps, used inside an item or field.
+- Generous gaps separate: several steps up, used between sections.
+- Reach for the in-between steps to tune cadence, rather than rounding everything to the same two values.
+
+```html title="Tight inside, generous between"
+<!-- Tight binds at gap 1-2, generous separates at gap 4-6.
+     In-between steps tune cadence: gap 3 = 12px, gap 5 = 20px. -->
+<tct-vstack gap="6">
+  <tct-vstack gap="1">
+    <tct-text weight="semibold">Retention</tct-text>
+    <tct-text color="secondary">Logs are kept for 30 days</tct-text>
+  </tct-vstack>
+  <tct-vstack gap="1"><!-- next label and value --></tct-vstack>
+</tct-vstack>
+```
+
+**Verify:** with every border removed, you can still name the groups from spacing alone. If you cannot, the intervals are too uniform. Form fields are the exception: `tct-form-layout` owns their spacing.
+
+The spacing steps are the Astryx 4 px scale, unchanged by Tecton (`--spacing-1` is 4 px, `--spacing-4` is 16 px). See [Spacing](../spacing/).
+
+### Density and size
+
+Match density to how often a region is used, and give every control in a row the same size so heights share a baseline.
+
+- **Compact:** high-volume regions scanned fast, like logs, monitors and large datasets.
+- **Balanced:** most table and list surfaces.
+- **Spacious:** low-frequency or high-stakes rows, like settings or a short selection list.
+
+```html title="Density paired with control size"
+<!-- Pair density with one control size: compact with sm,
+     balanced with sm or md, spacious with md or lg. -->
+<tct-table density="compact" has-hover><!-- data and columns are properties --></tct-table>
+<tct-button size="sm" variant="ghost">Retry</tct-button>
+```
+
+To set one size for a whole subtree, wrap it in `tct-size-provider`. An explicit `size` on an element wins over the provider, and the provider wins over the element's default. Control heights are `--size-element-sm` 28 px, `--size-element-md` 32 px and `--size-element-lg` 36 px; the 36 px value has no Tecton source and is _provisional_.
+
+**Verify:** every interactive element in a row shares one size, and that size is paired with the density of the region it sits in.
+
+### Best practices
+
+**Do:**
+
+- Let the container own padding; children zero their own margins.
+- Hold one content line per region: text on the line, hover backgrounds bleed to the edge.
+- Hold one padding token across a region's header, body and footer.
+- Contrast tight and generous gaps so grouping reads without borders.
+- One control size per row; match density to use frequency.
+
+**Don't:**
+
+- Double padding: an element indented past its section heading (keep one inset owner).
+- Raw pixel values for interior spacing; tokens only, pixels are for structural widths.
+- One repeated gap everywhere, which flattens grouping.
+- Mixed control sizes in a single row.
+
+## Breakpoints
+
+### Responsive contract
+
+Lock what each region does as width changes, and pair every line of the contract with the attribute, slot or query that enforces it.
+
+- **Divide:** how many regions survive at each width.
+- **Reveal:** which regions earn their width only when there is room, and open on demand below that.
+- **Resize:** content flexes while fixed regions hold their budgets, and text stays capped by `content-width` so line length holds.
+- **Swap:** navigation becomes the mobile navigation at the shell's mobile breakpoint; the side panel becomes a dialog or bottom sheet, driven by a media query.
+
+The named breakpoints are the Astryx defaults, retained on purpose because Tecton has none (_Astryx-retained_): `sm` 640, `md` 768, `lg` 1024, `xl` 1280 and `2xl` 1536 CSS pixels. They are theme metadata, exported from `@tecton-astryx/tokens/tokens.json` as `breakpoints`, and they are not custom properties, because custom properties cannot be used in a media query.
+
+```html title="Contract wired to a query"
+<!-- Recommended thresholds: 3 regions above 1024, 2 from 768, 1 below.
+     Text reads best at 40-60 characters per line.
+       >1024  side nav 256 | content | side panel 380
+       <=1024 the panel yields: hidden here, or its content moves into a dialog (media query below)
+       <=768  navigation collapses to the mobile navigation (shell breakpoint md) -->
+<tct-app-shell>
+  <tct-side-nav slot="side-nav"></tct-side-nav>
+  <tct-layout id="page">
+    <tct-layout-content slot="content"><!-- rows --></tct-layout-content>
+    <tct-layout-panel slot="end" width="380" has-divider></tct-layout-panel>
+  </tct-layout>
+</tct-app-shell>
+
+<script type="module">
+  const narrow = matchMedia('(max-width: 1024px)');
+  const panel = document.querySelector('#page tct-layout-panel');
+  const sync = () => (panel.hidden = narrow.matches);
+  narrow.addEventListener('change', sync);
+  sync();
+</script>
+```
+
+For responsiveness inside a component or a region, prefer container queries over viewport queries, so the same region adapts in a sidebar and on a full-width page:
+
+```css
+.region {
+  container-type: inline-size;
+}
+
+@container (min-width: 40rem) {
+  .region .summary {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+  }
+}
+```
+
+**Verify:** every contract line names a mechanism, so the comment cannot drift from the behaviour.
+
+### Best practices
+
+**Do:**
+
+- Write the contract down for every region before you call the layout done.
+- Decide per region whether it is revealed, resized or swapped at each width.
+- Drop a region rather than let it compete for width it does not have.
+
+**Don't:**
+
+- Hold three regions at a width where none of them has usable space.
+- Shrink every region uniformly instead of swapping or dropping one.
+- Wire a breakpoint in CSS that the contract comment never mentions.
+
+{/*
+Adapted from Astryx docs topic `layout` (+ `layout.doc.dense`) (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md).
+Section map (1:1): Overview; Scaffold (Shell, Navigation, Best practices); Structure (Type hierarchy, Containers, Headers and footers, Side panels, Best practices);
+Spacing (Alignment, Rhythm, Density and size, Best practices); Breakpoints (Responsive contract, Best practices). Upstream `astryx build`/template steps are deferred (templates library out of scope);
+`useMediaQuery` becomes a plain matchMedia listener in app code (core also has MediaQueryController for element authors).
+Guides: [mwg:css-layout] [mwg:size-aware-styling] [mwg:css] [mwg:accessibility]
+*/}

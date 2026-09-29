@@ -1,0 +1,217 @@
+---
+title: Typography
+description: Figtree and IBM Plex Mono, the Tecton type scale, font loading, weights, line heights and the semantic text tokens.
+sidebar:
+  order: 22
+---
+
+## Overview
+
+Typography is built on Tecton's type scale: a fixed ladder of sizes (10, 12, 14, 16, 20, 24, 32, 40 and 48 px) with two weights (400 and 500). Astryx generates its scale geometrically from a base size and a ratio; Tecton's ladder is not geometric, so every value is written out as an explicit token. Every text style is a semantic token that composes font size, weight and line height, so elements express intent (heading, body, label) rather than raw values.
+
+Two layers work together. Raw size tokens (`--font-size-xs` to `--font-size-5xl`) form the ladder, and semantic type-scale tokens (`--text-heading-1-size`, `--text-body-leading` and so on) give each style its size, weight and leading. Use the `tct-text` and `tct-heading` elements rather than composing the raw tokens. The values are on the [All tokens](../tokens/#type-scale) page.
+
+## Font families
+
+Three roles: body (UI text), heading (titles and headings) and code (monospace). Body and heading share Figtree, and headings differ only by weight; code and measured or tabular text use IBM Plex Mono.
+
+| Token                   | Value                                                                              |
+| ----------------------- | ---------------------------------------------------------------------------------- |
+| `--font-family-body`    | `"Figtree Variable", Figtree, "Figtree Fallback", Helvetica, Arial, sans-serif`     |
+| `--font-family-heading` | The same as body                                                                   |
+| `--font-family-code`    | `"IBM Plex Mono", "IBM Plex Mono Fallback", Consolas, Monaco, monospace`           |
+
+The first name is the family that the font package registers (Fontsource's variable Figtree registers as "Figtree Variable"), the second covers a locally installed copy, and the third is a metric-matched fallback described below. Both fonts are open source under the SIL Open Font License 1.1, which allows bundling and redistribution, provided the font is not sold on its own and the licence text travels with it. The licences are in `@tecton-astryx/tokens/fonts/`.
+
+## Loading fonts
+
+The elements never load font files. `tokens.css` only names the families, and naming a webfont makes every browser look for it and quietly fall back when the page has not loaded it. Loading is the application's job, and it is opt-in:
+
+```css
+/* tokens plus the font faces, in one link */
+@import '@tecton-astryx/tokens/tecton.css';
+
+/* or, separately */
+@import '@tecton-astryx/tokens/tokens.css';
+@import '@tecton-astryx/tokens/fonts.css';
+```
+
+`fonts.css` declares the faces in the document, because `@font-face` inside a shadow root is not reliably applied:
+
+- **Figtree Variable**, one variable file with a weight range of 300 to 900 (about 20 KB for Latin), covering the 400 and 500 that Tecton uses. Two files: Latin, and Latin Extended.
+- **IBM Plex Mono** in 400 and 500, Latin and Latin Extended.
+- `font-display: swap`, so fallback text stays visible while the font loads.
+- **Metric-matched fallback faces**, `"Figtree Fallback"` (local Arial) and `"IBM Plex Mono Fallback"` (local Courier New), with `size-adjust` and the ascent, descent and line-gap overrides computed with Capsize, so that the swap to the web font barely moves any text. Safari honours `size-adjust` but ignores the ascent, descent and line-gap overrides (a known WebKit limitation), so the swap is slightly less smooth there.
+
+Two further measures normalise the swap. The `--font-size-adjust-body` (`0.5`, Figtree's x-height ratio) and `--font-size-adjust-code` (`0.516`, IBM Plex Mono's) tokens hold numeric `font-size-adjust` values, which scale any fallback to the web font's x-height. Elements are specified to apply them on their own hosts; use them on your own text containers if you want the same behaviour, and not on the document root. They are _provisional_ tokens defined by the token pipeline, not Tecton values. Without `font-size-adjust` support the fonts render at their natural size, and the metric-matched fallbacks still apply.
+
+```css
+.article {
+  font-family: var(--font-family-body);
+  font-size-adjust: var(--font-size-adjust-body);
+}
+.article code {
+  font-family: var(--font-family-code);
+  font-size-adjust: var(--font-size-adjust-code);
+}
+```
+
+Preload the Latin Figtree file so that the swap is early:
+
+```html
+<link rel="preload" as="font" type="font/woff2" crossorigin
+      href="/vendor/tecton-astryx/fonts/figtree-latin-wght-normal.woff2" />
+```
+
+**Scripts outside Latin.** Only the Latin and Latin Extended subsets ship. Cyrillic, Greek, Arabic, Hebrew, CJK and most of Vietnamese render in the fallback stack (`Helvetica, Arial, sans-serif`) unless you add faces for them. If your product needs those scripts, declare the faces yourself in the document and put their family names in the font-family tokens:
+
+```css
+@font-face {
+  font-family: 'Noto Sans Arabic';
+  src: url('/fonts/noto-sans-arabic.woff2') format('woff2');
+  font-weight: 400 500;
+  font-display: swap;
+}
+
+:root {
+  --font-family-body: 'Figtree Variable', Figtree, 'Figtree Fallback', 'Noto Sans Arabic', Helvetica, Arial, sans-serif;
+}
+```
+
+Always pair a webfont with a real fallback stack (metric-similar system fonts plus a generic), so that text stays readable before the font loads and wherever it never does.
+
+## Font sizes
+
+The raw ladder, in `rem` at a 16 px root:
+
+| Token             | rem       | px |
+| ----------------- | --------- | -- |
+| `--font-size-xs`  | 0.625     | 10 |
+| `--font-size-sm`  | 0.75      | 12 |
+| `--font-size-base`| 0.875     | 14 |
+| `--font-size-lg`  | 1         | 16 |
+| `--font-size-xl`  | 1.25      | 20 |
+| `--font-size-2xl` | 1.5       | 24 |
+| `--font-size-3xl` | 2         | 32 |
+| `--font-size-4xl` | 2.5       | 40 |
+| `--font-size-5xl` | 3         | 48 |
+
+`--font-size-4xs`, `-3xs` and `-2xs` (6, 7 and 8 px) keep their Astryx defaults, because Tecton has no equivalent. Sizes are in `rem`, so browser font-size settings and zoom apply.
+
+## Font weights
+
+Tecton uses two weights: `normal` (400, body and code) and `medium` (500, labels, headings, data and actions). Tokens exist for four names so that Astryx code keeps working: `--font-weight-semibold` resolves to 500, because Tecton has no 600, and `--font-weight-bold` is 600 and is kept only so that prose `<strong>` stays distinguishable from body text. Type-scale tokens reference these by `var()`.
+
+## Line height
+
+Line heights are explicit in Tecton (58, 48, 38, 30, 24, 20, 18, 16 and 14 px down the ladder), and each `--text-*-leading` token stores the matching unitless ratio, between about 1.19 and 1.4. They are not computed from a 4 px grid formula as in Astryx, so do not set `line-height` by hand; the text elements apply the pair for you.
+
+## Type scale
+
+Semantic tokens combine size, weight and line height into a single text style. Each style is a triplet, `--text-<name>-size`, `--text-<name>-weight` and `--text-<name>-leading`, consumed by `tct-text` and `tct-heading`.
+
+| Style         | Size  | Weight | Used for                                        |
+| ------------- | ----- | ------ | ----------------------------------------------- |
+| `display-1`   | 48 px | 500    | Hero banners, data callouts                     |
+| `display-2`   | 40 px | 500    | The same, one step down                         |
+| `display-3`   | 32 px | 500    | The same, one step down                         |
+| `heading-1`   | 24 px | 500    | Page titles (level 1)                           |
+| `heading-2`   | 20 px | 500    | Sections (level 2)                              |
+| `heading-3`   | 16 px | 500    | Subsections (level 3). Tecton `large`           |
+| `heading-4`   | 14 px | 500    | Level 4. Tecton `medium-strong`                 |
+| `heading-5`   | 12 px | 500    | Level 5. Tecton `small-strong`                  |
+| `heading-6`   | 10 px | 500    | Level 6. Tecton `tiny`                          |
+| `large`       | 16 px | 500    | Emphasised body text                            |
+| `body`        | 14 px | 400    | Body text, the default                          |
+| `label`       | 14 px | 500    | Form labels                                     |
+| `supporting`  | 12 px | 400    | Helper text, timestamps, metadata               |
+| `code`        | 14 px | 400    | Code, in IBM Plex Mono                          |
+
+Headings 3 to 6 are Tecton's own steps (its `large`, `medium-strong`, `small-strong` and `tiny` variants), because Tecton names only two heading levels. They are Tecton-derived, not provisional.
+
+### Tecton text types
+
+Tecton's design has variants that Astryx's text types do not, and `tct-text` supports them as additional `type` values (_planned_; the `tct-text` page lists the exact values):
+
+| Type            | Size and weight | Notes                                      |
+| --------------- | --------------- | ------------------------------------------ |
+| `medium-strong` | 14 px, 500      |                                            |
+| `small-strong`  | 12 px, 500      |                                            |
+| `tiny`          | 10 px, 500      |                                            |
+| `large-data`    | 16 px, 400      | IBM Plex Mono, tabular numerals            |
+| `medium-data`   | 14 px, 400      | IBM Plex Mono, tabular numerals            |
+| `small-data`    | 12 px, 400      | IBM Plex Mono, tabular numerals            |
+| `action-medium` | 14 px, 500      | Button labels                              |
+| `action-small`  | 12 px, 500      | Small button labels                        |
+
+The data types use IBM Plex Mono with `font-variant-numeric: tabular-nums` (the `--tecton-font-numeric` token), so digits align in tables and readouts. Figtree text is proportional by default; where a Tecton spec wants aligned digits in Figtree, the same token applies. Letter spacing is `normal` everywhere, because Tecton specifies none.
+
+## Display text
+
+Display variants (`display-1` to `display-3`) continue the ladder above `heading-1`. Upstream uses a normal weight for display text; Tecton's display styles are weight 500, and the leading is tight (about 1.2), since large text reads better with less space. Use them for hero banners, marketing headlines and data callouts, not for document headings.
+
+Display text often needs heading semantics for accessibility. Use the `type` attribute on `tct-heading` to apply display styling while keeping the correct HTML level: `level="1" type="display-1"` gives display-1 styling with the semantics of a level-1 heading, so screen readers see the correct outline.
+
+## Usage
+
+```html title="Heading for document structure"
+<!-- Heading levels map to semantic tokens: level 1 uses --text-heading-1-* -->
+<tct-heading level="1">Page title</tct-heading>
+<tct-heading level="2">Section</tct-heading>
+<tct-heading level="3">Subsection</tct-heading>
+
+<!-- Display type for hero and marketing headings; level sets the semantics -->
+<tct-heading level="1" type="display-1">Hero title</tct-heading>
+<tct-heading level="2" type="display-2">$1.2M revenue</tct-heading>
+
+<!-- Override the accessibility level when visual is not the same as document hierarchy -->
+<tct-heading level="2" accessibility-level="3">Sidebar section</tct-heading>
+```
+
+```html title="Text for body, label and display text"
+<tct-text type="body">Body text at the base scale.</tct-text>
+<tct-text type="large">Emphasised body text.</tct-text>
+<tct-text type="label">Form label</tct-text>
+<tct-text type="supporting">Helper text, timestamps, metadata.</tct-text>
+<tct-text type="code">const x = 1;</tct-text>
+
+<!-- Display without heading semantics (data callouts, decoration) -->
+<tct-text type="display-2">$1.2M revenue</tct-text>
+```
+
+The scale is not adjusted through a `defineTheme` base and ratio (the upstream way): Tecton's values are explicit tokens, so changing a style means overriding its three tokens, and a whole-ramp change means overriding the ladder. Do that sparingly, and re-test layout, because a type-scale change is a geometry change.
+
+```css
+/* a denser body style for one data-heavy region */
+.dense-region {
+  --text-body-size: var(--font-size-sm);
+  --text-body-leading: 1.3333;
+}
+```
+
+## Best practices
+
+**Do:**
+
+- Use `tct-heading` for document headings and `tct-text` for everything else; they apply the full scale automatically.
+- Use display types with the right heading level when display text is a page heading, so accessibility and styling come together.
+- Use the `supporting` type for secondary information: timestamps, helper text, metadata, captions.
+- Consider `text-wrap: balance` on short multi-line headings and `text-wrap: pretty` on long prose, as progressive enhancement. Balance is Baseline since 2024 (Chrome 114, Firefox 121, Safari 17.5); `pretty` is missing from Firefox and is simply ignored there. Do not apply either globally; both cost layout time.
+- Use `accessibility-level` on a heading when the visual hierarchy does not match the document outline, for example sidebar or card headings.
+- Load the fonts you need for every script your product displays, and keep the metric-matched fallbacks in the stack.
+
+**Don't:**
+
+- Set `font-size` or `line-height` by hand. Use the semantic type-scale tokens so the ramp stays consistent.
+- Skip heading levels (level 1 to level 3); screen readers rely on an unbroken hierarchy. Use `accessibility-level` to separate visual level from semantic level.
+- Use display types for body content or in-page sections: they are for hero, marketing and data-callout contexts.
+- Override individual size tokens (`--font-size-lg`) to tweak a heading; change the style's own tokens or the whole ladder so proportions stay coherent.
+- Use raw numeric `font-weight` values (400, 600); reference the weight tokens so a theme can remap them.
+- Set `@font-face` inside a shadow root or expect an element to load a font for you.
+
+{/*
+Adapted from Astryx docs topic `typography` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md), with Tecton values (D-001, D-003, D-013 Q-06).
+Section map: Overview; Font Families; Loading Custom Fonts -> Loading fonts; Font Sizes; Font Weights; Line Height; Type Scale (+ Tecton text types); Display Text; Usage; Best Practices.
+Facts verified against packages/tokens/dist/fonts.css and tokens.json. The Tecton text-type values (medium-strong ...) are from tecton-theme.md section 7 (Text) and WORK-BREAKDOWN M5 (tct-text): planned, exact attribute values on the tct-text page.
+Subset caveat (Latin and Latin Extended only) is read from fonts.css. Guides: [mwg:visually-stable-font-fallbacks] [mwg:visually-stable-mixed-fonts] [mwg:share-web-fonts-across-origins] [mwg:improve-text-layout-and-legibility]
+*/}

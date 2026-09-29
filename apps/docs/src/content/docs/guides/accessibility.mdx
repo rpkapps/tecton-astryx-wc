@@ -1,0 +1,127 @@
+---
+title: Accessibility
+description: What the elements guarantee for keyboard, screen-reader, contrast, motion and forced-colours users, what remains your responsibility, and how it is tested.
+sidebar:
+  order: 10
+---
+
+The target is WCAG 2.2 level AA for the library's documented examples and supported compositions, plus at least the verified behaviour of upstream Astryx. Pattern-level behaviour follows the WAI-ARIA Authoring Practices. This is a design target and a test suite, not a certification: conformance depends on the page you build with the elements, and automated tools do not establish complete accessibility.
+
+Where upstream has a known accessibility defect, it is not copied. Improvements over upstream are recorded on the element's page in its _Differences_ section.
+
+## What the elements do for you
+
+### Semantics
+
+- When an element _is_ a native control, it renders the native element inside its shadow root: a real `<button>`, `<a href>`, `<input>`, `<dialog>`. Links stay links.
+- When the host is the semantic node (a heading, a separator, a progress bar, a tab), the role and states are set through `ElementInternals`, not through `role` attributes on the host. That keeps them as defaults that you can still override, and it means the absence of a `role` attribute in the markup does not mean the absence of a role. Check the browser's accessibility-tree inspector when you are unsure.
+- Groups and composites carry the correct pattern: toolbars are toolbars, radio groups are radio groups, and `tct-tab-list` is a navigation landmark with `aria-current` by default and becomes an ARIA tablist only in its tablist mode (then only tabs are allowed inside).
+- Landmarks are native elements where the layout elements render them (`<header>`, `<main>`, `<nav>`, `<aside>`, `<section>`).
+
+### Names, descriptions and errors
+
+- A form control renders its label, description and status message in the same shadow root as its native control, so the relationships are same-tree ID references, and they work. The label is required for a labelled control; hide it visually with the label-hidden option rather than omitting it.
+- Where a label or a description has to reference light-DOM content that you supplied, the element creates a small owned element (a satellite) in your tree and wires it with IDs. For example, a tooltip's text is exposed as the trigger's description.
+- ARIA attributes on a host (`aria-label`, `aria-labelledby`, `aria-describedby`, `aria-controls`, `aria-expanded`, `aria-pressed`, `aria-invalid` and the rest of the delegated set) are forwarded to the element's inner control, and ID references are resolved in your tree scope. Where element reflection is missing (Tier 2), the element copies the referenced text into `aria-label` or `aria-description` instead.
+- Validation is announced after interaction, not before. The programmatic `aria-invalid` state and the visual `:state(user-invalid)` start at the same moment: after a user commits a value, after a real submission attempt, or after `reportValidity()`. They do not start on `checkValidity()`. The message is frozen while the control has focus, so it is not re-announced on every keystroke, and it is announced once, politely, when it first appears.
+
+### Focus and keyboard
+
+- Every interactive element is reachable and operable with the keyboard. Each element's page has a keyboard table (generated from the same record that the tests read) that lists every key, its action and when it applies.
+- Composites use a single tab stop and roving focus: exactly one enabled item has `tabindex="0"`, arrow keys follow the element's computed direction (so they mirror in right-to-left), Home and End go to the ends, and typeahead moves to matching items. Tab leaves the composite.
+- Text inputs that need to keep DOM focus while showing a list (comboboxes, typeahead, the command palette) use `aria-activedescendant`. Everything else moves real focus.
+- Escape closes one layer per press: the top-most open layer only. Content can claim the key, and a composing IME never triggers a command (Enter, Escape and arrows are ignored during composition).
+- Elements that are unavailable for a moment, or "disabled with a reason", use `aria-disabled` and a guarded activation so that they stay focusable and focus is never dropped to `<body>`. Truly disabled form controls use the native `disabled`.
+- Native modal dialogs use `showModal()`, so the browser makes outside content inert and no focus trap script is needed. Focus returns to the trigger on close, or to the previously focused element.
+- Where the browser supports it (`focus({focusVisible})`), pointer-driven dismissals do not paint a focus ring on the element that gets focus back; keyboard ones do.
+
+### Visible focus
+
+The focus ring is Tecton hot pink everywhere, drawn with an outline on the internal focusable element: `--focus-outline-color` (`#ff00aa` in light mode, `#ff52a8` in dark), 2 px wide, solid, with a 2 px offset (1 px on buttons, through `--button-focus-offset`). It is a token, so it switches with a theme island.
+
+Pink does not reach 3:1 on every surface. Inverted surfaces such as tooltips, toasts and light media scrims draw a second, inner ring (`--tecton-color-focus-inner`, _provisional_). Table cells that are darker than the page use the same double ring, or a locally re-pointed focus colour. This is the documented workaround for the fact that Tecton defines only one focus colour.
+
+### Targets, zoom and reflow
+
+- Interactive targets are at least 24 by 24 CSS pixels, with a larger hit area for coarse pointers that does not change the visual size.
+- The layout survives 200 % text zoom, reflows at 320 CSS pixels wide, and copes with the text-spacing overrides of WCAG 1.4.12.
+- Sizes are in `rem`, so browser font-size settings apply.
+
+### Colour, contrast and modes
+
+- State is never colour alone: errors, warnings and successes come with an icon or text as well.
+- Text tokens are measured after alpha compositing on the real surfaces they sit on. The token build fails when a text role drops below 4.5:1 or an icon, boundary or focus role below 3:1, unless the pair is recorded with a reason.
+- **Forced colours** is required and supported: roles map to system colours (`Canvas`, `CanvasText`, `ButtonBorder`, `Highlight`, `HighlightText`, `GrayText`, `LinkText`), borders that carry meaning stay as transparent borders so that the system paints them, and the focus ring becomes `Highlight`.
+- **Reduced motion:** movement (slides, scales) only plays under `prefers-reduced-motion: no-preference`. Fades may remain, shortened. Spinners and indeterminate progress slow down instead of stopping. The library never zeroes durations globally.
+- `prefers-contrast: more` is not handled in version 1.
+- **Right-to-left** is supported by construction: logical CSS, mirrored arrows and directional icons.
+
+### Announcements
+
+Elements never own live regions. Everything spoken goes through one announcer: `element.ariaNotify()` when the browser has it, otherwise one polite and one assertive live region per document, mounted empty on first use, debounced, cleared shortly after speaking, and moved into the top-most modal while one is open (a modal makes everything outside it inert, live regions included). Streaming content announces completion, not every token.
+
+## Known contrast shortfalls
+
+These are properties of the Tecton design values, recorded in the token build with the ratio measured, and each has a handling rule:
+
+| Pair                                                         | Measured                     | Handling                                                                                                                                                       |
+| ------------------------------------------------------------ | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--color-border-emphasized` on the page                      | 2.2:1 in both modes          | Decorative separation only. A component whose border is the sole indicator of a control's boundary or state uses a border token of at least 3:1, such as `--tecton-color-divider-strong` (3.1:1). |
+| Outlined input border, dark mode                             | 2.2 to 2.4:1                 | Owner accepted: the label, value and focus state also identify the control. The light value passes (3.1:1).                                                    |
+| Top-nav text, light mode                                     | 4.0:1                        | Owner accepted, for large navigation labels only.                                                                                                              |
+| `--tecton-color-text-placeholder`                            | 3.1:1                        | Fields use the outlined-input placeholder role instead, which measures 4.7:1.                                                                                  |
+| `--tecton-color-info-bright` in light mode                   | 2.2:1                        | It is a highlight or fill step, not an ink. Use `--tecton-color-info` for text.                                                                                |
+| `--color-icon-secondary` on the dark table header            | 2.9:1                        | Table headers re-point their icons to `--color-text-secondary`, which passes.                                                                                  |
+| Focus ring on inverted surfaces and dark table cells         | 2.3 to 3.0:1                 | The double ring described above.                                                                                                                               |
+
+When you use tokens directly in your own CSS, you inherit these. Choose ink roles (`--color-text-*`, `--tecton-color-info`) for text and reserve fills for backgrounds.
+
+## Your responsibilities
+
+The elements make accessible composition possible; the page still has to be assembled correctly.
+
+**Page structure.** Put all content inside landmarks, keep one `<main>`, use headings in sequence (level 1 to 6, without skipping), and provide a skip link before repeated navigation, with a focusable target (`<main id="content" tabindex="-1">`). Label a landmark only when there is more than one of its kind, and do not include the role name in the label. Set `<html lang>` (and `dir`), give each page a unique `<title>`, and mark up passages in other languages with `lang`. In a single-page app, move focus and update the title on route changes.
+
+**Names.** Every control needs an accessible name. Use the `label` on form controls, and always give an icon-only button its `label` (it becomes the accessible name and a tooltip). Do not use `placeholder` or `title` as a name. Do not reuse one name for controls that do different things in the same view (several "Edit" buttons need distinguishing text), or for links that go to different places.
+
+**Content.** Give informative images a text alternative that says what they are for, and decorative images `alt=""`. Pair charts and other data visualisations with a data table or a description. Use semantic tables with captions and header cells, and never tables for layout. Write link text that makes sense out of context.
+
+**Colour.** Use the status tokens for their meaning, and add an icon or text. Do not use `--color-text-disabled` for content (it is not intended to reach 4.5:1). Do not paint your own text on the accent fill except with `--color-on-accent`.
+
+**Announcements.** Do not add your own live regions for element states; use the announcer (`announce()` in `@tecton-astryx/core/a11y/announcer.js`) for messages that are your own, and only for updates worth speaking. Do not announce "Loading…" states.
+
+**Forms.** Connect hints with the element's `description`, do not use a placeholder as a label, use valid `autocomplete` values, and let the validation timing described above do its job rather than adding your own alert. See [Forms](../forms/).
+
+**Motion.** Stop or offer to pause any auto-playing carousel or banner, and never flash more than three times per second.
+
+**Testing.** Run an automated scan (axe or Lighthouse) and then use the keyboard alone: Tab, Shift+Tab, arrows, Enter, Space and Escape must reach and operate everything, and focus must never get stuck or disappear. Then test with the screen readers your users have. A score of 100 % does not guarantee usability.
+
+## How the library is tested
+
+Every element is tested against these categories before it counts as done: default render and each state with axe (violations fail the build, and `incomplete` results are triaged), computed accessibility-tree assertions for role, name and state, every row of the keyboard table including right-to-left, forms, events, overlays (one Escape per layer, focus return), forced colours, reduced motion, RTL, and strings in `de-DE` and `ar-SA`.
+
+A manual assistive-technology matrix (NVDA with Chrome and Firefox, JAWS, VoiceOver on macOS and iOS, TalkBack) is run per release and recorded with exact versions (_planned_, hardening package WP-H). Until that matrix has results for an element, treat its screen-reader behaviour as designed, not verified.
+
+## Keyboard contracts by family
+
+Each element's page has the exact table. The families follow these contracts:
+
+| Family                                          | Contract                                                                                                                                                                  |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Buttons, links, clickable cards                 | Native activation (Enter and Space on buttons, Enter on links). No duplicate tab stops. Nested actions stay independently operable. Visible focus.                         |
+| Toolbar, button group, segmented control        | The right group, toolbar, radio or tab semantics for the purpose. Composite navigation: one tab stop, arrows, Home and End.                                                |
+| Tabs and navigation                             | For real tab panels: arrows, Home and End, and correct panel relationships. Route links remain links.                                                                       |
+| Selectors, typeahead, tokenizer                 | Editable and select-only behaviour is distinct. Opening, active option, commit, Escape and Tab are defined. Text-editing shortcuts and IME composition are preserved.     |
+| Dropdown, more and context menus                | Keyboard opening, typeahead, arrows, submenu movement, cancellation and focus return. Shift+F10 and the context-menu key open a context menu.                             |
+| Dialogs, sheets, popovers                       | Correct initial focus, modal containment only where appropriate, one Escape per layer, reliable focus return, and a safe path through non-dismissible flows.                |
+| Calendar, date and time                         | Keyboard access to dates, periods and time choices; unavailable-date semantics; locale-aware announcements.                                                                 |
+| Table, lists, trees                             | Static tables keep native reading and navigation. Grid-style arrows only for a true interactive grid. Tree expansion, selection and row actions are operable.             |
+| Resize, drag, slider, carousel                  | Keyboard equivalents and a single-pointer alternative to dragging. Values are announced.                                                                                    |
+| Chat, Markdown, code                            | No focus theft during streaming. Actions and attachments are operable. Composition never sends a message accidentally.                                                     |
+
+{/*
+Not a port of a single Astryx topic: upstream has no consumer accessibility guide (only per-component accessibility tabs). Sources: docs/ARCHITECTURE.md section 10, 6.5, 6.6, 9.7, 9.16;
+docs/plan/IMPLEMENTATION-PLAN.md section 7; packages/tokens/src/inputs/contrast.allow.json; packages/core/src/a11y/announcer.ts (verified).
+Guides: [mwg:accessibility] [mwg:accessible-web-components] [mwg:accessible-error-announcement] [mwg:validate-input-after-interaction] [mwg:ime-safe-enter-submit]
+[mwg:persistent-top-layer-ui] [mwg:dark-mode] [mwg:spinner]
+*/}

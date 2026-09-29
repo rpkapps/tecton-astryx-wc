@@ -1,0 +1,278 @@
+---
+title: Styling Library Interop
+description: Integrate Tailwind, CSS Modules, Panda, Chakra, MUI, CSS-in-JS and non-CSS renderers with the Tecton design tokens.
+sidebar:
+  order: 8
+---
+
+## Core principle
+
+Keep the design system as the source of truth for theme values. Elements read design tokens from CSS custom properties such as `--color-text-primary`, `--color-background-surface`, `--spacing-4` and `--radius-container`. Other styling libraries should map their own semantic tokens, utility names or theme objects to those CSS variables whenever possible.
+
+Use CSS variables for ordinary DOM styling, because they inherit through the tree, follow `data-theme` colour mode, respect nested theme islands, and update when the mode switches. Use the token metadata (or a computed-style probe) only for non-CSS consumers such as SVG attribute values, canvas, chart configuration, colour calculations or static config generation.
+
+For available token names and values, see [All tokens](../tokens/). Focused references are also available for [colour](../color/), [spacing](../spacing/), [shape](../shape/), [typography](../typography/), [elevation](../elevation/) and [motion](../motion/).
+
+## Choose an integration path
+
+Choose the narrowest integration path that fits the styling library. Most DOM styling should stay on the CSS-variable path; JavaScript token resolution is for APIs that cannot consume CSS custom properties.
+
+| Path                    | Use when                                                                | Value shape                                                       |
+| ----------------------- | ----------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| CSS variable aliases    | The library ultimately writes CSS and accepts string values            | `var(--color-text-primary)`                                       |
+| Typed token names       | You want autocomplete and typo checks for token names in TypeScript     | `tokenVar('--color-text-primary')` from `@tecton-astryx/tokens/tokens.js` |
+| Tailwind mapping        | You want utility classes backed by the active tokens                    | `@theme inline { --color-surface: var(--color-background-surface); }` |
+| Token metadata and probes | JavaScript needs token values for charts, canvas, SVG or config objects | `tokens['--color-data-categorical-blue'].light`                   |
+
+## Best practices
+
+**Do:**
+
+- Map by semantic intent: text, surface, border, accent, status, radius, spacing, typography.
+- Let one owner control the colour mode. `data-theme="light|dark"` on `<html>` (or on a scheme island) resolves every `light-dark()` token; see [Theming](../theme/).
+- Prefer CSS variables for runtime theme switching and nested themes.
+
+**Don't:**
+
+- Copy raw hex or pixel values into a second theme object when a `var(...)` reference would work.
+- Run a second, unsynchronised dark-mode provider that disagrees with the theme.
+- Make another library's CSS variables the source of truth for the design system. Some consumers need token values outside the DOM.
+
+## Plain CSS and CSS Modules
+
+The simplest integration is direct CSS variable usage. CSS Modules scope class names, but token variables are global, inherited values supplied by the theme stylesheet.
+
+```css title="Card.module.css"
+.card {
+  background: var(--color-background-surface);
+  color: var(--color-text-primary);
+  border: var(--border-width) solid var(--color-border);
+  border-radius: var(--radius-container);
+  padding: var(--spacing-4);
+}
+```
+
+Sass variables are compile-time only. They are useful for generating static CSS, but they do not update when the mode changes. Use native CSS custom properties for themeable values.
+
+## StyleX and typed names
+
+There is no StyleX integration and no `tokens.stylex` export: the elements do not use StyleX. If your application uses StyleX for its own components, reference tokens as `var(--…)` strings. For autocomplete and typo protection, import the `TokenName` type and `tokenVar()` helper from the metadata module:
+
+```ts
+import {tokenVar, type TokenName} from '@tecton-astryx/tokens/tokens.js';
+
+const surface: TokenName = '--color-background-surface';
+const value = tokenVar(surface); // 'var(--color-background-surface)'
+```
+
+## Tailwind
+
+Tailwind v4 maps a theme variable to a CSS variable with `@theme inline`, so utility classes stay in sync with the active tokens. There is no bridge stylesheet in the first release (unlike upstream's `tailwind-theme.css`); the mapping below is the whole of it, and you choose the utility names.
+
+```css title="global.css"
+@layer theme, base, tecton.reset, tecton.tokens, tecton.light-dom, components, utilities;
+
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/preflight.css' layer(base);
+@import '@tecton-astryx/tokens/tecton.css';
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+@theme inline {
+  --color-surface: var(--color-background-surface);
+  --color-page: var(--color-background-body);
+  --color-ink: var(--color-text-primary);
+  --color-ink-muted: var(--color-text-secondary);
+  --color-line: var(--color-border);
+  --color-brand: var(--color-accent);
+  --radius-card: var(--radius-container);
+  --radius-control: var(--radius-element);
+}
+```
+
+Pre-declare every layer before any import. This keeps the reset lowest, Tailwind's preflight above it, the tokens next, and Tailwind's utilities last, so a utility class on a wrapper (or on an element's host) can intentionally override defaults. Tailwind v4's default theme defines `--font-weight-normal`, `--font-weight-medium`, `--font-weight-semibold` and `--font-weight-bold`, the same four names as the tokens; layering the theme stylesheet above Tailwind's `theme` layer, as above, makes the token values win.
+
+```html
+<section class="rounded-card border border-line bg-surface p-4 text-ink">
+  <tct-button variant="primary">Save</tct-button>
+</section>
+```
+
+The mapping is pure CSS with no JavaScript. Mode changes apply automatically, because the utilities reference the same custom properties that the elements use.
+
+## Panda, Chakra and other semantic token systems
+
+Libraries like Panda CSS and Chakra UI have first-class semantic token objects. Put the CSS variables at the leaves of those objects, so product code can use the library's semantic names while the design system still owns the values.
+
+```ts title="Semantic token aliases"
+semanticTokens: {
+  colors: {
+    text: {
+      primary: {value: 'var(--color-text-primary)'},
+      secondary: {value: 'var(--color-text-secondary)'},
+    },
+    background: {
+      surface: {value: 'var(--color-background-surface)'},
+      body: {value: 'var(--color-background-body)'},
+    },
+    border: {
+      default: {value: 'var(--color-border)'},
+    },
+  },
+},
+tokens: {
+  spacing: {
+    4: {value: 'var(--spacing-4)'},
+  },
+  radii: {
+    container: {value: 'var(--radius-container)'},
+  },
+}
+```
+
+If a semantic-token library needs to generate its own light and dark CSS from raw values, align its mode selector with the theme (`data-theme="light|dark"`) and generate that adapter from the token metadata. Otherwise it can drift from nested or runtime themes.
+
+## MUI and palette-based themes
+
+MUI expects palette slots such as primary, background, text and divider. Map the slots to the token variables for ordinary component styling, and use raw values only when MUI or your code needs to parse colours for contrast, alpha, lighten or darken calculations.
+
+```ts title="MUI palette mapped to token variables"
+const theme = createTheme({
+  cssVariables: true,
+  colorSchemes: {
+    light: {
+      palette: {
+        primary: {main: 'var(--color-accent)'},
+        background: {
+          default: 'var(--color-background-body)',
+          paper: 'var(--color-background-surface)',
+        },
+        text: {
+          primary: 'var(--color-text-primary)',
+          secondary: 'var(--color-text-secondary)',
+        },
+        divider: 'var(--color-border)',
+      },
+    },
+    dark: {
+      palette: {
+        primary: {main: 'var(--color-accent)'},
+        background: {
+          default: 'var(--color-background-body)',
+          paper: 'var(--color-background-surface)',
+        },
+        text: {
+          primary: 'var(--color-text-primary)',
+          secondary: 'var(--color-text-secondary)',
+        },
+        divider: 'var(--color-border)',
+      },
+    },
+  },
+});
+```
+
+If MUI owns the colour mode in an app, generate the light and dark palette values from the token metadata and keep `data-theme` synchronised. If the theme stylesheet owns colour mode, keep both MUI schemes pointing at the same token variables.
+
+## Emotion, styled-components, Theme UI and Styled System
+
+Runtime CSS-in-JS libraries usually accept arbitrary theme objects. Keep those objects semantic, but store token variable references as the values. This keeps generated classes stable while the browser updates values through the CSS cascade.
+
+```ts title="Generic CSS-in-JS theme object"
+const appTheme = {
+  colors: {
+    textPrimary: 'var(--color-text-primary)',
+    textSecondary: 'var(--color-text-secondary)',
+    surface: 'var(--color-background-surface)',
+    border: 'var(--color-border)',
+    accent: 'var(--color-accent)',
+  },
+  spacing: {
+    4: 'var(--spacing-4)',
+  },
+  radius: {
+    container: 'var(--radius-container)',
+  },
+};
+```
+
+Avoid rebuilding CSS-in-JS theme objects with raw colour values on every mode switch. CSS variables let the class names stay the same while the browser resolves the active values.
+
+## UnoCSS and custom utility systems
+
+Utility generators such as UnoCSS can put token variables in their theme config or shortcuts. Keep classes semantic (`bg-surface`, `text-primary`) and let the values point at tokens.
+
+```ts title="UnoCSS-style config"
+export default defineConfig({
+  theme: {
+    colors: {
+      surface: 'var(--color-background-surface)',
+      primary: 'var(--color-text-primary)',
+      border: 'var(--color-border)',
+      accent: 'var(--color-accent)',
+    },
+    spacing: {
+      4: 'var(--spacing-4)',
+    },
+  },
+  shortcuts: {
+    'tct-panel': 'bg-surface text-primary border border-border rounded-lg p-4',
+  },
+});
+```
+
+Static utility extractors cannot see dynamically constructed class names. Prefer explicit class strings or the library's safelist or source-registration mechanism.
+
+## Non-CSS processing
+
+Use the metadata module when code outside CSS needs token values for a known mode, or a computed-style probe when the values should come from a specific place in the page.
+
+```js title="Token values for a known mode"
+import {tokens} from '@tecton-astryx/tokens/tokens.js';
+
+const mode = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+
+const chartOptions = {
+  textColor: tokens['--color-text-primary'][mode],
+  mutedTextColor: tokens['--color-text-secondary'][mode],
+  gridColor: tokens['--color-border'][mode],
+  seriesColors: [
+    tokens['--color-data-categorical-blue'][mode],
+    tokens['--color-data-categorical-orange'][mode],
+    tokens['--color-data-categorical-purple'][mode],
+  ],
+};
+```
+
+The module is a snapshot of the shipped Tecton values. It does not reflect your overrides, a nested `data-theme` island or a `data-media-theme` surface. To get the value in force at a place in the page, paint the token onto an element and read the computed style; see [Reading the theme from JavaScript](../theme/#reading-the-theme-from-javascript).
+
+_Planned:_ `resolveThemeTokens`, `registerTheme` and a token-reading controller for the theme element, ported from upstream's `useTheme` family.
+
+### Non-CSS processing best practices
+
+**Do:**
+
+- Use the data-visualisation tokens such as `--color-data-categorical-blue` for chart series instead of reusing arbitrary UI colours. They are _provisional_: a proposed mapping from Tecton accent hues and status roles.
+- Prefer CSS variables for SVG elements when possible (`fill="var(--color-accent)"`); use token metadata when an API requires a string value in JavaScript.
+- Re-read values when the mode changes: listen to the `change` event on `matchMedia('(prefers-color-scheme: dark)')` and to your own `data-theme` switch.
+
+**Don't:**
+
+- Use token metadata for ordinary DOM styling. Use CSS variables, parts or library aliases instead.
+- Assume the returned values reflect every cascade override. They are the shipped values, and local media-surface and arbitrary CSS overrides are not represented.
+
+## Interop checklist
+
+1. Import the theme stylesheet early enough for first paint, and load it once per page.
+2. Choose one owner for colour mode. `data-theme="light|dark"` and `color-scheme` resolve `light-dark()` tokens.
+3. Map the external library's semantic layer to token variables by intent, not by exact naming. For example, MUI `background.paper` maps to `--color-background-surface`.
+4. Use [All tokens](../tokens/) and the focused foundation pages when building mappings. Keep mappings small at first: text, surface, body, card, popover, border, accent, status, spacing, radius, typography, shadow.
+5. Use token metadata only for non-CSS APIs that need resolved values.
+6. Declare the layer order once, before any import, and assign every stylesheet to a layer on purpose.
+
+{/*
+Adapted from Astryx docs topic `styling-libraries` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md).
+Section map: Core Principle; Choose an Integration Path; Best Practices; Plain CSS and CSS Modules; StyleX -> StyleX and typed names; Tailwind; Panda, Chakra...; MUI...; Emotion...;
+UnoCSS...; Non-CSS Processing (+ Best Practices, as a subsection); Interop Checklist. Tailwind bridge: upstream's tailwind-theme.css is not part of the architecture; the page shows the equivalent @theme inline mapping.
+Tailwind v4 collision list is exactly the four --font-weight-* names (packages/tokens/src/pipeline/checks.ts DOCUMENTED_TAILWIND_COLLISIONS).
+Guides: [mwg:css] [mwg:styling-web-components] [mwg:design-token-reactivity] [mwg:dark-mode] [mwg:component-specific-light-dark-theme]
+*/}

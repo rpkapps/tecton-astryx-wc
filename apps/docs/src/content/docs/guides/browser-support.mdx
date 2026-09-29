@@ -1,0 +1,157 @@
+---
+title: Browser Support
+description: Which browsers the elements target, which platform features set the floor, and how to detect and support what your audience needs.
+sidebar:
+  order: 3
+---
+
+## Overview
+
+The elements are built on modern web platform features: custom elements with Shadow DOM and `ElementInternals`, the [`Popover`](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API) API, native `<dialog>`, CSS anchor positioning, `light-dark()` and `:state()`. These let elements stay small, accessible and free of runtime dependencies on their main code paths, but they also set a floor on which browsers render everything correctly.
+
+A design system does not own its traffic; the products built on it do. Their audiences range from evergreen-Chrome-only internal tools to public sites with a meaningful share of older Safari. So the library defines tiers that describe what works at each level. Pick the tier that matches your audience. Unlike Astryx for React, the floor is a recorded project decision with fixed versions (D-010), not a rolling window.
+
+## Support tiers
+
+| Tier                | Engines                                                                                    | What your users experience                                                                                                                                                                                                       | How it is tested                                                                                      |
+| ------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Tier 1: Supported   | Chrome and Edge 137+ (desktop and Android), Firefox 147+, Safari 26+ (macOS, iOS, iPadOS)   | Full fidelity: every documented behaviour, keyboard contract, form contract and placement. This is the reference target.                                                                                                        | Continuous integration on current Chromium, Firefox and WebKit, plus a manual assistive-technology matrix per release |
+| Tier 2: Degraded    | Chrome and Edge 116+, Firefox 125+, Safari 17+                                             | Elements render, submit, and are operable by keyboard, and they never throw. Layered surfaces are positioned by a lazily loaded measurement fallback instead of CSS. Some accessibility relationships fall back to copied text, and `:state()` styling hooks may not match. | An emulated run in CI that forces the newer features off                                              |
+| Below Tier 2        | Anything older                                                                             | Unsupported. No polyfills are shipped. Modules still import without throwing (for server rendering), but nothing else is promised.                                                                                              | An import-only test                                                                                   |
+
+Tier 1 is the first set of engine versions in which Popover, `showPopover({source})` (implicit anchoring), ARIA element reflection, `:state()`, `dialog.requestClose()` and `light-dark()` are all native, and in which every layered surface is positioned correctly. CSS anchor positioning is native in the Chrome, Edge and Firefox Tier-1 versions; Safari 26 positions with the measurement fallback. It is upstream Astryx's Tier 1 raised from Chrome 125 to Chrome 137 because of implicit anchors.
+
+Two differences from upstream are worth knowing before you plan around Tier 2:
+
+- In upstream, a Tier 2 browser loses positioning: layered surfaces open but are not placed next to their trigger. Here, Tier 2 positions layers with a measurement fallback, so surfaces still land beside their trigger.
+- Upstream calls everything older "Tier 3, best effort". Here, below Tier 2 is unsupported; the only guarantee is that importing the modules does not throw.
+
+## Which features set the floor
+
+The requirement comes from a small set of features. Everything else the elements use (cascade layers, container queries, `:has()`, `color-mix()`, `<dialog>`, shadow parts) has been widely available since 2023 or earlier and needs no special handling.
+
+| Feature                                                    | Role in the library                                                                                                           | Availability (from the modern-web-guidance data)                                                                                 |
+| ---------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| Custom elements, Shadow DOM, form-associated custom elements | The element model. Form controls take part in native forms through `ElementInternals`.                                    | Widely available. Form-associated custom elements: Chrome 77, Firefox 98, Safari 16.4.                                            |
+| [`Popover`](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API) API | Opens, stacks and light-dismisses layered surfaces in the top layer.                                                | Baseline 2025. Chrome and Edge 116, Firefox 125, Safari 17 (iOS 18.3). This is the Tier 2 floor.                                  |
+| CSS anchor positioning and implicit anchors (`showPopover({source})`) | Positions layered surfaces next to their trigger without JavaScript measurement.                          | Native in Chrome and Edge 137+ and Firefox 147+. Safari 26 (and Tier 2) positions with the measurement fallback, loaded only when needed; native in Safari 27. Detected at run time.            |
+| `light-dark()`                                             | Lets every colour token respond to the colour scheme with one value. Underpins the theme.                                     | Baseline 2024. Chrome 123, Firefox 120, Safari 17.5. Below that, the stylesheet uses a `prefers-color-scheme` fallback.            |
+| ARIA element reflection, `:state()`, `dialog.requestClose()` | Cross-root accessible names and descriptions, readable custom states, user-equivalent dialog close requests.                | Present in every Tier 1 engine. In Tier 2 the library falls back to copied text, no `:state()` hooks, and its own close path.      |
+
+`light-dark()` and Popover reached wide availability well before anchor positioning did. In Tier 2 browsers, layered surfaces still open and dismiss correctly, and positioning comes from the fallback.
+
+### Features that are progressive enhancement
+
+Some features are missing from at least one Tier 1 engine. The elements use them only when they are present, detect them, and follow a fallback, so nothing depends on them:
+
+| Feature                                          | Missing from                                      | What you get without it                                                                                                                   |
+| ------------------------------------------------ | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `Element.ariaNotify()`                           | At least one Tier 1 engine (Safari before 27)     | Announcements go through polite and assertive live regions that the library manages for you                                              |
+| Invoker commands (`command` and `commandfor`)    | Safari before 26.2                                | Overlay elements still open with `show()`, `hide()` and `toggle()`; the declarative `--show`, `--hide` and `--toggle` commands are an addition |
+| `CloseWatcher`                                   | At least one Tier 1 engine                        | Escape and outside press close layers; platform close gestures such as Android Back are the enhancement                                    |
+| `<dialog closedby>`                              | Safari (Chrome 134, Firefox 141)                  | Light dismiss uses the library's own pointer handling instead of the attribute                                                             |
+| `moveBefore()` and `connectedMoveCallback`       | Safari (Chrome 133, Firefox 144)                  | Moving an open element re-shows its surface instead of preserving it in place                                                              |
+| `hidden="until-found"`                           | At least one Tier 1 engine                        | Collapsed content stays hidden from find in page                                                                                           |
+| Reference Target, scoped custom element registries | At least one Tier 1 engine                    | Labels and IDREFs aimed at a host element rely on the library's own wiring; scoped registries are optional                                 |
+| `popover="hint"`, `interestfor`                  | At least one Tier 1 engine                        | Hover and focus surfaces use the library's own hover-intent logic                                                                          |
+| Anchored container queries                       | Firefox and Safari (Chrome 143)                   | Arrows and placement styling read a `data-placement` attribute that the library writes                                                     |
+| `field-sizing`, `scrollbar-color`, `contrast-color()` | At least one Tier 1 engine (`scrollbar-color`: Safari before 26.2) | Each has a fallback that does not depend on it; `contrast-color()` is used only for user-supplied colours |
+| Sanitizer API                                    | Safari (Chrome 146, Firefox 148)                  | Consumer markup strings (custom SVG icons) are sanitised by a lazily loaded fallback instead                                               |
+
+## Which elements are affected
+
+The browser requirement is concentrated in the layered-surface elements: anything that renders content in an overlay positioned against a trigger.
+
+- `tct-tooltip`, `tct-hover-card`, `tct-popover`
+- `tct-dropdown-menu` (including sub-menus), `tct-context-menu`, `tct-more-menu`
+- `tct-selector`, `tct-multi-selector`, `tct-complex-selector` (dropdown surfaces)
+- `tct-typeahead` and `tct-tokenizer` (suggestion menus)
+- `tct-carousel` (anchored controls) and `tct-outline` (the moving indicator)
+- Menus inside other elements: `tct-breadcrumbs` overflow, `tct-tab-list` menus, `tct-top-nav` menus and mega menus
+- `tct-date-input` and `tct-date-range-input` (calendar popovers), and the `tct-power-search` filter editor
+
+This list is longer than the one in upstream's guide, which is incomplete: upstream's own source anchors these elements too, and the port anchors every popover consumer the same way. If your product uses none of these, it has no anchor-positioning requirement at all, and it needs `light-dark()` only for exact theme colours. Page layout, typography, forms, buttons, cards, tables and navigation all work down to Tier 2 with no special handling. Native `<dialog>` surfaces (`tct-dialog`, `tct-alert-dialog`, `tct-bottom-sheet`, `tct-lightbox`, `tct-command-palette`) do not depend on anchoring.
+
+## What the library guarantees
+
+**Do rely on:**
+
+- Elements never throw on missing platform APIs. Detection goes through one module, so a missing API downgrades a behaviour instead of crashing.
+- Tier 1 and Tier 2 are officially supported. Tier 1 is tested on real engines, and Tier 2 is tested by forcing features off in a Chromium run.
+- Non-layered elements render correctly down to Tier 2.
+- Every module imports in Node and in unsupported browsers without touching the DOM.
+
+**Do not expect:**
+
+- Pixel-identical placement in Tier 2. Positioning comes from a measurement fallback, so a surface can differ by a pixel or two from the CSS result.
+- Any support below Tier 2, or polyfills for it.
+- `:state()` selectors to match in Tier 2. Nothing inside the library depends on them, but your own styles that do will not apply there.
+
+## Supporting older browsers
+
+If your audience includes browsers below Tier 2, you have these options, cheapest first. All of them are decisions you make for your audience.
+
+1. **Accept Tier 2 behaviour.** If your audience is on Chrome 116 and later, Firefox 125 and later or Safari 17 and later, you already have a working, fully operable experience with no extra work.
+2. **Gate the elements.** Detect the Popover API and show a static message, or a server-rendered fallback, to browsers without it. The library never ships a polyfill, and a polyfill for Popover or anchor positioning is not tested against these elements.
+3. **Server-render meaning first.** Write the content so that it is understandable without the elements (headings, lists, links, forms). Undefined tags are inert inline elements, so the content stays readable. The optional cloak stylesheet (_planned_) hides undefined tags briefly, and it fails open so content is never lost when a script does not load.
+
+Feature-detect at run time rather than sniffing user agents. Use the library's own detection, which is what the elements use:
+
+```js
+import {features} from '@tecton-astryx/core/features.js';
+
+features.popover;            // Popover API (Tier 2 and up)
+features.anchorPositioning;  // CSS anchor positioning (Tier 1)
+features.implicitAnchor;     // showPopover({source}) anchors implicitly (Tier 1; probed once)
+features.lightDark;          // light-dark() (Baseline 2024)
+features.elementReflection;  // ARIA element reflection
+features.customStates;       // :state() and ElementInternals#states
+```
+
+Or use the platform directly:
+
+```js
+// Popover API (Tier 2 and up)
+const hasPopover = typeof HTMLElement !== 'undefined' && 'popover' in HTMLElement.prototype;
+
+// CSS anchor positioning (Tier 1)
+const hasAnchorPositioning = CSS.supports('position-area', 'block-end') && CSS.supports('anchor-name', '--x');
+
+// CSS light-dark()
+const hasLightDark = CSS.supports('color', 'light-dark(#000, #fff)');
+```
+
+To try Tier 2 behaviour in your own tests without an old browser, force a feature off. `overrideFeature` returns a function that restores the previous state:
+
+```js
+import {overrideFeature} from '@tecton-astryx/core/features.js';
+
+const restore = overrideFeature('implicitAnchor', false);
+// … assert that a menu still opens beside its trigger …
+restore();
+```
+
+## How the floors move
+
+The version floors above are the project's recorded browser policy. They are not a rolling window: they change only through a new decision, and the change appears on this page.
+
+The policy behind them is fixed and simple:
+
+- **Baseline widely available** features are used freely, with no fallback.
+- Features that are present in **every Tier 1 engine** are used natively without polyfills. APIs whose absence would throw or silently break a core behaviour still go through the feature module, so Tier 2 degrades instead of crashing.
+- Features **missing from any Tier 1 engine** are progressive enhancement only, are feature-detected, and follow the guide's fallback.
+- Some techniques are never used: `:host-context()`, customized built-ins (`is=`), CSS module scripts at run time, and the `overlay` property for exit animations.
+
+Always feature-detect rather than hard-coding version numbers, so your app adapts as the platform moves.
+
+{/*
+Adapted from Astryx docs topic `browser-support` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md), rewritten for D-010 / ARCHITECTURE section 1.
+Section map: Overview -> Overview; Support Tiers -> Support tiers; Which Features Set the Floor -> Which features set the floor (+ progressive enhancement);
+Which Components Are Affected -> Which elements are affected (full list per inventory finding D11); What Astryx Guarantees -> What the library guarantees;
+Supporting Older Browsers -> Supporting older browsers; How These Tiers Move Over Time -> How the floors move.
+Availability figures come from modern-web-guidance (skill 2026_09_04-7de96777). NOTE for the orchestrator: the guide data lists "anchor positioning" as limited
+availability (Safari 27 only), which disagrees with A-01/D-010; this page follows D-010 and tells readers to feature-detect. See the hand-off open questions.
+Guides: [mwg:web-components] [mwg:custom-elements] [mwg:form-associated-custom-elements] [mwg:position-aware-tooltips]
+[mwg:resilient-context-menus-and-nested-dropdowns] [mwg:animate-to-from-top-layer] [mwg:persistent-top-layer-ui] [mwg:light-dismiss-a-dialog]
+[mwg:declarative-dialog-popover-control] [mwg:move-dom-element-without-losing-state] [mwg:dark-mode] [mwg:sanitize-untrusted-html] [mwg:css-layout]
+*/}

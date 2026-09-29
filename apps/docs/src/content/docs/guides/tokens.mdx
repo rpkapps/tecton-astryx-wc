@@ -1,0 +1,298 @@
+---
+title: All Tokens
+description: The design tokens - colour, spacing, size, border, focus, radius, shadow, motion and typography - with their Tecton values and where each value comes from.
+sidebar:
+  order: 20
+---
+
+Design tokens are CSS custom properties, declared once on the document by `tokens.css`. Elements read them through the cascade, so a token set on any ancestor reaches every element below it. This page is the authored reference for the tokens that you will use in your own CSS. A complete generated reference (every token, with its palette path and source) is planned as a generated page, built from `@tecton-astryx/tokens/tokens.json`.
+
+The token build emits 786 custom properties plus 1,820 opt-in palette colours. Each token has a status that says where its value comes from:
+
+| Status shown here  | Metadata status                    | Count | Meaning                                                                                                     |
+| ------------------ | ---------------------------------- | ----- | ----------------------------------------------------------------------------------------------------------- |
+| Tecton             | `tecton-export`, `tecton-astryx`   | 695 | From the Tecton design system: its export (authoritative for role values in both modes), or the owner's Tecton theme bindings where the export has no role |
+| Astryx default     | `upstream-default`                 | 18 | An Astryx value that Tecton deliberately keeps (the spacing scale, three tiny font sizes)                    |
+| Astryx-retained    | `astryx-retained`                  | 10 | No Tecton value exists, so the Astryx value is kept on purpose (motion)                                      |
+| Provisional        | `provisional`                      | 63 | No Tecton decision yet. A proposal (56 data-visualisation colours, `--size-element-lg`, and a few extras)   |
+
+Breakpoints and z-index are Astryx-retained too, but they are not custom properties; see [Values that are not tokens](#values-that-are-not-tokens).
+
+## Naming
+
+| Kind                   | Pattern                                             | Example                                    |
+| ---------------------- | --------------------------------------------------- | ------------------------------------------ |
+| Portable semantic      | The Astryx name, verbatim                           | `--color-text-secondary`, `--shadow-inset-error` |
+| Tecton semantic role   | `--tecton-<category>-<role>[-<state>]`              | `--tecton-color-action-primary-bg-hover`   |
+| Palette primitive (opt-in) | `--tecton-palette-<hue>-<surface>-<stop>`       | `--tecton-palette-mauve-on-light-680`      |
+| Component public       | `--<component>-<property>[-<state>]`                | `--button-focus-offset`                    |
+| Component private      | `--_<component>-<property>`, not an API             | `--_button-bg`                             |
+
+The Astryx names are used verbatim so that a page can mix Astryx for React and these elements from one `tokens.css`. Tecton-only roles live under `--tecton-*`. Elements never reference palette variables.
+
+## Colour tokens
+
+Semantic colours for consistent theming. Every colour token has a light and a dark value, and the stylesheet resolves them with `light-dark()` (with a `prefers-color-scheme` fallback where it is missing). See [Color](../color/) for how the roles fit together.
+
+| Token | Light | Dark | Status |
+| --- | --- | --- | --- |
+| `--color-accent` | `#644a78` | `#5d4d68` | Tecton |
+| `--color-accent-muted` | `#976dac40` | `#80708b40` | Tecton |
+| `--color-on-accent` | `#f7f3f8` | `#e5e0eb` | Tecton |
+| `--color-neutral` | `#e4dde7` | `#3a343e` | Tecton |
+| `--color-background-body` | `#f6f4f7` | `#1d1c1f` | Tecton |
+| `--color-background-surface` | `#fafafb` | `#131214` | Tecton |
+| `--color-background-card` | `#fafafb` | `#131214` | Tecton |
+| `--color-background-popover` | `#fafafb` | `#131214` | Tecton |
+| `--color-background-muted` | `#f0eef3` | `#28232c` | Tecton |
+| `--color-background-inverted` | `#21172a` | `#f6f5f8` | Tecton |
+| `--color-background-error-inverted` | `#a3240d` | `#e3a6a6` | Tecton |
+| `--color-overlay` | `#00000080` | same | Tecton |
+| `--color-overlay-hover` | `#0000000d` | `#ffffff0d` | Tecton |
+| `--color-overlay-pressed` | `#0000001a` | `#ffffff1a` | Tecton |
+| `--color-text-primary` | `#21172a` | `#f6f5f8` | Tecton |
+| `--color-text-secondary` | `#604e6e` | `#a7a2ac` | Tecton |
+| `--color-text-disabled` | `#ada3b2` | `#545356` | Tecton |
+| `--color-text-accent` | `#5c3878` | `#beb1c8` | Tecton |
+| `--color-on-dark` | `#f6f5f8` | same | Tecton |
+| `--color-on-light` | `#131214` | same | Tecton |
+| `--color-icon-primary` | `#21172a` | `#f6f5f8` | Tecton |
+| `--color-icon-secondary` | `#7b668b` | `#89848e` | Tecton |
+| `--color-icon-disabled` | `#d3ced6` | `#403f42` | Tecton |
+| `--color-icon-accent` | `#5c3878` | `#beb1c8` | Tecton |
+| `--color-success` | `#0c703e` | `#4fa66f` | Tecton |
+| `--color-success-muted` | `#10a05540` | `#61b67f40` | Tecton |
+| `--color-on-success` | `#f3fef8` | `#001607` | Tecton |
+| `--color-error` | `#a3240d` | `#c16e6c` | Tecton |
+| `--color-error-muted` | `#ed371d40` | `#b25d5940` | Tecton |
+| `--color-on-error` | `#fffaf9` | `#2e0000` | Tecton |
+| `--color-warning` | `#ffdd89` | `#e59306` | Tecton |
+| `--color-warning-muted` | `#ffb61f40` | `#fbbc3b40` | Tecton |
+| `--color-on-warning` | `#693f01` | `#1d0f01` | Tecton |
+| `--color-border` | `#e4dde7` | `#342f39` | Tecton |
+| `--color-border-emphasized` | `#b2a1bb` | `#57515c` | Tecton |
+| `--color-skeleton` | `#e4dde7` | `#3a343e` | Tecton |
+| `--color-track` | `#9884a4` | `#6e6873` | Tecton |
+| `--color-shadow` | `#00000026` | `#00000080` | Tecton |
+| `--color-tint-hover` | `#000000` | `#ffffff` | Tecton |
+
+### Hue, data and syntax tokens
+
+- **Hue tokens (40).** `--color-background-<hue>`, `--color-border-<hue>`, `--color-icon-<hue>` and `--color-text-<hue>` for the hues blue, cyan, teal, gray, green, orange, pink, purple, red and yellow. Backgrounds are translucent tints, and the text roles are inks that meet 4.5:1.
+- **Data-visualisation tokens (56, provisional).** `--color-data-categorical-<hue>` for blue, orange, purple, green, pink, cyan, red, teal, brown and indigo; `--color-data-neutral`; and five-step sequential ramps `--color-data-<hue>-1` to `-5` for blue, shamrock, orange, pink, purple, red, teal, yellow and gray. Tecton documents no data-visualisation colours, so this is a proposed mapping built from Tecton accent hues and status roles, using palette colours only. The teal, brown and indigo slots borrow lime, yellow and orchid.
+- **Syntax tokens (14).** `--color-syntax-<role>` for keyword, string, comment, number, function, type, variable, operator, constant, tag, attribute, property, punctuation and background.
+- **Tecton roles (452).** `--tecton-color-*`: explicit per-state action fills (`--tecton-color-action-primary-bg-hover`), input roles, status ladders (including the info and neutral ladders that Astryx lacks), table and top-navigation surfaces, tabs, toggles, chips and more. These are the roles that elements bind for their Tecton behaviour; use them in your own CSS when a semantic Astryx name does not express what you need.
+
+## Spacing tokens
+
+The 4 px base-unit scale. Element `gap` and `padding` attributes take the step values that upstream defines (0, 0.5, 1, 1.5, 2, 3, 4, 5, 6, 8 and 10), which map to these tokens. Tecton's own spacing scale is the same grid, and no spacing exceptions have been approved. See [Spacing](../spacing/).
+
+| Token | Value | Status |
+| --- | --- | --- |
+| `--spacing-0` | `0px` | Astryx default |
+| `--spacing-0-5` | `2px` | Astryx default |
+| `--spacing-1` | `4px` | Astryx default |
+| `--spacing-1-5` | `6px` | Astryx default |
+| `--spacing-2` | `8px` | Astryx default |
+| `--spacing-3` | `12px` | Astryx default |
+| `--spacing-4` | `16px` | Astryx default |
+| `--spacing-5` | `20px` | Astryx default |
+| `--spacing-6` | `24px` | Astryx default |
+| `--spacing-7` | `28px` | Astryx default |
+| `--spacing-8` | `32px` | Astryx default |
+| `--spacing-9` | `36px` | Astryx default |
+| `--spacing-10` | `40px` | Astryx default |
+| `--spacing-11` | `44px` | Astryx default |
+| `--spacing-12` | `48px` | Astryx default |
+
+## Size tokens
+
+Control heights. 28 and 32 are Tecton's measured button and text-field sizes. 36 has no Tecton source and is kept from Astryx as a provisional value.
+
+| Token | Value | Status |
+| --- | --- | --- |
+| `--size-element-sm` | `28px` | Tecton |
+| `--size-element-md` | `32px` | Tecton |
+| `--size-element-lg` | `36px` | Provisional |
+
+## Border tokens
+
+| Token | Value | Status |
+| --- | --- | --- |
+| `--border-width` | `1px` | Tecton |
+
+Tecton uses one-pixel rules throughout. The Tecton export also provides `--tecton-border-width-0`, `-100`, `-200` and `-400` (0, 1, 2 and 4 px).
+
+## Focus tokens
+
+The focus ring is hot pink in both modes, and it is drawn on the internal focusable element. See [Accessibility](../accessibility/).
+
+| Token | Value | Status |
+| --- | --- | --- |
+| `--focus-outline-color` | light `#ff00aa`, dark `#ff52a8` | Tecton |
+| `--focus-outline-width` | `2px` | Tecton |
+| `--focus-outline-style` | `solid` | Tecton |
+| `--focus-outline-offset` | `2px` | Tecton |
+| `--tecton-color-focus-inner` | light `#f6f5f8`, dark `#131214` | Provisional |
+
+`--button-focus-offset` (`1px`) is the button's documented focus offset.
+
+## Radius tokens
+
+Radii are named by role, not by size. See [Shape](../shape/).
+
+| Token | Value | Status |
+| --- | --- | --- |
+| `--radius-none` | `0px` | Tecton |
+| `--radius-inner` | `2px` | Tecton |
+| `--radius-element` | `4px` | Tecton |
+| `--radius-container` | `8px` | Tecton |
+| `--radius-chat` | `12px` | Tecton |
+| `--radius-page` | `16px` | Tecton |
+| `--radius-full` | `9999px` | Tecton |
+
+## Shadow tokens
+
+Tecton is flat: panels are separated by a one-pixel rule and by getting darker, and only a floating action button has a shadow in the design. The shadow tokens are soft single-layer black-alpha drops kept so that surfaces with an elevation attribute still render sensibly. See [Elevation](../elevation/).
+
+| Token | Value | Status |
+| --- | --- | --- |
+| `--shadow-low` | light `0px 1px 2px #0000001a`, dark `0px 1px 2px #00000066` | Tecton |
+| `--shadow-med` | light `0px 2px 6px #00000026`, dark `0px 2px 6px #00000080` | Tecton |
+| `--shadow-high` | light `0px 8px 24px #00000033`, dark `0px 8px 24px #00000099` | Tecton |
+| `--shadow-inset-hover` | light `inset 0px 0px 0px 2px #9272a440`, dark `inset 0px 0px 0px 2px #7d728440` | Tecton |
+| `--shadow-inset-selected` | light `inset 0px 0px 0px 2px #976dac80`, dark `inset 0px 0px 0px 2px #80708b80` | Tecton |
+| `--shadow-inset-success` | light `inset 0px 0px 0px 2px #10a0554d`, dark `inset 0px 0px 0px 2px #61b67f4d` | Tecton |
+| `--shadow-inset-warning` | light `inset 0px 0px 0px 2px #ffb61f4d`, dark `inset 0px 0px 0px 2px #fbbc3b4d` | Tecton |
+| `--shadow-inset-error` | light `inset 0px 0px 0px 2px #ed371d4d`, dark `inset 0px 0px 0px 2px #b25d594d` | Tecton |
+
+## Duration and easing tokens
+
+Motion is not a brand token, and Tecton has none, so the Astryx values are kept on purpose. See [Motion](../motion/).
+
+| Token | Value | Status |
+| --- | --- | --- |
+| `--duration-fast-min` | `130ms` | Astryx-retained |
+| `--duration-fast` | `175ms` | Astryx-retained |
+| `--duration-fast-max` | `230ms` | Astryx-retained |
+| `--duration-medium-min` | `310ms` | Astryx-retained |
+| `--duration-medium` | `410ms` | Astryx-retained |
+| `--duration-medium-max` | `550ms` | Astryx-retained |
+| `--duration-slow-min` | `730ms` | Astryx-retained |
+| `--duration-slow` | `975ms` | Astryx-retained |
+| `--duration-slow-max` | `1300ms` | Astryx-retained |
+| `--ease-standard` | `cubic-bezier(0.24, 1, 0.4, 1)` | Astryx-retained |
+
+## Font tokens
+
+### Font family
+
+Figtree for text and IBM Plex Mono for code, measured and tabular text. The stacks end in metric-matched fallbacks so that the swap to the web font barely moves text. See [Typography](../typography/).
+
+| Token | Value | Status |
+| --- | --- | --- |
+| `--font-family-body` | `"Figtree Variable", Figtree, "Figtree Fallback", Helvetica, Arial, sans-serif` | Tecton |
+| `--font-family-heading` | `"Figtree Variable", Figtree, "Figtree Fallback", Helvetica, Arial, sans-serif` | Tecton |
+| `--font-family-code` | `"IBM Plex Mono", "IBM Plex Mono Fallback", Consolas, Monaco, monospace` | Tecton |
+
+### Font size
+
+| Token | Value | Status |
+| --- | --- | --- |
+| `--font-size-4xs` | `0.375rem` | Astryx default |
+| `--font-size-3xs` | `0.4375rem` | Astryx default |
+| `--font-size-2xs` | `0.5rem` | Astryx default |
+| `--font-size-xs` | `0.625rem` | Tecton |
+| `--font-size-sm` | `0.75rem` | Tecton |
+| `--font-size-base` | `0.875rem` | Tecton |
+| `--font-size-lg` | `1rem` | Tecton |
+| `--font-size-xl` | `1.25rem` | Tecton |
+| `--font-size-2xl` | `1.5rem` | Tecton |
+| `--font-size-3xl` | `2rem` | Tecton |
+| `--font-size-4xl` | `2.5rem` | Tecton |
+| `--font-size-5xl` | `3rem` | Tecton |
+
+The raw sizes are the Tecton ladder (10, 12, 14, 16, 20, 24, 32, 40 and 48 px). Astryx's upstream sizes at `lg`, `3xl`, `4xl` and `5xl` were 17, 29, 35 and 42 px.
+
+### Font weight
+
+| Token | Value | Status |
+| --- | --- | --- |
+| `--font-weight-normal` | `400` | Tecton |
+| `--font-weight-medium` | `500` | Tecton |
+| `--font-weight-semibold` | `500` | Tecton |
+| `--font-weight-bold` | `600` | Tecton |
+
+Tecton uses only two weights, 400 and 500. `semibold` therefore resolves to 500, and `bold` (600) is kept so that prose `<strong>` stays distinguishable.
+
+### Type scale
+
+Each text style is three tokens: `--text-<name>-size`, `--text-<name>-weight` and `--text-<name>-leading` (the leading is a unitless ratio). Elements consume them for you; use the `tct-text` and `tct-heading` elements rather than composing raw font tokens.
+
+| Style            | Size          | Weight | Line height          |
+| ---------------- | ------------- | ------ | -------------------- |
+| `display-1`      | 3rem (48 px)  | 500    | 1.2083 (58 px)       |
+| `display-2`      | 2.5rem (40 px)| 500    | 1.2 (48 px)          |
+| `display-3`      | 2rem (32 px)  | 500    | 1.1875 (38 px)       |
+| `heading-1`      | 1.5rem (24 px)| 500    | 1.25 (30 px)         |
+| `heading-2`      | 1.25rem (20 px)| 500   | 1.2 (24 px)          |
+| `heading-3`      | 1rem (16 px)  | 500    | 1.25 (20 px)         |
+| `heading-4`      | 0.875rem (14 px)| 500  | 1.2857 (18 px)       |
+| `heading-5`      | 0.75rem (12 px)| 500   | 1.3333 (16 px)       |
+| `heading-6`      | 0.625rem (10 px)| 500  | 1.4 (14 px)          |
+| `large`          | 1rem (16 px)  | 500    | 1.25 (20 px)         |
+| `body`           | 0.875rem (14 px)| 400  | 1.2857 (18 px)       |
+| `label`          | 0.875rem (14 px)| 500  | 1.2857 (18 px)       |
+| `code`           | 0.875rem (14 px)| 400  | 1.2857 (18 px)       |
+| `supporting`     | 0.75rem (12 px)| 400   | 1.3333 (16 px)       |
+
+Headings 3 to 6 are Tecton's own `large`, `medium-strong`, `small-strong` and `tiny` variants (Tecton names only two heading levels, so the other four take the next steps of its scale). The Tecton export's own names are also available as `--tecton-font-size-*`, `--tecton-font-weight-*` and `--tecton-line-height-*` (`display-1` to `display-3`, `heading-1`, `heading-2`, `large`, `medium`, `small` and `tiny`, plus the `action-medium` and `action-small` weights), in pixels.
+
+## Tecton export scales
+
+The Tecton export defines scales that no Astryx token maps to. They are available as tokens for your own CSS:
+
+- `--tecton-space-0` to `--tecton-space-1800` (20 steps, 0 to 144 px; the numeric part is a design step, not pixels);
+- `--tecton-radius-0`, `-25`, `-50`, `-100`, `-150`, `-200` and `--tecton-radius-round` (0, 2, 4, 8, 12, 16 and 1000 px);
+- `--tecton-icon-size-50` to `-400` (12, 16, 20, 24, 32, 40 and 48 px).
+
+## Values that are not tokens
+
+| Value           | Where it lives                                     | Status          | Note                                                                                                                                  |
+| --------------- | -------------------------------------------------- | --------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Breakpoints     | `breakpoints` in `@tecton-astryx/tokens/tokens.js` | Astryx-retained | `sm` 640, `md` 768, `lg` 1024, `xl` 1280, `2xl` 1536. Custom properties cannot be used in media queries, so these are data only        |
+| z-index         | none                                               | Astryx-retained | Astryx defines no z-index tokens. Overlays use the top layer. A few upstream layers are kept on purpose (toast 500, bottom sheet 1000, skip link 9999) |
+| Letter-spacing  | none                                               | Tecton          | Tecton specifies none anywhere, so text uses `normal`                                                                                |
+| Icons           | `@tecton-astryx/icons`                             | Provisional     | Six role icons (`chevronsLeft`, `chevronsRight`, `calendar`, `clock`, `checkDouble`, `stop`) have no Tecton glyph and use Lucide      |
+
+## Usage
+
+Use tokens through `var()` in any CSS, and reference names from JavaScript through the metadata module:
+
+```css
+.panel {
+  padding: var(--spacing-4);
+  border-radius: var(--radius-container);
+  background-color: var(--color-background-surface);
+  color: var(--color-text-primary);
+  border: var(--border-width) solid var(--color-border);
+  transition: opacity var(--duration-fast) var(--ease-standard);
+}
+```
+
+```js
+import {tokens, tokenVar, breakpoints} from '@tecton-astryx/tokens/tokens.js';
+
+tokens['--radius-element'].light; // '4px'
+tokenVar('--color-accent'); // 'var(--color-accent)'
+breakpoints.values.lg; // 1024
+```
+
+The metadata module is a snapshot for docs and tools. Runtime styling always uses `tokens.css`.
+
+{/*
+Adapted from Astryx docs topic `tokens` (facebook/astryx @ ca632c6, MIT; see THIRD-PARTY-NOTICES.md). The upstream page is generated from tokens.stylex.ts; this page's tables are generated from
+packages/tokens/dist/tokens.json (token build, 786 tokens, statuses as in D-002/D-013 Q-06) and must be regenerated when the token inputs change. The complete generated reference is a docs-shell deliverable (ARCHITECTURE 16.4).
+Section map: Color Tokens; Spacing Tokens; Size Tokens; Border Tokens; Focus Tokens; Radius Tokens; Shadow Tokens; Duration Tokens + Easing Tokens (combined); Font Family/Size/Weight; Type Scale; Usage in StyleX -> Usage.
+Guides: [mwg:dark-mode] [mwg:design-token-reactivity] [mwg:visually-stable-font-fallbacks] [mwg:css]
+*/}
