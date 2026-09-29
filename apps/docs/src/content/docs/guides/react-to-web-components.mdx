@@ -16,7 +16,7 @@ The rules below are normative (they are the architecture's mapping rules). Each 
 - **Components and terminology.** The catalogue, the 11 categories, variants, sizes, states and anatomy are the same. If Astryx has a `TextInput` with a `hasClear` prop, you will find a `tct-text-input` with a `has-clear` attribute.
 - **Design tokens.** The 188 core token names (`--color-text-primary`, `--spacing-4`, `--radius-container` and so on) are used verbatim, with Tecton values. Tecton-only roles are `--tecton-*`. A page can even mix Astryx for React and these elements, themed from one `tokens.css`, because `data-theme` is shared.
 - **Behaviour.** Keyboard contracts, dismissal rules, IME safety, layer stacking and announcements are ported, with upstream's tests as the specification. Where upstream has a known accessibility defect it is not copied.
-- **Message ids and locales.** The 30 catalogs and the `@tct.<namespace>.<key>` ids are the same.
+- **Message ids and locales.** The 30 catalogs are the same, with ids of the form `@tct.<namespace>.<key>`.
 
 ## Names
 

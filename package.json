@@ -4,7 +4,7 @@
   "license": "UNLICENSED",
   "version": "0.0.0",
   "type": "module",
-  "description": "Framework-independent Web Components (Lit + TypeScript) implementing the Astryx design system, re-skinned with Tecton.",
+  "description": "Framework-independent Web Components (Lit + TypeScript) implementing an upstream design system's public components, re-skinned with Tecton.",
   "packageManager": "pnpm@10.33.0",
   "engines": {
     "node": ">=22.18.0",

@@ -14,7 +14,7 @@ import type {SampleBadgeSize, SampleBadgeVariant} from './sample-badge.types.js'
  * @upstream Badge
  * @slot - Optional extra content after the label.
  * @slot icon - Leading icon.
- * @csspart badge - The visible pill (Astryx target `astryx-badge`).
+ * @csspart badge - The visible pill.
  * @cssprop --sample-badge-radius - Corner radius. Default `var(--radius-full)`.
  * @cssstate removable - The badge shows a remove button.
  * @fires tct-remove - The user asked to remove the badge; cancelable.

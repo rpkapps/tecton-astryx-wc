@@ -14,7 +14,7 @@ Eighteen oil & gas / subsurface glyphs, each with an `outlined` and a `filled` v
   `packages/wc/src/icons/`, commit `8b119b84ec4b912eceebb9f220218346596c6407` (recorded in
   [`glyphs/SOURCE-COMMIT`](glyphs/SOURCE-COMMIT); a read-only copy lives at `/home/user/refs/tecton-icons`).
 - The larger 131-glyph set of the owner's earlier React theme is **not** used (D-013). Lucide stays the general-purpose set
-  and the source of the Astryx role names (D-009).
+  and the source of the upstream role names (D-009).
 
 ## Layout
 

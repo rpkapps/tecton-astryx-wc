@@ -133,7 +133,7 @@ Registered messages outrank every shipped catalog, whatever their specificity, a
 4. the element's built-in English default;
 5. the message id itself, with a development warning.
 
-Message ids keep the upstream form: `@tct.<namespace>.<key>` (for example `@tct.pagination.next`). Strings that this library adds are `@tct.<folder>.<key>`. Messages are ICU MessageFormat, so plural and number placeholders such as `{count, plural, one {page} other {pages}}` work in overrides.
+Message ids have the form `@tct.<namespace>.<key>` (for example `@tct.pagination.next`). Messages are ICU MessageFormat, so plural and number placeholders such as `{count, plural, one {page} other {pages}}` work in overrides.
 
 To load catalogs from somewhere other than the package (a CDN, a bundler chunk map), replace the loader:
 
@@ -169,7 +169,7 @@ Single-catalog usage, where your library resolves the elements' strings too, is 
 
 ## Using the elements as your i18n library
 
-For a small app, or when you do not want another runtime, you can resolve your own strings through the same mechanism. Keep your ids in a separate namespace from `@tct.*` and `@tct.*`, and register an `en` catalog, because the built-in English defaults contain only the elements' strings:
+For a small app, or when you do not want another runtime, you can resolve your own strings through the same mechanism. Keep your ids in a separate namespace from `@tct.*`, and register an `en` catalog, because the built-in English defaults contain only the elements' strings:
 
 ```js
 import {registerTranslation} from '@tecton-wc/core/i18n/registry.js';

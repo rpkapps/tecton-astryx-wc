@@ -139,6 +139,8 @@ export default defineConfig({
           ],
         },
         {label: 'Reference', items: [{autogenerate: {directory: 'reference'}}]},
+        // Also linked from every page footer; listed so the page has a current-page link (D-015).
+        {label: 'Third-party notices', link: '/legal/third-party-notices/'},
       ],
     }),
   ],
