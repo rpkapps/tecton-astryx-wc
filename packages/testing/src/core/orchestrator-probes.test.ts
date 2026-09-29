@@ -32,7 +32,7 @@ describe('probe: mixed form', () => {
     const submits: FormData[] = [];
     form.addEventListener('submit', (event) => {
       event.preventDefault();
-      submits.push(new FormData(form, (event as SubmitEvent).submitter));
+      submits.push(new FormData(form, event.submitter));
     });
     return {form, submits, input: form.querySelector('tct-test-input')!};
   }
