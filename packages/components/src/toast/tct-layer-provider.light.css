@@ -1,0 +1,9 @@
+/*
+ * tct-layer-provider is a provider: no shadow root and no box of its own (A§8.1, A§6.7). This is
+ * carried by the generated light-dom.css; the element also adopts the same rule at runtime.
+ */
+@layer tecton.light-dom {
+  :where(tct-layer-provider) {
+    display: contents;
+  }
+}

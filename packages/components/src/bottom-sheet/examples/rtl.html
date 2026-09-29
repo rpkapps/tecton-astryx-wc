@@ -1,0 +1,21 @@
+<!-- title: Right to left; description: The sheet keeps its block-axis behaviour in right-to-left contexts (Arrow Up and Arrow Down do not mirror), the handle name and its value are localized, and the layout uses logical properties. -->
+<div dir="rtl" lang="ar">
+  <tct-button id="sheet-rtl-open" label="فتح المرشحات"></tct-button>
+  <tct-bottom-sheet id="sheet-rtl" label="المرشحات" height="tall" snap-points="50%">
+    <div style="display: grid; gap: var(--spacing-3); padding: var(--spacing-4)">
+      <tct-heading level="3">المرشحات</tct-heading>
+      <label style="display: flex; align-items: center; gap: var(--spacing-2)">
+        <input type="checkbox" /> متوفر في المخزون
+      </label>
+      <label style="display: flex; align-items: center; gap: var(--spacing-2)">
+        <input type="checkbox" /> عروض
+      </label>
+    </div>
+  </tct-bottom-sheet>
+  <script type="module">
+    const sheet = document.getElementById('sheet-rtl');
+    document.getElementById('sheet-rtl-open').addEventListener('click', () => {
+      sheet.open = true;
+    });
+  </script>
+</div>

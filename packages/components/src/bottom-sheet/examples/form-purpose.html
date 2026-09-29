@@ -1,0 +1,26 @@
+<!-- title: Protecting form input; description: purpose="form" blocks the scrim press and the swipe (they would lose what was typed) but keeps Escape. purpose="required" blocks every implicit dismissal and is an alertdialog; the explicit controls of your own still close it. -->
+<tct-button id="sheet-form-open" label="Edit profile"></tct-button>
+<tct-bottom-sheet id="sheet-form" label="Edit profile" purpose="form" height="hug">
+  <form style="display: grid; gap: var(--spacing-3); padding: var(--spacing-4)">
+    <tct-heading level="3">Edit profile</tct-heading>
+    <label style="display: grid; gap: var(--spacing-1)">
+      Display name
+      <input name="name" value="Alex Morgan" style="min-block-size: var(--size-element-lg)" />
+    </label>
+    <div style="display: flex; gap: var(--spacing-2); justify-content: flex-end">
+      <tct-button id="sheet-form-cancel" variant="ghost" label="Cancel"></tct-button>
+      <tct-button id="sheet-form-save" variant="primary" label="Save"></tct-button>
+    </div>
+  </form>
+</tct-bottom-sheet>
+<script type="module">
+  const sheet = document.getElementById('sheet-form');
+  document.getElementById('sheet-form-open').addEventListener('click', () => {
+    sheet.open = true;
+  });
+  for (const id of ['sheet-form-cancel', 'sheet-form-save']) {
+    document.getElementById(id).addEventListener('click', () => {
+      sheet.open = false;
+    });
+  }
+</script>

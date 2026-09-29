@@ -1,0 +1,175 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "overlay",
+  "workPackage": "WP-4",
+  "entries": {
+    "core.overlay": {
+      "tag": "tct-overlay",
+      "status": "implemented",
+      "upstream": {
+        "name": "Overlay",
+        "path": "packages/core/src/Overlay/Overlay.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "The base content."
+        },
+        {
+          "upstream": "content",
+          "kind": "slot",
+          "target": "content",
+          "as": "slot",
+          "notes": "The content shown inside the scrim."
+        },
+        {
+          "upstream": "showOn",
+          "kind": "prop",
+          "target": "showOn",
+          "as": "attribute",
+          "reflect": true,
+          "default": "always",
+          "notes": "`show-on`."
+        },
+        {
+          "upstream": "isOpen",
+          "kind": "prop",
+          "target": "open",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Tri-state: the attribute forces the content open, the property `false` forces it hidden and inert, `undefined` leaves it to `show-on`."
+        },
+        {
+          "upstream": "scrim",
+          "kind": "prop",
+          "target": "scrim",
+          "as": "attribute",
+          "reflect": true,
+          "default": "dark",
+          "notes": "`dark` | `light` | `none` (upstream `false`)."
+        },
+        {
+          "upstream": "position",
+          "kind": "prop",
+          "target": "position",
+          "as": "attribute",
+          "reflect": true,
+          "default": "fill"
+        },
+        {
+          "upstream": "align",
+          "kind": "prop",
+          "target": "alignment",
+          "as": "attribute",
+          "reflect": true,
+          "default": "end",
+          "notes": "Renamed: an `align` attribute is mapped to text-align by Chrome (A§7.1)."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(overlay), ::part(scrim) and the tokens."
+        },
+        {
+          "upstream": "className",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: `class` goes on the host."
+        },
+        {
+          "upstream": "style",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: `style` goes on the host."
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "The host element is the container; use it directly."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useOverlay",
+          "target": "tct-overlay",
+          "as": "controller",
+          "notes": "The hook applied overlay behaviour to an existing container; wrap that container's content in tct-overlay, or use the container-reveal styles for a bare reveal."
+        },
+        {
+          "upstream": "useContainerReveal",
+          "target": "overlay/container-reveal.styles.css",
+          "as": "css",
+          "notes": "CSS module for hover/focus reveal inside a container (.reveal-container, .reveal, .reveal-preserved, .conceal, data-reveal-state, data-reveal-visibility, --_hover-delay). Consumed by Thumbnail and TreeList row actions. Filed as a request to move under styles/."
+        },
+        {
+          "upstream": "useClickableContainer",
+          "target": "INTERACTIVE_SELECTORS",
+          "as": "controller",
+          "notes": "Touch tap-to-toggle uses the same interactive-element guard as the shared clickable container."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Tab reaches hidden overlay content (it is only transparent) and focus inside the container reveals it while `show-on` is `hover` or `focus`",
+          "when": "show-on hover, hover-or-focus or focus"
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "OVERLAY-01",
+          "type": "approved-api-difference",
+          "text": "`align` is `alignment`, `scrim={false}` is `scrim=\"none\"`, and `isOpen` is a tri-state (`open` attribute forces open, property `false` forces hidden, `undefined` = `show-on`) (A§7.1, A§7.2)."
+        },
+        {
+          "id": "OVERLAY-02",
+          "type": "approved-api-difference",
+          "text": "The media-theme inversion is done by setting `data-media-theme` on each `slot=\"content\"` child (the tokens' `[data-media-theme]` island), because a `<tct-media-theme>` wrapper would have to be rendered around slotted content and document CSS cannot reach an attribute inside the shadow root. The attribute is removed again for `scrim=\"none\"`."
+        },
+        {
+          "id": "OVERLAY-03",
+          "type": "a11y-improvement",
+          "text": "The strip slide is movement, so it only runs without `prefers-reduced-motion: reduce` (the fade stays); upstream zeroes the whole transition."
+        },
+        {
+          "id": "OVERLAY-05",
+          "type": "a11y-improvement",
+          "text": "Hidden overlay content is transparent and click-through, not visibility:hidden as upstream: a hidden control could never receive keyboard focus there, so :focus-within could not reveal it. Here it stays in the tab order and the accessibility tree and reveals when focus reaches it."
+        },
+        {
+          "id": "OVERLAY-04",
+          "type": "tecton-visual",
+          "text": "The `light` scrim washes with the near-white `--color-on-dark` token at 60% instead of the literal `white`; no colour literals in component CSS (D-013)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": false,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/components/src/styles/container-reveal.styles.css",
+          "reason": "useContainerReveal is consumed by other families (Thumbnail, TreeList). Its CSS module is authored at packages/components/src/overlay/container-reveal.styles.css because WP-4 may not write under styles/; move it (git mv) and update the two consumers' imports.",
+          "diff": "git mv packages/components/src/overlay/container-reveal.styles.css packages/components/src/styles/container-reveal.styles.css"
+        }
+      ],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:css]; [mwg:interactive-content-reveal] for its accessibility guarantee (revealed content stays keyboard-reachable). tct-overlay has no events (upstream has none) and no strings."
+    }
+  }
+}

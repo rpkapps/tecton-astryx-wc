@@ -1,0 +1,86 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "skeleton",
+  "workPackage": "WP-2",
+  "entries": {
+    "core.skeleton": {
+      "tag": "tct-skeleton",
+      "status": "implemented",
+      "upstream": {
+        "name": "Skeleton",
+        "path": "packages/core/src/Skeleton/Skeleton.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "target": "width",
+          "as": "attribute",
+          "default": "100%",
+          "notes": "Number or numeric string = px; any other string is a CSS length. Written to a private custom property on the inner part (A§7.2)."
+        },
+        {
+          "upstream": "height",
+          "kind": "prop",
+          "target": "height",
+          "as": "attribute",
+          "default": "100%"
+        },
+        {
+          "upstream": "radius",
+          "kind": "prop",
+          "target": "radius",
+          "as": "attribute",
+          "default": "3",
+          "notes": "none | 0..4 | rounded; numeric attribute strings become numbers."
+        },
+        {
+          "upstream": "index",
+          "kind": "prop",
+          "target": "index",
+          "as": "attribute",
+          "default": "0"
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle family: data-* attributes are set on the host directly; nothing to map."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base) or the size attributes."
+        }
+      ],
+      "keyboard": [],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "SKELETON-01",
+          "type": "approved-api-difference",
+          "text": "The aria-hidden default is ElementInternals state on the host, so a host aria-hidden attribute overrides it exactly as upstream's prop spread lets aria-hidden={false} win."
+        },
+        {
+          "id": "SKELETON-02",
+          "type": "tecton-visual",
+          "text": "Radius steps keep upstream's token mapping (1 = radius-inner, 2 = radius-element, 3 and 4 = radius-container), which Tecton resolves to 2, 4 and 8px; upstream's doc comments (4/8/12/16px) describe the Astryx values."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "rtl": true,
+        "forcedColors": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:css] animation timing, reduced-motion pattern (`--_animation-reduced`) and forced colours; [mwg:accessible-web-components] default ARIA through ElementInternals; [mwg:styling-web-components] parts and private custom properties."
+    }
+  }
+}

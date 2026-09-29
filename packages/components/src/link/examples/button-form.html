@@ -1,0 +1,13 @@
+<!-- title: Button form; description: Without href the element is a real button dressed as a link, for an action that reads as text. Listen for click. -->
+<div id="button-form-example" style="display: flex; align-items: center; gap: var(--spacing-3)">
+  <tct-link standalone>Show more</tct-link>
+  <span aria-live="polite" data-status></span>
+</div>
+<script type="module">
+  const root = document.getElementById('button-form-example');
+  let count = 0;
+  root.querySelector('tct-link').addEventListener('click', () => {
+    count += 1;
+    root.querySelector('[data-status]').textContent = `Shown ${count} more`;
+  });
+</script>

@@ -1,0 +1,81 @@
+/*
+ * tct-avatar-group-overflow. The chip shares the avatars' shape through `--_radius` and their size and
+ * overlap through private custom properties written by the class. Opaque surface with a neutral tint so
+ * avatars beneath never bleed through. [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+  }
+
+  .base {
+    --_radius: var(--radius-full);
+    --_ring: 2px; /* design: the ring between stacked avatars (upstream BORDER_WIDTH) */
+    --_tint: linear-gradient(var(--color-neutral), var(--color-neutral));
+
+    position: relative;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-inline-size: calc(var(--_size) + var(--_ring) * 2);
+    block-size: calc(var(--_size) + var(--_ring) * 2);
+    padding-block: 0;
+    padding-inline: var(--spacing-2);
+    border: var(--_ring) solid var(--color-background-surface);
+    border-radius: var(--_radius);
+    background-color: var(--color-background-surface);
+    background-image: var(--_tint);
+    color: var(--color-text-secondary);
+    font-family: var(--font-family-body);
+    /* Scales with the avatar but never below the supporting-text size, the 12px legibility floor. */
+    font-size: max(var(--text-supporting-size), calc(var(--_size) * 0.35));
+    font-weight: var(--font-weight-medium);
+    user-select: none;
+  }
+
+  :host(:not(:first-child)) .base {
+    margin-inline-start: var(--_overlap);
+  }
+
+  .base[data-shape='rounded'] {
+    --_radius: var(--radius-element);
+  }
+
+  .base[data-shape='square'] {
+    --_radius: var(--radius-none);
+  }
+
+  button.base {
+    margin-block: 0;
+    cursor: pointer;
+    appearance: none;
+    font: inherit;
+    font-size: max(var(--text-supporting-size), calc(var(--_size) * 0.35));
+    font-weight: var(--font-weight-medium);
+  }
+}
+
+@layer state {
+  @media (hover: hover) {
+    button.base:hover {
+      background-image:
+        linear-gradient(var(--color-overlay-hover), var(--color-overlay-hover)), var(--_tint);
+    }
+  }
+
+  button.base:active {
+    background-image:
+      linear-gradient(var(--color-overlay-pressed), var(--color-overlay-pressed)), var(--_tint);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .base {
+      border-color: ButtonBorder;
+      background-color: Canvas;
+      color: CanvasText;
+    }
+  }
+}

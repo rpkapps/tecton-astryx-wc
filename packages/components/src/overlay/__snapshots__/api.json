@@ -1,0 +1,81 @@
+{
+  "folder": "overlay",
+  "elements": {
+    "tct-overlay": {
+      "class": "TctOverlay",
+      "attributes": [
+        {
+          "name": "alignment",
+          "property": "alignment",
+          "type": "OverlayAlignment",
+          "values": [
+            "start",
+            "center",
+            "end"
+          ],
+          "default": "'end'",
+          "reflects": true
+        },
+        {
+          "name": "open",
+          "property": "open",
+          "type": "boolean | undefined",
+          "default": "undefined",
+          "reflects": true
+        },
+        {
+          "name": "position",
+          "property": "position",
+          "type": "OverlayPosition",
+          "values": [
+            "fill",
+            "bottom",
+            "top"
+          ],
+          "default": "'fill'",
+          "reflects": true
+        },
+        {
+          "name": "scrim",
+          "property": "scrim",
+          "type": "OverlayScrim",
+          "values": [
+            "dark",
+            "light",
+            "none"
+          ],
+          "default": "'dark'",
+          "reflects": true
+        },
+        {
+          "name": "show-on",
+          "property": "showOn",
+          "type": "OverlayShowOn",
+          "values": [
+            "always",
+            "hover",
+            "focus",
+            "hover-or-focus"
+          ],
+          "default": "'always'",
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)",
+        "content"
+      ],
+      "events": [],
+      "cssParts": [
+        "overlay",
+        "scrim"
+      ],
+      "cssStates": [
+        "open"
+      ],
+      "cssProperties": []
+    }
+  }
+}

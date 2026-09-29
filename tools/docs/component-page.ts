@@ -5,7 +5,7 @@
  *   Variants and states (A) · Responsive behaviour (A) · Attributes and properties, Methods, Slots,
  *   Events, Styling hooks, Tokens (G, from the CEM and the compiled CSS) · Form semantics (A + G) ·
  *   Keyboard interactions (G, parity.json) · Screen-reader expectations (A) · Localisation (A + G) ·
- *   Consumer responsibilities (A) · Differences from Astryx (G) · Upstream mapping (G)
+ *   Consumer responsibilities (A)
  *
  * A = authored in `<folder>.docs.md` (see docs-model.ts); G = generated. Authored sections that are
  * missing make the generator fail (tools/docs/generate.ts), so every page has all of them.
@@ -15,7 +15,7 @@ import type {ComponentDocs, DocSection} from '../lib/docs-model.ts';
 import {REQUIRED_SECTIONS} from '../lib/docs-model.ts';
 import type {ElementDoc} from '../lib/element-api.ts';
 import {elementDoc} from '../lib/element-api.ts';
-import type {ParityEntry} from '../lib/parity.ts';
+import {publicText, tokenStatusLabel} from '../lib/public-text.ts';
 import type {TokenMeta} from '../lib/tokens.ts';
 import {escapeMdx, jsxValue, yamlString} from './mdx.ts';
 
@@ -40,8 +40,6 @@ export const COMPONENT_SECTION_ORDER = [
   'Screen-reader expectations',
   'Localisation',
   'Consumer responsibilities',
-  'Differences from Astryx',
-  'Upstream mapping',
 ] as const;
 
 export interface ComponentPageInput {
@@ -61,7 +59,7 @@ export class DocsError extends Error {}
 
 function authored(sections: readonly DocSection[], heading: string): string {
   const section = sections.find((candidate) => candidate.heading === heading);
-  return section ? escapeMdx(section.body) : '';
+  return section ? escapeMdx(publicText(section.body)) : '';
 }
 
 const tagText = (tag: string) => `<${tag}>`;
@@ -172,7 +170,7 @@ export function renderComponentPage(input: ComponentPageInput): string {
     '',
     ...imports,
     '',
-    `<ComponentMeta tags=${jsxValue(tags)} status=${JSON.stringify(status)} category=${JSON.stringify(meta.category)} upstream=${jsxValue(meta.entries)} provisional={${provisionalCount}} />`,
+    `<ComponentMeta tags=${jsxValue(tags)} status=${JSON.stringify(status)} category=${JSON.stringify(meta.category)} provisional={${provisionalCount}} />`,
     '',
   );
 
@@ -189,8 +187,8 @@ export function renderComponentPage(input: ComponentPageInput): string {
   push('## Examples', '');
   if (docs.examples.length === 0) push('This page has no examples yet.', '');
   docs.examples.forEach((example, index) => {
-    push(`### ${escapeMdx(example.title)}`, '');
-    if (example.description) push(escapeMdx(example.description), '');
+    push(`### ${escapeMdx(publicText(example.title))}`, '');
+    if (example.description) push(escapeMdx(publicText(example.description)), '');
     push(`<Example source={example${index}} />`, '');
   });
 
@@ -376,7 +374,7 @@ export function renderComponentPage(input: ComponentPageInput): string {
   push(
     '## Tokens',
     '',
-    'Design tokens the component reads. Values follow the active colour scheme; provisional and astryx-retained tokens are listed on [Differences and open items](/reference/differences-and-open-items/).',
+    'Design tokens the component reads. Values follow the active colour scheme.',
     '',
     table(
       `Design tokens used by ${docs.folder}`,
@@ -392,7 +390,7 @@ export function renderComponentPage(input: ComponentPageInput): string {
         category: token?.category ?? '',
         light: token?.light ?? '',
         dark: token?.dark ?? '',
-        status: token?.status ?? 'unknown',
+        status: token ? tokenStatusLabel(token.status) : 'unknown',
         statusTone:
           token?.status === 'provisional' ? 'warning' : token?.status === 'astryx-retained' ? 'info' : undefined,
       })),
@@ -466,70 +464,6 @@ export function renderComponentPage(input: ComponentPageInput): string {
   );
 
   push('## Consumer responsibilities', '', authored(s, 'Consumer responsibilities'), '');
-
-  // Differences from Astryx.
-  const differences = parityEntries.flatMap(([, entry]) => entry.differences ?? []);
-  const waived = parityEntries.flatMap(([, entry]) =>
-    entry.api.filter((row) => row.as === 'waived').map((row) => ({entry, row})),
-  );
-  push(
-    '## Differences from Astryx',
-    '',
-    table(
-      'Recorded differences',
-      [
-        {key: 'id', label: 'Id', kind: 'code'},
-        {key: 'type', label: 'Type', kind: 'badge'},
-        {key: 'text', label: 'Difference'},
-      ],
-      differences.map((difference) => ({
-        id: difference.id,
-        type: difference.type,
-        typeTone: difference.type === 'waiver' ? 'warning' : undefined,
-        text: difference.text,
-      })),
-      'No differences are recorded.',
-    ),
-    '',
-    table(
-      'Waived upstream API',
-      [
-        {key: 'upstream', label: 'Astryx API', kind: 'code'},
-        {key: 'kind', label: 'Kind'},
-        {key: 'reason', label: 'Reason'},
-      ],
-      waived.map(({row}) => ({upstream: row.upstream, kind: row.kind, reason: row.reason ?? ''})),
-      'No upstream API is waived.',
-    ),
-    '',
-  );
-
-  // Upstream mapping table(s).
-  push('## Upstream mapping', '');
-  const mappingTable = (id: string, entry: ParityEntry): string =>
-    table(
-      `Astryx ${entry.upstream.name} (${id}) to ${entry.tag ? tagText(entry.tag) : 'web components'}`,
-      [
-        {key: 'upstream', label: 'Astryx', kind: 'code'},
-        {key: 'kind', label: 'Kind'},
-        {key: 'as', label: 'Maps to'},
-        {key: 'target', label: 'Target', kind: 'code'},
-        {key: 'note', label: 'Notes'},
-      ],
-      entry.api.map((row) => ({
-        upstream: row.upstream,
-        kind: row.kind,
-        as: row.as,
-        target: row.target ?? '',
-        note: row.reason ?? '',
-      })),
-      'No mapping recorded.',
-    );
-  if (parityEntries.length === 0) push('No upstream mapping is recorded.', '');
-  else if (parityEntries.length === 1) push(mappingTable(...parityEntries[0]!), '');
-  else {
-    for (const [id, entry] of parityEntries) push(`### ${entry.upstream.name}`, '', mappingTable(id, entry), '');
-  }
 
   return `${out.join('\n').replace(/\n{3,}/g, '\n\n').trimEnd()}\n`;
 }

@@ -1,0 +1,127 @@
+/*
+ * tct-toast-viewport. The host is the popover="manual" top-layer element. Nothing here sets `display`
+ * on the host (a closed [popover] must stay display: none); the stack is a flex column inside.
+ * Rows open and collapse with a grid-template-rows transition (entry via @starting-style, exit from the
+ * component), eight pixels apart and none at the screen edge. Safe-area gutters keep toasts off notches.
+ * [mwg:persistent-toast-notifications] [mwg:animate-to-from-top-layer]
+ */
+@layer component {
+  /* stylelint-disable tct/host-box-props -- the host IS the popover layer: this resets the UA [popover] box */
+  :host {
+    /* Reset the UA popover box: the host spans the inline axis and only its rows take pointer events. */
+    position: fixed;
+    inset: auto;
+    inset-inline: 0;
+    box-sizing: border-box;
+    inline-size: auto;
+    block-size: auto;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    overflow: visible;
+    background: transparent;
+    color: inherit;
+    pointer-events: none;
+    outline: none;
+    /* Only reachable when the popover API is missing (Tier 2), where nothing else layers it. */
+    z-index: 500; /* design: the upstream toast layer */
+  }
+
+  /* stylelint-enable tct/host-box-props */
+
+  :host([position^='bottom']) {
+    inset-block-end: var(--_toast-inset-bottom, 0px);
+    inset-block-start: auto;
+  }
+
+  :host([position^='top']) {
+    inset-block-start: var(--_toast-inset-top, 0px);
+    inset-block-end: auto;
+  }
+
+  :host([position$='end']) {
+    inset-inline-end: var(--_toast-inset-end, 0px);
+  }
+
+  :host([position$='start']) {
+    inset-inline-start: var(--_toast-inset-start, 0px);
+  }
+
+  /* The safe-area gutters live here: paddings on the host lose to an application reset. */
+  .stack {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    box-sizing: border-box;
+    padding-block-start: max(var(--spacing-4), env(safe-area-inset-top, 0px));
+    padding-block-end: max(var(--spacing-4), env(safe-area-inset-bottom, 0px));
+    padding-inline-start: max(var(--spacing-4), env(safe-area-inset-left, 0px));
+    padding-inline-end: max(var(--spacing-4), env(safe-area-inset-right, 0px));
+  }
+
+  .stack[data-position^='top'] {
+    flex-direction: column-reverse;
+  }
+
+  .stack[data-position$='start'] {
+    align-items: flex-start;
+  }
+
+  .row {
+    --_toast-slide-y: var(--spacing-2);
+
+    display: grid;
+    grid-template-rows: 1fr;
+    inline-size: 100%;
+    /* design: rows are as wide as the toast card (upstream 400px) */
+    max-inline-size: 400px;
+    min-inline-size: 0;
+    padding-block-end: var(--spacing-2);
+    pointer-events: auto;
+    transition:
+      grid-template-rows var(--duration-fast) var(--ease-standard),
+      padding var(--duration-fast) var(--ease-standard);
+
+    @starting-style {
+      grid-template-rows: 0fr;
+      padding-block-end: 0;
+    }
+  }
+
+  .row[data-edge='top'] {
+    --_toast-slide-y: calc(-1 * var(--spacing-2));
+  }
+
+  /* Eight pixels between toasts and none between the last one and the screen edge. */
+  .row:last-child {
+    padding-block-end: 0;
+  }
+
+  .stack[data-position^='top'] .row {
+    padding-block-end: var(--spacing-2);
+  }
+
+  .stack[data-position^='top'] .row:first-child {
+    padding-block-end: 0;
+  }
+
+  .row[data-exiting] {
+    grid-template-rows: 0fr;
+    padding-block-end: 0;
+  }
+
+  .row-inner {
+    min-block-size: 0;
+    min-inline-size: 0;
+    overflow: hidden;
+  }
+
+  /* Once a row has finished opening the clip is released so focus rings paint outside the card. */
+  .row[data-settled]:not([data-exiting]) .row-inner {
+    overflow: visible;
+  }
+
+  .end-content {
+    display: contents;
+  }
+}

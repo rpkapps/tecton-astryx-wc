@@ -1,0 +1,152 @@
+{
+  "folder": "toast",
+  "elements": {
+    "tct-layer-provider": {
+      "class": "TctLayerProvider",
+      "attributes": [
+        {
+          "name": "toast-max-visible",
+          "property": "toastMaxVisible",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "toast-position",
+          "property": "toastPosition",
+          "type": "ToastPosition | undefined",
+          "values": [
+            "top-end",
+            "top-start",
+            "bottom-end",
+            "bottom-start"
+          ],
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "nested",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "toast",
+          "type": "LayerToastConfig | undefined",
+          "readonly": false
+        },
+        {
+          "name": "toastInset",
+          "type": "ToastInset | undefined",
+          "readonly": false
+        },
+        {
+          "name": "viewport",
+          "type": "TctToastViewport | null",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-toast": {
+      "class": "TctToast",
+      "attributes": [
+        {
+          "name": "auto-hide-duration",
+          "property": "autoHideDuration",
+          "type": "number | undefined",
+          "reflects": false
+        },
+        {
+          "name": "dismiss-label",
+          "property": "dismissLabel",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "exiting",
+          "property": "exiting",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "swipe-edge",
+          "property": "swipeEdge",
+          "type": "ToastSwipeEdge",
+          "values": [
+            "end",
+            "start"
+          ],
+          "default": "'end'",
+          "reflects": false
+        },
+        {
+          "name": "type",
+          "property": "type",
+          "type": "ToastType",
+          "values": [
+            "info",
+            "error"
+          ],
+          "default": "'info'",
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "autoHide",
+          "type": "boolean",
+          "readonly": true
+        },
+        {
+          "name": "renderContent",
+          "type": "ToastContentRenderFn | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [
+        {
+          "name": "dismiss",
+          "signature": "(reason: ToastDismissReason) => void"
+        }
+      ],
+      "slots": [
+        "(default)",
+        "end"
+      ],
+      "events": [
+        {
+          "name": "tct-toast-dismiss",
+          "class": "TctToastDismissEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        },
+        {
+          "name": "tct-toast-hide",
+          "class": "TctToastHideEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        }
+      ],
+      "cssParts": [
+        "content",
+        "dismiss-button",
+        "end",
+        "toast"
+      ],
+      "cssStates": [
+        "exiting"
+      ],
+      "cssProperties": []
+    }
+  }
+}

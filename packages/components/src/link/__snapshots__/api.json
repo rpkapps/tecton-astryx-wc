@@ -1,0 +1,196 @@
+{
+  "folder": "link",
+  "elements": {
+    "tct-link": {
+      "class": "TctLink",
+      "attributes": [
+        {
+          "name": "color",
+          "property": "color",
+          "type": "TextColor",
+          "default": "'accent'",
+          "reflects": true
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "display",
+          "property": "display",
+          "type": "TextDisplay",
+          "values": [
+            "inline",
+            "block"
+          ],
+          "default": "'inline'",
+          "reflects": true
+        },
+        {
+          "name": "download",
+          "property": "download",
+          "type": "LinkDownload",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "external",
+          "property": "external",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "has-underline",
+          "property": "hasUnderline",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "href",
+          "property": "href",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "max-lines",
+          "property": "maxLines",
+          "type": "number",
+          "default": "0",
+          "reflects": false
+        },
+        {
+          "name": "new-tab-label",
+          "property": "newTabLabel",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "referrer-policy",
+          "property": "referrerPolicy",
+          "type": "ReferrerPolicy | undefined",
+          "reflects": false
+        },
+        {
+          "name": "rel",
+          "property": "rel",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "TextSize | undefined",
+          "values": [
+            "4xs",
+            "3xs",
+            "2xs",
+            "xsm",
+            "sm",
+            "base",
+            "lg",
+            "xl",
+            "2xl",
+            "3xl",
+            "4xl"
+          ],
+          "reflects": true
+        },
+        {
+          "name": "standalone",
+          "property": "standalone",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "target",
+          "property": "target",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "tooltip",
+          "property": "tooltip",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "type",
+          "property": "type",
+          "type": "TextType",
+          "default": "'body'",
+          "reflects": true
+        },
+        {
+          "name": "weight",
+          "property": "weight",
+          "type": "TextWeight | undefined",
+          "values": [
+            "normal",
+            "medium",
+            "semibold",
+            "bold"
+          ],
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "control",
+          "type": "HTMLAnchorElement | HTMLButtonElement | null",
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [
+        {
+          "name": "click",
+          "native": true
+        }
+      ],
+      "cssParts": [
+        "base",
+        "external-icon",
+        "text",
+        "tooltip"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-link-provider": {
+      "class": "TctLinkProvider",
+      "attributes": [],
+      "properties": [
+        {
+          "name": "navigate",
+          "type": "LinkNavigate | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

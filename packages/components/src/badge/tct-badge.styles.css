@@ -1,0 +1,125 @@
+/*
+ * tct-badge. The host is layout only; the pill is painted by `.base` (A§6.2). Variants set the two
+ * private properties `--_bg` / `--_fg` and nothing else. Colours are Tecton roles only: the chip fill
+ * for `neutral` (Badge is what Tecton calls a chip), the filled status roles for the four
+ * severities, and the tinted hue roles for categories.
+ * [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+    /* A badge is one line: a wide label is clipped inside the pill, never pushed outside the host. */
+    max-inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  .base {
+    --_bg: var(--tecton-color-chip-default-fill);
+    --_fg: var(--tecton-color-chip-default-text);
+    --_icon-size: var(--tecton-icon-size-100);
+
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-1);
+    block-size: var(--spacing-5);
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    padding-block: 0;
+    padding-inline: var(--spacing-2);
+    /* Transparent, not absent: forced colours draw it as the pill's edge (A§6.6). */
+    border: var(--border-width) solid transparent;
+    border-radius: var(--radius-full);
+    background-color: var(--_bg);
+    color: var(--_fg);
+    font-family: inherit;
+    font-size: var(--text-supporting-size);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--text-supporting-leading);
+    white-space: nowrap;
+  }
+
+  /* The ellipsis lives on the label: text-overflow needs a block container, and taking the pill off
+     inline-flex would cost the icon its centring. As a flex item the label needs its own min-inline-size. */
+  .label {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  :host([variant='info']) .base {
+    --_bg: var(--tecton-color-status-info-filled-bg);
+    --_fg: var(--tecton-color-status-info-filled-text);
+  }
+
+  :host([variant='success']) .base {
+    --_bg: var(--tecton-color-status-success-filled-bg);
+    --_fg: var(--tecton-color-status-success-filled-text);
+  }
+
+  :host([variant='warning']) .base {
+    --_bg: var(--tecton-color-status-warning-filled-bg);
+    --_fg: var(--tecton-color-status-warning-filled-text);
+  }
+
+  :host([variant='error']) .base {
+    --_bg: var(--tecton-color-status-error-filled-bg);
+    --_fg: var(--tecton-color-status-error-filled-text);
+  }
+
+  :host([variant='blue']) .base {
+    --_bg: var(--color-background-blue);
+    --_fg: var(--color-text-blue);
+  }
+
+  :host([variant='cyan']) .base {
+    --_bg: var(--color-background-cyan);
+    --_fg: var(--color-text-cyan);
+  }
+
+  :host([variant='green']) .base {
+    --_bg: var(--color-background-green);
+    --_fg: var(--color-text-green);
+  }
+
+  :host([variant='orange']) .base {
+    --_bg: var(--color-background-orange);
+    --_fg: var(--color-text-orange);
+  }
+
+  :host([variant='pink']) .base {
+    --_bg: var(--color-background-pink);
+    --_fg: var(--color-text-pink);
+  }
+
+  :host([variant='purple']) .base {
+    --_bg: var(--color-background-purple);
+    --_fg: var(--color-text-purple);
+  }
+
+  :host([variant='red']) .base {
+    --_bg: var(--color-background-red);
+    --_fg: var(--color-text-red);
+  }
+
+  :host([variant='teal']) .base {
+    --_bg: var(--color-background-teal);
+    --_fg: var(--color-text-teal);
+  }
+
+  :host([variant='yellow']) .base {
+    --_bg: var(--color-background-yellow);
+    --_fg: var(--color-text-yellow);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .base {
+      border-color: ButtonBorder;
+      background-color: Canvas;
+      color: CanvasText;
+    }
+  }
+}

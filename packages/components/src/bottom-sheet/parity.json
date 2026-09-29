@@ -1,0 +1,413 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "bottom-sheet",
+  "workPackage": "WP-4",
+  "entries": {
+    "core.bottom-sheet": {
+      "tag": "tct-bottom-sheet",
+      "status": "implemented",
+      "upstream": {
+        "name": "BottomSheet",
+        "path": "packages/core/src/BottomSheet/BottomSheet.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "isOpen",
+          "kind": "prop",
+          "target": "open",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Standalone sheets only; ignored (with a development warning) inside a switcher."
+        },
+        {
+          "upstream": "onOpenChange",
+          "kind": "event",
+          "target": "tct-open-change",
+          "as": "event",
+          "notes": "Cancelable intent event for Escape (`escape`), a scrim press (`outside`), a swipe (`pointer`), `requestClose()` (`request`); property writes never emit it. `tct-after-open-change` settles each change."
+        },
+        {
+          "upstream": "finalFocusRef",
+          "kind": "prop",
+          "target": "finalFocusElement",
+          "as": "property",
+          "notes": "Also the `final-focus` attribute (id of an element in the same tree)."
+        },
+        {
+          "upstream": "purpose",
+          "kind": "prop",
+          "target": "purpose",
+          "as": "attribute",
+          "reflect": true,
+          "default": "info",
+          "notes": "`info` allows Escape, the scrim and swipe; `form` Escape only; `required` nothing (an alertdialog)."
+        },
+        {
+          "upstream": "sheetId",
+          "kind": "prop",
+          "target": "sheetId",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "`sheet-id`; the sheet is then a panel of the enclosing `tct-bottom-sheet-switcher`."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Required accessible name; a development warning fires when it is empty."
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "The content of the scrolling area."
+        },
+        {
+          "upstream": "height",
+          "kind": "prop",
+          "target": "height",
+          "as": "attribute",
+          "default": "capped",
+          "notes": "`hug`, `capped`, `tall`, a bare number (px) or a CSS length."
+        },
+        {
+          "upstream": "snapPoints",
+          "kind": "prop",
+          "target": "snapPoints",
+          "as": "property",
+          "default": [],
+          "notes": "Also the `snap-points` attribute: values separated by spaces or commas (`\"96px 50%\"`, `\"0.5\"`)."
+        },
+        {
+          "upstream": "hasScrim",
+          "kind": "prop",
+          "target": "noScrim",
+          "as": "attribute",
+          "default": false,
+          "notes": "Inverted: `no-scrim` opens the sheet non-modally."
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "No ref: the element is the handle. Upstream forwards it to the visual panel; the panel is `part=\"sheet\"`."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "StyleX escape hatch; replaced by `part` and custom properties (A§7.2)."
+        },
+        {
+          "upstream": "className",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "Framework prop; the host takes classes and styles as any element."
+        },
+        {
+          "upstream": "style",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "Framework prop; the host takes classes and styles as any element."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A plain attribute on the host."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useSheetGestures",
+          "target": "SheetGestureController",
+          "as": "controller",
+          "notes": "Ported: drag, flick, magnet, rubber band, settle, touch handoff from the body, re-anchoring on resize. Plus the non-drag alternatives (BOTTOMSHEET-02). Internal to the bottom-sheet folder. [mwg:swipe-to-remove] [mwg:navigation-drawer]"
+        },
+        {
+          "upstream": "useMobileKeyboard",
+          "target": "SheetKeyboardController",
+          "as": "controller",
+          "notes": "Reduced to what the platform does not do (BOTTOMSHEET-05). Internal to the bottom-sheet folder."
+        },
+        {
+          "upstream": "useScrollLock",
+          "target": "LayerController",
+          "as": "controller",
+          "notes": "The shared, ref-counted scroll lock of a modal layer; a non-modal sheet does not lock."
+        },
+        {
+          "upstream": "useMediaQuery",
+          "target": "AdaptivePresentationController",
+          "as": "controller",
+          "notes": "`(pointer: coarse)` + width picks popover or bottom sheet for components that adapt (`controllers/adaptive-presentation.ts`)."
+        },
+        {
+          "upstream": "useDevWarning",
+          "target": "devWarn",
+          "as": "module-function",
+          "notes": "Empty label, invalid snap points, misuse of `sheet-id` and `open`."
+        },
+        {
+          "upstream": "useScrollableArea",
+          "target": "SheetGestureController (body access)",
+          "as": "controller",
+          "notes": "The shared scrollable area of WP-8 is not available yet: the body is a named tab stop while it overflows and holds nothing focusable (WCAG 2.1.1). Replace with the shared controller when it lands (request below)."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Escape",
+          "action": "Closes the sheet (cancelable tct-open-change) and returns focus to the opener",
+          "when": "purpose info or form, sheet is the top-most layer"
+        },
+        {
+          "keys": "Tab, Shift+Tab",
+          "action": "Moves between the resize handle and the sheet's controls; focus stays inside a modal sheet",
+          "when": "sheet open"
+        },
+        {
+          "keys": "ArrowUp, PageUp",
+          "action": "Moves the sheet to the next taller stop",
+          "when": "focus on the resize handle (the sheet has snap points)"
+        },
+        {
+          "keys": "ArrowDown, PageDown",
+          "action": "Moves the sheet to the next shorter stop",
+          "when": "focus on the resize handle (the sheet has snap points)"
+        },
+        {
+          "keys": "End",
+          "action": "Moves the sheet to its tallest stop",
+          "when": "focus on the resize handle"
+        },
+        {
+          "keys": "Home",
+          "action": "Moves the sheet to its shortest stop",
+          "when": "focus on the resize handle"
+        },
+        {
+          "keys": "Enter, Space",
+          "action": "Cycles the stops: one taller, and from the tallest to the shortest",
+          "when": "focus on the resize handle"
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "BOTTOMSHEET-01",
+          "type": "approved-api-difference",
+          "text": "`isOpen`/`onOpenChange` are `open` and the cancelable `tct-open-change` (with `tct-after-open-change`); `hasScrim` is `no-scrim`; `finalFocusRef` is `finalFocusElement` or `final-focus`; `snapPoints` is a property and a space or comma separated `snap-points` attribute. Inside a `tct-bottom-sheet-switcher` a sheet takes its `sheet-id` from the attribute, like upstream, and a sheet in a sheet's content is standalone."
+        },
+        {
+          "id": "BOTTOMSHEET-02",
+          "type": "a11y-improvement",
+          "text": "WCAG 2.5.7: upstream's handle is decorative and the stops are reachable by dragging only. A sheet with snap points has a resizable handle: a labelled vertical slider (`aria-valuetext` is the visible share of the viewport) with Arrow Up/Down, Page Up/Down, Home, End, and Enter/Space to cycle; a tap on the handle (a press that never moves) also cycles, so every stop is reachable with a single pointer and no drag. A `tct-snap-change` event reports every user-driven change. The handle is at least 24px tall (WCAG 2.5.8). A sheet without stops keeps the decorative handle: Escape, the scrim and your own controls are the ways to close it (a `no-scrim` sheet needs a close control of your own)."
+        },
+        {
+          "id": "BOTTOMSHEET-03",
+          "type": "approved-api-difference",
+          "text": "Geometry: the sheet is a native `<dialog>` that is a zero-height strip along the bottom edge, with the panel overflowing it upwards, so the layer stack's own \"press outside\" logic sees the backdrop as outside the dialog (upstream is a full-viewport dialog with a click check). Every stop is drawn with `translate`. Content below the fold at a lower stop stays reachable because the scrolling body gives up the resting offset as block-end margin and the sheet is pinned to its measured height: the swap happens when a slide down ends (and at once going up), so the visible geometry never changes. Upstream keeps a separate scroll-preservation inset; here a scroll position past the shorter scroll range can be clamped when a sheet that was scrolled to the end expands."
+        },
+        {
+          "id": "BOTTOMSHEET-04",
+          "type": "tecton-visual",
+          "text": "No drop shadow (D-013): a 1px rule on the three edges that face the scrim (block start and both inline edges) on the surface fill separates the sheet in dark mode too. The handle pill uses the emphasized border colour so it keeps 3:1 against the surface. The scrim is `--color-overlay`; forced colours drop it and draw the panel with `Canvas`/`CanvasText`."
+        },
+        {
+          "id": "BOTTOMSHEET-05",
+          "type": "approved-api-difference",
+          "text": "Mobile keyboard: only a fully expanded `tall` sheet is accommodated (as upstream): it stays put, the body ends with a spacer as tall as the keyboard (measured with the visual viewport) and the focused text field is scrolled above it with a 48px clearance; starting a drag blurs the field. Upstream's iOS-specific focus hand-over (`preventScroll` on every route into a field, restoring a document scroll) is not ported: the visual viewport listeners run only while a field of the sheet has focus, and `interactive-widget=resizes-content` pages need none of it. Provisional until it is verified on iOS Safari."
+        },
+        {
+          "id": "BOTTOMSHEET-06",
+          "type": "approved-api-difference",
+          "text": "Upstream's `BottomSheetEdgeTint` (an invisible fixed strip that colours the iOS Safari 26 toolbar) is kept as `.edge-tint` inside the shared dialog; it renders nothing visible."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [
+        "Mobile keyboard handling on iOS Safari (BOTTOMSHEET-05) is verified in Chromium only."
+      ],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/core/src/controllers/scrollable-area.ts",
+          "reason": "When WP-8's shared scrollable-area controller lands, replace `#syncBodyAccess()` in tct-bottom-sheet.ts (a named tab stop while the body overflows and holds nothing focusable) with it, as upstream does (`keyboardAccess: contentOrViewport`, first-native-control delegation)."
+        },
+        {
+          "file": "packages/core/src/events/events.test.ts",
+          "reason": "New core event class `tct-snap-change` (bottom sheet) was added in packages/core/src/events/; its flags and payload are asserted in the bottom-sheet tests; list it in the shared events test if wanted."
+        }
+      ],
+      "sizeBudgetKb": 46,
+      "notes": "Guides: [mwg:navigation-drawer] [mwg:light-dismiss-a-dialog] [mwg:swipe-to-remove] [mwg:animate-to-from-top-layer] [mwg:platform-controls-dismiss-dialog] [mwg:persistent-top-layer-ui]. The handle name is the existing localized `resizable.handle.label`; the value text is a percent formatted for the locale, so no new message id."
+    },
+    "core.bottom-sheet-switcher": {
+      "tag": "tct-bottom-sheet-switcher",
+      "status": "implemented",
+      "upstream": {
+        "name": "BottomSheetSwitcher",
+        "path": "packages/core/src/BottomSheet/BottomSheetSwitcher.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "activeSheet",
+          "kind": "prop",
+          "target": "activeSheet",
+          "as": "attribute",
+          "reflect": true,
+          "default": null,
+          "notes": "`active-sheet`: the `sheet-id` of the interactive sheet; no attribute (or `null`) closes the flow."
+        },
+        {
+          "upstream": "onActiveSheetChange",
+          "kind": "event",
+          "target": "tct-open-change",
+          "as": "event",
+          "notes": "Raised with `open: false` (reasons `escape`, `outside`, `pointer`, `request`) when the active sheet asks to close the flow; cancelable. Unless prevented the switcher sets `activeSheet` to null itself. The switcher never chooses a next sheet: the application sets `active-sheet`."
+        },
+        {
+          "upstream": "onCancel",
+          "kind": "event",
+          "target": "tct-open-change",
+          "as": "event",
+          "notes": "The native dialog `cancel` event (Escape, a browser close request) is routed through the layer stack and surfaces as the same cancelable `tct-open-change`."
+        },
+        {
+          "upstream": "hasScrim",
+          "kind": "prop",
+          "target": "noScrim",
+          "as": "attribute",
+          "default": false,
+          "notes": "Inverted: `no-scrim` shares one non-modal dialog. Set it before opening."
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "The `tct-bottom-sheet` panels, each with a unique `sheet-id`."
+        },
+        {
+          "upstream": "ref",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "No ref: the element is the handle; the shared dialog is `part=\"dialog\"`."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "StyleX escape hatch; replaced by `part` and custom properties (A§7.2)."
+        },
+        {
+          "upstream": "className",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "Framework prop; the host takes classes and styles as any element."
+        },
+        {
+          "upstream": "style",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "Framework prop; the host takes classes and styles as any element."
+        },
+        {
+          "upstream": "aria-label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Accessible name of the shared dialog; default the label of the showing sheet."
+        },
+        {
+          "upstream": "onClick",
+          "kind": "event",
+          "as": "waived",
+          "reason": "A native event on the host; the scrim press is handled by the layer stack."
+        },
+        {
+          "upstream": "onKeyDown",
+          "kind": "event",
+          "as": "waived",
+          "reason": "A native event on the host; Escape is handled by the layer stack."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useFocusTrap",
+          "target": "showModal()",
+          "as": "waived",
+          "reason": "The native modal `<dialog>` traps focus and makes the page inert; there is no focus-trap code."
+        },
+        {
+          "upstream": "useFocusTrapEscapeCompatibilitySignal",
+          "target": "LayerController",
+          "as": "waived",
+          "reason": "A compatibility shim for upstream's focus-trap Escape signal; the one layer stack answers Escape."
+        },
+        {
+          "upstream": "useLayerDismissal",
+          "target": "LayerController",
+          "as": "controller",
+          "notes": "One Escape closes one layer; while the last sheet leaves the flow takes no part in Escape or outside presses."
+        },
+        {
+          "upstream": "useScrollLock",
+          "target": "LayerController",
+          "as": "controller",
+          "notes": "Ref-counted scroll lock for a modal flow."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Escape",
+          "action": "Closes the flow (cancelable tct-open-change) and returns focus to the original opener",
+          "when": "the active sheet's purpose is info or form"
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "BOTTOMSHEETSWITCHER-01",
+          "type": "approved-api-difference",
+          "text": "`onActiveSheetChange(null)` is the cancelable `tct-open-change` (`open: false`), after which the switcher clears `active-sheet` itself; the switcher is not a controlled component (D-006). The sheets talk to their switcher through a private context (a sheet provides `null` to its own content, so a sheet in a sheet is standalone) and receive their phase (`entering`, `active`, `covered`, `aligning`, `fading`, `exiting`, `hidden`) as an internal property."
+        },
+        {
+          "id": "BOTTOMSHEETSWITCHER-02",
+          "type": "approved-api-difference",
+          "text": "The shared dialog is a zero-height strip like a standalone sheet's (BOTTOMSHEET-03), so the backdrop is outside it for the layer stack. A `no-scrim` flow opens it non-modally and takes no focus."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": false,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 46,
+      "notes": "Guides: [mwg:persistent-top-layer-ui] [mwg:platform-controls-dismiss-dialog]. The keyboard, RTL, forced-colours and i18n behaviour of the panels is the bottom sheet's (tct-bottom-sheet tests)."
+    }
+  }
+}

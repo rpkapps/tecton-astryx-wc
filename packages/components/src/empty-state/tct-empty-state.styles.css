@@ -1,0 +1,71 @@
+/*
+ * tct-empty-state. The host is layout only; `.base` is the centred column. Compact mode is a reflected
+ * attribute that swaps the spacing and type roles through private properties. [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .base {
+    --_gap: var(--spacing-4);
+    --_padding-block: var(--spacing-8);
+    --_padding-inline: var(--spacing-6);
+    --_title-size: var(--text-large-size);
+    --_title-leading: var(--text-large-leading);
+    --_description-size: var(--text-body-size);
+    --_description-leading: var(--text-body-leading);
+    --_actions-direction: row;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--_gap);
+    padding-block: var(--_padding-block);
+    padding-inline: var(--_padding-inline);
+    text-align: center;
+  }
+
+  :host([compact]) .base {
+    --_gap: var(--spacing-2);
+    --_padding-block: var(--spacing-4);
+    --_padding-inline: var(--spacing-4);
+    --_title-size: var(--text-label-size);
+    --_title-leading: var(--text-label-leading);
+    --_description-size: var(--text-supporting-size);
+    --_description-leading: var(--text-supporting-leading);
+    --_actions-direction: column;
+  }
+
+  .text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-inline-size: 360px; /* design: readable measure of the text group (upstream) */
+  }
+
+  .title {
+    margin: 0;
+    font-family: inherit;
+    font-size: var(--_title-size);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--_title-leading);
+    color: var(--color-text-primary);
+  }
+
+  .description {
+    font-size: var(--_description-size);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--_description-leading);
+    color: var(--color-text-secondary);
+  }
+
+  .actions {
+    display: flex;
+    flex-direction: var(--_actions-direction);
+    align-items: center;
+    gap: var(--spacing-2);
+    margin-block-start: var(--spacing-1);
+  }
+}

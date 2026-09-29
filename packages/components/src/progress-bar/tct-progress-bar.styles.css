@@ -1,0 +1,195 @@
+/*
+ * tct-progress-bar. The host is a block; `.base` is the column. Fill colour and mark colours are private
+ * custom properties chosen by `data-variant` (the fill's variant) and `data-placement` (on the fill or on
+ * the bare track). Track and fills are Tecton roles: --color-track, the progress primary for accent,
+ * the filled status roles for success/warning/error, the neutral status role. [mwg:css]
+ */
+@layer component {
+  :host {
+    display: block;
+    min-inline-size: 48px; /* design: the narrowest useful bar (upstream) */
+  }
+
+  .base {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-1);
+    inline-size: 100%;
+  }
+
+  .header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .label {
+    font-size: var(--text-body-size);
+    font-weight: var(--font-weight-medium);
+    line-height: var(--text-body-leading);
+    color: var(--color-text-primary);
+  }
+
+  .value-label {
+    font-size: var(--text-body-size);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--text-body-leading);
+    color: var(--color-text-secondary);
+  }
+
+  :host([disabled]) .label,
+  :host([disabled]) .value-label {
+    color: var(--color-text-disabled);
+  }
+
+  /* The in-flow track sets the height of this containing block; marks share its geometry without entering
+     the progressbar's subtree, and stay unclipped so themed tall marks can overhang symmetrically. */
+  .track-container {
+    position: relative;
+    inline-size: 100%;
+  }
+
+  .track {
+    inline-size: 100%;
+    block-size: 8px; /* design: track thickness (upstream) */
+    border-radius: var(--radius-full);
+    background-color: var(--color-track);
+  }
+
+  /* The indeterminate fill overshoots the track on both sides and is clipped to the rail. */
+  .track[data-indeterminate] {
+    overflow: hidden;
+  }
+
+  .fill {
+    --_fill-color: var(--tecton-color-progress-primary);
+
+    inline-size: var(--_fill, 0%);
+    block-size: 100%;
+    border-radius: var(--radius-full);
+    background-color: var(--_fill-color);
+    transition: inline-size var(--duration-medium) var(--ease-standard);
+  }
+
+  .fill[data-variant='success'] {
+    --_fill-color: var(--tecton-color-status-success-filled-bg);
+  }
+
+  .fill[data-variant='warning'] {
+    --_fill-color: var(--tecton-color-status-warning-filled-bg);
+  }
+
+  .fill[data-variant='error'] {
+    --_fill-color: var(--tecton-color-status-error-filled-bg);
+  }
+
+  .fill[data-variant='neutral'] {
+    --_fill-color: var(--tecton-color-status-neutral);
+  }
+
+  .fill[data-variant='disabled'] {
+    --_fill-color: var(--color-text-disabled);
+  }
+
+  .fill.indeterminate {
+    inline-size: 40%; /* design: the sliding segment (upstream) */
+    animation: tct-progress-slide 1.5s ease-in-out infinite;
+    /* Slowed, never stopped, so the user still knows the process is active. */
+    --_animation-reduced: tct-progress-slide 3s ease-in-out infinite;
+  }
+
+  :host(:dir(rtl)) .fill.indeterminate {
+    animation-name: tct-progress-slide-rtl;
+    --_animation-reduced: tct-progress-slide-rtl 3s ease-in-out infinite;
+  }
+
+  @keyframes tct-progress-slide {
+    from {
+      translate: -100% 0;
+    }
+
+    to {
+      translate: 250% 0;
+    }
+  }
+
+  /* Physical translate: mirrored so the segment travels along the reading flow. */
+  @keyframes tct-progress-slide-rtl {
+    from {
+      translate: 100% 0;
+    }
+
+    to {
+      translate: -250% 0;
+    }
+  }
+
+  /* A mark is a vertical tick centred on the track. Colour depends on what it sits on. */
+  .mark {
+    --_mark-color: var(--color-text-primary);
+
+    position: absolute;
+    display: block;
+    inset-block-start: 50%;
+    inset-inline-start: var(--_mark-position);
+    inline-size: 2px; /* design: mark tick width (upstream); restyle with ::part(mark) */
+    block-size: 8px; /* design: mark tick height (upstream) */
+    background-color: var(--_mark-color);
+    translate: -50% -50%;
+  }
+
+  :host(:dir(rtl)) .mark {
+    translate: 50% -50%;
+  }
+
+  :host([disabled]) .mark {
+    --_mark-color: var(--color-text-secondary);
+  }
+
+  /* On the fill the tick takes the ink that pairs with the fill's own colour. */
+  .mark[data-placement='fill'] {
+    --_mark-color: var(--color-background-surface);
+  }
+
+  .mark[data-placement='fill'][data-variant='success'] {
+    --_mark-color: var(--tecton-color-status-success-filled-text);
+  }
+
+  .mark[data-placement='fill'][data-variant='warning'] {
+    --_mark-color: var(--tecton-color-status-warning-filled-text);
+  }
+
+  .mark[data-placement='fill'][data-variant='error'] {
+    --_mark-color: var(--tecton-color-status-error-filled-text);
+  }
+
+  .mark[data-placement='fill'][data-variant='neutral'] {
+    --_mark-color: var(--color-text-primary);
+  }
+
+  .mark[data-placement='fill'][data-variant='disabled'] {
+    --_mark-color: var(--color-text-secondary);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .track {
+      border: var(--border-width) solid CanvasText;
+      background-color: Canvas;
+    }
+
+    .fill,
+    .mark {
+      background-color: Highlight;
+    }
+
+    .fill[data-variant='disabled'] {
+      background-color: GrayText;
+    }
+
+    .mark[data-placement='fill'] {
+      background-color: HighlightText;
+    }
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "badge",
+  "workPackage": "WP-2",
+  "entries": {
+    "core.badge": {
+      "tag": "tct-badge",
+      "status": "implemented",
+      "upstream": {
+        "name": "Badge",
+        "path": "packages/core/src/Badge/Badge.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "variant",
+          "kind": "prop",
+          "target": "variant",
+          "as": "attribute",
+          "reflect": true,
+          "default": "neutral"
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Plain-text shorthand. The upstream ReactNode label is also the default slot (rich content); the attribute wins when both are present."
+        },
+        {
+          "upstream": "icon",
+          "kind": "slot",
+          "target": "icon",
+          "as": "slot",
+          "notes": "Named slot; the wrapper is drawn only when something is slotted."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(base|icon|label) or the tokens."
+        }
+      ],
+      "keyboard": [],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "BADGE-01",
+          "type": "tecton-visual",
+          "text": "Fills come from Tecton roles: neutral is the chip default fill and ink (Tecton maps Badge to its Chip), the four severities use the filled status roles (--tecton-color-status-*-filled-bg / -text), the hue variants keep the tinted --color-background-* / --color-text-* roles. The React theme's extra lime variant is not ported: --tecton-color-accent-lime-fill with the badge contrast ink measures 2.79:1 in light mode."
+        },
+        {
+          "id": "BADGE-02",
+          "type": "approved-api-difference",
+          "text": "`label` is a plain-text attribute and the default slot; upstream's ReactNode label maps to the slot. The native title fallback follows upstream: set for a plain-text label (attribute or text-only slot), never for rich content."
+        },
+        {
+          "id": "BADGE-03",
+          "type": "tecton-visual",
+          "text": "The pill carries a transparent 1px border so forced colours draw its edge (the pill loses its fill there); the box height stays 20px (border-box)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "rtl": true,
+        "forcedColors": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:shadow-dom] slot whitespace and slotchange; [mwg:styling-web-components] parts and private custom properties; [mwg:accessible-web-components] no role, text stays in the reading order; [mwg:contrast-color] evaluated for the lime variant and rejected (fixed Tecton roles only)."
+    }
+  }
+}

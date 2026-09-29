@@ -1,0 +1,20 @@
+<!-- title: Holding it open while the work runs; description: Set action-loading while the action runs: the spinner shows and the action is blocked, Cancel stays available. Close the dialog when the work settles, never before. -->
+<button type="button" id="alert-loading-open">Revoke access</button>
+<tct-alert-dialog
+  id="alert-loading"
+  heading="Revoke access?"
+  description="Alex will lose access to this workspace immediately."
+  action-label="Revoke access"
+></tct-alert-dialog>
+<script type="module">
+  const dialog = document.getElementById('alert-loading');
+  document.getElementById('alert-loading-open').addEventListener('click', () => {
+    dialog.open = true;
+  });
+  dialog.addEventListener('tct-action', async () => {
+    dialog.actionLoading = true;
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    dialog.actionLoading = false;
+    dialog.open = false;
+  });
+</script>

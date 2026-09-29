@@ -1,0 +1,12 @@
+<!-- title: Elapsed and clock; description: Elapsed is compact and drops the seconds after an hour; clock is a stopwatch that stays second-precise. Both count by themselves. -->
+<div id="formats-example" style="display: flex; flex-direction: column; gap: var(--spacing-2)">
+  <div>Elapsed, just started: <tct-timer></tct-timer></div>
+  <div>Clock, just started: <tct-timer format="clock"></tct-timer></div>
+  <div>Elapsed, an hour in: <tct-timer data-started-earlier></tct-timer></div>
+  <div>Clock, an hour in: <tct-timer format="clock" data-started-earlier></tct-timer></div>
+</div>
+<script type="module">
+  const root = document.getElementById('formats-example');
+  const startedAt = Date.now() - 3_753_000;
+  for (const timer of root.querySelectorAll('[data-started-earlier]')) timer.startTime = startedAt;
+</script>

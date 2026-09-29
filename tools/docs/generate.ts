@@ -5,14 +5,12 @@
  *   components/index.mdx                      overview of the 11 categories
  *   components/<category>/index.mdx           one overview per category
  *   components/<category>/<folder>.mdx        one page per documented component folder
- *   reference/parity-status.mdx               generated from reports/parity.json
- *   reference/differences-and-open-items.mdx  parity.json differences + provisional tokens + open questions
  *   reference/tokens.mdx                      packages/tokens/dist/tokens.json
  *
  * Authored guides (`guides/`) belong to WP-D and are never touched. A folder with a `<folder>.docs.md`
  * must have every required authored section and valid frontmatter, otherwise generation fails.
  */
-import {existsSync, readFileSync, readdirSync, rmSync} from 'node:fs';
+import {existsSync, mkdirSync, readFileSync, readdirSync, rmSync} from 'node:fs';
 import {basename, dirname, join} from 'node:path';
 import {cemElements, loadCem} from '../lib/cem.ts';
 import {
@@ -24,18 +22,20 @@ import {
 } from '../lib/docs-model.ts';
 import {walkFiles, writeIfChanged} from '../lib/fs.ts';
 import {checkParity, discoverParityFiles, loadManifest, loadSchema} from '../lib/parity.ts';
-import type {ParityReport} from '../lib/parity-report.ts';
 import {PATHS, ROOT, rel} from '../lib/paths.ts';
-import {CATEGORIES, COMPONENT_PAGES_DIR, REFERENCE_PAGES_DIR, categorySlug} from '../lib/site.ts';
+import {
+  CATEGORIES,
+  COMPONENT_PAGES_DIR,
+  REFERENCE_PAGES_DIR,
+  categorySlug,
+} from '../lib/site.ts';
 import {loadTokens} from '../lib/tokens.ts';
 import {flatten, parseFolderMessages, type UpstreamCatalog} from '../../packages/locales/scripts/lib.ts';
+import {differencesReport, parseOpenQuestions} from './internal-reports.ts';
 import {COMPONENT_SECTION_ORDER, DocsError, renderComponentPage} from './component-page.ts';
 import {
   categoryPage,
   componentsOverviewPage,
-  differencesPage,
-  parseOpenQuestions,
-  parityStatusPage,
   tokensPage,
   type PageIndex,
 } from './site-pages.ts';
@@ -48,12 +48,6 @@ if (!cem) {
   console.error('docs: custom-elements.json is missing; the CEM step must run first.');
   process.exit(1);
 }
-const reportFile = join(PATHS.reports, 'parity.json');
-if (!existsSync(reportFile)) {
-  console.error('docs: reports/parity.json is missing; the parity report step must run first.');
-  process.exit(1);
-}
-const report = JSON.parse(readFileSync(reportFile, 'utf8')) as ParityReport;
 const tokenData = loadTokens();
 const tokensByName = new Map((tokenData?.tokens ?? []).map((token) => [token.name, token]));
 
@@ -82,7 +76,7 @@ function messageIds(dir: string): string[] {
   return [...ids].sort();
 }
 
-const pages = new Map<string, {category: string; title: string}>();
+const pages = new Map<string, {category: string; title: string; summary: string; tags: string[]}>();
 const elementsByFolder = new Map<string, ReturnType<typeof cemElements>>();
 for (const element of cemElements(cem)) {
   if (element.folder) elementsByFolder.set(element.folder, [...(elementsByFolder.get(element.folder) ?? []), element]);
@@ -134,34 +128,36 @@ for (const folder of componentFolderNames(PATHS.componentsSrc)) {
     }
     const category = docs.frontmatter.category;
     outputs.set(join(COMPONENT_PAGES_DIR, categorySlug(category), `${folder}.mdx`), content);
-    pages.set(folder, {category, title: docs.frontmatter.title});
+    pages.set(folder, {
+      category,
+      title: docs.frontmatter.title,
+      summary: docs.frontmatter.summary,
+      tags: elements.map((element) => element.tagName),
+    });
   } catch (error) {
     errors.push(`${where}: ${(error as Error).message}`);
   }
 }
 
 const index: PageIndex = pages;
-outputs.set(join(COMPONENT_PAGES_DIR, 'index.mdx'), componentsOverviewPage(report, index));
+outputs.set(join(COMPONENT_PAGES_DIR, 'index.mdx'), componentsOverviewPage(index));
 for (const category of CATEGORIES) {
-  outputs.set(join(COMPONENT_PAGES_DIR, categorySlug(category), 'index.mdx'), categoryPage(category, report, index));
+  outputs.set(join(COMPONENT_PAGES_DIR, categorySlug(category), 'index.mdx'), categoryPage(category, index));
 }
 
-// Reference pages.
-const parityFiles = discoverParityFiles(ROOT);
+// Reference: the token reference is public. Parity status and differences are internal reports
+// (the upstream design system's name is not printed on the public site).
+outputs.set(join(REFERENCE_PAGES_DIR, 'tokens.mdx'), tokensPage(tokenData));
+
 const {parity} = checkParity({
   manifest: loadManifest(PATHS.manifest),
   schema: loadSchema(PATHS.paritySchema),
   docsSchema: loadSchema(PATHS.docsFrontmatterSchema),
-  files: parityFiles,
+  files: discoverParityFiles(ROOT),
 });
 const questionsFile = join(ROOT, 'docs/plan/OPEN-QUESTIONS.md');
 const openQuestions = existsSync(questionsFile) ? parseOpenQuestions(readFileSync(questionsFile, 'utf8')) : [];
-outputs.set(join(REFERENCE_PAGES_DIR, 'parity-status.mdx'), parityStatusPage(report, index));
-outputs.set(
-  join(REFERENCE_PAGES_DIR, 'differences-and-open-items.mdx'),
-  differencesPage({parity, tokens: tokenData, openQuestions}),
-);
-outputs.set(join(REFERENCE_PAGES_DIR, 'tokens.mdx'), tokensPage(tokenData));
+const internalReport = join(PATHS.reports, 'differences.md');
 
 if (errors.length > 0) {
   for (const message of errors) console.error(`docs: ${message}`);
@@ -170,6 +166,8 @@ if (errors.length > 0) {
 }
 
 let written = 0;
+mkdirSync(PATHS.reports, {recursive: true});
+if (writeIfChanged(internalReport, `${differencesReport({parity, tokens: tokenData, openQuestions})}\n`)) written++;
 for (const [path, content] of outputs) {
   if (writeIfChanged(path, content)) written++;
 }

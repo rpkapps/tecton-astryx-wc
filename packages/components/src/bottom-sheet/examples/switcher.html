@@ -1,0 +1,39 @@
+<!-- title: A multi-step flow; description: tct-bottom-sheet-switcher shows one of its sheets at a time in one shared dialog. Set active-sheet to a child's sheet-id; when the new sheet is shorter the previous one moves down to meet it and then fades. Escape or a scrim press raises tct-open-change and the switcher closes the flow. -->
+<tct-button id="sheet-flow-open" label="Review settings"></tct-button>
+<tct-bottom-sheet-switcher id="sheet-flow">
+  <tct-bottom-sheet sheet-id="review" label="Review notification settings" height="hug" purpose="form">
+    <div style="display: grid; gap: var(--spacing-4); padding: var(--spacing-4)">
+      <div style="display: grid; gap: var(--spacing-1)">
+        <tct-heading level="3">Review settings</tct-heading>
+        <span style="color: var(--color-text-secondary)">Daily summaries will be sent by email.</span>
+      </div>
+      <div style="display: flex; gap: var(--spacing-2); justify-content: flex-end">
+        <tct-button id="sheet-flow-cancel" variant="secondary" label="Cancel"></tct-button>
+        <tct-button id="sheet-flow-continue" variant="primary" label="Continue"></tct-button>
+      </div>
+    </div>
+  </tct-bottom-sheet>
+  <tct-bottom-sheet sheet-id="confirm" label="Confirm settings" height="hug">
+    <div style="display: grid; gap: var(--spacing-4); padding: var(--spacing-4)">
+      <div style="display: grid; gap: var(--spacing-1)">
+        <tct-heading level="3">Confirm settings</tct-heading>
+        <span style="color: var(--color-text-secondary)">Your notification settings are ready to save.</span>
+      </div>
+      <div style="display: flex; gap: var(--spacing-2); justify-content: flex-end">
+        <tct-button id="sheet-flow-back" variant="secondary" label="Back"></tct-button>
+        <tct-button id="sheet-flow-save" variant="primary" label="Save"></tct-button>
+      </div>
+    </div>
+  </tct-bottom-sheet>
+</tct-bottom-sheet-switcher>
+<script type="module">
+  const flow = document.getElementById('sheet-flow');
+  const go = (id) => {
+    flow.activeSheet = id;
+  };
+  document.getElementById('sheet-flow-open').addEventListener('click', () => go('review'));
+  document.getElementById('sheet-flow-cancel').addEventListener('click', () => go(null));
+  document.getElementById('sheet-flow-continue').addEventListener('click', () => go('confirm'));
+  document.getElementById('sheet-flow-back').addEventListener('click', () => go('review'));
+  document.getElementById('sheet-flow-save').addEventListener('click', () => go(null));
+</script>

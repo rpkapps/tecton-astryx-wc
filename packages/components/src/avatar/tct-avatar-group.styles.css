@@ -1,0 +1,14 @@
+/*
+ * tct-avatar-group. The host is inline-flex; `.base` is the row container. Size, shape and overlap reach
+ * the members through context, so the container needs no custom properties. [mwg:styling-web-components]
+ */
+@layer component {
+  :host {
+    display: inline-flex;
+  }
+
+  .base {
+    display: inline-flex;
+    align-items: center;
+  }
+}

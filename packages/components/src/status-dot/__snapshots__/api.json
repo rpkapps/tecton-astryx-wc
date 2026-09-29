@@ -1,0 +1,58 @@
+{
+  "folder": "status-dot",
+  "elements": {
+    "tct-status-dot": {
+      "class": "TctStatusDot",
+      "attributes": [
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "pulsing",
+          "property": "pulsing",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "tooltip",
+          "property": "tooltip",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "variant",
+          "property": "variant",
+          "type": "StatusDotVariant",
+          "values": [
+            "success",
+            "warning",
+            "error",
+            "accent",
+            "neutral"
+          ],
+          "default": "'success'",
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "icon"
+      ],
+      "events": [],
+      "cssParts": [
+        "base",
+        "icon",
+        "tooltip"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

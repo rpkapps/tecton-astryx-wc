@@ -1,0 +1,43 @@
+/*
+ * tct-alert-dialog. The surface, backdrop, entry and exit are `tct-dialog`'s; this sheet lays out the
+ * confirmation: the question and its consequence, then the actions. Above 640px the actions sit side by
+ * side and wrap as whole buttons; at 640px and below the destructive action is first and both fill the
+ * footer (the order in the DOM follows, so the tab order matches what is seen).
+ */
+@layer component {
+  :host {
+    display: contents;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+    min-inline-size: 0;
+  }
+
+  .footer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--spacing-2);
+    margin-block-start: var(--spacing-4);
+  }
+
+  .footer[data-compact] {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+  }
+
+  /* A label never makes a button wider than the dialog; complete buttons move to another row. */
+  .action {
+    max-inline-size: 100%;
+    min-inline-size: 0;
+  }
+
+  .footer[data-compact] .action {
+    inline-size: 100%;
+  }
+}

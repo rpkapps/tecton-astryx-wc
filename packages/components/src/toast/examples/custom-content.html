@@ -1,0 +1,15 @@
+<!-- title: Custom content; description: renderContent replaces the layout of one toast; the card, semantics and auto-hide stay. The renderer owns every control, so call dismiss from the control that should close the toast. -->
+<div id="toast-custom-root">
+  <button type="button" id="toast-custom-show">Show custom toast</button>
+  <script type="module">
+    import {toast} from '@tecton-astryx/components/toast/toast.api.js';
+    import {html} from 'lit';
+    document.getElementById('toast-custom-show').addEventListener('click', () => {
+      toast({
+        body: 'Export ready',
+        autoHide: false,
+        renderContent: ({body, dismiss}) => html`<div style="display: flex; align-items: center; justify-content: space-between; gap: var(--spacing-3)"><strong>${body}</strong><button type="button" style="color: inherit; background: transparent; border: var(--border-width) solid; border-radius: var(--radius-element)" @click=${dismiss}>Done</button></div>`,
+      });
+    });
+  </script>
+</div>

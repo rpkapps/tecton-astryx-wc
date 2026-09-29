@@ -1,0 +1,139 @@
+/*
+ * tct-toast. An inverted status card (fill from --color-background-inverted, ink from the opposite
+ * mode) with no drop shadow (D-013): the contrast of the fill separates it from the page. The ink is
+ * chosen with light-dark() because the token island attribute (`data-media-theme`) cannot reach into
+ * a shadow tree. Movement is direct-manipulation only (swipe) or runs without reduced motion.
+ * [mwg:persistent-toast-notifications] [mwg:animate-to-from-top-layer]
+ */
+@layer component {
+  :host {
+    display: block;
+    inline-size: 100%;
+    max-inline-size: 100%;
+  }
+
+  .card {
+    --_bg: var(--color-background-inverted);
+    --_ink: light-dark(var(--color-on-dark), var(--color-on-light));
+
+    box-sizing: border-box;
+    inline-size: 100%;
+    /* design: the upstream toast is 400px wide and never wider than its container */
+    max-inline-size: 400px;
+    padding: var(--spacing-4);
+    /* Transparent, not absent: the edge is the visible boundary in forced colours. */
+    border: var(--border-width) solid transparent;
+    border-radius: var(--radius-container);
+    background: var(--_bg);
+    color: var(--_ink);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+    opacity: var(--_toast-swipe-opacity, 1);
+    translate: 0 var(--_toast-swipe-y, 0px);
+    scale: var(--_toast-swipe-scale, 1);
+    transition: opacity var(--duration-fast) var(--ease-standard);
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+
+  .card[data-type='error'] {
+    --_bg: var(--color-background-error-inverted);
+    --_ink: var(--color-on-error);
+  }
+
+  .inner {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    gap: var(--spacing-3);
+    inline-size: 100%;
+  }
+
+  .content {
+    flex: 1;
+    min-inline-size: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .end {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: var(--spacing-2);
+    /* One line box tall, so a long message wraps beside the controls instead of pushing them down. */
+    block-size: calc(var(--text-body-size) * var(--text-body-leading));
+    margin-inline-end: calc(var(--spacing-1) * -1);
+  }
+
+  .dismiss {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    inline-size: var(--size-element-sm);
+    block-size: var(--size-element-sm);
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-element);
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+    --_icon-size: var(--tecton-icon-size-100);
+  }
+
+  .dismiss tct-icon {
+    color: inherit;
+  }
+
+  .card[data-exiting] {
+    opacity: 0;
+  }
+
+  :host([exiting]) .card {
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .card {
+      transition:
+        opacity var(--duration-fast) var(--ease-standard),
+        translate var(--duration-fast) var(--ease-standard),
+        scale var(--duration-fast) var(--ease-standard);
+
+      @starting-style {
+        opacity: 0;
+        translate: 0 var(--_toast-slide-y, var(--spacing-2));
+      }
+    }
+
+    :host([exiting]) .card {
+      translate: 0
+        var(--_toast-swipe-exit-y, var(--_toast-swipe-y, var(--_toast-slide-y, var(--spacing-2))));
+    }
+  }
+}
+
+@layer state {
+  @media (hover: hover) {
+    .dismiss:hover {
+      background: var(--color-overlay-hover);
+    }
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .card {
+      border-color: CanvasText;
+      background: Canvas;
+      color: CanvasText;
+    }
+
+    .dismiss {
+      border: var(--border-width) solid ButtonText;
+      color: ButtonText;
+    }
+  }
+}

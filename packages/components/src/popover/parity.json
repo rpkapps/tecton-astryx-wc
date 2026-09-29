@@ -1,0 +1,235 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "popover",
+  "workPackage": "WP-4",
+  "entries": {
+    "core.popover": {
+      "tag": "tct-popover",
+      "status": "implemented",
+      "upstream": {
+        "name": "Popover",
+        "path": "packages/core/src/Popover/Popover.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "The trigger: a button, a role=button element, or a library element rendering one."
+        },
+        {
+          "upstream": "anchorRef",
+          "kind": "ref",
+          "target": "anchorElement",
+          "as": "property",
+          "notes": "Also the `anchor` attribute (id of an element in the same tree). The referenced element must be, or contain, a button."
+        },
+        {"upstream": "content", "kind": "slot", "target": "content", "as": "slot"},
+        {
+          "upstream": "placement",
+          "kind": "prop",
+          "target": "placement",
+          "as": "attribute",
+          "default": "below"
+        },
+        {
+          "upstream": "alignment",
+          "kind": "prop",
+          "target": "alignment",
+          "as": "attribute",
+          "default": "start"
+        },
+        {
+          "upstream": "isOpen",
+          "kind": "prop",
+          "target": "open",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Optional-controlled upstream; here the element owns the state and `open` is the current value (D-006)."
+        },
+        {
+          "upstream": "onOpenChange",
+          "kind": "event",
+          "target": "tct-open-change",
+          "as": "event",
+          "notes": "Cancelable intent event before user-driven changes; `tct-after-open-change` once a change settled (every actual change, including programmatic ones, like the upstream callback)."
+        },
+        {
+          "upstream": "isEnabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Inverted: `disabled` ignores trigger interactions."
+        },
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "target": "width",
+          "as": "attribute",
+          "default": "auto",
+          "notes": "A bare number is px; anything else is a CSS length. Applied through a private custom property."
+        },
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
+        {
+          "upstream": "role",
+          "kind": "prop",
+          "target": "popup-role",
+          "as": "attribute",
+          "default": "dialog",
+          "notes": "Renamed: a public `role` attribute would shadow the global one (A§7.1)."
+        },
+        {
+          "upstream": "isModal",
+          "kind": "prop",
+          "target": "nonModal",
+          "as": "attribute",
+          "default": false,
+          "notes": "Inverted: `non-modal` drops aria-modal (A§7.2)."
+        },
+        {
+          "upstream": "hasCloseButton",
+          "kind": "prop",
+          "target": "noCloseButton",
+          "as": "attribute",
+          "default": false,
+          "notes": "Inverted: `no-close-button`."
+        },
+        {
+          "upstream": "closeButtonLabel",
+          "kind": "prop",
+          "target": "closeLabel",
+          "as": "attribute",
+          "notes": "`close-label`; default is the localized @astryx.popover.close."
+        },
+        {
+          "upstream": "hasAutoFocus",
+          "kind": "prop",
+          "target": "noAutoFocus",
+          "as": "attribute",
+          "default": false,
+          "notes": "Inverted: `no-auto-focus`."
+        },
+        {
+          "upstream": "hasLightDismiss",
+          "kind": "prop",
+          "target": "noLightDismiss",
+          "as": "attribute",
+          "default": false,
+          "notes": "Inverted: `no-light-dismiss`."
+        },
+        {
+          "upstream": "hasEscapeDismiss",
+          "kind": "prop",
+          "target": "noEscapeDismiss",
+          "as": "attribute",
+          "default": false,
+          "notes": "Inverted: `no-escape-dismiss`."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(popover) and the tokens."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: attributes go on the host element."
+        },
+        {
+          "upstream": "className",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: `class` goes on the host; the painted surface is ::part(popover)."
+        },
+        {
+          "upstream": "style",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: `style` goes on the host; the painted surface is ::part(popover)."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "usePopover",
+          "target": "LayerController + PositionController + FocusTrapController (composed by tct-popover)",
+          "as": "controller",
+          "notes": "Other families that need a dialog-style popover (date pickers, comboboxes) compose the same three controllers or embed tct-popover."
+        },
+        {"upstream": "InteractiveRoleContext", "target": "interactiveRoleContext", "as": "context"},
+        {"upstream": "Layer", "target": "layerContext", "as": "context"}
+      ],
+      "keyboard": [
+        {
+          "keys": "Enter, Space",
+          "action": "Opens or closes the popover from the trigger",
+          "when": "trigger focused"
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes the popover and returns focus to the trigger",
+          "when": "open; not `no-escape-dismiss`; one layer per press"
+        },
+        {
+          "keys": "Tab",
+          "action": "Moves to the next control; after the last control the close button is revealed, then focus wraps to the first control",
+          "when": "open"
+        },
+        {
+          "keys": "Shift+Tab",
+          "action": "Moves to the previous control; before the first control focus wraps to the close button",
+          "when": "open"
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "POPOVER-01",
+          "type": "approved-api-difference",
+          "text": "Boolean defaults that were true upstream are inverted (`no-close-button`, `no-auto-focus`, `no-light-dismiss`, `no-escape-dismiss`, `non-modal`), `isEnabled` is `disabled`, `role` is `popup-role` and `closeButtonLabel` is `close-label` (A§7.1, A§7.2)."
+        },
+        {
+          "id": "POPOVER-02",
+          "type": "approved-api-difference",
+          "text": "The React render-prop trigger mode is not needed: the default slot holds the trigger, and `anchor` / `anchorElement` replace `anchorRef` for a trigger that lives elsewhere."
+        },
+        {
+          "id": "POPOVER-03",
+          "type": "a11y-improvement",
+          "text": "The surface lives in the popover's shadow root, so the trigger carries no `aria-controls`: ID relationships never cross a shadow boundary (A§8.2). aria-haspopup and aria-expanded are unchanged."
+        },
+        {
+          "id": "POPOVER-04",
+          "type": "a11y-improvement",
+          "text": "`no-escape-dismiss` takes full effect on its own. Upstream needs `hasLightDismiss=false` too, because native popover=auto light dismiss also closes on Escape; the surface here is always popover=manual and dismissal belongs to the layer stack. A popover that ignores Escape lets it fall through to the layer below."
+        },
+        {
+          "id": "POPOVER-05",
+          "type": "tecton-visual",
+          "text": "Tecton surface: a 1px border on the recessed popover fill, no drop shadow, 8px container radius (D-013, design/components/menu.md, theme components.ts `popover`)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 63,
+      "notes": "Guides: [mwg:declarative-dialog-popover-control] [mwg:animate-to-from-top-layer] [mwg:position-aware-tooltips] [mwg:persistent-top-layer-ui] [mwg:platform-controls-dismiss-dialog]. The fallback close button is a tct-button (secondary); the UA popover reset is the shared .layer-surface."
+    }
+  }
+}

@@ -1,0 +1,15 @@
+<!-- title: Explicit dismiss; description: A coachmark that stays until the user closes it: no outside-press or Escape dismissal, and an explicit button inside. -->
+<div id="explicit-dismiss-root">
+  <tct-popover label="New: saved views" no-light-dismiss no-escape-dismiss no-auto-focus placement="below">
+    <button type="button">Saved views</button>
+    <div slot="content" style="display: grid; gap: var(--spacing-2); max-inline-size: 260px">
+      <strong>Save your filters</strong>
+      <span>Saved views keep your filters and sort order for next time.</span>
+      <button type="button" data-close>Got it</button>
+    </div>
+  </tct-popover>
+  <script type="module">
+    const root = document.getElementById('explicit-dismiss-root');
+    root.querySelector('[data-close]').addEventListener('click', () => root.querySelector('tct-popover').hide());
+  </script>
+</div>
