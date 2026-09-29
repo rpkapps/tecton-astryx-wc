@@ -1,0 +1,112 @@
+/*
+ * Floating surfaces (A§6.1): the reset every `[popover]` needs and the shared tooltip surface used by
+ * built-in tooltips (icon-only buttons, truncated text) and by the tooltip family. Positioning is written
+ * inline by `PositionController` (`position-area` on the CSS path, coordinates on the JS path); this module
+ * only resets what the UA sheet gives popovers and paints the surface. [mwg:interest-triggered-tooltips]
+ * [mwg:position-aware-tooltips]
+ *
+ *   .layer-surface     on a `<div popover="manual">`: neutral box, no UA border/padding/background.
+ *                      Never sets `display` (a closed popover must stay `display: none`).
+ *   .tooltip-surface   the inverted Tecton tooltip look (fills from `--color-text-primary`, no shadow,
+ *                      no border; Tecton has no tooltip design, the component's own shape is kept).
+ *
+ * Entry is a `@starting-style` transition on `:popover-open` (opacity, plus a small nudge away from the
+ * anchor under `no-preference`). Exit animations are awaited by the controller (WAAPI), never by
+ * `overlay`. `data-placement` is written by `PositionController` (above | below | start | end).
+ */
+@layer component {
+  .layer-surface {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    overflow: visible;
+    background: none;
+    color: inherit;
+  }
+
+  .tooltip-surface {
+    padding-block: var(--spacing-1);
+    padding-inline: var(--spacing-2);
+    max-inline-size: min(100%, 300px); /* design: upstream tooltip content width cap (300px) */
+    border-radius: var(--radius-container);
+    background-color: var(--color-text-primary);
+    color: var(--color-background-surface);
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+    font-weight: var(--text-body-weight);
+    overflow-wrap: anywhere;
+    text-align: start;
+    pointer-events: auto;
+  }
+
+  .tooltip-surface:popover-open {
+    opacity: 1;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+}
+
+@layer state {
+  @media (prefers-reduced-motion: no-preference) {
+    .tooltip-surface:popover-open {
+      translate: 0 0;
+      transition:
+        opacity var(--duration-fast) var(--ease-standard),
+        translate var(--duration-fast) var(--ease-standard);
+
+      @starting-style {
+        opacity: 0;
+        translate: 0 var(--spacing-1);
+      }
+    }
+
+    .tooltip-surface[data-placement='below']:popover-open {
+      @starting-style {
+        opacity: 0;
+        translate: 0 calc(-1 * var(--spacing-1));
+      }
+    }
+
+    .tooltip-surface[data-placement='start']:popover-open {
+      @starting-style {
+        opacity: 0;
+        translate: var(--spacing-1) 0;
+      }
+    }
+
+    .tooltip-surface[data-placement='end']:popover-open {
+      @starting-style {
+        opacity: 0;
+        translate: calc(-1 * var(--spacing-1)) 0;
+      }
+    }
+
+    /* Right-to-left mirrors the horizontal nudge: start/end are logical, translate is physical. */
+    :host(:dir(rtl)) .tooltip-surface[data-placement='start']:popover-open {
+      @starting-style {
+        opacity: 0;
+        translate: calc(-1 * var(--spacing-1)) 0;
+      }
+    }
+
+    :host(:dir(rtl)) .tooltip-surface[data-placement='end']:popover-open {
+      @starting-style {
+        opacity: 0;
+        translate: var(--spacing-1) 0;
+      }
+    }
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .tooltip-surface {
+      border: 1px solid CanvasText;
+    }
+  }
+}

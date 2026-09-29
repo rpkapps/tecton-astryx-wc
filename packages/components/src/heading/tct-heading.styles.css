@@ -1,0 +1,80 @@
+/*
+ * tct-heading: the level scale. Levels 1 to 6 read the heading tokens (Tecton: 24, 20, 16, 14, 12, 10 px);
+ * a display `type` overrides the level's visual step with the display scale. Both use `:where(.text)` so
+ * an explicit colour or weight (shared typography module) always wins. A custom `type` keeps the level
+ * baseline until the consumer styles `::part(text)`. The host defaults to block; `display="inline"`
+ * switches it, and truncation or capsize force block again.
+ */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  :host([display='inline']) {
+    display: inline;
+  }
+
+  :host([max-lines]:not([max-lines='0'])),
+  :host([has-capsize]) {
+    display: block;
+  }
+
+  .text {
+    display: block;
+    --_size: var(--text-heading-2-size);
+    --_leading: var(--text-heading-2-leading);
+    --_weight: var(--text-heading-2-weight);
+  }
+
+  :host([display='inline']) :where(.text) {
+    display: inline;
+  }
+
+  :host([level='1']) :where(.text) {
+    --_size: var(--text-heading-1-size);
+    --_leading: var(--text-heading-1-leading);
+    --_weight: var(--text-heading-1-weight);
+  }
+
+  :host([level='3']) :where(.text) {
+    --_size: var(--text-heading-3-size);
+    --_leading: var(--text-heading-3-leading);
+    --_weight: var(--text-heading-3-weight);
+  }
+
+  :host([level='4']) :where(.text) {
+    --_size: var(--text-heading-4-size);
+    --_leading: var(--text-heading-4-leading);
+    --_weight: var(--text-heading-4-weight);
+  }
+
+  :host([level='5']) :where(.text) {
+    --_size: var(--text-heading-5-size);
+    --_leading: var(--text-heading-5-leading);
+    --_weight: var(--text-heading-5-weight);
+  }
+
+  :host([level='6']) :where(.text) {
+    --_size: var(--text-heading-6-size);
+    --_leading: var(--text-heading-6-leading);
+    --_weight: var(--text-heading-6-weight);
+  }
+
+  :host([type='display-1']) :where(.text) {
+    --_size: var(--text-display-1-size);
+    --_leading: var(--text-display-1-leading);
+    --_weight: var(--text-display-1-weight);
+  }
+
+  :host([type='display-2']) :where(.text) {
+    --_size: var(--text-display-2-size);
+    --_leading: var(--text-display-2-leading);
+    --_weight: var(--text-display-2-weight);
+  }
+
+  :host([type='display-3']) :where(.text) {
+    --_size: var(--text-display-3-size);
+    --_leading: var(--text-display-3-leading);
+    --_weight: var(--text-display-3-weight);
+  }
+}
