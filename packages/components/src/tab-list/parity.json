@@ -335,8 +335,8 @@
         "api": true,
         "keyboard": true,
         "events": true,
-        "rtl": false,
-        "forcedColors": false,
+        "rtl": true,
+        "forcedColors": true,
         "i18n": false
       },
       "provisional": [],

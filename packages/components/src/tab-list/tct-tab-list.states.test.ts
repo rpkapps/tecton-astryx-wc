@@ -43,11 +43,13 @@ async function mount(theme: 'light' | 'dark', pattern: 'nav' | 'tabs'): Promise<
       `<tct-tab value="overview" label="Overview" ${panelIds ? 'panel-id="p1"' : ''}></tct-tab>` +
       `<tct-tab value="activity" label="Activity" ${panelIds ? 'panel-id="p2"' : ''}></tct-tab>` +
       `<tct-tab value="settings" label="Settings" ${panelIds ? 'panel-id="p3"' : ''}></tct-tab>` +
-      `<tct-tab value="locked" label="Locked" disabled></tct-tab></tct-tab-list>` +
+      `<tct-tab value="locked" label="Locked" disabled></tct-tab>${pattern === 'nav' ? '<tct-tab-menu label="More"></tct-tab-menu>' : ''}</tct-tab-list>` +
       `<div id="p1" role="tabpanel"></div><div id="p2" role="tabpanel"></div><div id="p3" role="tabpanel"></div></div>`,
     {theme},
   );
   const list = wrapper.querySelector('tct-tab-list')!;
+  const menu = list.querySelector('tct-tab-menu');
+  if (menu) menu.options = [{value: 'reports', label: 'Reports'}, {value: 'exports', label: 'Exports'}];
   await list.updateComplete;
   await Promise.all([...list.children].map((child) => (child as TctTab).updateComplete));
   await nextFrame();
@@ -90,6 +92,30 @@ describe('tct-tab: text contrast in every state', () => {
         await settledStrip(wrapper.querySelector('tct-tab-list')!);
         await expectAccessible(wrapper, contrastOnly);
       });
+
+      if (pattern === 'nav') {
+        it(`hover and keyboard focus on the tab menu trigger, idle and selected (${where})`, async () => {
+          const wrapper = await mount(theme, pattern);
+          const list = wrapper.querySelector('tct-tab-list')!;
+          const menu = list.querySelector('tct-tab-menu')!;
+          await userEvent.hover(menu.control!);
+          await settledStrip(list);
+          await expectAccessible(wrapper, contrastOnly);
+          await userEvent.hover(document.body, {position: {x: 0, y: 0}});
+          menu.control!.focus();
+          await pressKeys('Shift+Tab', 'Tab');
+          await settledStrip(list);
+          await expectAccessible(wrapper, contrastOnly);
+          // Selected option: the trigger shows the option and the selected ink.
+          list.value = 'reports';
+          await list.updateComplete;
+          await settledStrip(list);
+          await expectAccessible(wrapper, contrastOnly);
+          await userEvent.hover(menu.control!);
+          await settledStrip(list);
+          await expectAccessible(wrapper, contrastOnly);
+        });
+      }
 
       it(`keyboard focus on the selected tab (${where})`, async () => {
         const wrapper = await mount(theme, pattern);

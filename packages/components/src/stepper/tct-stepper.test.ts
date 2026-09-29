@@ -9,6 +9,7 @@ import {html} from 'lit';
 import {cdp, userEvent} from 'vitest/browser';
 import {afterEach, describe, expect, it, vi} from 'vitest';
 import {axNode, expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {emulateMedia} from '@tecton-wc/testing/emulate.js';
 import {expectEventCounts, recordEvents} from '@tecton-wc/testing/events.js';
 import {fixture} from '@tecton-wc/testing/fixture.js';
 import {deepActiveElement, pressKeys, tabSequence} from '@tecton-wc/testing/keyboard.js';
@@ -684,4 +685,30 @@ describe('tct-step: text contrast in every state', () => {
       });
     }
   }
+});
+
+/** The computed colour a CSS system colour resolves to (forced colours emulation on). */
+function systemColor(name: string): string {
+  const probe = document.createElement('span');
+  probe.style.color = name;
+  document.body.append(probe);
+  const value = getComputedStyle(probe).color;
+  probe.remove();
+  return value;
+}
+
+describe('tct-stepper: forced colours', () => {
+  it('draws the segments and badges in system colours and keeps the focus ring', async () => {
+    await emulateMedia({forcedColors: 'active'});
+    const element = await stepper('active-step="1" navigable');
+    const [done, , upcoming] = steps(element);
+    const seg = done!.shadowRoot!.querySelector('.seg')!;
+    expect(getComputedStyle(seg).backgroundColor).toBe(systemColor('GrayText'));
+    expect(getComputedStyle(seg, '::before').backgroundColor).toBe(systemColor('Highlight'));
+    const badge = indicator(upcoming!)!;
+    expect(getComputedStyle(badge).borderStyle).toBe('solid');
+    button(upcoming!)!.focus({focusVisible: true});
+    expect(getComputedStyle(button(upcoming!)!).outlineStyle).not.toBe('none');
+    expect(getComputedStyle(button(upcoming!)!).outlineColor).toBe(systemColor('Highlight'));
+  });
 });

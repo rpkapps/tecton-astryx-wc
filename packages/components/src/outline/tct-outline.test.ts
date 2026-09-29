@@ -559,3 +559,28 @@ describe('the outline events', () => {
     expect(new TctActiveChangeEvent('a', 'click')).toMatchObject({type: 'tct-active-change', id: 'a', reason: 'click'});
   });
 });
+
+/** The computed colour a CSS system colour resolves to (forced colours emulation on). */
+function systemColor(name: string): string {
+  const probe = document.createElement('span');
+  probe.style.color = name;
+  document.body.append(probe);
+  const value = getComputedStyle(probe).color;
+  probe.remove();
+  return value;
+}
+
+describe('tct-outline: forced colours', () => {
+  it('keeps the focus ring, and paints the bar and the active link in system colours', async () => {
+    await emulateMedia({forcedColors: 'active'});
+    const {outline} = await page();
+    const indicator = outline.shadowRoot!.querySelector('.indicator')!;
+    expect(getComputedStyle(indicator).backgroundColor).toBe(systemColor('Highlight'));
+    expect(getComputedStyle(links(outline)[0]!).color).toBe(systemColor('Highlight'));
+    links(outline)[0]!.focus();
+    await pressKeys('ArrowDown');
+    await Promise.all(links(outline)[1]!.getAnimations().map((animation) => animation.finished));
+    expect(deepActiveElement()).toBe(links(outline)[1]);
+    expect(getComputedStyle(links(outline)[1]!).outlineStyle).not.toBe('none');
+  });
+});

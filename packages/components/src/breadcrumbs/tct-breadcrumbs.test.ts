@@ -7,6 +7,7 @@ import {html} from 'lit';
 import {cdp, userEvent} from 'vitest/browser';
 import {afterEach, describe, expect, it, vi} from 'vitest';
 import {axNode, expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {emulateMedia} from '@tecton-wc/testing/emulate.js';
 import {recordEvents} from '@tecton-wc/testing/events.js';
 import {fixture} from '@tecton-wc/testing/fixture.js';
 import {deepActiveElement, pressKeys} from '@tecton-wc/testing/keyboard.js';
@@ -487,4 +488,28 @@ describe('tct-breadcrumb-item: text contrast in every state', () => {
       });
     }
   }
+});
+
+/** The computed colour a CSS system colour resolves to (forced colours emulation on). */
+function systemColor(name: string): string {
+  const probe = document.createElement('span');
+  probe.style.color = name;
+  document.body.append(probe);
+  const value = getComputedStyle(probe).color;
+  probe.remove();
+  return value;
+}
+
+describe('tct-breadcrumbs: forced colours', () => {
+  it('keeps the focus ring on a link crumb and an action crumb, in the system highlight colour', async () => {
+    await emulateMedia({forcedColors: 'active'});
+    const element = await trail('', '<tct-breadcrumb-item href="/">Home</tct-breadcrumb-item><tct-breadcrumb-item>Action</tct-breadcrumb-item><tct-breadcrumb-item>Now</tct-breadcrumb-item>');
+    const [home, action] = items(element);
+    anchor(home!).focus({focusVisible: true});
+    expect(getComputedStyle(anchor(home!)).outlineStyle).not.toBe('none');
+    crumb(action!).focus({focusVisible: true});
+    const ring = getComputedStyle(crumb(action!));
+    expect(ring.outlineStyle).not.toBe('none');
+    expect(ring.outlineColor).toBe(systemColor('Highlight'));
+  });
 });

@@ -6,6 +6,7 @@
 import {userEvent} from 'vitest/browser';
 import {describe, expect, it} from 'vitest';
 import {axNode, expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {emulateMedia} from '@tecton-wc/testing/emulate.js';
 import {recordEvents} from '@tecton-wc/testing/events.js';
 import {fixture} from '@tecton-wc/testing/fixture.js';
 import {deepActiveElement, pressKeys} from '@tecton-wc/testing/keyboard.js';
@@ -215,3 +216,27 @@ describe('tct-tab-menu: menu', () => {
 function inner(menu: TctTabMenu): string {
   return menu.shadowRoot!.querySelector('.tab .label')!.textContent ?? '';
 }
+
+describe('tct-tab-menu: forced colours and right-to-left', () => {
+  it('keeps the keyboard focus ring on the trigger in forced colours', async () => {
+    await emulateMedia({forcedColors: 'active'});
+    const {menu} = await menuList();
+    menu.parentElement!.parentElement!.querySelector('button')!.focus();
+    await pressKeys('Tab', 'ArrowRight', 'ArrowRight');
+    await waitUntil(() => deepActiveElement() === trigger(menu), 'trigger focused');
+    expect(getComputedStyle(trigger(menu)).outlineStyle).not.toBe('none');
+  });
+
+  it('places the trigger after the last tab, on the left in right-to-left', async () => {
+    const wrapper = await fixture<HTMLDivElement>(
+      `<div dir="rtl" style="width: 520px"><tct-tab-list value="overview"><tct-tab value="overview" label="Overview"></tct-tab>` +
+        `<tct-tab-menu label="More"></tct-tab-menu></tct-tab-list></div>`,
+    );
+    const menu = wrapper.querySelector('tct-tab-menu')!;
+    menu.options = OPTIONS;
+    await menu.updateComplete;
+    await nextFrame();
+    const tab = wrapper.querySelector('tct-tab')!.getBoundingClientRect();
+    expect(trigger(menu).getBoundingClientRect().right).toBeLessThanOrEqual(tab.left + 1);
+  });
+});

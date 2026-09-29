@@ -10,6 +10,7 @@ import {ContextProvider} from '@tecton-wc/core/context/protocol.js';
 import {defineElement} from '@tecton-wc/core/define.js';
 import {TctElement} from '@tecton-wc/core/tct-element.js';
 import {axNode, expectAccessible} from '@tecton-wc/testing/a11y.js';
+import {emulateMedia} from '@tecton-wc/testing/emulate.js';
 import {recordEvents} from '@tecton-wc/testing/events.js';
 import {fixture} from '@tecton-wc/testing/fixture.js';
 import {deepActiveElement, pressKeys, tabSequence} from '@tecton-wc/testing/keyboard.js';
@@ -286,5 +287,40 @@ describe('tct-nav-heading-menu: accessibility', () => {
   it('has no axe violations', async () => {
     const element = await menu();
     await expectAccessible(element.parentElement!);
+  });
+});
+
+/** The computed colour a CSS system colour resolves to (forced colours emulation on). */
+function systemColor(name: string): string {
+  const probe = document.createElement('span');
+  probe.style.color = name;
+  document.body.append(probe);
+  const value = getComputedStyle(probe).color;
+  probe.remove();
+  return value;
+}
+
+describe('tct-nav-heading-menu: forced colours and right-to-left', () => {
+  it('highlights the focused row with the system highlight colours', async () => {
+    await emulateMedia({forcedColors: 'active'});
+    const element = await menu();
+    control(rows(element)[0]!).focus();
+    await pressKeys('ArrowDown');
+    await Promise.all(control(rows(element)[1]!).getAnimations().map((animation) => animation.finished));
+    const row = getComputedStyle(control(rows(element)[1]!));
+    expect(row.backgroundColor).toBe(systemColor('Highlight'));
+    expect(row.color).toBe(systemColor('HighlightText'));
+  });
+
+  it('lays the icon and the text out from the right', async () => {
+    const wrapper = await fixture<HTMLDivElement>(
+      `<div dir="rtl"><tct-nav-heading-menu><tct-nav-heading-menu-item label="Settings" icon="check"></tct-nav-heading-menu-item></tct-nav-heading-menu></div>`,
+    );
+    const row = wrapper.querySelector('tct-nav-heading-menu-item')!;
+    await row.updateComplete;
+    await nextFrame();
+    const icon = row.shadowRoot!.querySelector('tct-icon')!.getBoundingClientRect();
+    const text = row.shadowRoot!.querySelector('.content')!.getBoundingClientRect();
+    expect(icon.left).toBeGreaterThan(text.left);
   });
 });
