@@ -318,10 +318,15 @@ describe('tct-citation: accessibility and keyboard', () => {
 
   it('is one tab stop when linked; focus() lands on the link and Enter is native activation', async () => {
     const citation = await make();
+    // A focusable element after the citation: Tab from the last tab stop would leave the document for
+    // the browser UI, where whether document.activeElement changes is timing-dependent.
+    const next = document.createElement('button');
+    next.textContent = 'next';
+    citation.after(next);
     citation.focus();
     expect(deepActiveElement()).toBe(baseOf(citation));
     await pressKeys('Tab');
-    expect(deepActiveElement()).not.toBe(baseOf(citation));
+    expect(deepActiveElement()).toBe(next);
   });
 
   it('an unlinked citation takes no focus', async () => {
