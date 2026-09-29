@@ -40,7 +40,7 @@ export class TctChatSystemMessage extends TctElement {
   /** `default` (plain centred text) or `divider` (text between two rules). */
   @property({reflect: true}) variant: ChatSystemMessageVariant = 'default';
 
-  readonly #slots = new SlotController(this, 'icon');
+  readonly #slots: SlotController = new SlotController(this, 'icon');
   #observer: MutationObserver | undefined;
 
   override connectedCallback(): void {

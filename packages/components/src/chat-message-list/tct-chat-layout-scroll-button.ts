@@ -52,7 +52,7 @@ export class TctChatLayoutScrollButton extends TctElement {
    */
   @property({attribute: false}) focusTarget: HTMLElement | (() => HTMLElement | null) | null = null;
 
-  readonly #locale = new LocaleController(this, {
+  readonly #locale: LocaleController = new LocaleController(this, {
     namespace: 'chatLayoutScrollButton',
     defaults: english,
   });

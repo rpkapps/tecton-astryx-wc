@@ -73,8 +73,10 @@ export class TctChatMessageBubble extends TctElement {
    */
   @property() width: string | undefined;
 
-  readonly #message = new ContextConsumer(this, {context: chatMessageContext, subscribe: true});
-  readonly #slots = new SlotController(this, 'name', 'metadata');
+  readonly #message: ContextConsumer<typeof chatMessageContext> = new ContextConsumer<
+    typeof chatMessageContext
+  >(this, {context: chatMessageContext, subscribe: true});
+  readonly #slots: SlotController = new SlotController(this, 'name', 'metadata');
   #reported: ChatMessageContextValue | undefined;
 
   override disconnectedCallback(): void {

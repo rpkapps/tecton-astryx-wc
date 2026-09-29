@@ -25,16 +25,18 @@ import type {TctChatMessageList} from './tct-chat-message-list.js';
 
 /** The chat layout's wiring: a scroll container, the context, both controllers and the button. */
 class ChatHarness extends LitElement {
-  readonly follow = new ChatStreamScrollController(this, {
+  readonly follow: ChatStreamScrollController = new ChatStreamScrollController(this, {
     scroller: () => this.renderRoot.querySelector<HTMLElement>('.scroller'),
   });
-  readonly news = new ChatNewMessagesController(this, {
+  readonly news: ChatNewMessagesController = new ChatNewMessagesController(this, {
     isLocked: () => this.follow.isLocked,
     onResize: () => {
       this.follow.scrollIfLocked();
     },
   });
-  readonly #layout = new ContextProvider(this, {
+  readonly #layout: ContextProvider<typeof chatLayoutContext> = new ContextProvider<
+    typeof chatLayoutContext
+  >(this, {
     context: chatLayoutContext,
     initialValue: {
       scrollContainer: () => this.renderRoot.querySelector<HTMLElement>('.scroller'),

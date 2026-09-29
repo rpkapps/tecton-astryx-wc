@@ -101,13 +101,17 @@ export class TctChatMessageList extends TctElement {
 
   @state() private _loadingOlder = false;
 
-  readonly #slots = new SlotController(this, 'default', 'empty-state');
+  readonly #slots: SlotController = new SlotController(this, 'default', 'empty-state');
   #provided: ChatDensity = 'balanced';
-  readonly #provider = new ContextProvider(this, {
+  readonly #provider: ContextProvider<typeof chatListContext> = new ContextProvider<
+    typeof chatListContext
+  >(this, {
     context: chatListContext,
     initialValue: {density: 'balanced'},
   });
-  readonly #layout = new ContextConsumer(this, {context: chatLayoutContext, subscribe: true});
+  readonly #layout: ContextConsumer<typeof chatLayoutContext> = new ContextConsumer<
+    typeof chatLayoutContext
+  >(this, {context: chatLayoutContext, subscribe: true});
 
   // Content registered with the layout, and the older-messages observer.
   #registered: {contentRef: (element: HTMLElement | null) => void} | undefined;

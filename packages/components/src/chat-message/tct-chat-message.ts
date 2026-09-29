@@ -67,9 +67,14 @@ export class TctChatMessage extends TctElement {
    */
   @property() name = '';
 
-  readonly #locale = new LocaleController(this, {namespace: 'chatMessage', defaults: english});
-  readonly #slots = new SlotController(this, 'avatar', 'name', 'metadata');
-  readonly #list = new ContextConsumer(this, {context: chatListContext, subscribe: true});
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'chatMessage',
+    defaults: english,
+  });
+  readonly #slots: SlotController = new SlotController(this, 'avatar', 'name', 'metadata');
+  readonly #list: ContextConsumer<typeof chatListContext> = new ContextConsumer<
+    typeof chatListContext
+  >(this, {context: chatListContext, subscribe: true});
   #context: ChatMessageContextValue = {
     sender: 'assistant',
     density: 'balanced',
@@ -77,7 +82,9 @@ export class TctChatMessage extends TctElement {
       this.#reportName(source, hasName);
     },
   };
-  readonly #provider = new ContextProvider(this, {
+  readonly #provider: ContextProvider<typeof chatMessageContext> = new ContextProvider<
+    typeof chatMessageContext
+  >(this, {
     context: chatMessageContext,
     initialValue: this.#context,
   });

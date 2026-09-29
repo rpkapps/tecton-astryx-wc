@@ -78,8 +78,11 @@ export class TctChatToolCalls extends TctElement {
   /** Keys of the calls whose `resultDetail` is open. */
   @state() private _open: ReadonlySet<string> = new Set();
 
-  readonly #locale = new LocaleController(this, {namespace: 'chatToolCalls', defaults: english});
-  readonly #ids = new IdController(this, 'tool-calls');
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'chatToolCalls',
+    defaults: english,
+  });
+  readonly #ids: IdController = new IdController(this, 'tool-calls');
   /** Last seen status by call key, to announce a call that fails (not one that arrives failed in history). */
   #statuses: Map<string, ChatToolCallStatus> | undefined;
 

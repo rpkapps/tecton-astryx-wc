@@ -59,9 +59,14 @@ export class TctChatMessageMetadata extends TctElement {
   /** Delivery status: `sending`, `sent`, `delivered`, `read` or `error` (shown as "Failed"). */
   @property({reflect: true}) status: ChatMessageStatus | undefined;
 
-  readonly #locale = new LocaleController(this, {namespace: 'chat', defaults: english});
-  readonly #slots = new SlotController(this, 'timestamp', 'footer');
-  readonly #message = new ContextConsumer(this, {context: chatMessageContext, subscribe: true});
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'chat',
+    defaults: english,
+  });
+  readonly #slots: SlotController = new SlotController(this, 'timestamp', 'footer');
+  readonly #message: ContextConsumer<typeof chatMessageContext> = new ContextConsumer<
+    typeof chatMessageContext
+  >(this, {context: chatMessageContext, subscribe: true});
 
   protected override willUpdate(changed: PropertyValues<this>): void {
     if (changed.has('status')) {
