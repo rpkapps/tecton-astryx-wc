@@ -1,0 +1,138 @@
+@layer component {
+  :host {
+    display: block;
+  }
+
+  /* Outer chrome (upstream Section): the variant surface and the divider rules. */
+  .surface {
+    --_background: transparent;
+    --_padding-block: var(--spacing-2);
+    --_padding-inline: var(--spacing-4);
+
+    padding-block: var(--_padding-block);
+    padding-inline: var(--_padding-inline);
+    background-color: var(--_background);
+  }
+
+  .surface[data-variant='section'] {
+    --_background: var(--color-background-surface);
+  }
+
+  .surface[data-variant='muted'] {
+    --_background: var(--color-background-muted);
+  }
+
+  .surface[data-divider-top] {
+    border-block-start: var(--border-width) solid var(--color-border);
+  }
+
+  .surface[data-divider-bottom] {
+    border-block-end: var(--border-width) solid var(--color-border);
+  }
+
+  .surface[data-divider-start] {
+    border-inline-start: var(--border-width) solid var(--color-border);
+  }
+
+  .surface[data-divider-end] {
+    border-inline-end: var(--border-width) solid var(--color-border);
+  }
+
+  .toolbar {
+    --_gap: var(--spacing-1);
+    --_min-height: var(--size-element-sm);
+
+    /*
+     * Three columns always: start | centre | end. An empty centre collapses to nothing and start and end
+     * share the rest, which is the two-area layout; slot presence is never needed (a server cannot know it).
+     */
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    column-gap: var(--_gap);
+    min-block-size: var(--_min-height);
+  }
+
+  .toolbar[data-orientation='vertical'] {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    row-gap: var(--_gap);
+  }
+
+  .toolbar[data-gap='0'] {
+    --_gap: var(--spacing-0);
+  }
+
+  .toolbar[data-gap='0-5'] {
+    --_gap: var(--spacing-0-5);
+  }
+
+  .toolbar[data-gap='1-5'] {
+    --_gap: var(--spacing-1-5);
+  }
+
+  .toolbar[data-gap='2'] {
+    --_gap: var(--spacing-2);
+  }
+
+  .toolbar[data-gap='3'] {
+    --_gap: var(--spacing-3);
+  }
+
+  .toolbar[data-gap='4'] {
+    --_gap: var(--spacing-4);
+  }
+
+  .toolbar[data-gap='5'] {
+    --_gap: var(--spacing-5);
+  }
+
+  .toolbar[data-gap='6'] {
+    --_gap: var(--spacing-6);
+  }
+
+  .toolbar[data-gap='8'] {
+    --_gap: var(--spacing-8);
+  }
+
+  .toolbar[data-gap='10'] {
+    --_gap: var(--spacing-10);
+  }
+
+  .area {
+    display: flex;
+    align-items: center;
+    gap: var(--_gap);
+    min-inline-size: 0;
+  }
+
+  .center {
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .end {
+    justify-content: flex-end;
+  }
+
+  .toolbar[data-orientation='vertical'] .area {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  /*
+   * Edge compensation: a ghost button or tab carries transparent padding, which doubles up with the bar's
+   * own at the edges. A component that opts in marks itself `data-tct-edge-comp`; the bar pulls the first
+   * and last one in by (inline padding minus block padding). Upstream does this on the slot wrapper with
+   * `:has()`; slotted content can only be reached through ::slotted.
+   */
+  .toolbar[data-orientation='horizontal'] ::slotted([data-tct-edge-comp]:first-child) {
+    margin-inline-start: calc(-1 * (var(--_padding-inline) - var(--_padding-block)));
+  }
+
+  .toolbar[data-orientation='horizontal'] ::slotted([data-tct-edge-comp]:last-child) {
+    margin-inline-end: calc(-1 * (var(--_padding-inline) - var(--_padding-block)));
+  }
+}

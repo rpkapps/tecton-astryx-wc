@@ -1,0 +1,169 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "toolbar",
+  "workPackage": "WP-3",
+  "entries": {
+    "core.toolbar": {
+      "tag": "tct-toolbar",
+      "status": "in-progress",
+      "upstream": {
+        "name": "Toolbar",
+        "path": "packages/core/src/Toolbar/Toolbar.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "Accessible name, through ElementInternals; a host aria-label wins."
+        },
+        {
+          "upstream": "startContent",
+          "kind": "slot",
+          "target": "start",
+          "as": "slot",
+          "notes": "Unslotted children are start content too."
+        },
+        {"upstream": "centerContent", "kind": "slot", "target": "center", "as": "slot"},
+        {"upstream": "endContent", "kind": "slot", "target": "end", "as": "slot"},
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md (explicit, then a size provider, then md)",
+          "notes": "Provided to the controls inside through sizeContext."
+        },
+        {
+          "upstream": "gap",
+          "kind": "prop",
+          "target": "gap",
+          "as": "attribute",
+          "default": 1,
+          "notes": "Spacing step 0, 0.5, 1, 1.5, 2, 3, 4, 5, 6, 8 or 10; mapped to --spacing-* by the stylesheet."
+        },
+        {
+          "upstream": "orientation",
+          "kind": "prop",
+          "target": "orientation",
+          "as": "attribute",
+          "reflect": true,
+          "default": "horizontal"
+        },
+        {
+          "upstream": "variant",
+          "kind": "prop",
+          "target": "variant",
+          "as": "attribute",
+          "reflect": true,
+          "default": "transparent",
+          "notes": "transparent, section, muted (the Section variants a toolbar uses)."
+        },
+        {
+          "upstream": "dividers",
+          "kind": "prop",
+          "target": "dividers",
+          "as": "attribute",
+          "notes": "Property is an array; the attribute is a space separated token list (`dividers=\"top bottom\"`)."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(surface), ::part(toolbar) and custom properties."
+        }
+      ],
+      "hooks": [
+        {"upstream": "useKeyboardHint", "target": "KeyboardHintController", "as": "controller"},
+        {"upstream": "useListFocus", "target": "RovingTabindexController", "as": "controller"}
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Enters the toolbar at the item that last had focus (the first enabled item at first); the next Tab leaves it",
+          "when": "one tab stop"
+        },
+        {
+          "keys": "ArrowRight",
+          "action": "Moves focus to the next enabled item, wrapping after the last",
+          "when": "horizontal; ArrowLeft in RTL"
+        },
+        {
+          "keys": "ArrowLeft",
+          "action": "Moves focus to the previous enabled item, wrapping before the first",
+          "when": "horizontal; ArrowRight in RTL"
+        },
+        {
+          "keys": "ArrowDown",
+          "action": "Moves focus to the next enabled item of a vertical toolbar",
+          "when": "vertical"
+        },
+        {
+          "keys": "ArrowUp",
+          "action": "Moves focus to the previous enabled item of a vertical toolbar",
+          "when": "vertical"
+        },
+        {"keys": "Home", "action": "Moves focus to the first enabled item"},
+        {"keys": "End", "action": "Moves focus to the last enabled item"},
+        {
+          "keys": "Arrow keys in a text field",
+          "action": "Are left to a text field while its caret can still move; at the edge they move focus on",
+          "when": "caret guard"
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "TOOLBAR-01",
+          "type": "approved-api-difference",
+          "text": "Content is slotted (start, center, end) instead of ReactNode props. The roving items are the focusable leaves of the slotted content in flat-tree order, found through open shadow roots (a tct-button keeps its native button there); the focus target is the leaf itself, so tabindex is written on the inner control, never on a shadow host (a negative tabindex on a host removes its subtree from Tab)."
+        },
+        {
+          "id": "TOOLBAR-02",
+          "type": "approved-api-difference",
+          "text": "The toolbar draws its own surface and dividers (upstream wraps a Section). The layout is always three columns (start | centre | end); an empty centre collapses, so the two-area and single-area layouts need no slot detection and are correct before JavaScript runs."
+        },
+        {
+          "id": "TOOLBAR-03",
+          "type": "approved-api-difference",
+          "text": "Edge compensation (ghost buttons and tabs sitting flush at the bar's edges) is done with ::slotted([data-tct-edge-comp]) on the first and last slotted child. It takes effect once ghost Button and tab elements set data-tct-edge-comp on their host (see requests)."
+        },
+        {
+          "id": "TOOLBAR-05",
+          "type": "approved-api-difference",
+          "text": "A nested composite that runs its own roving tabindex (tct-segmented-control, tct-tab-list) keeps its own tab stop and arrows; the toolbar's arrows do not enter it. Upstream flattens every button, input and [tabindex] below the toolbar into one list; here two controllers writing tabindex on the same items would leave two tab stops."
+        },
+        {
+          "id": "TOOLBAR-04",
+          "type": "approved-api-difference",
+          "text": "The role, aria-label and aria-orientation are set through ElementInternals on the host; upstream ignores consumer role, aria-label and aria-orientation props, here a host aria-label attribute overrides the label property (an author who writes it means it)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/components/src/button/tct-button.ts (WP-F)",
+          "reason": "Ghost buttons should reflect data-tct-edge-comp on the host so toolbars (and later banners and layout headers) can compensate their transparent padding at the edges, replacing upstream's data-astryx-edge-comp. No toolbar behaviour depends on it."
+        }
+      ],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessibility] (toolbar as one composite tab stop, caret keys stay with text fields) [mwg:spatial-navigation] (arrow keys only inside the composite, focus target kept visible) [mwg:accessible-web-components] (role and aria-* through ElementInternals; no IDREFs across roots)."
+    }
+  }
+}
