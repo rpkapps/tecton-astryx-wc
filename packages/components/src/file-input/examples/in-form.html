@@ -1,0 +1,23 @@
+<!-- title: In a form; description: The chosen files submit in the form's FormData under the name. A required field blocks the submit while nothing is chosen, focuses the field and shows the error only then. Reset clears the files. -->
+<tct-vstack max-width="480">
+  <form id="in-form-root">
+    <tct-form-layout>
+      <tct-file-input label="Résumé" name="resume" required accept=".pdf,.doc,.docx"></tct-file-input>
+      <tct-file-input label="Portfolio" name="portfolio" multiple optional></tct-file-input>
+      <tct-hstack gap="2">
+        <tct-button type="submit" variant="primary">Send</tct-button>
+        <tct-button type="reset">Reset</tct-button>
+      </tct-hstack>
+      <output></output>
+    </tct-form-layout>
+  </form>
+</tct-vstack>
+<script type="module">
+  const form = document.getElementById('in-form-root');
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    form.querySelector('output').textContent = [...new FormData(form, event.submitter)]
+      .map(([name, value]) => `${name}: ${value.name}`)
+      .join(', ');
+  });
+</script>
