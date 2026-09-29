@@ -1,0 +1,797 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "side-nav",
+  "workPackage": "WP-14",
+  "entries": {
+    "core.side-nav": {
+      "tag": "tct-side-nav",
+      "status": "implemented",
+      "upstream": {
+        "name": "SideNav",
+        "path": "packages/core/src/SideNav/SideNav.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "header",
+          "kind": "slot",
+          "target": "header",
+          "as": "slot"
+        },
+        {
+          "upstream": "topContent",
+          "kind": "slot",
+          "target": "top-content",
+          "as": "slot"
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "`tct-side-nav-section`s and `tct-side-nav-item`s. Scrolls."
+        },
+        {
+          "upstream": "footer",
+          "kind": "slot",
+          "target": "footer",
+          "as": "slot"
+        },
+        {
+          "upstream": "footerIcons",
+          "kind": "slot",
+          "target": "footer-icons",
+          "as": "slot",
+          "notes": "Its buttons take the compact size."
+        },
+        {
+          "upstream": "collapsible",
+          "kind": "prop",
+          "target": "collapsible",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "The object form maps to attributes: `defaultIsCollapsed` and `isCollapsed` to `collapsed` (initial state, and the property), `onCollapsedChange` to the cancelable `tct-collapse-change`, `hasButton` to `no-collapse-button` (inverted), `buttonLabel` to `collapse-button-label`."
+        },
+        {
+          "upstream": "collapsible.defaultIsCollapsed",
+          "kind": "prop",
+          "target": "collapsed",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "collapsible.isCollapsed",
+          "kind": "prop",
+          "target": "collapsed",
+          "as": "property",
+          "notes": "Prevent `tct-collapse-change` and set it to own the state."
+        },
+        {
+          "upstream": "collapsible.onCollapsedChange",
+          "kind": "event",
+          "target": "tct-collapse-change",
+          "as": "event",
+          "notes": "Cancelable intent with `collapsed` and `reason` (pointer, keyboard, drag)."
+        },
+        {
+          "upstream": "collapsible.hasButton",
+          "kind": "prop",
+          "target": "no-collapse-button",
+          "as": "attribute",
+          "notes": "Inverted: the built-in button is on unless `no-collapse-button` is set."
+        },
+        {
+          "upstream": "collapsible.buttonLabel",
+          "kind": "prop",
+          "target": "collapse-button-label",
+          "as": "attribute"
+        },
+        {
+          "upstream": "resizable",
+          "kind": "prop",
+          "target": "resizable",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "The object form maps to attributes: `defaultWidth`, `minWidth`, `maxWidth`, `autoSaveId`; `onWidthChange` to `tct-size-change`."
+        },
+        {
+          "upstream": "resizable.defaultWidth",
+          "kind": "prop",
+          "target": "default-width",
+          "as": "attribute",
+          "default": 260
+        },
+        {
+          "upstream": "resizable.minWidth",
+          "kind": "prop",
+          "target": "min-width",
+          "as": "attribute",
+          "default": 180
+        },
+        {
+          "upstream": "resizable.maxWidth",
+          "kind": "prop",
+          "target": "max-width",
+          "as": "attribute",
+          "default": 480
+        },
+        {
+          "upstream": "resizable.autoSaveId",
+          "kind": "prop",
+          "target": "auto-save-id",
+          "as": "attribute",
+          "notes": "Remembers the width and the collapse state in `localStorage`; the persisted state wins over the attribute on the first render."
+        },
+        {
+          "upstream": "resizable.onWidthChange",
+          "kind": "event",
+          "target": "tct-size-change",
+          "as": "event",
+          "notes": "Reports every step of a drag or keyboard resize, with `size`."
+        },
+        {
+          "upstream": "resizable.defaultIsCollapsed",
+          "kind": "prop",
+          "target": "collapsed",
+          "as": "attribute"
+        },
+        {
+          "upstream": "resizable.isCollapsed",
+          "kind": "prop",
+          "target": "collapsed",
+          "as": "property"
+        },
+        {
+          "upstream": "resizable.onCollapseChange",
+          "kind": "event",
+          "target": "tct-collapse-change",
+          "as": "event"
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Accessible name of the landmark; the localised \"Side navigation\" by default. (Not an upstream prop.)"
+        },
+        {
+          "upstream": "handleRef",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "Deprecated upstream. The element itself is the handle: `collapse()`, `expand()`, `isCollapsed` and the `for` attribute of `tct-side-nav-collapse-button` cover the imperative uses."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: style the host, `::part()` or the documented attributes and custom properties."
+        },
+        {
+          "upstream": "className",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "React attribute; a WC uses the `class` attribute and `::part()`."
+        },
+        {
+          "upstream": "style",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "React attribute; a WC uses the `style` attribute and `::part()`."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "React test hook; a WC test selects by tag, part or role."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useSideNavCollapse",
+          "target": "SideNavCollapseController",
+          "as": "controller",
+          "notes": "`side-nav/side-nav.context.ts`; `value.isCollapsed`, `isCollapsible`, `toggle()`, and `isInSideNav`. Re-renders the host on change."
+        },
+        {
+          "upstream": "useSideNavRenderMode",
+          "target": "SideNavRenderModeController",
+          "as": "controller",
+          "notes": "An explicit `sideNavRenderContext` wins, then (with `derive`) the app shell: `drawer` while the shell shows the navigation in its mobile drawer."
+        },
+        {
+          "upstream": "SideNavRenderContext",
+          "target": "sideNavRenderContext",
+          "as": "context",
+          "notes": "Modes `default`, `drawer`, `drawer-content` and `topbar`. `topbar` exists only through an explicit provider; nothing derives it."
+        },
+        {
+          "upstream": "useDevWarning",
+          "as": "waived",
+          "reason": "Dev warnings go through `devWarn` in core; the conflicting collapse state of two props cannot occur because there is one `collapsed` property."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab, Shift + Tab",
+          "action": "Move through the items in document order (the rail and the mobile drawer included)"
+        },
+        {
+          "keys": "Enter, Space",
+          "action": "Toggle a collapsible group of sub-items, or the collapse button",
+          "when": "on the row or the chevron"
+        },
+        {
+          "keys": "Enter, Space, click",
+          "action": "Open the flyout of a collapsed item with sub-items; focus moves into it",
+          "when": "collapsed rail"
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes the flyout and returns focus to the item",
+          "when": "flyout open"
+        },
+        {
+          "keys": "Arrow keys, Home, End",
+          "action": "Resize the navigation by 10 px, to the minimum or to the maximum",
+          "when": "resize handle focused"
+        }
+      ],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "SIDE-NAV-01",
+          "type": "approved-api-difference",
+          "text": "The `collapsible` and `resizable` object props become flat attributes (`collapsed`, `no-collapse-button`, `collapse-button-label`, `default-width`, `min-width`, `max-width`, `auto-save-id`). The user's collapse or resize asks with a cancelable `tct-collapse-change` (or reports `tct-size-change`); writing `collapsed`, `collapse()` or `expand()` never emits. There is one `collapsed` state, so upstream's conflict of two props carrying collapse state cannot occur."
+        },
+        {
+          "id": "SIDE-NAV-02",
+          "type": "a11y-improvement",
+          "text": "Every collapsed rail item is named by its label and shows a tooltip on hover and keyboard focus; an item with sub-items is a button that opens a named flyout (`role=\"dialog\"`, the localised sub-menu label), on hover (fine pointers), Enter, Space or a click, with focus moving in and Escape returning it. Items without an icon are hidden in the rail, and collapsed sub-items are `inert`."
+        },
+        {
+          "id": "SIDE-NAV-03",
+          "type": "approved-api-difference",
+          "text": "The render mode is a context (`sideNavRenderContext`) read through `SideNavRenderModeController`. The side navigation derives `drawer` from the enclosing `tct-app-shell` itself; its parts read what it publishes, so an item inside a `footer-icons` or drawer subtree never re-derives it. `topbar` is available only through an explicit provider."
+        },
+        {
+          "id": "SIDE-NAV-04",
+          "type": "waiver",
+          "text": "No truncation tooltip on long labels (upstream shows none in the expanded navigation either): the label ellipsizes and the full text stays in the accessibility tree."
+        },
+        {
+          "id": "SIDE-NAV-05",
+          "type": "approved-api-difference",
+          "text": "The mobile drawer is filled by the shell. Below 768 px the side navigation is slotted into the shell's automatic drawer, renders as full rows without the collapse button or the resize handle, and closes the drawer when a link or a button item is chosen; a `tct-mobile-nav` of your own in the shell's `mobile-nav` slot keeps the inline navigation."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/core/src/context/protocol.ts",
+          "reason": "A context consumer that connects before its provider has upgraded, or that is slotted into a shadow tree the provider renders (a footer icon in `footer-icons`, an action in `actions`), can miss the value: the request event is dispatched once. Retry the request when a provider connects on the flat tree (or when the host is assigned to a slot). Until then the side navigation and the item call `renderOnConnect` (side-nav/nav-render.ts) to provide the compact size before the slotted children connect."
+        }
+      ],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessibility] landmark, disclosure toggles and focus return; [mwg:anchor-positioning] the flyout is a popover positioned by `showPopover({source})`, with the shared Floating UI fallback for Tier 2; [mwg:popover] flyouts and heading menus are `popover=\"manual\"` layers; [mwg:styling-web-components] parts, logical CSS, forced colours."
+    },
+    "core.side-nav-collapse-button": {
+      "tag": "tct-side-nav-collapse-button",
+      "status": "implemented",
+      "upstream": {
+        "name": "SideNavCollapseButton",
+        "path": "packages/core/src/SideNav/SideNavCollapseButton.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "collapsible",
+          "kind": "prop",
+          "target": "sideNav",
+          "as": "property",
+          "notes": "The upstream shared controlled config becomes a reference to the navigation: name it with `for` (an id in the same tree) or set `sideNav`; inside a side navigation it reads the state by itself."
+        },
+        {
+          "upstream": "collapsible",
+          "kind": "prop",
+          "target": "for",
+          "as": "attribute"
+        },
+        {
+          "upstream": "handleRef",
+          "kind": "ref",
+          "as": "waived",
+          "reason": "Deprecated upstream; `for` and `sideNav` name the navigation, and the click asks it through the cancelable `tct-collapse-change`."
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Replaces both \"Collapse sidebar\" and \"Expand sidebar\" (name and tooltip)."
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "A custom icon replacing the chevron."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: style the host, `::part()` or the documented attributes and custom properties."
+        }
+      ],
+      "hooks": [],
+      "keyboard": [
+        {
+          "keys": "Enter, Space",
+          "action": "Collapses or expands the navigation (native button)"
+        }
+      ],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "SIDE-NAV-COLLAPSE-BUTTON-01",
+          "type": "approved-api-difference",
+          "text": "It renders nothing while the navigation is not collapsible and in the mobile drawer. It raises no event of its own: its click asks the navigation, which raises the cancelable `tct-collapse-change`."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessibility] named icon button with a tooltip."
+    },
+    "core.side-nav-heading": {
+      "tag": "tct-side-nav-heading",
+      "status": "implemented",
+      "upstream": {
+        "name": "SideNavHeading",
+        "path": "packages/core/src/SideNav/SideNavHeading.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "heading",
+          "kind": "prop",
+          "target": "heading",
+          "as": "attribute"
+        },
+        {
+          "upstream": "icon",
+          "kind": "slot",
+          "target": "icon",
+          "as": "slot",
+          "notes": "Usually a `tct-nav-icon`."
+        },
+        {
+          "upstream": "headingHref",
+          "kind": "prop",
+          "target": "heading-href",
+          "as": "attribute"
+        },
+        {
+          "upstream": "superheading",
+          "kind": "prop",
+          "target": "superheading",
+          "as": "attribute"
+        },
+        {
+          "upstream": "superheadingHref",
+          "kind": "prop",
+          "target": "superheading-href",
+          "as": "attribute"
+        },
+        {
+          "upstream": "subheading",
+          "kind": "prop",
+          "target": "subheading",
+          "as": "attribute"
+        },
+        {
+          "upstream": "subheadingHref",
+          "kind": "prop",
+          "target": "subheading-href",
+          "as": "attribute"
+        },
+        {
+          "upstream": "menu",
+          "kind": "slot",
+          "target": "menu",
+          "as": "slot",
+          "notes": "A panel below the heading: a disclosure, not an ARIA menu; slot a `tct-nav-heading-menu` or plain links."
+        },
+        {
+          "upstream": "headerEndContent",
+          "kind": "slot",
+          "target": "end",
+          "as": "slot",
+          "notes": "Hidden in the collapsed rail."
+        },
+        {
+          "upstream": "as",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "React polymorphism. The element renders the native link or button itself, and a `tct-link-provider` routes internal destinations through the router of the app."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: style the host, `::part()` or the documented attributes and custom properties."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useMenuHover",
+          "target": "NavHoverController",
+          "as": "controller",
+          "notes": "`side-nav/nav-hover.ts`: a hover-open after 80 ms on fine pointers, a click within 500 ms confirms and pins it."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Enter, Space",
+          "action": "Opens the menu and moves focus into it",
+          "when": "chevron button, or the whole heading with a menu and no hrefs"
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes the menu and returns focus to the chevron button",
+          "when": "menu open"
+        }
+      ],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "SIDE-NAV-HEADING-01",
+          "type": "a11y-improvement",
+          "text": "The menu is a disclosure panel: the trigger has `aria-expanded` and is named \"Open menu\" (localised), the panel is the slotted content with its own semantics, and focus returns to the trigger when it closes. In the collapsed rail the heading is its icon alone, named by `heading`, with a tooltip."
+        },
+        {
+          "id": "SIDE-NAV-HEADING-02",
+          "type": "approved-api-difference",
+          "text": "The interaction boundary follows what is set, as upstream: only `heading-href` is one link; several hrefs are independent links; a menu and no hrefs make the whole heading the trigger; a menu with hrefs keeps the links and adds the chevron button. Closing the menu when a slotted `tct-nav-heading-menu` item is chosen needs a close context from that element (in-page navigation family); plain links close it through the click."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/components/src/nav-heading-menu/ (WP-10)",
+          "reason": "Once `tct-nav-heading-menu` is merged it should read a close request from the heading that hosts it (a context or a `tct-request-close` event) so that choosing an item closes the panel, as choosing a plain link does through the click."
+        }
+      ],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:popover], [mwg:accessibility] disclosure with aria-expanded and focus return."
+    },
+    "core.side-nav-item": {
+      "tag": "tct-side-nav-item",
+      "status": "implemented",
+      "upstream": {
+        "name": "SideNavItem",
+        "path": "packages/core/src/SideNav/SideNavItem.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Names the item, also in the collapsed rail (or a host `aria-label` of your own)."
+        },
+        {
+          "upstream": "as",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "React polymorphism. The element renders the native link or button itself, and a `tct-link-provider` routes internal destinations through the router of the app."
+        },
+        {
+          "upstream": "icon",
+          "kind": "prop",
+          "target": "icon",
+          "as": "attribute"
+        },
+        {
+          "upstream": "icon",
+          "kind": "slot",
+          "target": "icon",
+          "as": "slot",
+          "notes": "A custom icon (`<svg>` or `tct-icon`)."
+        },
+        {
+          "upstream": "selectedIcon",
+          "kind": "prop",
+          "target": "selected-icon",
+          "as": "attribute"
+        },
+        {
+          "upstream": "selectedIcon",
+          "kind": "slot",
+          "target": "selected-icon",
+          "as": "slot"
+        },
+        {
+          "upstream": "isSelected",
+          "kind": "prop",
+          "target": "selected",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "The inner link carries `aria-current=\"page\"`."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "href",
+          "kind": "prop",
+          "target": "href",
+          "as": "attribute",
+          "notes": "A link when set, a button otherwise; unsafe URLs render no `href`."
+        },
+        {
+          "upstream": "onClick",
+          "kind": "event",
+          "target": "click",
+          "as": "native-event"
+        },
+        {
+          "upstream": "endContent",
+          "kind": "slot",
+          "target": "end",
+          "as": "slot",
+          "notes": "Passive content; controls go in `actions`."
+        },
+        {
+          "upstream": "actions",
+          "kind": "slot",
+          "target": "actions",
+          "as": "slot",
+          "notes": "Row-level controls; compact size; hidden in the rail."
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "Nested `tct-side-nav-item`s."
+        },
+        {
+          "upstream": "collapsible",
+          "kind": "prop",
+          "target": "no-collapse",
+          "as": "attribute",
+          "notes": "Inverted: an item with sub-items is collapsible unless `no-collapse` is set. `collapsed` is the state (the attribute is the initial state), `has-action` says the row keeps an action of its own (an `actions` slot or a click handler) so the chevron becomes a separate button."
+        },
+        {
+          "upstream": "collapsible",
+          "kind": "prop",
+          "target": "collapsed",
+          "as": "attribute",
+          "reflect": true
+        },
+        {
+          "upstream": "collapsible",
+          "kind": "prop",
+          "target": "has-action",
+          "as": "attribute"
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: style the host, `::part()` or the documented attributes and custom properties."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useMenuHover",
+          "target": "NavHoverController",
+          "as": "controller",
+          "notes": "The rail flyout opens on hover after a short delay and closes when the pointer leaves, unless a click pinned it."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Enter, Space",
+          "action": "Follows the link or presses the button; toggles the sub-items when the row is the toggle; opens the flyout in the rail"
+        },
+        {
+          "keys": "Tab",
+          "action": "Moves to the chevron toggle, the actions and the sub-items in order (collapsed sub-items are inert)"
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes the flyout and returns focus to the item",
+          "when": "flyout open"
+        }
+      ],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "SIDE-NAV-ITEM-01",
+          "type": "approved-api-difference",
+          "text": "The upstream `collapsible` prop is `no-collapse` (inverted) plus the `collapsed` and `has-action` attributes. The user's toggle asks with a cancelable `tct-collapse-change` (`collapsed`, `reason`); writing `collapsed` never emits. The chevron toggle stops the click, so listeners on the item never hear it."
+        },
+        {
+          "id": "SIDE-NAV-ITEM-02",
+          "type": "a11y-improvement",
+          "text": "In the collapsed rail an item is a named icon button (label, or a host `aria-label`) with a tooltip; an item with sub-items opens a named flyout dialog. Disabled items are native disabled buttons, or anchors without a destination, out of the tab order."
+        },
+        {
+          "id": "SIDE-NAV-ITEM-03",
+          "type": "tecton-visual",
+          "text": "The row uses the shared navigation-row styling (`nav-row`) with Tecton overlay roles for hover and pressed, the neutral role for selected, and Highlight, HighlightText and GrayText in forced-colours mode."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/core/src/context/protocol.ts",
+          "reason": "A context consumer that connects before its provider has upgraded, or that is slotted into a shadow tree the provider renders (a footer icon in `footer-icons`, an action in `actions`), can miss the value: the request event is dispatched once. Retry the request when a provider connects on the flat tree (or when the host is assigned to a slot). Until then the side navigation and the item call `renderOnConnect` (side-nav/nav-render.ts) to provide the compact size before the slotted children connect."
+        }
+      ],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessibility] disclosure toggle with aria-expanded and aria-controls, inert collapsed group; [mwg:anchor-positioning] the flyout."
+    },
+    "core.side-nav-section": {
+      "tag": "tct-side-nav-section",
+      "status": "implemented",
+      "upstream": {
+        "name": "SideNavSection",
+        "path": "packages/core/src/SideNav/SideNavSection.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "title",
+          "kind": "prop",
+          "target": "heading",
+          "as": "attribute",
+          "notes": "The group is named by it."
+        },
+        {
+          "upstream": "subtitle",
+          "kind": "prop",
+          "target": "subheading",
+          "as": "attribute"
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "endContent",
+          "kind": "slot",
+          "target": "end",
+          "as": "slot"
+        },
+        {
+          "upstream": "isHeaderHidden",
+          "kind": "prop",
+          "target": "header-hidden",
+          "as": "attribute",
+          "default": false,
+          "notes": "The heading stays in the accessibility tree."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: style the host, `::part()` or the documented attributes and custom properties."
+        }
+      ],
+      "hooks": [],
+      "keyboard": [],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "SIDE-NAV-SECTION-01",
+          "type": "approved-api-difference",
+          "text": "`title` and `subtitle` are `heading` and `subheading` (a `title` attribute would show a native tooltip). In the collapsed rail the heading is not drawn but stays in the accessibility tree, so the group keeps its name."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": false,
+        "rtl": true,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessibility] a labelled group."
+    }
+  }
+}

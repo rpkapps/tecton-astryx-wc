@@ -1,0 +1,15 @@
+<!-- title: In an app shell; description: Inside a tct-app-shell the side navigation is the inline sidebar, and below the mobile breakpoint (768 px) it becomes the content of the mobile drawer that a toggle opens: the same items as full rows, without the collapse button or the resize handle. Choosing an item closes the drawer. -->
+<tct-app-shell no-landmarks style="--app-shell-height: 360px">
+  <tct-side-nav slot="side-nav" collapsible label="Application">
+    <tct-side-nav-heading slot="header" heading="Acme" heading-href="#home">
+      <tct-nav-icon slot="icon"><tct-icon name="layers"></tct-icon></tct-nav-icon>
+    </tct-side-nav-heading>
+    <tct-side-nav-item label="Overview" icon="home" href="#overview" selected></tct-side-nav-item>
+    <tct-side-nav-item label="Projects" icon="folder" href="#projects"></tct-side-nav-item>
+    <tct-side-nav-item label="Settings" icon="settings" href="#settings"></tct-side-nav-item>
+  </tct-side-nav>
+  <tct-vstack padding="4" gap="2">
+    <tct-text type="medium-strong">Overview</tct-text>
+    <tct-text as="p">The main content. Narrow the window below 768 px to see the side navigation move into the drawer.</tct-text>
+  </tct-vstack>
+</tct-app-shell>

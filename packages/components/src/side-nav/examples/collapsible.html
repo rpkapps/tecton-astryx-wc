@@ -1,0 +1,15 @@
+<!-- title: Collapsible; description: collapsible adds a button that shrinks the navigation to a rail of icon buttons. Items are named by their label and show a tooltip, items with sub-items open a flyout beside the rail, and items without an icon are hidden. -->
+<div style="block-size: 480px">
+  <tct-side-nav collapsible label="Collapsible navigation">
+    <tct-side-nav-heading slot="header" heading="Acme" heading-href="#home">
+      <tct-nav-icon slot="icon"><tct-icon name="layers"></tct-icon></tct-nav-icon>
+    </tct-side-nav-heading>
+    <tct-side-nav-item label="Dashboard" icon="home" href="#dashboard" selected></tct-side-nav-item>
+    <tct-side-nav-item label="Projects" icon="folder">
+      <tct-side-nav-item label="Active" href="#active"></tct-side-nav-item>
+      <tct-side-nav-item label="Archived" href="#archived"></tct-side-nav-item>
+    </tct-side-nav-item>
+    <tct-side-nav-item label="Calendar" icon="calendar" href="#calendar"></tct-side-nav-item>
+    <tct-side-nav-item label="Settings" icon="settings" href="#settings"></tct-side-nav-item>
+  </tct-side-nav>
+</div>

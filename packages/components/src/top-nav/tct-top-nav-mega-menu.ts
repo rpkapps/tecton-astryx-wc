@@ -2,7 +2,7 @@ import {html, type CSSResultGroup, type TemplateResult} from 'lit';
 import {SlotController} from '@tecton-wc/core/controllers/slot.js';
 import type {PlacementRequest} from '@tecton-wc/core/layer/position.js';
 import {TctIcon} from '../icon/tct-icon.js';
-import {TctTopNavDisclosure} from './top-nav-disclosure.js';
+import {TctTopNavDisclosure} from './tct-top-nav-disclosure.js';
 import {topNavSlotOf} from './top-nav.types.js';
 import styles from './tct-top-nav-mega-menu.styles.css';
 

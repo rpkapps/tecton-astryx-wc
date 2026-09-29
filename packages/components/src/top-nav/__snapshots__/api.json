@@ -1,0 +1,549 @@
+{
+  "folder": "top-nav",
+  "elements": {
+    "tct-top-nav": {
+      "class": "TctTopNav",
+      "attributes": [
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "anchorElement",
+          "type": "HTMLElement | null",
+          "readonly": true
+        },
+        {
+          "name": "renderMode",
+          "type": "TopNavRenderMode",
+          "values": [
+            "default",
+            "mobile-bar",
+            "drawer"
+          ],
+          "readonly": true
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)",
+        "center",
+        "end",
+        "heading",
+        "start"
+      ],
+      "events": [],
+      "cssParts": [
+        "base",
+        "heading"
+      ],
+      "cssStates": [
+        "mobile-bar"
+      ],
+      "cssProperties": []
+    },
+    "tct-top-nav-heading": {
+      "class": "TctTopNavHeading",
+      "attributes": [
+        {
+          "name": "heading",
+          "property": "heading",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "heading-href",
+          "property": "headingHref",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "logo-label",
+          "property": "logoLabel",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "subheading",
+          "property": "subheading",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "subheading-href",
+          "property": "subheadingHref",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "superheading",
+          "property": "superheading",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "superheading-href",
+          "property": "superheadingHref",
+          "type": "string | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "end",
+        "logo",
+        "menu"
+      ],
+      "events": [],
+      "cssParts": [
+        "base",
+        "end-content",
+        "heading",
+        "icon",
+        "menu",
+        "menu-trigger",
+        "subheading",
+        "superheading"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-top-nav-item": {
+      "class": "TctTopNavItem",
+      "attributes": [
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "download",
+          "property": "download",
+          "type": "LinkDownload",
+          "default": "false",
+          "reflects": false
+        },
+        {
+          "name": "href",
+          "property": "href",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "icon",
+          "property": "icon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "icon-only",
+          "property": "iconOnly",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "referrer-policy",
+          "property": "referrerPolicy",
+          "type": "ReferrerPolicy | undefined",
+          "reflects": false
+        },
+        {
+          "name": "rel",
+          "property": "rel",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "selected",
+          "property": "selected",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "size",
+          "property": "size",
+          "type": "SideNavItemSize",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "default": "'md'",
+          "reflects": true
+        },
+        {
+          "name": "target",
+          "property": "target",
+          "type": "string | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "control",
+          "type": "HTMLAnchorElement | null",
+          "readonly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "focus",
+          "signature": "(options?: FocusOptions) => void"
+        }
+      ],
+      "slots": [
+        "(default)",
+        "icon"
+      ],
+      "events": [
+        {
+          "name": "click",
+          "native": true
+        }
+      ],
+      "cssParts": [
+        "icon",
+        "item"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-top-nav-mega-menu": {
+      "class": "TctTopNavMegaMenu",
+      "attributes": [
+        {
+          "name": "delay",
+          "property": "delay",
+          "type": "number",
+          "default": "150",
+          "reflects": false
+        },
+        {
+          "name": "hide-delay",
+          "property": "hideDelay",
+          "type": "number",
+          "default": "200",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "open",
+          "property": "open",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "trigger",
+          "type": "HTMLButtonElement | null",
+          "readonly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "hide",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "requestClose",
+          "signature": "(reason: ChangeReason) => void"
+        },
+        {
+          "name": "show",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "toggle",
+          "signature": "(force?: boolean) => Promise<void>"
+        }
+      ],
+      "slots": [
+        "(default)",
+        "featured"
+      ],
+      "events": [
+        {
+          "name": "tct-after-open-change",
+          "class": "TctAfterOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "featured",
+        "items",
+        "panel",
+        "trigger"
+      ],
+      "cssStates": [
+        "open"
+      ],
+      "cssProperties": []
+    },
+    "tct-top-nav-mega-menu-featured-card": {
+      "class": "TctTopNavMegaMenuFeaturedCard",
+      "attributes": [
+        {
+          "name": "description",
+          "property": "description",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "heading",
+          "property": "heading",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "image",
+          "property": "image",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "image-alt",
+          "property": "imageAlt",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "link-href",
+          "property": "linkHref",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "link-label",
+          "property": "linkLabel",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "body",
+        "description",
+        "heading",
+        "image",
+        "link"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-top-nav-mega-menu-item": {
+      "class": "TctTopNavMegaMenuItem",
+      "attributes": [
+        {
+          "name": "description",
+          "property": "description",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "heading",
+          "property": "heading",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "href",
+          "property": "href",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "icon",
+          "property": "icon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "rel",
+          "property": "rel",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "target",
+          "property": "target",
+          "type": "string | undefined",
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "control",
+          "type": "HTMLElement | null",
+          "readonly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "focus",
+          "signature": "(options?: FocusOptions) => void"
+        }
+      ],
+      "slots": [
+        "icon"
+      ],
+      "events": [
+        {
+          "name": "click",
+          "native": true
+        }
+      ],
+      "cssParts": [
+        "description",
+        "icon",
+        "item",
+        "title"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-top-nav-menu": {
+      "class": "TctTopNavMenu",
+      "attributes": [
+        {
+          "name": "delay",
+          "property": "delay",
+          "type": "number",
+          "default": "150",
+          "reflects": false
+        },
+        {
+          "name": "hide-delay",
+          "property": "hideDelay",
+          "type": "number",
+          "default": "200",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "open",
+          "property": "open",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        }
+      ],
+      "properties": [
+        {
+          "name": "items",
+          "type": "readonly TopNavMenuItemData[]",
+          "default": "[]",
+          "readonly": false
+        },
+        {
+          "name": "trigger",
+          "type": "HTMLButtonElement | null",
+          "readonly": true
+        }
+      ],
+      "methods": [
+        {
+          "name": "hide",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "requestClose",
+          "signature": "(reason: ChangeReason) => void"
+        },
+        {
+          "name": "show",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "toggle",
+          "signature": "(force?: boolean) => Promise<void>"
+        }
+      ],
+      "slots": [
+        "(default)"
+      ],
+      "events": [
+        {
+          "name": "tct-after-open-change",
+          "class": "TctAfterOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "items",
+        "panel",
+        "trigger"
+      ],
+      "cssStates": [
+        "open"
+      ],
+      "cssProperties": []
+    }
+  }
+}

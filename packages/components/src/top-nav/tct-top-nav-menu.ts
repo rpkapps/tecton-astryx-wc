@@ -2,7 +2,7 @@ import {html, nothing, type CSSResultGroup, type TemplateResult} from 'lit';
 import {property} from 'lit/decorators.js';
 import {TctTopNavMegaMenuItem} from './tct-top-nav-mega-menu-item.js';
 import type {TopNavMenuItemData} from './top-nav.types.js';
-import {TctTopNavDisclosure} from './top-nav-disclosure.js';
+import {TctTopNavDisclosure} from './tct-top-nav-disclosure.js';
 import {TctIcon} from '../icon/tct-icon.js';
 import styles from './tct-top-nav-menu.styles.css';
 

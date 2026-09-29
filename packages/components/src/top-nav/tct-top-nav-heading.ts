@@ -2,7 +2,7 @@ import type {CSSResultGroup} from 'lit';
 import {property} from 'lit/decorators.js';
 import english from '@tecton-wc/locales/en/topNav.js';
 import {TctIcon} from '../icon/tct-icon.js';
-import {TctNavHeadingBase} from '../side-nav/nav-heading.base.js';
+import {TctNavHeadingBase} from '../side-nav/tct-nav-heading-base.js';
 
 /**
  * The heading of a top navigation: the product, suite or account, with a logo (usually a `tct-nav-icon`), an

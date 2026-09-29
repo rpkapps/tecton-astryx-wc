@@ -1,0 +1,23 @@
+<!-- title: In an app shell; description: Inside a tct-app-shell, below the mobile breakpoint (768 px) the bar collapses to the heading, the end content and a drawer toggle. The start and centre items, and the menus as collapsible sections, move into the shell's mobile drawer above the side navigation. -->
+<tct-app-shell no-landmarks style="--app-shell-height: 380px">
+  <tct-top-nav slot="top-nav" label="Main">
+    <tct-top-nav-heading slot="heading" heading="Acme" heading-href="#home">
+      <tct-nav-icon slot="logo"><tct-icon name="layers"></tct-icon></tct-nav-icon>
+    </tct-top-nav-heading>
+    <tct-top-nav-item label="Home" href="#home" selected></tct-top-nav-item>
+    <tct-top-nav-item label="Docs" href="#docs"></tct-top-nav-item>
+    <tct-top-nav-menu label="Products">
+      <tct-top-nav-mega-menu-item heading="Analytics" description="Usage metrics and trends" href="#analytics"></tct-top-nav-mega-menu-item>
+      <tct-top-nav-mega-menu-item heading="Automation" description="Workflows and rules" href="#automation"></tct-top-nav-mega-menu-item>
+    </tct-top-nav-menu>
+    <tct-top-nav-item slot="end" label="Search" icon="search" icon-only href="#search"></tct-top-nav-item>
+  </tct-top-nav>
+  <tct-side-nav slot="side-nav" label="Sections">
+    <tct-side-nav-item label="Overview" icon="home" href="#overview" selected></tct-side-nav-item>
+    <tct-side-nav-item label="Projects" icon="folder" href="#projects"></tct-side-nav-item>
+  </tct-side-nav>
+  <tct-vstack padding="4" gap="2">
+    <tct-text type="medium-strong">Overview</tct-text>
+    <tct-text as="p">The main content. Narrow the window below 768 px to see the bar collapse into the drawer.</tct-text>
+  </tct-vstack>
+</tct-app-shell>

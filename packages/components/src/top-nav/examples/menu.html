@@ -1,0 +1,11 @@
+<!-- title: Menu; description: A menu discloses a small panel of destinations: a button with aria-expanded that shows ordinary links, not an ARIA menu. Enter and Space open it and move focus to the first link, Tab moves through the links, the arrow keys are an enhancement, and Escape closes it and returns focus to the button. It also opens on hover. -->
+<tct-top-nav label="Products">
+  <tct-top-nav-heading slot="heading" heading="Acme" heading-href="#home"></tct-top-nav-heading>
+  <tct-top-nav-item label="Home" href="#home"></tct-top-nav-item>
+  <tct-top-nav-menu label="Products">
+    <tct-top-nav-mega-menu-item heading="Analytics" description="Usage metrics and trends" icon="gauge" href="#analytics"></tct-top-nav-mega-menu-item>
+    <tct-top-nav-mega-menu-item heading="Automation" description="Workflows and rules" icon="bolt" href="#automation"></tct-top-nav-mega-menu-item>
+    <tct-top-nav-mega-menu-item heading="Billing" icon="coins" href="#billing"></tct-top-nav-mega-menu-item>
+  </tct-top-nav-menu>
+  <tct-top-nav-item label="Docs" href="#docs"></tct-top-nav-item>
+</tct-top-nav>

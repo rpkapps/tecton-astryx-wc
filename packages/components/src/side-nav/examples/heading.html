@@ -1,0 +1,15 @@
+<!-- title: Heading with a menu; description: The heading is a link with only heading-href. With a menu and no destination the whole heading opens the menu; with both, the links stay links and only the chevron button opens the menu. The menu is a disclosure panel, not an ARIA menu. -->
+<div style="block-size: 360px">
+  <tct-side-nav label="Heading with a menu">
+    <tct-side-nav-heading slot="header" heading="Acme" superheading="Organisation" subheading="Free plan" heading-href="#acme">
+      <tct-nav-icon slot="icon"><tct-icon name="layers"></tct-icon></tct-nav-icon>
+      <tct-vstack slot="menu" gap="1" padding="2">
+        <a href="#acme">Acme</a>
+        <a href="#globex">Globex</a>
+        <a href="#initech">Initech</a>
+      </tct-vstack>
+    </tct-side-nav-heading>
+    <tct-side-nav-item label="Dashboard" icon="home" href="#dashboard" selected></tct-side-nav-item>
+    <tct-side-nav-item label="Projects" icon="folder" href="#projects"></tct-side-nav-item>
+  </tct-side-nav>
+</div>

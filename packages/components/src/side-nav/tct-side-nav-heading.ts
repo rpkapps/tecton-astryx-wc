@@ -1,7 +1,7 @@
 import type {CSSResultGroup} from 'lit';
 import english from '@tecton-wc/locales/en/sideNav.js';
 import {TctIcon} from '../icon/tct-icon.js';
-import {TctNavHeadingBase} from './nav-heading.base.js';
+import {TctNavHeadingBase} from './tct-nav-heading-base.js';
 import {SideNavCollapseController} from './side-nav.context.js';
 
 /**

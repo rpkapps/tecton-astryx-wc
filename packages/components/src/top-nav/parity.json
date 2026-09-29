@@ -1,0 +1,888 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "top-nav",
+  "workPackage": "WP-14",
+  "entries": {
+    "core.top-nav": {
+      "tag": "tct-top-nav",
+      "status": "implemented",
+      "upstream": {
+        "name": "TopNav",
+        "path": "packages/core/src/TopNav/TopNav.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "heading",
+          "kind": "slot",
+          "target": "heading",
+          "as": "slot"
+        },
+        {
+          "upstream": "startContent",
+          "kind": "slot",
+          "target": "start",
+          "as": "slot",
+          "notes": "The default slot is the same region."
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "centerContent",
+          "kind": "slot",
+          "target": "center",
+          "as": "slot",
+          "notes": "With it the bar is a three-column grid so the centre stays centred."
+        },
+        {
+          "upstream": "endContent",
+          "kind": "slot",
+          "target": "end",
+          "as": "slot"
+        },
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute",
+          "notes": "Accessible name of the landmark; the localised \"Top navigation\" by default."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: style the host, `::part()` or the documented attributes and custom properties."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useTopNavRenderMode",
+          "target": "TopNavRenderModeController",
+          "as": "controller",
+          "notes": "`top-nav/top-nav.context.ts`: an explicit `topNavRenderContext` wins, then (with `derive`) the app shell: `mobile-bar` below the breakpoint."
+        },
+        {
+          "upstream": "TopNavRenderContext",
+          "target": "topNavRenderContext",
+          "as": "context",
+          "notes": "Modes `default`, `mobile-bar` and `drawer`."
+        },
+        {
+          "upstream": "TopNavMobileContentContext",
+          "as": "waived",
+          "reason": "A custom element cannot project one node into two places; `tct-top-nav` adds a `tct-top-nav-drawer` to the shell instead (see the request and TOP-NAV-01)."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab, Shift + Tab",
+          "action": "Move through the items, menus and end content in document order"
+        },
+        {
+          "keys": "Enter, Space",
+          "action": "Follow an item, or toggle a menu (see the menus)"
+        }
+      ],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "TOP-NAV-01",
+          "type": "approved-api-difference",
+          "text": "Below the mobile breakpoint (767 px and narrower by default, from the shell) the bar collapses to the heading, the end content and a `tct-mobile-nav-toggle` (unless the shell has `no-mobile-toggle`); the start and centre items go to the shell's mobile drawer above the side navigation with a rule between, as copies shown by an internal `tct-top-nav-drawer` (a click on a copy is forwarded to the original, and the copies are rebuilt when the originals change). A `tct-mobile-nav` of your own keeps the full bar."
+        },
+        {
+          "id": "TOP-NAV-02",
+          "type": "tecton-visual",
+          "text": "The resting ink of the items is `--color-text-secondary` and their icons rest on the top-nav adornment role; each interaction state (hover, keyboard focus, pressed, current page) switches to `--color-text-primary`. The owner's export of `--tecton-color-top-nav-text` (black or white at 50%) measures 4.0:1 on the light band and fails WCAG 1.4.3 for 14 px labels; the band itself keeps the top-nav background role. Contrast is tested in light and dark, at rest and in hover, focus, current and expanded states."
+        },
+        {
+          "id": "TOP-NAV-03",
+          "type": "approved-api-difference",
+          "text": "The top navigation draws no heading of its own and never truncates item labels with a tooltip; the `topbar` side navigation mode is not derived from it (an explicit `sideNavRenderContext` only)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [
+        {
+          "name": "--tecton-color-top-nav-text",
+          "reason": "The export value measures 4.0:1 on the light top-nav band (WCAG 1.4.3 needs 4.5:1 for 14 px text). The items use `--color-text-secondary` at rest (7.5:1 light, 8.4:1 dark) instead. If the owner wants the role itself to pass, the light value needs a higher alpha."
+        }
+      ],
+      "requests": [
+        {
+          "file": "packages/components/src/app-shell/tct-app-shell.ts",
+          "reason": "Upstream AppShell hands the side navigation content to the top navigation through `TopNavMobileContentContext` to build one combined drawer. A custom element cannot project one node into two places, so `tct-top-nav` adds a `tct-top-nav-drawer` satellite (`slot=\"drawer\"`) to the shell, which lists copies of the start and centre items above the side navigation and forwards their clicks. No shell change is needed; if the shell later exposes an API for drawer contributions, the satellite can use it."
+        }
+      ],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessibility] landmark and disclosure navigation; [mwg:anchor-positioning] the mega menu is anchored to the bar; [mwg:navigation-drawer] the mobile hand-off; [mwg:styling-web-components] tokens and forced colours."
+    },
+    "core.top-nav-heading": {
+      "tag": "tct-top-nav-heading",
+      "status": "implemented",
+      "upstream": {
+        "name": "TopNavHeading",
+        "path": "packages/core/src/TopNav/TopNavHeading.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "logo",
+          "kind": "slot",
+          "target": "logo",
+          "as": "slot",
+          "notes": "Usually a `tct-nav-icon`."
+        },
+        {
+          "upstream": "heading",
+          "kind": "prop",
+          "target": "heading",
+          "as": "attribute"
+        },
+        {
+          "upstream": "headingHref",
+          "kind": "prop",
+          "target": "heading-href",
+          "as": "attribute"
+        },
+        {
+          "upstream": "superheading",
+          "kind": "prop",
+          "target": "superheading",
+          "as": "attribute"
+        },
+        {
+          "upstream": "superheadingHref",
+          "kind": "prop",
+          "target": "superheading-href",
+          "as": "attribute"
+        },
+        {
+          "upstream": "subheading",
+          "kind": "prop",
+          "target": "subheading",
+          "as": "attribute"
+        },
+        {
+          "upstream": "subheadingHref",
+          "kind": "prop",
+          "target": "subheading-href",
+          "as": "attribute"
+        },
+        {
+          "upstream": "headerEndContent",
+          "kind": "slot",
+          "target": "end",
+          "as": "slot"
+        },
+        {
+          "upstream": "menu",
+          "kind": "slot",
+          "target": "menu",
+          "as": "slot",
+          "notes": "A disclosure panel, not an ARIA menu."
+        },
+        {
+          "upstream": "as",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "React polymorphism. The element renders the native link or button itself, and a `tct-link-provider` routes internal destinations through the router of the app."
+        },
+        {
+          "upstream": "logoLabel",
+          "kind": "prop",
+          "target": "logo-label",
+          "as": "attribute",
+          "notes": "Names the logo link when the logo links on its own; otherwise the heading names it."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: style the host, `::part()` or the documented attributes and custom properties."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useMenuHover",
+          "target": "NavHoverController",
+          "as": "controller",
+          "notes": "Shared with the side navigation heading."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Enter, Space",
+          "action": "Opens the menu and moves focus into it",
+          "when": "chevron button, or the whole heading with a menu and no hrefs"
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes the menu and returns focus to the chevron button",
+          "when": "menu open"
+        }
+      ],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "TOP-NAV-HEADING-01",
+          "type": "a11y-improvement",
+          "text": "The menu trigger is a button named \"Open menu\" (localised) with `aria-expanded`; the panel is the slotted content with its own semantics, not an ARIA menu, and focus returns to the trigger. Closing when a slotted `tct-nav-heading-menu` item is chosen is the same request as SIDE-NAV-HEADING-02."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": false,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:popover], [mwg:accessibility]."
+    },
+    "core.top-nav-item": {
+      "tag": "tct-top-nav-item",
+      "status": "implemented",
+      "upstream": {
+        "name": "TopNavItem",
+        "path": "packages/core/src/TopNav/TopNavItem.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute"
+        },
+        {
+          "upstream": "href",
+          "kind": "prop",
+          "target": "href",
+          "as": "attribute",
+          "notes": "Unsafe URLs render no `href`; an unmodified click on an internal destination is offered to the router of a `tct-link-provider`."
+        },
+        {
+          "upstream": "isSelected",
+          "kind": "prop",
+          "target": "selected",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "`aria-current=\"page\"` on the inner link."
+        },
+        {
+          "upstream": "isDisabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "An anchor without a destination, out of the tab order."
+        },
+        {
+          "upstream": "isIconOnly",
+          "kind": "prop",
+          "target": "icon-only",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Named by `label`."
+        },
+        {
+          "upstream": "icon",
+          "kind": "prop",
+          "target": "icon",
+          "as": "attribute"
+        },
+        {
+          "upstream": "icon",
+          "kind": "slot",
+          "target": "icon",
+          "as": "slot"
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "Replaces the label."
+        },
+        {
+          "upstream": "as",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "React polymorphism. The element renders the native link or button itself, and a `tct-link-provider` routes internal destinations through the router of the app."
+        },
+        {
+          "upstream": "target",
+          "kind": "prop",
+          "target": "target",
+          "as": "attribute"
+        },
+        {
+          "upstream": "rel",
+          "kind": "prop",
+          "target": "rel",
+          "as": "attribute",
+          "notes": "`noopener noreferrer` is added for `_blank`."
+        },
+        {
+          "upstream": "download",
+          "kind": "prop",
+          "target": "download",
+          "as": "attribute"
+        },
+        {
+          "upstream": "referrerPolicy",
+          "kind": "prop",
+          "target": "referrer-policy",
+          "as": "attribute"
+        },
+        {
+          "upstream": "size",
+          "kind": "prop",
+          "target": "size",
+          "as": "attribute",
+          "reflect": true,
+          "default": "md"
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: style the host, `::part()` or the documented attributes and custom properties."
+        }
+      ],
+      "hooks": [],
+      "keyboard": [
+        {
+          "keys": "Enter",
+          "action": "Follows the link (native anchor)"
+        }
+      ],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "TOP-NAV-ITEM-01",
+          "type": "tecton-visual",
+          "text": "The pill rests on `--color-text-secondary` with the top-nav adornment role for the icon (TOP-NAV-02) and pairs every state that adds a fill with `--color-text-primary`: the neutral role for the current page, overlay roles for hover and pressed. Forced colours use Highlight and HighlightText for the current page and GrayText for disabled."
+        },
+        {
+          "id": "TOP-NAV-ITEM-02",
+          "type": "approved-api-difference",
+          "text": "Inside the mobile drawer the item renders as a vertical navigation row (the shared `nav-row`) and closes the drawer when it is chosen."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": false,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessibility] aria-current and a disabled link."
+    },
+    "core.top-nav-menu": {
+      "tag": "tct-top-nav-menu",
+      "status": "implemented",
+      "upstream": {
+        "name": "TopNavMenu",
+        "path": "packages/core/src/TopNav/TopNavMenu.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute"
+        },
+        {
+          "upstream": "items",
+          "kind": "prop",
+          "target": "items",
+          "as": "property",
+          "notes": "An array of `{title, description, icon, href, onClick}`; the default slot takes `tct-top-nav-mega-menu-item`s instead."
+        },
+        {
+          "upstream": "items",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot"
+        },
+        {
+          "upstream": "delay",
+          "kind": "prop",
+          "target": "delay",
+          "as": "attribute",
+          "default": 150
+        },
+        {
+          "upstream": "hideDelay",
+          "kind": "prop",
+          "target": "hide-delay",
+          "as": "attribute",
+          "default": 200
+        },
+        {
+          "upstream": "open",
+          "kind": "prop",
+          "target": "open",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "The state; the attribute is the initial state. (Not an upstream prop.)"
+        },
+        {
+          "upstream": "open",
+          "kind": "event",
+          "target": "tct-open-change",
+          "as": "event",
+          "notes": "Cancelable intent with `open` and `reason`; `tct-after-open-change` reports the settled state."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: style the host, `::part()` or the documented attributes and custom properties."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useListFocus",
+          "as": "waived",
+          "reason": "The panel is a group of ordinary links reached with Tab; the Arrow keys, Home and End move between them as an enhancement (in `tct-top-nav-disclosure.ts`), not a roving `menuitem` list."
+        },
+        {
+          "upstream": "useMenuHover",
+          "target": "NavHoverController",
+          "as": "controller",
+          "notes": "Hover-open after `delay` (150 ms), close after `hide-delay`, on fine pointers; a click within 500 ms of a hover-open pins it."
+        },
+        {
+          "upstream": "useTypeahead",
+          "as": "waived",
+          "reason": "Typeahead belongs to menus of `menuitem`s. A disclosure of links is reached with Tab, so there is no roving focus to steer."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Enter, Space",
+          "action": "Toggles the panel; a keyboard open moves focus to the first link"
+        },
+        {
+          "keys": "Tab, Shift + Tab",
+          "action": "Move through the button and the links of an open panel in order; Tab out of the panel closes it"
+        },
+        {
+          "keys": "ArrowDown",
+          "action": "Opens the panel and enters it",
+          "when": "on the button"
+        },
+        {
+          "keys": "Arrow keys, Home, End",
+          "action": "Move between the links (an enhancement; Tab is the primary way)",
+          "when": "panel open"
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes the panel and returns focus to the button",
+          "when": "panel open"
+        }
+      ],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "TOP-NAV-MENU-01",
+          "type": "a11y-improvement",
+          "text": "Disclosure navigation, not an ARIA menu (upstream navigation-destinations guidance): a button with `aria-expanded` and `aria-controls` shows a labelled group of links, with no `role=\"menu\"`, `aria-haspopup` or `menuitem`. Enter and Space toggle (upstream never closes from the keyboard), a keyboard open moves focus to the first link, a pointer open leaves focus on the button, Tab moves through the links and out of the panel (which closes it), and only one panel is open at a time."
+        },
+        {
+          "id": "TOP-NAV-MENU-02",
+          "type": "approved-api-difference",
+          "text": "The panel aligns to the region of the bar the menu sits in (start, centre or end) and mirrors in RTL; positioning is the shared `PositionController` (CSS anchor positioning with a Floating UI fallback in Tier 2). In the mobile drawer the menu is a collapsible section whose header toggles the links."
+        },
+        {
+          "id": "TOP-NAV-MENU-03",
+          "type": "waiver",
+          "text": "No typeahead and no roving `menuitem` focus (`useListFocus`, `useTypeahead`): they are menu semantics, which the disclosure pattern does not have."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessibility] disclosure navigation; [mwg:anchor-positioning] the panel; [mwg:popover] a `popover=\"manual\"` layer with light dismiss handled by the layer controller."
+    },
+    "core.top-nav-mega-menu": {
+      "tag": "tct-top-nav-mega-menu",
+      "status": "implemented",
+      "upstream": {
+        "name": "TopNavMegaMenu",
+        "path": "packages/core/src/TopNav/TopNavMegaMenu.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "label",
+          "kind": "prop",
+          "target": "label",
+          "as": "attribute"
+        },
+        {
+          "upstream": "items",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "`tct-top-nav-mega-menu-item`s in two columns."
+        },
+        {
+          "upstream": "featured",
+          "kind": "slot",
+          "target": "featured",
+          "as": "slot",
+          "notes": "Usually a `tct-top-nav-mega-menu-featured-card`."
+        },
+        {
+          "upstream": "delay",
+          "kind": "prop",
+          "target": "delay",
+          "as": "attribute",
+          "default": 150
+        },
+        {
+          "upstream": "hideDelay",
+          "kind": "prop",
+          "target": "hide-delay",
+          "as": "attribute",
+          "default": 250
+        },
+        {
+          "upstream": "onOpenChange",
+          "kind": "event",
+          "target": "tct-open-change",
+          "as": "event",
+          "notes": "Cancelable intent with `open` and `reason`; `tct-after-open-change` reports the settled state."
+        },
+        {
+          "upstream": "onOpenChange",
+          "kind": "prop",
+          "target": "open",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "The state; the attribute is the initial state."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: style the host, `::part()` or the documented attributes and custom properties."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useMenuHover",
+          "target": "NavHoverController",
+          "as": "controller",
+          "notes": "Hover-open after `delay` (150 ms), close after `hide-delay`, on fine pointers; a click within 500 ms of a hover-open pins it."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Enter, Space",
+          "action": "Toggles the panel; a keyboard open moves focus to the first link"
+        },
+        {
+          "keys": "Tab, Shift + Tab",
+          "action": "Move through the button and the links of an open panel in order; Tab out of the panel closes it"
+        },
+        {
+          "keys": "ArrowDown",
+          "action": "Opens the panel and enters it",
+          "when": "on the button"
+        },
+        {
+          "keys": "Arrow keys, Home, End",
+          "action": "Move between the links (an enhancement; Tab is the primary way)",
+          "when": "panel open"
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes the panel and returns focus to the button",
+          "when": "panel open"
+        }
+      ],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "TOP-NAV-MEGA-MENU-01",
+          "type": "a11y-improvement",
+          "text": "Disclosure navigation like `tct-top-nav-menu`: the panel is a labelled group of links (a browsing grid of links is the documented anti-case for `role=\"menu\"`). A hover-open leaves focus on the button; a click or key open moves focus in."
+        },
+        {
+          "id": "TOP-NAV-MEGA-MENU-02",
+          "type": "approved-api-difference",
+          "text": "The panel is anchored to the whole bar (the implicit anchor of the top navigation), not to the button: below the bar, at most 960 px wide, aligned to the start, the centre or the end of the bar by the region the item sits in, mirrored in RTL, and scrolling inside when the space below is short. With the Floating UI fallback (Tier 2) the panel keeps an 8 px gutter to the viewport edge."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "form": false,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:anchor-positioning] anchored to the bar element; [mwg:accessibility]."
+    },
+    "core.top-nav-mega-menu-item": {
+      "tag": "tct-top-nav-mega-menu-item",
+      "status": "implemented",
+      "upstream": {
+        "name": "TopNavMegaMenuItem",
+        "path": "packages/core/src/TopNav/TopNavMegaMenuItem.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "title",
+          "kind": "prop",
+          "target": "heading",
+          "as": "attribute",
+          "notes": "Names the link (a `title` attribute would show a native tooltip)."
+        },
+        {
+          "upstream": "description",
+          "kind": "prop",
+          "target": "description",
+          "as": "attribute",
+          "notes": "Describes the link."
+        },
+        {
+          "upstream": "icon",
+          "kind": "prop",
+          "target": "icon",
+          "as": "attribute"
+        },
+        {
+          "upstream": "icon",
+          "kind": "slot",
+          "target": "icon",
+          "as": "slot"
+        },
+        {
+          "upstream": "href",
+          "kind": "prop",
+          "target": "href",
+          "as": "attribute"
+        },
+        {
+          "upstream": "onClick",
+          "kind": "event",
+          "target": "click",
+          "as": "native-event"
+        },
+        {
+          "upstream": "as",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "React polymorphism. The element renders the native link or button itself, and a `tct-link-provider` routes internal destinations through the router of the app."
+        },
+        {
+          "upstream": "target",
+          "kind": "prop",
+          "target": "target",
+          "as": "attribute"
+        },
+        {
+          "upstream": "rel",
+          "kind": "prop",
+          "target": "rel",
+          "as": "attribute"
+        }
+      ],
+      "hooks": [],
+      "keyboard": [
+        {
+          "keys": "Enter, Space",
+          "action": "Follows the link or presses the button"
+        }
+      ],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "TOP-NAV-MEGA-MENU-ITEM-01",
+          "type": "approved-api-difference",
+          "text": "`title` is `heading`. The item is a link with an `href` and a button without one, so it is always keyboard operable; in the mobile drawer it is a row indented under its menu's section."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": false,
+        "rtl": true,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessibility] link with a description."
+    },
+    "core.top-nav-mega-menu-featured-card": {
+      "tag": "tct-top-nav-mega-menu-featured-card",
+      "status": "implemented",
+      "upstream": {
+        "name": "TopNavMegaMenuFeaturedCard",
+        "path": "packages/core/src/TopNav/TopNavMegaMenuFeaturedCard.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "title",
+          "kind": "prop",
+          "target": "heading",
+          "as": "attribute"
+        },
+        {
+          "upstream": "description",
+          "kind": "prop",
+          "target": "description",
+          "as": "attribute"
+        },
+        {
+          "upstream": "image",
+          "kind": "prop",
+          "target": "image",
+          "as": "attribute",
+          "notes": "Passes the embedded-resource URL policy (no `javascript:` or `data:`)."
+        },
+        {
+          "upstream": "imageAlt",
+          "kind": "prop",
+          "target": "image-alt",
+          "as": "attribute",
+          "notes": "Without it the image is decorative (`alt=\"\"`, `role=\"presentation\"`, `aria-hidden`)."
+        },
+        {
+          "upstream": "linkLabel",
+          "kind": "prop",
+          "target": "link-label",
+          "as": "attribute"
+        },
+        {
+          "upstream": "linkHref",
+          "kind": "prop",
+          "target": "link-href",
+          "as": "attribute",
+          "notes": "The link shows only with both a label and a destination."
+        },
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "Custom content below the standard body."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: style the host, `::part()` or the documented attributes and custom properties."
+        }
+      ],
+      "hooks": [],
+      "keyboard": [],
+      "form": {
+        "formAssociated": false
+      },
+      "differences": [
+        {
+          "id": "TOP-NAV-MEGA-MENU-FEATURED-CARD-01",
+          "type": "approved-api-difference",
+          "text": "`title` is `heading`. The call-to-action arrow points along the reading direction (mirrored in RTL)."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "form": false,
+        "events": false,
+        "rtl": true,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:accessibility] decorative images."
+    }
+  }
+}

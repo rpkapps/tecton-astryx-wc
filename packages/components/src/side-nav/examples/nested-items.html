@@ -1,0 +1,18 @@
+<!-- title: Nested items; description: An item with sub-items is collapsible. With no destination the whole row toggles them; with an href a separate chevron button toggles them and the row keeps its link. collapsed is the initial state, no-collapse keeps the sub-items always shown. -->
+<div style="block-size: 480px">
+  <tct-side-nav label="Nested navigation">
+    <tct-side-nav-item label="Dashboard" icon="home" href="#dashboard"></tct-side-nav-item>
+    <tct-side-nav-item label="Projects" icon="folder">
+      <tct-side-nav-item label="Active" href="#active" selected></tct-side-nav-item>
+      <tct-side-nav-item label="Archived" href="#archived"></tct-side-nav-item>
+    </tct-side-nav-item>
+    <tct-side-nav-item label="Reports" icon="file" href="#reports" collapsed>
+      <tct-side-nav-item label="Weekly" href="#weekly"></tct-side-nav-item>
+      <tct-side-nav-item label="Monthly" href="#monthly"></tct-side-nav-item>
+    </tct-side-nav-item>
+    <tct-side-nav-item label="Always shown" icon="layers" no-collapse>
+      <tct-side-nav-item label="First" href="#first"></tct-side-nav-item>
+      <tct-side-nav-item label="Second" href="#second"></tct-side-nav-item>
+    </tct-side-nav-item>
+  </tct-side-nav>
+</div>
