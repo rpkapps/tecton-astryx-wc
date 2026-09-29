@@ -61,17 +61,21 @@ function sanitizeWithDomPurify(
   html: string,
   options: SanitizeOptions,
 ): DocumentFragment {
-  return purify.sanitize(
-    html,
-    options.svg
-      ? {
-          USE_PROFILES: {svg: true},
-          FORBID_TAGS: ['style', 'script', 'foreignObject'],
-          FORBID_ATTR: ['style'],
-          RETURN_DOM_FRAGMENT: true,
-        }
-      : {USE_PROFILES: {html: true}, RETURN_DOM_FRAGMENT: true},
-  );
+  if (!options.svg) {
+    return purify.sanitize(html, {USE_PROFILES: {html: true}, RETURN_DOM_FRAGMENT: true});
+  }
+  // The HTML parser drops bare SVG children (`<path/>`), so parse inside an `<svg>` wrapper and hand
+  // back its children: the same "parsed in an SVG context" result the native path produces.
+  const wrapped = purify.sanitize(`<svg>${html}</svg>`, {
+    USE_PROFILES: {svg: true},
+    FORBID_TAGS: ['style', 'script', 'foreignObject'],
+    FORBID_ATTR: ['style'],
+    RETURN_DOM_FRAGMENT: true,
+  });
+  const fragment = document.createDocumentFragment();
+  const root = wrapped.firstElementChild;
+  if (root) fragment.append(...root.childNodes);
+  return fragment;
 }
 
 /**
