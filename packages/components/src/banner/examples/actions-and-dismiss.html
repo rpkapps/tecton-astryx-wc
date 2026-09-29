@@ -1,11 +1,11 @@
 <!-- title: Actions and dismiss; description: Actions go in the end slot. dismissable adds a dismiss button; the banner hides itself, fires a cancelable tct-dismiss first, and returns focus to where it came from. -->
-<div id="actions-and-dismiss" style="display: flex; flex-direction: column; gap: var(--spacing-3)">
+<tct-vstack id="actions-and-dismiss" gap="3">
   <tct-banner status="warning" heading="Two-factor authentication is off" dismissable>
     <tct-button slot="end" variant="ghost" size="sm" label="Turn on"></tct-button>
   </tct-banner>
   <tct-banner status="info" heading="Import finished" description="128 rows were added." dismissable dismiss-label="Dismiss import notice"></tct-banner>
-  <p data-output style="color: var(--color-text-secondary)">Nothing dismissed yet.</p>
-</div>
+  <tct-text as="p" display="block" color="secondary" data-output>Nothing dismissed yet.</tct-text>
+</tct-vstack>
 <script type="module">
   const root = document.getElementById('actions-and-dismiss');
   root.addEventListener('tct-dismiss', (event) => {

@@ -1,8 +1,8 @@
 <!-- title: Statuses; description: Info, success, warning, error and Tecton's neutral. Warning and error announce as alerts, the rest politely; say the status in the heading text, because the icon is decorative. -->
-<div style="display: flex; flex-direction: column; gap: var(--spacing-3)">
+<tct-vstack gap="3">
   <tct-banner status="info" heading="New update available" description="Version 2.4 adds saved views."></tct-banner>
   <tct-banner status="success" heading="Changes saved" description="Your settings were updated."></tct-banner>
   <tct-banner status="warning" heading="Storage almost full" description="You have used 92% of your quota."></tct-banner>
   <tct-banner status="error" heading="Payment failed" description="Your card was declined. Update it to keep your plan."></tct-banner>
   <tct-banner status="neutral" heading="Scheduled maintenance" description="Sunday 02:00 to 03:00 UTC."></tct-banner>
-</div>
+</tct-vstack>

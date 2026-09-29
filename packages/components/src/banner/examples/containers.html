@@ -1,8 +1,8 @@
 <!-- title: Containers and elevation; description: card is a rounded standalone banner; section is a square full-width band. elevation lifts a floating banner. -->
-<div style="display: flex; flex-direction: column; gap: var(--spacing-4)">
+<tct-vstack gap="4">
   <tct-banner status="info" heading="Card container" description="Rounded, for use inside page content."></tct-banner>
   <tct-banner status="info" container="section" heading="Section container" description="Square and full width, for messages that span the page."></tct-banner>
-  <div style="padding: var(--spacing-3)">
+  <tct-vstack padding="3">
     <tct-banner status="success" elevation="med" heading="Elevated" description="A floating banner lifts above content."></tct-banner>
-  </div>
-</div>
+  </tct-vstack>
+</tct-vstack>
