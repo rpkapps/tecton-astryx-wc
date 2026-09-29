@@ -1,0 +1,177 @@
+/*
+ * tct-app-shell. The host is a block; `.shell` (part "base") is the box: a column with the variant's
+ * background, as tall as the viewport (`fill`) or at least as tall (`auto`). Inside it the layout arranges
+ * the header, the start panel and the main content; the navigation areas paint the wash or surface the
+ * variant asks for (through the exported `::part()` of the panel and the content, and directly on the
+ * wrappers). In auto mode the header and the side navigation are sticky: the header keeps its own height
+ * in `--_header-height` (measured by the shell) so the side navigation sticks below it and fills the rest
+ * of the viewport.
+ *
+ * `elevated` draws the content as an elevated surface with a rounded start corner behind a transparent
+ * main region (the wash frame shows around it). The skip link is visually hidden until it takes focus, then
+ * shows at the top start corner. [mwg:accessibility] skip links and focusable targets;
+ * [mwg:css-layout] sticky, viewport units (`dvh`); [mwg:styling-web-components] host rules, part=base,
+ * ::part of children
+ */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .shell {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--color-background-body);
+    overflow: clip;
+  }
+
+  .shell[data-height='fill'] {
+    block-size: 100dvh;
+  }
+
+  .shell[data-height='auto'] {
+    min-block-size: 100dvh;
+  }
+
+  .shell:is([data-variant='surface'], [data-variant='section']) {
+    background-color: var(--color-background-surface);
+  }
+
+  /* The layout fills the shell (fill) or grows inside it (auto). */
+  tct-layout {
+    flex: 1 1 auto;
+    min-block-size: 0;
+  }
+
+  /* The skip link: hidden until focused (the shared utility), then a badge at the top start corner. */
+  .skip-link {
+    box-sizing: border-box;
+    z-index: 9999; /* design: above every layer of the page; upstream's value */
+    padding-block: var(--spacing-2);
+    padding-inline: var(--spacing-4);
+    color: var(--color-text-accent);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--text-body-size);
+    text-decoration: none;
+    background-color: var(--color-background-surface);
+    border-radius: var(--radius-element);
+  }
+
+  .skip-link:focus {
+    position: fixed;
+    inset-block-start: var(--spacing-2);
+    inset-inline-start: var(--spacing-2);
+  }
+
+  .header,
+  .banner {
+    flex: none;
+  }
+
+  .header[data-bg='wash'],
+  .banner[data-bg='wash'],
+  .sidenav-frame[data-bg='wash'] {
+    background-color: var(--color-background-body);
+  }
+
+  .header[data-bg='surface'],
+  .banner[data-bg='surface'],
+  .sidenav-frame[data-bg='surface'] {
+    background-color: var(--color-background-surface);
+  }
+
+  tct-layout-panel[data-bg='wash']::part(base) {
+    background-color: var(--color-background-body);
+  }
+
+  tct-layout-panel[data-bg='surface']::part(base) {
+    background-color: var(--color-background-surface);
+  }
+
+  tct-layout-content[data-bg='wash']::part(base) {
+    background-color: var(--color-background-body);
+  }
+
+  tct-layout-content[data-bg='surface']::part(base) {
+    background-color: var(--color-background-surface);
+  }
+
+  /* The wash frame shows around the elevated content surface. */
+  tct-layout-content[data-bg='transparent']::part(base) {
+    background-color: transparent;
+    isolation: isolate;
+  }
+
+  /* Auto height: the header stays pinned while the page scrolls under it. */
+  .header[data-sticky] {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 1;
+  }
+
+  /*
+   * Auto height: the side navigation sticks below the header and fills the rest of the viewport; it scrolls
+   * on its own because the page, not the panel, owns the page scroll.
+   */
+  .sidenav-frame {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    overflow: clip;
+  }
+
+  .sidenav-frame[data-sticky] {
+    position: sticky;
+    inset-block-start: var(--_header-height, 0px);
+    block-size: calc(100dvh - var(--_header-height, 0px));
+  }
+
+  .sidenav-frame > tct-layout-panel {
+    flex: 1 1 auto;
+    min-block-size: 0;
+  }
+
+  /* The elevated content surface: a backdrop with the rounded start corner behind the main region. */
+  .elevated {
+    position: relative;
+    display: flex;
+    flex: 1 1 auto;
+    min-block-size: 0;
+    block-size: 100%;
+  }
+
+  .elevated-backdrop {
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-background-surface);
+    border-start-start-radius: var(--radius-page);
+    pointer-events: none;
+  }
+
+  tct-layout-content.main {
+    position: relative;
+  }
+
+  /* The top bar of a side-navigation-only shell below the breakpoint. */
+  .mobile-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    block-size: var(--spacing-12);
+    padding-inline: var(--spacing-2);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .skip-link {
+      color: LinkText;
+      background-color: Canvas;
+    }
+
+    .elevated-backdrop {
+      border: var(--border-width) solid CanvasText;
+    }
+  }
+}

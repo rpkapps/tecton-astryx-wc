@@ -1,0 +1,142 @@
+/*
+ * tct-layout. Structure: the host takes the height of its parent (`fill`) or at least that height
+ * (`auto`); inside it `.outer` cancels the padding of an enclosing padded container with negative
+ * margins (it reads the `--container-padding-*` properties that container publishes) and `.inner`
+ * resets them, so the regions inside start from zero. `.middle` is the row of start panel, content
+ * and end panel between the header and the footer; the slot wrappers (`.area`) exist only to answer
+ * the layout-area context and generate no box.
+ *
+ * Content width: with `content-width` and a value that can take part in arithmetic, the content
+ * region aligns its own children (`--layout-alignment-width`, see tct-layout-content), so its
+ * scrollbar stays at the outer edge. Otherwise, or with panels on both sides, `.middle` itself is
+ * limited and centred. `.middle` becomes a size query container only when a content region needs
+ * `100cqi`. [mwg:css-layout] flexbox, container query units, logical properties;
+ * [mwg:size-aware-styling] container-type; [mwg:styling-web-components] host rules, part=base
+ */
+@layer component {
+  :host {
+    display: flex;
+    flex-direction: column;
+    block-size: 100%;
+    min-inline-size: 0;
+  }
+
+  :host([height='auto']) {
+    block-size: auto;
+    min-block-size: 100%;
+  }
+
+  .outer {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-inline-size: 0;
+    min-block-size: 0;
+    margin-inline-start: calc(-1 * var(--container-padding-inline-start, 0px));
+    margin-inline-end: calc(-1 * var(--container-padding-inline-end, 0px));
+    margin-block-start: calc(-1 * var(--container-padding-block-start, 0px));
+    margin-block-end: calc(-1 * var(--container-padding-block-end, 0px));
+  }
+
+  /* Add the block padding back that the negative margins took, so the layout still fills its parent. */
+  .outer[data-height='fill'] {
+    block-size: calc(
+      100% + var(--container-padding-block-start, 0px) + var(--container-padding-block-end, 0px)
+    );
+    max-block-size: var(--container-max-height, none);
+  }
+
+  .inner {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-inline-size: 0;
+    min-block-size: 0;
+
+    /* The regions start from zero container padding; the layout is the container now. */
+    --container-padding-inline-start: 0px;
+    --container-padding-inline-end: 0px;
+    --container-padding-block-start: 0px;
+    --container-padding-block-end: 0px;
+
+    /*
+     * Reset an inherited width so nested layouts without a content width keep their released
+     * padding; an explicit content width overrides these on the same element (inline style).
+     */
+    --layout-content-width: 100cqi;
+    --layout-alignment-width: 100cqi;
+  }
+
+  .area {
+    display: contents;
+  }
+
+  .middle {
+    display: flex;
+    flex: 1 1 0%;
+    flex-direction: row;
+    min-inline-size: 0;
+    min-block-size: 0;
+  }
+
+  .body {
+    display: flex;
+    flex: 1 1 0%;
+    flex-direction: column;
+    min-inline-size: 0;
+    min-block-size: 0;
+  }
+
+  /* The whole start + content + end composition is limited and centred. */
+  .middle[data-width-mode='constrained'] {
+    inline-size: 100%;
+    max-inline-size: var(--layout-content-width);
+    margin-inline: auto;
+  }
+
+  /* A content region needs the container's width for its own alignment arithmetic. */
+  .middle[data-container] {
+    container-type: inline-size;
+  }
+
+  /*
+   * Without panels the content region spans the full width (its scrollbar stays at the outer edge)
+   * and aligns its children itself; arbitrary content keeps the constrained lane.
+   */
+  .body[data-single-column] {
+    inline-size: 100%;
+    max-inline-size: var(--layout-content-width, none);
+    margin-inline: auto;
+  }
+
+  .middle[data-content-region] .body[data-single-column] {
+    max-inline-size: none;
+  }
+
+  /*
+   * One panel: it stays aligned to the content-width frame, and a content region extends to the
+   * opposite open edge.
+   */
+  .middle[data-width-mode='internal']:is([data-panels='start'], [data-panels='end']) {
+    box-sizing: border-box;
+    inline-size: 100%;
+    max-inline-size: var(--layout-content-width, none);
+    margin-inline: auto;
+  }
+
+  .middle[data-width-mode='internal'][data-content-region]:is(
+      [data-panels='start'],
+      [data-panels='end']
+    ) {
+    max-inline-size: none;
+    margin-inline: 0;
+  }
+
+  .middle[data-width-mode='internal'][data-content-region][data-panels='start'] {
+    padding-inline-start: max(0px, calc((100% - var(--layout-content-width)) / 2));
+  }
+
+  .middle[data-width-mode='internal'][data-content-region][data-panels='end'] {
+    padding-inline-end: max(0px, calc((100% - var(--layout-content-width)) / 2));
+  }
+}

@@ -1,0 +1,6 @@
+/* tct-mobile-nav-toggle. The host is layout only: it is the button, or nothing. */
+@layer component {
+  :host {
+    display: contents;
+  }
+}

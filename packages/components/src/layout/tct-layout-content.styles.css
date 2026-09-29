@@ -1,0 +1,132 @@
+/*
+ * tct-layout-content. The host is a one-item column that fills the space the layout gives it; `.base`
+ * (part "base") is the scroller and carries the padding. Padding starts as the inner padding on every
+ * side and becomes the outer padding on the edges that touch the layout (no start panel, no end panel,
+ * no header, no footer); a header or footer without a divider removes the padding towards it; the
+ * `padding*` attributes win per edge. With no panels (or one) the inline padding also aligns the
+ * children to the layout's content width: `--layout-alignment-width` is subtracted from the width of
+ * the query container the layout provides, so the scrollbar stays at the outer edge. Without a content
+ * width both terms are `100cqi` and the extra padding is zero.
+ * [mwg:css-layout] container query units, overflow; [mwg:size-aware-styling] cqi;
+ * [mwg:styling-web-components] host rules, part=base; [mwg:accessibility] scrollable region focus
+ */
+@layer component {
+  :host {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-inline-size: 0;
+    min-block-size: 0;
+    inline-size: var(--_box-width, auto);
+    block-size: var(--_box-height, auto);
+    max-inline-size: var(--_box-max-width, none);
+
+    /* Custom properties inherit through the flat tree; a nested box must not read its parent's. */
+    --_box-padding-inline-start: initial;
+    --_box-padding-inline-end: initial;
+    --_box-padding-block-start: initial;
+    --_box-padding-block-end: initial;
+    --_box-width: initial;
+    --_box-height: initial;
+    --_box-max-width: initial;
+    --_box-min-height: initial;
+  }
+
+  .base {
+    --_pis: var(--layout-padding-inner-x, var(--spacing-4));
+    --_pie: var(--layout-padding-inner-x, var(--spacing-4));
+    --_pbs: var(--layout-padding-inner-y, var(--spacing-4));
+    --_pbe: var(--layout-padding-inner-y, var(--spacing-4));
+
+    /* The padding used per edge: an explicit attribute wins. */
+    --_eis: var(--_box-padding-inline-start, var(--_pis));
+    --_eie: var(--_box-padding-inline-end, var(--_pie));
+    --_ebs: var(--_box-padding-block-start, var(--_pbs));
+    --_ebe: var(--_box-padding-block-end, var(--_pbe));
+
+    /* Published for descendants that bleed to the edge or align to the padding. */
+    --container-padding-inline-start: var(--_eis);
+    --container-padding-inline-end: var(--_eie);
+    --container-padding-block-start: var(--_ebs);
+    --container-padding-block-end: var(--_ebe);
+
+    box-sizing: border-box;
+    flex: 1 1 auto;
+    min-block-size: max(0px, var(--_box-min-height, 0px));
+    overflow: clip;
+    padding-inline-start: var(--_eis);
+    padding-inline-end: var(--_eie);
+    padding-block-start: var(--_ebs);
+    padding-block-end: var(--_ebe);
+  }
+
+  .base[data-no-start] {
+    --_pis: var(--layout-padding-outer-x, var(--spacing-4));
+  }
+
+  .base[data-no-end] {
+    --_pie: var(--layout-padding-outer-x, var(--spacing-4));
+  }
+
+  .base[data-no-header] {
+    --_pbs: var(--layout-padding-outer-y, var(--spacing-4));
+  }
+
+  .base[data-no-footer] {
+    --_pbe: var(--layout-padding-outer-y, var(--spacing-4));
+  }
+
+  /* A header or footer without a divider lets the content run into it. */
+  .base[data-header-flush] {
+    --_pbs: 0px;
+  }
+
+  .base[data-footer-flush] {
+    --_pbe: 0px;
+  }
+
+  .base[data-scrollable] {
+    overflow: auto;
+  }
+
+  /* No panels: children align to the content width on both inline sides. */
+  .base[data-constrain='both'] {
+    padding-inline-start: max(
+      var(--_eis),
+      calc((100cqi - var(--layout-alignment-width)) / 2 + var(--_eis))
+    );
+    padding-inline-end: max(
+      var(--_eie),
+      calc((100cqi - var(--layout-alignment-width)) / 2 + var(--_eie))
+    );
+  }
+
+  /*
+   * One panel: the query box of the layout excludes the panel-side gutter, so its full difference
+   * from the content width is the missing gutter on the opposite side.
+   */
+  .base[data-constrain='end'] {
+    padding-inline-end: max(
+      var(--_eie),
+      calc(100cqi - var(--layout-alignment-width) + var(--_eie))
+    );
+  }
+
+  .base[data-constrain='start'] {
+    padding-inline-start: max(
+      var(--_eis),
+      calc(100cqi - var(--layout-alignment-width) + var(--_eis))
+    );
+  }
+}
+
+@layer state {
+  /*
+   * A box that is only a programmatic focus target (a skip-link target with tabindex -1) draws no ring:
+   * a ring around the whole content area is noise rather than guidance. Once it is a real tab stop
+   * (tabindex 0, because it scrolls) the shared ring shows.
+   */
+  .base[tabindex='-1']:focus-visible {
+    outline: none;
+  }
+}

@@ -1,0 +1,122 @@
+/*
+ * tct-layout-panel. The host is only the flex item (it never shrinks and is as wide as its box); `.base`
+ * (part "base") is the box: it carries the width, the padding, the divider and the scrolling. The
+ * width is on the box, not the host, so the negative margin that collapses the spacing towards the
+ * content shortens the host by exactly the collapsed amount: the panel keeps the width asked for and
+ * the content starts that much earlier, which is what "collapse the spacing on the side facing the
+ * content" means (upstream does the same with a negative margin on the panel itself).
+ *
+ * Padding: the inner padding on every side, the outer padding on the outer edge of the layout (the
+ * inline start of a start panel, the inline end of an end panel) and where there is no header or
+ * footer; the `padding*` attributes win per edge. A collapsed resizable panel takes no space and is
+ * hidden (`visibility`, so nothing inside stays in the tab order).
+ * [mwg:css-layout] flexbox, logical properties; [mwg:styling-web-components] host rules, part=base
+ */
+@layer component {
+  :host {
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    min-block-size: 0;
+
+    /* Custom properties inherit through the flat tree; a nested box must not read its parent's. */
+    --_box-padding-inline-start: initial;
+    --_box-padding-inline-end: initial;
+    --_box-padding-block-start: initial;
+    --_box-padding-block-end: initial;
+    --_box-width: initial;
+    --_box-height: initial;
+    --_box-max-width: initial;
+    --_box-min-height: initial;
+  }
+
+  .base {
+    --_pis: var(--layout-padding-inner-x, var(--spacing-4));
+    --_pie: var(--layout-padding-inner-x, var(--spacing-4));
+    --_pbs: var(--layout-padding-inner-y, var(--spacing-4));
+    --_pbe: var(--layout-padding-inner-y, var(--spacing-4));
+    --_collapse: var(--layout-padding-inner-x, var(--spacing-4));
+
+    /* The padding used per edge: an explicit attribute wins. */
+    --_eis: var(--_box-padding-inline-start, var(--_pis));
+    --_eie: var(--_box-padding-inline-end, var(--_pie));
+    --_ebs: var(--_box-padding-block-start, var(--_pbs));
+    --_ebe: var(--_box-padding-block-end, var(--_pbe));
+
+    /* Published for descendants that bleed to the edge or align to the padding. */
+    --container-padding-inline-start: var(--_eis);
+    --container-padding-inline-end: var(--_eie);
+    --container-padding-block-start: var(--_ebs);
+    --container-padding-block-end: var(--_ebe);
+
+    box-sizing: border-box;
+    flex: 1 1 auto;
+    inline-size: var(--_size, var(--_box-width, auto));
+    max-inline-size: var(--_box-max-width, none);
+    min-block-size: max(0px, var(--_box-min-height, 0px));
+    overflow: clip;
+    padding-inline-start: var(--_eis);
+    padding-inline-end: var(--_eie);
+    padding-block-start: var(--_ebs);
+    padding-block-end: var(--_ebe);
+  }
+
+  .base[data-area='start'] {
+    --_pis: var(--layout-padding-outer-x, var(--spacing-4));
+  }
+
+  .base[data-area='end'] {
+    --_pie: var(--layout-padding-outer-x, var(--spacing-4));
+  }
+
+  .base[data-no-header] {
+    --_pbs: var(--layout-padding-outer-y, var(--spacing-4));
+  }
+
+  .base[data-no-footer] {
+    --_pbe: var(--layout-padding-outer-y, var(--spacing-4));
+  }
+
+  .base[data-scrollable] {
+    overflow: auto;
+  }
+
+  /* The divider faces the content: the inline end of a start panel, the inline start of an end panel. */
+  .base[data-divider][data-area='start'] {
+    border-inline-end: var(--border-width) solid var(--color-border);
+  }
+
+  .base[data-divider][data-area='end'] {
+    border-inline-start: var(--border-width) solid var(--color-border);
+  }
+
+  /* Without a divider the spacing on that side merges with the content's. */
+  .base[data-collapse][data-area='start'] {
+    margin-inline-end: calc(-1 * var(--_collapse));
+  }
+
+  .base[data-collapse][data-area='end'] {
+    margin-inline-start: calc(-1 * var(--_collapse));
+  }
+
+  .base[data-collapsed] {
+    inline-size: 0;
+    min-inline-size: 0;
+    margin-inline: 0;
+    padding-inline: 0;
+    border-inline-width: 0;
+    visibility: hidden;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .base[data-divider][data-area='start'] {
+      border-inline-end-color: ButtonBorder;
+    }
+
+    .base[data-divider][data-area='end'] {
+      border-inline-start-color: ButtonBorder;
+    }
+  }
+}
