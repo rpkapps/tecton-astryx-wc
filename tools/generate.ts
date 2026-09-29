@@ -54,6 +54,8 @@ export const EXTERNAL_STEPS_AFTER_BARRELS: readonly ExternalStep[] = [
   {name: 'agent registry', script: 'tools/agent-registry/generate.ts', milestone: 'M6'},
   // Docs component pages, the parity / differences / tokens pages (A§16.2).
   {name: 'docs pages', script: 'tools/docs/generate.ts', milestone: 'M6'},
+  // `astro:content` types (apps/docs/.astro): lint and typecheck read them before any docs build.
+  {name: 'docs types (astro sync)', script: 'tools/docs/sync-types.ts', milestone: 'M6'},
 ];
 
 function runExternal(step: ExternalStep): boolean {
