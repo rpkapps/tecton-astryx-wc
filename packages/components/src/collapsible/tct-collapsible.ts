@@ -74,7 +74,7 @@ export class TctCollapsible extends TctElement {
   /** Identifies this item within a `tct-collapsible-group`. Required to take part in one. */
   @property() value = '';
 
-  readonly #ids = new IdController(this, 'tct-collapsible');
+  readonly #ids: IdController = new IdController(this, 'tct-collapsible');
   #lastOpen: boolean | undefined;
 
   readonly #state: CollapsibleController = new CollapsibleController(this, {

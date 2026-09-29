@@ -66,7 +66,10 @@ export class TctSegmentedControl extends FormControlMixin(TctElement) {
    */
   @property({attribute: 'disabled-message'}) disabledMessage = '';
 
-  readonly #size = new SizeController(this, {explicit: () => this.size, fallback: 'md'});
+  readonly #size: SizeController = new SizeController(this, {
+    explicit: () => this.size,
+    fallback: 'md',
+  });
   #lastContext: SegmentedControlContextValue | undefined;
 
   /**
@@ -82,30 +85,33 @@ export class TctSegmentedControl extends FormControlMixin(TctElement) {
     this.redispatchChange();
   };
 
-  readonly #provider = new ContextProvider(this, {
+  readonly #provider: ContextProvider<typeof segmentedControlContext> = new ContextProvider<
+    typeof segmentedControlContext
+  >(this, {
     context: segmentedControlContext,
     initialValue: this.#contextValue(),
   });
 
-  readonly #roving = new RovingTabindexController<TctSegmentedControlItem>(this, {
-    items: () => this.#items(),
-    orientation: 'horizontal',
-    wrap: true,
-    isDisabled: (item) => this.#itemDisabled(item),
-    // APG radio group: selection follows focus. Tab into the group stays a pure focus move.
-    activateOnFocus: true,
-    onActivate: (item) => {
-      this.#select(item, item.value);
-    },
-  });
+  readonly #roving: RovingTabindexController<TctSegmentedControlItem> =
+    new RovingTabindexController<TctSegmentedControlItem>(this, {
+      items: () => this.#items(),
+      orientation: 'horizontal',
+      wrap: true,
+      isDisabled: (item) => this.#itemDisabled(item),
+      // APG radio group: selection follows focus. Tab into the group stays a pure focus move.
+      activateOnFocus: true,
+      onActivate: (item) => {
+        this.#select(item, item.value);
+      },
+    });
 
-  readonly #hint = new KeyboardHintController(this, {
+  readonly #hint: KeyboardHintController = new KeyboardHintController(this, {
     orientation: 'horizontal',
     enabled: () => !this.isDisabled,
   });
 
   /** Explains a disabled control (`disabled-message`); anchored to the strip, shown on hover and keyboard focus. */
-  protected readonly disabledTooltip = new TooltipController(this, {
+  protected readonly disabledTooltip: TooltipController = new TooltipController(this, {
     mode: 'shadow',
     trigger: () => this.renderRoot.querySelector<HTMLElement>('.control'),
     surface: () => this.renderRoot.querySelector<HTMLElement>('.disabled-message'),

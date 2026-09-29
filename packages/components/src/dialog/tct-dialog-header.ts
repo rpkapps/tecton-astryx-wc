@@ -85,17 +85,22 @@ export class TctDialogHeader extends TctElement implements DialogHeaderLike {
    */
   @property({type: Boolean, reflect: true, attribute: 'has-divider'}) hasDivider = false;
 
-  readonly #dialog = new ContextConsumer(this, {
+  readonly #dialog: ContextConsumer<typeof dialogContext> = new ContextConsumer<
+    typeof dialogContext
+  >(this, {
     context: dialogContext,
     subscribe: true,
     callback: (value) => {
       value?.register(this);
     },
   });
-  readonly #locale = new LocaleController(this, {namespace: 'dialog', defaults: dialogMessages});
-  readonly #slots = new SlotController(this, 'title', 'start', 'end');
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'dialog',
+    defaults: dialogMessages,
+  });
+  readonly #slots: SlotController = new SlotController(this, 'title', 'start', 'end');
   readonly #id = uniqueId('tct-dialog-title');
-  readonly #parts = new OwnedPartsController(this, {
+  readonly #parts: OwnedPartsController = new OwnedPartsController(this, {
     parts: [
       {
         slot: 'title',

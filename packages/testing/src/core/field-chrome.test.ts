@@ -81,7 +81,9 @@ class TctTestField extends TctElement {
 class TctTestLayoutProvider extends TctElement {
   static override readonly tagName = 'tct-test-layout-provider';
   @property() optionality: FormOptionality = 'required';
-  readonly provider = new ContextProvider(this, {
+  readonly provider: ContextProvider<typeof formLayoutContext> = new ContextProvider<
+    typeof formLayoutContext
+  >(this, {
     context: formLayoutContext,
     initialValue: {direction: 'vertical'},
   });

@@ -103,7 +103,7 @@ export class TctHeading extends TctElement {
   @property({type: Boolean, attribute: 'has-strikethrough', reflect: true}) hasStrikethrough =
     false;
 
-  readonly #tooltip = new TruncationTooltip(this, {
+  readonly #tooltip: TruncationTooltip = new TruncationTooltip(this, {
     target: () => this.shadowRoot?.querySelector<HTMLElement>('.text'),
     maxLines: () => this.#lines,
     disabled: () => this.noTruncateTooltip,

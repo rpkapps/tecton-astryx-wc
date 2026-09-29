@@ -153,6 +153,7 @@ export default defineConfig([
       'tct/no-feature-checks': 'error',
       'tct/no-public-on-props': 'error',
       'tct/no-export-star-in-define': 'error',
+      'tct/typed-host-controller': 'error',
     },
   },
 

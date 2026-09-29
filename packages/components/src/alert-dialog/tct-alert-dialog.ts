@@ -118,7 +118,7 @@ export class TctAlertDialog extends TctElement {
     namespace: 'alertDialog',
     defaults: defaultMessages,
   });
-  readonly #compact = new MediaQueryController(this, SMALL_SCREEN_QUERY);
+  readonly #compact: MediaQueryController = new MediaQueryController(this, SMALL_SCREEN_QUERY);
 
   get #dialog(): TctDialog | null {
     return this.renderRoot.querySelector<TctDialog>('tct-dialog');

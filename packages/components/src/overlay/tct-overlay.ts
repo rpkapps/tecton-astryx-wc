@@ -67,7 +67,7 @@ export class TctOverlay extends TctElement {
 
   // -------------------------------------------------------------------------------- internals
 
-  readonly #touch = new MediaQueryController(this, '(hover: none)');
+  readonly #touch: MediaQueryController = new MediaQueryController(this, '(hover: none)');
   #touchOpen = false;
   /** Content elements this component put `data-media-theme` on (so `scrim="none"` can take it off again). */
   readonly #themed = new WeakSet<Element>();

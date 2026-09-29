@@ -108,7 +108,10 @@ export class TctOverflowList extends TctElement {
    */
   @property({attribute: false}) overflowRenderer: OverflowRenderer | undefined;
 
-  readonly #locale = new LocaleController(this, {namespace: 'overflow-list', defaults});
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'overflow-list',
+    defaults,
+  });
   readonly #overflow: OverflowController = new OverflowController(this, {
     targets: (): (Element | null | undefined)[] => [
       this.renderRoot?.querySelector('.list'),

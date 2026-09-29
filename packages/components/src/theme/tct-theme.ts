@@ -86,14 +86,22 @@ export class TctTheme extends TctProviderElement {
   /** Colour mode: `light`, `dark`, or `system` (follows the operating system; the default). */
   @property({reflect: true}) mode: ThemeMode = 'system';
 
-  readonly #provider = new ContextProvider(this, {context: themeContext, initialValue: null});
-  readonly #parent = new ContextConsumer(this, {
+  readonly #provider: ContextProvider<typeof themeContext> = new ContextProvider<
+    typeof themeContext
+  >(this, {
     context: themeContext,
-    subscribe: true,
-    callback: () => {
-      this.#syncRoot();
-    },
+    initialValue: null,
   });
+  readonly #parent: ContextConsumer<typeof themeContext> = new ContextConsumer<typeof themeContext>(
+    this,
+    {
+      context: themeContext,
+      subscribe: true,
+      callback: () => {
+        this.#syncRoot();
+      },
+    },
+  );
   #preference: MediaQueryList | undefined;
 
   #resolvedMode(): 'light' | 'dark' {

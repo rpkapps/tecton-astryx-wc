@@ -48,9 +48,17 @@ export class TctAvatarGroupOverflow extends TctElement {
    */
   @property({type: Boolean, reflect: true}) interactive = false;
 
-  readonly #group = new ContextConsumer(this, {context: avatarGroupContext, subscribe: true});
-  readonly #locale = new LocaleController(this, {namespace: 'avatarGroup', defaults});
-  readonly #slots = new SlotController(this, 'default');
+  readonly #group: ContextConsumer<typeof avatarGroupContext> = new ContextConsumer<
+    typeof avatarGroupContext
+  >(this, {
+    context: avatarGroupContext,
+    subscribe: true,
+  });
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'avatarGroup',
+    defaults,
+  });
+  readonly #slots: SlotController = new SlotController(this, 'default');
   #hadControl = false;
 
   /** The inner button when `interactive`, else `null`: what the group's roving tab stop focuses. */

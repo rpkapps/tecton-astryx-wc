@@ -423,7 +423,9 @@ describe('tct-item: description context', () => {
   /** A control rendered in a slot: consumes what the row publishes about its description. */
   class TctTestDescriptionProbe extends TctElement {
     static override readonly tagName = 'tct-test-description-probe';
-    readonly consumer = new ContextConsumer(this, {
+    readonly consumer: ContextConsumer<typeof itemDescriptionContext> = new ContextConsumer<
+      typeof itemDescriptionContext
+    >(this, {
       context: itemDescriptionContext,
       subscribe: true,
     });

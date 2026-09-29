@@ -174,3 +174,24 @@ tester.run('no-top-level-dom-access', rules['no-top-level-dom-access'], {
     {code: 'if (x) { navigator.vibrate(1); }', errors: [{messageId: 'topLevel'}]},
   ],
 });
+
+tester.run('typed-host-controller', rules['typed-host-controller'], {
+  valid: [
+    {code: 'class A { #locale: LocaleController = new LocaleController(this, {}); }'},
+    {
+      code: 'class A { #c: ContextConsumer<typeof key> = new ContextConsumer(this, {context: key}); }',
+    },
+    {code: 'class A { #map = new Map(); }'},
+    {code: 'class A { #x = new Thing(other, this); }'},
+  ],
+  invalid: [
+    {
+      code: 'class A { #locale = new LocaleController(this, {}); }',
+      errors: [{messageId: 'annotate'}],
+    },
+    {
+      code: 'class A { readonly slots = new SlotController(this); }',
+      errors: [{messageId: 'annotate'}],
+    },
+  ],
+});

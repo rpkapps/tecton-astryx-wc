@@ -94,9 +94,12 @@ export class TctMetadataList extends TctElement {
   /** Overrides the "Show less" label. */
   @property({attribute: 'show-less-label'}) showLessLabel = '';
 
-  readonly #slots = new SlotController(this, 'heading');
-  readonly #ids = new IdController(this, 'tct-metadata-list');
-  readonly #locale = new LocaleController(this, {namespace: 'metadataList', defaults});
+  readonly #slots: SlotController = new SlotController(this, 'heading');
+  readonly #ids: IdController = new IdController(this, 'tct-metadata-list');
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'metadataList',
+    defaults,
+  });
 
   /** The light-DOM pairs, in order (everything except the heading slot). */
   #items(): HTMLElement[] {

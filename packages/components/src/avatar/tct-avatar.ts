@@ -127,14 +127,30 @@ export class TctAvatar extends TctElement {
   @state() private erroredSrc: string | undefined;
   @state() private erroredFallbackSrc: string | undefined;
 
-  readonly #slots = new SlotController(this, 'status');
-  readonly #locale = new LocaleController(this, {namespace: 'avatar', defaults});
-  readonly #group = new ContextConsumer(this, {context: avatarGroupContext, subscribe: true});
-  readonly #link = new ContextConsumer(this, {context: linkContext, subscribe: true});
+  readonly #slots: SlotController = new SlotController(this, 'status');
+  readonly #locale: LocaleController = new LocaleController(this, {namespace: 'avatar', defaults});
+  readonly #group: ContextConsumer<typeof avatarGroupContext> = new ContextConsumer<
+    typeof avatarGroupContext
+  >(this, {
+    context: avatarGroupContext,
+    subscribe: true,
+  });
+  readonly #link: ContextConsumer<typeof linkContext> = new ContextConsumer<typeof linkContext>(
+    this,
+    {
+      context: linkContext,
+      subscribe: true,
+    },
+  );
   readonly #statusLabels = new Map<Element, string>();
-  readonly #provider = new ContextProvider(this, {context: avatarContext, initialValue: null});
+  readonly #provider: ContextProvider<typeof avatarContext> = new ContextProvider<
+    typeof avatarContext
+  >(this, {
+    context: avatarContext,
+    initialValue: null,
+  });
   #hadControl = false;
-  readonly #aria = new AriaDelegateController(this, {
+  readonly #aria: AriaDelegateController = new AriaDelegateController(this, {
     target: () => this.control,
     // The name is composed here (a host aria-label is read in render()); with a tooltip the description
     // is the tooltip's, like `tct-button`.

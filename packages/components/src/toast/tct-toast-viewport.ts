@@ -124,7 +124,10 @@ export class TctToastViewport extends TctElement {
 
   // -------------------------------------------------------------------------------- internals
 
-  readonly #locale = new LocaleController(this, {namespace: 'toast', defaults: defaultMessages});
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'toast',
+    defaults: defaultMessages,
+  });
   readonly #id = uniqueId('tct-toast-viewport');
   #toasts: ToastEntry[] = [];
   #exiting = new Set<string>();

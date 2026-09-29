@@ -93,7 +93,7 @@ export class TctTooltip extends TctElement {
   /** Whether the tooltip is showing. The attribute opens it initially (it stays dismissible). */
   @property({type: Boolean, reflect: true}) open = false;
 
-  readonly #tooltip = new TooltipController(this, {
+  readonly #tooltip: TooltipController = new TooltipController(this, {
     mode: 'satellite',
     surfaceTag: 'tct-tooltip-surface',
     trigger: () => this.#trigger(),

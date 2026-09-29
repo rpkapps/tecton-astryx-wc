@@ -62,11 +62,15 @@ export class TctMediaTheme extends TctElement {
    */
   @property({reflect: true}) fallback: MediaThemeFallback = 'dark';
 
-  readonly #context = new ContextProvider(this, {
+  readonly #context: ContextProvider<typeof themeContext> = new ContextProvider<
+    typeof themeContext
+  >(this, {
     context: themeContext,
     initialValue: {name: 'tecton', mode: 'light'},
   });
-  readonly #parentTheme = new ContextConsumer(this, {
+  readonly #parentTheme: ContextConsumer<typeof themeContext> = new ContextConsumer<
+    typeof themeContext
+  >(this, {
     context: themeContext,
     subscribe: true,
     callback: () => this.#apply(),

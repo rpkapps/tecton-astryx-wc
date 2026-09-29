@@ -44,7 +44,7 @@ export class TctBadge extends TctElement {
   /** Plain-text label. When absent the default slot is the label. */
   @property() label: string | undefined;
 
-  readonly #slots = new SlotController(this, 'icon');
+  readonly #slots: SlotController = new SlotController(this, 'icon');
 
   protected override willUpdate(changed: PropertyValues<this>): void {
     if (changed.has('variant') && !(BADGE_VARIANTS as readonly string[]).includes(this.variant)) {

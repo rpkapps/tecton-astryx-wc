@@ -37,15 +37,18 @@ const BROKEN = 'http://localhost:1/none.png';
 class TctTestRouter extends TctElement {
   static override readonly tagName = 'tct-test-router';
   readonly calls: {href: string; event: MouseEvent}[] = [];
-  readonly provider = new ContextProvider(this, {
-    context: linkContext,
-    initialValue: {
-      navigate: (href, event) => {
-        this.calls.push({href, event});
-        return true;
-      },
-    } satisfies LinkContextValue,
-  });
+  readonly provider: ContextProvider<typeof linkContext> = new ContextProvider<typeof linkContext>(
+    this,
+    {
+      context: linkContext,
+      initialValue: {
+        navigate: (href, event) => {
+          this.calls.push({href, event});
+          return true;
+        },
+      } satisfies LinkContextValue,
+    },
+  );
   override render() {
     return html`<slot></slot>`;
   }

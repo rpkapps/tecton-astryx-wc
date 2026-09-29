@@ -24,7 +24,13 @@ import type {TctToolbar} from './tct-toolbar.js';
 /** A control that reports the size it inherits (what a button or input reads). */
 class TctTestSized extends TctElement {
   static override readonly tagName = 'tct-test-sized';
-  readonly #size = new ContextConsumer(this, {context: sizeContext, subscribe: true});
+  readonly #size: ContextConsumer<typeof sizeContext> = new ContextConsumer<typeof sizeContext>(
+    this,
+    {
+      context: sizeContext,
+      subscribe: true,
+    },
+  );
   get inherited(): string | null | undefined {
     return this.#size.value;
   }

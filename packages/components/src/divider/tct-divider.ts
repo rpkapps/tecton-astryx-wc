@@ -57,7 +57,7 @@ export class TctDivider extends TctElement {
    */
   @property({attribute: 'full-bleed', type: Boolean, reflect: true}) fullBleed = false;
 
-  readonly #slots = new SlotController(this, 'label');
+  readonly #slots: SlotController = new SlotController(this, 'label');
   #observer: MutationObserver | undefined;
 
   /** The text a slotted label contributes to the accessible name. */

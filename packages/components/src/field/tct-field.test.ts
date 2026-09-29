@@ -177,7 +177,9 @@ describe('tct-field: required and optional indicators', () => {
   it('marks only the exception when the form states a default optionality', async () => {
     class Provider extends TctElement {
       static override readonly tagName = 'tct-test-form-layout';
-      readonly provider = new ContextProvider(this, {
+      readonly provider: ContextProvider<typeof formLayoutContext> = new ContextProvider<
+        typeof formLayoutContext
+      >(this, {
         context: formLayoutContext,
         initialValue: {direction: 'vertical', optionality: 'required'},
       });
@@ -327,7 +329,9 @@ describe('tct-field: width and layout', () => {
 
     class Layout extends TctElement {
       static override readonly tagName = 'tct-test-horizontal-layout';
-      readonly provider = new ContextProvider(this, {
+      readonly provider: ContextProvider<typeof formLayoutContext> = new ContextProvider<
+        typeof formLayoutContext
+      >(this, {
         context: formLayoutContext,
         initialValue: {direction: 'horizontal-labels'},
       });

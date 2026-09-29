@@ -113,10 +113,20 @@ export class TctBanner extends TctElement {
   /** Whether the content is showing (initial and current state). Ignored with `no-collapse`. */
   @property({type: Boolean, reflect: true}) open = false;
 
-  readonly #ids = new IdController(this, 'tct-banner');
-  readonly #locale = new LocaleController(this, {namespace: 'banner', defaults: english});
-  readonly #slots = new SlotController(this, 'default', 'heading', 'description', 'icon', 'end');
-  readonly #disclosure = new CollapsibleController(this, {
+  readonly #ids: IdController = new IdController(this, 'tct-banner');
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'banner',
+    defaults: english,
+  });
+  readonly #slots: SlotController = new SlotController(
+    this,
+    'default',
+    'heading',
+    'description',
+    'icon',
+    'end',
+  );
+  readonly #disclosure: CollapsibleController = new CollapsibleController(this, {
     open: () => this.open,
     setOpen: (open) => {
       this.open = open;

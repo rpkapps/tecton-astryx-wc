@@ -67,9 +67,15 @@ export class TctList extends TctElement {
   /** First number of a numbered list (`list-style="decimal"`). */
   @property({type: Number}) start = 1;
 
-  readonly #slots = new SlotController(this, 'header');
-  readonly #ids = new IdController(this, 'tct-list');
-  readonly #context = new ContextProvider(this, {context: listContext, initialValue: null});
+  readonly #slots: SlotController = new SlotController(this, 'header');
+  readonly #ids: IdController = new IdController(this, 'tct-list');
+  readonly #context: ContextProvider<typeof listContext> = new ContextProvider<typeof listContext>(
+    this,
+    {
+      context: listContext,
+      initialValue: null,
+    },
+  );
   constructor() {
     super();
     // Mirrors host aria-* onto the inner list; it syncs on connect and after every host update.

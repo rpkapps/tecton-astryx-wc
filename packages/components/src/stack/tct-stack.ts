@@ -124,7 +124,7 @@ export class TctStack extends BoxPropsMixin(TctElement) {
     ScrollFocusController.attach(this);
   }
 
-  readonly #aria = new AriaDelegateController(this, {
+  readonly #aria: AriaDelegateController = new AriaDelegateController(this, {
     target: () => {
       const inner = this.renderRoot.querySelector<HTMLElement>('[part~="base"]');
       return inner && inner.localName !== 'div' ? inner : null;

@@ -77,8 +77,20 @@ export class TctListItem extends TctElement {
   /** Selected state, exposed as `aria-current`. */
   @property({type: Boolean, reflect: true}) selected = false;
 
-  readonly #list = new ContextConsumer(this, {context: listContext, subscribe: true});
-  readonly #slots = new SlotController(this, 'label', 'description', 'start', 'end');
+  readonly #list: ContextConsumer<typeof listContext> = new ContextConsumer<typeof listContext>(
+    this,
+    {
+      context: listContext,
+      subscribe: true,
+    },
+  );
+  readonly #slots: SlotController = new SlotController(
+    this,
+    'label',
+    'description',
+    'start',
+    'end',
+  );
   #delegate: HTMLElement | null = null;
 
   protected override willUpdate(): void {

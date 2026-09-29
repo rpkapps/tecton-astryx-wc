@@ -158,9 +158,22 @@ export class TctField extends TctElement implements ControlObserver {
     this.statusMessage = value?.message ?? '';
   }
 
-  readonly #provider = new ContextProvider(this, {context: fieldContext, initialValue: null});
-  readonly #layout = new ContextConsumer(this, {context: formLayoutContext, subscribe: true});
-  readonly #locale = new LocaleController(this, {namespace: 'field', defaults: fieldMessages});
+  readonly #provider: ContextProvider<typeof fieldContext> = new ContextProvider<
+    typeof fieldContext
+  >(this, {
+    context: fieldContext,
+    initialValue: null,
+  });
+  readonly #layout: ContextConsumer<typeof formLayoutContext> = new ContextConsumer<
+    typeof formLayoutContext
+  >(this, {
+    context: formLayoutContext,
+    subscribe: true,
+  });
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'field',
+    defaults: fieldMessages,
+  });
   readonly #chrome: FieldChromeController = new FieldChromeController(this, {
     mode: () => 'light',
     control: () => this.#control(),

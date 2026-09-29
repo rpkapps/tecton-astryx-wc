@@ -51,7 +51,13 @@ export class TctEmptyState extends TctElement {
   /** Reduced spacing and type size for constrained areas such as cards and sidebars. */
   @property({type: Boolean, reflect: true}) compact = false;
 
-  readonly #slots = new SlotController(this, 'icon', 'heading', 'description', 'actions');
+  readonly #slots: SlotController = new SlotController(
+    this,
+    'icon',
+    'heading',
+    'description',
+    'actions',
+  );
 
   constructor() {
     super();

@@ -140,7 +140,10 @@ export class TctPopover extends TctElement {
   // -------------------------------------------------------------------------------- internals
 
   readonly #id = uniqueId('tct-popover');
-  readonly #locale = new LocaleController(this, {namespace: 'popover', defaults: defaultMessages});
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'popover',
+    defaults: defaultMessages,
+  });
   #settled: Promise<void> = Promise.resolve();
   #boundButton: HTMLElement | null = null;
   #commandSource: Element | null = null;
@@ -165,7 +168,7 @@ export class TctPopover extends TctElement {
     this.addEventListener('command', this.#onCommand as EventListener);
   }
 
-  readonly #position = new PositionController(this, {
+  readonly #position: PositionController = new PositionController(this, {
     surface: () => this.#layerElement,
     anchor: () => this.#anchorTarget,
     placement: () => ({

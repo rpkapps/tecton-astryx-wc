@@ -28,7 +28,12 @@ class TctTestToggle extends TctElement {
   static override shadowRootOptions = {...TctElement.shadowRootOptions, delegatesFocus: true};
   @property() value = '';
   @property({type: Boolean, reflect: true}) disabled = false;
-  readonly #group = new ContextConsumer(this, {context: toggleButtonGroupContext, subscribe: true});
+  readonly #group: ContextConsumer<typeof toggleButtonGroupContext> = new ContextConsumer<
+    typeof toggleButtonGroupContext
+  >(this, {
+    context: toggleButtonGroupContext,
+    subscribe: true,
+  });
   get groupSize(): string | undefined {
     return this.#group.value?.size;
   }

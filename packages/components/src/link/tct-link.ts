@@ -144,12 +144,22 @@ export class TctLink extends TctElement {
   /** The host `aria-label`, tracked so a change re-renders the inner element. @internal */
   @property({attribute: 'aria-label'}) private _hostLabel: string | null = null;
 
-  readonly #locale = new LocaleController(this, {namespace: 'link', defaults: english});
-  readonly #interactive = new ContextConsumer(this, {
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'link',
+    defaults: english,
+  });
+  readonly #interactive: ContextConsumer<typeof interactiveRoleContext> = new ContextConsumer<
+    typeof interactiveRoleContext
+  >(this, {
     context: interactiveRoleContext,
     subscribe: true,
   });
-  readonly #router = new ContextConsumer(this, {context: linkContext});
+  readonly #router: ContextConsumer<typeof linkContext> = new ContextConsumer<typeof linkContext>(
+    this,
+    {
+      context: linkContext,
+    },
+  );
 
   constructor() {
     super();

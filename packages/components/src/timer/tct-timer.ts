@@ -63,7 +63,7 @@ export class TctTimer extends TctElement {
   /** Font weight override, as `tct-text`. */
   @property({reflect: true}) weight: TextWeight | undefined;
 
-  readonly #locale = new LocaleController(this);
+  readonly #locale: LocaleController = new LocaleController(this);
   #mountTime: number | undefined;
   #timeout: ReturnType<typeof setTimeout> | undefined;
   #shownText: string | undefined;

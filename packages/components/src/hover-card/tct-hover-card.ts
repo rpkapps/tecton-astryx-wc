@@ -160,7 +160,7 @@ export class TctHoverCard extends TctElement {
   #ariaMode: 'dialog' | 'group' | undefined;
   #ariaSaved = new Map<string, string | null>();
 
-  readonly #position = new PositionController(this, {
+  readonly #position: PositionController = new PositionController(this, {
     surface: () => this.#layerElement,
     anchor: () => this.#trigger,
     placement: () => ({
@@ -198,7 +198,7 @@ export class TctHoverCard extends TctElement {
     },
   });
 
-  readonly #intent = new HoverIntentController(this, {
+  readonly #intent: HoverIntentController = new HoverIntentController(this, {
     trigger: () => this.#trigger,
     surface: () => this.#layerElement,
     openDelay: () => this.delay,

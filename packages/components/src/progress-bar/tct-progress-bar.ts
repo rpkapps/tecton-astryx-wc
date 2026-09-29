@@ -93,8 +93,8 @@ export class TctProgressBar extends TctElement {
   /** Visually disabled (grey fill and text), for cancelled or inactive operations. */
   @property({type: Boolean, reflect: true}) disabled = false;
 
-  readonly #ids = new IdController(this, 'tct-progress-bar');
-  readonly #locale = new LocaleController(this, {namespace: 'progress-bar'});
+  readonly #ids: IdController = new IdController(this, 'tct-progress-bar');
+  readonly #locale: LocaleController = new LocaleController(this, {namespace: 'progress-bar'});
 
   protected override willUpdate(changed: PropertyValues<this>): void {
     if (

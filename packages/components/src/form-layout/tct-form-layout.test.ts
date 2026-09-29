@@ -18,7 +18,12 @@ import type {TctFormLayout} from './tct-form-layout.js';
 
 /** A stand-in for tct-field and the form controls: reads the layout context and renders it. */
 class TestLayoutReader extends LitElement {
-  readonly consumer = new ContextConsumer(this, {context: formLayoutContext, subscribe: true});
+  readonly consumer: ContextConsumer<typeof formLayoutContext> = new ContextConsumer<
+    typeof formLayoutContext
+  >(this, {
+    context: formLayoutContext,
+    subscribe: true,
+  });
   renders = 0;
   protected override render() {
     this.renders++;

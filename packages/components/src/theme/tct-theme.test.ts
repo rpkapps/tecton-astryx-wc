@@ -22,7 +22,12 @@ import {themeName} from './theme.types.js';
 /** A consumer written the way any family reads the context. */
 class TestThemeProbe extends TctElement {
   static override readonly tagName = 'tct-test-theme-probe';
-  readonly consumer = new ContextConsumer(this, {context: themeContext, subscribe: true});
+  readonly consumer: ContextConsumer<typeof themeContext> = new ContextConsumer<
+    typeof themeContext
+  >(this, {
+    context: themeContext,
+    subscribe: true,
+  });
   get theme() {
     return this.consumer.value;
   }

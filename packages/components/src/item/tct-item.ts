@@ -185,9 +185,23 @@ export class TctItem extends TctElement {
   /** Declarative form of `interactiveElement`: a selector resolved against the item's light DOM. */
   @property({attribute: 'interactive-selector'}) interactiveSelector = '';
 
-  readonly #slots = new SlotController(this, 'start', 'end', 'label', 'description');
-  readonly #link = new ContextConsumer(this, {context: linkContext, subscribe: true});
-  readonly #description = new ContextProvider(this, {
+  readonly #slots: SlotController = new SlotController(
+    this,
+    'start',
+    'end',
+    'label',
+    'description',
+  );
+  readonly #link: ContextConsumer<typeof linkContext> = new ContextConsumer<typeof linkContext>(
+    this,
+    {
+      context: linkContext,
+      subscribe: true,
+    },
+  );
+  readonly #description: ContextProvider<typeof itemDescriptionContext> = new ContextProvider<
+    typeof itemDescriptionContext
+  >(this, {
     context: itemDescriptionContext,
     initialValue: null,
   });

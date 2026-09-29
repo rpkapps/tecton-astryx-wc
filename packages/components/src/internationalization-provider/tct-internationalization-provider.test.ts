@@ -23,7 +23,10 @@ import type {TctInternationalizationProvider} from './tct-internationalization-p
 /** Reads locale, direction, strings and formatters the way every family does, via LocaleController. */
 class TestLocaleProbe extends TctElement {
   static override readonly tagName = 'tct-test-locale-probe';
-  readonly i18n = new LocaleController(this, {namespace: 'spinner', defaults: english});
+  readonly i18n: LocaleController = new LocaleController(this, {
+    namespace: 'spinner',
+    defaults: english,
+  });
   override render() {
     return html`<span id="text">${this.i18n.t('loading', undefined, 'loading-label')}</span>`;
   }

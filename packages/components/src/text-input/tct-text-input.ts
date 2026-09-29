@@ -236,15 +236,25 @@ export class TctTextInput extends FormControlMixin(TctElement) {
     else super.value = value;
   }
 
-  readonly #ids = new IdController(this, 'tct-text-input');
-  readonly #size = new SizeController<TextInputSize>(this, {
+  readonly #ids: IdController = new IdController(this, 'tct-text-input');
+  readonly #size: SizeController<TextInputSize> = new SizeController<TextInputSize>(this, {
     explicit: () => (this.size ? oneOf(this.size, TEXT_INPUT_SIZES, 'md') : undefined),
     fallback: 'md',
   });
-  readonly #slots = new SlotController(this, 'input', 'start', 'end');
-  readonly #layout = new ContextConsumer(this, {context: formLayoutContext, subscribe: true});
-  readonly #group = new ContextConsumer(this, {context: inputGroupContext, subscribe: true});
-  readonly #locale = new LocaleController(this, {
+  readonly #slots: SlotController = new SlotController(this, 'input', 'start', 'end');
+  readonly #layout: ContextConsumer<typeof formLayoutContext> = new ContextConsumer<
+    typeof formLayoutContext
+  >(this, {
+    context: formLayoutContext,
+    subscribe: true,
+  });
+  readonly #group: ContextConsumer<typeof inputGroupContext> = new ContextConsumer<
+    typeof inputGroupContext
+  >(this, {
+    context: inputGroupContext,
+    subscribe: true,
+  });
+  readonly #locale: LocaleController = new LocaleController(this, {
     namespace: 'textInput',
     defaults: {...textInputMessages, ...inputMessages, ...fieldMessages},
   });

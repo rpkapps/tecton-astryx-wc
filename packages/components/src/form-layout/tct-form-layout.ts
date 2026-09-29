@@ -49,7 +49,9 @@ export class TctFormLayout extends TctElement {
    */
   @property({attribute: 'default-optionality'}) defaultOptionality: FormOptionality | undefined;
 
-  readonly #context = new ContextProvider(this, {
+  readonly #context: ContextProvider<typeof formLayoutContext> = new ContextProvider<
+    typeof formLayoutContext
+  >(this, {
     context: formLayoutContext,
     initialValue: {direction: 'vertical'},
   });

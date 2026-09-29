@@ -78,18 +78,29 @@ export class TctToolbar extends TctElement {
   /** Sides that draw a divider rule: any of `top`, `bottom`, `start`, `end` (attribute: space separated). */
   @property({converter: dividersConverter, reflect: true}) dividers: ToolbarDivider[] = [];
 
-  readonly #size = new SizeController(this, {explicit: () => this.size, fallback: 'md'});
-  readonly #sizeProvider = new ContextProvider(this, {context: sizeContext, initialValue: null});
-
-  readonly #roving = new RovingTabindexController<HTMLElement>(this, {
-    items: () => [...this.children].flatMap((child) => focusableLeaves(child)),
-    orientation: () => this.#orientation(),
-    wrap: true,
-    // Arrow keys stay with a text field while the caret can still move; only at the edge do they leave it.
-    caretGuard: true,
+  readonly #size: SizeController = new SizeController(this, {
+    explicit: () => this.size,
+    fallback: 'md',
+  });
+  readonly #sizeProvider: ContextProvider<typeof sizeContext> = new ContextProvider<
+    typeof sizeContext
+  >(this, {
+    context: sizeContext,
+    initialValue: null,
   });
 
-  readonly #hint = new KeyboardHintController(this, {orientation: () => this.#orientation()});
+  readonly #roving: RovingTabindexController<HTMLElement> =
+    new RovingTabindexController<HTMLElement>(this, {
+      items: () => [...this.children].flatMap((child) => focusableLeaves(child)),
+      orientation: () => this.#orientation(),
+      wrap: true,
+      // Arrow keys stay with a text field while the caret can still move; only at the edge do they leave it.
+      caretGuard: true,
+    });
+
+  readonly #hint: KeyboardHintController = new KeyboardHintController(this, {
+    orientation: () => this.#orientation(),
+  });
 
   constructor() {
     super();

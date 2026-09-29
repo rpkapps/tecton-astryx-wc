@@ -27,7 +27,7 @@ export class TctMetadataListItem extends TctElement {
   /** The label text (required). */
   @property() label = '';
 
-  readonly #slots = new SlotController(this, 'icon');
+  readonly #slots: SlotController = new SlotController(this, 'icon');
 
   protected override willUpdate(): void {
     this.internals.role = 'listitem';

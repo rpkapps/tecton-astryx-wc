@@ -37,8 +37,19 @@ class TctTestMember extends TctElement {
   static override readonly tagName = 'tct-test-member';
   static override shadowRootOptions = {...TctElement.shadowRootOptions, delegatesFocus: true};
   @property({type: Boolean, reflect: true}) disabled = false;
-  readonly #group = new ContextConsumer(this, {context: buttonGroupContext, subscribe: true});
-  readonly #size = new ContextConsumer(this, {context: sizeContext, subscribe: true});
+  readonly #group: ContextConsumer<typeof buttonGroupContext> = new ContextConsumer<
+    typeof buttonGroupContext
+  >(this, {
+    context: buttonGroupContext,
+    subscribe: true,
+  });
+  readonly #size: ContextConsumer<typeof sizeContext> = new ContextConsumer<typeof sizeContext>(
+    this,
+    {
+      context: sizeContext,
+      subscribe: true,
+    },
+  );
   get received(): ButtonGroupContextValue | null | undefined {
     return this.#group.value;
   }

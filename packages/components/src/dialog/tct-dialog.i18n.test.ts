@@ -24,7 +24,12 @@ import type {TctDialogHeader} from './tct-dialog-header.js';
 
 class TctTestLocaleProvider extends TctElement {
   static override readonly tagName = 'tct-test-locale-provider';
-  readonly provider = new ContextProvider(this, {context: localeContext, initialValue: null});
+  readonly provider: ContextProvider<typeof localeContext> = new ContextProvider<
+    typeof localeContext
+  >(this, {
+    context: localeContext,
+    initialValue: null,
+  });
   set value(value: LocaleContextValue | null) {
     this.provider.setValue(value);
   }

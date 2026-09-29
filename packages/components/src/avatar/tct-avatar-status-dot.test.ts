@@ -18,7 +18,9 @@ import type {TctAvatarStatusDot} from './tct-avatar-status-dot.js';
 class TctTestAvatarHost extends TctElement {
   static override readonly tagName = 'tct-test-avatar-host';
   readonly reports = new Map<Element, string | undefined>();
-  readonly provider = new ContextProvider(this, {
+  readonly provider: ContextProvider<typeof avatarContext> = new ContextProvider<
+    typeof avatarContext
+  >(this, {
     context: avatarContext,
     initialValue: {
       size: 36,

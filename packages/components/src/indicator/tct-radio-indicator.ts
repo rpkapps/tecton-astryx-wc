@@ -41,7 +41,7 @@ export class TctRadioIndicator extends TctElement {
   /** Whether the owning control is disabled. Purely visual; the owner keeps the real disabled semantics. */
   @property({type: Boolean, reflect: true}) disabled = false;
 
-  readonly #slots = new SlotController(this, 'default');
+  readonly #slots: SlotController = new SlotController(this, 'default');
 
   protected override willUpdate(changed: PropertyValues<this>): void {
     // Decorative by contract: hidden from assistive technology whatever the author writes on the host.

@@ -31,16 +31,21 @@ class TctTestContext extends TctElement {
   static override readonly tagName = 'tct-test-context';
   readonly calls: {href: string; event: MouseEvent}[] = [];
   handled = true;
-  readonly router = new ContextProvider(this, {
-    context: linkContext,
-    initialValue: {
-      navigate: (href, event) => {
-        this.calls.push({href, event});
-        return this.handled;
-      },
-    } satisfies LinkContextValue,
-  });
-  readonly interactive = new ContextProvider(this, {
+  readonly router: ContextProvider<typeof linkContext> = new ContextProvider<typeof linkContext>(
+    this,
+    {
+      context: linkContext,
+      initialValue: {
+        navigate: (href, event) => {
+          this.calls.push({href, event});
+          return this.handled;
+        },
+      } satisfies LinkContextValue,
+    },
+  );
+  readonly interactive: ContextProvider<typeof interactiveRoleContext> = new ContextProvider<
+    typeof interactiveRoleContext
+  >(this, {
     context: interactiveRoleContext,
     initialValue: false,
   });

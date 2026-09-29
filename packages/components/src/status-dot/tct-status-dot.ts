@@ -50,7 +50,7 @@ export class TctStatusDot extends TctElement {
    */
   @property() tooltip = '';
 
-  readonly #slots = new SlotController(this, 'icon');
+  readonly #slots: SlotController = new SlotController(this, 'icon');
 
   // The surface lives in this shadow root next to the dot (its trigger), so the dot's
   // `aria-describedby` stays inside one tree. The dot never takes focus. [mwg:interest-triggered-tooltips]

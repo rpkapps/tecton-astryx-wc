@@ -84,8 +84,16 @@ export class TctFieldLabel extends TctElement {
    */
   @property() indicator = '';
 
-  readonly #locale = new LocaleController(this, {namespace: 'field', defaults: fieldMessages});
-  readonly #layout = new ContextConsumer(this, {context: formLayoutContext, subscribe: true});
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'field',
+    defaults: fieldMessages,
+  });
+  readonly #layout: ContextConsumer<typeof formLayoutContext> = new ContextConsumer<
+    typeof formLayoutContext
+  >(this, {
+    context: formLayoutContext,
+    subscribe: true,
+  });
 
   /** The text of the indicator: the owner's, else "Optional" or "Required" (only when it differs from the form default). */
   #indicatorText(): string {

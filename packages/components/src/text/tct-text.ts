@@ -108,7 +108,7 @@ export class TctText extends TctElement {
   /** Host semantics: `span` (default), `p` (paragraph), `div`, `label`, or `h1`-`h3` (headings). */
   @property() as: TextElement = 'span';
 
-  readonly #tooltip = new TruncationTooltip(this, {
+  readonly #tooltip: TruncationTooltip = new TruncationTooltip(this, {
     target: () => this.shadowRoot?.querySelector<HTMLElement>('.text'),
     maxLines: () => this.#lines,
     disabled: () => this.noTruncateTooltip,

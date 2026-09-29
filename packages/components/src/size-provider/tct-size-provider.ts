@@ -27,7 +27,13 @@ export class TctSizeProvider extends TctProviderElement {
   /** Default size for the controls inside: `sm`, `md` or `lg`. Unset: controls use their own default. */
   @property({reflect: true}) size: ElementSize | undefined = undefined;
 
-  readonly #provider = new ContextProvider(this, {context: sizeContext, initialValue: null});
+  readonly #provider: ContextProvider<typeof sizeContext> = new ContextProvider<typeof sizeContext>(
+    this,
+    {
+      context: sizeContext,
+      initialValue: null,
+    },
+  );
 
   #publish(): void {
     const size = this.size;

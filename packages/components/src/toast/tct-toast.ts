@@ -100,7 +100,10 @@ export class TctToast extends TctElement {
 
   // -------------------------------------------------------------------------------- internals
 
-  readonly #locale = new LocaleController(this, {namespace: 'toast', defaults: defaultMessages});
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'toast',
+    defaults: defaultMessages,
+  });
   #timer: ReturnType<typeof setTimeout> | undefined;
   #paused = false;
   #remaining = DEFAULT_AUTO_HIDE_MS;

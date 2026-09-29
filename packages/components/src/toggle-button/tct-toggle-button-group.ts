@@ -63,11 +63,16 @@ export class TctToggleButtonGroup extends TctElement {
   /** Disables every button. A member cannot re-enable itself, but a member may disable itself. */
   @property({type: Boolean, reflect: true}) disabled = false;
 
-  readonly #size = new SizeController(this, {explicit: () => this.size, fallback: 'md'});
+  readonly #size: SizeController = new SizeController(this, {
+    explicit: () => this.size,
+    fallback: 'md',
+  });
   #current: string[] | undefined;
   #lastKey = '';
   #context: ToggleButtonGroupContextValue | undefined;
-  readonly #provider = new ContextProvider(this, {
+  readonly #provider: ContextProvider<typeof toggleButtonGroupContext> = new ContextProvider<
+    typeof toggleButtonGroupContext
+  >(this, {
     context: toggleButtonGroupContext,
     initialValue: null,
   });

@@ -72,8 +72,13 @@ export class TctAvatarStatusDot extends TctElement {
    */
   @property() label: string | undefined;
 
-  readonly #avatar = new ContextConsumer(this, {context: avatarContext, subscribe: true});
-  readonly #slots = new SlotController(this, 'icon');
+  readonly #avatar: ContextConsumer<typeof avatarContext> = new ContextConsumer<
+    typeof avatarContext
+  >(this, {
+    context: avatarContext,
+    subscribe: true,
+  });
+  readonly #slots: SlotController = new SlotController(this, 'icon');
   #reportedTo: AvatarContextValue | undefined;
 
   override connectedCallback(): void {

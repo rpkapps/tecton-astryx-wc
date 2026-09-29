@@ -38,7 +38,7 @@ export class TctTestTooltip extends TctElement {
   @property({type: Boolean}) disabledTip = false;
   @property() strategy: 'auto' | 'css' | 'js' = 'auto';
 
-  readonly tooltip = new TooltipController(this, {
+  readonly tooltip: TooltipController = new TooltipController(this, {
     mode: 'satellite',
     surfaceTag: 'div',
     trigger: () => this.querySelector<HTMLElement>(':scope > :not([data-tct-owned])'),

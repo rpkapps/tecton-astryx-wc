@@ -26,7 +26,12 @@ const LIGHT_SURFACE = 'rgb(250, 250, 252)';
 
 /** A stand-in for any element that reads the theme: shows the mode it received. */
 class TestThemeReader extends LitElement {
-  readonly consumer = new ContextConsumer(this, {context: themeContext, subscribe: true});
+  readonly consumer: ContextConsumer<typeof themeContext> = new ContextConsumer<
+    typeof themeContext
+  >(this, {
+    context: themeContext,
+    subscribe: true,
+  });
   protected override render() {
     const value = this.consumer.value;
     return html`<span data-name=${value?.name ?? 'none'} data-mode=${value?.mode ?? 'none'}
@@ -37,7 +42,9 @@ class TestThemeReader extends LitElement {
 
 /** A stand-in for tct-theme (WP-F): provides a named theme and a mode. */
 class TestThemeProvider extends LitElement {
-  readonly provider = new ContextProvider(this, {
+  readonly provider: ContextProvider<typeof themeContext> = new ContextProvider<
+    typeof themeContext
+  >(this, {
     context: themeContext,
     initialValue: {name: 'acme', mode: 'dark'},
   });

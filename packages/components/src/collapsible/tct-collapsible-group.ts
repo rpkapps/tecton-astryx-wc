@@ -60,7 +60,9 @@ export class TctCollapsibleGroup extends TctElement {
   #current: string[] | undefined;
   #lastKey = '';
   #context: CollapsibleGroupContextValue | undefined;
-  readonly #provider = new ContextProvider(this, {
+  readonly #provider: ContextProvider<typeof collapsibleGroupContext> = new ContextProvider<
+    typeof collapsibleGroupContext
+  >(this, {
     context: collapsibleGroupContext,
     initialValue: null,
   });

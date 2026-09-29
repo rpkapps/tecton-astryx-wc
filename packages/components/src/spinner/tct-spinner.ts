@@ -82,7 +82,10 @@ export class TctSpinner extends TctElement {
    */
   @property() label = '';
 
-  readonly #locale = new LocaleController(this, {namespace: 'spinner', defaults: english});
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'spinner',
+    defaults: english,
+  });
   #circle: SVGCircleElement | null = null;
 
   protected override willUpdate(changed: PropertyValues): void {

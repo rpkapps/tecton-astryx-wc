@@ -20,7 +20,13 @@ import type {TctSizeProvider} from './tct-size-provider.js';
 /** A consumer written the way any family reads the context, with no button in the way. */
 class TestSizeProbe extends TctElement {
   static override readonly tagName = 'tct-test-size-probe';
-  readonly consumer = new ContextConsumer(this, {context: sizeContext, subscribe: true});
+  readonly consumer: ContextConsumer<typeof sizeContext> = new ContextConsumer<typeof sizeContext>(
+    this,
+    {
+      context: sizeContext,
+      subscribe: true,
+    },
+  );
   get size(): string | null | undefined {
     return this.consumer.value;
   }

@@ -92,9 +92,12 @@ export class TctTreeList extends TctElement {
   /** Overrides the accessible name of the expand/collapse toggle ("Toggle children"). */
   @property({attribute: 'toggle-children-label'}) toggleChildrenLabel = '';
 
-  readonly #slots = new SlotController(this, 'header');
-  readonly #ids = new IdController(this, 'tct-tree-list');
-  readonly #locale = new LocaleController(this, {namespace: 'treeList', defaults});
+  readonly #slots: SlotController = new SlotController(this, 'header');
+  readonly #ids: IdController = new IdController(this, 'tct-tree-list');
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'treeList',
+    defaults,
+  });
   readonly #focus: TreeFocusController = new TreeFocusController(this, {
     tree: () => this.renderRoot?.querySelector<HTMLElement>('.tree'),
     rovingTabindex: true,

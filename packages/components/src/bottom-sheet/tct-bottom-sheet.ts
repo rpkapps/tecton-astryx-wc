@@ -179,11 +179,13 @@ export class TctBottomSheet extends TctElement implements SwitcherSheet {
 
   // -------------------------------------------------------------------------------- internals
 
-  readonly #locale = new LocaleController(this, {
+  readonly #locale: LocaleController = new LocaleController(this, {
     namespace: 'resizable',
     defaults: defaultMessages,
   });
-  readonly #switcherContext = new ContextConsumer(this, {
+  readonly #switcherContext: ContextConsumer<typeof sheetSwitcherContext> = new ContextConsumer<
+    typeof sheetSwitcherContext
+  >(this, {
     context: sheetSwitcherContext,
     subscribe: true,
   });

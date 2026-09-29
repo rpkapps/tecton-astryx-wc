@@ -183,11 +183,27 @@ export class TctButton extends TctElement {
   @state() private _pending = false;
   @state() private _fieldsetDisabled = false;
 
-  readonly #locale = new LocaleController(this, {namespace: 'button', defaults: english});
-  readonly #slots = new SlotController(this, 'default', 'icon', 'end');
-  readonly #group = new ContextConsumer(this, {context: buttonGroupContext, subscribe: true});
-  readonly #link = new ContextConsumer(this, {context: linkContext});
-  readonly #size = new SizeController(this, {explicit: () => this.size, fallback: 'md'});
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'button',
+    defaults: english,
+  });
+  readonly #slots: SlotController = new SlotController(this, 'default', 'icon', 'end');
+  readonly #group: ContextConsumer<typeof buttonGroupContext> = new ContextConsumer<
+    typeof buttonGroupContext
+  >(this, {
+    context: buttonGroupContext,
+    subscribe: true,
+  });
+  readonly #link: ContextConsumer<typeof linkContext> = new ContextConsumer<typeof linkContext>(
+    this,
+    {
+      context: linkContext,
+    },
+  );
+  readonly #size: SizeController = new SizeController(this, {
+    explicit: () => this.size,
+    fallback: 'md',
+  });
   #inFlight = false;
   #wasLoading = false;
   #appliedWidth: string | undefined;

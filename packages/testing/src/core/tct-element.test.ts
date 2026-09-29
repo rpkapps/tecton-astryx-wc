@@ -24,7 +24,7 @@ class TctTestBase extends TctElement {
   connects = 0;
   disconnects = 0;
   moves = 0;
-  readonly ids = new IdController(this, 'tct-test');
+  readonly ids: IdController = new IdController(this, 'tct-test');
 
   override connectedCallback(): void {
     super.connectedCallback();
@@ -360,7 +360,7 @@ describe('dev diagnostics and IME helpers', () => {
   it('ImeGuard tracks composition on the target and clears on blur', async () => {
     class Host extends TctElement {
       static override readonly tagName = 'tct-test-ime';
-      readonly guard = new ImeGuard(this, () => this.renderRoot.querySelector('input'));
+      readonly guard: ImeGuard = new ImeGuard(this, () => this.renderRoot.querySelector('input'));
       override render() {
         return html`<input />`;
       }

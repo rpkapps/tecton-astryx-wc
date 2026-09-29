@@ -64,8 +64,11 @@ export class TctCitation extends TctElement {
 
   @state() private imageFailed = false;
 
-  readonly #slots = new SlotController(this, 'icon');
-  readonly #locale = new LocaleController(this, {namespace: 'citation', defaults});
+  readonly #slots: SlotController = new SlotController(this, 'icon');
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'citation',
+    defaults,
+  });
 
   protected override willUpdate(changed: PropertyValues<this>): void {
     if (changed.has('variant') && !CITATION_VARIANTS.includes(this.variant)) {

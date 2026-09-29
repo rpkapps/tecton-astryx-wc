@@ -92,8 +92,13 @@ export class TctToggleButton extends TctElement {
   @property({attribute: false}) pressedChangeAction:
     ((pressed: boolean) => void | Promise<void>) | undefined;
 
-  readonly #group = new ContextConsumer(this, {context: toggleButtonGroupContext, subscribe: true});
-  readonly #slots = new SlotController(this, 'default', 'icon', 'pressed-icon');
+  readonly #group: ContextConsumer<typeof toggleButtonGroupContext> = new ContextConsumer<
+    typeof toggleButtonGroupContext
+  >(this, {
+    context: toggleButtonGroupContext,
+    subscribe: true,
+  });
+  readonly #slots: SlotController = new SlotController(this, 'default', 'icon', 'pressed-icon');
   /** Set when the intent event was prevented: the click must not run the pressed-change action. */
   #skipAction = false;
 

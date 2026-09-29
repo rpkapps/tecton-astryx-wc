@@ -43,11 +43,13 @@ export class TctSegmentedControlItem extends TctElement {
   /** Disables this segment only. It is skipped by arrow keys and cannot be selected. */
   @property({type: Boolean, reflect: true}) disabled = false;
 
-  readonly #context = new ContextConsumer(this, {
+  readonly #context: ContextConsumer<typeof segmentedControlContext> = new ContextConsumer<
+    typeof segmentedControlContext
+  >(this, {
     context: segmentedControlContext,
     subscribe: true,
   });
-  readonly #slots = new SlotController(this, 'icon');
+  readonly #slots: SlotController = new SlotController(this, 'icon');
 
   constructor() {
     super();

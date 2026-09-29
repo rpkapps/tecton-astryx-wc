@@ -70,17 +70,28 @@ export class TctAvatarGroup extends TctElement {
   /** Shape of every member and of the overflow indicator. Wins over the members' own `shape`. */
   @property({reflect: true}) shape: AvatarShape = 'circle';
 
-  readonly #provider = new ContextProvider(this, {context: avatarGroupContext, initialValue: null});
-  readonly #locale = new LocaleController(this, {namespace: 'avatarGroup', defaults});
-  readonly #ids = new IdController(this, 'tct-avatar-group');
+  readonly #provider: ContextProvider<typeof avatarGroupContext> = new ContextProvider<
+    typeof avatarGroupContext
+  >(this, {
+    context: avatarGroupContext,
+    initialValue: null,
+  });
+  readonly #locale: LocaleController = new LocaleController(this, {
+    namespace: 'avatarGroup',
+    defaults,
+  });
+  readonly #ids: IdController = new IdController(this, 'tct-avatar-group');
   readonly #observer = new MutationObserver(() => {
     this.requestUpdate();
   });
-  readonly #roving = new RovingTabindexController<AvatarItem>(this, {
-    items: () => this.#items(),
-    orientation: 'horizontal',
-    focusTarget: (item) => item.control,
-  });
+  readonly #roving: RovingTabindexController<AvatarItem> = new RovingTabindexController<AvatarItem>(
+    this,
+    {
+      items: () => this.#items(),
+      orientation: 'horizontal',
+      focusTarget: (item) => item.control,
+    },
+  );
 
   /** @internal Re-renders when the host `aria-label` or `aria-describedby` changes. */
   override attributeChangedCallback(name: string, old: string | null, value: string | null): void {

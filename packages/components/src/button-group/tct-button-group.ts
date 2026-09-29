@@ -60,19 +60,28 @@ export class TctButtonGroup extends TctElement {
   /** Disables every member. A disabled member drops focus, so do not use it to show a pending action. */
   @property({type: Boolean, reflect: true}) disabled = false;
 
-  readonly #size = new SizeController(this, {explicit: () => this.size, fallback: 'md'});
-  readonly #sizeProvider = new ContextProvider(this, {context: sizeContext, initialValue: null});
-  readonly #members = new ButtonGroupMemberContext(this);
-
-  readonly #roving = new RovingTabindexController<HTMLElement>(this, {
-    items: () => groupMembers(this),
-    orientation: () => this.#resolvedOrientation(),
-    wrap: true,
-    focusTarget: (member) => focusTargetOf(member),
-    isDisabled: (member) => this.disabled || isMemberDisabled(member),
-    // A member that opens its own layer (a menu) keeps the arrow keys pressed inside it.
-    boundary: () => true,
+  readonly #size: SizeController = new SizeController(this, {
+    explicit: () => this.size,
+    fallback: 'md',
   });
+  readonly #sizeProvider: ContextProvider<typeof sizeContext> = new ContextProvider<
+    typeof sizeContext
+  >(this, {
+    context: sizeContext,
+    initialValue: null,
+  });
+  readonly #members: ButtonGroupMemberContext = new ButtonGroupMemberContext(this);
+
+  readonly #roving: RovingTabindexController<HTMLElement> =
+    new RovingTabindexController<HTMLElement>(this, {
+      items: () => groupMembers(this),
+      orientation: () => this.#resolvedOrientation(),
+      wrap: true,
+      focusTarget: (member) => focusTargetOf(member),
+      isDisabled: (member) => this.disabled || isMemberDisabled(member),
+      // A member that opens its own layer (a menu) keeps the arrow keys pressed inside it.
+      boundary: () => true,
+    });
 
   constructor() {
     super();

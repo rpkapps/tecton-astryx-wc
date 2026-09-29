@@ -54,7 +54,12 @@ export class TctInternationalizationProvider extends TctProviderElement {
    */
   @property({attribute: false}) overrides: Overrides | undefined = undefined;
 
-  readonly #provider = new ContextProvider(this, {context: localeContext, initialValue: null});
+  readonly #provider: ContextProvider<typeof localeContext> = new ContextProvider<
+    typeof localeContext
+  >(this, {
+    context: localeContext,
+    initialValue: null,
+  });
   #reflectedLang = false;
 
   override attributeChangedCallback(

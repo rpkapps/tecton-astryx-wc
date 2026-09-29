@@ -131,8 +131,13 @@ export class TctDialog extends TctElement {
   /** Hides the close button of the `heading` shorthand (a `required` dialog has none anyway). */
   @property({type: Boolean, attribute: 'no-close-button'}) noCloseButton = false;
 
-  readonly #slots = new SlotController(this, 'heading');
-  readonly #provider = new ContextProvider(this, {context: dialogContext, initialValue: null});
+  readonly #slots: SlotController = new SlotController(this, 'heading');
+  readonly #provider: ContextProvider<typeof dialogContext> = new ContextProvider<
+    typeof dialogContext
+  >(this, {
+    context: dialogContext,
+    initialValue: null,
+  });
   #contextValue: DialogContextValue | null = null;
   #header: DialogHeaderLike | null = null;
   /** The element that opened the dialog through a declarative invoker (it gets `aria-expanded`). */
@@ -143,7 +148,7 @@ export class TctDialog extends TctElement {
   #opened = false;
   #warned = false;
 
-  readonly #aria = new AriaDelegateController(this, {
+  readonly #aria: AriaDelegateController = new AriaDelegateController(this, {
     target: () => this.#surface,
     // The heading names the dialog unless the author gave it an aria-label or aria-labelledby.
     labels: () => {
