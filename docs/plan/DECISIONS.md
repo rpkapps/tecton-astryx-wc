@@ -158,3 +158,42 @@ ARCHITECTURE §1 / A-01 is confirmed.
 - **Tier 2 (degraded):** Chrome ≥ 116, Firefox ≥ 125, Safari ≥ 17.
 
 This is the project's recorded custom browser policy for modern-web-guidance.
+
+## D-011 — Full parity for agentic AI coding support (owner, 2026-09-29)
+
+The owner requires **all** of Astryx's AI coding-agent support. This supersedes the inventory's
+"docs/reference capability only" reading of `@astryxdesign/cli`. Upstream surface to match (from
+`packages/cli`, `apps/docsite/src/app/mcp`, `working-with-ai.doc.mjs`, `internal/vibe-tests`):
+
+1. **Per-component agent metadata**, authored from the first component onward:
+   - `keywords` (the search index);
+   - a dense doc: a one-line description, dense usage, best practices as do/don't, and one-line
+     property descriptions (upstream `docsDense`);
+   - compound/related awareness (e.g. Table → its plugins).
+2. **CLI** (`tct` bin in a new private `@tecton-astryx/cli` package). Commands:
+   - `component` (list / detail / props / examples / source), `docs <topic>` (list / section), `discover`,
+     `search`, and the equivalent of `hook` (controllers and utilities);
+   - `doctor`, `gap-report`, and `layout` (grammar / check / expand);
+   - `init --features agents` with `--agent claude|cursor|codex` and `--agent-docs-path`, which generates
+     AGENTS.md, `.claude/CLAUDE.md` or `.cursorrules` blocks: component index, behavioural rules, CLI
+     reference;
+   - `upgrade` (stale-block detection plus `--apply`).
+
+   Every command supports `--dense` (token-efficient) and `--json` (stable envelope, like upstream
+   `./json`: `parseResponse`, `isError`, `assertResponse`).
+3. **MCP server** exposing `search(query)` and `get(name)`: keyword index, compound awareness, about
+   1.5K tokens per brief result, showcase examples. It ships as `tct mcp` (stdio) and as a docs-site
+   HTTP route. It is in-house JSON-RPC unless the owner approves an MCP SDK; any SDK needs a licence
+   check and approval first (D-007).
+4. **`llms.txt`** plus JSON/Markdown reference output, generated from the CEM and docs.
+5. **The "Working with AI" docs guide**, adapted to `tct` and Web Components.
+6. **Agent-eval harness** equivalent to upstream `vibe-tests`: fixture prompts that check an agent
+   produces correct `tct-*` code with the agent docs (internal, WP-H).
+
+Out of scope, as per the plan: the templates library (so `template` commands and the template steps
+of the agent workflow are deferred) and the playground. Upstream's non-agent CLI commands (`theme`,
+`build`, `swizzle`, `integration`, `blog`) are tracked separately as a follow-up.
+
+Consequences: CONVENTIONS §7 frontmatter gains `keywords` and a `dense` block, required for every
+component including WP-F. A new work package, **WP-AI**, is added after WP-F, and the MCP server and
+CLI read the same generated registry as the docs site.

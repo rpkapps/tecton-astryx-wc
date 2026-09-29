@@ -210,8 +210,22 @@ category: Action                    # one of the 11 upstream categories
 entries: [Button]                   # upstream names documented on this page (incl. subcomponents)
 summary: Triggers an action when activated.
 examples: [variants, sizes, icons, loading, disabled-with-reason, in-form]   # order on the page
+keywords: [button, btn, cta, submit, action, loading, primary, secondary, ghost, destructive, danger]  # agent/search index (D-011); start from upstream `keywords`
+dense:                              # agent-facing dense doc (D-011); port upstream `docsDense`, adapted to WC
+  description: action trigger w/ 4 variants, 3 sizes, loading state
+  usage: Triggers an action when activated. Use for form submission, confirmation or any clear CTA.
+  bestPractices:
+    - {do: true,  text: 'Primary for the single most important action; secondary or ghost for the rest.'}
+    - {do: false, text: 'Button for navigation; use tct-link when it only goes to another page.'}
+  properties:                       # one line per public attribute/property/slot/event name
+    variant: visual style variant
+    loading: shows spinner, blocks activation, announces via live region
+related: [icon-button, button-group, link]   # compound/related folders for agent 'get' results
 ---
 ```
+
+`keywords` and `dense` are required (D-011); `tools/check-parity.ts` fails when they are missing or when
+`dense.properties` omits a public API name from the CEM.
 
 ### Required authored sections (H2, in this order; the generator fails when one is missing)
 

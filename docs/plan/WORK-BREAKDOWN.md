@@ -736,6 +736,27 @@ revision; spacing-exceptions review (plan §6); manual AT matrix records.
 
 ---
 
+### WP-AI — Agentic AI coding support (D-011; one engineer; from wave 1, needs WP-F)
+
+Full parity with upstream Astryx's agent tooling (`/home/user/refs/astryx/packages/cli`,
+`apps/docsite/src/app/mcp/route.ts`, `packages/cli/assets/docs/working-with-ai.doc.mjs`,
+`internal/vibe-tests`).
+
+- New private package `packages/cli` (`@tecton-astryx/cli`, bin `tct`). It reads one generated
+  **agent registry** (`tools/generate` output: CEM + docs frontmatter `keywords`/`dense`/`related` +
+  examples + tokens + docs topics). The docs site and the MCP route read the same registry.
+- Commands: `component`, `docs`, `discover`, `search`, `controllers` (upstream `hook`), `doctor`,
+  `gap-report`, `layout` (grammar/check/expand, ported to `tct-*` markup), `init --features agents`
+  (`--agent claude|cursor|codex`, `--agent-docs-path`), and `upgrade` (stale-block detection + `--apply`).
+  All support `--dense` and `--json`, with a stable JSON envelope API (`@tecton-astryx/cli/json`).
+- MCP server: `search(query)` + `get(name)`, available as `tct mcp` (stdio) and as a docs-site route.
+  Implement in-house JSON-RPC unless the owner approves an SDK.
+- `llms.txt`, `llms-full.txt`, JSON/Markdown reference output; the "Working with AI" guide page.
+- Tests port the upstream CLI contract tests that apply (exit codes, JSON contract, dense projection,
+  init behaviour, upgrade file protection, MCP search/get).
+- Grows with the batches: each later work package only adds frontmatter; WP-AI owns no component folders.
+- Agent-eval harness (upstream vibe-tests equivalent) is delivered with WP-H.
+
 ## 6. Extension packages (after core; separate set)
 
 Tags: lab → `tct-lab-*`; charts, richtext, vega → `tct-*` (A§7.1). Packages `@tecton-astryx/{lab,charts,richtext,vega}`
