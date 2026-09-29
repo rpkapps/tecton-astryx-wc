@@ -94,7 +94,9 @@
         }
       ],
       "keyboard": [],
-      "form": {"formAssociated": false},
+      "form": {
+        "formAssociated": false
+      },
       "differences": [
         {
           "id": "TIMER-01",
@@ -117,8 +119,8 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
-      "notes": "Guides: [mwg:format-human-readable-durations] Intl.NumberFormat unit style used instead of Intl.DurationFormat to keep the zero-padded shape; [mwg:styling-web-components] parts and inherited typography."
+      "sizeBudgetKb": 41,
+      "notes": "Guides: [mwg:format-human-readable-durations] Intl.NumberFormat unit style used instead of Intl.DurationFormat to keep the zero-padded shape; [mwg:styling-web-components] parts and inherited typography. Size: measured 38.94 kB gzip on 2026-09-29 (family entry with lit, core and the shared tooltip/layer/locale runtime inlined), budget 41 kB; revisit when the shared runtime is split out of family entries."
     }
   }
 }

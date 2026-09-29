@@ -39,6 +39,7 @@ dense:
     default: link content
     control: the inner anchor or button
     navigate: tct-link-provider property (href, event) => boolean; return true to handle the navigation yourself
+    click: native click, retargeted from the inner anchor or button; a disabled link never fires it
 related: [button, text, avatar]
 ---
 

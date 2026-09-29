@@ -207,8 +207,8 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
-      "notes": "Guides: [mwg:accessible-web-components] name and role inside the shadow root, delegatesFocus; [mwg:styling-web-components] parts and private custom properties; [mwg:shadow-dom] slots; [mwg:security] URL policy; [mwg:contrast-color] no user-supplied colours exist upstream, so the fixed Tecton pair is used."
+      "sizeBudgetKb": 47,
+      "notes": "Guides: [mwg:accessible-web-components] name and role inside the shadow root, delegatesFocus; [mwg:styling-web-components] parts and private custom properties; [mwg:shadow-dom] slots; [mwg:security] URL policy; [mwg:contrast-color] no user-supplied colours exist upstream, so the fixed Tecton pair is used. Size: measured 44.42 kB gzip on 2026-09-29 (family entry with lit, core and the shared tooltip/layer/locale runtime inlined), budget 47 kB; revisit when the shared runtime is split out of family entries."
     },
     "core.avatar-status-dot": {
       "tag": "tct-avatar-status-dot",

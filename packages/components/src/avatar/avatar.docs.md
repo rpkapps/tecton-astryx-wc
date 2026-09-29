@@ -38,6 +38,8 @@ dense:
     icon: slot for an icon inside the status dot (medium and large avatars)
     count: overflow count for "+N" and the name "N more"
     default: group members (tct-avatar and one overflow); overflow custom content instead of "+N"
+    aria-label: overrides the derived accessible name of an avatar, or the default name of a group (Avatars)
+    aria-describedby: on a group, merged with the keyboard hint of a group that has interactive avatars
 related: [status-dot, badge, tooltip]
 ---
 

@@ -150,8 +150,8 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
-      "notes": "Guides: [mwg:progress-ring] native <progress> not used (cannot carry marks or custom value text); [mwg:spinner] reduced-motion slowdown; [mwg:css] --_animation-reduced and forced colours; [mwg:accessible-web-components] ids in one root. [mwg:interest-triggered-tooltips] and [mwg:position-aware-tooltips] for the mark tooltips."
+      "sizeBudgetKb": 41,
+      "notes": "Guides: [mwg:progress-ring] native <progress> not used (cannot carry marks or custom value text); [mwg:spinner] reduced-motion slowdown; [mwg:css] --_animation-reduced and forced colours; [mwg:accessible-web-components] ids in one root. [mwg:interest-triggered-tooltips] and [mwg:position-aware-tooltips] for the mark tooltips. Size: measured 38.37 kB gzip on 2026-09-29 (family entry with lit, core and the shared tooltip/layer/locale runtime inlined), budget 41 kB; revisit when the shared runtime is split out of family entries."
     }
   }
 }

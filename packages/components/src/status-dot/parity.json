@@ -70,7 +70,9 @@
         }
       ],
       "keyboard": [],
-      "form": {"formAssociated": false},
+      "form": {
+        "formAssociated": false
+      },
       "differences": [
         {
           "id": "STATUS-DOT-01",
@@ -99,8 +101,8 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
-      "notes": "Guides: [mwg:accessible-web-components] role and name on the inner element; [mwg:interest-triggered-tooltips] and [mwg:position-aware-tooltips] via TooltipController; [mwg:css] reduced motion (--_animation-reduced) and forced colours."
+      "sizeBudgetKb": 23,
+      "notes": "Guides: [mwg:accessible-web-components] role and name on the inner element; [mwg:interest-triggered-tooltips] and [mwg:position-aware-tooltips] via TooltipController; [mwg:css] reduced motion (--_animation-reduced) and forced colours. Size: measured 21.35 kB gzip on 2026-09-29 (family entry with lit, core and the shared tooltip/layer/locale runtime inlined), budget 23 kB; revisit when the shared runtime is split out of family entries."
     }
   }
 }

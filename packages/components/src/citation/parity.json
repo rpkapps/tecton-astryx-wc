@@ -98,8 +98,8 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
-      "notes": "Guides: [mwg:accessible-web-components] name and role inside the shadow root, delegatesFocus; [mwg:styling-web-components] parts; [mwg:security] URL policy and rel=noopener; [mwg:shadow-dom] slot presence."
+      "sizeBudgetKb": 28,
+      "notes": "Guides: [mwg:accessible-web-components] name and role inside the shadow root, delegatesFocus; [mwg:styling-web-components] parts; [mwg:security] URL policy and rel=noopener; [mwg:shadow-dom] slot presence. Size: measured 26.5 kB gzip on 2026-09-29 (family entry with lit, core and the shared tooltip/layer/locale runtime inlined), budget 28 kB; revisit when the shared runtime is split out of family entries."
     }
   }
 }

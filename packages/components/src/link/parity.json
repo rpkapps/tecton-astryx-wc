@@ -253,8 +253,8 @@
       "provisional": [],
       "tokenRequests": [],
       "requests": [],
-      "sizeBudgetKb": null,
-      "notes": "Guides: [mwg:accessible-web-components] native a/button in the shadow root with delegatesFocus; [mwg:security] URL policy and noopener; [mwg:interest-triggered-tooltips] and [mwg:position-aware-tooltips] via TooltipController; [mwg:css] forced colours, hover only under (hover: hover). Utilities: useLinkify is the module function linkify() (linkify.ts); useLinkComponent is replaced by linkContext (tct-link-provider)."
+      "sizeBudgetKb": 49,
+      "notes": "Guides: [mwg:accessible-web-components] native a/button in the shadow root with delegatesFocus; [mwg:security] URL policy and noopener; [mwg:interest-triggered-tooltips] and [mwg:position-aware-tooltips] via TooltipController; [mwg:css] forced colours, hover only under (hover: hover). Utilities: useLinkify is the module function linkify() (linkify.ts); useLinkComponent is replaced by linkContext (tct-link-provider). Size: measured 46.71 kB gzip on 2026-09-29 (family entry with lit, core and the shared tooltip/layer/locale runtime inlined), budget 49 kB; revisit when the shared runtime is split out of family entries."
     },
     "core.link-provider": {
       "tag": "tct-link-provider",

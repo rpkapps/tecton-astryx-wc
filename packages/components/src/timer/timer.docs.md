@@ -22,6 +22,7 @@ dense:
     size: font size override (tct-text)
     color: text colour (tct-text), default secondary
     weight: font weight override (tct-text)
+    timeElement: the inner time element (the upstream ref)
 related: [text, progress-bar]
 ---
 

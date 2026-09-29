@@ -21,6 +21,7 @@ dense:
     height: height; a number is pixels, a string is any CSS length (default 100%)
     radius: corner radius scale none, 0, 1, 2, 3 (default), 4 or rounded
     index: position in a group; pulse starts 1000ms + 100ms x index after mount
+    ariaHidden: hidden from assistive technology by default, set through ElementInternals; aria-hidden="false" on the host overrides it
 related: [spinner, progress-bar, empty-state]
 ---
 

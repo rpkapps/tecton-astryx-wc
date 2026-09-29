@@ -23,6 +23,7 @@ dense:
     compact: reduced spacing and type size for constrained areas
     icon: slot for an icon or illustration above the title; decorative (aria-hidden)
     actions: slot for buttons below the description; a row by default, a column when compact
+    role: default role is status, set through ElementInternals; a host role attribute overrides it
 ---
 
 ## Purpose
