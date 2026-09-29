@@ -27,10 +27,10 @@
  *
  * After running it: `pnpm install --offline` (workspace-only lockfile changes) and `pnpm check`.
  */
-import {spawnSync} from 'node:child_process';
 import {readFileSync, readdirSync, statSync, writeFileSync} from 'node:fs';
 import {join, relative, resolve, sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {spawnPnpmSync} from '../lib/run.ts';
 
 export interface Rule {
   /** Short name printed in the summary. */
@@ -177,8 +177,7 @@ export function run({root, dryRun = false}: RunOptions): RunResult {
 /** Formats the changed files with the repository's prettier (unknown file types are ignored). */
 function format(root: string, paths: readonly string[]): void {
   for (let i = 0; i < paths.length; i += 80) {
-    const result = spawnSync(
-      'pnpm',
+    const result = spawnPnpmSync(
       [
         'exec',
         'prettier',

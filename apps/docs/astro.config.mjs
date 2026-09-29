@@ -75,7 +75,7 @@ const generate = {
   hooks: {
     'astro:config:setup': () => {
       if (process.env.TCT_GENERATED === '1') return;
-      const result = spawnSync('node', ['tools/generate.ts'], {cwd: REPO_ROOT, stdio: 'inherit'});
+      const result = spawnSync(process.execPath, ['tools/generate.ts'], {cwd: REPO_ROOT, stdio: 'inherit'});
       if (result.status !== 0) throw new Error('pnpm generate failed; the docs pages cannot be built.');
     },
   },

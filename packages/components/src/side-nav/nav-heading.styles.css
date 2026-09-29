@@ -1,0 +1,205 @@
+/*
+ * The navigation heading (side and top): an icon or logo, a name with optional lines above and below,
+ * trailing content and a chevron that opens the menu. A link heading hovers with the overlay role; a
+ * heading that opens a menu only changes the cursor (the panel is the answer). The menu panel is a top
+ * layer popover anchored to the whole heading. [mwg:css] [mwg:resilient-context-menus-and-nested-dropdowns]
+ */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .root {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    box-sizing: border-box;
+    min-block-size: var(--spacing-8);
+    padding-block: 0;
+    padding-inline: var(--spacing-2);
+    border-radius: var(--radius-element);
+    color: inherit;
+    text-decoration: none;
+    cursor: default;
+  }
+
+  /* A nav icon is a 32px circle that carries its own spacing at the start edge. */
+  .root[data-nav-icon] {
+    padding-inline-start: 0;
+  }
+
+  .link-root,
+  .trigger-root {
+    cursor: pointer;
+  }
+
+  .icon {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .icon-link {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-element);
+  }
+
+  .text {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-inline-size: 0;
+  }
+
+  .heading-row {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-1);
+  }
+
+  .superheading,
+  .subheading {
+    overflow: hidden;
+    color: var(--color-text-secondary);
+    font-size: var(--text-supporting-size);
+    line-height: var(--text-supporting-leading);
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .heading {
+    overflow: hidden;
+    color: var(--color-text-primary);
+    font-size: var(--text-large-size);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--text-large-leading);
+    text-decoration: none;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .text-link {
+    border-radius: var(--radius-inner);
+    cursor: pointer;
+  }
+
+  .end {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    margin-inline-start: auto;
+  }
+
+  /* The chevron: a 28px box that is the trigger of the menu (its name is "Open menu"). */
+  .chevron-btn {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    min-inline-size: var(--spacing-7);
+    min-block-size: var(--spacing-7);
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius-element);
+    background: transparent;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+  }
+
+  .chevron-btn tct-icon {
+    transition: rotate var(--duration-fast) var(--ease-standard);
+  }
+
+  /* The collapsed rail: a square icon control, as an item is. */
+  .rail {
+    justify-content: center;
+    inline-size: var(--_row-height);
+    padding-inline: 0;
+  }
+
+  .rail-row {
+    margin: 0;
+    color: inherit;
+  }
+
+  /*
+   * The menu panel: the slotted menu on the popover surface, in the top layer. The layer is a flex column clamped
+   * to the space the positioning leaves (max-block-size is written inline), so the menu scrolls inside it.
+   */
+  .menu-layer:popover-open {
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+
+  .menu {
+    box-sizing: border-box;
+    flex: 0 1 auto;
+    min-block-size: 0;
+    min-inline-size: 180px; /* design: upstream menu minimum width (180px) */
+    max-inline-size: calc(100vi - var(--spacing-8));
+    padding: var(--spacing-1);
+    border: var(--border-width) solid var(--color-border);
+    border-radius: var(--radius-container);
+    background: var(--color-background-popover);
+    color: var(--color-text-primary);
+    font-size: var(--text-label-size);
+    line-height: var(--text-label-leading);
+    overflow: auto;
+  }
+}
+
+@layer state {
+  @supports not selector(:popover-open) {
+    .menu-layer {
+      position: fixed;
+      display: none;
+    }
+  }
+
+  .menu:focus-visible {
+    outline: none;
+  }
+
+  .root[data-open] .chevron-btn tct-icon {
+    rotate: 180deg;
+  }
+
+  @media (hover: hover) {
+    .link-root:hover {
+      background: var(--color-overlay-hover);
+    }
+
+    .chevron-btn:hover,
+    .icon-link:hover {
+      background: var(--color-overlay-hover);
+    }
+  }
+
+  .link-root:active,
+  .chevron-btn:active {
+    background: var(--color-overlay-pressed);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .menu {
+      border-color: CanvasText;
+      background: Canvas;
+      color: CanvasText;
+    }
+  }
+}

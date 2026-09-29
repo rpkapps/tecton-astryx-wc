@@ -1,0 +1,17 @@
+<!-- title: Heading; description: The heading shows a logo, the name with a line above and below, trailing content and an optional menu to switch products or accounts. With only heading-href it is one link; with a menu and hrefs the links stay links and the chevron button opens the menu. -->
+<tct-vstack gap="4">
+  <tct-top-nav label="Heading link">
+    <tct-top-nav-heading slot="heading" heading="Acme" superheading="Suite" subheading="Team" heading-href="#acme" logo-label="Acme home">
+      <tct-nav-icon slot="logo"><tct-icon name="layers"></tct-icon></tct-nav-icon>
+    </tct-top-nav-heading>
+  </tct-top-nav>
+  <tct-top-nav label="Heading menu">
+    <tct-top-nav-heading slot="heading" heading="Acme">
+      <tct-nav-icon slot="logo"><tct-icon name="layers"></tct-icon></tct-nav-icon>
+      <tct-vstack slot="menu" gap="1" padding="2">
+        <a href="#acme">Acme</a>
+        <a href="#globex">Globex</a>
+      </tct-vstack>
+    </tct-top-nav-heading>
+  </tct-top-nav>
+</tct-vstack>

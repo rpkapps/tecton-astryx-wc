@@ -1,0 +1,121 @@
+/*
+ * The navigation row shared by `tct-side-nav-item` and the drawer form of the top navigation items
+ * (upstream `navItemStyles`): a full-width row with a leading icon, a label and trailing content. Put
+ * `.nav-row` on the element that takes focus (the `<a>` or `<button>`); `data-size` picks the height,
+ * `data-selected` marks the current page. [mwg:css] [mwg:styling-web-components]
+ *
+ * Tecton: the hover and pressed fills are the translucent overlay roles, the current page is the neutral
+ * fill, and every fill keeps the primary text role (the ink is chosen against all three). The icon rests
+ * on the secondary text role, which stays readable on the pressed fill; a selected row's icon follows the
+ * row.
+ */
+@layer component {
+  .nav-row {
+    --_row-bg: transparent;
+    --_row-fg: var(--color-text-primary);
+    --_row-icon: var(--color-text-secondary);
+    --_row-height: var(--size-element-md);
+    --_row-padding: var(--spacing-2);
+
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2);
+    box-sizing: border-box;
+    inline-size: 100%;
+    block-size: var(--_row-height);
+    margin: 0;
+    padding-block: 0;
+    padding-inline: var(--_row-padding);
+    border: 0;
+    border-radius: var(--radius-element);
+    background: var(--_row-bg);
+    color: var(--_row-fg);
+    font-family: inherit;
+    font-size: var(--text-label-size);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--text-label-leading);
+    text-align: start;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .nav-row[data-size='sm'] {
+    --_row-height: var(--size-element-sm);
+    --_row-padding: var(--spacing-1);
+  }
+
+  .nav-row[data-size='lg'] {
+    --_row-height: var(--size-element-lg);
+  }
+
+  .nav-row-icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    color: var(--_row-icon);
+  }
+
+  .nav-row-label {
+    flex: 1;
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .nav-row-end {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+  }
+}
+
+@layer state {
+  .nav-row[data-selected] {
+    --_row-bg: var(--color-neutral);
+    --_row-icon: currentColor;
+
+    font-weight: var(--font-weight-medium);
+  }
+
+  .nav-row:is(:disabled, [aria-disabled='true']) {
+    --_row-fg: var(--color-text-disabled);
+    --_row-icon: var(--color-icon-disabled);
+
+    cursor: default;
+  }
+
+  .nav-row:active:not(:disabled, [aria-disabled='true'], [data-selected]) {
+    --_row-bg: var(--color-overlay-pressed);
+  }
+
+  @media (hover: hover) {
+    .nav-row:hover:not(:disabled, [aria-disabled='true'], [data-selected]) {
+      --_row-bg: var(--color-overlay-hover);
+    }
+
+    .nav-row:hover:active:not(:disabled, [aria-disabled='true'], [data-selected]) {
+      --_row-bg: var(--color-overlay-pressed);
+    }
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .nav-row {
+      border: 1px solid transparent;
+    }
+
+    .nav-row[data-selected] {
+      --_row-bg: Highlight;
+      --_row-fg: HighlightText;
+      --_row-icon: HighlightText;
+    }
+
+    .nav-row:is(:disabled, [aria-disabled='true']) {
+      --_row-fg: GrayText;
+      --_row-icon: GrayText;
+    }
+  }
+}

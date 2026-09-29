@@ -1,0 +1,23 @@
+/*
+ * tct-top-nav-drawer (internal). The copies of the top navigation's items, one under the other, then a
+ * rule before the side navigation that follows in the drawer. [mwg:css-layout] [mwg:navigation-drawer]
+ */
+@layer component {
+  :host {
+    display: block;
+  }
+
+  .list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-0-5);
+  }
+
+  .list > * {
+    display: block;
+  }
+
+  .divider {
+    margin-block: var(--spacing-2);
+  }
+}

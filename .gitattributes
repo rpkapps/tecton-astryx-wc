@@ -1,0 +1,16 @@
+# Every text file is checked out with LF line endings on every platform. The token and locale input
+# locks hash file contents, Prettier's format check expects LF, and several generators parse lines;
+# a Windows checkout with core.autocrlf=true would otherwise turn every text file into CRLF.
+* text=auto eol=lf
+
+# Binary files: never normalised.
+*.woff2 binary
+*.woff binary
+*.ttf binary
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.pdf binary

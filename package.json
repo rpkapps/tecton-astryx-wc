@@ -33,7 +33,7 @@
     "docs:mcp": "TCT_REQUIRE_DOCS_BUILD=1 vitest run --project node packages/cli/src/docs-endpoint.node.test.ts",
     "docs:a11y": "node tools/run-if-exists.ts tools/docs/a11y.ts -- node tools/docs/a11y.ts",
     "check": "node tools/check.ts",
-    "test:tier2": "TCT_TIER2=1 vitest run --project browser-chromium",
+    "test:tier2": "node tools/test-tier2.ts",
     "examples:check": "node tools/check-examples.ts"
   },
   "devDependencies": {

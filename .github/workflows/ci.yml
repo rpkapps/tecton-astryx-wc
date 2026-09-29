@@ -19,6 +19,25 @@ env:
   NODE_VERSION: '22'
 
 jobs:
+  # 0. Windows: the tooling runs on Windows 11 contributors' machines (CRLF checkouts, pnpm.cmd shims).
+  #    Generation, types, lint, node tests and the package build; the browser suites run on Linux.
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - run: corepack enable
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm generate
+      - run: pnpm typecheck
+      - run: pnpm lint
+      - run: pnpm exec vitest run --project node
+      - run: pnpm build
+
   # 1. Everything, in order, with Chromium: generate, format, lint, typecheck, tokens, api, parity,
   #    licences, tests, build (incl. exports, server-import and CDN smoke checks), size, docs build and
   #    the docs accessibility crawl.

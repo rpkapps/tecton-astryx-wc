@@ -1,0 +1,17 @@
+<!-- title: Sections; description: A section groups items under a heading, with an optional subheading and end content. header-hidden keeps the heading in the accessibility tree without drawing it. -->
+<div style="block-size: 480px">
+  <tct-side-nav label="Sections">
+    <tct-side-nav-section heading="Main">
+      <tct-side-nav-item label="Dashboard" icon="home" href="#dashboard" selected></tct-side-nav-item>
+      <tct-side-nav-item label="Projects" icon="folder" href="#projects"></tct-side-nav-item>
+    </tct-side-nav-section>
+    <tct-side-nav-section heading="Teams" subheading="Where you belong">
+      <tct-icon-button slot="end" label="Add a team" icon="plus" variant="ghost" size="sm"></tct-icon-button>
+      <tct-side-nav-item label="Design" icon="users" href="#design"></tct-side-nav-item>
+      <tct-side-nav-item label="Engineering" icon="users" href="#engineering"></tct-side-nav-item>
+    </tct-side-nav-section>
+    <tct-side-nav-section heading="Account" header-hidden>
+      <tct-side-nav-item label="Settings" icon="settings" href="#settings"></tct-side-nav-item>
+    </tct-side-nav-section>
+  </tct-side-nav>
+</div>
