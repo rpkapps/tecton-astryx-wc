@@ -11,7 +11,7 @@ import {animationsFinished, nextFrame} from '@tecton-wc/testing/timing.js';
 import '../nav-icon/define.js';
 import './define.js';
 import type {TctTopNav} from './tct-top-nav.js';
-import {isOpen, layerOf} from './top-nav-test-helpers.js';
+import {isOpen, layerOf} from './fixtures/top-nav-test-helpers.js';
 
 const CONTENT = `
   <tct-top-nav-heading slot="heading" heading="Acme"><div slot="menu"><a href="#one">One</a></div></tct-top-nav-heading>

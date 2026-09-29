@@ -2,10 +2,10 @@
 import {page} from 'vitest/browser';
 import {fixture} from '@tecton-wc/testing/fixture.js';
 import {nextFrame} from '@tecton-wc/testing/timing.js';
-import '../nav-icon/define.js';
-import './define.js';
-import type {TctTopNavDisclosure} from './tct-top-nav-disclosure.js';
-import type {TctTopNav} from './tct-top-nav.js';
+import '../../nav-icon/define.js';
+import '../define.js';
+import type {TctTopNavDisclosure} from '../tct-top-nav-disclosure.js';
+import type {TctTopNav} from '../tct-top-nav.js';
 
 export const MENU_ITEMS = `
   <tct-top-nav-mega-menu-item id="analytics" heading="Analytics" description="Track behaviour" icon="funnel" href="#analytics"></tct-top-nav-mega-menu-item>

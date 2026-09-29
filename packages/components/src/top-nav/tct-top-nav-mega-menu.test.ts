@@ -21,7 +21,7 @@ import {
   MENU_ITEMS,
   panelOf,
   triggerOf,
-} from './top-nav-test-helpers.js';
+} from './fixtures/top-nav-test-helpers.js';
 
 afterEach(async () => {
   await userEvent.hover(document.body, {position: {x: 0, y: 0}}).catch(() => undefined);
@@ -87,7 +87,8 @@ describe('tct-top-nav-mega-menu: semantics', () => {
     expect(first.hideDelay).toBe(250);
     await userEvent.hover(triggerOf(first));
     await waitUntil(() => isOpen(first), 'hover opens it');
-    await userEvent.click(triggerOf(first));
+    // A synchronous click keeps the 500 ms guard independent of how fast a pointer click is delivered.
+    triggerOf(first).click();
     await userEvent.hover(document.body, {position: {x: 900, y: 650}});
     await new Promise((resolve) => setTimeout(resolve, 350));
     expect(isOpen(first)).toBe(true);
