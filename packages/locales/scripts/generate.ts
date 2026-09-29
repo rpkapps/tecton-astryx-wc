@@ -46,8 +46,12 @@ const LOCK = join(PACKAGE, 'src', 'catalogs.lock.json');
 const DIST = join(PACKAGE, 'dist');
 const COMPONENTS_SRC = resolve(PACKAGE, '..', 'components', 'src');
 
+// CRLF normalised to LF: the catalogs are JSON text, and a Windows checkout (core.autocrlf) must not
+// read as a changed upstream catalog. On LF files this equals the plain sha256.
 const sha256 = (path: string): string =>
-  createHash('sha256').update(readFileSync(path)).digest('hex');
+  createHash('sha256')
+    .update(readFileSync(path).toString('utf8').replace(/\r\n/g, '\n'))
+    .digest('hex');
 
 function readCatalogs(): {tag: string; file: string; catalog: UpstreamCatalog}[] {
   return readdirSync(CATALOGS)

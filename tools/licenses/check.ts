@@ -4,11 +4,11 @@
  * leaking into the shipped runtime tree, on a missing THIRD-PARTY-NOTICES.md entry, and on breaches
  * of D-008 (a LICENSE file, or a package.json that is not `private` + `UNLICENSED`).
  */
-import {spawnSync} from 'node:child_process';
 import {existsSync, readFileSync} from 'node:fs';
 import {join} from 'node:path';
 import {listDirs} from '../lib/fs.ts';
 import {ROOT} from '../lib/paths.ts';
+import {spawnPnpmSync} from '../lib/run.ts';
 import {
   evaluateLicenses,
   REQUIRED_NOTICE_TEXT,
@@ -20,7 +20,7 @@ import {
 } from './policy.ts';
 
 function pnpmLicenses(args: readonly string[]): PackageLicense[] {
-  const result = spawnSync('pnpm', [...args, 'licenses', 'list', '--json'], {
+  const result = spawnPnpmSync([...args, 'licenses', 'list', '--json'], {
     cwd: ROOT,
     encoding: 'utf8',
     maxBuffer: 256 * 1024 * 1024,

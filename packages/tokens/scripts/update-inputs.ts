@@ -36,7 +36,11 @@ interface LockEntry {
   origin: string;
 }
 
-const sha256 = (path: string) => createHash('sha256').update(readFileSync(path)).digest('hex');
+// CRLF normalised to LF (see textSha256 in src/pipeline/inputs.ts): a Windows checkout is not a change.
+const sha256 = (path: string) =>
+  createHash('sha256')
+    .update(readFileSync(path).toString('utf8').replace(/\r\n/g, '\n'))
+    .digest('hex');
 
 function main(): number {
   const check = process.argv.includes('--check');
