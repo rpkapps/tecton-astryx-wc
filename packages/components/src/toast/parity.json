@@ -1,0 +1,254 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "toast",
+  "workPackage": "WP-4",
+  "entries": {
+    "core.toast": {
+      "tag": "tct-toast",
+      "status": "implemented",
+      "upstream": {
+        "name": "Toast",
+        "path": "packages/core/src/Toast/Toast.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "body",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "The message. `toast({body})` takes text, a Node or a Lit template."
+        },
+        {
+          "upstream": "type",
+          "kind": "prop",
+          "target": "type",
+          "as": "attribute",
+          "reflect": true,
+          "default": "info"
+        },
+        {
+          "upstream": "isAutoHide",
+          "kind": "prop",
+          "target": "autoHideDuration",
+          "as": "attribute",
+          "notes": "`auto-hide-duration=\"0\"` keeps the toast (`autoHide: false` in `toast()`); default true for info, false for error; the resolved value is the read-only `autoHide`."
+        },
+        {
+          "upstream": "autoHideDuration",
+          "kind": "prop",
+          "target": "autoHideDuration",
+          "as": "attribute",
+          "default": 5000,
+          "notes": "`auto-hide-duration` in ms."
+        },
+        {
+          "upstream": "endContent",
+          "kind": "slot",
+          "target": "end",
+          "as": "slot",
+          "notes": "`toast({endContent})` takes text, a Node or a Lit template."
+        },
+        {
+          "upstream": "uniqueID",
+          "kind": "prop",
+          "target": "toast({uniqueId})",
+          "as": "module-function",
+          "notes": "Renamed `uniqueId`; a `toast()` option (de-duplication belongs to the viewport)."
+        },
+        {
+          "upstream": "collisionBehavior",
+          "kind": "prop",
+          "target": "toast({collisionBehavior})",
+          "as": "module-function",
+          "default": "overwrite"
+        },
+        {
+          "upstream": "onHide",
+          "kind": "event",
+          "target": "tct-toast-hide",
+          "as": "event",
+          "notes": "Once per toast, when it starts to hide, with the reason. `toast({onHide})` is also accepted."
+        },
+        {
+          "upstream": "onDismiss",
+          "kind": "event",
+          "target": "tct-toast-dismiss",
+          "as": "event",
+          "notes": "Cancelable; the toast wants to go (reason `auto` or `manual`)."
+        },
+        {
+          "upstream": "renderContent",
+          "kind": "prop",
+          "target": "renderContent",
+          "as": "property",
+          "notes": "Returns text, a Node or a Lit template; `body` and `endContent` are handed over by `toast()`."
+        },
+        {
+          "upstream": "isExiting",
+          "kind": "prop",
+          "target": "exiting",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useToast",
+          "target": "toast()",
+          "as": "module-function",
+          "notes": "`toast(options, {from})` returns the dismiss function; `dismissToast(uniqueId)` and `dismissAllToasts()` complete it. The first call registers the elements."
+        },
+        {
+          "upstream": "useClickableContainer",
+          "target": "INTERACTIVE_SELECTORS",
+          "as": "controller",
+          "notes": "Swipes never start on interactive descendants (the shared selector list)."
+        },
+        {
+          "upstream": "useToastGesture",
+          "target": "ToastGestureController",
+          "as": "controller",
+          "notes": "Internal to the toast folder."
+        },
+        {
+          "upstream": "ToastViewport",
+          "target": "tct-toast-viewport",
+          "as": "controller",
+          "notes": "Internal element (@internal): top-layer popover host, stacking, F6, focus hand-off, announcements."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "F6",
+          "action": "Moves focus into the newest toast (its trailing action first, then the close button)",
+          "when": "a toast is showing and focus is outside the notifications region"
+        },
+        {
+          "keys": "Enter, Space",
+          "action": "Activates the focused close button or trailing action; dismissing a focused toast hands focus to a remaining toast, or back to where it was",
+          "when": "focus in a toast"
+        },
+        {
+          "keys": "Tab",
+          "action": "Moves between the toast's controls; leaving the toast resumes the auto-hide countdown",
+          "when": "focus in a toast"
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "TOAST-01",
+          "type": "approved-api-difference",
+          "text": "`isAutoHide` and `autoHideDuration` are one property: `auto-hide-duration` in ms, `0` keeps the toast (`autoHide: false` in `toast()`), unset means 5000 for `info` and `0` for `error`. `uniqueID` is `uniqueId`; `useToast()` is `toast()` (plus `dismissToast()` and `dismissAllToasts()`); `onDismiss` and `onHide` are the events `tct-toast-dismiss` and `tct-toast-hide` (also `onHide` in the `toast()` options); toast positions are kebab case (`bottom-end`)."
+        },
+        {
+          "id": "TOAST-02",
+          "type": "a11y-improvement",
+          "text": "The toast has status/alert semantics but `aria-live=\"off\"`: the viewport speaks each toast once through the announcer (A§10). Upstream stamps a live region on the card and announces separately, which reads a toast twice on some assistive technology."
+        },
+        {
+          "id": "TOAST-03",
+          "type": "approved-api-difference",
+          "text": "`tct-toast` never removes itself: it fires `tct-toast-dismiss` (cancelable), sets `exiting` and fires `tct-toast-hide` once; the owner (the viewport, or your listener) removes it after the exit."
+        },
+        {
+          "id": "TOAST-04",
+          "type": "tecton-visual",
+          "text": "No drop shadow (D-013): the inverted fill separates the card from the page. The ink is `light-dark(--color-on-dark, --color-on-light)` (`--color-on-error` for errors) because the media-theme island attribute cannot reach into a shadow tree; the close button uses the double focus ring for inverted surfaces (D-005)."
+        },
+        {
+          "id": "TOAST-05",
+          "type": "approved-api-difference",
+          "text": "The swipe transform is applied through `translate`/`scale` (individual transform properties); the exit slide only runs without reduced motion, the fade stays."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/components/src/button/tct-button.styles.css",
+          "reason": "An inverted-surface hook for a ghost icon-only button (for example `--button-fg` / `--button-bg-hover` or a `data-surface=inverted` variant) would let the toast dismiss button become a tct-button; today the private `--_fg`/`--_bg` tokens cannot be reached from outside the shadow root."
+        },
+        {
+          "file": "packages/core/src/events/events.test.ts",
+          "reason": "Two new core event classes, `tct-toast-dismiss` and `tct-toast-hide`, were added in packages/core/src/events/ (flags and payload are asserted in toast/tct-toast.test.ts); add them to the shared events test if the orchestrator wants them listed there."
+        }
+      ],
+      "sizeBudgetKb": 48,
+      "notes": "Guides: [mwg:persistent-toast-notifications] [mwg:persistent-top-layer-ui] [mwg:animate-to-from-top-layer]. The close button stays a native <button> around tct-icon: it sits on the inverted card and tct-button has no colour hooks for inverted surfaces (see requests). The viewport host is itself the popover, so the shared .layer-surface class does not apply."
+    },
+    "core.layer-provider": {
+      "tag": "tct-layer-provider",
+      "status": "implemented",
+      "upstream": {
+        "name": "LayerProvider",
+        "path": "packages/core/src/Layer/LayerProvider.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {"upstream": "children", "kind": "slot", "target": "default", "as": "slot"},
+        {
+          "upstream": "toast",
+          "kind": "prop",
+          "target": "toast",
+          "as": "property",
+          "notes": "The whole `{position, maxVisible, inset}` object; the attributes `toast-position` and `toast-max-visible` and the property `toastInset` (structured data is property-only) win over its fields."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "LayerContext",
+          "target": "toaster.ts (provider registry)",
+          "as": "controller",
+          "notes": "`toast()` reaches the outermost connected provider; `toast(options, {from})` the nearest one around an element."
+        },
+        {
+          "upstream": "useLayerContext",
+          "target": "TctLayerProvider.nested",
+          "as": "property",
+          "notes": "A nested provider does nothing, like upstream."
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "LAYERPROVIDER-01",
+          "type": "approved-api-difference",
+          "text": "The `toast` config is also available as `toast-position` and `toast-max-visible` attributes (declarative use) and a `toastInset` property; `position` values are kebab case (`bottom-end`)."
+        },
+        {
+          "id": "LAYERPROVIDER-02",
+          "type": "approved-api-difference",
+          "text": "Upstream hosts the sheet and imperative-modal layers in the same provider; here only the toast viewport is hosted. Bottom sheets and alert dialogs are elements, and `openAlertDialog()` renders its own dialog, so they need no provider."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": false,
+        "events": false,
+        "rtl": true,
+        "forcedColors": false,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 48,
+      "notes": "Provider: no shadow root and no box (A§8.1); the light-dom rule ships in tct-layer-provider.light.css and is adopted at runtime."
+    }
+  }
+}

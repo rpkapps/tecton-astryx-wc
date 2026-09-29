@@ -1,0 +1,213 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "hover-card",
+  "workPackage": "WP-4",
+  "entries": {
+    "core.hover-card": {
+      "tag": "tct-hover-card",
+      "status": "implemented",
+      "upstream": {
+        "name": "HoverCard",
+        "path": "packages/core/src/HoverCard/HoverCard.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "children",
+          "kind": "slot",
+          "target": "default",
+          "as": "slot",
+          "notes": "The trigger: an element or plain text. Text becomes a focusable, dashed-underlined inline trigger."
+        },
+        {"upstream": "content", "kind": "slot", "target": "content", "as": "slot"},
+        {
+          "upstream": "placement",
+          "kind": "prop",
+          "target": "placement",
+          "as": "attribute",
+          "default": "above"
+        },
+        {
+          "upstream": "alignment",
+          "kind": "prop",
+          "target": "alignment",
+          "as": "attribute",
+          "default": "center"
+        },
+        {"upstream": "delay", "kind": "prop", "target": "delay", "as": "attribute", "default": 300},
+        {
+          "upstream": "hideDelay",
+          "kind": "prop",
+          "target": "hideDelay",
+          "as": "attribute",
+          "default": 200,
+          "notes": "`hide-delay`."
+        },
+        {
+          "upstream": "focusTrigger",
+          "kind": "prop",
+          "target": "focusTrigger",
+          "as": "attribute",
+          "default": "auto",
+          "notes": "`focus-trigger`."
+        },
+        {
+          "upstream": "touchTrigger",
+          "kind": "prop",
+          "target": "touchTrigger",
+          "as": "attribute",
+          "default": "auto",
+          "notes": "`touch-trigger`."
+        },
+        {
+          "upstream": "isEnabled",
+          "kind": "prop",
+          "target": "disabled",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "Inverted."
+        },
+        {"upstream": "label", "kind": "prop", "target": "label", "as": "attribute"},
+        {
+          "upstream": "onOpenChange",
+          "kind": "event",
+          "target": "tct-open-change",
+          "as": "event",
+          "notes": "Cancelable intent event before a user-driven change; `tct-after-open-change` once settled."
+        },
+        {
+          "upstream": "hasHoverIndication",
+          "kind": "prop",
+          "target": "hoverIndication",
+          "as": "attribute",
+          "default": "auto",
+          "notes": "`hover-indication`: `auto` | `always` | `never` (upstream `'auto' | true | false`)."
+        },
+        {
+          "upstream": "isDefaultOpen",
+          "kind": "prop",
+          "target": "open",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "The `open` attribute is the initial state; it stays dismissible."
+        },
+        {
+          "upstream": "isOpen",
+          "kind": "prop",
+          "target": "open",
+          "as": "property",
+          "reflect": true,
+          "notes": "The element owns the state (D-006); `open` is the current value. Hover, focus, tap, Escape and outside press change it after the cancelable intent event."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: use class/style, ::part(hover-card) and the tokens."
+        },
+        {
+          "upstream": "className",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: `class` goes on the host; the painted card is ::part(hover-card)."
+        },
+        {
+          "upstream": "style",
+          "kind": "prop",
+          "as": "waived",
+          "reason": "A-xstyle: `style` goes on the host; the painted card is ::part(hover-card)."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useHoverCard",
+          "target": "HoverIntentController + LayerController + PositionController (composed by tct-hover-card)",
+          "as": "controller"
+        },
+        {
+          "upstream": "useLayer",
+          "target": "LayerController + PositionController",
+          "as": "controller"
+        },
+        {
+          "upstream": "useLayerDismissal",
+          "target": "LayerController",
+          "as": "controller",
+          "notes": "Escape and outside press through the one document layer stack."
+        },
+        {
+          "upstream": "useTouchTrigger",
+          "target": "HoverIntentController",
+          "as": "controller",
+          "notes": "touch: 'auto' | 'tap' | 'none'."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Tab",
+          "action": "Focusing the trigger with the keyboard opens the card immediately",
+          "when": "trigger focusable (`focus-trigger` auto) or `focus-trigger=\"always\"`"
+        },
+        {
+          "keys": "Tab",
+          "action": "Moves focus from the trigger into the card's interactive content; the card stays open while focus is inside it",
+          "when": "open"
+        },
+        {
+          "keys": "Escape",
+          "action": "Closes the card; focus returns to the trigger when it was inside the card, and refocusing the trigger does not reopen it",
+          "when": "open; one layer per press"
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "HOVERCARD-01",
+          "type": "approved-api-difference",
+          "text": "`isEnabled` is `disabled`, `hasHoverIndication` (`'auto' | boolean`) is the enumerated `hover-indication` (`auto`, `always`, `never`), `delay`/`hideDelay`/`focusTrigger`/`touchTrigger` keep their names in kebab case (A§7.2)."
+        },
+        {
+          "id": "HOVERCARD-02",
+          "type": "approved-api-difference",
+          "text": "The controlled `isOpen` / uncontrolled `isDefaultOpen` split collapses into the element-owned `open` state (D-006): the `open` attribute is the default-open state, and setting `open` never emits events."
+        },
+        {
+          "id": "HOVERCARD-03",
+          "type": "a11y-improvement",
+          "text": "The card lives in the hover card's shadow root, so a slotted trigger cannot reference it by ID. A labelled card keeps aria-haspopup=dialog and (where the trigger's role allows it) aria-expanded, but drops aria-controls; an unlabelled group card is exposed to a slotted trigger as `aria-description` (a copy of its text) instead of aria-describedby. A text trigger, which shares the shadow root, keeps aria-controls / aria-describedby."
+        },
+        {
+          "id": "HOVERCARD-04",
+          "type": "a11y-improvement",
+          "text": "Focus moving from the trigger into the card keeps it open, and focus leaving the card to anything but the trigger closes it, so a keyboard user can operate interactive card content (WCAG 1.4.13 persistent, hoverable, dismissible)."
+        },
+        {
+          "id": "HOVERCARD-05",
+          "type": "tecton-visual",
+          "text": "Same Tecton surface as the popover: a 1px border on the recessed popover fill, no drop shadow, 8px container radius (D-013). Upstream paints the surface fill with a medium shadow."
+        },
+        {
+          "id": "HOVERCARD-06",
+          "type": "approved-api-difference",
+          "text": "The React portal correction for cards inside a paragraph, heading or link is unnecessary: the card is a top-layer popover in the element's shadow root and never nests in the trigger's parent."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": false
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [],
+      "sizeBudgetKb": 24,
+      "notes": "Guides: [mwg:interest-triggered-tooltips] [mwg:animate-to-from-top-layer] [mwg:position-aware-tooltips]. Has no localisable strings (upstream has none). The layer is kind 'hint' so the controller sets no trigger ARIA and the card owns it."
+    }
+  }
+}

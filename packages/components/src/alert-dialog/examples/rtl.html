@@ -1,0 +1,19 @@
+<!-- title: Right to left; description: The actions align to the inline end and Cancel stays first in reading order; the labels are localized. Write the heading and description in the user's language. -->
+<div dir="rtl" lang="ar">
+  <button type="button" id="alert-rtl-open">حذف المشروع</button>
+  <tct-alert-dialog
+    id="alert-rtl"
+    heading="حذف المشروع؟"
+    description="لا يمكن التراجع عن هذا الإجراء. سيتم حذف المشروع وجميع ملفاته نهائيًا."
+    action-label="حذف المشروع"
+  ></tct-alert-dialog>
+  <script type="module">
+    const dialog = document.getElementById('alert-rtl');
+    document.getElementById('alert-rtl-open').addEventListener('click', () => {
+      dialog.open = true;
+    });
+    dialog.addEventListener('tct-action', () => {
+      dialog.open = false;
+    });
+  </script>
+</div>

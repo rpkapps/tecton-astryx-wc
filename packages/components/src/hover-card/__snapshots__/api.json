@@ -1,0 +1,141 @@
+{
+  "folder": "hover-card",
+  "elements": {
+    "tct-hover-card": {
+      "class": "TctHoverCard",
+      "attributes": [
+        {
+          "name": "alignment",
+          "property": "alignment",
+          "type": "HoverCardAlignment",
+          "default": "'center'",
+          "reflects": false
+        },
+        {
+          "name": "delay",
+          "property": "delay",
+          "type": "number",
+          "default": "300",
+          "reflects": false
+        },
+        {
+          "name": "disabled",
+          "property": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "focus-trigger",
+          "property": "focusTrigger",
+          "type": "HoverCardFocusTrigger",
+          "values": [
+            "auto",
+            "always",
+            "never"
+          ],
+          "default": "'auto'",
+          "reflects": false
+        },
+        {
+          "name": "hide-delay",
+          "property": "hideDelay",
+          "type": "number",
+          "default": "200",
+          "reflects": false
+        },
+        {
+          "name": "hover-indication",
+          "property": "hoverIndication",
+          "type": "HoverCardIndication",
+          "values": [
+            "auto",
+            "always",
+            "never"
+          ],
+          "default": "'auto'",
+          "reflects": false
+        },
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "open",
+          "property": "open",
+          "type": "boolean",
+          "default": "false",
+          "reflects": true
+        },
+        {
+          "name": "placement",
+          "property": "placement",
+          "type": "HoverCardPlacement",
+          "default": "'above'",
+          "reflects": false
+        },
+        {
+          "name": "touch-trigger",
+          "property": "touchTrigger",
+          "type": "HoverCardTouchTrigger",
+          "values": [
+            "auto",
+            "tap",
+            "none"
+          ],
+          "default": "'auto'",
+          "reflects": false
+        }
+      ],
+      "properties": [],
+      "methods": [
+        {
+          "name": "hide",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "requestClose",
+          "signature": "(reason: ChangeReason) => void"
+        },
+        {
+          "name": "show",
+          "signature": "() => Promise<void>"
+        },
+        {
+          "name": "toggle",
+          "signature": "(force?: boolean) => Promise<void>"
+        }
+      ],
+      "slots": [
+        "(default)",
+        "content"
+      ],
+      "events": [
+        {
+          "name": "tct-after-open-change",
+          "class": "TctAfterOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": false
+        },
+        {
+          "name": "tct-open-change",
+          "class": "TctOpenChangeEvent",
+          "bubbles": true,
+          "composed": true,
+          "cancelable": true
+        }
+      ],
+      "cssParts": [
+        "hover-card",
+        "trigger"
+      ],
+      "cssStates": [
+        "open"
+      ],
+      "cssProperties": []
+    }
+  }
+}

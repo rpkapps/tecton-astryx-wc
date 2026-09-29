@@ -1,0 +1,15 @@
+<!-- title: Controlled; description: Setting open forces the overlay shown (attribute) or hidden and inert (property false). Set it to undefined to hand control back to show-on. -->
+<div id="overlay-controlled-root" style="display: grid; gap: var(--spacing-3); justify-items: start">
+  <tct-overlay show-on="hover" open style="inline-size: 320px">
+    <div style="display: grid; place-items: center; inline-size: 320px; block-size: 180px; background: var(--color-on-light); color: var(--color-on-dark)">Media</div>
+    <div slot="content"><button type="button">Quick view</button></div>
+  </tct-overlay>
+  <button type="button" id="overlay-controlled-toggle">Toggle overlay</button>
+  <script type="module">
+    const root = document.getElementById('overlay-controlled-root');
+    const overlay = root.querySelector('tct-overlay');
+    root.querySelector('#overlay-controlled-toggle').addEventListener('click', () => {
+      overlay.open = overlay.open === true ? false : true;
+    });
+  </script>
+</div>
