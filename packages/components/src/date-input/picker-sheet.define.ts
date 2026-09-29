@@ -1,5 +1,6 @@
 import {defineElement} from '@tecton-wc/core/define.js';
 import {TctBottomSheet} from '../bottom-sheet/tct-bottom-sheet.js';
+import '../segmented-control/define.js';
 import {TctTimePanel} from './tct-time-panel.js';
 
 /**

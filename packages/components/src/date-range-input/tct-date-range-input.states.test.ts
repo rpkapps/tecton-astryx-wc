@@ -22,6 +22,7 @@ import {
   parseColor,
   textContrast,
   type Rgba,
+  settleAnimations,
 } from '../date-input/picker-test-helpers.js';
 import {
   calendar,
@@ -222,11 +223,10 @@ describe('tct-date-range-input: languages and direction', () => {
 describe('tct-date-range-input: accessibility and contrast in every state', () => {
   const SCHEMES = ['light', 'dark'] as const;
 
+  /** Waits until nothing is animating (shadow trees included) for a few frames: a state change starts its transition late. */
   async function settle(field: TctDateRangeInput): Promise<void> {
     await field.updateComplete;
-    await Promise.all(
-      document.getAnimations().map((animation) => animation.finished.catch(() => undefined)),
-    );
+    await settleAnimations();
   }
 
   async function themed(

@@ -123,3 +123,41 @@ export function contrast(foreground: Rgba, background: Rgba): number {
 export function textContrast(element: Element, surface: Rgba): number {
   return contrast(parseColor(getComputedStyle(element).color), surface);
 }
+
+// ------------------------------------------------------------------------------------- animations
+
+/** Every animation and transition running anywhere under `root`, shadow trees included (`getAnimations` stops at a shadow boundary). */
+export function runningAnimations(root: Node = document): Animation[] {
+  const found: Animation[] = [];
+  const visit = (node: Node): void => {
+    if (node instanceof Element) {
+      found.push(...node.getAnimations());
+      if (node.shadowRoot) visit(node.shadowRoot);
+    }
+    for (const child of node.childNodes) visit(child);
+  };
+  visit(root);
+  return found;
+}
+
+/**
+ * Waits until nothing under `root` (shadow trees included) is animating for a few frames in a row: a state
+ * change starts its transition a frame late, so measuring the first frame or two hides contrast defects and
+ * makes axe read half-faded text.
+ */
+export async function settleAnimations(root: Node = document): Promise<void> {
+  const frame = (): Promise<void> =>
+    new Promise((resolve) => {
+      requestAnimationFrame(() => {
+        resolve();
+      });
+    });
+  for (let quiet = 0; quiet < 3; quiet += 1) {
+    const running = runningAnimations(root);
+    if (running.length > 0) {
+      await Promise.all(running.map((animation) => animation.finished.catch(() => undefined)));
+      quiet = -1;
+    }
+    await frame();
+  }
+}

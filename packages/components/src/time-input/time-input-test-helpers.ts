@@ -5,6 +5,7 @@
 import {userEvent} from 'vitest/browser';
 import {fixture} from '@tecton-wc/testing/fixture.js';
 import {nextFrame, waitUntil} from '@tecton-wc/testing/timing.js';
+import {settleAnimations} from '../date-input/picker-test-helpers.js';
 import type {TctTimePanel} from '../date-input/tct-time-panel.js';
 import type {TctTimeInput} from './tct-time-input.js';
 
@@ -67,10 +68,7 @@ export async function closeSheet(field: TctTimeInput): Promise<void> {
     () => sheet(field)?.shadowRoot?.querySelector('[data-phase="exiting"]') == null,
     'sheet left',
   );
-  await Promise.all(
-    document.getAnimations().map((animation) => animation.finished.catch(() => undefined)),
-  );
-  await nextFrame();
+  await settleAnimations();
 }
 
 /** Opens the touch sheet with a click on the toggle and waits until it is open and the panel is painted. */
@@ -93,7 +91,5 @@ export async function openSheet(field: TctTimeInput): Promise<void> {
   // transition) after the measurements. Park it in a corner first.
   await userEvent.hover(document.documentElement, {position: {x: 1, y: 1}});
   await nextFrame();
-  await Promise.all(
-    document.getAnimations().map((animation) => animation.finished.catch(() => undefined)),
-  );
+  await settleAnimations();
 }

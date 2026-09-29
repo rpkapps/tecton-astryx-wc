@@ -1,0 +1,92 @@
+/*
+ * tct-date-time-input: the two painted boxes (the date part with its toggle, and the time part with its clock)
+ * side by side and wrapping under one label, the dropdown of preset times, and the tabs of the touch sheet.
+ * The box, the label chrome, the native surface and the picker layers come from the shared field module and
+ * the shared picker sheet. State fills pair with their own Tecton state text roles.
+ * [mwg:css] [mwg:styling-web-components]
+ */
+@layer component {
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-2);
+  }
+
+  /* Each part is a box of its own that shares the row, the date (a long month name) with more room; below the bases they wrap onto two lines. */
+  .row > .input-wrapper {
+    flex: 3 1 12.25rem;
+    min-inline-size: 0;
+  }
+
+  .row > .time-box {
+    flex: 2 1 8.5rem;
+  }
+
+  .time-toggle {
+    --_focus-offset: 1px;
+  }
+
+  .time-listbox {
+    box-sizing: border-box;
+    max-block-size: 18.75rem;
+    min-inline-size: 100%;
+    padding: var(--spacing-1);
+    /* physical: the options stack vertically in every writing mode, and overflow-block is missing from Chrome before 135 */
+    overflow-y: auto;
+  }
+
+  .time-option {
+    --_option-bg: transparent;
+    --_option-fg: var(--color-text-primary);
+
+    display: flex;
+    align-items: center;
+    box-sizing: border-box;
+    inline-size: 100%;
+    padding-block: var(--spacing-1);
+    padding-inline: var(--spacing-2);
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+    color: var(--_option-fg);
+    text-align: start;
+    cursor: pointer;
+    background-color: var(--_option-bg);
+    border-radius: var(--radius-element);
+  }
+
+  /* The picked time: the muted accent wash and the primary text, and a heavier weight so colour is not the only cue. */
+  .time-option[aria-selected='true'] {
+    --_option-bg: var(--color-accent-muted);
+    --_option-fg: var(--color-text-primary);
+
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .tabs {
+    align-self: stretch;
+  }
+}
+
+@layer state {
+  /* The highlighted option (the pointer, or the arrow keys through aria-activedescendant). */
+  .time-option[data-highlighted]:not([aria-selected='true']) {
+    --_option-bg: var(--tecton-color-action-tertiary-bg-hover);
+    --_option-fg: var(--tecton-color-action-tertiary-text-hover);
+  }
+
+  .time-option[data-highlighted][aria-selected='true'] {
+    --_option-bg: var(--color-accent-muted);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .time-option[data-highlighted],
+    .time-option[aria-selected='true'] {
+      color: HighlightText;
+      background-color: Highlight;
+      forced-color-adjust: none;
+    }
+  }
+}
