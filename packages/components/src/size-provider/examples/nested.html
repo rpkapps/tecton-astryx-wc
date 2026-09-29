@@ -1,8 +1,8 @@
 <!-- title: Nested providers; description: The nearest provider wins, and a provider without a size hands the controls back to their own default. -->
 <tct-size-provider size="lg">
-  <div style="display: flex; gap: var(--spacing-2); align-items: center">
+  <tct-hstack gap="2" v-align="center">
     <tct-button>Outer (lg)</tct-button>
     <tct-size-provider size="sm"><tct-button>Inner (sm)</tct-button></tct-size-provider>
     <tct-size-provider><tct-button>Unset (own default)</tct-button></tct-size-provider>
-  </div>
+  </tct-hstack>
 </tct-size-provider>
