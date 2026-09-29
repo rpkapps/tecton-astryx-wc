@@ -1,0 +1,230 @@
+/*
+ * tct-bottom-sheet. Tecton surface: a 1px rule on the surface fill, no drop shadow (D-013): the rule on the
+ * three edges that face the scrim separates the sheet in dark mode too. [mwg:css] [mwg:navigation-drawer]
+ * [mwg:light-dismiss-a-dialog] [mwg:animate-to-from-top-layer]
+ *
+ * Structure. A standalone sheet is a `<dialog class="dialog">` that is a ZERO-HEIGHT strip along the bottom
+ * edge; the panel (`.positioner` > `.sheet`) overflows it upwards. That keeps the platform's own idea of
+ * "outside" meaningful: a press on the backdrop is outside the strip (the layer stack dismisses it), a
+ * press on the panel is inside. Inside a switcher the switcher owns the strip and the host is transparent.
+ *
+ * Motion. The sheet slides with `translate` (`--_sheet-offset` is the detent or the finger); entry is a
+ * `@starting-style` transition, exit a transition to `100%` under `[data-phase='exiting']`. Movement only
+ * under `no-preference`; the fade stays. The scrim fades through `::backdrop` and `--_sheet-scrim-opacity`.
+ */
+@layer component {
+  :host {
+    display: contents;
+  }
+
+  .positioner {
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .sheet {
+    --_band: 48px; /* design: the reserved block-end band a lift (rubber band) reveals, and the drag's end padding */
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    inline-size: 100%;
+    max-inline-size: 640px; /* design: upstream sheet max width */
+    min-block-size: 0;
+    block-size: calc(var(--_sheet-budget, 62dvh) + var(--_band));
+    margin-block-end: calc(-1 * var(--_band));
+    padding-block-end: calc(env(safe-area-inset-bottom, 0px) + var(--_band));
+    border-block-start: var(--border-width) solid var(--color-border);
+    border-inline: var(--border-width) solid var(--color-border);
+    border-start-start-radius: var(--radius-container);
+    border-start-end-radius: var(--radius-container);
+    background-color: var(--color-background-surface);
+    color: var(--color-text-primary);
+    font-family: var(--font-family-body);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+    overflow: hidden;
+    outline: none;
+    pointer-events: auto;
+    translate: 0 calc(var(--_sheet-offset, 0px) + var(--_sheet-align, 0px));
+    opacity: 1;
+    transition: opacity var(--duration-fast) var(--ease-standard);
+
+    @starting-style {
+      opacity: 0;
+    }
+  }
+
+  .sheet[data-height='hug'] {
+    block-size: fit-content;
+    max-block-size: calc(92dvh + var(--_band));
+  }
+
+  /* While a lower stop gives up its offset as body margin the height stays what it was measured. */
+  .sheet[data-pinned] {
+    block-size: var(--_sheet-pinned);
+    max-block-size: none;
+  }
+
+  .sheet[data-phase='fading'] {
+    opacity: 0;
+  }
+
+  .positioner[inert] {
+    pointer-events: none;
+  }
+
+  .handle {
+    /* Floats over the body: content starts at the sheet's top edge and rides up under the pill. */
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    block-size: var(--spacing-6);
+    /* Keeps the pill legible over content that scrolls under it, fading out across the lower half. */
+    background-image: linear-gradient(
+      to bottom,
+      var(--color-background-surface) 60%,
+      transparent
+    );
+    touch-action: none;
+    cursor: grab;
+    outline-offset: calc(-1 * var(--focus-outline-width));
+  }
+
+  .handle:active {
+    cursor: grabbing;
+  }
+
+  .pill {
+    display: block;
+    inline-size: var(--size-element-lg);
+    block-size: var(--spacing-1);
+    border-radius: var(--radius-full);
+    background-color: var(--color-border-emphasized);
+  }
+
+  .body {
+    flex: 1 1 auto;
+    box-sizing: border-box;
+    min-block-size: 0;
+    margin-block-end: var(--_sheet-inset, 0px);
+    overflow: auto;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
+    background-color: var(--color-background-surface);
+    scroll-padding-block-end: var(--_band);
+    outline-offset: calc(-1 * var(--focus-outline-width));
+  }
+
+  /* The keyboard-aware scroll range of a fully expanded tall sheet (see sheet-keyboard.ts). */
+  .sheet[data-tall] .body::after {
+    content: '';
+    display: block;
+    block-size: var(--_sheet-keyboard-inset, 0px);
+    pointer-events: none;
+  }
+
+  .content {
+    /* A real observed content box: block formatting, margin and float isolation, a definite percentage basis. */
+    display: flow-root;
+    box-sizing: border-box;
+    block-size: 100%;
+    min-block-size: min-content;
+  }
+
+}
+
+@layer state {
+  /* A drag or a resize-in-place writes the offset without animating it. */
+  .sheet[data-dragging] {
+    transition: none;
+  }
+
+  /* A swipe that dismissed keeps the drawn position for the exit. */
+  .sheet[data-dismissing]:not([data-phase='exiting']) {
+    transition: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .sheet {
+      transition:
+        translate var(--duration-medium) var(--ease-standard),
+        opacity var(--duration-fast) var(--ease-standard);
+
+      @starting-style {
+        translate: 0 100%;
+        opacity: 0;
+      }
+    }
+
+    .sheet[data-dragging] {
+      transition: none;
+    }
+
+    .sheet[data-dismissing]:not([data-phase='exiting']) {
+      transition: none;
+    }
+
+    /*
+     * The exit is its own motion, not the entrance played backwards: the entrance decelerates (it
+     * arrives fast and settles), which on the way out would put the sheet half off-screen in the first
+     * fraction of the close. It accelerates away instead, quickest as it leaves.
+     */
+    .sheet[data-phase='exiting'] {
+      translate: 0 100%;
+      transition-timing-function: cubic-bezier(0.3, 0, 0.6, 0.6);
+    }
+
+    .sheet[data-phase='fading'] {
+      transition:
+        translate var(--duration-medium) var(--ease-standard),
+        opacity var(--duration-medium) var(--ease-standard);
+    }
+  }
+
+  /* Without movement the exit is a fade. */
+  @media (prefers-reduced-motion: reduce) {
+    .sheet[data-phase='exiting'] {
+      opacity: 0;
+    }
+  }
+
+  .handle[data-resizable] {
+    cursor: ns-resize;
+  }
+
+  .handle[data-resizable]:active {
+    cursor: grabbing;
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .sheet {
+      border-color: CanvasText;
+      background-color: Canvas;
+      color: CanvasText;
+    }
+
+    .body {
+      background-color: Canvas;
+    }
+
+    .handle {
+      background-image: none;
+    }
+
+    .pill {
+      background-color: CanvasText;
+    }
+  }
+}

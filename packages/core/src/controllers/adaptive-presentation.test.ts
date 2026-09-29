@@ -61,7 +61,7 @@ function stubCompactTouch(initial: boolean): {set: (value: boolean) => void; res
       onchange: null,
       addListener: () => undefined,
       removeListener: () => undefined,
-    }) as FakeQuery & {matches: boolean};
+    }) as unknown as FakeQuery;
     Object.defineProperty(list, 'matches', {get: () => current});
     lists.add(list);
     return list as unknown as MediaQueryList;
