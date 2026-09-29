@@ -1,0 +1,125 @@
+{
+  "folder": "breadcrumbs",
+  "elements": {
+    "tct-breadcrumb-item": {
+      "class": "TctBreadcrumbItem",
+      "attributes": [
+        {
+          "name": "current",
+          "property": "current",
+          "type": "boolean | undefined",
+          "reflects": false
+        },
+        {
+          "name": "href",
+          "property": "href",
+          "type": "string | undefined",
+          "reflects": false
+        },
+        {
+          "name": "icon",
+          "property": "icon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "menu-size",
+          "property": "menuSize",
+          "type": "BreadcrumbMenuSize | undefined",
+          "values": [
+            "sm",
+            "md",
+            "lg"
+          ],
+          "reflects": false
+        }
+      ],
+      "properties": [
+        {
+          "name": "menu",
+          "type": "DropdownMenuOption[] | undefined",
+          "readonly": false
+        }
+      ],
+      "methods": [],
+      "slots": [
+        "(default)",
+        "icon",
+        "menu"
+      ],
+      "events": [
+        {
+          "name": "click",
+          "native": true
+        }
+      ],
+      "cssParts": [
+        "crumb",
+        "item",
+        "menu",
+        "menu-trigger",
+        "overflow-trigger",
+        "separator"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    },
+    "tct-breadcrumbs": {
+      "class": "TctBreadcrumbs",
+      "attributes": [
+        {
+          "name": "label",
+          "property": "label",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "max-items",
+          "property": "maxItems",
+          "type": "number",
+          "default": "0",
+          "reflects": false
+        },
+        {
+          "name": "separator",
+          "property": "separator",
+          "type": "string",
+          "default": "'/'",
+          "reflects": false
+        },
+        {
+          "name": "separator-icon",
+          "property": "separatorIcon",
+          "type": "string",
+          "default": "''",
+          "reflects": false
+        },
+        {
+          "name": "variant",
+          "property": "variant",
+          "type": "BreadcrumbsVariant",
+          "values": [
+            "default",
+            "supporting"
+          ],
+          "default": "'default'",
+          "reflects": true
+        }
+      ],
+      "properties": [],
+      "methods": [],
+      "slots": [
+        "(default)"
+      ],
+      "events": [],
+      "cssParts": [
+        "base",
+        "list"
+      ],
+      "cssStates": [],
+      "cssProperties": []
+    }
+  }
+}

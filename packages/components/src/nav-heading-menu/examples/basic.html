@@ -1,0 +1,19 @@
+<!-- title: Basic; description: A menu of links and actions, as it appears in a navigation heading's popover. One Tab stop; arrows, Home, End and typeahead move between the rows; Enter or Space activate. -->
+<div id="basic-root">
+  <tct-card padding="1">
+    <tct-nav-heading-menu>
+      <tct-nav-heading-menu-item label="Dashboard" href="#dashboard"></tct-nav-heading-menu-item>
+      <tct-nav-heading-menu-item label="Analytics" href="#analytics"></tct-nav-heading-menu-item>
+      <tct-nav-heading-menu-item label="Reports" href="#reports"></tct-nav-heading-menu-item>
+      <tct-nav-heading-menu-item label="Archive" disabled></tct-nav-heading-menu-item>
+      <tct-nav-heading-menu-item label="Invite people" data-action></tct-nav-heading-menu-item>
+    </tct-nav-heading-menu>
+  </tct-card>
+  <tct-text color="secondary" data-output>Nothing chosen yet.</tct-text>
+  <script type="module">
+    const root = document.querySelector('#basic-root');
+    root.querySelector('[data-action]').addEventListener('click', () => {
+      root.querySelector('[data-output]').textContent = 'Invite people chosen.';
+    });
+  </script>
+</div>

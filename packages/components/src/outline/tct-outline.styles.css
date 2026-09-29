@@ -1,0 +1,182 @@
+/*
+ * tct-outline. A row: the list of links, a 2px track (order -1: it sits before the list) and the bar that slides
+ * along it to the active link; its position is measured (top and height of the active link), so it works
+ * without CSS anchor positioning, which is not in every Tier-1 engine. Links use the tertiary action roles:
+ * hover, keyboard focus and press each pair their fill with their own text role. The active link is primary text,
+ * one weight heavier, and carries aria-current="location" (the bar is decorative). [mwg:scrollspy]
+ * [mwg:anchor-positioning-tab-underline] [mwg:css]
+ */
+@layer component {
+  :host {
+    display: block;
+    min-inline-size: 0;
+  }
+
+  .root {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    gap: var(--spacing-0-5);
+    inline-size: 100%;
+  }
+
+  .track {
+    position: relative;
+    flex-shrink: 0;
+    order: -1;
+    inline-size: 2px;
+  }
+
+  .rule {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    inline-size: 2px;
+    border-radius: var(--radius-full);
+    background-color: var(--color-border);
+    pointer-events: none;
+  }
+
+  .indicator {
+    --_indicator-top: 0px;
+    --_indicator-height: 0px;
+
+    position: absolute;
+    z-index: 1;
+    inset-block-start: var(--_indicator-top);
+    inset-inline-start: 0;
+    inline-size: 2px;
+    block-size: var(--_indicator-height);
+    border-radius: var(--radius-full);
+    background-color: var(--color-icon-primary);
+    pointer-events: none;
+  }
+
+  .list {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    gap: var(--spacing-0-5);
+    min-inline-size: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .item {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .link {
+    --_pad-block: var(--spacing-2);
+    --_indent: var(--spacing-3);
+
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    inline-size: 100%;
+    padding-block: var(--_pad-block);
+    padding-inline-start: var(--_indent);
+    padding-inline-end: var(--spacing-2);
+    border-radius: var(--radius-element);
+    background-color: transparent;
+    color: var(--color-text-secondary);
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-leading);
+    font-weight: var(--font-weight-normal);
+    text-align: start;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      color var(--duration-fast) var(--ease-standard),
+      background-color var(--duration-fast) var(--ease-standard);
+  }
+
+  .root[data-density='compact'] .link {
+    --_pad-block: var(--spacing-1);
+  }
+
+  .link[data-level='2'] {
+    --_indent: var(--spacing-7);
+  }
+
+  .link[data-level='3'] {
+    --_indent: var(--spacing-11);
+  }
+
+  .link[data-level='4'] {
+    --_indent: var(--spacing-12);
+  }
+
+  .label {
+    min-inline-size: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .link[data-active] {
+    color: var(--color-text-primary);
+    font-weight: var(--font-weight-medium);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .indicator {
+      transition-property: inset-block-start, block-size;
+      transition-duration: var(--duration-fast-min);
+      transition-timing-function: var(--ease-standard);
+    }
+  }
+}
+
+@layer state {
+  @media (hover: hover) {
+    .link:hover {
+      background-color: var(--tecton-color-action-tertiary-bg-hover);
+      color: var(--tecton-color-action-tertiary-text-hover);
+    }
+  }
+
+  .link:focus-visible {
+    background-color: var(--tecton-color-action-tertiary-bg-focus);
+    color: var(--tecton-color-action-tertiary-text-focus);
+    outline-width: var(--focus-outline-width);
+    outline-style: var(--focus-outline-style);
+    outline-color: var(--focus-outline-color);
+    outline-offset: var(--focus-outline-offset);
+  }
+
+  .link:active {
+    background-color: var(--tecton-color-action-tertiary-bg-press);
+    color: var(--tecton-color-action-tertiary-text-press);
+  }
+}
+
+@layer a11y {
+  @media (forced-colors: active) {
+    .link {
+      color: LinkText;
+    }
+
+    .link[data-active] {
+      color: Highlight;
+    }
+
+    .rule {
+      forced-color-adjust: none;
+      background-color: GrayText;
+    }
+
+    .indicator {
+      forced-color-adjust: none;
+      background-color: Highlight;
+    }
+
+    .link:focus-visible {
+      outline-color: Highlight;
+    }
+  }
+}

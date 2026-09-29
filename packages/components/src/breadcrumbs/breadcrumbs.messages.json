@@ -1,0 +1,6 @@
+{
+  "@tct.breadcrumbs.overflow": {
+    "defaultMessage": "Show {count, number} more {count, plural, one {breadcrumb} other {breadcrumbs}}",
+    "description": "Accessible name of the ellipsis button that replaces collapsed crumbs of a breadcrumb trail (Breadcrumbs max-items); it opens a menu with the hidden crumbs. {count} is how many are hidden. Example: `Show 2 more breadcrumbs`."
+  }
+}
