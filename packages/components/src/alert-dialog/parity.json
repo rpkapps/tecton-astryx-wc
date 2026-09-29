@@ -1,0 +1,209 @@
+{
+  "$schema": "../../../../tools/schemas/parity.schema.json",
+  "folder": "alert-dialog",
+  "workPackage": "WP-4",
+  "entries": {
+    "core.alert-dialog": {
+      "tag": "tct-alert-dialog",
+      "status": "implemented",
+      "upstream": {
+        "name": "AlertDialog",
+        "path": "packages/core/src/AlertDialog/AlertDialog.tsx",
+        "commit": "ca632c6"
+      },
+      "api": [
+        {
+          "upstream": "isOpen",
+          "kind": "prop",
+          "target": "open",
+          "as": "attribute",
+          "reflect": true,
+          "default": false
+        },
+        {
+          "upstream": "isInline",
+          "kind": "prop",
+          "target": "inline",
+          "as": "attribute",
+          "reflect": true,
+          "default": false,
+          "notes": "A documentation preview; renders a named `role=\"group\"`, not an alertdialog."
+        },
+        {
+          "upstream": "onOpenChange",
+          "kind": "event",
+          "target": "tct-open-change",
+          "as": "event",
+          "notes": "Cancelable intent event for Escape (reason `escape`), Cancel (`close-button`) and `requestClose()` (`request`); property writes never emit it."
+        },
+        {
+          "upstream": "title",
+          "kind": "prop",
+          "target": "heading",
+          "as": "attribute",
+          "notes": "Renamed: `title` is the global tooltip attribute in HTML. Rendered as a level-2 heading that names the dialog."
+        },
+        {
+          "upstream": "description",
+          "kind": "prop",
+          "target": "description",
+          "as": "attribute",
+          "notes": "Describes the dialog (`aria-describedby`)."
+        },
+        {
+          "upstream": "cancelLabel",
+          "kind": "prop",
+          "target": "cancelLabel",
+          "as": "attribute",
+          "notes": "`cancel-label`; default the localized `@astryx.alertDialog.cancel`."
+        },
+        {
+          "upstream": "actionLabel",
+          "kind": "prop",
+          "target": "actionLabel",
+          "as": "attribute",
+          "notes": "`action-label`."
+        },
+        {
+          "upstream": "actionVariant",
+          "kind": "prop",
+          "target": "actionVariant",
+          "as": "attribute",
+          "default": "destructive",
+          "notes": "`action-variant`; an unknown value falls back to destructive."
+        },
+        {
+          "upstream": "isActionLoading",
+          "kind": "prop",
+          "target": "actionLoading",
+          "as": "attribute",
+          "reflect": true,
+          "notes": "`action-loading`."
+        },
+        {
+          "upstream": "onAction",
+          "kind": "event",
+          "target": "tct-action",
+          "as": "event",
+          "notes": "A new core event class (`tct-action`, not cancelable). The dialog does not close on its own."
+        },
+        {
+          "upstream": "width",
+          "kind": "prop",
+          "target": "width",
+          "as": "attribute",
+          "default": 400,
+          "notes": "A number is px, a string a CSS length; clamped by the dialog."
+        },
+        {
+          "upstream": "ref",
+          "kind": "prop",
+          "target": "the element itself",
+          "waived": true,
+          "reason": "No ref: the element is the handle (A§7.2)."
+        },
+        {
+          "upstream": "xstyle",
+          "kind": "prop",
+          "target": "CSS parts and custom properties",
+          "waived": true,
+          "reason": "StyleX escape hatch; replaced by `part` and custom properties (A§7.2)."
+        },
+        {
+          "upstream": "className",
+          "kind": "prop",
+          "target": "class on the host",
+          "waived": true,
+          "reason": "Framework prop; the host takes classes and styles as any element."
+        },
+        {
+          "upstream": "style",
+          "kind": "prop",
+          "target": "style on the host",
+          "waived": true,
+          "reason": "Framework prop; the host takes classes and styles as any element."
+        },
+        {
+          "upstream": "data-testid",
+          "kind": "prop",
+          "target": "data-testid on the host",
+          "waived": true,
+          "reason": "A plain attribute on the host."
+        }
+      ],
+      "hooks": [
+        {
+          "upstream": "useImperativeAlertDialog",
+          "target": "openAlertDialog()",
+          "as": "module-function",
+          "notes": "`openAlertDialog(options)` renders a `tct-alert-dialog`, opens it and removes it once closed; it returns `{element, isOpen, hide(), closed}`. `onAction(handle)` may return a promise: the action button shows its spinner until it settles."
+        },
+        {
+          "upstream": "useMediaQuery",
+          "target": "MediaQueryController",
+          "as": "controller",
+          "notes": "`(max-width: 640px)` decides the stacked order (destructive first) in the DOM, so tab order follows what is seen."
+        }
+      ],
+      "keyboard": [
+        {
+          "keys": "Escape",
+          "action": "Cancels: asks to close (cancelable tct-open-change) and returns focus to the opener",
+          "when": "the alert dialog is the top-most layer"
+        },
+        {
+          "keys": "Tab, Shift+Tab",
+          "action": "Moves between Cancel and the action; focus stays inside the modal",
+          "when": "dialog open"
+        },
+        {
+          "keys": "Enter, Space",
+          "action": "Activates the focused button",
+          "when": "focus on Cancel or the action"
+        }
+      ],
+      "form": {"formAssociated": false},
+      "differences": [
+        {
+          "id": "ALERTDIALOG-01",
+          "type": "approved-api-difference",
+          "text": "`title` is `heading` (the HTML global `title` attribute is a tooltip). Callbacks are events: `onOpenChange(false)` is the cancelable `tct-open-change`, `onAction` is `tct-action`. `useImperativeAlertDialog()` is `openAlertDialog()`; its `onAction` receives the handle and a returned promise drives the action button's spinner."
+        },
+        {
+          "id": "ALERTDIALOG-02",
+          "type": "approved-api-difference",
+          "text": "Upstream is a Dialog with `purpose=\"form\"` and an explicit `role=\"alertdialog\"`. `tct-dialog` gives the alertdialog role to `purpose=\"required\"` only, which also blocks Escape, so the inner dialog is `required` (no backdrop dismissal, no close button, alertdialog) and Escape is answered by the alert dialog in the capture phase while it is the top-most layer. A browser close request (Android back) does not cancel it."
+        },
+        {
+          "id": "ALERTDIALOG-03",
+          "type": "approved-api-difference",
+          "text": "There is a default slot for extra content under the description (a 'do not ask again' checkbox); upstream has none. The Layout family is not used: the content and footer are laid out with tokens in this element."
+        }
+      ],
+      "tests": {
+        "render": true,
+        "a11y": true,
+        "api": true,
+        "keyboard": true,
+        "events": true,
+        "rtl": true,
+        "forcedColors": true,
+        "i18n": true
+      },
+      "provisional": [],
+      "tokenRequests": [],
+      "requests": [
+        {
+          "file": "packages/components/src/dialog/tct-dialog.ts",
+          "reason": "A `role` (or `alert`) option on tct-dialog would let the alert dialog keep Escape through the dialog's own layer (`purpose=\"form\"` + alertdialog) instead of the capture-phase Escape handler (ALERTDIALOG-02), and would let a browser close request cancel it."
+        },
+        {
+          "file": "packages/core/src/events/events.test.ts",
+          "reason": "New core event classes `tct-action` (alert dialog), `tct-snap-change` (bottom sheet), `tct-toast-dismiss` and `tct-toast-hide` (toast) were added in packages/core/src/events/; their flags and payloads are asserted in the component tests; list them in the shared events test if wanted."
+        }
+      ],
+      "sizeBudgetKb": null,
+      "notes": "Guides: [mwg:platform-controls-dismiss-dialog] [mwg:light-dismiss-a-dialog]. Composes tct-dialog, tct-heading, tct-text and tct-button."
+    }
+  }
+}
