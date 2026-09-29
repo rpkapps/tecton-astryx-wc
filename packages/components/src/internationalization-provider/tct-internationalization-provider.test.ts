@@ -14,7 +14,7 @@ import {axNode, expectAccessible} from '@tecton-astryx/testing/a11y.js';
 import {fixture} from '@tecton-astryx/testing/fixture.js';
 import {runElementSuite} from '@tecton-astryx/testing/suites/element.js';
 import {isChromium} from '@tecton-astryx/testing/tier.js';
-import {waitUntil} from '@tecton-astryx/testing/timing.js';
+import {aTimeout, waitUntil} from '@tecton-astryx/testing/timing.js';
 import '../spinner/define.js';
 import './define.js';
 import type {TctSpinner} from '../spinner/tct-spinner.js';
@@ -279,7 +279,15 @@ describe('tct-internationalization-provider: messages and overrides', () => {
     );
     const spinner = root.querySelector<TctSpinner>('tct-spinner')!;
     await spinner.updateComplete;
-    await waitUntil(async () => (await axNode(spinner)).name === 'Bitte warten', 'name');
+    // The override is in the context already; the accessible name follows the next render.
+    for (
+      let attempt = 0;
+      attempt < 60 && (await axNode(spinner)).name !== 'Bitte warten';
+      attempt++
+    ) {
+      await aTimeout(50);
+    }
+    expect((await axNode(spinner)).name).toBe('Bitte warten');
   });
 });
 
