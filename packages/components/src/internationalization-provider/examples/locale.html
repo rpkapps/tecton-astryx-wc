@@ -1,0 +1,15 @@
+<!-- title: Locale; description: The same component in three languages. Each provider sets lang on itself; shipped catalogs load on demand. -->
+<div style="display: flex; gap: var(--spacing-8); align-items: flex-start">
+  <tct-internationalization-provider locale="en">
+    <tct-spinner size="lg"></tct-spinner>
+    <tct-text type="body" color="secondary">en</tct-text>
+  </tct-internationalization-provider>
+  <tct-internationalization-provider locale="de-DE">
+    <tct-spinner size="lg"></tct-spinner>
+    <tct-text type="body" color="secondary">de-DE</tct-text>
+  </tct-internationalization-provider>
+  <tct-internationalization-provider locale="fr-FR">
+    <tct-spinner size="lg"></tct-spinner>
+    <tct-text type="body" color="secondary">fr-FR</tct-text>
+  </tct-internationalization-provider>
+</div>
