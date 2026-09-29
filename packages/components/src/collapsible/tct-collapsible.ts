@@ -77,7 +77,7 @@ export class TctCollapsible extends TctElement {
   readonly #ids = new IdController(this, 'tct-collapsible');
   #lastOpen: boolean | undefined;
 
-  readonly #state = new CollapsibleController(this, {
+  readonly #state: CollapsibleController = new CollapsibleController(this, {
     value: () => this.value || undefined,
     open: () => this.open,
     setOpen: (open) => {
