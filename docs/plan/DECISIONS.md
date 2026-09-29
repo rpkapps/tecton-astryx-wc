@@ -90,3 +90,27 @@ Rule: no external library is added without owner approval. The owner approved th
 Anything else (including `@lit/context`, `@tanstack/*`, icon packages, Markdown parsers, syntax
 highlighters) needs a new owner approval. Every non-lit runtime dependency stays behind an
 internal module boundary so it can be swapped or removed.
+
+### D-007a — Licence audit (2026-09-29, npm registry metadata)
+
+Runtime tree, including transitive dependencies. All are permissive, with no copyleft obligations for consumers:
+
+| Package (version) | Licence | Transitive deps |
+| --- | --- | --- |
+| lit 3.3.3 | BSD-3-Clause | lit-html, lit-element, @lit/reactive-element, @lit-labs/ssr-dom-shim (BSD-3-Clause); @types/trusted-types (MIT) |
+| @floating-ui/dom 1.8.0 | MIT | @floating-ui/core, @floating-ui/utils (MIT) |
+| @internationalized/date 3.12.4 | Apache-2.0 | @swc/helpers (Apache-2.0) |
+| intl-messageformat 12.1.2 | BSD-3-Clause | @formatjs/* (MIT), tslib (0BSD) |
+| dompurify 3.4.16 | MPL-2.0 OR Apache-2.0 | none. **We elect Apache-2.0.** |
+| @fontsource-variable/figtree 5.3.0 | OFL-1.1 (font) | none |
+| @fontsource/ibm-plex-mono 5.3.0 | OFL-1.1 (font) | none |
+
+Dev-only packages: TypeScript, Playwright, Apache-2.0; Vite, Vitest (+ browser packages), CEM analyzer,
+Astro, Starlight, ESLint, typescript-eslint, Stylelint, size-limit, Capsize, MIT; **axe-core
+MPL-2.0**. MPL is file-level copyleft; axe is used only in tests and never bundled or modified, so no
+obligation reaches consumers.
+
+Requirements for the foundation work package:
+- Add a CI licence check. The allowlist is MIT, BSD-2/3-Clause, Apache-2.0, ISC, 0BSD and OFL-1.1 (fonts), plus the
+  explicit exceptions dompurify (Apache-2.0 election) and axe-core (dev-only). Any other licence fails the build.
+- Ship a `THIRD-PARTY-NOTICES.md` with the runtime licences and the OFL font notices.
